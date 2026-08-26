@@ -47,6 +47,21 @@ class GrahaAspectOut(BaseModel):
     graha_name: str
     rasi: int = Field(..., ge=0, le=11)
     rasi_name: str
+    graha_drishti_due_to: str = Field(
+        "the inherent nature of a planet",
+        description=(
+            "Section 10.4. Graha drishti follows the graha, so two grahas in "
+            "one rasi aspect different signs."
+        ),
+    )
+    rasi_drishti_due_to: str = Field(
+        "the sign a planet is in",
+        description=(
+            "Section 10.4. Rasi drishti follows the rasi, so two grahas in one "
+            "rasi aspect the same signs — though 'the nature of the influence "
+            "varies from planet to planet'."
+        ),
+    )
     aspects_houses_from_itself: list[int] = Field(
         ...,
         description='The 7th always; plus the graha\'s special aspects if it has any',
@@ -129,6 +144,21 @@ class ChartAspectOut(BaseModel):
     )
     grahas: list[GrahaAspectOut]
     note: str
+    aspect_sources: dict[str, AspectSourceOut] = Field(
+        default_factory=dict,
+        description=(
+            "Section 10.4, so the two kinds returned per graha are read as the "
+            "chapter means them rather than as one flat list of aspects."
+        ),
+    )
+    influence_caveat: str | None = Field(
+        None,
+        description=(
+            "Sections 10.1 and 10.4: whether an aspect takes effect depends on "
+            "the aspected graha or house too. This response says an aspect "
+            "exists, never that it succeeds."
+        ),
+    )
 
 
 class BetweenIn(BaseModel):
@@ -173,6 +203,35 @@ class RasiAspectOut(BaseModel):
     )
     excluded_rasi_name: str | None = None
     excluded_because: str
+
+
+class AspectSourceOut(BaseModel):
+    """Section 10.4: what one kind of aspect is due to, and how far it reaches.
+
+    `scope` is the chapter's own comparative wording — "greater influence"
+    against "limited influence on the neighbors". It is deliberately not a
+    number: section 10.4 never gives one, and inventing a weight would put
+    our judgement into PVR's rule.
+    """
+
+    due_to: str
+    analogy: str
+    scope: str
+    targets_shared_by_co_located_grahas: bool = Field(
+        ...,
+        description=(
+            "Whether two grahas in the same rasi aspect the same signs by this "
+            "kind. True for rasi drishti, false for graha drishti."
+        ),
+    )
+    nature_shared_by_co_located_grahas: bool = Field(
+        ...,
+        description=(
+            "False for both. Even where the targets are shared, section 10.4 "
+            "says the nature of the influence varies from planet to planet."
+        ),
+    )
+    statement: str
 
 
 class AspectKindOut(BaseModel):
@@ -229,3 +288,22 @@ class AspectRulesOut(BaseModel):
         ),
         examples=[18],
     )
+    aspect_sources: dict[str, AspectSourceOut]
+    same_sign_note: str = Field(
+        ...,
+        description=(
+            "Section 10.4's central claim: grahas sharing a rasi share their "
+            "rasi-drishti targets but not the nature of the influence."
+        ),
+    )
+    seventh_house_analogy: str
+    priest_and_brother_analogy: str
+    malefic_influence_analogy: str = Field(
+        ...,
+        description=(
+            "Section 10.4's second example. An aspect is not good news by "
+            "default — the criminal influences his neighbours too."
+        ),
+    )
+    influence_may_not_land: str
+    influence_caveat: str

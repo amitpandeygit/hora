@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**4 waiting on Amit · 29 waiting on evidence · 2 parked**
+**4 waiting on Amit · 30 waiting on evidence · 2 parked**
 
 ---
 
@@ -269,6 +269,39 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 **Closes when:** a semantic map is taken from the book (not from general
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
+
+### OI-64 — an aspect may not land, and nothing decides whether it does
+
+Two sections say it outright.
+
+§10.1: "The nature of the influence exerted and **the degree to which that
+influence succeeds** depends on the individual situation."
+
+§10.4, with a case: "How pious and god-fearing his influence makes his
+neighbors depends on other factors. **If one of the neighbors is a dreaded
+criminal, he is not going to be influenced.**"
+
+So an aspect existing and an aspect taking effect are different things. The
+engine computes the first and says nothing about the second — correctly, since
+chapter 10 gives no rule for it, only the warning that one is needed.
+
+Two further §10.4 claims are recorded and equally uncomputed:
+
+- **Nature.** Grahas sharing a rasi share their rasi-drishti *targets* but not
+  the nature of the influence — the priest and his movie-loving brother reach
+  the same neighbours and do opposite things there. Nothing computes nature.
+- **Scope.** Graha drishti is "greater influence"; rasi drishti is "limited
+  influence on the neighbors". Comparative, never numeric. `ASPECT_SOURCE`
+  keeps it as prose and a test asserts no number is exposed — quantifying it
+  would put our judgement inside PVR's rule.
+
+This matters most for interpretation, which is where the temptation to invent a
+weight will come from. The response carries `influence_caveat` so a caller
+cannot read an aspect as an outcome.
+
+**Closes when:** a later chapter gives a rule for whether an aspect succeeds —
+benefic/malefic nature of the aspected graha, strength, or argala — or you
+decide the engine should stop at "the aspect exists" permanently.
 
 ### OI-63 — `SPECIAL_ASPECTS` gives Rahu and Ketu the 5th and 9th; §10.2 does not
 

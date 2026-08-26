@@ -1,5 +1,23 @@
 {
   "body": {
+    "aspect_sources": {
+      "graha_drishti": {
+        "analogy": "the influence a priest has in the matters of the nearby temple where he works",
+        "due_to": "the inherent nature of a planet",
+        "nature_shared_by_co_located_grahas": false,
+        "scope": "greater influence in the matters of the temple where he works",
+        "statement": "Influence exerted by graha drishti is due to the inherent nature of a planet. Different planets in the same sign may aspect different houses and planets with graha drishti.",
+        "targets_shared_by_co_located_grahas": false
+      },
+      "rasi_drishti": {
+        "analogy": "the influence people exert on their neighbors",
+        "due_to": "the sign a planet is in",
+        "nature_shared_by_co_located_grahas": false,
+        "scope": "limited influence on the neighbors",
+        "statement": "Influence exerted by rasi drishti is due to the sign a planet is in. This is analogous to the influence people exert on their neighbors.",
+        "targets_shared_by_co_located_grahas": true
+      }
+    },
     "aspecting_grahas": [
       0,
       1,
@@ -37,9 +55,11 @@
           7
         ],
         "graha": 0,
+        "graha_drishti_due_to": "the inherent nature of a planet",
         "graha_name": "Sun",
         "has_special_aspect": false,
         "rasi": 1,
+        "rasi_drishti_due_to": "the sign a planet is in",
         "rasi_drishti_grahas": [
           {
             "graha": 5,
@@ -81,9 +101,11 @@
           7
         ],
         "graha": 1,
+        "graha_drishti_due_to": "the inherent nature of a planet",
         "graha_name": "Moon",
         "has_special_aspect": false,
         "rasi": 0,
+        "rasi_drishti_due_to": "the sign a planet is in",
         "rasi_drishti_grahas": [
           {
             "graha": 2,
@@ -170,9 +192,11 @@
           8
         ],
         "graha": 2,
+        "graha_drishti_due_to": "the inherent nature of a planet",
         "graha_name": "Mars",
         "has_special_aspect": true,
         "rasi": 7,
+        "rasi_drishti_due_to": "the sign a planet is in",
         "rasi_drishti_grahas": [
           {
             "graha": 1,
@@ -220,9 +244,11 @@
           7
         ],
         "graha": 3,
+        "graha_drishti_due_to": "the inherent nature of a planet",
         "graha_name": "Mercury",
         "has_special_aspect": false,
         "rasi": 8,
+        "rasi_drishti_due_to": "the sign a planet is in",
         "rasi_drishti_grahas": [
           {
             "graha": 4,
@@ -291,9 +317,11 @@
           9
         ],
         "graha": 4,
+        "graha_drishti_due_to": "the inherent nature of a planet",
         "graha_name": "Jupiter",
         "has_special_aspect": true,
         "rasi": 5,
+        "rasi_drishti_due_to": "the sign a planet is in",
         "rasi_drishti_grahas": [
           {
             "graha": 3,
@@ -335,9 +363,11 @@
           7
         ],
         "graha": 5,
+        "graha_drishti_due_to": "the inherent nature of a planet",
         "graha_name": "Venus",
         "has_special_aspect": false,
         "rasi": 9,
+        "rasi_drishti_due_to": "the sign a planet is in",
         "rasi_drishti_grahas": [
           {
             "graha": 0,
@@ -430,9 +460,11 @@
           10
         ],
         "graha": 6,
+        "graha_drishti_due_to": "the inherent nature of a planet",
         "graha_name": "Saturn",
         "has_special_aspect": true,
         "rasi": 7,
+        "rasi_drishti_due_to": "the sign a planet is in",
         "rasi_drishti_grahas": [
           {
             "graha": 1,
@@ -487,9 +519,11 @@
           7
         ],
         "graha": 7,
+        "graha_drishti_due_to": "the inherent nature of a planet",
         "graha_name": "Rahu",
         "has_special_aspect": false,
         "rasi": 4,
+        "rasi_drishti_due_to": "the sign a planet is in",
         "rasi_drishti_grahas": [
           {
             "graha": 1,
@@ -544,9 +578,11 @@
           7
         ],
         "graha": 8,
+        "graha_drishti_due_to": "the inherent nature of a planet",
         "graha_name": "Ketu",
         "has_special_aspect": false,
         "rasi": 10,
+        "rasi_drishti_due_to": "the sign a planet is in",
         "rasi_drishti_grahas": [
           {
             "graha": 1,
@@ -575,6 +611,7 @@
         "rasi_name": "Aquarius"
       }
     ],
+    "influence_caveat": "Whether an aspect takes effect depends on the aspected graha or house as well as the aspecting graha. The engine reports that an aspect exists, never that it succeeds.",
     "lagna_rasi": 7,
     "lagna_rasi_name": "Scorpio",
     "note": "We can decide the signs and houses aspected by a planet as above. If any planet occupies the aspected houses, then the planet is also aspected.",

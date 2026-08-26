@@ -27,9 +27,11 @@
       9
     ],
     "graha": 4,
+    "graha_drishti_due_to": "the inherent nature of a planet",
     "graha_name": "Jupiter",
     "has_special_aspect": true,
     "rasi": 2,
+    "rasi_drishti_due_to": "the sign a planet is in",
     "rasi_drishti_grahas": [],
     "rasi_drishti_rasis": [
       {

@@ -23,18 +23,25 @@ from hora.charts.vargas import d9_navamsa
 from hora.core.const import (
     ASPECT_DEFINITION,
     ASPECT_KINDS,
+    ASPECT_SOURCE,
     ASPECTED_PLANET_EXAMPLE,
     ASPECTED_PLANET_RULE,
     ASPECTS_ARE_A_SKILL_NOTE,
     DRISHTI_MEANS,
     GRAHA_DRISHTI_HEADING_AS_PRINTED,
+    INFLUENCE_DEPENDS_ON_RECEIVER,
+    INFLUENCE_MAY_NOT_LAND,
+    MALEFIC_INFLUENCE_ANALOGY,
     MODALITY_NAMES_EN,
+    PRIEST_AND_BROTHER_ANALOGY,
     RASI_DRISHTI_EXAMPLES,
     RASI_DRISHTI_GRAHA_EXAMPLE,
     RASI_DRISHTI_GRAHA_RULE,
     RASI_DRISHTI_IS_MUTUAL,
     RASI_DRISHTI_RULES,
+    RASI_DRISHTI_SAME_TARGETS_DIFFERENT_NATURE,
     RASI_MODALITY,
+    SEVENTH_HOUSE_ANALOGY,
     SEVENTH_HOUSE_EXAMPLES,
     SEVENTH_HOUSE_RULE,
     SPECIAL_ASPECT_BULLETS,
@@ -947,3 +954,176 @@ def test_chart_endpoint_answers_exercise_15(client):
     assert [g["graha_name"] for g in rows["Ketu"]["rasi_drishti_grahas"]] == ["Moon"]
     assert len(body["rasi_drishti_grahas"]) == 9
     assert len(body["aspecting_grahas"]) == 7
+
+
+# --------------------------------------------------------------------------
+# 10.4 Graha drishti vs rasi drishti
+# --------------------------------------------------------------------------
+
+
+def test_10_4_adds_no_calculation():
+    """§10.4 is entirely analogy — priests, criminals, neighbours. It changes
+    no aspect the engine computes.
+
+    Its value is that it says what each kind *is*, which decides how the output
+    should be read. Checked by running Exercise 15 and confirming §10.4 moved
+    nothing.
+    """
+    row = next(r for r in _exercise_14_chart()["grahas"]
+               if r["graha_name"] == "Saturn")
+    assert [RASI_ABBR[r["rasi"]] for r in row["aspected_rasis"]] == [
+        "Cp", "Ta", "Le"]
+    assert [RASI_ABBR[r["rasi"]] for r in row["rasi_drishti_rasis"]] == [
+        "Cp", "Ar", "Cn"]
+
+
+def test_10_4_rasi_drishti_is_due_to_the_sign():
+    """"Influence exerted by rasi drishti is due to the sign a planet is in.
+    This is analogous to the influence people exert on their neighbors."""
+    source = ASPECT_SOURCE["rasi_drishti"]
+    assert source["due_to"] == "the sign a planet is in"
+    assert "neighbors" in source["analogy"]
+
+
+def test_10_4_graha_drishti_is_due_to_the_planets_own_nature():
+    """"Influence exerted by graha drishti is due to the inherent nature of a
+    planet. Different planets in the same sign may aspect different houses and
+    planets with graha drishti."""
+    source = ASPECT_SOURCE["graha_drishti"]
+    assert source["due_to"] == "the inherent nature of a planet"
+    assert "temple" in source["analogy"]
+
+
+def test_10_4_the_two_sources_are_what_decide_sharing():
+    """The whole distinction reduces to one boolean. Rasi drishti follows the
+    rasi, so co-located grahas share their targets; graha drishti follows the
+    graha, so they do not.
+
+    Both flags are checked against the computation rather than trusted.
+    """
+    assert ASPECT_SOURCE["rasi_drishti"]["targets_shared_by_co_located_grahas"]
+    assert not ASPECT_SOURCE["graha_drishti"]["targets_shared_by_co_located_grahas"]
+
+    chart = aspect_service.chart({Graha.MARS: R["Sc"], Graha.SATURN: R["Sc"]})
+    rows = {r["graha_name"]: r for r in chart["grahas"]}
+    assert rows["Mars"]["rasi_drishti_rasis"] == rows["Saturn"]["rasi_drishti_rasis"]
+    assert rows["Mars"]["aspected_rasis"] != rows["Saturn"]["aspected_rasis"]
+
+
+def test_10_4_co_located_grahas_share_rasi_drishti_targets_in_every_rasi():
+    """Not just in Scorpio: for all twelve rasis, any two grahas placed
+    together reach exactly the same signs by rasi drishti."""
+    for rasi in range(12):
+        chart = aspect_service.chart({Graha.SUN: rasi, Graha.SATURN: rasi})
+        rows = {r["graha_name"]: r for r in chart["grahas"]}
+        assert rows["Sun"]["rasi_drishti_rasis"] == \
+            rows["Saturn"]["rasi_drishti_rasis"], rasi
+
+
+def test_10_4_the_priest_and_his_brother_share_a_house_and_differ_in_effect():
+    """"A priest may tell his neighbors to pray to God. His movie-loving
+    brother living in the same house may talk the same neighbors into watching
+    all the movies of a particular actress."
+
+    Same house, same neighbours, opposite influence. That is the whole of
+    "planets in the same sign exert influence on the same houses and planets
+    through rasi drishti, but the nature of the influence varies from planet to
+    planet."
+    """
+    assert "same house" in PRIEST_AND_BROTHER_ANALOGY
+    assert "same neighbors" in PRIEST_AND_BROTHER_ANALOGY
+    assert "varies from planet to planet" in RASI_DRISHTI_SAME_TARGETS_DIFFERENT_NATURE
+
+
+def test_10_4_shared_targets_never_mean_shared_nature():
+    """Both kinds carry `nature_shared_by_co_located_grahas = False`, even rasi
+    drishti where the targets *are* shared.
+
+    So nothing in the response may be read as "these two grahas do the same
+    thing here". The engine reports where an aspect lands; what it does there
+    is not computed at all.
+    """
+    for source in ASPECT_SOURCE.values():
+        assert source["nature_shared_by_co_located_grahas"] is False
+
+
+def test_10_4_the_seventh_house_is_the_one_universal_target():
+    """"Everyone in a house may have a strong influence over friends of the
+    family who visit the house frequently. Similarly, all planets aspect the
+    7th house from them and have an influence over it."
+
+    The analogy's point: the 7th is what nobody is exempt from, whatever kind
+    of planet it is. Checked for all nine.
+    """
+    assert "7th house from them" in SEVENTH_HOUSE_ANALOGY
+    for graha in Graha:
+        assert 7 in graha_drishti_houses(graha)
+
+
+def test_10_4_an_aspect_is_not_good_news_by_default():
+    """"Let us take a dreaded criminal as another example. He may also have an
+    influence on his neighbors. Youngsters living in the neighboring houses
+    may enter the criminal world because of him."
+
+    So neither kind of aspect carries a valence. The engine returns no
+    benefic/malefic field on an aspect, and this is why.
+    """
+    assert "criminal" in MALEFIC_INFLUENCE_ANALOGY
+    row = next(r for r in _exercise_14_chart()["grahas"]
+               if r["graha_name"] == "Saturn")
+    for field in ("benefic", "malefic", "good", "bad", "strength", "value"):
+        assert field not in row
+
+
+def test_10_4_scope_is_comparative_and_is_never_a_number():
+    """§10.4 says graha drishti is "greater influence" and rasi drishti
+    "limited influence on the neighbors". A comparison, in words.
+
+    Quantifying it would be our judgement inserted into PVR's rule, so `scope`
+    stays prose and no numeric weight is exposed anywhere.
+    """
+    assert "greater influence" in ASPECT_SOURCE["graha_drishti"]["scope"]
+    assert "limited influence" in ASPECT_SOURCE["rasi_drishti"]["scope"]
+    for source in ASPECT_SOURCE.values():
+        assert not any(isinstance(v, (int, float)) and not isinstance(v, bool)
+                       for v in source.values())
+
+
+def test_10_4_an_aspect_may_not_land_and_the_engine_does_not_decide():
+    """"How pious and god-fearing his influence makes his neighbors depends on
+    other factors. If one of the neighbors is a dreaded criminal, he is not
+    going to be influenced."
+
+    §10.1 says the same: "the degree to which that influence succeeds depends
+    on the individual situation". Nothing in the engine models this — it
+    reports that an aspect exists, never that it succeeds. See OI-64, and the
+    caveat is carried in the response so a caller cannot miss it.
+    """
+    assert "not going to be influenced" in INFLUENCE_MAY_NOT_LAND
+    assert "never that it succeeds" in INFLUENCE_DEPENDS_ON_RECEIVER
+    assert "depends on the individual situation" in ASPECT_DEFINITION
+    chart = aspect_service.chart({Graha.SUN: R["Ta"], Graha.SATURN: R["Sc"]})
+    assert "never that it succeeds" in chart["influence_caveat"]
+
+
+def test_10_4_every_graha_row_names_both_sources(client):
+    """A caller reading the two kinds flat would treat them as equivalent.
+    Each row says what each kind is due to, so it cannot."""
+    body = client.post("/v1/aspect/chart", json={
+        "rasis": {"2": R["Sc"], "6": R["Sc"]}, "lagna_rasi": R["Sc"]}).json()
+    for row in body["grahas"]:
+        assert row["graha_drishti_due_to"] == "the inherent nature of a planet"
+        assert row["rasi_drishti_due_to"] == "the sign a planet is in"
+    assert set(body["aspect_sources"]) == {"graha_drishti", "rasi_drishti"}
+    assert "never that it succeeds" in body["influence_caveat"]
+
+
+def test_10_4_the_rules_endpoint_carries_the_analogy(client):
+    body = client.get("/v1/aspect/rules").json()
+    sources = body["aspect_sources"]
+    assert sources["rasi_drishti"]["targets_shared_by_co_located_grahas"] is True
+    assert sources["graha_drishti"]["targets_shared_by_co_located_grahas"] is False
+    assert all(s["nature_shared_by_co_located_grahas"] is False
+               for s in sources.values())
+    assert "criminal" in body["malefic_influence_analogy"]
+    assert "varies from planet to planet" in body["same_sign_note"]

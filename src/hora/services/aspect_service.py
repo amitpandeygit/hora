@@ -18,21 +18,28 @@ from hora.core import validate
 from hora.core.const import (
     ASPECT_DEFINITION,
     ASPECT_KINDS,
+    ASPECT_SOURCE,
     ASPECTED_PLANET_EXAMPLE,
     ASPECTED_PLANET_RULE,
     ASPECTS_ARE_A_SKILL_NOTE,
     DRISHTI_MEANS,
     FIGURE_2_NOTE,
     GRAHA_NAMES,
+    INFLUENCE_DEPENDS_ON_RECEIVER,
+    INFLUENCE_MAY_NOT_LAND,
+    MALEFIC_INFLUENCE_ANALOGY,
     MODALITY_NAMES_EN,
     NAVAGRAHA,
+    PRIEST_AND_BROTHER_ANALOGY,
     RASI_DRISHTI_GRAHA_EXAMPLE,
     RASI_DRISHTI_GRAHA_RULE,
     RASI_DRISHTI_INTRO,
     RASI_DRISHTI_IS_MUTUAL,
     RASI_DRISHTI_RULES,
+    RASI_DRISHTI_SAME_TARGETS_DIFFERENT_NATURE,
     RASI_MODALITY,
     RASI_NAMES,
+    SEVENTH_HOUSE_ANALOGY,
     SEVENTH_HOUSE_RULE,
     SPECIAL_ASPECT_BULLETS,
     SPECIAL_ASPECT_GRAHAS,
@@ -105,6 +112,11 @@ def graha(
         "graha_name": GRAHA_NAMES[graha_id],
         "rasi": rasi,
         "rasi_name": RASI_NAMES[rasi],
+        # §10.4: the two kinds are not interchangeable, and a caller reading
+        # both flat would treat them as if they were. Each block says what its
+        # aspect is *due to* and whether a co-located graha would share it.
+        "graha_drishti_due_to": ASPECT_SOURCE["graha_drishti"]["due_to"],
+        "rasi_drishti_due_to": ASPECT_SOURCE["rasi_drishti"]["due_to"],
         "aspects_houses_from_itself": list(houses_aspected),
         "has_special_aspect": graha_id in SPECIAL_ASPECT_GRAHAS,
         "aspected_rasis": [
@@ -170,6 +182,10 @@ def chart(
             for g in NAVAGRAHA if g in rasis
         ],
         "note": ASPECTED_PLANET_RULE,
+        # §10.4, so the two kinds in `grahas` are read as the chapter means
+        # them rather than as one flat list of aspects.
+        "aspect_sources": {k: dict(v) for k, v in ASPECT_SOURCE.items()},
+        "influence_caveat": INFLUENCE_DEPENDS_ON_RECEIVER,
     }
 
 
@@ -277,4 +293,13 @@ def rules() -> dict:
         "figure_2_line_count": len({
             frozenset((s, t)) for s in range(12) for t in rasi_drishti(s)
         }),
+        # §10.4. Comparative only — the chapter says "greater" and "limited",
+        # never a number, and quantifying it would be our invention.
+        "aspect_sources": {k: dict(v) for k, v in ASPECT_SOURCE.items()},
+        "same_sign_note": RASI_DRISHTI_SAME_TARGETS_DIFFERENT_NATURE,
+        "seventh_house_analogy": SEVENTH_HOUSE_ANALOGY,
+        "priest_and_brother_analogy": PRIEST_AND_BROTHER_ANALOGY,
+        "malefic_influence_analogy": MALEFIC_INFLUENCE_ANALOGY,
+        "influence_may_not_land": INFLUENCE_MAY_NOT_LAND,
+        "influence_caveat": INFLUENCE_DEPENDS_ON_RECEIVER,
     }

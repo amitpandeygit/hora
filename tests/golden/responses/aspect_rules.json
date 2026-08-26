@@ -1,5 +1,23 @@
 {
   "body": {
+    "aspect_sources": {
+      "graha_drishti": {
+        "analogy": "the influence a priest has in the matters of the nearby temple where he works",
+        "due_to": "the inherent nature of a planet",
+        "nature_shared_by_co_located_grahas": false,
+        "scope": "greater influence in the matters of the temple where he works",
+        "statement": "Influence exerted by graha drishti is due to the inherent nature of a planet. Different planets in the same sign may aspect different houses and planets with graha drishti.",
+        "targets_shared_by_co_located_grahas": false
+      },
+      "rasi_drishti": {
+        "analogy": "the influence people exert on their neighbors",
+        "due_to": "the sign a planet is in",
+        "nature_shared_by_co_located_grahas": false,
+        "scope": "limited influence on the neighbors",
+        "statement": "Influence exerted by rasi drishti is due to the sign a planet is in. This is analogous to the influence people exert on their neighbors.",
+        "targets_shared_by_co_located_grahas": true
+      }
+    },
     "aspected_planet_example": "Jupiter in Ta will aspect Saturn in Cp, because Cp is the 9th house from Ta and Jupiter aspects the 9th from him.",
     "aspected_planet_rule": "We can decide the signs and houses aspected by a planet as above. If any planet occupies the aspected houses, then the planet is also aspected.",
     "aspecting_grahas": [
@@ -36,6 +54,8 @@
     "drishti_means": "aspect",
     "figure_2_line_count": 18,
     "figure_2_note": "A visual representation of rasi aspects is given in Figure 2. A line is drawn between every pair of signs that aspect each other.",
+    "influence_caveat": "Whether an aspect takes effect depends on the aspected graha or house as well as the aspecting graha. The engine reports that an aspect exists, never that it succeeds.",
+    "influence_may_not_land": "How pious and god-fearing his influence makes his neighbors depends on other factors. If one of the neighbors is a dreaded criminal, he is not going to be influenced.",
     "kinds": [
       {
         "counted_from": "the graha",
@@ -54,7 +74,9 @@
         "varies_by": "rasi"
       }
     ],
+    "malefic_influence_analogy": "Let us take a dreaded criminal as another example. He may also have an influence on his neighbors. Youngsters living in the neighboring houses may enter the criminal world because of him.",
     "nodes_note": "Section 10.2 gives special aspects to Mars, Jupiter and Saturn only, and names no aspect for Rahu or Ketu. They are therefore not among the aspecting grahas by default, though they are aspected like any other graha when they occupy an aspected rasi. Exercise 14's own answer lists Ketu and Rahu as aspected.",
+    "priest_and_brother_analogy": "A priest may tell his neighbors to pray to God. His movie-loving brother living in the same house may talk the same neighbors into watching all the movies of a particular actress.",
     "rasi_drishti_graha_example": "A planet in Libra will aspect the houses and planets in Aq, Ta and Le.",
     "rasi_drishti_graha_rule": "A planet aspects the signs aspected by the sign it occupies. It also aspects the houses and planets in those signs. This is called rasi drishti (sign aspect).",
     "rasi_drishti_intro": "Rasis aspect other rasis based on the following rules:",
@@ -79,6 +101,8 @@
         "text": "A dual rasi aspects all other dual rasis."
       }
     ],
+    "same_sign_note": "All planets in a sign will have rasi drishti on the same signs, just as people living in the same house see the same neighbors everyday and exert some influence over the same neighbors. But the influence they exert may differ. Thus, planets in the same sign exert influence on the same houses and planets through rasi drishti, but the nature of the influence varies from planet to planet.",
+    "seventh_house_analogy": "Everyone in a house may have a strong influence over friends of the family who visit the house frequently. Similarly, all planets aspect the 7th house from them and have an influence over it.",
     "seventh_house_rule": "All planets aspect the 7th house from them. Find the 7th house from the planet and the planet aspects that house.",
     "skill_note": "Look at a few charts and figure out which planets are aspecting which houses and which planets are aspecting which planets. With experience, you can become good at it and this is an important skill required in interpreting charts.",
     "special_aspect_rule": "In addition, Mars, Jupiter and Saturn have special aspects.",
