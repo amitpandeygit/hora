@@ -249,6 +249,20 @@ CASES = [
         # 10.2's own example: Jupiter in Ta aspects Saturn in Cp.
         "graha": 4, "graha_rasi": 1, "target_rasi": 9,
     }),
+    # Chapter 10 §10.6 — argala. The chart case is Exercise 16: Chart 5's
+    # navamsa, Scorpio lagna, all twelve houses and all ninety-six cells.
+    ("argala_rules", "GET", "/v1/argala/rules", None),
+    ("argala_chart_exercise_16", "POST", "/v1/argala/chart", {
+        "rasis": {0: 1, 1: 0, 2: 7, 3: 8, 4: 5, 5: 9, 6: 7, 7: 4, 8: 10},
+        "lagna_rasi": 7,
+    }),
+    ("argala_sign_worked_example", "POST", "/v1/argala/sign", {
+        # 10.6's own example: Mercury, Jupiter, Venus, Saturn in Ge, Pi, Ar, Vi.
+        "sign": 2, "rasis": {3: 2, 4: 11, 5: 0, 6: 5},
+    }),
+    ("err_argala_empty_chart", "POST", "/v1/argala/chart",
+     {"rasis": {}, "lagna_rasi": 0}),
+
     ("aspect_rasi_aries", "GET", "/v1/aspect/rasi/0", None),
     ("aspect_rasi_taurus", "GET", "/v1/aspect/rasi/1", None),
     ("aspect_rasi_gemini", "GET", "/v1/aspect/rasi/2", None),

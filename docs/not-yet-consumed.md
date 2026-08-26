@@ -517,6 +517,20 @@ derived from the book:
 unimported until a chapter derives it. Its tables should be treated as a draft.
 Tracked as [OI-18](open-items.md#oi-18).
 
+### Chapter 10 — §10.6 worked examples (2)
+
+`VIRODHARGALA_EXAMPLE` · `KETU_NOTE_EXAMPLE`
+
+§10.6's two worked examples. Both are reproduced by
+`tests/unit/test_book_chapter10_argala.py`; nothing in `src/` reads them,
+because the computation they demonstrate is driven by the pairing table and
+the Ketu reversal rather than by the examples themselves.
+
+| Symbol | What will consume it |
+|---|---|
+| `VIRODHARGALA_EXAMPLE` | Nothing — a test fixture holding the example's placements and its printed text |
+| `KETU_NOTE_EXAMPLE` | Likewise, for the anti-zodiacal note |
+
 ### Chapter 10 — §10.1 to §10.3 (3)
 
 `GRAHA_DRISHTI_HEADING_AS_PRINTED` · `SEVENTH_HOUSE_EXAMPLES` ·

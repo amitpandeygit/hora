@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**4 waiting on Amit · 30 waiting on evidence · 2 parked**
+**4 waiting on Amit · 32 waiting on evidence · 2 parked**
 
 ---
 
@@ -269,6 +269,44 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 **Closes when:** a semantic map is taken from the book (not from general
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
+
+### OI-66 — §10.5 (Argala) has not been supplied; §10.6 was built without it
+
+§10.6 names the four argala houses outright — "the argala on it from the 2nd,
+4th, 11th and 5th houses from it" — so the computation is complete and
+Exercise 16's ninety-six cells all reproduce.
+
+But §10.5 is the section that *defines* argala, and it has not been read. Its
+own statements — what argala means, whether the four houses carry different
+weights, whether anything beyond nature distinguishes them — have had no pass.
+`ARGALA_BY_NATURE` currently holds only paapaargala and subhaargala, taken from
+§10.6's worked example rather than from §10.5's own definition.
+
+**Closes when:** §10.5 gets a sentence-level pass like every other section.
+
+### OI-65 — how many malefics are "several" in §10.6's 3rd-house rule?
+
+§10.6: "If there are **several** malefics in the 3rd house from a house or a
+planet, they cause argala instead of virodhargala on that house or planet."
+
+The book never says how many. The only evidence is Exercise 16's own answer
+table: the 11th house is Vi, the 3rd from Vi is Sc, and Sc holds **Mars and
+Saturn** — two unambiguous malefics. The printed answer still lists them under
+*virodhargalas*.
+
+So by the book's own worked output two is not "several", and three is the
+smallest threshold that reproduces Exercise 16. `SEVERAL_MALEFICS = 3`, and a
+test states the failing case: at two, the 11th row stops matching.
+
+**The evidence is thin.** Exactly one cell in the whole exercise has two or
+more malefics in its 3rd, so this rests on a single data point — and the
+exercise may simply be listing occupants mechanically and leaving the special
+principle to the reader, in which case it is no evidence at all.
+
+The threshold is a per-call parameter, so nothing is baked in.
+
+**Closes when:** JHora's argala output settles it, or PVR states a number
+elsewhere.
 
 ### OI-64 — an aspect may not land, and nothing decides whether it does
 

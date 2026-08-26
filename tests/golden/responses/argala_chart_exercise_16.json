@@ -1,0 +1,1742 @@
+{
+  "body": {
+    "houses": [
+      {
+        "argalas": [
+          {
+            "grahas": [
+              {
+                "graha": 3,
+                "graha_name": "Mercury"
+              }
+            ],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 8,
+                "graha_name": "Ketu"
+              }
+            ],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 4,
+                "graha_name": "Jupiter"
+              }
+            ],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "grahas": [],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 1,
+        "ketu_sign": 10,
+        "sign": 7,
+        "sign_name": "Scorpio",
+        "virodhargalas": [
+          {
+            "grahas": [],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 7,
+                "graha_name": "Rahu"
+              }
+            ],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 5,
+                "graha_name": "Venus"
+              }
+            ],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "grahas": [],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 3,
+            "sign_name": "Cancer"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [
+              {
+                "graha": 5,
+                "graha_name": "Venus"
+              }
+            ],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "grahas": [],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "grahas": [],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 1,
+                "graha_name": "Moon"
+              }
+            ],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 0,
+            "sign_name": "Aries"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 2,
+        "ketu_sign": 10,
+        "sign": 8,
+        "sign_name": "Sagittarius",
+        "virodhargalas": [
+          {
+            "grahas": [
+              {
+                "graha": 2,
+                "graha_name": "Mars"
+              },
+              {
+                "graha": 6,
+                "graha_name": "Saturn"
+              }
+            ],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 4,
+                "graha_name": "Jupiter"
+              }
+            ],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 8,
+                "graha_name": "Ketu"
+              }
+            ],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 7,
+                "graha_name": "Rahu"
+              }
+            ],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 4,
+            "sign_name": "Leo"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [
+              {
+                "graha": 8,
+                "graha_name": "Ketu"
+              }
+            ],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 1,
+                "graha_name": "Moon"
+              }
+            ],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 2,
+                "graha_name": "Mars"
+              },
+              {
+                "graha": 6,
+                "graha_name": "Saturn"
+              }
+            ],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 0,
+                "graha_name": "Sun"
+              }
+            ],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 1,
+            "sign_name": "Taurus"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 3,
+        "ketu_sign": 10,
+        "sign": 9,
+        "sign_name": "Capricorn",
+        "virodhargalas": [
+          {
+            "grahas": [
+              {
+                "graha": 3,
+                "graha_name": "Mercury"
+              }
+            ],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "grahas": [],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "grahas": [],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 4,
+                "graha_name": "Jupiter"
+              }
+            ],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 5,
+            "sign_name": "Virgo"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [
+              {
+                "graha": 5,
+                "graha_name": "Venus"
+              }
+            ],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 2,
+                "graha_name": "Mars"
+              },
+              {
+                "graha": 6,
+                "graha_name": "Saturn"
+              }
+            ],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 1,
+                "graha_name": "Moon"
+              }
+            ],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "grahas": [],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "counted_anti_zodiacally": true,
+        "house": 4,
+        "ketu_sign": 10,
+        "sign": 10,
+        "sign_name": "Aquarius",
+        "virodhargalas": [
+          {
+            "grahas": [],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 0,
+                "graha_name": "Sun"
+              }
+            ],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 3,
+                "graha_name": "Mercury"
+              }
+            ],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "grahas": [],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 2,
+            "sign_name": "Gemini"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [
+              {
+                "graha": 1,
+                "graha_name": "Moon"
+              }
+            ],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "grahas": [],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 5,
+                "graha_name": "Venus"
+              }
+            ],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "grahas": [],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 3,
+            "sign_name": "Cancer"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 5,
+        "ketu_sign": 10,
+        "sign": 11,
+        "sign_name": "Pisces",
+        "virodhargalas": [
+          {
+            "grahas": [
+              {
+                "graha": 8,
+                "graha_name": "Ketu"
+              }
+            ],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 3,
+                "graha_name": "Mercury"
+              }
+            ],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 0,
+                "graha_name": "Sun"
+              }
+            ],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 2,
+                "graha_name": "Mars"
+              },
+              {
+                "graha": 6,
+                "graha_name": "Saturn"
+              }
+            ],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [
+              {
+                "graha": 0,
+                "graha_name": "Sun"
+              }
+            ],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "grahas": [],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 8,
+                "graha_name": "Ketu"
+              }
+            ],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 7,
+                "graha_name": "Rahu"
+              }
+            ],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 4,
+            "sign_name": "Leo"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 6,
+        "ketu_sign": 10,
+        "sign": 0,
+        "sign_name": "Aries",
+        "virodhargalas": [
+          {
+            "grahas": [],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 5,
+                "graha_name": "Venus"
+              }
+            ],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "grahas": [],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 3,
+                "graha_name": "Mercury"
+              }
+            ],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 7,
+                "graha_name": "Rahu"
+              }
+            ],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "grahas": [],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 4,
+                "graha_name": "Jupiter"
+              }
+            ],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 5,
+            "sign_name": "Virgo"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 7,
+        "ketu_sign": 10,
+        "sign": 1,
+        "sign_name": "Taurus",
+        "virodhargalas": [
+          {
+            "grahas": [
+              {
+                "graha": 1,
+                "graha_name": "Moon"
+              }
+            ],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 8,
+                "graha_name": "Ketu"
+              }
+            ],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "grahas": [],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 5,
+                "graha_name": "Venus"
+              }
+            ],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 4,
+                "graha_name": "Jupiter"
+              }
+            ],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 1,
+                "graha_name": "Moon"
+              }
+            ],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "grahas": [],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 8,
+        "ketu_sign": 10,
+        "sign": 2,
+        "sign_name": "Gemini",
+        "virodhargalas": [
+          {
+            "grahas": [
+              {
+                "graha": 0,
+                "graha_name": "Sun"
+              }
+            ],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "grahas": [],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 7,
+                "graha_name": "Rahu"
+              }
+            ],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 8,
+                "graha_name": "Ketu"
+              }
+            ],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [
+              {
+                "graha": 7,
+                "graha_name": "Rahu"
+              }
+            ],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "grahas": [],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 0,
+                "graha_name": "Sun"
+              }
+            ],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 2,
+                "graha_name": "Mars"
+              },
+              {
+                "graha": 6,
+                "graha_name": "Saturn"
+              }
+            ],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 9,
+        "ketu_sign": 10,
+        "sign": 3,
+        "sign_name": "Cancer",
+        "virodhargalas": [
+          {
+            "grahas": [],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 1,
+                "graha_name": "Moon"
+              }
+            ],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 4,
+                "graha_name": "Jupiter"
+              }
+            ],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "grahas": [],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [
+              {
+                "graha": 4,
+                "graha_name": "Jupiter"
+              }
+            ],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 2,
+                "graha_name": "Mars"
+              },
+              {
+                "graha": 6,
+                "graha_name": "Saturn"
+              }
+            ],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "grahas": [],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 3,
+                "graha_name": "Mercury"
+              }
+            ],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 10,
+        "ketu_sign": 10,
+        "sign": 4,
+        "sign_name": "Leo",
+        "virodhargalas": [
+          {
+            "grahas": [],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 0,
+                "graha_name": "Sun"
+              }
+            ],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "grahas": [],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 1,
+                "graha_name": "Moon"
+              }
+            ],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 0,
+            "sign_name": "Aries"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 3,
+                "graha_name": "Mercury"
+              }
+            ],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "grahas": [],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 5,
+                "graha_name": "Venus"
+              }
+            ],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 11,
+        "ketu_sign": 10,
+        "sign": 5,
+        "sign_name": "Virgo",
+        "virodhargalas": [
+          {
+            "grahas": [
+              {
+                "graha": 7,
+                "graha_name": "Rahu"
+              }
+            ],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "grahas": [],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 2,
+                "graha_name": "Mars"
+              },
+              {
+                "graha": 6,
+                "graha_name": "Saturn"
+              }
+            ],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 0,
+                "graha_name": "Sun"
+              }
+            ],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 1,
+            "sign_name": "Taurus"
+          }
+        ]
+      },
+      {
+        "argalas": [
+          {
+            "grahas": [
+              {
+                "graha": 2,
+                "graha_name": "Mars"
+              },
+              {
+                "graha": 6,
+                "graha_name": "Saturn"
+              }
+            ],
+            "house": 2,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 12,
+            "paired_house": 12,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 5,
+                "graha_name": "Venus"
+              }
+            ],
+            "house": 4,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 10,
+            "paired_house": 10,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 7,
+                "graha_name": "Rahu"
+              }
+            ],
+            "house": 11,
+            "kind": "argala",
+            "obstructed": true,
+            "obstructed_by": null,
+            "obstructs": 3,
+            "paired_house": 3,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 8,
+                "graha_name": "Ketu"
+              }
+            ],
+            "house": 5,
+            "kind": "argala",
+            "obstructed": false,
+            "obstructed_by": null,
+            "obstructs": 9,
+            "paired_house": 9,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          }
+        ],
+        "counted_anti_zodiacally": false,
+        "house": 12,
+        "ketu_sign": 10,
+        "sign": 6,
+        "sign_name": "Libra",
+        "virodhargalas": [
+          {
+            "grahas": [
+              {
+                "graha": 4,
+                "graha_name": "Jupiter"
+              }
+            ],
+            "house": 12,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 2,
+            "obstructs": null,
+            "paired_house": 2,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "grahas": [],
+            "house": 10,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 4,
+            "obstructs": null,
+            "paired_house": 4,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "grahas": [
+              {
+                "graha": 3,
+                "graha_name": "Mercury"
+              }
+            ],
+            "house": 3,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 11,
+            "obstructs": null,
+            "paired_house": 11,
+            "present": true,
+            "promoted_from_virodhargala": false,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "grahas": [],
+            "house": 9,
+            "kind": "virodhargala",
+            "obstructed": null,
+            "obstructed_by": 5,
+            "obstructs": null,
+            "paired_house": 5,
+            "present": false,
+            "promoted_from_virodhargala": false,
+            "sign": 2,
+            "sign_name": "Gemini"
+          }
+        ]
+      }
+    ],
+    "lagna_rasi": 7,
+    "lagna_rasi_name": "Scorpio",
+    "several_malefics_threshold": 3
+  },
+  "status": 200
+}

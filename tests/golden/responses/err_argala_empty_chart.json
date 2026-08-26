@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "no placements given; supply at least one graha and rasi",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

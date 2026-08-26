@@ -1,0 +1,66 @@
+{
+  "body": {
+    "by_nature": {
+      "benefic": {
+        "gloss": "benefic intervention",
+        "name": "subhaargala"
+      },
+      "malefic": {
+        "gloss": "malefic intervention",
+        "name": "paapaargala"
+      }
+    },
+    "definition": "Virodhargala shows the obstruction of argala.",
+    "fixed_malefics": [
+      {
+        "graha": 0,
+        "graha_name": "Sun"
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars"
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn"
+      },
+      {
+        "graha": 7,
+        "graha_name": "Rahu"
+      },
+      {
+        "graha": 8,
+        "graha_name": "Ketu"
+      }
+    ],
+    "ketu_note": "If a sign contains Ketu, argalas and virodhargalas on it are counted anti-zodiacally. For example, let us say Ketu is in Vi. Then Le, Ge, Sc and Ta are the 2nd, 4th, 11th and 5th from Vi (counted anti-zodiacally) and planets in those signs cause argala on Vi and on the planets in Vi. Virodhargala is also counted similarly.",
+    "malefics_note": "Chapter 3 makes the Moon and Mercury conditionally malefic, so they are not in the default set. Supply `malefics` to override it.",
+    "pairs": [
+      {
+        "argala_house": 2,
+        "text": "the 12th obstructs the argala from the 2nd",
+        "virodhargala_house": 12
+      },
+      {
+        "argala_house": 4,
+        "text": "the 10th obstructs the argala from the 4th",
+        "virodhargala_house": 10
+      },
+      {
+        "argala_house": 11,
+        "text": "the 3rd obstructs the argala from the 11th",
+        "virodhargala_house": 3
+      },
+      {
+        "argala_house": 5,
+        "text": "the 9th obstructs the argala from the 5th",
+        "virodhargala_house": 9
+      }
+    ],
+    "rule": "Planets and houses in the 12th, 10th, 3rd and 9th houses from a house or planet cause virodhargala and obstruct the argala on it from the 2nd, 4th, 11th and 5th houses from it (respectively).",
+    "several_malefics_note": "The book does not say how many malefics count as \u201cseveral\u201d. Exercise 16's own answer table leaves two malefics in the 3rd as virodhargala \u2014 Mars and Saturn in Sc, the 3rd from the 11th house \u2014 so three is the smallest threshold that reproduces it. Configurable per call. See docs/open-items.md OI-65.",
+    "several_malefics_threshold": 3,
+    "third_house_rule": "There is a special principle regarding the 3rd house obstruction. If there are several malefics in the 3rd house from a house or a planet, they cause argala instead of virodhargala on that house or planet."
+  },
+  "status": 200
+}

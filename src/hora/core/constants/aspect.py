@@ -260,3 +260,79 @@ INFLUENCE_DEPENDS_ON_RECEIVER = (
     "well as the aspecting graha. The engine reports that an aspect exists, "
     "never that it succeeds."
 )
+
+
+# --------------------------------------------------------------------------
+# §10.5 and §10.6 Argala and virodhargala
+# --------------------------------------------------------------------------
+
+#: §10.6 pairs each argala house with the house that obstructs it: "Planets and
+#: houses in the 12th, 10th, 3rd and 9th houses from a house or planet cause
+#: virodhargala and obstruct the argala on it from the 2nd, 4th, 11th and 5th
+#: houses from it (*respectively*)."
+#:
+#: Stored as pairs rather than as two lists, because the whole content of the
+#: rule is which obstructs which, and two parallel lists can drift.
+ARGALA_PAIRS: tuple[tuple[int, int], ...] = (
+    (2, 12),
+    (4, 10),
+    (11, 3),
+    (5, 9),
+)
+
+VIRODHARGALA_DEFINITION = "Virodhargala shows the obstruction of argala."
+VIRODHARGALA_RULE = (
+    "Planets and houses in the 12th, 10th, 3rd and 9th houses from a house or "
+    "planet cause virodhargala and obstruct the argala on it from the 2nd, "
+    "4th, 11th and 5th houses from it (respectively)."
+)
+
+#: §10.6 names the two by the nature of the intervening graha.
+ARGALA_BY_NATURE = {
+    "malefic": {"name": "paapaargala", "gloss": "malefic intervention"},
+    "benefic": {"name": "subhaargala", "gloss": "benefic intervention"},
+}
+
+#: §10.6's worked example: Mercury, Jupiter, Venus and Saturn in Ge, Pi, Ar and
+#: Vi. Both an obstructed argala and an unobstructed one, in one chart.
+VIRODHARGALA_EXAMPLE = {
+    "rasis": {"Mercury": 2, "Jupiter": 11, "Venus": 0, "Saturn": 5},
+    "target_sign": 2,
+    "text": (
+        "Saturn is in the 4th from Mercury and Ge and he causes argala on "
+        "them. With Saturn being a malefic, this is a paapaargala (malefic "
+        "intervention). But Jupiter is in the 10th from Mercury and Ge. So he "
+        "obstructs Saturn's argala and averts the troubles. Venus is in the "
+        "11th from Mercury and Ge and so he causes argala on them. With Venus "
+        "being a benefic, it is a subhaargala (benefic intervention). If Le "
+        "(3rd from Ge) is empty, this argala is unobstructed."
+    ),
+}
+
+#: §10.6's note. The reversal is a property of the sign Ketu sits in, not of
+#: the graha doing the counting.
+KETU_REVERSES_ARGALA = (
+    "If a sign contains Ketu, argalas and virodhargalas on it are counted "
+    "anti-zodiacally. For example, let us say Ketu is in Vi. Then Le, Ge, Sc "
+    "and Ta are the 2nd, 4th, 11th and 5th from Vi (counted anti-zodiacally) "
+    "and planets in those signs cause argala on Vi and on the planets in Vi. "
+    "Virodhargala is also counted similarly."
+)
+KETU_NOTE_EXAMPLE = {"ketu_sign": 5, "houses": (2, 4, 11, 5), "signs": (4, 2, 7, 1)}
+
+#: §10.6's special principle for the 3rd house.
+THIRD_HOUSE_MALEFIC_RULE = (
+    "There is a special principle regarding the 3rd house obstruction. If "
+    "there are several malefics in the 3rd house from a house or a planet, "
+    "they cause argala instead of virodhargala on that house or planet."
+)
+
+#: How many malefics count as "several". **The book never says.**
+#:
+#: The only evidence is Exercise 16's own answer table: the 11th house (Vi) has
+#: Mars *and* Saturn in its 3rd (Sc) — two malefics — and the printed answer
+#: still lists them under virodhargala. So two is not "several" by the book's
+#: own worked output, and three is the smallest value that reproduces it.
+#:
+#: Recorded rather than decided. See docs/open-items.md OI-65.
+SEVERAL_MALEFICS = 3
