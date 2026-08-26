@@ -11,6 +11,8 @@ from fastapi import APIRouter, HTTPException
 from hora.api.models_argala import (
     ArgalaChartIn,
     ArgalaChartOut,
+    ArgalaOnKarakaIn,
+    ArgalaOnKarakaOut,
     ArgalaOnSignIn,
     ArgalaOnSignOut,
     ArgalaRulesOut,
@@ -43,6 +45,23 @@ def on_sign(req: ArgalaOnSignIn) -> dict:
     try:
         return argala_service.on_sign(
             req.sign, req.rasis, malefics=req.malefics,
+            several=req.several_malefics)
+    except argala_service.InputError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/karaka", response_model=ArgalaOnKarakaOut,
+             summary="Section 10.7: argalas on a karaka rather than a house")
+def on_karaka(req: ArgalaOnKarakaIn) -> dict:
+    """Argala on a graha is argala on the sign it occupies.
+
+    Section 10.6 says so outright — planets in the argala houses "cause argala
+    on Vi *and on the planets in Vi*" — and section 10.7 step 1 makes the
+    karaka a first-class target alongside a house.
+    """
+    try:
+        return argala_service.on_karaka(
+            req.graha, req.rasis, malefics=req.malefics,
             several=req.several_malefics)
     except argala_service.InputError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

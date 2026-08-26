@@ -13,6 +13,7 @@
       }
     },
     "definition": "Virodhargala shows the obstruction of argala.",
+    "dominance_note": "Step 3 is computed: `dominant` names whichever of argala and virodhargala is caused by more planets. Step 4 is not \u2014 when the counts tie, `dominant` is null and `dominance_reason` says why. Step 5 says \u201cguess\u201d, and nothing here guesses.",
     "fixed_malefics": [
       {
         "graha": 0,
@@ -41,6 +42,32 @@
       "4": "primary",
       "5": "secondary"
     },
+    "house_roles": [
+      {
+        "house": 2,
+        "kind": "primary",
+        "role": "the basic ingredient for the sustenance of a matter",
+        "verb": "sustains"
+      },
+      {
+        "house": 4,
+        "kind": "primary",
+        "role": "the basic factor that drives the mood, state and progress of a matter",
+        "verb": "drives"
+      },
+      {
+        "house": 11,
+        "kind": "primary",
+        "role": "the catalyst that can result in gains for a matter",
+        "verb": "catalyses"
+      },
+      {
+        "house": 5,
+        "kind": "secondary",
+        "role": "the additional contributing factors",
+        "verb": "contributes to"
+      }
+    ],
     "influence_ranking": [
       {
         "influence": "rasi drishti",
@@ -95,7 +122,35 @@
     "secondary_rule": "Apart from the 2nd, 4th and 11th houses from a house, the 5th house from a house has a secondary argala on it.",
     "several_malefics_note": "The book does not say how many malefics count as \u201cseveral\u201d. Exercise 16's own answer table leaves two malefics in the 3rd as virodhargala \u2014 Mars and Saturn in Sc, the 3rd from the 11th house \u2014 so three is the smallest threshold that reproduces it. Configurable per call. See docs/open-items.md OI-65.",
     "several_malefics_threshold": 3,
-    "third_house_rule": "There is a special principle regarding the 3rd house obstruction. If there are several malefics in the 3rd house from a house or a planet, they cause argala instead of virodhargala on that house or planet."
+    "third_house_rule": "There is a special principle regarding the 3rd house obstruction. If there are several malefics in the 3rd house from a house or a planet, they cause argala instead of virodhargala on that house or planet.",
+    "use_conclusion": "Using the above guidelines, we can understand the meaning of argalas on houses and karakas.",
+    "use_procedure": [
+      {
+        "computable": true,
+        "step": 1,
+        "text": "Depending on the matter of interest, take the relevant house or the relevant karaka."
+      },
+      {
+        "computable": true,
+        "step": 2,
+        "text": "Find argalas and virodhargalas on it."
+      },
+      {
+        "computable": true,
+        "step": 3,
+        "text": "If there are both, see if more planets cause argala or virodhargala."
+      },
+      {
+        "computable": false,
+        "step": 4,
+        "text": "If they are caused by the same number of planets, compare the strengths and decide whether argala dominates or virodhargala."
+      },
+      {
+        "computable": false,
+        "step": 5,
+        "text": "Based on the signs, houses and planets involved, guess the meaning of the argala or virodhargala."
+      }
+    ]
   },
   "status": 200
 }

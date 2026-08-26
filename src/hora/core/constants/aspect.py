@@ -463,3 +463,79 @@ ARGALA_NATURE_RULE = (
     "Benefics and malefics in the houses causing argala cause good and bad "
     "intervention."
 )
+
+
+# --------------------------------------------------------------------------
+# §10.7 Use of argala
+# --------------------------------------------------------------------------
+
+#: §10.7's procedure, in order. Steps 1 to 3 are computable. Step 4 needs a
+#: strength comparison chapter 15 has not finished. Step 5 says "guess", and
+#: nothing in the engine guesses.
+ARGALA_USE_PROCEDURE: tuple[dict, ...] = (
+    {"step": 1, "computable": True,
+     "text": "Depending on the matter of interest, take the relevant house or "
+             "the relevant karaka."},
+    {"step": 2, "computable": True,
+     "text": "Find argalas and virodhargalas on it."},
+    {"step": 3, "computable": True,
+     "text": "If there are both, see if more planets cause argala or "
+             "virodhargala."},
+    {"step": 4, "computable": False,
+     "text": "If they are caused by the same number of planets, compare the "
+             "strengths and decide whether argala dominates or virodhargala."},
+    {"step": 5, "computable": False,
+     "text": "Based on the signs, houses and planets involved, guess the "
+             "meaning of the argala or virodhargala."},
+)
+
+#: What an argala from each house *contributes* to the matter. §10.7 is the
+#: only place the four houses are given distinct semantic roles — §10.5 shows
+#: that they matter, §10.7 says how they differ from one another.
+ARGALA_HOUSE_ROLE: dict[int, dict] = {
+    2: {"kind": "primary", "role": "the basic ingredient for the sustenance of a matter",
+        "verb": "sustains"},
+    4: {"kind": "primary",
+        "role": "the basic factor that drives the mood, state and progress of a matter",
+        "verb": "drives"},
+    11: {"kind": "primary",
+         "role": "the catalyst that can result in gains for a matter",
+         "verb": "catalyses"},
+    5: {"kind": "secondary", "role": "the additional contributing factors",
+        "verb": "contributes to"},
+}
+
+#: §10.7's seven worked instances. `from_house` is the argala house counted
+#: from `target`; `house` is where that lands. Every one is checked
+#: arithmetically in the tests rather than trusted.
+ARGALA_ROLE_EXAMPLES: tuple[dict, ...] = (
+    {"from_house": 2, "target": 1, "house": 2, "shows": "food",
+     "contributes": "the sustenance of self"},
+    {"from_house": 2, "target": 4, "house": 5, "shows": "intelligence",
+     "contributes": "the sustenance of learning"},
+    {"from_house": 4, "target": 1, "house": 4, "shows": "comfort",
+     "contributes": "the mood and state of self"},
+    {"from_house": 4, "target": 4, "house": 7, "shows": "interaction",
+     "contributes": "one's learning"},
+    {"from_house": 11, "target": 4, "house": 2,
+     "shows": "character, grooming and samskara",
+     "contributes": "a catalyst in the process of learning"},
+    {"from_house": 5, "target": 1, "house": 5, "shows": "emotional situation",
+     "contributes": "the state of self"},
+    {"from_house": 5, "target": 4, "house": 8, "shows": "hard work",
+     "contributes": "one's learning"},
+)
+
+ARGALA_USE_CONCLUSION = (
+    "Using the above guidelines, we can understand the meaning of argalas on "
+    "houses and karakas."
+)
+
+#: §10.7 step 3 counts planets; step 4 falls back to strength. The engine does
+#: step 3 and stops — chapter 15's `simple_rules` measure is not built, and
+#: guessing a winner would invent the answer. See OI-67.
+ARGALA_DOMINANCE_UNDETERMINED = (
+    "Argala and virodhargala are caused by the same number of planets. Section "
+    "10.7 then says to compare the strengths, which needs a graha strength "
+    "measure this engine does not yet have."
+)

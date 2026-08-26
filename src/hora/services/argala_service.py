@@ -20,10 +20,14 @@ from hora.core import validate
 from hora.core.const import (
     ARGALA_BY_NATURE,
     ARGALA_DEFINITION,
+    ARGALA_DOMINANCE_UNDETERMINED,
     ARGALA_HOUSE_KIND,
+    ARGALA_HOUSE_ROLE,
     ARGALA_MEANS,
     ARGALA_NATURE_RULE,
     ARGALA_PAIRS,
+    ARGALA_USE_CONCLUSION,
+    ARGALA_USE_PROCEDURE,
     GRAHA_NAMES,
     INFLUENCE_RANKING,
     KETU_REVERSES_ARGALA,
@@ -40,7 +44,7 @@ from hora.core.const import (
 
 InputError = validate.InputError
 
-__all__ = ["InputError", "chart", "on_sign", "rules"]
+__all__ = ["InputError", "chart", "on_karaka", "on_sign", "rules"]
 
 #: The grahas chapter 3 fixes as malefic whatever the chart. The Moon and
 #: Mercury are conditional there and are deliberately left out: a caller who
@@ -125,10 +129,34 @@ def on_sign(
     # this argala is unobstructed."
     obstructed = {v.house: bool(v.grahas) for v in virodhas}
 
+    # §10.7 step 3: "If there are both, see if more planets cause argala or
+    # virodhargala." Counted over every graha in every argala house against
+    # every graha in every virodhargala house.
+    argala_count = sum(len(e.grahas) for e in argalas)
+    virodha_count = sum(len(e.grahas) for e in virodhas)
+    if argala_count == 0 and virodha_count == 0:
+        dominant, reason = None, "neither argala nor virodhargala is present"
+    elif argala_count > virodha_count:
+        dominant, reason = "argala", "more planets cause argala"
+    elif virodha_count > argala_count:
+        dominant, reason = "virodhargala", "more planets cause virodhargala"
+    else:
+        # §10.7 step 4 needs a strength comparison. Chapter 15's simple-rules
+        # measure is not built, so the engine stops rather than picking one.
+        dominant, reason = None, ARGALA_DOMINANCE_UNDETERMINED
+
     return {
         "sign": sign,
         "sign_name": RASI_NAMES[sign],
         "counted_anti_zodiacally": counts_anti_zodiacally(sign, ketu),
+        "argala_graha_count": argala_count,
+        "virodhargala_graha_count": virodha_count,
+        "primary_argala_graha_count": sum(
+            len(e.grahas) for e in argalas if e.argala_kind == "primary"),
+        "secondary_argala_graha_count": sum(
+            len(e.grahas) for e in argalas if e.argala_kind == "secondary"),
+        "dominant": dominant,
+        "dominance_reason": reason,
         "ketu_sign": ketu,
         "argalas": [
             {**_row(e, occupants),
@@ -136,6 +164,35 @@ def on_sign(
             for e in argalas
         ],
         "virodhargalas": [_row(e, occupants) for e in virodhas],
+    }
+
+
+def on_karaka(
+    graha: int,
+    rasis: dict[int, int],
+    *,
+    malefics: list[int] | None = None,
+    several: int | None = None,
+) -> dict:
+    """§10.7 step 1: "take the relevant house **or the relevant karaka**".
+
+    Argala on a graha is argala on the sign it occupies — §10.6 says so
+    outright: planets in the argala houses "cause argala on Vi *and on the
+    planets in Vi*". So this resolves the graha to its sign and answers the
+    same question, naming the graha it was asked about.
+    """
+    if int(graha) not in set(NAVAGRAHA):
+        raise InputError(f"unknown graha {graha!r}")
+    graha = int(graha)
+    rasis = _validate_rasis(rasis)
+    if graha not in rasis:
+        raise InputError(
+            f"{GRAHA_NAMES[graha]} has no placement; supply its rasi")
+    result = on_sign(rasis[graha], rasis, malefics=malefics, several=several)
+    return {
+        "karaka": graha,
+        "karaka_name": GRAHA_NAMES[graha],
+        **result,
     }
 
 
@@ -188,6 +245,18 @@ def rules() -> dict:
         "ketu_note": KETU_REVERSES_ARGALA,
         "third_house_rule": THIRD_HOUSE_MALEFIC_RULE,
         "several_malefics_threshold": SEVERAL_MALEFICS,
+        "use_procedure": [dict(step) for step in ARGALA_USE_PROCEDURE],
+        "house_roles": [
+            {"house": house, **{k: v for k, v in entry.items()}}
+            for house, entry in ARGALA_HOUSE_ROLE.items()
+        ],
+        "use_conclusion": ARGALA_USE_CONCLUSION,
+        "dominance_note": (
+            "Step 3 is computed: `dominant` names whichever of argala and "
+            "virodhargala is caused by more planets. Step 4 is not — when the "
+            "counts tie, `dominant` is null and `dominance_reason` says why. "
+            "Step 5 says \u201cguess\u201d, and nothing here guesses."
+        ),
         "several_malefics_note": (
             "The book does not say how many malefics count as “several”. "
             "Exercise 16's own answer table leaves two malefics in the 3rd as "

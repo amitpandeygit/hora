@@ -517,6 +517,18 @@ derived from the book:
 unimported until a chapter derives it. Its tables should be treated as a draft.
 Tracked as [OI-18](open-items.md#oi-18).
 
+### Chapter 10 — §10.7 worked instances (1)
+
+`ARGALA_ROLE_EXAMPLES`
+
+§10.7's seven worked instances of the four roles. The role table itself and
+the procedure are consumed by `services/argala_service.py`; these are the
+examples that demonstrate them.
+
+| Symbol | What will consume it |
+|---|---|
+| `ARGALA_ROLE_EXAMPLES` | Nothing computes it — each instance names what a house *means* for a matter, and the engine assigns no meanings. §10.7 step 5 says "guess", and nothing here guesses |
+
 ### Chapter 10 — §10.5 prose and worked examples (6)
 
 `ARGALA_IS_ADDITIONAL` · `ARGALA_IS_IMPORTANT` · `ARGALA_EXAMPLES` ·

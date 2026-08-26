@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**4 waiting on Amit · 31 waiting on evidence · 2 parked**
+**4 waiting on Amit · 32 waiting on evidence · 2 parked**
 
 ---
 
@@ -269,6 +269,34 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 **Closes when:** a semantic map is taken from the book (not from general
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
+
+### OI-67 — does a secondary argala count equally in §10.7's planet tally?
+
+§10.7 step 3: "If there are both, see if **more planets** cause argala or
+virodhargala."
+
+§10.5 has already split the four argala houses into three **primary** (2nd,
+4th, 11th) and one **secondary** (5th), and §10.7 gives the 5th the weakest
+role — "the additional contributing factors", against "basic ingredient" and
+"basic factor" for the 2nd and 4th. But step 3 says "more planets" and draws no
+distinction.
+
+So a graha in the 5th may or may not count as a full vote against a
+virodhargala. The book never says.
+
+The engine counts all argala houses equally, and returns
+`primary_argala_graha_count` and `secondary_argala_graha_count` separately so a
+caller can weight them differently without recomputing. No verdict changes
+today that would not change under either reading — but that is because nothing
+consumes the tally yet.
+
+Bound up with **step 4**, which is also unresolved: "compare the strengths and
+decide whether argala dominates" needs a graha strength measure. Chapter 15's
+`simple_rules` is the one section 9.2 wants and it is not built. On a tie the
+engine returns `dominant: null` with the reason, rather than picking.
+
+**Closes when:** the strength chapters land and step 4 becomes computable —
+the same evidence will probably settle whether the 5th votes at full weight.
 
 ### OI-65 — how many malefics are "several" in §10.6's 3rd-house rule?
 

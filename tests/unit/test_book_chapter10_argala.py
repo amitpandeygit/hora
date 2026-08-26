@@ -25,6 +25,7 @@ from hora.core.const import (
     ARGALA_DEFINITION,
     ARGALA_EXAMPLES,
     ARGALA_HOUSE_KIND,
+    ARGALA_HOUSE_ROLE,
     ARGALA_IS_ADDITIONAL,
     ARGALA_IS_IMPORTANT,
     ARGALA_MEANS,
@@ -32,6 +33,9 @@ from hora.core.const import (
     ARGALA_NATURE_RULE,
     ARGALA_NATURE_SPELLING_VARIANTS,
     ARGALA_PAIRS,
+    ARGALA_ROLE_EXAMPLES,
+    ARGALA_USE_CONCLUSION,
+    ARGALA_USE_PROCEDURE,
     ASPECT_SOURCE,
     INFLUENCE_RANKING,
     KETU_NOTE_EXAMPLE,
@@ -771,3 +775,333 @@ def test_chart_endpoint_marks_primary_and_secondary(client):
         kinds = {a["house"]: a["argala_kind"] for a in house["argalas"]}
         assert kinds == {2: "primary", 4: "primary", 11: "primary",
                          5: "secondary"}
+
+
+# --------------------------------------------------------------------------
+# 10.7 Use of argala
+# --------------------------------------------------------------------------
+
+
+def test_10_7_the_procedure_has_five_steps():
+    """"Depending on the matter of interest, take the relevant house or the
+    relevant karaka. Find argalas and virodhargalas on it. If there are both,
+    see if more planets cause argala or virodhargala. If they are caused by the
+    same number of planets, compare the strengths and decide whether argala
+    dominates or virodhargala. Based on the signs, houses and planets involved,
+    guess the meaning of the argala or virodhargala."
+
+    The first thing in chapter 10 that is a procedure rather than a lookup.
+    """
+    assert [s["step"] for s in ARGALA_USE_PROCEDURE] == [1, 2, 3, 4, 5]
+    assert "relevant house or the relevant karaka" in ARGALA_USE_PROCEDURE[0]["text"]
+    assert "more planets cause argala" in ARGALA_USE_PROCEDURE[2]["text"]
+
+
+def test_10_7_the_engine_performs_the_first_three_steps_only():
+    """Steps 1 to 3 are arithmetic. Step 4 needs a strength comparison, and
+    step 5 says "**guess**".
+
+    Marked per step rather than left implicit, so a caller can see where the
+    computation stops.
+    """
+    computable = [s["step"] for s in ARGALA_USE_PROCEDURE if s["computable"]]
+    assert computable == [1, 2, 3]
+    assert "compare the strengths" in ARGALA_USE_PROCEDURE[3]["text"]
+    assert "guess" in ARGALA_USE_PROCEDURE[4]["text"]
+
+
+def test_10_7_step_3_counts_planets_and_names_a_winner():
+    """"If there are both, see if more planets cause argala or virodhargala."
+
+    §10.6's own example: Saturn and Venus cause argala on Ge, Jupiter causes
+    virodhargala. Two against one, so argala dominates — which is what §10.6
+    concluded in words.
+    """
+    result = argala_service.on_sign(R["Ge"], {
+        Graha.MERCURY: R["Ge"], Graha.JUPITER: R["Pi"],
+        Graha.VENUS: R["Ar"], Graha.SATURN: R["Vi"]})
+    assert result["argala_graha_count"] == 2
+    assert result["virodhargala_graha_count"] == 1
+    assert result["dominant"] == "argala"
+    assert "more planets cause argala" in result["dominance_reason"]
+
+
+def test_10_7_step_4_stops_rather_than_guessing_a_winner():
+    """"If they are caused by the same number of planets, compare the
+    strengths and decide whether argala dominates or virodhargala."
+
+    Chapter 15's simple-rules strength measure is not built, so on a tie the
+    engine returns no winner and says why. Picking one would invent the
+    answer.
+    """
+    result = argala_service.on_sign(R["Ge"], {
+        Graha.MERCURY: R["Ge"], Graha.JUPITER: R["Pi"], Graha.VENUS: R["Ar"]})
+    assert result["argala_graha_count"] == result["virodhargala_graha_count"] == 1
+    assert result["dominant"] is None
+    assert "compare the strengths" in result["dominance_reason"]
+
+
+def test_10_7_an_empty_target_is_reported_as_neither():
+    """No argala and no virodhargala is a third case, distinct from a tie —
+    §10.7's step 3 begins "If there are both". Reported separately so a caller
+    cannot read absence as a stalemate.
+    """
+    result = argala_service.on_sign(R["Ge"], {Graha.MERCURY: R["Ge"]})
+    assert result["argala_graha_count"] == result["virodhargala_graha_count"] == 0
+    assert result["dominant"] is None
+    assert "neither argala nor virodhargala" in result["dominance_reason"]
+
+
+def test_10_7_step_5_guesses_and_the_engine_does_not():
+    """"Based on the signs, houses and planets involved, **guess** the meaning
+    of the argala or virodhargala."
+
+    The book's own verb. Nothing in the response assigns a meaning to an
+    argala.
+    """
+    result = argala_service.on_sign(R["Ge"], {
+        Graha.MERCURY: R["Ge"], Graha.SATURN: R["Vi"]})
+    for row in result["argalas"] + result["virodhargalas"]:
+        for field in ("meaning", "shows", "signifies", "interpretation"):
+            assert field not in row
+
+
+# --------------------------------------------------------------------------
+# 10.7's four roles
+# --------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "house,role_fragment",
+    [(2, "basic ingredient for the sustenance"),
+     (4, "basic factor that drives the mood, state and progress"),
+     (11, "catalyst that can result in gains"),
+     (5, "additional contributing factors")],
+)
+def test_10_7_each_argala_house_has_its_own_role(house, role_fragment):
+    """"Argala from the 2nd house shows the basic ingredient for the sustenance
+    of a matter... from the 4th house shows the basic factor that drives the
+    mood, state and progress... from the 11th house shows the catalyst that can
+    result in gains... Secondary argala from the 5th house shows the additional
+    contributing factors."
+
+    §10.5 showed the four houses matter. §10.7 is the only place that says how
+    they differ from one another.
+    """
+    assert role_fragment in ARGALA_HOUSE_ROLE[house]["role"]
+
+
+def test_10_7_the_roles_cover_exactly_the_four_argala_houses():
+    """No fifth role, and none for a virodhargala house. The roles attach to
+    the argala houses alone."""
+    assert set(ARGALA_HOUSE_ROLE) == {2, 4, 11, 5}
+    assert set(ARGALA_HOUSE_ROLE) == {a for a, _ in ARGALA_PAIRS}
+    virodhas = {v for _, v in ARGALA_PAIRS}
+    assert not (set(ARGALA_HOUSE_ROLE) & virodhas)
+
+
+def test_10_7_the_roles_agree_with_10_5s_primary_and_secondary():
+    """The 5th's role is the only one qualified as "**Secondary** argala from
+    the 5th house", and it is the only one §10.5 calls secondary. The two
+    sections agree without either cross-referencing the other.
+    """
+    for house, entry in ARGALA_HOUSE_ROLE.items():
+        assert entry["kind"] == ARGALA_HOUSE_KIND[house], house
+    assert ARGALA_HOUSE_ROLE[5]["kind"] == "secondary"
+    assert "additional" in ARGALA_HOUSE_ROLE[5]["role"]
+
+
+def test_10_7_the_roles_are_ordered_by_how_essential_they_are():
+    """"basic ingredient" for sustenance, "basic factor" that drives, then a
+    "catalyst" for gains, then "additional" contributing factors.
+
+    The 2nd and 4th are both called *basic*; the 11th is a catalyst, which acts
+    on a process rather than constituting it; the 5th is merely additional. So
+    the wording ranks them, and the ranking matches primary before secondary.
+    """
+    assert "basic" in ARGALA_HOUSE_ROLE[2]["role"]
+    assert "basic" in ARGALA_HOUSE_ROLE[4]["role"]
+    assert "basic" not in ARGALA_HOUSE_ROLE[11]["role"]
+    assert "additional" in ARGALA_HOUSE_ROLE[5]["role"]
+
+
+@pytest.mark.parametrize("example", ARGALA_ROLE_EXAMPLES,
+                         ids=lambda e: f"{e['from_house']}from{e['target']}")
+def test_10_7_each_worked_instance_lands_on_the_house_it_names(example):
+    """"the 2nd house shows food and it is a basic ingredient for the
+    sustenance of self (1st). The 5th house shows intelligence and it is a
+    basic ingredient for the sustenance of learning (4th)."
+
+    Seven instances across the four roles, each checked arithmetically.
+    """
+    landed = (example["target"] + example["from_house"] - 2) % 12 + 1
+    assert landed == example["house"], example
+
+
+def test_10_7_the_learning_examples_reproduce_10_5s_education_example():
+    """§10.5 said the 5th (intelligence), 7th (interaction) and 2nd (character
+    and samskara) make or break education, reading from the 4th house.
+
+    §10.7 names the same three houses for the same target and assigns each a
+    role: the 5th sustains, the 7th drives, the 2nd catalyses. Two sections,
+    the same three houses, and §10.7 explains why each is there.
+    """
+    education = next(e for e in ARGALA_EXAMPLES if e["matter"] == "education")
+    from_10_5 = {c["house"]: c["from_house"] for c in education["causes"]}
+    from_10_7 = {e["house"]: e["from_house"]
+                 for e in ARGALA_ROLE_EXAMPLES
+                 if e["target"] == 4 and e["from_house"] != 5}
+    assert from_10_5 == from_10_7 == {5: 2, 7: 4, 2: 11}
+    assert ARGALA_HOUSE_ROLE[2]["verb"] == "sustains"
+    assert ARGALA_HOUSE_ROLE[4]["verb"] == "drives"
+    assert ARGALA_HOUSE_ROLE[11]["verb"] == "catalyses"
+
+
+def test_10_7_the_meanings_mostly_agree_between_10_5_and_10_7():
+    """The 5th shows "intelligence" in both. The 7th shows "interaction with
+    others" in §10.5 and "interaction" in §10.7 — the shorter form.
+
+    The 2nd is the interesting one. §10.5: "overall character and samskara".
+    §10.7: "character, **grooming** and samskara". §10.7 adds a word §10.5
+    does not have, so the two lists are not interchangeable and neither is a
+    subset of the other in wording.
+
+    Both are kept as printed. Recorded here so nobody normalises one into the
+    other on the assumption that they are the same sentence twice.
+    """
+    education = next(e for e in ARGALA_EXAMPLES if e["matter"] == "education")
+    by_house = {c["house"]: c["shows"] for c in education["causes"]}
+    role_by_house = {e["house"]: e["shows"] for e in ARGALA_ROLE_EXAMPLES
+                     if e["target"] == 4}
+
+    assert by_house[5] == role_by_house[5] == "intelligence"
+    assert by_house[7] == "interaction with others"
+    assert role_by_house[7] == "interaction"
+
+    assert by_house[2] == "overall character and samskara"
+    assert role_by_house[2] == "character, grooming and samskara"
+    shared = {"character", "samskara"}
+    assert shared <= set(by_house[2].split())
+    assert shared <= {w.strip(",") for w in role_by_house[2].split()}
+    assert "grooming" not in by_house[2]
+
+
+def test_10_7_the_secondary_examples_agree_with_10_5_too():
+    """§10.5: "argala of 8th house on 4th ... shows the influence of hard work
+    in learning". §10.7: "The 8th house shows hard work and that contributes to
+    one's learning". Same house, same matter, same word."""
+    hard_work = next(e for e in ARGALA_ROLE_EXAMPLES if e["house"] == 8)
+    assert hard_work["shows"] == "hard work"
+    assert hard_work["from_house"] == 5
+    learning = next(e for e in SECONDARY_ARGALA_EXAMPLES if e["matter"] == "learning")
+    assert learning["causing_house"] == 8
+    assert "hard work" in learning["shows"]
+
+
+def test_10_7_the_self_examples_use_the_first_house_as_target():
+    """Three of the seven read from the 1st house, where the argala house and
+    the house it lands on are the same number — the 2nd from the 1st is the
+    2nd. The simplest case, and the one that makes the roles legible.
+    """
+    self_examples = [e for e in ARGALA_ROLE_EXAMPLES if e["target"] == 1]
+    assert len(self_examples) == 3
+    for example in self_examples:
+        assert example["house"] == example["from_house"]
+    assert {e["from_house"] for e in self_examples} == {2, 4, 5}
+
+
+def test_10_7_no_worked_instance_is_given_for_the_eleventh_from_the_first():
+    """The 11th from the 1st is the 11th, and §10.7 gives no example for it —
+    its catalyst example reads from the 4th instead. Pinned so the gap is
+    known to be the book's, not a transcription loss.
+    """
+    assert not [e for e in ARGALA_ROLE_EXAMPLES
+                if e["target"] == 1 and e["from_house"] == 11]
+    catalyst = [e for e in ARGALA_ROLE_EXAMPLES if e["from_house"] == 11]
+    assert len(catalyst) == 1
+    assert catalyst[0]["target"] == 4
+
+
+def test_10_7_the_conclusion_covers_houses_and_karakas_both():
+    """"Using the above guidelines, we can understand the meaning of argalas on
+    houses **and karakas**." — step 1's alternative, restated at the end."""
+    assert "houses and karakas" in ARGALA_USE_CONCLUSION
+
+
+# --------------------------------------------------------------------------
+# Argala on a karaka
+# --------------------------------------------------------------------------
+
+
+def test_10_7_argala_on_a_karaka_is_argala_on_its_sign():
+    """§10.6: planets in the argala houses "cause argala on Vi **and on the
+    planets in Vi**". So a karaka receives whatever its sign receives, and the
+    two endpoints must agree exactly.
+    """
+    rasis = {Graha.MERCURY: R["Ge"], Graha.JUPITER: R["Pi"],
+             Graha.VENUS: R["Ar"], Graha.SATURN: R["Vi"]}
+    by_karaka = argala_service.on_karaka(Graha.MERCURY, rasis)
+    by_sign = argala_service.on_sign(R["Ge"], rasis)
+    assert by_karaka["karaka_name"] == "Mercury"
+    assert {k: v for k, v in by_karaka.items() if k not in
+            ("karaka", "karaka_name")} == by_sign
+
+
+def test_10_7_two_grahas_in_one_sign_receive_the_same_argala():
+    """A consequence of the same rule: co-located karakas cannot differ. Mars
+    and Saturn share Scorpio in Chart 5's navamsa.
+    """
+    rasis = _navamsa()
+    mars = argala_service.on_karaka(Graha.MARS, rasis)
+    saturn = argala_service.on_karaka(Graha.SATURN, rasis)
+    assert mars["argalas"] == saturn["argalas"]
+    assert mars["virodhargalas"] == saturn["virodhargalas"]
+    assert mars["dominant"] == saturn["dominant"]
+
+
+def test_10_7_a_karaka_without_a_placement_is_refused():
+    """Rather than defaulting to Aries or dropping the graha silently."""
+    with pytest.raises(argala_service.InputError, match="no placement"):
+        argala_service.on_karaka(Graha.KETU, {Graha.MERCURY: R["Ge"]})
+
+
+def test_10_7_the_karaka_endpoint_answers_the_10_6_example(client):
+    body = client.post("/v1/argala/karaka", json={
+        "graha": int(Graha.MERCURY),
+        "rasis": {3: R["Ge"], 4: R["Pi"], 5: R["Ar"], 6: R["Vi"]}}).json()
+    assert body["karaka_name"] == "Mercury"
+    assert body["sign_name"] == "Gemini"
+    assert body["dominant"] == "argala"
+
+
+def test_10_7_the_karaka_endpoint_rejects_an_unplaced_graha(client):
+    response = client.post("/v1/argala/karaka", json={
+        "graha": int(Graha.KETU), "rasis": {3: R["Ge"]}})
+    assert response.status_code == 400
+    assert "no placement" in response.json()["error"]["message"]
+
+
+def test_10_7_the_rules_endpoint_carries_the_procedure_and_roles(client):
+    body = client.get("/v1/argala/rules").json()
+    assert [s["step"] for s in body["use_procedure"]] == [1, 2, 3, 4, 5]
+    assert [s["computable"] for s in body["use_procedure"]] == [
+        True, True, True, False, False]
+    roles = {r["house"]: r["verb"] for r in body["house_roles"]}
+    assert roles == {2: "sustains", 4: "drives", 11: "catalyses",
+                     5: "contributes to"}
+    assert "houses and karakas" in body["use_conclusion"]
+    assert "nothing here guesses" in body["dominance_note"]
+
+
+def test_10_7_exercise_16_rows_carry_a_dominance_verdict(client):
+    """Every house in Exercise 16 gets step 3 applied, so the procedure is
+    reachable over a whole chart and not only one target."""
+    body = client.post("/v1/argala/chart", json={
+        "rasis": _navamsa(), "lagna_rasi": R["Sc"]}).json()
+    verdicts = {h["house"]: h["dominant"] for h in body["houses"]}
+    assert set(verdicts) == set(range(1, 13))
+    assert all(v in (None, "argala", "virodhargala") for v in verdicts.values())
+    for house in body["houses"]:
+        counted = (house["argala_graha_count"], house["virodhargala_graha_count"])
+        if counted[0] == counted[1]:
+            assert house["dominant"] is None

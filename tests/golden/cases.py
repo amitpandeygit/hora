@@ -260,6 +260,10 @@ CASES = [
         # 10.6's own example: Mercury, Jupiter, Venus, Saturn in Ge, Pi, Ar, Vi.
         "sign": 2, "rasis": {3: 2, 4: 11, 5: 0, 6: 5},
     }),
+    ("argala_karaka_mercury", "POST", "/v1/argala/karaka", {
+        # 10.7 step 1: the relevant karaka. 10.6's own example placements.
+        "graha": 3, "rasis": {3: 2, 4: 11, 5: 0, 6: 5},
+    }),
     ("err_argala_empty_chart", "POST", "/v1/argala/chart",
      {"rasis": {}, "lagna_rasi": 0}),
 

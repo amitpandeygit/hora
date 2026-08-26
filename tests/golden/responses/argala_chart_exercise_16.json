@@ -2,6 +2,7 @@
   "body": {
     "houses": [
       {
+        "argala_graha_count": 3,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -76,10 +77,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause argala",
+        "dominant": "argala",
         "house": 1,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 3,
+        "secondary_argala_graha_count": 0,
         "sign": 7,
         "sign_name": "Scorpio",
+        "virodhargala_graha_count": 2,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -150,6 +156,7 @@
         ]
       },
       {
+        "argala_graha_count": 2,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -219,10 +226,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause virodhargala",
+        "dominant": "virodhargala",
         "house": 2,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 1,
+        "secondary_argala_graha_count": 1,
         "sign": 8,
         "sign_name": "Sagittarius",
+        "virodhargala_graha_count": 5,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -307,6 +319,7 @@
         ]
       },
       {
+        "argala_graha_count": 5,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -390,10 +403,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause argala",
+        "dominant": "argala",
         "house": 3,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 4,
+        "secondary_argala_graha_count": 1,
         "sign": 9,
         "sign_name": "Capricorn",
+        "virodhargala_graha_count": 2,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -464,6 +482,7 @@
         ]
       },
       {
+        "argala_graha_count": 4,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -542,10 +561,15 @@
           }
         ],
         "counted_anti_zodiacally": true,
+        "dominance_reason": "more planets cause argala",
+        "dominant": "argala",
         "house": 4,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 4,
+        "secondary_argala_graha_count": 0,
         "sign": 10,
         "sign_name": "Aquarius",
+        "virodhargala_graha_count": 2,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -616,6 +640,7 @@
         ]
       },
       {
+        "argala_graha_count": 2,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -685,10 +710,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause virodhargala",
+        "dominant": "virodhargala",
         "house": 5,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 2,
+        "secondary_argala_graha_count": 0,
         "sign": 11,
         "sign_name": "Pisces",
+        "virodhargala_graha_count": 5,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -773,6 +803,7 @@
         ]
       },
       {
+        "argala_graha_count": 3,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -847,10 +878,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause argala",
+        "dominant": "argala",
         "house": 6,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 2,
+        "secondary_argala_graha_count": 1,
         "sign": 0,
         "sign_name": "Aries",
+        "virodhargala_graha_count": 2,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -921,6 +957,7 @@
         ]
       },
       {
+        "argala_graha_count": 2,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -990,10 +1027,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause virodhargala",
+        "dominant": "virodhargala",
         "house": 7,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 1,
+        "secondary_argala_graha_count": 1,
         "sign": 1,
         "sign_name": "Taurus",
+        "virodhargala_graha_count": 3,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -1069,6 +1111,7 @@
         ]
       },
       {
+        "argala_graha_count": 2,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -1138,10 +1181,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause virodhargala",
+        "dominant": "virodhargala",
         "house": 8,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 2,
+        "secondary_argala_graha_count": 0,
         "sign": 2,
         "sign_name": "Gemini",
+        "virodhargala_graha_count": 3,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -1217,6 +1265,7 @@
         ]
       },
       {
+        "argala_graha_count": 4,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -1295,10 +1344,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause argala",
+        "dominant": "argala",
         "house": 9,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 2,
+        "secondary_argala_graha_count": 2,
         "sign": 3,
         "sign_name": "Cancer",
+        "virodhargala_graha_count": 2,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -1369,6 +1423,7 @@
         ]
       },
       {
+        "argala_graha_count": 4,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -1447,10 +1502,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause argala",
+        "dominant": "argala",
         "house": 10,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 3,
+        "secondary_argala_graha_count": 1,
         "sign": 4,
         "sign_name": "Leo",
+        "virodhargala_graha_count": 2,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -1521,6 +1581,7 @@
         ]
       },
       {
+        "argala_graha_count": 2,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -1590,10 +1651,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause virodhargala",
+        "dominant": "virodhargala",
         "house": 11,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 1,
+        "secondary_argala_graha_count": 1,
         "sign": 5,
         "sign_name": "Virgo",
+        "virodhargala_graha_count": 4,
         "virodhargalas": [
           {
             "argala_kind": "primary",
@@ -1673,6 +1739,7 @@
         ]
       },
       {
+        "argala_graha_count": 5,
         "argalas": [
           {
             "argala_kind": "primary",
@@ -1756,10 +1823,15 @@
           }
         ],
         "counted_anti_zodiacally": false,
+        "dominance_reason": "more planets cause argala",
+        "dominant": "argala",
         "house": 12,
         "ketu_sign": 10,
+        "primary_argala_graha_count": 4,
+        "secondary_argala_graha_count": 1,
         "sign": 6,
         "sign_name": "Libra",
+        "virodhargala_graha_count": 2,
         "virodhargalas": [
           {
             "argala_kind": "primary",
