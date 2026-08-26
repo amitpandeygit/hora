@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 35 waiting on evidence · 2 parked**
+**5 waiting on Amit · 37 waiting on evidence · 2 parked**
 
 ---
 
@@ -271,6 +271,54 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
 
+### OI-71 — Chart 8 was never supplied; Exercise 17 works from a reconstruction
+
+Exercise 17 reads Chart 8. The chart itself has not been given to us — only the
+exercise, its hint and its answer.
+
+Seven placements are recoverable from the answer text, and the recovery is
+**provably unique**: Mars is "in the 5th house from Saturn" and "in own house",
+and Saturn is "in a watery sign". Mars in Aries would put Saturn in
+Sagittarius, which is fiery. Only Mars in Scorpio with Saturn in Cancer
+satisfies both.
+
+The rest then follows and is independently confirmed by the text: Venus in the
+4th is Libra, "own sign"; Rahu in the 11th is Taurus, putting Ketu in Scorpio,
+"the other owner of Sc". Mercury and Jupiter join Venus in Libra, the Sun joins
+Mars and Ketu in Scorpio.
+
+**Lagna, the Moon and every longitude remain unknown.** So `CHART_8_PARTIAL` is
+a reconstruction for testing the argala geometry, explicitly not a chart
+fixture, and it cannot be used as one — no houses, no chara karakas, no
+verification against birth data as Charts 6 and 7 got.
+
+**Closes when:** you send Chart 8's page, or we accept the exercise as covered
+by the reconstruction alone.
+
+### OI-72 — Exercise 17 is the only place chapter 10 compares strengths
+
+§10.7 step 4 says "compare the strengths and decide whether argala dominates or
+virodhargala", and chapter 10 never does it — Examples 35 and 36 both skip it
+(OI-70). Exercise 17's hint is the exception, and even there it ranks planets
+*within* an argala house rather than argala against virodhargala:
+
+> "Being in **own house**, Venus dominates over Jupiter and Mercury. Being the
+> **most advanced** planet, Mercury is also strong. Mars dominates over Sun and
+> Ketu, being in own house and being **more advanced than Ketu** – the other
+> owner of Sc."
+
+Two criteria — **own house** and **most advanced** — plus a tie-break between
+co-owners of a sign. All three belong to chapter 15's `simple_rules` measure,
+which is marked "not yet implemented" and which
+`test_simple_rules_is_the_measure_section_9_2_actually_wants` already flags as
+wanted elsewhere.
+
+This is evidence of what that measure must contain, gathered from a chapter
+that has no business defining it.
+
+**Closes when:** chapter 15's simple-rules measure is built and reproduces this
+hint's three judgements.
+
 ### OI-70 — §10.7 step 3 is unvalidated: no counting rule fits both examples
 
 Step 3: "If there are both, see if **more planets** cause argala or
@@ -345,6 +393,9 @@ Chapter 8 does not say this anywhere:
 - **Table 16's** Saturn row lists the 5th (Following), 6th (servants), 8th
   (Longevity, troubles) and 12th (losses, hospitalization). No karma, no
   livelihood.
+
+**Used three times.** Example 35 opens with it, Example 36 assumes it, and
+Exercise 17 repeats it word for word. A settled premise, not a slip.
 
 Saturn as karma karaka is standard classical doctrine, so the claim is not
 surprising — but chapter 8 is the chapter that was supposed to hold the karaka

@@ -517,6 +517,17 @@ derived from the book:
 unimported until a chapter derives it. Its tables should be treated as a draft.
 Tracked as [OI-18](open-items.md#oi-18).
 
+### Chapter 10 — Exercise 17's technique (2)
+
+`STRENGTH_CRITERIA_USED` · `KARAKA_SIGN_ELEMENT_READING`
+
+Two techniques Exercise 17 uses that chapter 10 never defines.
+
+| Symbol | What will consume it |
+|---|---|
+| `STRENGTH_CRITERIA_USED` | Chapter 15's simple-rules strength measure — own house, most advanced, co-owner tie-break. See OI-72 |
+| `KARAKA_SIGN_ELEMENT_READING` | Reading a karaka's own sign element before its argalas; chapter 2 supplies the elements, nothing joins them to a karaka |
+
 ### Chapter 10 — Example 35's premise (2)
 
 `EXAMPLE_35_PREMISE` · `EXAMPLE_35_RULE`

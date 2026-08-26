@@ -39,13 +39,16 @@ from hora.core.const import (
     ASPECT_SOURCE,
     EXAMPLE_35_PREMISE,
     EXAMPLE_35_RULE,
+    GRAHA_NAMES,
     INFLUENCE_RANKING,
+    KARAKA_SIGN_ELEMENT_READING,
     KETU_NOTE_EXAMPLE,
     KETU_REVERSES_ARGALA,
     PRIMARY_ARGALA_RULE,
     SECONDARY_ARGALA_EXAMPLES,
     SECONDARY_ARGALA_RULE,
     SEVERAL_MALEFICS,
+    STRENGTH_CRITERIA_USED,
     THIRD_HOUSE_MALEFIC_RULE,
     VIRODHARGALA_DEFINITION,
     VIRODHARGALA_EXAMPLE,
@@ -1658,3 +1661,202 @@ def test_example_36_through_the_endpoints(client):
     second = next(a for a in gl["argalas"] if a["house"] == 2)
     assert [g["graha_name"] for g in second["grahas"]] == ["Sun"]
     assert second["obstructed"] is False
+
+
+# --------------------------------------------------------------------------
+# Exercise 17 — Chart 8, which was not supplied
+# --------------------------------------------------------------------------
+
+#: **Reconstructed, not transcribed.** Chart 8 itself was never given to us.
+#: These placements are *derived* from Exercise 17's own hint and answer, and
+#: the derivation is provably unique — see
+#: `test_exercise_17_chart_8_placements_are_forced`. Lagna, the Moon and every
+#: longitude remain unknown, so this is not a chart fixture and cannot be used
+#: as one. See OI-71.
+CHART_8_PARTIAL = {
+    Graha.SATURN: "Cn",
+    Graha.VENUS: "Li", Graha.JUPITER: "Li", Graha.MERCURY: "Li",
+    Graha.SUN: "Sc", Graha.MARS: "Sc", Graha.KETU: "Sc",
+    Graha.RAHU: "Ta",
+}
+
+
+def _chart_8_rasis():
+    return {int(g): R[sign] for g, sign in CHART_8_PARTIAL.items()}
+
+
+def test_exercise_17_chart_8_placements_are_forced():
+    """Chart 8 was not supplied. Two statements in Exercise 17 pin Saturn:
+
+    * "Mars is very strong in the **5th house from Saturn**" and "being in own
+      house" — so Mars is in Aries or Scorpio, five houses on from Saturn;
+    * "Being in a **watery sign**, he shows something flexible and fluid."
+
+    Only one placement satisfies both. Mars in Aries would put Saturn in
+    Sagittarius, which is fiery.
+    """
+    from hora.core.const import RASI_ELEMENT, RASI_LORD
+
+    water = RASI_ELEMENT[R["Cn"]]
+    solutions = [
+        (saturn, (saturn + 4) % 12) for saturn in range(12)
+        if RASI_LORD[(saturn + 4) % 12] == Graha.MARS
+        and RASI_ELEMENT[saturn] == water
+    ]
+    assert solutions == [(R["Cn"], R["Sc"])]
+
+
+def test_exercise_17_the_remaining_placements_follow():
+    """With Saturn in Cancer, the rest of the hint checks out and nothing has
+    to be guessed:
+
+    * Venus in the **4th** from Cancer is Libra — "Though Venus is in **own
+      sign**";
+    * Rahu in the **11th** is Taurus, which puts Ketu in Scorpio with Mars,
+      matching "Ketu – the other owner of Sc".
+    """
+    from hora.core.const import RASI_LORD
+
+    saturn = R["Cn"]
+    venus = (saturn + 3) % 12
+    rahu = (saturn + 10) % 12
+    assert RASI_ABBR[venus] == "Li"
+    assert RASI_LORD[venus] == Graha.VENUS
+    assert RASI_ABBR[rahu] == "Ta"
+    assert (rahu + 6) % 12 == R["Sc"]
+
+
+def test_exercise_17_confirms_chapter_15s_co_lord_table():
+    """"Ketu – **the other owner of Sc**."
+
+    Chapter 15 §15.5.1 gives Scorpio two lords, Mars and Ketu, and Aquarius two,
+    Saturn and Rahu. That table was built from chapter 15 alone; Exercise 17
+    uses it in chapter 10 without citing it, and the two agree.
+    """
+    from hora.charts.colord import CO_LORDS
+
+    assert [GRAHA_NAMES[g] for g in CO_LORDS[R["Sc"]]] == ["Mars", "Ketu"]
+    assert Graha.KETU in CO_LORDS[R["Sc"]]
+
+
+def test_exercise_17_the_three_argalas_on_saturn():
+    """The exercise names three influences on Saturn: Venus and Mercury in the
+    4th, Mars in the 5th, Rahu in the 11th. All three are argala houses, and
+    Jupiter rides along in Libra with Venus and Mercury.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_8_rasis())
+    assert result["sign_name"] == "Cancer"
+    occupied = {a["house"]: sorted(g["graha_name"] for g in a["grahas"])
+                for a in result["argalas"] if a["present"]}
+    assert occupied == {
+        4: ["Jupiter", "Mercury", "Venus"],
+        5: ["Ketu", "Mars", "Sun"],
+        11: ["Rahu"],
+    }
+
+
+def test_exercise_17_uses_10_7s_role_words_exactly():
+    """The clearest confirmation that §10.7's roles are meant to be used.
+
+    * 4th — "Being the 4th house argala, this influence is the **basic
+      driving factor** of the native's karma." §10.7: "the **basic factor that
+      drives** the mood, state and progress of a matter".
+    * 11th — "His 11th house argala can denote **gains** in his livelihood with
+      those factors working as **catalysts**." §10.7: "the **catalyst** that can
+      result in **gains** for a matter".
+    * 5th — "he also has a **secondary** argala." §10.5 and §10.7 both call the
+      5th secondary.
+
+    Three roles, three matches, none of them cross-referenced by the book.
+    """
+    fourth = ARGALA_HOUSE_ROLE[4]
+    assert "basic factor that drives" in fourth["role"]
+    eleventh = ARGALA_HOUSE_ROLE[11]
+    assert "catalyst" in eleventh["role"] and "gains" in eleventh["role"]
+    assert ARGALA_HOUSE_ROLE[5]["kind"] == "secondary"
+
+    result = argala_service.on_karaka(Graha.SATURN, _chart_8_rasis())
+    kinds = {a["house"]: a["argala_kind"] for a in result["argalas"]}
+    assert kinds[4] == kinds[11] == "primary"
+    assert kinds[5] == "secondary"
+
+
+def test_exercise_17_rahus_argala_is_malefic():
+    """"Rahu is in the 11th from Saturn and he has a **malefic argala** on
+    Saturn." — a paapaargala, §10.5's term, because Rahu is a malefic.
+    """
+    assert ARGALA_BY_NATURE["malefic"]["name"] == "paapaargala"
+    assert Graha.RAHU in argala_service.FIXED_MALEFICS
+    result = argala_service.on_karaka(Graha.SATURN, _chart_8_rasis())
+    eleventh = next(a for a in result["argalas"] if a["house"] == 11)
+    assert [g["graha_name"] for g in eleventh["grahas"]] == ["Rahu"]
+
+
+def test_exercise_17_is_the_only_place_step_4_is_applied():
+    """"Being in own house, Venus dominates over Jupiter and Mercury. Being the
+    most advanced planet, Mercury is also strong. Mars dominates over Sun and
+    Ketu, being in own house and being more advanced than Ketu."
+
+    §10.7 step 4 says "compare the strengths" and chapter 10 never does it —
+    except here, and even here it ranks planets *within* an argala house rather
+    than argala against virodhargala.
+
+    Two criteria are used: **own house** and **most advanced**. Both belong to
+    chapter 15's `simple_rules` measure, which is not built. Recorded as
+    evidence of what that measure must contain.
+    """
+    criteria = {c["criterion"] for c in STRENGTH_CRITERIA_USED}
+    assert "own house" in criteria
+    assert "most advanced" in criteria
+    assert next(s for s in ARGALA_USE_PROCEDURE if s["step"] == 4)[
+        "computable"] is False
+
+
+def test_exercise_17_the_strength_comparison_is_not_computed():
+    """The engine ranks nothing inside an argala house. It returns the grahas
+    in the order they are supplied and stops — Venus dominating Jupiter and
+    Mercury is the book's judgement, not a computation.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_8_rasis())
+    fourth = next(a for a in result["argalas"] if a["house"] == 4)
+    payload = repr(fourth).lower()
+    for field in ("strength", "dominates", "stronger", "rank"):
+        assert field not in payload
+
+
+def test_exercise_17_reads_the_karakas_own_sign_before_any_argala():
+    """"Saturn is the significator of livelihood and karma... **Being in a
+    watery sign, he shows something flexible and fluid.** By studying the
+    argalas on him, we can see the decisive influences."
+
+    The element of the karaka's own sign is read first, and argala only after.
+    Chapter 10 introduces no such rule — it is chapter 2's elements applied to
+    a karaka, used here without comment.
+    """
+    from hora.core.const import RASI_ELEMENT
+
+    assert "watery sign" in KARAKA_SIGN_ELEMENT_READING
+    assert RASI_ELEMENT[R["Cn"]] == RASI_ELEMENT[R["Sc"]] == RASI_ELEMENT[R["Pi"]]
+
+
+def test_exercise_17_repeats_example_35s_unsourced_premise():
+    """"Saturn is the significator of livelihood and karma."
+
+    Word for word what Example 35 opens with, and chapter 8 still does not say
+    it. Two independent uses make it a settled premise rather than a slip, and
+    strengthen OI-69.
+    """
+    assert EXAMPLE_35_PREMISE == "Saturn is the significator of livelihood and karma."
+
+
+def test_exercise_17_the_interpretation_is_not_computed():
+    """"The native was a very famous and successful fashion designer. He had
+    mafia connections. He was finally shot dead."
+
+    §10.7 step 5's "guess", worked to a conclusion. Nothing in the response
+    approaches this, and nothing should.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_8_rasis())
+    payload = repr(result).lower()
+    for word in ("fashion", "designer", "mafia", "livelihood", "karma"):
+        assert word not in payload

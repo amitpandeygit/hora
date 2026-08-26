@@ -552,3 +552,24 @@ EXAMPLE_35_PREMISE = "Saturn is the significator of livelihood and karma."
 EXAMPLE_35_RULE = (
     "Argalas on him denote decisive influences on livelihood and karma."
 )
+
+
+#: Exercise 17's hint applies §10.7 step 4 — "compare the strengths" — for the
+#: first and only time in the chapter, using two simple criteria and one
+#: tie-break. Chapter 15's `simple_rules` measure is the one that would compute
+#: this, and it is not built; recorded as evidence of what it must contain.
+STRENGTH_CRITERIA_USED: tuple[dict, ...] = (
+    {"criterion": "own house", "text": "Being in own house, Venus dominates "
+                                       "over Jupiter and Mercury."},
+    {"criterion": "most advanced", "text": "Being the most advanced planet, "
+                                           "Mercury is also strong."},
+    {"criterion": "own house and advancement over the co-owner",
+     "text": "Mars dominates over Sun and Ketu, being in own house and being "
+             "more advanced than Ketu – the other owner of Sc."},
+)
+
+#: Exercise 17 reads the karaka's own sign element before reading any argala.
+#: A technique chapter 10 uses without introducing.
+KARAKA_SIGN_ELEMENT_READING = (
+    "Being in a watery sign, he shows something flexible and fluid."
+)
