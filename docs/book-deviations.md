@@ -16,14 +16,19 @@ not overrule PVR, and how PVR-versus-PVR conflicts are broken — is in
 ## Where we stand against the book
 
 Asked directly on 2026-08-26: *are we differing from the book?* The honest
-tally, so it does not have to be reassembled from 21 entries each time.
+tally, so it does not have to be reassembled from 24 entries each time.
+Last revised 2026-08-27, after chapter 10.
 
-**1. Nine internal conflicts, resolved by rule (PVR-1 to PVR-9).** The book
+**1. Ten internal conflicts (PVR-1 to PVR-10), nine resolved by rule.** The book
 says X in one place and not-X in another; we pick one. These are not
 disagreements with the book — they are places the book disagrees with itself,
 adjudicated by the ladder in [precedence.md](precedence.md), which was written
 before any of them arose: a stated rule beats its transcribed output, a table
-beats prose, a definitional section beats a passing mention.
+beats prose, a definitional section beats a passing mention. **PVR-10 is the
+one the ladder does not settle** — §10.6's "several malefics" rule is not
+computable, so there was nothing to outrank Exercise 16's output with. Open as
+[OI-65](open-items.md); the threshold is a per-call parameter, not a baked-in
+constant.
 
 **2. One departure from printed text, with internal support: D-6.** §3.2.7
 prints "Saturn and Mercury are female" after already naming Moon and Venus as
@@ -35,12 +40,27 @@ takes the sex of its company.
 differing: node exaltations in Gemini/Sagittarius (D-4), Mercury's moolatrikona
 at 15° (D-5), the dosha assignment (D-1), upper-limb sunrise (D-10).
 
-**4. One genuine live divergence: [OI-36](open-items.md).** `ABHIJIT_END` runs
+**3a. Book typos we transcribe rather than correct.** "Graha Drishri" for
+Graha Drishti (D-24), two spellings each for subhaargala and paapaargala
+(D-25), and two different word-lists for the same reading in §10.5 and §10.7
+(D-26). None changes a calculation; all three would vanish under a
+"tidy-up" pass, and D-20 already showed that costs real information.
+
+**4. Two live divergences, one known-wrong and one undecided.**
+
+**[OI-36](open-items.md) — known wrong.** `ABHIJIT_END` runs
 53'20" past what §1.3.6 defines, because classical Muhurta convention was
 layered on top of PVR's sentence during Phase 1. The book does **not**
 contradict itself here — our code contradicts an unambiguous statement. It is
-unfixed only because the decision is deferred. **This is the one place we are
-wrong against the book and know it.**
+unfixed only because the decision is deferred.
+
+**[OI-68](open-items.md) — undecided.** Our `node_type` default is `true`.
+Chart 6 prints its own birth data, and recomputing it reproduces every body to
+one arcminute **only with the mean node**; under `true`, Rahu is thirty-nine
+arcminutes out. This is the first hard evidence in the project about which
+convention the book uses and it points against our default. One chart is one
+data point, so it is registered rather than acted on — but it is a place where
+our output and the book's printed output genuinely differ.
 
 ---
 
@@ -721,3 +741,89 @@ Membership is not in dispute — both name the same four.
 
 **To close:** confirm against JHora or a later PVR source which numbering he
 intends, if either.
+
+---
+
+## D-24 · §10.2's heading is printed "Graha Drishri"
+
+**Status: closed.** Recorded as printed; the term itself is spelled correctly
+everywhere it is used.
+
+The section heading reads:
+
+> **10.2   Graha Drishri**
+
+Every other occurrence in the chapter — §10.1's own sentence "There are 2 kinds
+of aspects: (1) graha **drishti** and (2) rasi drishti", and §10.3's heading
+"Rasi **Drishti**" one section later — spells it *drishti*. The `t` has become
+an `r`.
+
+**What we do:** `GRAHA_DRISHTI_HEADING_AS_PRINTED` holds the misprint;
+`ASPECT_KINDS["graha_drishti"]["name"]` holds the term. Keeping both means a
+reader searching the book for "Graha Drishri" finds it, and no code ever treats
+"drishri" as a second kind of aspect.
+
+Confirmed by Amit, 2026-08-27. Pinned by
+`test_10_2_the_heading_is_printed_with_a_typo` and
+`test_10_3_the_heading_is_spelled_correctly`, which asserts §10.3 sets the same
+word correctly — which is what makes this a misprint rather than a variant.
+
+---
+
+## D-25 · §10.5 spells both argala natures two ways
+
+**Status: closed.** Both spellings stored; the definitional forms are primary.
+
+§10.5 defines them once:
+
+> Argala by a benefic planet is called a "**subhaargala**" (benefic
+> intervention) and argala by a malefic planet is called a "**paapaargala**"
+> (malefic intervention).
+
+Then uses the shorter forms in every example that follows:
+
+> If Jupiter is in 5th house ... his **subhargala** (benefic intervention) on
+> 4th will help one's education. If Rahu is in 5th house, his **papargala**
+> (malefic intervention) on 4th will cause obstacles ...
+
+Note §10.6 uses the long forms again — "this is a **paapaargala** (malefic
+intervention)" — so the book alternates rather than switching once.
+
+**What we do:** `ARGALA_BY_NATURE` carries "subhaargala" and "paapaargala",
+the forms from the sentence whose stated purpose is to define them —
+[precedence.md](precedence.md) tie-break rule 2, a definitional section beats a
+passing mention. `ARGALA_NATURE_SPELLING_VARIANTS` records the short forms so
+text matched against the book still resolves.
+
+Same treatment as [D-20](#) and [D-21](#). Pinned by
+`test_10_5_spells_both_terms_two_ways`.
+
+---
+
+## D-26 · §10.5 and §10.7 word the 2nd house's contribution differently
+
+**Status: closed.** Both stored as printed; neither is a subset of the other.
+
+Both sections work the same reading — what the argala houses contribute to
+education/learning, read from the 4th house — and they name the same three
+houses, the 5th, 7th and 2nd. Two of the three agree in wording. The 2nd does
+not:
+
+| House | §10.5 | §10.7 |
+|---|---|---|
+| 5th | intelligence | intelligence |
+| 7th | interaction with others | interaction |
+| 2nd | overall character and samskara | character, **grooming** and samskara |
+
+§10.7 adds *grooming*, which §10.5 does not have; §10.5 has *overall*, which
+§10.7 does not. So neither list contains the other, and "the same sentence
+printed twice" is the wrong model.
+
+**What we do:** `ARGALA_EXAMPLES` holds §10.5's wording and
+`ARGALA_ROLE_EXAMPLES` holds §10.7's, each against its own section. Nothing
+merges them.
+
+This one is easy to lose: a reader checking the two sections against each other
+would naturally normalise one into the other, and the fuller list would
+disappear. Found by a test that assumed they matched and failed. Pinned by
+`test_10_7_the_meanings_mostly_agree_between_10_5_and_10_7`.

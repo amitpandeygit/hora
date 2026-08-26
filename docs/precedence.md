@@ -106,6 +106,15 @@ trivial — a conflict that looked trivial is how a wrong default gets in.
 | **PVR-5** | Upaketu in Exercise 7 | Table 9's two formulas (both give 13°19' Ar) vs the §4.4 answer "19°1' Sc" | Rules 1 and 3 — a derivation rule beats its transcribed output, and a table beats prose | 13°19' Aries | [D-9](book-deviations.md) |
 | **PVR-9** | DK in Example 28 | §8.2's procedure (decreasing advancement) vs Table 14's last row "Venus 2º28' 8 DK" | Rule 1 — the stated procedure beats its transcribed output; Venus is already MK at 17º21', and 2º28' is Saturn's | Saturn | [D-17](book-deviations.md) |
 | **PVR-8** | D-3 in Example 27 | §6.2.3's rule (last 10º goes to the 9th from the rasi) vs the example's "D-3: Li" for 29º49' Sg | Rule 1 — the stated rule beats its transcribed output; Leo is the 9th from Sagittarius, Libra is the 11th | Leo | [D-16](book-deviations.md) |
+| **PVR-10** | "several" malefics in §10.6's 3rd-house rule | §10.6's stated rule (several malefics in the 3rd cause argala instead of virodhargala) vs Exercise 16's answer, which leaves Mars **and** Saturn in the 3rd from the 11th house as virodhargala | **Rule 1 does not apply** — the stated rule is not computable, because "several" is never given a number. Rule 5 (corroboration) has nothing to corroborate: one cell in the whole exercise qualifies. Fell through to the transcribed output, which is the weakest ground in the ladder | threshold 3 — the smallest value reproducing Exercise 16 | **unresolved**, [OI-65](open-items.md) |
+
+**PVR-10 is the first entry the ladder does not settle.** Every other conflict
+was decided by a rule that outranked the alternative. Here the stated rule is
+under-specified, so there was nothing to outrank the output with, and the
+threshold rests on a single cell. It is registered as unresolved and the
+threshold is a per-call parameter rather than a constant baked into a
+calculation. If the ladder needs a rule for "a stated rule that cannot be
+computed", this is the case that will motivate it.
 
 ### Obligations on every entry
 
