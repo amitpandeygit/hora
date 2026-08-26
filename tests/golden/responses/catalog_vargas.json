@@ -1,0 +1,143 @@
+{
+  "body": {
+    "generic": "Any D<N> for N in 1..300 falls back to the cyclic (parivritti) rule.",
+    "groups": {
+      "shodasavarga": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D7",
+        "D9",
+        "D10",
+        "D12",
+        "D16",
+        "D20",
+        "D24",
+        "D27",
+        "D30",
+        "D40",
+        "D45",
+        "D60"
+      ]
+    },
+    "named": [
+      {
+        "code": "D1",
+        "divisions": 1,
+        "name": "Rasi"
+      },
+      {
+        "code": "D2",
+        "divisions": 2,
+        "name": "Hora"
+      },
+      {
+        "code": "D3",
+        "divisions": 3,
+        "name": "Drekkana"
+      },
+      {
+        "code": "D4",
+        "divisions": 4,
+        "name": "Chaturthamsa"
+      },
+      {
+        "code": "D5",
+        "divisions": 5,
+        "name": "Panchamsa"
+      },
+      {
+        "code": "D6",
+        "divisions": 6,
+        "name": "Shashthamsa"
+      },
+      {
+        "code": "D7",
+        "divisions": 7,
+        "name": "Saptamsa"
+      },
+      {
+        "code": "D8",
+        "divisions": 8,
+        "name": "Ashtamsa"
+      },
+      {
+        "code": "D9",
+        "divisions": 9,
+        "name": "Navamsa"
+      },
+      {
+        "code": "D10",
+        "divisions": 10,
+        "name": "Dasamsa"
+      },
+      {
+        "code": "D11",
+        "divisions": 11,
+        "name": "Rudramsa"
+      },
+      {
+        "code": "D12",
+        "divisions": 12,
+        "name": "Dwadasamsa"
+      },
+      {
+        "code": "D16",
+        "divisions": 16,
+        "name": "Shodasamsa"
+      },
+      {
+        "code": "D20",
+        "divisions": 20,
+        "name": "Vimsamsa"
+      },
+      {
+        "code": "D24",
+        "divisions": 24,
+        "name": "Chaturvimsamsa"
+      },
+      {
+        "code": "D27",
+        "divisions": 27,
+        "name": "Nakshatramsa"
+      },
+      {
+        "code": "D30",
+        "divisions": 30,
+        "name": "Trimsamsa"
+      },
+      {
+        "code": "D40",
+        "divisions": 40,
+        "name": "Khavedamsa"
+      },
+      {
+        "code": "D45",
+        "divisions": 45,
+        "name": "Akshavedamsa"
+      },
+      {
+        "code": "D60",
+        "divisions": 60,
+        "name": "Shashtyamsa"
+      },
+      {
+        "code": "D81",
+        "divisions": 81,
+        "name": "Nava Navamsa"
+      },
+      {
+        "code": "D108",
+        "divisions": 108,
+        "name": "Ashtottaramsa"
+      },
+      {
+        "code": "D144",
+        "divisions": 144,
+        "name": "Dwadas Dwadasamsa"
+      }
+    ]
+  },
+  "status": 200
+}

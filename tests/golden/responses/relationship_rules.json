@@ -1,0 +1,233 @@
+{
+  "body": {
+    "compound": {
+      "glosses": {
+        "enemy": "enemy",
+        "friend": "friend",
+        "great_enemy": "bad enemy",
+        "great_friend": "good friend",
+        "neutral": "neutral"
+      },
+      "names": {
+        "enemy": "satru",
+        "friend": "mitra",
+        "great_enemy": "adhisatru",
+        "great_friend": "adhimitra",
+        "neutral": "sama"
+      },
+      "rule": "We get the compound relationships between planets by combining permanent and temporary relationships as shown in Table 8.",
+      "section": "3.4.3",
+      "six_cells_five_outcomes": "A natural friend who is a temporary enemy and a natural enemy who is a temporary friend both give sama, so Table 8's six cells carry five distinct names.",
+      "table_8": [
+        {
+          "natural": "friend",
+          "temporary_enemy": "sama",
+          "temporary_enemy_gloss": "neutral",
+          "temporary_friend": "adhimitra",
+          "temporary_friend_gloss": "good friend"
+        },
+        {
+          "natural": "neutral",
+          "temporary_enemy": "satru",
+          "temporary_enemy_gloss": "enemy",
+          "temporary_friend": "mitra",
+          "temporary_friend_gloss": "friend"
+        },
+        {
+          "natural": "enemy",
+          "temporary_enemy": "adhisatru",
+          "temporary_enemy_gloss": "bad enemy",
+          "temporary_friend": "sama",
+          "temporary_friend_gloss": "neutral"
+        }
+      ]
+    },
+    "house_sets_differ": "Natural uses 2, 4, 5, 8, 9, 12 counted from the moolatrikona; temporary uses 2, 3, 4, 10, 11, 12 counted from the occupied rasi. Different sets, different origins.",
+    "natural": {
+      "counted_from": "moolatrikona",
+      "derivation": "Take the moolatrikona of the planet. Lord of the rasi where it is exalted is its friend. Lords of 2nd, 4th, 5th, 8th, 9th and 12th rasis from it are also its natural friends. Lords of other rasis are its natural enemies. If a planet becomes a friend and an enemy on account of owning two rasis, then it is a neutral planet.",
+      "derivation_reproduces_table_7": true,
+      "friend_houses": [
+        2,
+        4,
+        5,
+        8,
+        9,
+        12
+      ],
+      "names": {
+        "enemy": "satru",
+        "friend": "mitra",
+        "neutral": "sama"
+      },
+      "section": "3.4.1",
+      "table_7": [
+        {
+          "column_names": {
+            "0": "satru",
+            "1": "sama",
+            "2": "mitra"
+          },
+          "enemies": [
+            5,
+            6
+          ],
+          "friends": [
+            1,
+            2,
+            4
+          ],
+          "graha": 0,
+          "graha_name": "Sun",
+          "neutrals": [
+            3
+          ]
+        },
+        {
+          "column_names": {
+            "0": "satru",
+            "1": "sama",
+            "2": "mitra"
+          },
+          "enemies": [],
+          "friends": [
+            0,
+            3
+          ],
+          "graha": 1,
+          "graha_name": "Moon",
+          "neutrals": [
+            2,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "column_names": {
+            "0": "satru",
+            "1": "sama",
+            "2": "mitra"
+          },
+          "enemies": [
+            3
+          ],
+          "friends": [
+            0,
+            1,
+            4
+          ],
+          "graha": 2,
+          "graha_name": "Mars",
+          "neutrals": [
+            5,
+            6
+          ]
+        },
+        {
+          "column_names": {
+            "0": "satru",
+            "1": "sama",
+            "2": "mitra"
+          },
+          "enemies": [
+            1
+          ],
+          "friends": [
+            0,
+            5
+          ],
+          "graha": 3,
+          "graha_name": "Mercury",
+          "neutrals": [
+            2,
+            4,
+            6
+          ]
+        },
+        {
+          "column_names": {
+            "0": "satru",
+            "1": "sama",
+            "2": "mitra"
+          },
+          "enemies": [
+            3,
+            5
+          ],
+          "friends": [
+            0,
+            1,
+            2
+          ],
+          "graha": 4,
+          "graha_name": "Jupiter",
+          "neutrals": [
+            6
+          ]
+        },
+        {
+          "column_names": {
+            "0": "satru",
+            "1": "sama",
+            "2": "mitra"
+          },
+          "enemies": [
+            0,
+            1
+          ],
+          "friends": [
+            3,
+            6
+          ],
+          "graha": 5,
+          "graha_name": "Venus",
+          "neutrals": [
+            2,
+            4
+          ]
+        },
+        {
+          "column_names": {
+            "0": "satru",
+            "1": "sama",
+            "2": "mitra"
+          },
+          "enemies": [
+            0,
+            1,
+            2
+          ],
+          "friends": [
+            3,
+            5
+          ],
+          "graha": 6,
+          "graha_name": "Saturn",
+          "neutrals": [
+            4
+          ]
+        }
+      ]
+    },
+    "section": "3.4",
+    "temporary": {
+      "counted_from": "the rasi occupied by the planet",
+      "friend_houses": [
+        2,
+        3,
+        4,
+        10,
+        11,
+        12
+      ],
+      "has_no_neutral": "Section 3.4.2 gives two outcomes, not three. Only the natural scheme has a neutral.",
+      "nodes_excluded": "Example 4 says Saturn is the only temporary enemy of the Sun in Lord Sree Rama's chart, though Rahu sits in the 9th from the Sun. The nodes are therefore not counted by default.",
+      "rule": "Planets occupying the 2nd, 3rd, 4th, 10th, 11th and 12th rasis counted from the rasi occupied by a planet are its temporary friends. Planet occupying other rasis are its temporary enemies.",
+      "sanskrit_name": "tatkaala",
+      "section": "3.4.2"
+    },
+    "title": "Planetary Relationships"
+  },
+  "status": 200
+}

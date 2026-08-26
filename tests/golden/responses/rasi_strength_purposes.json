@@ -1,0 +1,32 @@
+{
+  "body": {
+    "purposes": [
+      {
+        "applies_to": "Narayana dasa and other phalita dasas",
+        "implemented": true,
+        "key": "phalita",
+        "name": "Phalita dasas",
+        "note": null,
+        "rule_2_planets": "Jupiter, Mercury and the rasi's lord"
+      },
+      {
+        "applies_to": "Atmakaraka kendradi graha and rasi dasas",
+        "implemented": true,
+        "key": "ak_based",
+        "name": "Dasas based on the Atma Karaka",
+        "note": "The sign containing AK is stronger than any other rasi. After the Mercury/Jupiter/lord check, a rasi whose lord is in a quadrant from AK beats one whose lord is in a panaphara from AK.",
+        "rule_2_planets": "Jupiter, Mercury and the rasi's lord"
+      },
+      {
+        "applies_to": "dasas that show longevity",
+        "implemented": false,
+        "key": "ayur",
+        "name": "Ayur dasas",
+        "note": "\"Aspect of all other planets is equally important\" does not say how to weigh them against the luminaries, so rule 2 cannot be computed for this purpose from the text alone.",
+        "rule_2_planets": "the luminaries; aspect of all other planets is equally important; there is no significance for the aspect of lord"
+      }
+    ],
+    "warning": "The above rules are too general. One should understand the meaning of each rule and adapt based on the situation."
+  },
+  "status": 200
+}

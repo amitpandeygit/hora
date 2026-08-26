@@ -1,0 +1,53 @@
+{
+  "body": {
+    "alternate_names": [
+      "Vidiya"
+    ],
+    "completed": 16,
+    "elapsed_in_tithi": 4.5,
+    "elongation": 196.5,
+    "ends_at": 204.0,
+    "fraction_elapsed": 0.375,
+    "full_name": "Krishna Dwitiya",
+    "index": 17,
+    "lord": 1,
+    "lord_name": "Moon",
+    "name": "Dwitiya",
+    "number_in_paksha": 2,
+    "paksha": 1,
+    "paksha_name": "Krishna",
+    "raw_difference": -163.5,
+    "starts_at": 192.0,
+    "steps": [
+      {
+        "description": "Find the difference (Moon's longitude - Sun's longitude). Add 360 if the result is negative.",
+        "detail": "134.7167 - 298.2167 = -163.5000, + 360 = 196.5000",
+        "name": "elongation",
+        "number": 1,
+        "value": 196.50000000000003
+      },
+      {
+        "description": "Divide this result by 12. Ignore the remainder and take the quotient.",
+        "detail": "196.5000 / 12 = 16.3750, quotient 16",
+        "name": "completed",
+        "number": 2,
+        "value": 16
+      },
+      {
+        "description": "Add 1 to the quotient. You get a number from 1 to 30.",
+        "detail": "16 + 1 = 17",
+        "name": "index",
+        "number": 3,
+        "value": 17
+      },
+      {
+        "description": "Refer to Table 3 and find the name of the tithi. Write the classification of fortnight first, then the tithi name.",
+        "detail": "the 17th of 30 is the 2th of Krishna paksha, which is Dwitiya, so Krishna Dwitiya",
+        "name": "name",
+        "number": 4,
+        "value": 17
+      }
+    ]
+  },
+  "status": 200
+}

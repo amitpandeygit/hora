@@ -1,0 +1,20 @@
+{
+  "body": {
+    "error": {
+      "details": [
+        {
+          "location": [
+            "body",
+            "place",
+            "latitude"
+          ],
+          "message": "Input should be less than or equal to 90",
+          "type": "less_than_equal"
+        }
+      ],
+      "message": "the request did not validate",
+      "type": "unprocessable"
+    }
+  },
+  "status": 422
+}

@@ -1,0 +1,428 @@
+{
+  "body": {
+    "amsa_names": {
+      "dasavarga": {
+        "10": "Sreedhaamaamsa",
+        "2": "Paarijaataamsa",
+        "3": "Uttamaamsa",
+        "4": "Gopuraamsa",
+        "5": "Simhaasanaamsa",
+        "6": "Paaraavataamsa",
+        "7": "Devalokaamsa",
+        "8": "Brahmalokamsa",
+        "9": "Airaavataamsa"
+      },
+      "saptavarga": {
+        "2": "Kimsukaamsa",
+        "3": "Vyanjanaamsa",
+        "4": "Chaamaraamsa",
+        "5": "Chatraamsa",
+        "6": "Kundalaamsa",
+        "7": "Mukutaamsa"
+      },
+      "shadvarga": {
+        "2": "Kimsukaamsa",
+        "3": "Vyanjanaamsa",
+        "4": "Chaamaraamsa",
+        "5": "Chatraamsa",
+        "6": "Kundalaamsa"
+      },
+      "shodasavarga": {
+        "10": "Uchchaisravaamsa",
+        "11": "Dhanvantaryamsa",
+        "12": "Sooryakaantaamsa",
+        "13": "Vidrumaamsa",
+        "14": "Indraasanaamsa",
+        "15": "Golokaamsa",
+        "16": "Sree Vallabhaamsa",
+        "2": "Bhedakaamsa",
+        "3": "Kusumaamsa",
+        "4": "Nagapurushaamsa",
+        "5": "Kandukaamsa",
+        "6": "Keralaamsa",
+        "7": "Kalpavrikshaamsa",
+        "8": "Chandanavanaamsa",
+        "9": "Poornachandraamsa"
+      }
+    },
+    "analysis_patterns": [
+      {
+        "chart": "D4",
+        "houses": [
+          9,
+          12
+        ],
+        "link": "If 12th lord is with Rahu in the 9th house in D-4, it can suggest that one would live abroad, probably during the periods of Rahu or 12th lord or 9th house.",
+        "matter": "going abroad",
+        "significator": "Rahu",
+        "why": "It is related to residence and fortune."
+      },
+      {
+        "chart": "D10",
+        "houses": [
+          5,
+          10
+        ],
+        "link": "Because GL (ghati lagna) shows power and authority, planets or rasis giving a promotion are usually connected with GL. Because AL shows status, planets associating with AL or the 5th or the 10th from it are favorable. If the lord of AL is in the 10th from it and aspects GL, probably his period will give a promotion.",
+        "matter": "promotion at the office",
+        "significator": "GL",
+        "why": "D-10 shows one's career and achievements."
+      }
+    ],
+    "charts": [
+      {
+        "aliases": [
+          "Kshetra Chakra"
+        ],
+        "chart": "D1",
+        "counts_from": "the longitude itself",
+        "divisions": 1,
+        "name": "Rasi",
+        "part_size_degrees": 30.0,
+        "signifies": "Existence at the physical level",
+        "worked_example_in_book": false
+      },
+      {
+        "aliases": [],
+        "chart": "D2",
+        "counts_from": "Sun's or Moon's hora, by half and parity",
+        "divisions": 2,
+        "name": "Hora",
+        "part_size_degrees": 15.0,
+        "signifies": "Wealth and money",
+        "worked_example_in_book": false
+      },
+      {
+        "aliases": [],
+        "chart": "D3",
+        "counts_from": "the 1st, 5th and 9th from the rasi",
+        "divisions": 3,
+        "name": "Drekkana",
+        "part_size_degrees": 10.0,
+        "signifies": "Everything related to brothers and sisters",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [
+          "Chaturamsa",
+          "Turyamsa"
+        ],
+        "chart": "D4",
+        "counts_from": "the 1st, 4th, 7th and 10th from the rasi",
+        "divisions": 4,
+        "name": "Chaturthamsa",
+        "part_size_degrees": 7.5,
+        "signifies": "Residence, houses owned, properties and fortune",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [],
+        "chart": "D5",
+        "counts_from": "Ar, Aq, Sg, Ge, Li (odd) or Ta, Vi, Pi, Cp, Sc (even)",
+        "divisions": 5,
+        "name": "Panchamsa",
+        "part_size_degrees": 6.0,
+        "signifies": "Fame, authority and power",
+        "worked_example_in_book": false
+      },
+      {
+        "aliases": [],
+        "chart": "D6",
+        "counts_from": "Ar (odd rasi) or Li (even rasi)",
+        "divisions": 6,
+        "name": "Shashthamsa",
+        "part_size_degrees": 5.0,
+        "signifies": "Health troubles",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [],
+        "chart": "D7",
+        "counts_from": "the rasi itself (odd) or the 7th from it (even)",
+        "divisions": 7,
+        "name": "Saptamsa",
+        "part_size_degrees": 4.2857142857,
+        "signifies": "Everything related to children (and grand-children)",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [],
+        "chart": "D8",
+        "counts_from": "Ar, Sg or Le, by movable, fixed or dual",
+        "divisions": 8,
+        "name": "Ashtamsa",
+        "part_size_degrees": 3.75,
+        "signifies": "Sudden and unexpected troubles, litigation etc",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [
+          "Dharmamsa"
+        ],
+        "chart": "D9",
+        "counts_from": "Ar, Cp, Li or Cn, by fiery, earthy, airy or watery",
+        "divisions": 9,
+        "name": "Navamsa",
+        "part_size_degrees": 3.3333333333,
+        "signifies": "Marriage and everything related to spouse(s), dharma (duty and righteousness), interaction with other people, basic skills, inner self",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [
+          "Dasamaamsa",
+          "Karmamsa",
+          "Swargamsa"
+        ],
+        "chart": "D10",
+        "counts_from": "the rasi itself (odd) or the 9th from it (even)",
+        "divisions": 10,
+        "name": "Dasamsa",
+        "part_size_degrees": 3.0,
+        "signifies": "Career, activities and achievements in society",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [
+          "Ekadasamsa"
+        ],
+        "chart": "D11",
+        "counts_from": "the rasi reflected about Aries, counted anti-zodiacally",
+        "divisions": 11,
+        "name": "Rudramsa",
+        "part_size_degrees": 2.7272727273,
+        "signifies": "Death and destruction",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [],
+        "chart": "D12",
+        "counts_from": "the rasi itself",
+        "divisions": 12,
+        "name": "Dwadasamsa",
+        "part_size_degrees": 2.5,
+        "signifies": "Everything related to parents (also uncles, aunts and grand-parents, i.e. blood-relatives of parents)",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [
+          "Kalamsa"
+        ],
+        "chart": "D16",
+        "counts_from": "Ar, Le or Sg, by movable, fixed or dual",
+        "divisions": 16,
+        "name": "Shodasamsa",
+        "part_size_degrees": 1.875,
+        "signifies": "Vehicles, pleasures, comforts and discomforts",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [],
+        "chart": "D20",
+        "counts_from": "Ar, Sg or Le, by movable, fixed or dual",
+        "divisions": 20,
+        "name": "Vimsamsa",
+        "part_size_degrees": 1.5,
+        "signifies": "Religious activities and spiritual matters",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [
+          "Siddhamsa"
+        ],
+        "chart": "D24",
+        "counts_from": "Le (odd rasi) or Cn (even rasi)",
+        "divisions": 24,
+        "name": "Chaturvimsamsa",
+        "part_size_degrees": 1.25,
+        "signifies": "Learning, knowledge and education",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [
+          "Saptavimsamsa",
+          "Bhamsa"
+        ],
+        "chart": "D27",
+        "counts_from": "Ar, Cn, Li or Cp, by fiery, earthy, airy or watery",
+        "divisions": 27,
+        "name": "Nakshatramsa",
+        "part_size_degrees": 1.1111111111,
+        "signifies": "Strengths and weaknesses, inherent nature",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [],
+        "chart": "D30",
+        "counts_from": "five unequal arcs, by parity of the rasi",
+        "divisions": 30,
+        "name": "Trimsamsa",
+        "part_size_degrees": 1.0,
+        "signifies": "Evils and punishment, sub-conscious self, some diseases",
+        "worked_example_in_book": false
+      },
+      {
+        "aliases": [
+          "Chatvarimsamsa"
+        ],
+        "chart": "D40",
+        "counts_from": "Ar (odd rasi) or Li (even rasi)",
+        "divisions": 40,
+        "name": "Khavedamsa",
+        "part_size_degrees": 0.75,
+        "signifies": "Auspicious and inauspicious events",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [
+          "Pancha-chatvarimsamsa"
+        ],
+        "chart": "D45",
+        "counts_from": "Ar, Le or Sg, by movable, fixed or dual",
+        "divisions": 45,
+        "name": "Akshavedamsa",
+        "part_size_degrees": 0.6666666667,
+        "signifies": "All matters",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [],
+        "chart": "D60",
+        "counts_from": "the rasi itself, the part being 2 x degrees + 1",
+        "divisions": 60,
+        "name": "Shashtyamsa",
+        "part_size_degrees": 0.5,
+        "signifies": "Karma of past life, all matters",
+        "worked_example_in_book": true
+      },
+      {
+        "aliases": [
+          "Nava Navamsa"
+        ],
+        "chart": "D81",
+        "counts_from": "D-9 applied to the D-9 longitude",
+        "divisions": 81,
+        "name": "Nava Navamsa",
+        "part_size_degrees": 0.3703703704,
+        "signifies": null,
+        "worked_example_in_book": false
+      },
+      {
+        "aliases": [
+          "Ashtottaramsa"
+        ],
+        "chart": "D108",
+        "counts_from": "D-12 applied to the D-9 longitude",
+        "divisions": 108,
+        "name": "Ashtottaramsa",
+        "part_size_degrees": 0.2777777778,
+        "signifies": null,
+        "worked_example_in_book": false
+      },
+      {
+        "aliases": [
+          "Dwadas Dwadasamsa"
+        ],
+        "chart": "D144",
+        "counts_from": "D-12 applied to the D-12 longitude",
+        "divisions": 144,
+        "name": "Dwadas Dwadasamsa",
+        "part_size_degrees": 0.2083333333,
+        "signifies": null,
+        "worked_example_in_book": false
+      }
+    ],
+    "choose_by_matter": "We should choose the divisional chart to analyze, based on the matter we are interested in.",
+    "generic": "Any D<N> for N in 1..300 falls back to the cyclic rule.",
+    "groups": {
+      "dasavarga": [
+        "D1",
+        "D2",
+        "D3",
+        "D7",
+        "D9",
+        "D10",
+        "D12",
+        "D16",
+        "D30",
+        "D60"
+      ],
+      "saptavarga": [
+        "D1",
+        "D2",
+        "D3",
+        "D7",
+        "D9",
+        "D12",
+        "D30"
+      ],
+      "shadvarga": [
+        "D1",
+        "D2",
+        "D3",
+        "D9",
+        "D12",
+        "D30"
+      ],
+      "shodasavarga": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D7",
+        "D9",
+        "D10",
+        "D12",
+        "D16",
+        "D20",
+        "D24",
+        "D27",
+        "D30",
+        "D40",
+        "D45",
+        "D60"
+      ]
+    },
+    "higher_charts_caution": {
+      "charts": [
+        "D40",
+        "D45",
+        "D60"
+      ],
+      "note": "The content of this paragraph has philosophical undercurrents that may be difficult to understand for students without a good background in Hindu philosophy. This knowledge should be learnt directly from a competent guru. Readers are advised to leave these higher charts until they find one."
+    },
+    "key_to_analysis": "In this manner, we should analyze the divisional chart that signifies the sphere of life that we are interested in and analyze the houses that show the matter of interest. This is the key to correct chart analysis.",
+    "method": "We should remember which planets, rasis and houses show a particular matter and find links between them in the divisional chart of interest.",
+    "note": "Charts with no worked example in the book are the ones a transcription error can hide in: D-5's rule was wrong until chapter 6 was audited, and it has no example to catch it.",
+    "planes": [
+      {
+        "divisions": "1 to 12",
+        "high": 12,
+        "low": 1,
+        "plane": "physical",
+        "shows": "Body, wealth, residence, wife, children, parents \u2013 these are all matters relating to the physical self."
+      },
+      {
+        "divisions": "13 to 24",
+        "high": 24,
+        "low": 13,
+        "plane": "mental",
+        "shows": "Sense of pleasure and unhappiness, religiousness, learning and knowledge \u2013 these are all matters relating to the mind and intellect."
+      },
+      {
+        "divisions": "25 to 36",
+        "high": 36,
+        "low": 25,
+        "plane": "sub-conscious",
+        "shows": "One's strengths, weaknesses, inherent nature, evils, certain psychological imbalances \u2013 these are all matters relating to the sub-conscious self."
+      },
+      {
+        "divisions": "above 36",
+        "high": null,
+        "low": 37,
+        "plane": "kaarmic",
+        "shows": "Based on the karma from previous lives, we all have an existence at a level that goes beyond the levels of body, mind and sub-consciousness."
+      }
+    ]
+  },
+  "status": 200
+}

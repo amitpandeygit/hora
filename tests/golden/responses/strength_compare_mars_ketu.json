@@ -1,0 +1,34 @@
+{
+  "body": {
+    "axes": [
+      {
+        "axis": "age",
+        "determined": true,
+        "left": "Kumaara",
+        "reason": "Kumaara gives half results, Saisava gives quarter",
+        "right": "Saisava",
+        "winner": 2,
+        "winner_name": "Mars"
+      },
+      {
+        "axis": "alertness",
+        "determined": true,
+        "left": "Sushupta",
+        "reason": "Sushupta gives negligible results, Jaagrita gives full",
+        "right": "Jaagrita",
+        "winner": 8,
+        "winner_name": "Ketu"
+      }
+    ],
+    "caveat": "The book decides this kind of comparison with shadbala, or with the 'very simple rules' it mentions for trivial determinations. Neither is implemented \u2014 shadbala is explicitly beyond the scope of the book, and the simple rules are not in the material transcribed so far. This verdict rests on avastha alone, which the book does not nominate for this purpose. Treat it as evidence, not as the answer.",
+    "determined": false,
+    "left": 2,
+    "left_name": "Mars",
+    "reason": "the measures disagree: age favours Mars; alertness favours Ketu",
+    "right": 8,
+    "right_name": "Ketu",
+    "winner": null,
+    "winner_name": null
+  },
+  "status": 200
+}

@@ -1,0 +1,582 @@
+# Open items
+
+Unresolved only. Closed items and the evidence that closed them live in
+[closed-items.md](closed-items.md) and are not repeated here.
+
+**4 waiting on Amit · 28 waiting on evidence · 2 parked**
+
+---
+
+## Waiting on you
+
+Deferred by decision, 2026-08-26: held until every algorithm in the book is
+implemented. Do not act on these, and do not re-raise them each session.
+
+| ID | Decision | What moves if you say yes |
+|---|---|---|
+| OI-39 | Multiply before dividing at all six floor-division sites | Nakshatra **and pada** on `/v1/chart`, yoga on `/v1/panchanga`, the starting dasha lord — all wrong at exact boundaries today |
+| OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
+| OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
+| OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
+
+Listed in the order I would take them: OI-39 is the only unambiguous defect and
+the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
+
+### OI-39 — floor-dividing by 360/27 lands one unit early
+
+One nakshatra span is 360/27 = 13.333…°, not representable in binary, so
+`x // NAKSHATRA_SPAN` returns k−1 when x is exactly k spans. `40.0 // 13.333333333333334`
+is 2.0, not 3.0.
+
+| quantity | boundaries wrong |
+|---|---|
+| yoga (27) | 9 |
+| nakshatra (27) | 9 |
+| nakshatra **pada** (108) | **59** |
+
+Sites: `panchanga/core.py:147`, `charts/chart.py:110-111`, `dasha/base.py:128`
+and `:161`, `charts/special_lagna.py:123`.
+
+Ephemeris values never land exactly on a boundary; hand-entered ones do, which
+is what every book exercise uses. Moon = 40°00'00" gives nakshatra 3 pada 4
+instead of 4 pada 1.
+
+Fix is one line per site — `int(x * 27 / 360)` — proven and boundary-tested in
+`charts/yoga.py:completed_spans`. **Live consequence meanwhile:**
+`/v1/yoga/compute` (correct) and `/v1/panchanga` (not) disagree at nine points.
+
+### OI-36 — Abhijit's end does not match §1.3.6
+
+**This is the one place our code is wrong against the book and we know it.**
+Everywhere else we depart from a printed statement, the book contradicts itself
+and a written rule picks the side — see "Where we stand against the book" in
+[book-deviations.md](book-deviations.md). Here §1.3.6 is unambiguous and we do
+not follow it.
+
+§1.3.6: "The last quarter of Uttarashadha is known as Abhijit." That is
+6 Cp 40 → 10 Cp 00.
+
+| | End | Length |
+|---|---|---|
+| §1.3.6 | 10 Cp 00 | 3°20' |
+| our code | 10 Cp 53'20" | 4°13'20" |
+
+The extra 53'20" is the first 1/15 of Sravana — the classical Muhurta
+definition, which PVR does not give. Start agrees; end does not.
+
+[precedence.md](precedence.md) puts PVR's stated rule above classical
+convention he does not repeat, which points to shortening it.
+
+### OI-37 — `Pratipada` vs `Pratipat`
+
+Table 3 prints row 1 as "Pratipat/Pratipada/Padyami". We take the book's
+first-listed name as canonical everywhere — rows 2, 3, 4, 15 all do. Row 1 is
+the only exception. Both spellings are stored either way; only `full_name`
+changes.
+
+### OI-40 — §1.3.11 contradicts its own example on a hora's length
+
+First paragraph: 24 equal parts of the *actual* sunrise-to-sunrise interval, so
+"almost equal to an hour". The example: "a period of one hour", read off a
+15:30 clock elapsed. At 15.5h into a 25-hour day the two give the 15th vs the
+16th hora — different lord.
+
+Both are supported; `day_length_hours` defaults to 24, reproducing the example.
+`/v1/panchanga` already uses the actual interval.
+
+---
+
+## Waiting on evidence
+
+### OI-1 — JHora itself: no tier-1 verification
+
+Nothing checked against Jagannatha Hora 8.0; it is Windows-only and no Windows
+layer is available. All 36 slots in `tests/benchmark/fixtures/pvr_1972.json`
+remain `unverified`.
+
+Two weaker tiers pass: PyJHora 4.8.7 (57/57) and the book's own chapter 1.
+
+**Closes when:** one JHora run of the reference chart is transcribed into that
+fixture and `python -m hora.benchmark tests/benchmark/fixtures/pvr_1972.json --strict`
+passes.
+
+### OI-2 — display name spellings unverified against JHora
+
+Book spellings are the default (`Pushyami`, `Sakuna`, `Kaarteeka`); pan-Indian
+forms are available via `settings.name_scheme = "standard"`. The book is 2000,
+JHora 8.0 is 2016, and PVR's 2010 "Looking Back" note says he revised things
+afterwards. Integer IDs are the contract, so a switch is one line.
+
+**Closes when:** JHora's display names are transcribed.
+
+### OI-3 — adhika maasa: no reckoning chosen
+
+Both amanta and purnimanta names are returned; neither is default. The adhika
+flag uses the classical no-sankranti rule.
+
+§1.3.8.2 settles the naming rule (Table 4, implemented in `charts/maasa.py`)
+and the symptom ("Sun-Moon conjunction coming twice in the same rasi"). It does
+**not** say which of the two is Nija and which Adhika. `maasa.month_pair()`
+therefore returns the pair unlabelled and never guesses.
+
+**Closes when:** JHora's default reckoning is confirmed, and which member of a
+pair it calls adhika.
+
+### OI-4 — Swiss Ephemeris licence not purchased
+
+Production needs the Professional Licence from Astrodienst. Until it is signed
+the service must not be exposed publicly — the AGPL alternative would require
+open-sourcing the whole API. See [licensing.md](licensing.md).
+
+**Closes when:** the licence is signed.
+
+### OI-8 — chapters 10 onward not yet audited
+
+Chapters 1–9 and 15 have all had a sentence-level pass, section by section
+from the screenshots: worked examples and exercises as fixtures, tables cell by
+cell, footnotes recorded. Chapter 9 covers the six arudha steps, the exception,
+Table 18, Examples 29–30 and Exercises 12–13; chapter 15 covers §15.1, §15.3,
+§15.4.1–15.4.4 and §15.5.1–15.5.2 with Tables 36–37 and footnotes 51–52.
+
+Two caveats on chapter 15, which are gaps in *coverage*, not in the sweep:
+
+- Three of its five strength measures are **not built** — `ashtakavarga` and
+  `vimsopaka` are marked "not yet implemented", and `simple_rules` likewise.
+  Only `avastha` is available. (`shadbala` is a different case: the book itself
+  says its computation is beyond the book's scope.)
+- Nothing in the code or the tests references a **§15.2**. Either the chapter
+  has none, or a section was never screenshotted. Worth one look.
+
+Chapters 10–27 hold aspects, argalas, yogas, dasas and Tajaka.
+
+Chapter 6 was the warning: code written from general classical knowledge rather
+than from PVR was wrong in three of twenty rules. Everything unaudited was
+written the same way.
+
+**Closes when:** every chapter has had a sentence-level pass.
+
+### OI-12 — PVR's verbatim indications: redistribution licence unconfirmed
+
+§2.3's rasi keyword lists and §8.2/§8.5's karaka readings are stored in
+`data/content/*.yaml` under `source: pvr-vaia`, `licence_status: unconfirmed`.
+Classical attributions are nobody's property; PVR's curated lists and prose are
+his. They are withheld from responses unless `HORA_SERVE_UNCONFIRMED_CONTENT`
+is set. §2.2.5's element readings are under the same gate.
+
+**Closes when:** PVR grants redistribution rights, or the lists are replaced
+with independently sourced ones.
+
+### OI-14 — node exaltations: Gemini/Sagittarius vs Taurus/Scorpio
+
+Table 6 exalts Rahu in Gemini and Ketu in Sagittarius; many texts say Taurus
+and Scorpio. Following the book, approved 2026-08-25, recorded as
+[D-4](book-deviations.md). Measured: the node's dignity label changes in ~33%
+of charts. Node ownership stays co-lordship only; `RASI_LORD` unchanged.
+
+**Closes when:** JHora confirms which pair it uses.
+
+### OI-15 — Mercury's moolatrikona: 15° vs 16° Virgo
+
+§3.3 rule 4 gives 15°–20°; BPHS is commonly read as 16°–20°. Following the
+book, recorded as [D-5](book-deviations.md). Affects Mercury only between 15°
+and 16° Virgo — about one chart in 360, dignity label only.
+
+A BPHS disagreement does not by itself overrule PVR; BPHS survives in variant
+recensions.
+
+**Closes when:** what BPHS actually says is established, and whether 16° is well
+attested or itself a variant.
+
+### OI-18 — `charts/aspects.py` is premature and unverified
+
+Written during Phase 1 scaffolding from general knowledge, not from the book.
+Aspects and argalas are **chapter 10**, unaudited. `rasi_drishti` in it was
+found wrong and corrected; the rest is unchecked. Nothing imports it, and
+`tests/unit/test_not_yet_consumed.py` fails the moment anything does.
+
+**Closes when:** chapter 10 is audited and the module is re-derived from it.
+
+### OI-19 — sunrise: book says upper limb, PyJHora uses disc centre
+
+| Source | Rank | Says |
+|---|---|---|
+| Book §5.5 comment (3) | 2 | Upper limb — "the latter approach is recommended" |
+| PyJHora | 5 | `BIT_HINDU_RISING` — disc centre |
+
+Default is now `disc_upper_limb`, recorded as [D-10](book-deviations.md).
+Sunrise moves +3.7 min at the reference place; Ghati Lagna moves 4.6°.
+
+This does not refute the PyJHora evidence — it is outranked, not wrong. If
+JHora uses disc centre, rank 1 wins.
+
+**Closes when:** JHora's sunrise definition is confirmed.
+
+### OI-23 — the `MARAKA` house label is unverified
+
+`charts/bhava.py` defines `MARAKA = (2, 7)` and `classify_house` reports it in
+every chart response. **Chapter 7 does not mention maraka** — it names seven
+categories and maraka is not among them. Written from general classical
+knowledge during Phase 1.
+
+Not obviously wrong; neither was D-5.
+
+**Closes when:** a chapter defining maraka is reached and it is verified, or it
+is removed.
+
+### OI-24 — chapter 8 gives only one chara karaka scheme
+
+`/v1/karaka/chara` implements §8.2's eight-karaka scheme, the only one the book
+defines. JHora offers four. There is no PVR text here to implement the others
+from.
+
+**Closes when:** a later chapter or another PVR source defines them, or they
+are confirmed against JHora.
+
+### OI-28 — §15.5.2's ayur-dasa adaptation cannot be computed
+
+§15.5.2 adapts a rule using ayur-dasa, which requires dasa analysis.
+`src/hora/dasha/rasi/` is empty.
+
+**Closes when:** rasi dasas are implemented.
+
+### OI-55 — §7.3's house-meaning rule derives 3 of the book's own 4 cases
+
+§7.3: "the 4th houses in D-24, D-16, D-4 and D-12 show education, vehicle,
+house and mother (respectively)."
+
+`house_service.meanings_in_varga` takes the literal overlap of the two
+signification lists, so every word it returns is PVR's own. It reaches D-24,
+D-16 and D-4. **It cannot reach D-12**: that signifies "parents", the 4th house
+signifies "Mother", and *mother is a parent* is world knowledge neither table
+contains. The overlap returns `relative` — in both lists, not wrong, not what
+PVR picked.
+
+**This is a pattern, not one case.** Three instances so far, all in chapter 7:
+
+| section | the book says | the tables say |
+|---|---|---|
+| §7.3 | 4th in D-12 shows **mother** | D-12 signifies "parents" |
+| §7.3.5 | 5th shows **memory**, **success in competition** | 5th lists neither |
+| §7.3.9 | 5th shows **progeny** | 5th lists "Children" |
+
+The book links matters to houses by meaning throughout. Any code that matches
+significations literally will keep hitting this, and each miss looks like a bug
+until it is recognised as the same gap.
+
+The response carries `derivable` and a `limitation` field naming this case
+rather than presenting a partial method as complete. Nothing invents a synonym.
+
+**Closes when:** a semantic map is taken from the book (not from general
+knowledge), or you accept the overlap as a hint for callers to pick from —
+which is what we do today.
+
+### OI-62 — the not-yet-consumed register counts publication as consumption
+
+`test_not_yet_consumed.py` exempts four named "exposer" files plus
+`core/constants/`. Every other file that mentions a symbol counts as consuming
+it — including a `*_service.py` that only copies the string into a response.
+
+Measured: **49 constants** have no consumer other than a `*_service.py`, and
+most are prose. Examples: `CHARA_KARAKA_PROCEDURE`, `CHARA_KARAKA_TIE_BREAK`,
+`CHOOSING_A_KARAKA`, `AVASTHA_EFFECTS`, `CONJUNCTION_DEFINITION`,
+`CHOOSE_MEANING_BY_VARGA`.
+
+`reference_service.py` is exempt for exactly this reason — its docstring says
+it "formats constants and computes nothing astrological". But `karaka_service`,
+`strength_service`, `varga_service`, `maasa_service` and `house_service` all
+publish prose the same way in among their real calculations, and the guard
+cannot tell the two apart at file granularity.
+
+Consequence: the register **understates** how much of the book is recorded but
+not acted on. Publishing a rule is not applying it.
+
+Options: (a) exempt at function granularity rather than file — a service
+function that only reads constants and returns them is an exposer; (b) mark the
+publication-only constants explicitly, e.g. a `PUBLISHED_ONLY` tuple per
+module; (c) accept it and say so in the register's preamble.
+
+Related to OI-61 — both are guards that promise more than they check.
+
+**Closes when:** you pick an option.
+
+### OI-61 — the "verbatim" fidelity check is case- and punctuation-blind
+
+`test_declared_verbatim_fields_are_verbatim` compares through `_flat`:
+
+```python
+def _flat(text): return re.sub(r"[^a-z]", "", text.lower())
+```
+
+Everything but the letters is thrown away. So the check that gives
+`VERBATIM_FIELDS` its meaning cannot see:
+
+- case — "Dara karaka" against "Dara Karaka" (OI-60);
+- punctuation — "&" against "and", parentheses, commas;
+- word boundaries — a phrase split differently still matches.
+
+It catches a paraphrase. It does not catch a normalisation, which is the
+failure mode `core/constants/karaka.py`'s own docstring warns about: chapter 2
+lost three of the author's typos that way. §8.3's list is a live instance —
+the book capitalises every relative ("Younger siblings"), we store lowercase,
+and the check is satisfied.
+
+The flattening exists because PDF extraction inserts line breaks and
+hyphenation. But only whitespace and soft hyphens genuinely need normalising;
+case and punctuation survive extraction fine.
+
+Proposed: a second, stricter comparison that collapses whitespace and soft
+hyphens only, run alongside the existing one. Not written, because the check is
+PDF-gated and cannot be run here to see what it flags.
+
+The docstring has been corrected to state the real guarantee, and
+`test_the_verbatim_check_is_case_and_punctuation_insensitive` pins the
+weakness so it is not mistaken for a stronger one.
+
+**Closes when:** the stricter comparison is written and run against the PDF,
+and whatever it flags is settled.
+
+### OI-60 — Table 13 prints "Dara karaka" with a lowercase k; we store "Dara Karaka"
+
+Table 13's Karaka column reads: Atma Karaka, Amatya Karaka, Bhratri Karaka,
+Matri Karaka, Pitri Karaka, Putra Karaka, Jnaati Karaka, **Dara karaka**.
+
+Seven rows capitalise "Karaka"; row 8 does not. Almost certainly the author's
+slip, but `CHARA_KARAKAS["name"]` is a **declared-verbatim field**
+(`VERBATIM_FIELDS` in `core/constants/karaka.py`), and a declared-verbatim
+field must match character for character. Ours reads "Dara Karaka".
+
+This is the failure mode that module's own docstring warns about: chapter 2
+lost three of the author's typos to silent normalisation before anyone noticed.
+
+Two ways to settle it, and they point opposite ways:
+
+- **Transcribe faithfully** — store "Dara karaka". Keeps the verbatim
+  guarantee true, changes API output for one row.
+- **Drop `name` from `VERBATIM_FIELDS`** — admit the names are normalised, and
+  the guarantee no longer covers them.
+
+Not acting either way. The API name is a published string.
+
+**Closes when:** you pick one, or JHora's own label settles it.
+
+### OI-59 — the equal-house scheme §7.5 describes is not the one we call `equal_lagna`
+
+§7.5: "In the "equal house method", they take a 30º arc **with center at
+lagna** as the 1st house."
+
+Centred, not starting. Measured against the ephemeris for JD 2451545.0 at
+Hyderabad:
+
+| Setting | Swiss code | Ascendant | 1st cusp | Offset |
+|---|---|---|---|---|
+| `equal_lagna` | `A` | 72.2904 | 72.2904 | 0º |
+| `vehlow_equal` | `V` | 72.2904 | 57.2904 | 15º |
+
+So §7.5's "equal house method" is our `vehlow_equal`; `equal_lagna` is a
+different scheme (JHora's "Equal housing", first cusp at the lagna degree).
+
+**No calculation is wrong.** PVR recommends neither, and the default is whole
+sign, so nothing we ship uses either. The risk is a caller who reads §7.5 and
+picks `equal_lagna` expecting the book's description.
+
+Options: (a) leave both, document which is which in the enum docstring;
+(b) rename. Not acting either way.
+
+**Closes when:** you say whether to document or rename, or JHora's own
+"Equal housing" output settles which construction it means.
+
+### OI-58 — §7.4.4 inverts a house reading with strength; nothing computes it
+
+"If a dusthana is fortified or afflicted by malefics, it may show serious
+obstacles. If a dusthana is weak, it shows that obstacles will be easily
+overcome. For example, exalted 8th lord may show a lot of troubles and
+debilitated 8th lord may show easy sailing."
+
+The dusthanas are the only §7.4 category whose reading **flips** with strength:
+everywhere else a strong house is good news. Both inputs exist — `sign_dignity`
+gives exalted/debilitated, `category_houses` gives the dusthanas — but nothing
+reads them together, so a caller asking about the 8th gets "setbacks and
+obstacles" whether its lord is exalted or debilitated.
+
+Related to OI-57: both are §7.4 rules whose two halves are built and unjoined,
+and both wait on the strength chapters for what "fortified" and "weak" mean as
+thresholds.
+
+**Closes when:** the strength chapters define fortification, and a house
+reading consumes dignity.
+
+### OI-57 — §7.4.1's digbala rule joins two tables nothing connects
+
+"Digbala of planets who attain full digbala in various of these trines shows
+the strength of different purushaarthas in one's life."
+
+Both halves exist: chapter 3 gives each graha its digbala house (`Mercury and
+Jupiter` the 1st, `Sun and Mars` the 10th, `Moon and Venus` the 4th, `Saturn`
+the 7th) and §7.4.1 gives the four purushaartha trikonas. Nothing joins them.
+
+The join is discriminating: the four digbala houses are 1, 4, 7 and 10 — one in
+each purushaartha — so a chart's digbala pattern maps directly onto which of
+the four goals is strong.
+
+**Closes when:** the strength chapters settle what "attains full digbala"
+means as a threshold, and something consumes the mapping.
+
+### OI-56 — §7.3.9's strength rule needs a graha-versus-lagna comparison
+
+"If Mars is stronger than lagna, then the 3rd house from Mars may be more
+important than the 3rd house from lagna."
+
+The only place chapter 7 says how to **choose** between two references rather
+than which to use for what. Table 12's six pairs each give a house from lagna
+and the same house from a graha; this rule decides which to weigh more.
+
+Not implemented. It needs a strength comparison between a graha and the lagna —
+chapter 15 has graha strength and rasi strength, but nothing compares the two
+kinds. `GRAHA_LAGNA_STRENGTH_RULE` records the statement.
+
+**Closes when:** chapter 15's sweep settles what "stronger than lagna" means,
+or a later chapter defines it.
+
+### OI-54 — §6.6.3's two amsa yogas are not implemented
+
+"lagna lord or ghati lagna lord in Simhaasanaamsa would make one very famous. A
+quadrant lord with good amsabala in dasavarga makes one very successful."
+
+Both are stored in `DASAVARGA_COMBINATIONS` and neither is computed. They need
+the yoga chapters, and the second needs a threshold for "good amsabala" that
+§6.6 never gives.
+
+This was cited in code before it existed here — a dangling reference, found by
+grepping `src/` and `tests/` for OI numbers and checking each against this file.
+Worth repeating that sweep occasionally.
+
+**Closes when:** the yoga chapters are reached and "good amsabala" is defined.
+
+### OI-53 — three served vargas are not in the book
+
+`/v1/varga/rules` serves **23** divisional charts. Chapter 6 defines **twenty**.
+
+The extras are **D-81** (Nava Navamsa), **D-108** (Ashtottaramsa) and **D-144**
+(Dwadas Dwadasamsa) — composites: D-9 of the D-9 longitude, D-12 of the D-9,
+D-12 of the D-12. PVR defines none of them. They have no Table 11 signification
+and no worked example, and §6.4's planes do not name them (though "above 36"
+would take them).
+
+They are a known classical construction and are almost certainly right, but
+"almost certainly right" is what D-5 and D-11 looked like before the sweep —
+both were written from general knowledge rather than from PVR, and both were
+wrong (D-12, D-14).
+
+**Not removed.** They are harmless while nothing consumes them, and JHora
+computes them. `test_three_served_charts_are_not_in_the_book` pins the set so a
+fourth cannot appear unnoticed.
+
+**Closes when:** they are verified against JHora, or a PVR source defining them
+is found, or they are withdrawn.
+
+### OI-52 — §6.2.2 calls the D-2 rule "not quite complete"
+
+"Though absolutely correct, the above is not quite complete. Proper use of hora
+chart is beyond the scope of this book. So we will ignore and not use hora
+chart in this book."
+
+So `d2_hora` implements a rule PVR himself says is **incomplete**, and the
+completion is nowhere in the book. All four cases of the stated rule reproduce,
+and D-2 places every body in Cancer or Leo — but if the missing part changes
+that, our D-2 is wrong in a way no worked example can reveal, because **the
+book gives D-2 no worked example**.
+
+D-2 is in `SHADVARGA` and `SHODASAVARGA`, so it carries a weight in amsabala.
+Chapter 6's Example 27 exercises amsabala and reproduces, which bounds the risk
+but does not remove it.
+
+**Closes when:** the completion is found — in BPHS (as a gap-fill, never an
+override; see [OI-51](#oi-51)), in PVR's later writings, or against JHora.
+
+### OI-51 — §5.7 names more Parasara lagnas that the book leaves out
+
+"There are some more special lagnas defined by Parasara, but they are beyond
+the scope of this book. We will restrict ourselves to the ones defined in this
+book."
+
+So the four we implement — BL, HL, GL, SL — are not the whole Parasari set.
+The rest will arrive from BPHS, with **no PVR text to check them against**.
+
+**The rule, confirmed with Amit 2026-08-26 and written into
+[precedence.md](precedence.md):** BPHS may *fill a gap* PVR leaves, but may
+**never override** him without an explicit decision recorded case by case. The
+temptation here will be to let BPHS quietly become the authority for anything
+the book puts out of scope. Filling is fine; overriding is not.
+
+**Closes when:** the BPHS work reaches special lagnas, and each additional one
+is either implemented from BPHS as a gap-fill or deliberately left out.
+
+### OI-50 — umbrella APIs: five design decisions, deferred
+
+A front end must call many of the ~80 endpoints and join them. An umbrella is
+wanted, **deferred 2026-08-26** until the chapters are done — chapters 16+ are
+what a real reading assembles, so designing it now means guessing at the
+consumer.
+
+**Shape, when we build it.** Not one per chapter; two, split by whether a chart
+is needed: `GET /v1/reference/book` (static tables and rules) and
+`POST /v1/reading/chart` (panchanga, positions, dignity, relationships,
+arudhas, strength, houses, vargas). Both alongside the existing endpoints.
+
+**The five decisions, unanswered:**
+
+| # | Decision | My recommendation |
+|---|---|---|
+| 1 | Input: nativity or explicit longitudes? | Accept **both**; one required |
+| 2 | Section selection — `?include=...`? | **Yes**, default to all |
+| 3 | If one section cannot be produced, does the whole call fail? | **No** — that section returns `available: false` with a reason |
+| 4 | Expose chapter 15 strength as it stands, or finish §15 first? | Finish first |
+| 5 | Sweep chapters 9 and 15 to sentence level before wrapping them? | **Done.** Both were swept screenshot by screenshot; the note claiming otherwise was stale. See OI-8 |
+
+**Keeping the cost down meanwhile:** every chapter's endpoints follow the same
+shape — `/rules`, `/compute`, and a chart-level view where a chart applies, as
+`/v1/relationship/chart` does. Then the umbrella is assembly, not redesign.
+
+**Closes when:** the chapters are done and these five are answered.
+
+### OI-49 — §3.4.2 excludes the nodes; nothing states why
+
+Example 4 proves §3.4.2 counts only the classical seven: Rahu sits in the 9th
+from the Sun and the book still calls Saturn "the **only** temporary enemy".
+`charts/relationship.py` therefore excludes the nodes by default, and
+`include_nodes=True` is available for a caller who wants them.
+
+But the book gives no *rule* saying so — only the example's silence. JHora may
+count them.
+
+**Closes when:** JHora's temporary-relationship treatment of the nodes is
+confirmed, or a later chapter states the rule.
+
+### OI-48 — `charts/avastha.py` still reads the fixed benefic sets
+
+§3.2.2's conditional rules are implemented in `charts/benefic.py` (OI-45,
+closed), but
+`charts/avastha.py` reads `NATURAL_BENEFIC`/`NATURAL_MALEFIC` directly at three
+sites, so a waxing Moon still never counts as a benefic aspect and Mercury
+never counts either way. Wiring it in moves live `/v1/avastha` output and needs
+paksha and co-tenants threaded through.
+
+**Closes when:** you approve the avastha change — it belongs with the four
+decisions above.
+
+---
+
+## Parked
+
+### OI-7 — chart drawing styles (South/North/East Indian) · **OUT OF SCOPE**
+
+Deliberately not built. This is a calculation API; rendering belongs to the
+client. Not a gap.
+
+### OI-10 — sunrise definition · **SUPERSEDED** by OI-19
+
+---
+
+**Design decisions are not open items.** A settled, tested choice in the API
+contract lives in [api-contract.md](api-contract.md#design-decisions). This file
+is for what is still unresolved.

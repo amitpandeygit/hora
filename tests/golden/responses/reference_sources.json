@@ -1,0 +1,17 @@
+{
+  "body": {
+    "note": "Categorisation of individual terms is this project's editorial judgement, not the source author's.",
+    "serving_unconfirmed": false,
+    "sources": {
+      "pvr-vaia": {
+        "author": "P.V.R. Narasimha Rao",
+        "first_published": 2000,
+        "licence_note": "The author shares the book freely for reading. That is not an explicit licence to redistribute the text commercially. These entries are stored but are NOT served publicly until the licence is confirmed or the text is replaced. See docs/open-items.md OI-12.",
+        "licence_status": "unconfirmed",
+        "section": "2.3 Indications of Rasis",
+        "title": "Vedic Astrology: An Integrated Approach"
+      }
+    }
+  },
+  "status": 200
+}

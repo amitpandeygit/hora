@@ -1,0 +1,160 @@
+{
+  "body": {
+    "note": "Mars, Mercury, Jupiter, Venus and Saturn own 2 signs each. In their case, take the stronger sign owned by the planet.",
+    "ownership": [
+      {
+        "graha": 0,
+        "graha_name": "Sun",
+        "needs_comparison": false,
+        "owns": [
+          4
+        ],
+        "owns_names": [
+          "Leo"
+        ],
+        "symbol": "AL(Su)"
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon",
+        "needs_comparison": false,
+        "owns": [
+          3
+        ],
+        "owns_names": [
+          "Cancer"
+        ],
+        "symbol": "AL(Mo)"
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars",
+        "needs_comparison": true,
+        "owns": [
+          0,
+          7
+        ],
+        "owns_names": [
+          "Aries",
+          "Scorpio"
+        ],
+        "symbol": "AL(Ma)"
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury",
+        "needs_comparison": true,
+        "owns": [
+          2,
+          5
+        ],
+        "owns_names": [
+          "Gemini",
+          "Virgo"
+        ],
+        "symbol": "AL(Me)"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "needs_comparison": true,
+        "owns": [
+          8,
+          11
+        ],
+        "owns_names": [
+          "Sagittarius",
+          "Pisces"
+        ],
+        "symbol": "AL(Ju)"
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus",
+        "needs_comparison": true,
+        "owns": [
+          1,
+          6
+        ],
+        "owns_names": [
+          "Taurus",
+          "Libra"
+        ],
+        "symbol": "AL(Ve)"
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn",
+        "needs_comparison": true,
+        "owns": [
+          9,
+          10
+        ],
+        "owns_names": [
+          "Capricorn",
+          "Aquarius"
+        ],
+        "symbol": "AL(Sa)"
+      },
+      {
+        "graha": 7,
+        "graha_name": "Rahu",
+        "needs_comparison": false,
+        "owns": [
+          10
+        ],
+        "owns_names": [
+          "Aquarius"
+        ],
+        "symbol": "AL(Ra)"
+      },
+      {
+        "graha": 8,
+        "graha_name": "Ketu",
+        "needs_comparison": false,
+        "owns": [
+          7
+        ],
+        "owns_names": [
+          "Scorpio"
+        ],
+        "symbol": "AL(Ke)"
+      }
+    ],
+    "section": "9.5 Computation of Graha Arudhas",
+    "steps": [
+      {
+        "name": "graha_sign",
+        "number": 1,
+        "text": "Take the sign containing the planet of interest in the divisional chart of interest."
+      },
+      {
+        "name": "owned_sign",
+        "number": 2,
+        "text": "Find the sign owned by that planet."
+      },
+      {
+        "name": "count_to_owned",
+        "number": 3,
+        "text": "Count signs from the sign containing the planet of interest to the stronger sign owned by it. Counting is in the zodiacal direction always."
+      },
+      {
+        "name": "advance_from_owned",
+        "number": 4,
+        "text": "Count the same number of signs from the stronger sign owned and find the ending sign."
+      },
+      {
+        "name": "apply_exception",
+        "number": 5,
+        "text": "Exception: If the sign found thus in step (4) is in the 1st or 7th from the original sign containing the planet, then we take the 10th sign from the sign found in step (4). Otherwise we don't make any change."
+      },
+      {
+        "name": "graha_arudha",
+        "number": 6,
+        "text": "The resulting sign contains the arudha pada of the planet of interest."
+      }
+    ],
+    "stronger_sign_section": "15.5.2 Stronger Rasi"
+  },
+  "status": 200
+}

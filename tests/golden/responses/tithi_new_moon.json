@@ -1,0 +1,55 @@
+{
+  "body": {
+    "alternate_names": [
+      "Paurnimasya",
+      "Poornima",
+      "Pournimasya"
+    ],
+    "completed": 29,
+    "elapsed_in_tithi": 1.0,
+    "elongation": 349.0,
+    "ends_at": 360.0,
+    "fraction_elapsed": 0.08333333,
+    "full_name": "Amavasya",
+    "index": 30,
+    "lord": 7,
+    "lord_name": "Rahu",
+    "name": "Amavasya",
+    "number_in_paksha": 15,
+    "paksha": 1,
+    "paksha_name": "Krishna",
+    "raw_difference": 349.0,
+    "starts_at": 348.0,
+    "steps": [
+      {
+        "description": "Find the difference (Moon's longitude - Sun's longitude). Add 360 if the result is negative.",
+        "detail": "349.0000 - 0.0000 = 349.0000",
+        "name": "elongation",
+        "number": 1,
+        "value": 349.0
+      },
+      {
+        "description": "Divide this result by 12. Ignore the remainder and take the quotient.",
+        "detail": "349.0000 / 12 = 29.0833, quotient 29",
+        "name": "completed",
+        "number": 2,
+        "value": 29
+      },
+      {
+        "description": "Add 1 to the quotient. You get a number from 1 to 30.",
+        "detail": "29 + 1 = 30",
+        "name": "index",
+        "number": 3,
+        "value": 30
+      },
+      {
+        "description": "Refer to Table 3 and find the name of the tithi. Write the classification of fortnight first, then the tithi name.",
+        "detail": "the 30th of 30 is Amavasya, the new moon, which occurs once and is written unqualified",
+        "name": "name",
+        "number": 4,
+        "value": 30
+      }
+    ]
+  },
+  "status": 200
+}

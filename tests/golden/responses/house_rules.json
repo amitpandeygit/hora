@@ -1,0 +1,364 @@
+{
+  "body": {
+    "categories": [
+      {
+        "category": "trikona",
+        "derivation": null,
+        "houses": [
+          1,
+          5,
+          9
+        ],
+        "presiding_deity": "Goddess Lakshmi",
+        "shows": "Prosperity and flourishing",
+        "synonyms": [
+          "kona",
+          "trine"
+        ]
+      },
+      {
+        "category": "kendra",
+        "derivation": null,
+        "houses": [
+          1,
+          4,
+          7,
+          10
+        ],
+        "presiding_deity": "Sri Maha Vishnu",
+        "shows": "Sustenance and vital activity",
+        "synonyms": [
+          "quadrant",
+          "angle"
+        ]
+      },
+      {
+        "category": "panaphara",
+        "derivation": "the quadrants from the 2nd house",
+        "houses": [
+          2,
+          5,
+          8,
+          11
+        ],
+        "presiding_deity": null,
+        "shows": null,
+        "synonyms": [
+          "succedant"
+        ]
+      },
+      {
+        "category": "apoklima",
+        "derivation": "the quadrants from the 3rd house",
+        "houses": [
+          3,
+          6,
+          9,
+          12
+        ],
+        "presiding_deity": null,
+        "shows": null,
+        "synonyms": [
+          "precedant"
+        ]
+      },
+      {
+        "category": "upachaya",
+        "derivation": null,
+        "houses": [
+          3,
+          6,
+          10,
+          11
+        ],
+        "presiding_deity": null,
+        "shows": "Gains and growth",
+        "synonyms": []
+      },
+      {
+        "category": "dusthana",
+        "derivation": null,
+        "houses": [
+          6,
+          8,
+          12
+        ],
+        "presiding_deity": null,
+        "shows": "Setbacks and obstacles",
+        "synonyms": [
+          "trik sthana"
+        ]
+      },
+      {
+        "category": "chaturasra",
+        "derivation": null,
+        "houses": [
+          4,
+          8
+        ],
+        "presiding_deity": null,
+        "shows": null,
+        "synonyms": []
+      }
+    ],
+    "definition": {
+      "common_references": [
+        "lagna",
+        "special lagnas"
+      ],
+      "default_reference": "lagna",
+      "default_reference_rule": "If no reference point is specified when houses are mentioned, it means that lagna is used as the reference",
+      "order_wraps": "when we encounter Pisces, we go to Aries after it",
+      "sanskrit": "bhava",
+      "text": "Starting from the rasi occupied by the selected reference point and proceeding in the regular order across the zodiac, we associate each rasi with a house. Always the rasi containing the reference point chosen is the 1st house."
+    },
+    "graha_lagnas": [
+      {
+        "graha": 0,
+        "graha_name": "Sun",
+        "houses": [
+          9,
+          10,
+          11
+        ]
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon",
+        "houses": [
+          4,
+          1,
+          2,
+          11,
+          9
+        ]
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars",
+        "houses": [
+          3
+        ]
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury",
+        "houses": [
+          6
+        ]
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "houses": [
+          5
+        ]
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus",
+        "houses": [
+          7
+        ]
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn",
+        "houses": [
+          8,
+          12
+        ]
+      }
+    ],
+    "halves": {
+      "invisible": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "visible": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    "note": "A house never spans two rasis. Section 7.5 rejects bhava chalit, equal-house and Sripathi division outright: 'Each rasi is a house.' That is why the engine's default house_system is whole_sign.",
+    "purusharthas": [
+      {
+        "houses": [
+          1,
+          5,
+          9
+        ],
+        "meaning": "righteousness and adherence to one's duty",
+        "purushartha": "dharma"
+      },
+      {
+        "houses": [
+          2,
+          6,
+          10
+        ],
+        "meaning": "money and career",
+        "purushartha": "artha"
+      },
+      {
+        "houses": [
+          3,
+          7,
+          11
+        ],
+        "meaning": "desiring things and getting them",
+        "purushartha": "kaama"
+      },
+      {
+        "houses": [
+          4,
+          8,
+          12
+        ],
+        "meaning": "final liberation of soul",
+        "purushartha": "moksha"
+      }
+    ],
+    "references": [
+      {
+        "available": true,
+        "name": "Lagna",
+        "note": "The default reference when none is named",
+        "reference": "lagna",
+        "shows": "true self"
+      },
+      {
+        "available": true,
+        "name": "Chandra Lagna",
+        "note": "The Moon's rasi",
+        "reference": "chandra_lagna",
+        "shows": "matters from the perspective of mind"
+      },
+      {
+        "available": true,
+        "name": "Ravi Lagna",
+        "note": "The Sun's rasi",
+        "reference": "ravi_lagna",
+        "shows": "matters from the perspective of soul"
+      },
+      {
+        "available": true,
+        "name": "Paaka Lagna",
+        "note": "The rasi occupied by the lagna lord",
+        "reference": "paaka_lagna",
+        "shows": "matters related to the physical self"
+      },
+      {
+        "available": true,
+        "name": "Ghati Lagna",
+        "note": "See chapter 5",
+        "reference": "ghati_lagna",
+        "shows": "self, from the point of view of power, authority and fame"
+      },
+      {
+        "available": true,
+        "name": "Hora Lagna",
+        "note": "See chapter 5",
+        "reference": "hora_lagna",
+        "shows": "self, from the point of view of wealth"
+      },
+      {
+        "available": true,
+        "name": "Arudha Lagna",
+        "note": "The arudha pada of the 1st house, computed by section 9.2's six steps in charts/arudha.py",
+        "reference": "arudha_lagna",
+        "shows": "how a native is perceived, and status"
+      },
+      {
+        "available": true,
+        "name": "Karakamsa Lagna",
+        "note": "The rasi of the atma karaka in navamsa, defined in section 7.3.6",
+        "reference": "karakamsa_lagna",
+        "shows": "the inner self"
+      }
+    ],
+    "significations": [
+      {
+        "half": "invisible",
+        "house": 1,
+        "purushartha": "dharma",
+        "signifies": "Physical body, complexion, appearance, head, intelligence, strength, energy, fame, success, nature of birth, caste"
+      },
+      {
+        "half": "invisible",
+        "house": 2,
+        "purushartha": "artha",
+        "signifies": "Wealth, assets, family, speech, eyes, mouth, face, voice, food"
+      },
+      {
+        "half": "invisible",
+        "house": 3,
+        "purushartha": "kaama",
+        "signifies": "Younger co-borns, confidants, courage, mental strength, communication skills, creativity, throat, ears, arms, father's death (7th from 9th), expenditure on vehicles and house (12th from 4th), travels"
+      },
+      {
+        "half": "invisible",
+        "house": 4,
+        "purushartha": "moksha",
+        "signifies": "Mother, vehicles, house, lands, immovable property, motherland, childhood, wealth from real estate, education, relatives, happiness, comforts, pleasures, peace, state of mind, heart"
+      },
+      {
+        "half": "invisible",
+        "house": 5,
+        "purushartha": "dharma",
+        "signifies": "Children, poorvapunya (good deeds of previous lives), intelligence, knowledge & scholarship, devotion, mantras (prayers), stomach, digestive system, authority/power, fame, love, affection, emotions, judgment, speculation"
+      },
+      {
+        "half": "invisible",
+        "house": 6,
+        "purushartha": "artha",
+        "signifies": "Enemies, service, servants, relatives, mental tension, injuries, health, diseases, agriculture, accidents, mental affliction, mother's younger brother, hips"
+      },
+      {
+        "half": "visible",
+        "house": 7,
+        "purushartha": "kaama",
+        "signifies": "Marriage, marital life, life partner, sex, passion (and related happiness), long journeys, partners, business, death, the portion of the body below the navel"
+      },
+      {
+        "half": "visible",
+        "house": 8,
+        "purushartha": "moksha",
+        "signifies": "Longevity, debts, disease, ill-fame, inheritance, loss of friends, occult studies, evils, gifts, unearned wealth, windfall, disgrace, secrets, genitals"
+      },
+      {
+        "half": "visible",
+        "house": 9,
+        "purushartha": "dharma",
+        "signifies": "Father, teacher, boss, fortune, religiousness, spirituality, God, higher studies & high knowledge, fortune in a foreign land, foreign trips, diksha (joining a religious order), past life and the cause of birth, grandchildren, principles, dharma, intuition, compassion, sympathy, leadership, charity, thighs"
+      },
+      {
+        "half": "visible",
+        "house": 10,
+        "purushartha": "artha",
+        "signifies": "Growth, profession, career, karma (action), conduct in society, fame, honors, awards, self-respect, dignity, knees"
+      },
+      {
+        "half": "visible",
+        "house": 11,
+        "purushartha": "kaama",
+        "signifies": "Elder co-borns, income, gains, realization of hopes, friends, ankles"
+      },
+      {
+        "half": "visible",
+        "house": 12,
+        "purushartha": "moksha",
+        "signifies": "Losses, expenditure, punishment, imprisonment, hospitalization, pleasures in bed, misfortune, bad habits, sleep, meditation, donation, secret enemies, heaven, left eye, feet, residence away from the place of birth, moksha (emancipation/liberation)"
+      }
+    ]
+  },
+  "status": 200
+}

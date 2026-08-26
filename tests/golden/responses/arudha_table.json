@@ -1,0 +1,1044 @@
+{
+  "body": {
+    "lagna_sign": 5,
+    "lagna_sign_name": "Virgo",
+    "padas": [
+      {
+        "before_exception": 5,
+        "before_exception_name": "Virgo",
+        "count": 7,
+        "exception_applied": true,
+        "exception_position": 1,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 1,
+        "house_sign": 5,
+        "house_sign_name": "Virgo",
+        "lord": 3,
+        "lord_name": "Mercury",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 2,
+        "sign_name": "Gemini",
+        "special_name": "Arudha Lagna",
+        "special_symbol": "AL",
+        "specific_names": [
+          "Arudha lagna",
+          "Pada lagna",
+          "Arudha",
+          "Pada"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 1 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Virgo is Mercury",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "count": 7,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Virgo to Pisces is 7",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 7,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "7 signs from Pisces ends in Virgo",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Virgo is the 1th from Virgo, so take the 10th from it and get Gemini",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 2,
+            "sign_name": "Gemini"
+          }
+        ],
+        "symbol": "A1"
+      },
+      {
+        "before_exception": 4,
+        "before_exception_name": "Leo",
+        "count": 6,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 2,
+        "house_sign": 6,
+        "house_sign_name": "Libra",
+        "lord": 5,
+        "lord_name": "Venus",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 4,
+        "sign_name": "Leo",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Dhanarudha",
+          "Vittarudha",
+          "Dhana pada",
+          "Vitta pada"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 2 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Libra is Venus",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "count": 6,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Libra to Pisces is 6",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 6,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "6 signs from Pisces ends in Leo",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Leo is the 11th from Libra, neither 1st nor 7th \u2014 no change",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 4,
+            "sign_name": "Leo"
+          }
+        ],
+        "symbol": "A2"
+      },
+      {
+        "before_exception": 5,
+        "before_exception_name": "Virgo",
+        "count": 6,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 3,
+        "house_sign": 7,
+        "house_sign_name": "Scorpio",
+        "lord": 2,
+        "lord_name": "Mars",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 5,
+        "sign_name": "Virgo",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Bhatrarudha",
+          "Bhratri pada",
+          "Vikramarudha",
+          "Vikrama pada"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 3 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Scorpio is Mars, taken as stronger than Ketu",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "count": 6,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Scorpio to Aries is 6",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 6,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "6 signs from Aries ends in Virgo",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Virgo is the 11th from Scorpio, neither 1st nor 7th \u2014 no change",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 5,
+            "sign_name": "Virgo"
+          }
+        ],
+        "symbol": "A3"
+      },
+      {
+        "before_exception": 4,
+        "before_exception_name": "Leo",
+        "count": 5,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 4,
+        "house_sign": 8,
+        "house_sign_name": "Sagittarius",
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 4,
+        "sign_name": "Leo",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Matri pada",
+          "Vahana pada",
+          "Sukha pada",
+          "Matrarudha",
+          "Vahanarudha",
+          "Sukharudha"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 4 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Sagittarius is Jupiter",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "count": 5,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Sagittarius to Aries is 5",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 5,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "5 signs from Aries ends in Leo",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Leo is the 9th from Sagittarius, neither 1st nor 7th \u2014 no change",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 4,
+            "sign_name": "Leo"
+          }
+        ],
+        "symbol": "A4"
+      },
+      {
+        "before_exception": 3,
+        "before_exception_name": "Cancer",
+        "count": 4,
+        "exception_applied": true,
+        "exception_position": 7,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 5,
+        "house_sign": 9,
+        "house_sign_name": "Capricorn",
+        "lord": 6,
+        "lord_name": "Saturn",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 0,
+        "sign_name": "Aries",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Mantra pada",
+          "Mantrarudha",
+          "Putrarudha",
+          "Putra pada",
+          "Buddhi pada"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 5 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Capricorn is Saturn",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "count": 4,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Capricorn to Aries is 4",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 4,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "4 signs from Aries ends in Cancer",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Cancer is the 7th from Capricorn, so take the 10th from it and get Aries",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 0,
+            "sign_name": "Aries"
+          }
+        ],
+        "symbol": "A5"
+      },
+      {
+        "before_exception": 2,
+        "before_exception_name": "Gemini",
+        "count": 3,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 6,
+        "house_sign": 10,
+        "house_sign_name": "Aquarius",
+        "lord": 6,
+        "lord_name": "Saturn",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 2,
+        "sign_name": "Gemini",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Roga pada",
+          "Satru pada",
+          "Rogarudha",
+          "Satrarudha"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 6 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Aquarius is Saturn, taken as stronger than Rahu",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "count": 3,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Aquarius to Aries is 3",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 3,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "3 signs from Aries ends in Gemini",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Gemini is the 5th from Aquarius, neither 1st nor 7th \u2014 no change",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 2,
+            "sign_name": "Gemini"
+          }
+        ],
+        "symbol": "A6"
+      },
+      {
+        "before_exception": 1,
+        "before_exception_name": "Taurus",
+        "count": 2,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 7,
+        "house_sign": 11,
+        "house_sign_name": "Pisces",
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 1,
+        "sign_name": "Taurus",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Dara pada",
+          "Dararudha"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 7 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Pisces is Jupiter",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "count": 2,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Pisces to Aries is 2",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 2,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "2 signs from Aries ends in Taurus",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Taurus is the 3th from Pisces, neither 1st nor 7th \u2014 no change",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 1,
+            "sign_name": "Taurus"
+          }
+        ],
+        "symbol": "A7"
+      },
+      {
+        "before_exception": 0,
+        "before_exception_name": "Aries",
+        "count": 1,
+        "exception_applied": true,
+        "exception_position": 1,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 8,
+        "house_sign": 0,
+        "house_sign_name": "Aries",
+        "lord": 2,
+        "lord_name": "Mars",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 9,
+        "sign_name": "Capricorn",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Mrityu pada",
+          "Kashta pada",
+          "Kashtarudha",
+          "Randhrarudha"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 8 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Aries is Mars",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "count": 1,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Aries to Aries is 1",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 1,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "1 signs from Aries ends in Aries",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Aries is the 1th from Aries, so take the 10th from it and get Capricorn",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          }
+        ],
+        "symbol": "A8"
+      },
+      {
+        "before_exception": 9,
+        "before_exception_name": "Capricorn",
+        "count": 11,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 9,
+        "house_sign": 1,
+        "house_sign_name": "Taurus",
+        "lord": 5,
+        "lord_name": "Venus",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 9,
+        "sign_name": "Capricorn",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Bhagya pada",
+          "Bhagyarudha",
+          "Pitri pada",
+          "Pitrarudha",
+          "Dharma pada",
+          "Guru pada"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 9 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Taurus is Venus",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "count": 11,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Taurus to Pisces is 11",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 11,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "11 signs from Pisces ends in Capricorn",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Capricorn is the 9th from Taurus, neither 1st nor 7th \u2014 no change",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          }
+        ],
+        "symbol": "A9"
+      },
+      {
+        "before_exception": 8,
+        "before_exception_name": "Sagittarius",
+        "count": 10,
+        "exception_applied": true,
+        "exception_position": 7,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 10,
+        "house_sign": 2,
+        "house_sign_name": "Gemini",
+        "lord": 3,
+        "lord_name": "Mercury",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 5,
+        "sign_name": "Virgo",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Karma pada",
+          "Karmarudha",
+          "Swarga pada",
+          "Swargarudha",
+          "Rajya pada"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 10 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Gemini is Mercury",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "count": 10,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Gemini to Pisces is 10",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 10,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "10 signs from Pisces ends in Sagittarius",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Sagittarius is the 7th from Gemini, so take the 10th from it and get Virgo",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 5,
+            "sign_name": "Virgo"
+          }
+        ],
+        "symbol": "A10"
+      },
+      {
+        "before_exception": 1,
+        "before_exception_name": "Taurus",
+        "count": 12,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 11,
+        "house_sign": 3,
+        "house_sign_name": "Cancer",
+        "lord": 1,
+        "lord_name": "Moon",
+        "lord_sign": 2,
+        "lord_sign_name": "Gemini",
+        "sign": 1,
+        "sign_name": "Taurus",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Labha pada",
+          "Labharudha"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 11 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Cancer is Moon",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "count": 12,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Cancer to Gemini is 12",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 12,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "12 signs from Gemini ends in Taurus",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Taurus is the 11th from Cancer, neither 1st nor 7th \u2014 no change",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 1,
+            "sign_name": "Taurus"
+          }
+        ],
+        "symbol": "A11"
+      },
+      {
+        "before_exception": 6,
+        "before_exception_name": "Libra",
+        "count": 8,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 12,
+        "house_sign": 4,
+        "house_sign_name": "Leo",
+        "lord": 0,
+        "lord_name": "Sun",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 6,
+        "sign_name": "Libra",
+        "special_name": "Upapada Lagna",
+        "special_symbol": "UL",
+        "specific_names": [
+          "Upapada lagna",
+          "Upapada",
+          "Gaunapada",
+          "Vyayarudha",
+          "Moksha pada"
+        ],
+        "steps": [
+          {
+            "count": null,
+            "description": "Take the sign containing the house of interest",
+            "detail": "house 12 from lagna in Virgo",
+            "name": "house_sign",
+            "number": 1,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "count": null,
+            "description": "Find the sign occupied by the lord of that house",
+            "detail": "lord of Leo is Sun",
+            "name": "lord_sign",
+            "number": 2,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "count": 8,
+            "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+            "detail": "Leo to Pisces is 8",
+            "name": "count_to_lord",
+            "number": 3,
+            "sign": null,
+            "sign_name": null
+          },
+          {
+            "count": 8,
+            "description": "Count the same number of signs from the sign containing the lord",
+            "detail": "8 signs from Pisces ends in Libra",
+            "name": "advance_from_lord",
+            "number": 4,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "count": null,
+            "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+            "detail": "Libra is the 3th from Leo, neither 1st nor 7th \u2014 no change",
+            "name": "apply_exception",
+            "number": 5,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "count": null,
+            "description": "The resulting sign contains the arudha pada of the house of interest",
+            "detail": null,
+            "name": "arudha_pada",
+            "number": 6,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "symbol": "A12"
+      }
+    ]
+  },
+  "status": 200
+}

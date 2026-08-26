@@ -1,0 +1,65 @@
+{
+  "body": {
+    "decided_by": "6",
+    "determined": true,
+    "first": 0,
+    "first_name": "Aries",
+    "purpose": "phalita",
+    "reason": "Aries's lord Mars advanced 23\u00b017'; Libra's lord Venus advanced 19\u00b051'",
+    "rules": [
+      {
+        "decided": false,
+        "description": "If one rasi contains more planets than the other, it is stronger",
+        "detail": "Aries contains 0 planets; Libra contains 0 planets \u2014 tie",
+        "rule": "1",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "More of Jupiter, Mercury and the rasi's lord occupy or aspect it",
+        "detail": "Aries count 0; Libra count 0 \u2014 tie",
+        "rule": "2",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "If one rasi contains an exalted planet and the other does not, the former is stronger",
+        "detail": "Aries holds no exalted planet; Libra holds no exalted planet \u2014 tie",
+        "rule": "3",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "A rasi whose lord is in a rasi with a different oddity is stronger",
+        "detail": "Aries (odd) has its lord Mars in Taurus (even) \u2014 different oddity; Libra (odd) has its lord Venus in Cancer (even) \u2014 different oddity \u2014 tie",
+        "rule": "4",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "Dual rasis are stronger than fixed rasis and fixed rasis are stronger than movable rasis",
+        "detail": "Aries is movable; Libra is movable \u2014 tie (always so when comparing a rasi and the 7th from it)",
+        "rule": "5",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": true,
+        "description": "The rasi owned by the planet with the higher advancement is stronger",
+        "detail": "Aries's lord Mars advanced 23\u00b017'; Libra's lord Venus advanced 19\u00b051'",
+        "rule": "6",
+        "winner": 0,
+        "winner_name": "Aries"
+      }
+    ],
+    "second": 6,
+    "second_name": "Libra",
+    "winner": 0,
+    "winner_name": "Aries"
+  },
+  "status": 200
+}

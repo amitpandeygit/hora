@@ -1,0 +1,898 @@
+{
+  "body": {
+    "deviations": [
+      "dosha assignment follows the book, not conventional Ayurveda \u2014 see docs/book-deviations.md D-1"
+    ],
+    "rasis": [
+      {
+        "ayana": "uttara",
+        "color": "blood-red color",
+        "day_night_governor": 1,
+        "day_night_names": [
+          "night time",
+          "nishaa"
+        ],
+        "direction": "east",
+        "dosha": "pitta",
+        "dosha_english": "bilious",
+        "element": "fire",
+        "element_definition": "Fire is a substance that transforms the state of things.",
+        "element_sanskrit": "agni",
+        "ends": 30.0,
+        "footed_names": [
+          "odd-footed",
+          "vishamapada",
+          "ojapada"
+        ],
+        "guna": "rajas",
+        "guna_adjectives": [
+          "raajasik",
+          "rajasik"
+        ],
+        "guna_meaning": "energy",
+        "is_odd": true,
+        "is_odd_footed": true,
+        "limb": "head",
+        "lord": 2,
+        "lord_name": "Mars",
+        "modality": "chara",
+        "modality_deity": "Brahma",
+        "modality_deity_role": "Creator",
+        "modality_english": "movable",
+        "modality_nature": "Their nature is to move and to be dynamic.",
+        "name": "Aries",
+        "odd_even_names": [
+          "odd",
+          "vishama",
+          "oja",
+          "male"
+        ],
+        "rasi": 0,
+        "rising": "prishthodaya",
+        "rising_dasa_half": "second",
+        "rising_description": "Some rasis rise with their feet.",
+        "sanskrit": "Mesha",
+        "starts": 0.0,
+        "strong_at": "night",
+        "symbol": "Ar",
+        "varna": "kshatriya",
+        "varna_description": "Kshatriyas are valiant and they become kings, army chiefs and soldiers.",
+        "varna_english": "warriors"
+      },
+      {
+        "ayana": "uttara",
+        "color": "white",
+        "day_night_governor": 1,
+        "day_night_names": [
+          "night time",
+          "nishaa"
+        ],
+        "direction": "south",
+        "dosha": "vaata",
+        "dosha_english": "windy",
+        "element": "earth",
+        "element_definition": "Earth is a substance with a constant and solid state.",
+        "element_sanskrit": "bhoo",
+        "ends": 60.0,
+        "footed_names": [
+          "odd-footed",
+          "vishamapada",
+          "ojapada"
+        ],
+        "guna": "rajas",
+        "guna_adjectives": [
+          "raajasik",
+          "rajasik"
+        ],
+        "guna_meaning": "energy",
+        "is_odd": false,
+        "is_odd_footed": true,
+        "limb": "face",
+        "lord": 5,
+        "lord_name": "Venus",
+        "modality": "sthira",
+        "modality_deity": "Shiva",
+        "modality_deity_role": "Destroyer",
+        "modality_english": "fixed",
+        "modality_nature": "Their nature is to be stable and constant.",
+        "name": "Taurus",
+        "odd_even_names": [
+          "even",
+          "sama",
+          "yugma",
+          "female"
+        ],
+        "rasi": 1,
+        "rising": "prishthodaya",
+        "rising_dasa_half": "second",
+        "rising_description": "Some rasis rise with their feet.",
+        "sanskrit": "Vrishabha",
+        "starts": 30.0,
+        "strong_at": "night",
+        "symbol": "Ta",
+        "varna": "vaisya",
+        "varna_description": "Vaisyas are the traders and suppliers of various services.",
+        "varna_english": "traders"
+      },
+      {
+        "ayana": "uttara",
+        "color": "grass green",
+        "day_night_governor": 1,
+        "day_night_names": [
+          "night time",
+          "nishaa"
+        ],
+        "direction": "west",
+        "dosha": "mixed",
+        "dosha_english": null,
+        "element": "air",
+        "element_definition": "Air is a substance with a varying state.",
+        "element_sanskrit": "vaayu",
+        "ends": 90.0,
+        "footed_names": [
+          "odd-footed",
+          "vishamapada",
+          "ojapada"
+        ],
+        "guna": "tamas",
+        "guna_adjectives": [
+          "taamasik",
+          "tamasik"
+        ],
+        "guna_meaning": "darkness",
+        "is_odd": true,
+        "is_odd_footed": true,
+        "limb": "arms",
+        "lord": 3,
+        "lord_name": "Mercury",
+        "modality": "dwiswabhava",
+        "modality_deity": "Vishnu",
+        "modality_deity_role": "Sustainer",
+        "modality_english": "dual",
+        "modality_nature": "They are stable sometimes and dynamic sometimes.",
+        "name": "Gemini",
+        "odd_even_names": [
+          "odd",
+          "vishama",
+          "oja",
+          "male"
+        ],
+        "rasi": 2,
+        "rising": "seershodaya",
+        "rising_dasa_half": "first",
+        "rising_description": "Some rasis rise with their head.",
+        "sanskrit": "Mithuna",
+        "starts": 60.0,
+        "strong_at": "night",
+        "symbol": "Ge",
+        "varna": "sudra",
+        "varna_description": "Sudras execute various menial tasks.",
+        "varna_english": "workers"
+      },
+      {
+        "ayana": "dakshina",
+        "color": "pale red",
+        "day_night_governor": 1,
+        "day_night_names": [
+          "night time",
+          "nishaa"
+        ],
+        "direction": "north",
+        "dosha": "kapha",
+        "dosha_english": "phlegmatic",
+        "element": "water",
+        "element_definition": "Water is a substance with a flexible state.",
+        "element_sanskrit": "jala",
+        "ends": 120.0,
+        "footed_names": [
+          "even-footed",
+          "samapada",
+          "yugmapada"
+        ],
+        "guna": "sattwa",
+        "guna_adjectives": [
+          "saattwik",
+          "saattvic",
+          "sattwik"
+        ],
+        "guna_meaning": "purity",
+        "is_odd": false,
+        "is_odd_footed": false,
+        "limb": "heart",
+        "lord": 1,
+        "lord_name": "Moon",
+        "modality": "chara",
+        "modality_deity": "Brahma",
+        "modality_deity_role": "Creator",
+        "modality_english": "movable",
+        "modality_nature": "Their nature is to move and to be dynamic.",
+        "name": "Cancer",
+        "odd_even_names": [
+          "even",
+          "sama",
+          "yugma",
+          "female"
+        ],
+        "rasi": 3,
+        "rising": "prishthodaya",
+        "rising_dasa_half": "second",
+        "rising_description": "Some rasis rise with their feet.",
+        "sanskrit": "Karkataka",
+        "starts": 90.0,
+        "strong_at": "night",
+        "symbol": "Cn",
+        "varna": "brahmana",
+        "varna_description": "Brahmanas pursue knowledge and work as priests or ministers.",
+        "varna_english": "scholars"
+      },
+      {
+        "ayana": "dakshina",
+        "color": "white",
+        "day_night_governor": 0,
+        "day_night_names": [
+          "daytime",
+          "divaa"
+        ],
+        "direction": "east",
+        "dosha": "pitta",
+        "dosha_english": "bilious",
+        "element": "fire",
+        "element_definition": "Fire is a substance that transforms the state of things.",
+        "element_sanskrit": "agni",
+        "ends": 150.0,
+        "footed_names": [
+          "even-footed",
+          "samapada",
+          "yugmapada"
+        ],
+        "guna": "sattwa",
+        "guna_adjectives": [
+          "saattwik",
+          "saattvic",
+          "sattwik"
+        ],
+        "guna_meaning": "purity",
+        "is_odd": true,
+        "is_odd_footed": false,
+        "limb": "stomach",
+        "lord": 0,
+        "lord_name": "Sun",
+        "modality": "sthira",
+        "modality_deity": "Shiva",
+        "modality_deity_role": "Destroyer",
+        "modality_english": "fixed",
+        "modality_nature": "Their nature is to be stable and constant.",
+        "name": "Leo",
+        "odd_even_names": [
+          "odd",
+          "vishama",
+          "oja",
+          "male"
+        ],
+        "rasi": 4,
+        "rising": "seershodaya",
+        "rising_dasa_half": "first",
+        "rising_description": "Some rasis rise with their head.",
+        "sanskrit": "Simha",
+        "starts": 120.0,
+        "strong_at": "day",
+        "symbol": "Le",
+        "varna": "kshatriya",
+        "varna_description": "Kshatriyas are valiant and they become kings, army chiefs and soldiers.",
+        "varna_english": "warriors"
+      },
+      {
+        "ayana": "dakshina",
+        "color": "variegated",
+        "day_night_governor": 0,
+        "day_night_names": [
+          "daytime",
+          "divaa"
+        ],
+        "direction": "south",
+        "dosha": "vaata",
+        "dosha_english": "windy",
+        "element": "earth",
+        "element_definition": "Earth is a substance with a constant and solid state.",
+        "element_sanskrit": "bhoo",
+        "ends": 180.0,
+        "footed_names": [
+          "even-footed",
+          "samapada",
+          "yugmapada"
+        ],
+        "guna": "tamas",
+        "guna_adjectives": [
+          "taamasik",
+          "tamasik"
+        ],
+        "guna_meaning": "darkness",
+        "is_odd": false,
+        "is_odd_footed": false,
+        "limb": "hip",
+        "lord": 3,
+        "lord_name": "Mercury",
+        "modality": "dwiswabhava",
+        "modality_deity": "Vishnu",
+        "modality_deity_role": "Sustainer",
+        "modality_english": "dual",
+        "modality_nature": "They are stable sometimes and dynamic sometimes.",
+        "name": "Virgo",
+        "odd_even_names": [
+          "even",
+          "sama",
+          "yugma",
+          "female"
+        ],
+        "rasi": 5,
+        "rising": "seershodaya",
+        "rising_dasa_half": "first",
+        "rising_description": "Some rasis rise with their head.",
+        "sanskrit": "Kanya",
+        "starts": 150.0,
+        "strong_at": "day",
+        "symbol": "Vi",
+        "varna": "vaisya",
+        "varna_description": "Vaisyas are the traders and suppliers of various services.",
+        "varna_english": "traders"
+      },
+      {
+        "ayana": "dakshina",
+        "color": "black",
+        "day_night_governor": 0,
+        "day_night_names": [
+          "daytime",
+          "divaa"
+        ],
+        "direction": "west",
+        "dosha": "mixed",
+        "dosha_english": null,
+        "element": "air",
+        "element_definition": "Air is a substance with a varying state.",
+        "element_sanskrit": "vaayu",
+        "ends": 210.0,
+        "footed_names": [
+          "odd-footed",
+          "vishamapada",
+          "ojapada"
+        ],
+        "guna": "rajas",
+        "guna_adjectives": [
+          "raajasik",
+          "rajasik"
+        ],
+        "guna_meaning": "energy",
+        "is_odd": true,
+        "is_odd_footed": true,
+        "limb": "space below navel",
+        "lord": 5,
+        "lord_name": "Venus",
+        "modality": "chara",
+        "modality_deity": "Brahma",
+        "modality_deity_role": "Creator",
+        "modality_english": "movable",
+        "modality_nature": "Their nature is to move and to be dynamic.",
+        "name": "Libra",
+        "odd_even_names": [
+          "odd",
+          "vishama",
+          "oja",
+          "male"
+        ],
+        "rasi": 6,
+        "rising": "seershodaya",
+        "rising_dasa_half": "first",
+        "rising_description": "Some rasis rise with their head.",
+        "sanskrit": "Thula",
+        "starts": 180.0,
+        "strong_at": "day",
+        "symbol": "Li",
+        "varna": "sudra",
+        "varna_description": "Sudras execute various menial tasks.",
+        "varna_english": "workers"
+      },
+      {
+        "ayana": "dakshina",
+        "color": "reddish brown",
+        "day_night_governor": 0,
+        "day_night_names": [
+          "daytime",
+          "divaa"
+        ],
+        "direction": "north",
+        "dosha": "kapha",
+        "dosha_english": "phlegmatic",
+        "element": "water",
+        "element_definition": "Water is a substance with a flexible state.",
+        "element_sanskrit": "jala",
+        "ends": 240.0,
+        "footed_names": [
+          "odd-footed",
+          "vishamapada",
+          "ojapada"
+        ],
+        "guna": "rajas",
+        "guna_adjectives": [
+          "raajasik",
+          "rajasik"
+        ],
+        "guna_meaning": "energy",
+        "is_odd": false,
+        "is_odd_footed": true,
+        "limb": "private parts",
+        "lord": 2,
+        "lord_name": "Mars",
+        "modality": "sthira",
+        "modality_deity": "Shiva",
+        "modality_deity_role": "Destroyer",
+        "modality_english": "fixed",
+        "modality_nature": "Their nature is to be stable and constant.",
+        "name": "Scorpio",
+        "odd_even_names": [
+          "even",
+          "sama",
+          "yugma",
+          "female"
+        ],
+        "rasi": 7,
+        "rising": "seershodaya",
+        "rising_dasa_half": "first",
+        "rising_description": "Some rasis rise with their head.",
+        "sanskrit": "Vrischika",
+        "starts": 210.0,
+        "strong_at": "day",
+        "symbol": "Sc",
+        "varna": "brahmana",
+        "varna_description": "Brahmanas pursue knowledge and work as priests or ministers.",
+        "varna_english": "scholars"
+      },
+      {
+        "ayana": "dakshina",
+        "color": "the color of the husk of grass",
+        "day_night_governor": 1,
+        "day_night_names": [
+          "night time",
+          "nishaa"
+        ],
+        "direction": "east",
+        "dosha": "pitta",
+        "dosha_english": "bilious",
+        "element": "fire",
+        "element_definition": "Fire is a substance that transforms the state of things.",
+        "element_sanskrit": "agni",
+        "ends": 270.0,
+        "footed_names": [
+          "odd-footed",
+          "vishamapada",
+          "ojapada"
+        ],
+        "guna": "sattwa",
+        "guna_adjectives": [
+          "saattwik",
+          "saattvic",
+          "sattwik"
+        ],
+        "guna_meaning": "purity",
+        "is_odd": true,
+        "is_odd_footed": true,
+        "limb": "thighs",
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "modality": "dwiswabhava",
+        "modality_deity": "Vishnu",
+        "modality_deity_role": "Sustainer",
+        "modality_english": "dual",
+        "modality_nature": "They are stable sometimes and dynamic sometimes.",
+        "name": "Sagittarius",
+        "odd_even_names": [
+          "odd",
+          "vishama",
+          "oja",
+          "male"
+        ],
+        "rasi": 8,
+        "rising": "prishthodaya",
+        "rising_dasa_half": "second",
+        "rising_description": "Some rasis rise with their feet.",
+        "sanskrit": "Dhanus",
+        "starts": 240.0,
+        "strong_at": "night",
+        "symbol": "Sg",
+        "varna": "kshatriya",
+        "varna_description": "Kshatriyas are valiant and they become kings, army chiefs and soldiers.",
+        "varna_english": "warriors"
+      },
+      {
+        "ayana": "uttara",
+        "color": "variegated",
+        "day_night_governor": 1,
+        "day_night_names": [
+          "night time",
+          "nishaa"
+        ],
+        "direction": "south",
+        "dosha": "vaata",
+        "dosha_english": "windy",
+        "element": "earth",
+        "element_definition": "Earth is a substance with a constant and solid state.",
+        "element_sanskrit": "bhoo",
+        "ends": 300.0,
+        "footed_names": [
+          "even-footed",
+          "samapada",
+          "yugmapada"
+        ],
+        "guna": "tamas",
+        "guna_adjectives": [
+          "taamasik",
+          "tamasik"
+        ],
+        "guna_meaning": "darkness",
+        "is_odd": false,
+        "is_odd_footed": false,
+        "limb": "knees",
+        "lord": 6,
+        "lord_name": "Saturn",
+        "modality": "chara",
+        "modality_deity": "Brahma",
+        "modality_deity_role": "Creator",
+        "modality_english": "movable",
+        "modality_nature": "Their nature is to move and to be dynamic.",
+        "name": "Capricorn",
+        "odd_even_names": [
+          "even",
+          "sama",
+          "yugma",
+          "female"
+        ],
+        "rasi": 9,
+        "rising": "prishthodaya",
+        "rising_dasa_half": "second",
+        "rising_description": "Some rasis rise with their feet.",
+        "sanskrit": "Makara",
+        "starts": 270.0,
+        "strong_at": "night",
+        "symbol": "Cp",
+        "varna": "vaisya",
+        "varna_description": "Vaisyas are the traders and suppliers of various services.",
+        "varna_english": "traders"
+      },
+      {
+        "ayana": "uttara",
+        "color": "brown color (that of a mongoose)",
+        "day_night_governor": 0,
+        "day_night_names": [
+          "daytime",
+          "divaa"
+        ],
+        "direction": "west",
+        "dosha": "mixed",
+        "dosha_english": null,
+        "element": "air",
+        "element_definition": "Air is a substance with a varying state.",
+        "element_sanskrit": "vaayu",
+        "ends": 330.0,
+        "footed_names": [
+          "even-footed",
+          "samapada",
+          "yugmapada"
+        ],
+        "guna": "tamas",
+        "guna_adjectives": [
+          "taamasik",
+          "tamasik"
+        ],
+        "guna_meaning": "darkness",
+        "is_odd": true,
+        "is_odd_footed": false,
+        "limb": "ankles",
+        "lord": 6,
+        "lord_name": "Saturn",
+        "modality": "sthira",
+        "modality_deity": "Shiva",
+        "modality_deity_role": "Destroyer",
+        "modality_english": "fixed",
+        "modality_nature": "Their nature is to be stable and constant.",
+        "name": "Aquarius",
+        "odd_even_names": [
+          "odd",
+          "vishama",
+          "oja",
+          "male"
+        ],
+        "rasi": 10,
+        "rising": "seershodaya",
+        "rising_dasa_half": "first",
+        "rising_description": "Some rasis rise with their head.",
+        "sanskrit": "Kumbha",
+        "starts": 300.0,
+        "strong_at": "day",
+        "symbol": "Aq",
+        "varna": "sudra",
+        "varna_description": "Sudras execute various menial tasks.",
+        "varna_english": "workers"
+      },
+      {
+        "ayana": "uttara",
+        "color": "cream color or the color of fish",
+        "day_night_governor": 0,
+        "day_night_names": [
+          "daytime",
+          "divaa"
+        ],
+        "direction": "north",
+        "dosha": "kapha",
+        "dosha_english": "phlegmatic",
+        "element": "water",
+        "element_definition": "Water is a substance with a flexible state.",
+        "element_sanskrit": "jala",
+        "ends": 360.0,
+        "footed_names": [
+          "even-footed",
+          "samapada",
+          "yugmapada"
+        ],
+        "guna": "sattwa",
+        "guna_adjectives": [
+          "saattwik",
+          "saattvic",
+          "sattwik"
+        ],
+        "guna_meaning": "purity",
+        "is_odd": false,
+        "is_odd_footed": false,
+        "limb": "feet",
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "modality": "dwiswabhava",
+        "modality_deity": "Vishnu",
+        "modality_deity_role": "Sustainer",
+        "modality_english": "dual",
+        "modality_nature": "They are stable sometimes and dynamic sometimes.",
+        "name": "Pisces",
+        "odd_even_names": [
+          "even",
+          "sama",
+          "yugma",
+          "female"
+        ],
+        "rasi": 11,
+        "rising": "ubhayodaya",
+        "rising_dasa_half": null,
+        "rising_description": "Pi rises with both its head and feet.",
+        "sanskrit": "Meena",
+        "starts": 330.0,
+        "strong_at": "day",
+        "symbol": "Pi",
+        "varna": "brahmana",
+        "varna_description": "Brahmanas pursue knowledge and work as priests or ministers.",
+        "varna_english": "scholars"
+      }
+    ],
+    "section_2_2_1": {
+      "applies_to_native": "Because we are all part of the Supreme energy governing this world, the above mapping applies to us too.",
+      "zodiac_as_vishnu": "The whole zodiac is nothing but a manifestation of Lord Vishnu's body."
+    },
+    "section_2_2_10": {
+      "governors": [
+        {
+          "graha": 1,
+          "graha_name": "Moon",
+          "half": "night time"
+        },
+        {
+          "graha": 0,
+          "graha_name": "Sun",
+          "half": "daytime"
+        }
+      ],
+      "names": [
+        [
+          "night time",
+          "nishaa"
+        ],
+        [
+          "daytime",
+          "divaa"
+        ]
+      ],
+      "pair_rule": "Out of the two rasis owned by a planet, one is a day sign and one is a night sign."
+    },
+    "section_2_2_11": {
+      "dasa_rule": "It is said that planets in Seershodaya rasi give their results in the first half of their dasas and planets in Prishthodaya rasi give their results in the second half of their dasas.",
+      "descriptions": [
+        "Some rasis rise with their head.",
+        "Some rasis rise with their feet.",
+        "Pi rises with both its head and feet."
+      ],
+      "prishthodaya_note": "Many scholars have interpreted \u201cprishthodaya\u201d as \u201crising with the feet\u201d. So we will use the same interpretation. However, strictly speaking, one should note that \u201cprishtha\u201d means \u201cback\u201d."
+    },
+    "section_2_2_12": {
+      "varnas": [
+        {
+          "description": "Brahmanas pursue knowledge and work as priests or ministers.",
+          "element": "water",
+          "english": "scholars",
+          "varna": "brahmana"
+        },
+        {
+          "description": "Kshatriyas are valiant and they become kings, army chiefs and soldiers.",
+          "element": "fire",
+          "english": "warriors",
+          "varna": "kshatriya"
+        },
+        {
+          "description": "Vaisyas are the traders and suppliers of various services.",
+          "element": "earth",
+          "english": "traders",
+          "varna": "vaisya"
+        },
+        {
+          "description": "Sudras execute various menial tasks.",
+          "element": "air",
+          "english": "workers",
+          "varna": "sudra"
+        }
+      ]
+    },
+    "section_2_2_2": {
+      "names": [
+        [
+          "odd",
+          "vishama",
+          "oja",
+          "male"
+        ],
+        [
+          "even",
+          "sama",
+          "yugma",
+          "female"
+        ]
+      ],
+      "used_for": "This division is used in some dasas and in the determination of the sex of children."
+    },
+    "section_2_2_3": {
+      "names": [
+        [
+          "odd-footed",
+          "vishamapada",
+          "ojapada"
+        ],
+        [
+          "even-footed",
+          "samapada",
+          "yugmapada"
+        ]
+      ],
+      "note": "A different partition from 2.2.2's odd/even \u2014 Taurus is an even rasi but an odd-footed one.",
+      "used_for": "This division is used in some dasas."
+    },
+    "section_2_2_4": {
+      "modalities": [
+        {
+          "deity": "Brahma",
+          "english": "movable",
+          "modality": "chara",
+          "nature": "Their nature is to move and to be dynamic.",
+          "role": "Creator"
+        },
+        {
+          "deity": "Shiva",
+          "english": "fixed",
+          "modality": "sthira",
+          "nature": "Their nature is to be stable and constant.",
+          "role": "Destroyer"
+        },
+        {
+          "deity": "Vishnu",
+          "english": "dual",
+          "modality": "dwiswabhava",
+          "nature": "They are stable sometimes and dynamic sometimes.",
+          "role": "Sustainer"
+        }
+      ],
+      "trinity_note": "Brahma, Vishnu and Shiva together form the Trinity of Hindu Gods. Brahma creates the world. Vishnu sustains it. Shiva destroys it."
+    },
+    "section_2_2_5": {
+      "definitions": {
+        "air": "Air is a substance with a varying state.",
+        "earth": "Earth is a substance with a constant and solid state.",
+        "ether": "Ether is something that is present everywhere.",
+        "fire": "Fire is a substance that transforms the state of things.",
+        "water": "Water is a substance with a flexible state."
+      },
+      "elements_underlie_everything": "These 5 elements are behind every material substance, every action, every thought, every emotion and every happening in this universe.",
+      "ether_in_every_rasi": "The 5th element of aakaasa or ether is present in every rasi.",
+      "ether_name": "ether",
+      "ether_name_sanskrit": "aakaasa",
+      "five_elements": [
+        "fire",
+        "water",
+        "air",
+        "earth",
+        "ether"
+      ]
+    },
+    "section_2_2_6": {
+      "ayurveda_note": "Ayurveda is India's Vedic medical system that recognizes human body and everything else in the universe as having 3 natures that are formed with the above 5 elements.",
+      "humours": [
+        {
+          "body_example": "digestion",
+          "dosha": "pitta",
+          "elements": [
+            "fire",
+            "water"
+          ],
+          "english": "bilious",
+          "shows": "It shows things that result in tranformation in a system."
+        },
+        {
+          "body_example": "breathing",
+          "dosha": "vaata",
+          "elements": [
+            "air",
+            "ether"
+          ],
+          "english": "windy",
+          "shows": "It shows things that move in and out of a system."
+        },
+        {
+          "body_example": "bones, muscles, fat",
+          "dosha": "kapha",
+          "elements": [
+            "earth",
+            "water"
+          ],
+          "english": "phlegmatic",
+          "shows": "It shows things that bind a system together. It shows things that give a structure to a system."
+        },
+        {
+          "body_example": null,
+          "dosha": "mixed",
+          "elements": null,
+          "english": null,
+          "shows": null
+        }
+      ],
+      "note": "The stated compositions do not give the sign assignment \u2014 see D-1 in docs/book-deviations.md. The pitta sentence prints 'tranformation', which is the book's own typo."
+    },
+    "section_2_2_7": {
+      "gunas": [
+        {
+          "adjectives": [
+            "saattwik",
+            "saattvic",
+            "sattwik"
+          ],
+          "alternate_name": null,
+          "effect": "a quality that gives truthfulness and purity",
+          "guna": "sattwa",
+          "meaning": "purity"
+        },
+        {
+          "adjectives": [
+            "raajasik",
+            "rajasik"
+          ],
+          "alternate_name": "rajo guna",
+          "effect": "a quality that makes one energetic and passionate",
+          "guna": "rajas",
+          "meaning": "energy"
+        },
+        {
+          "adjectives": [
+            "taamasik",
+            "tamasik"
+          ],
+          "alternate_name": "tamo guna",
+          "effect": "a quality that makes one depraved",
+          "guna": "tamas",
+          "meaning": "darkness"
+        }
+      ],
+      "triguna_note": "In Hindu philosophy, everything in this universe has one of 3 gunas (qualities). They are called trigunas."
+    }
+  },
+  "status": 200
+}

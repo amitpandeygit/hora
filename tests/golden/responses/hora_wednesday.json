@@ -1,0 +1,130 @@
+{
+  "body": {
+    "horas": [
+      {
+        "index": 1,
+        "lord": 3,
+        "lord_name": "Mercury"
+      },
+      {
+        "index": 2,
+        "lord": 1,
+        "lord_name": "Moon"
+      },
+      {
+        "index": 3,
+        "lord": 6,
+        "lord_name": "Saturn"
+      },
+      {
+        "index": 4,
+        "lord": 4,
+        "lord_name": "Jupiter"
+      },
+      {
+        "index": 5,
+        "lord": 2,
+        "lord_name": "Mars"
+      },
+      {
+        "index": 6,
+        "lord": 0,
+        "lord_name": "Sun"
+      },
+      {
+        "index": 7,
+        "lord": 5,
+        "lord_name": "Venus"
+      },
+      {
+        "index": 8,
+        "lord": 3,
+        "lord_name": "Mercury"
+      },
+      {
+        "index": 9,
+        "lord": 1,
+        "lord_name": "Moon"
+      },
+      {
+        "index": 10,
+        "lord": 6,
+        "lord_name": "Saturn"
+      },
+      {
+        "index": 11,
+        "lord": 4,
+        "lord_name": "Jupiter"
+      },
+      {
+        "index": 12,
+        "lord": 2,
+        "lord_name": "Mars"
+      },
+      {
+        "index": 13,
+        "lord": 0,
+        "lord_name": "Sun"
+      },
+      {
+        "index": 14,
+        "lord": 5,
+        "lord_name": "Venus"
+      },
+      {
+        "index": 15,
+        "lord": 3,
+        "lord_name": "Mercury"
+      },
+      {
+        "index": 16,
+        "lord": 1,
+        "lord_name": "Moon"
+      },
+      {
+        "index": 17,
+        "lord": 6,
+        "lord_name": "Saturn"
+      },
+      {
+        "index": 18,
+        "lord": 4,
+        "lord_name": "Jupiter"
+      },
+      {
+        "index": 19,
+        "lord": 2,
+        "lord_name": "Mars"
+      },
+      {
+        "index": 20,
+        "lord": 0,
+        "lord_name": "Sun"
+      },
+      {
+        "index": 21,
+        "lord": 5,
+        "lord_name": "Venus"
+      },
+      {
+        "index": 22,
+        "lord": 3,
+        "lord_name": "Mercury"
+      },
+      {
+        "index": 23,
+        "lord": 1,
+        "lord_name": "Moon"
+      },
+      {
+        "index": 24,
+        "lord": 6,
+        "lord_name": "Saturn"
+      }
+    ],
+    "weekday": 3,
+    "weekday_lord_name": "Mercury",
+    "weekday_name": "Wednesday"
+  },
+  "status": 200
+}

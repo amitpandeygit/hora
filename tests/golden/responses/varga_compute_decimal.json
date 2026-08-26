@@ -1,0 +1,43 @@
+{
+  "body": {
+    "charts": [
+      {
+        "chart": "D60",
+        "counts_from": "the rasi itself, the part being 2 x degrees + 1",
+        "degrees_in_rasi": 27.999996,
+        "divisions": 60,
+        "dms": "28-00-00",
+        "name": "Shashtyamsa",
+        "part_index": 26,
+        "part_size_degrees": 0.5,
+        "rasi": 8,
+        "rasi_name": "Sagittarius",
+        "varga_longitude": 267.999996,
+        "variant": null
+      },
+      {
+        "chart": "D150",
+        "counts_from": null,
+        "degrees_in_rasi": 24.99999,
+        "divisions": 150,
+        "dms": "25-00-00",
+        "name": "D-150",
+        "part_index": 65,
+        "part_size_degrees": 0.2,
+        "rasi": 10,
+        "rasi_name": "Aquarius",
+        "varga_longitude": 324.99999,
+        "variant": null
+      }
+    ],
+    "input": {
+      "degrees": 222.9666666,
+      "degrees_in_rasi": 12.9666666,
+      "rasi": 7,
+      "rasi_dm": "12 Sc 58",
+      "rasi_name": "Scorpio",
+      "sign_dm": "7s 12d 58'"
+    }
+  },
+  "status": 200
+}

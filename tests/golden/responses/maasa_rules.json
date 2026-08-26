@@ -1,0 +1,123 @@
+{
+  "body": {
+    "adhika_interval_years": 3,
+    "adhika_rule": "Once in every 3 years, this difference accumulates to one month and an extra lunar month comes. This results in Sun-Moon conjunction coming twice in the same rasi.",
+    "conjunction_approximate_note": "However, we sometimes use this term approximately. If two planets are in the same sign, but not exactly at the same longitude, we still say that they are in conjunction.",
+    "conjunction_definition": "Two planets are said to be in \u201cconjunction\u201d if they are exactly at the same longitude.",
+    "definition": "A new lunar month starts whenever Sun and Moon are at the same longitude.",
+    "lunar_year_days": 355,
+    "maasa_meaning": "month",
+    "month_length_days": [
+      29,
+      30
+    ],
+    "naming_origin": "These names come from the constellation that Moon is most likely to occupy on the full Moon day.",
+    "naming_rule": "The name of a lunar month is decided by the rasi in which Sun-Moon conjunction takes place.",
+    "qualifiers": {
+      "Adhika": "extra",
+      "Nija": "real"
+    },
+    "section": "1.3.8.2",
+    "solar_year_days": 365.2425,
+    "table_4": [
+      {
+        "approximate_gregorian": "Mar/Apr",
+        "conjunction_rasi": 11,
+        "conjunction_rasi_name": "Pisces",
+        "full_moon_nakshatra": "Chitra",
+        "month_name": "Chaitra",
+        "month_name_simple": "Chaitra"
+      },
+      {
+        "approximate_gregorian": "Apr/May",
+        "conjunction_rasi": 0,
+        "conjunction_rasi_name": "Aries",
+        "full_moon_nakshatra": "Visaakha",
+        "month_name": "Vaisaakha",
+        "month_name_simple": "Vaisakha"
+      },
+      {
+        "approximate_gregorian": "May/June",
+        "conjunction_rasi": 1,
+        "conjunction_rasi_name": "Taurus",
+        "full_moon_nakshatra": "Jyeshtha",
+        "month_name": "Jyeshtha",
+        "month_name_simple": "Jyeshtha"
+      },
+      {
+        "approximate_gregorian": "June/July",
+        "conjunction_rasi": 2,
+        "conjunction_rasi_name": "Gemini",
+        "full_moon_nakshatra": "Poorva/Uttara Aashaadha",
+        "month_name": "Aashaadha",
+        "month_name_simple": "Ashadha"
+      },
+      {
+        "approximate_gregorian": "July/Aug",
+        "conjunction_rasi": 3,
+        "conjunction_rasi_name": "Cancer",
+        "full_moon_nakshatra": "Sravana",
+        "month_name": "Sraavana",
+        "month_name_simple": "Sravana"
+      },
+      {
+        "approximate_gregorian": "Aug/Sept",
+        "conjunction_rasi": 4,
+        "conjunction_rasi_name": "Leo",
+        "full_moon_nakshatra": "Poorva/Uttara Bhadrapada",
+        "month_name": "Bhaadrapada",
+        "month_name_simple": "Bhadrapada"
+      },
+      {
+        "approximate_gregorian": "Sept/Oct",
+        "conjunction_rasi": 5,
+        "conjunction_rasi_name": "Virgo",
+        "full_moon_nakshatra": "Aswini",
+        "month_name": "Aaswayuja",
+        "month_name_simple": "Asvina"
+      },
+      {
+        "approximate_gregorian": "Oct/Nov",
+        "conjunction_rasi": 6,
+        "conjunction_rasi_name": "Libra",
+        "full_moon_nakshatra": "Krittika",
+        "month_name": "Kaarteeka",
+        "month_name_simple": "Kartika"
+      },
+      {
+        "approximate_gregorian": "Nov/Dec",
+        "conjunction_rasi": 7,
+        "conjunction_rasi_name": "Scorpio",
+        "full_moon_nakshatra": "Mrigasira",
+        "month_name": "Maargasira",
+        "month_name_simple": "Margasira"
+      },
+      {
+        "approximate_gregorian": "Dec/Jan",
+        "conjunction_rasi": 8,
+        "conjunction_rasi_name": "Sagittarius",
+        "full_moon_nakshatra": "Pushyami",
+        "month_name": "Pushya",
+        "month_name_simple": "Pausha"
+      },
+      {
+        "approximate_gregorian": "Jan/Feb",
+        "conjunction_rasi": 9,
+        "conjunction_rasi_name": "Capricorn",
+        "full_moon_nakshatra": "Makha",
+        "month_name": "Maagha",
+        "month_name_simple": "Magha"
+      },
+      {
+        "approximate_gregorian": "Feb/Mar",
+        "conjunction_rasi": 10,
+        "conjunction_rasi_name": "Aquarius",
+        "full_moon_nakshatra": "Poorva/Uttara Phalguni",
+        "month_name": "Phaalguna",
+        "month_name_simple": "Phalguna"
+      }
+    ],
+    "title": "Lunar Months"
+  },
+  "status": 200
+}

@@ -1,0 +1,10 @@
+{
+  "body": {
+    "conditional": true,
+    "graha": 3,
+    "graha_name": "Mercury",
+    "nature": "benefic",
+    "reason": "Mercury is alone, so he is a natural benefic"
+  },
+  "status": 200
+}

@@ -1,0 +1,851 @@
+{
+  "body": {
+    "deviations": [
+      "Rahu exalts in Gemini and Ketu in Sagittarius per Table 6, not the commonly cited Taurus and Scorpio \u2014 see docs/book-deviations.md D-4",
+      "Mercury's moolatrikona starts at 15 degrees Virgo per section 3.3 rule 4, not the usual 16 \u2014 D-5",
+      "Mercury and Saturn are recorded as neuter; the book prints female \u2014 D-6",
+      "The nodes co-own Aquarius and Scorpio for dignity only; rasi lordship is unchanged \u2014 D-4"
+    ],
+    "grahas": [
+      {
+        "abbreviation": "Su",
+        "abode": "temple",
+        "aliases": [],
+        "avatara": "Rama",
+        "avatara_aliases": [],
+        "avatara_description": null,
+        "cabinet_role": "king",
+        "co_lord_only": false,
+        "color": "blood-red color",
+        "debilitation_rasi": "Libra",
+        "deep_exaltation_degree": 10.0,
+        "deity": "Agni",
+        "deity_role": "fire god",
+        "dhatu": "bones",
+        "dhatu_description": null,
+        "dhatu_moola_jeeva": "moola",
+        "dhatu_moola_jeeva_meaning": "roots and vegetables",
+        "dig_bala_house": 10,
+        "digbala_house": 10,
+        "element": "fire",
+        "element_adjective": "fiery",
+        "element_governance": null,
+        "element_tattva": "agni tattva",
+        "exaltation_rasi": "Aries",
+        "governs": "soul",
+        "guna": "sattwa",
+        "guna_definition": "Sattva guna simply means purity and truthfulness in one's thoughts and action.",
+        "id": 0,
+        "is_chaayaa_graha": false,
+        "moolatrikona": {
+          "from_degree": 0.0,
+          "rasi": "Leo",
+          "to_degree": 20.0
+        },
+        "name": "Sun",
+        "natural_benefic": false,
+        "natural_malefic": true,
+        "natural_nature": "malefic",
+        "natural_relations": {
+          "Jupiter": "friend",
+          "Mars": "friend",
+          "Mercury": "neutral",
+          "Moon": "friend",
+          "Saturn": "enemy",
+          "Venus": "enemy"
+        },
+        "owns": [
+          "Leo"
+        ],
+        "ritu": null,
+        "rules_element": false,
+        "sanskrit": "Surya",
+        "sex": "male",
+        "shares_element_without_ruling": true,
+        "strong_at": "day",
+        "strong_in_ayana": "dakshina",
+        "taste": "pungent",
+        "taste_examples": [
+          "onion",
+          "ginger",
+          "pepper"
+        ],
+        "time_period": "ayana",
+        "varna": "kshatriya",
+        "varna_english": "warriors",
+        "varna_forte": "Bravery is the forte of the warrior class."
+      },
+      {
+        "abbreviation": "Mo",
+        "abode": "watery place",
+        "aliases": [],
+        "avatara": "Krishna",
+        "avatara_aliases": [],
+        "avatara_description": null,
+        "cabinet_role": "king",
+        "co_lord_only": false,
+        "color": "tawny color",
+        "debilitation_rasi": "Scorpio",
+        "deep_exaltation_degree": 3.0,
+        "deity": "Varuna",
+        "deity_role": "rain god",
+        "dhatu": "blood",
+        "dhatu_description": null,
+        "dhatu_moola_jeeva": "dhaatu",
+        "dhatu_moola_jeeva_meaning": "metals and materials",
+        "dig_bala_house": 4,
+        "digbala_house": 4,
+        "element": "water",
+        "element_adjective": "watery",
+        "element_governance": null,
+        "element_tattva": "jala tattva",
+        "exaltation_rasi": "Taurus",
+        "governs": "mind",
+        "guna": "sattwa",
+        "guna_definition": "Sattva guna simply means purity and truthfulness in one's thoughts and action.",
+        "id": 1,
+        "is_chaayaa_graha": false,
+        "moolatrikona": {
+          "from_degree": 3.0,
+          "rasi": "Taurus",
+          "to_degree": 30.0
+        },
+        "name": "Moon",
+        "natural_benefic": false,
+        "natural_malefic": false,
+        "natural_nature": "conditional",
+        "natural_relations": {
+          "Jupiter": "neutral",
+          "Mars": "neutral",
+          "Mercury": "friend",
+          "Saturn": "neutral",
+          "Sun": "friend",
+          "Venus": "neutral"
+        },
+        "owns": [
+          "Cancer"
+        ],
+        "ritu": "varsha",
+        "rules_element": false,
+        "sanskrit": "Chandra",
+        "sex": "female",
+        "shares_element_without_ruling": true,
+        "strong_at": "night",
+        "strong_in_ayana": null,
+        "taste": "saline",
+        "taste_examples": [
+          "sea salt",
+          "rock salt"
+        ],
+        "time_period": "minute",
+        "varna": "vaisya",
+        "varna_english": "traders",
+        "varna_forte": "Getting along with others well is the forte of the trader class."
+      },
+      {
+        "abbreviation": "Ma",
+        "abode": null,
+        "aliases": [],
+        "avatara": "Narasimha",
+        "avatara_aliases": [
+          "Nrisimha"
+        ],
+        "avatara_description": "half-man, half-lion",
+        "cabinet_role": "leader (army chief)",
+        "co_lord_only": false,
+        "color": "blood-red color",
+        "debilitation_rasi": "Cancer",
+        "deep_exaltation_degree": 28.0,
+        "deity": "Subrahmanya",
+        "deity_role": "army chief of gods",
+        "dhatu": "marrow",
+        "dhatu_description": null,
+        "dhatu_moola_jeeva": "dhaatu",
+        "dhatu_moola_jeeva_meaning": "metals and materials",
+        "dig_bala_house": 10,
+        "digbala_house": 10,
+        "element": "fire",
+        "element_adjective": "fiery",
+        "element_governance": "leadership, enterprise",
+        "element_tattva": "agni tattva",
+        "exaltation_rasi": "Capricorn",
+        "governs": "strength",
+        "guna": "tamas",
+        "guna_definition": "Tamo guna shows a dark, mean and depraved spirit in thoughts and actions.",
+        "id": 2,
+        "is_chaayaa_graha": false,
+        "moolatrikona": {
+          "from_degree": 0.0,
+          "rasi": "Aries",
+          "to_degree": 12.0
+        },
+        "name": "Mars",
+        "natural_benefic": false,
+        "natural_malefic": true,
+        "natural_nature": "malefic",
+        "natural_relations": {
+          "Jupiter": "friend",
+          "Mercury": "enemy",
+          "Moon": "friend",
+          "Saturn": "neutral",
+          "Sun": "friend",
+          "Venus": "neutral"
+        },
+        "owns": [
+          "Aries",
+          "Scorpio"
+        ],
+        "ritu": "greeshma",
+        "rules_element": true,
+        "sanskrit": "Mangala",
+        "sex": "male",
+        "shares_element_without_ruling": false,
+        "strong_at": "night",
+        "strong_in_ayana": "dakshina",
+        "taste": "bitter",
+        "taste_examples": [
+          "karela/bitter melon",
+          "dandelion root",
+          "rhubarb root",
+          "neem leaves"
+        ],
+        "time_period": "week",
+        "varna": "kshatriya",
+        "varna_english": "warriors",
+        "varna_forte": "Bravery is the forte of the warrior class."
+      },
+      {
+        "abbreviation": "Me",
+        "abode": "sports ground",
+        "aliases": [],
+        "avatara": "Buddha",
+        "avatara_aliases": [],
+        "avatara_description": null,
+        "cabinet_role": "prince",
+        "co_lord_only": false,
+        "color": "grass green color",
+        "debilitation_rasi": "Pisces",
+        "deep_exaltation_degree": 15.0,
+        "deity": "Maha Vishnu",
+        "deity_role": "supreme sustaining force",
+        "dhatu": "skin",
+        "dhatu_description": null,
+        "dhatu_moola_jeeva": "jeeva",
+        "dhatu_moola_jeeva_meaning": "living beings",
+        "dig_bala_house": 1,
+        "digbala_house": 1,
+        "element": "earth",
+        "element_adjective": "earthy",
+        "element_governance": "memory, logical abilities",
+        "element_tattva": "bhoo tattva",
+        "exaltation_rasi": "Virgo",
+        "governs": "speech",
+        "guna": "rajas",
+        "guna_definition": "Rajo guna shows some passion, energy and impurity in thoughts and actions.",
+        "id": 3,
+        "is_chaayaa_graha": false,
+        "moolatrikona": {
+          "from_degree": 15.0,
+          "rasi": "Virgo",
+          "to_degree": 20.0
+        },
+        "name": "Mercury",
+        "natural_benefic": false,
+        "natural_malefic": false,
+        "natural_nature": "conditional",
+        "natural_relations": {
+          "Jupiter": "neutral",
+          "Mars": "neutral",
+          "Moon": "enemy",
+          "Saturn": "neutral",
+          "Sun": "friend",
+          "Venus": "friend"
+        },
+        "owns": [
+          "Gemini",
+          "Virgo"
+        ],
+        "ritu": "hemanta",
+        "rules_element": true,
+        "sanskrit": "Budha",
+        "sex": "neuter",
+        "shares_element_without_ruling": false,
+        "strong_at": "always",
+        "strong_in_ayana": null,
+        "taste": "mixed",
+        "taste_examples": [],
+        "time_period": "ritu",
+        "varna": "vaisya",
+        "varna_english": "traders",
+        "varna_forte": "Getting along with others well is the forte of the trader class."
+      },
+      {
+        "abbreviation": "Ju",
+        "abode": "treasure house",
+        "aliases": [],
+        "avatara": "Vaamana",
+        "avatara_aliases": [],
+        "avatara_description": "learned dwarf",
+        "cabinet_role": "minister",
+        "co_lord_only": false,
+        "color": "tawny color",
+        "debilitation_rasi": "Capricorn",
+        "deep_exaltation_degree": 5.0,
+        "deity": "Indra",
+        "deity_role": "ruler of gods",
+        "dhatu": "fat",
+        "dhatu_description": null,
+        "dhatu_moola_jeeva": "jeeva",
+        "dhatu_moola_jeeva_meaning": "living beings",
+        "dig_bala_house": 1,
+        "digbala_house": 1,
+        "element": "ether",
+        "element_adjective": "ethery",
+        "element_governance": "wisdom, intelligence and perceiving knowledge",
+        "element_tattva": "aakaasa tattva",
+        "exaltation_rasi": "Cancer",
+        "governs": "knowledge and happiness",
+        "guna": "sattwa",
+        "guna_definition": "Sattva guna simply means purity and truthfulness in one's thoughts and action.",
+        "id": 4,
+        "is_chaayaa_graha": false,
+        "moolatrikona": {
+          "from_degree": 0.0,
+          "rasi": "Sagittarius",
+          "to_degree": 10.0
+        },
+        "name": "Jupiter",
+        "natural_benefic": true,
+        "natural_malefic": false,
+        "natural_nature": "benefic",
+        "natural_relations": {
+          "Mars": "friend",
+          "Mercury": "enemy",
+          "Moon": "friend",
+          "Saturn": "neutral",
+          "Sun": "friend",
+          "Venus": "enemy"
+        },
+        "owns": [
+          "Sagittarius",
+          "Pisces"
+        ],
+        "ritu": "seeta",
+        "rules_element": true,
+        "sanskrit": "Guru",
+        "sex": "male",
+        "shares_element_without_ruling": false,
+        "strong_at": "day",
+        "strong_in_ayana": "uttara",
+        "taste": "sweet",
+        "taste_examples": [
+          "sugar",
+          "dates"
+        ],
+        "time_period": "month",
+        "varna": "brahmana",
+        "varna_english": "learned",
+        "varna_forte": "Learning and intelligence is the forte of the learned class."
+      },
+      {
+        "abbreviation": "Ve",
+        "abode": "bedroom",
+        "aliases": [],
+        "avatara": "Parasu Rama",
+        "avatara_aliases": [
+          "Bhaargava Rama"
+        ],
+        "avatara_description": null,
+        "cabinet_role": "minister",
+        "co_lord_only": false,
+        "color": "variegated",
+        "debilitation_rasi": "Virgo",
+        "deep_exaltation_degree": 27.0,
+        "deity": "Sachi Devi",
+        "deity_role": "Indra's wife",
+        "dhatu": "semen",
+        "dhatu_description": "materials related to the reproductive system",
+        "dhatu_moola_jeeva": "moola",
+        "dhatu_moola_jeeva_meaning": "roots and vegetables",
+        "dig_bala_house": 4,
+        "digbala_house": 4,
+        "element": "water",
+        "element_adjective": "watery",
+        "element_governance": "imaginative and creative work",
+        "element_tattva": "jala tattva",
+        "exaltation_rasi": "Pisces",
+        "governs": "potency",
+        "guna": "rajas",
+        "guna_definition": "Rajo guna shows some passion, energy and impurity in thoughts and actions.",
+        "id": 5,
+        "is_chaayaa_graha": false,
+        "moolatrikona": {
+          "from_degree": 0.0,
+          "rasi": "Libra",
+          "to_degree": 15.0
+        },
+        "name": "Venus",
+        "natural_benefic": true,
+        "natural_malefic": false,
+        "natural_nature": "benefic",
+        "natural_relations": {
+          "Jupiter": "neutral",
+          "Mars": "neutral",
+          "Mercury": "friend",
+          "Moon": "enemy",
+          "Saturn": "friend",
+          "Sun": "enemy"
+        },
+        "owns": [
+          "Taurus",
+          "Libra"
+        ],
+        "ritu": "vasanta",
+        "rules_element": true,
+        "sanskrit": "Shukra",
+        "sex": "female",
+        "shares_element_without_ruling": false,
+        "strong_at": "day",
+        "strong_in_ayana": "uttara",
+        "taste": "sour",
+        "taste_examples": [
+          "lemon",
+          "tamarind"
+        ],
+        "time_period": "fortnight",
+        "varna": "brahmana",
+        "varna_english": "learned",
+        "varna_forte": "Learning and intelligence is the forte of the learned class."
+      },
+      {
+        "abbreviation": "Sa",
+        "abode": "filthy area",
+        "aliases": [],
+        "avatara": "Koorma",
+        "avatara_aliases": [],
+        "avatara_description": "tortoise",
+        "cabinet_role": "servant",
+        "co_lord_only": false,
+        "color": "black color",
+        "debilitation_rasi": "Aries",
+        "deep_exaltation_degree": 20.0,
+        "deity": "Brahma",
+        "deity_role": "Creator",
+        "dhatu": "muscles",
+        "dhatu_description": null,
+        "dhatu_moola_jeeva": "dhaatu",
+        "dhatu_moola_jeeva_meaning": "metals and materials",
+        "dig_bala_house": 7,
+        "digbala_house": 7,
+        "element": "air",
+        "element_adjective": "airy",
+        "element_governance": "wandering and free spirit",
+        "element_tattva": "vaayu tattva",
+        "exaltation_rasi": "Libra",
+        "governs": "grief",
+        "guna": "tamas",
+        "guna_definition": "Tamo guna shows a dark, mean and depraved spirit in thoughts and actions.",
+        "id": 6,
+        "is_chaayaa_graha": false,
+        "moolatrikona": {
+          "from_degree": 0.0,
+          "rasi": "Aquarius",
+          "to_degree": 20.0
+        },
+        "name": "Saturn",
+        "natural_benefic": false,
+        "natural_malefic": true,
+        "natural_nature": "malefic",
+        "natural_relations": {
+          "Jupiter": "neutral",
+          "Mars": "enemy",
+          "Mercury": "friend",
+          "Moon": "enemy",
+          "Sun": "enemy",
+          "Venus": "friend"
+        },
+        "owns": [
+          "Capricorn",
+          "Aquarius"
+        ],
+        "ritu": "sisira",
+        "rules_element": true,
+        "sanskrit": "Shani",
+        "sex": "neuter",
+        "shares_element_without_ruling": false,
+        "strong_at": "night",
+        "strong_in_ayana": "dakshina",
+        "taste": "astringent",
+        "taste_examples": [
+          "plantain",
+          "pomegranate"
+        ],
+        "time_period": "year",
+        "varna": "sudra",
+        "varna_english": "worker",
+        "varna_forte": "Hard work is the forte of the working class."
+      },
+      {
+        "abbreviation": "Ra",
+        "abode": null,
+        "aliases": [
+          "north node",
+          "head of dragon"
+        ],
+        "avatara": "Varaaha",
+        "avatara_aliases": [
+          "Sookara"
+        ],
+        "avatara_description": "boar",
+        "cabinet_role": "army",
+        "co_lord_only": true,
+        "color": null,
+        "debilitation_rasi": "Sagittarius",
+        "deep_exaltation_degree": null,
+        "deity": null,
+        "deity_role": null,
+        "dhatu": null,
+        "dhatu_description": null,
+        "dhatu_moola_jeeva": "dhaatu",
+        "dhatu_moola_jeeva_meaning": "metals and materials",
+        "dig_bala_house": null,
+        "digbala_house": null,
+        "element": null,
+        "element_adjective": null,
+        "element_governance": null,
+        "element_tattva": null,
+        "exaltation_rasi": "Gemini",
+        "governs": null,
+        "guna": null,
+        "guna_definition": null,
+        "id": 7,
+        "is_chaayaa_graha": true,
+        "moolatrikona": {
+          "from_degree": 0.0,
+          "rasi": "Virgo",
+          "to_degree": 30.0
+        },
+        "name": "Rahu",
+        "natural_benefic": false,
+        "natural_malefic": true,
+        "natural_nature": "malefic",
+        "natural_relations": {},
+        "owns": [
+          "Aquarius"
+        ],
+        "ritu": null,
+        "rules_element": false,
+        "sanskrit": "Rahu",
+        "sex": null,
+        "shares_element_without_ruling": false,
+        "strong_at": null,
+        "strong_in_ayana": "dakshina",
+        "taste": null,
+        "taste_examples": [],
+        "time_period": null,
+        "varna": null,
+        "varna_english": null,
+        "varna_forte": null
+      },
+      {
+        "abbreviation": "Ke",
+        "abode": null,
+        "aliases": [
+          "south node",
+          "tail of dragon"
+        ],
+        "avatara": "Matsya",
+        "avatara_aliases": [
+          "Meena"
+        ],
+        "avatara_description": "fish",
+        "cabinet_role": "army",
+        "co_lord_only": true,
+        "color": null,
+        "debilitation_rasi": "Gemini",
+        "deep_exaltation_degree": null,
+        "deity": null,
+        "deity_role": null,
+        "dhatu": null,
+        "dhatu_description": null,
+        "dhatu_moola_jeeva": "jeeva",
+        "dhatu_moola_jeeva_meaning": "living beings",
+        "dig_bala_house": null,
+        "digbala_house": null,
+        "element": null,
+        "element_adjective": null,
+        "element_governance": null,
+        "element_tattva": null,
+        "exaltation_rasi": "Sagittarius",
+        "governs": null,
+        "guna": null,
+        "guna_definition": null,
+        "id": 8,
+        "is_chaayaa_graha": true,
+        "moolatrikona": {
+          "from_degree": 0.0,
+          "rasi": "Pisces",
+          "to_degree": 30.0
+        },
+        "name": "Ketu",
+        "natural_benefic": false,
+        "natural_malefic": true,
+        "natural_nature": "malefic",
+        "natural_relations": {},
+        "owns": [
+          "Scorpio"
+        ],
+        "ritu": null,
+        "rules_element": false,
+        "sanskrit": "Ketu",
+        "sex": null,
+        "shares_element_without_ruling": false,
+        "strong_at": null,
+        "strong_in_ayana": "dakshina",
+        "taste": null,
+        "taste_examples": [],
+        "time_period": null,
+        "varna": null,
+        "varna_english": null,
+        "varna_forte": null
+      }
+    ],
+    "ritus": [
+      {
+        "index": 0,
+        "meaning": "spring",
+        "name": "vasanta",
+        "ruler": "Venus"
+      },
+      {
+        "index": 1,
+        "meaning": "summer",
+        "name": "greeshma",
+        "ruler": "Mars"
+      },
+      {
+        "index": 2,
+        "meaning": "rainy season",
+        "name": "varsha",
+        "ruler": "Moon"
+      },
+      {
+        "index": 3,
+        "meaning": "season of dew",
+        "name": "hemanta",
+        "ruler": "Mercury"
+      },
+      {
+        "index": 4,
+        "meaning": "winter",
+        "name": "seeta",
+        "ruler": "Jupiter"
+      },
+      {
+        "index": 5,
+        "meaning": "fall",
+        "name": "sisira",
+        "ruler": "Saturn"
+      }
+    ],
+    "section_3_2_10": {
+      "definitions": [
+        "Sattva guna simply means purity and truthfulness in one's thoughts and action.",
+        "Rajo guna shows some passion, energy and impurity in thoughts and actions.",
+        "Tamo guna shows a dark, mean and depraved spirit in thoughts and actions."
+      ],
+      "misconception_note": "There is a misconception today that sattwa guna means patience and not hurting others. An aggressive response to an offender is often thought to be raajasik. However, sattwa simply means \u201cthe state of being true\u201d. Pleasing others with artificial goodness is not sattwa guna. Punishing a person for his mistakes is not necessarily rajo guna. If there is some passion and impurity in one's energetic response, then it shows rajo guna. But, if a warrior fights a sinning person with no passion or ego, it can still be a saattvic act. Lord Sri Rama and Sun are examples for this. Sun is a king of the warrior class and yet he is saattwik. Lord Rama, who was born with his amsa, is a saattwik person despite killing Ravana and other demons.",
+      "sattwa_meaning": "the state of being true"
+    },
+    "section_3_2_11": {
+      "note": "This description should give one an idea of the nature of planets."
+    },
+    "section_3_2_12": {
+      "affliction_note": "If Sun is afflicted, it can show some problems related to bones. Weakness of Moon may give blood related problems. And so on.",
+      "name": "sapta dhaatus",
+      "note": "Sapta dhaatus or 7 matters make up human body."
+    },
+    "section_3_2_13": {
+      "use": "These periods are very useful in prasna or horary astrology."
+    },
+    "section_3_2_14": {
+      "mercury_has_no_examples": "Mercury governs a mixed taste and the book gives it no examples, so none are invented.",
+      "use": "The 2nd house shows one's preference in food. The planets influencing it may decide one's favorite taste. In addition, one should avoid the tastes of the planets who are likely bring disease."
+    },
+    "section_3_2_15": {
+      "always_strong": [
+        3
+      ],
+      "always_strong_note": "Mercury is always strong.",
+      "benefic_strong_ayana": "uttara",
+      "benefic_strong_paksha": "Sukla",
+      "malefic_strong_ayana": "dakshina",
+      "malefic_strong_paksha": "Krishna",
+      "name": "digbala",
+      "note": "These are the digbalas (strengths associated with direction) of planets. These show the direction taken by one in one's life.",
+      "strong_at_night": [
+        1,
+        2,
+        6
+      ],
+      "strong_by_day": [
+        0,
+        4,
+        5
+      ]
+    },
+    "section_3_2_16": {
+      "note": "Planetary rulerships over ritus (seasons).",
+      "ritus": [
+        {
+          "lord": 5,
+          "lord_name": "Venus",
+          "meaning": "spring",
+          "ritu": "vasanta"
+        },
+        {
+          "lord": 2,
+          "lord_name": "Mars",
+          "meaning": "summer",
+          "ritu": "greeshma"
+        },
+        {
+          "lord": 1,
+          "lord_name": "Moon",
+          "meaning": "rainy season",
+          "ritu": "varsha"
+        },
+        {
+          "lord": 3,
+          "lord_name": "Mercury",
+          "meaning": "season of dew",
+          "ritu": "hemanta"
+        },
+        {
+          "lord": 4,
+          "lord_name": "Jupiter",
+          "meaning": "winter",
+          "ritu": "seeta"
+        },
+        {
+          "lord": 6,
+          "lord_name": "Saturn",
+          "meaning": "fall",
+          "ritu": "sisira"
+        }
+      ]
+    },
+    "section_3_2_17": {
+      "classes": [
+        {
+          "grahas": [
+            1,
+            2,
+            6,
+            7
+          ],
+          "meaning": "metals and materials",
+          "name": "dhaatu"
+        },
+        {
+          "grahas": [
+            0,
+            5
+          ],
+          "meaning": "roots and vegetables",
+          "name": "moola"
+        },
+        {
+          "grahas": [
+            3,
+            4,
+            8
+          ],
+          "meaning": "living beings",
+          "name": "jeeva"
+        }
+      ]
+    },
+    "section_3_2_2": {
+      "benefic_class_names": [
+        "saumya grahas",
+        "subha grahas"
+      ],
+      "conditional": [
+        1,
+        3
+      ],
+      "fixed_benefics": [
+        4,
+        5
+      ],
+      "fixed_malefics": [
+        0,
+        2,
+        6,
+        7,
+        8
+      ],
+      "inherent_nature_note": "This information is important because the results given by planets are based on their inherent nature.",
+      "malefic_class_names": [
+        "kroora grahas",
+        "paapa grahas"
+      ],
+      "mercury_rule": "Mercury becomes a natural benefic when he is alone or with more natural benefics. Mercury becomes a natural malefic when he is joined by more natural malefics.",
+      "moon_rule": "Waxing Moon of Sukla paksha is a natural benefic. Waning Moon of Krishna paksha is a natural malefic."
+    },
+    "section_3_2_4": {
+      "color_use": "These colors can be useful, for example, when predicting the color of one's car."
+    },
+    "section_3_2_7": {
+      "sex_prediction_note": "This information can be used for predicting the sex of children based on one's chart. For example, if the house ruling the first child is influenced by Jupiter, Mars and Mercury, we may predict a son. If it is influenced by Moon and Mercury, we may predict a daughter."
+    },
+    "section_3_2_8": {
+      "note": "These rulerships throw light on the basic nature of planets.",
+      "shares_without_ruling": [
+        0,
+        1
+      ],
+      "shares_without_ruling_phrase": "also has the same nature"
+    },
+    "section_3_2_9": {
+      "cabinet_note": "It should be noted that Moon, who was earlier classified in the planetary cabinet as a king, is said here to be of Vaisya varna. Sun is a king who is also a warrior. He is a brave king, who asserts himself. But Moon is a king who gets along well with everyone.",
+      "english_names": [
+        "learned",
+        "warriors",
+        "traders",
+        "worker"
+      ],
+      "fortes": [
+        "Learning and intelligence is the forte of the learned class.",
+        "Bravery is the forte of the warrior class.",
+        "Getting along with others well is the forte of the trader class.",
+        "Hard work is the forte of the working class."
+      ],
+      "gloss_differs_from_2_2_12": "Section 2.2.12 glosses the four as scholars, warriors, traders, workers; 3.2.9 as learned, warriors, traders, worker. Both are the book's own and neither is normalised.",
+      "nature_not_caste": "In this manner, we should understand varnas to show one's basic nature rather than the caste of one's family."
+    },
+    "section_3_3": {
+      "analogy": {
+        "debilitated": "one's worst party \u2014 unhappy, stuck at a place he hates",
+        "exalted": "one's favorite party/picnic \u2014 excited",
+        "moolatrikona": "one's office \u2014 powerful and duty-minded",
+        "own": "one's home \u2014 most natural and comfortable"
+      },
+      "sanskrit_names": {
+        "debilitated": "neecha",
+        "exalted": "uchcha",
+        "moolatrikona": "moolatrikona",
+        "own": "swakshetra"
+      },
+      "strong_note": "A planet is said to be strong in its own rasi or exaltation rasi or moolatrikona.",
+      "strong_placements": [
+        "own",
+        "exalted",
+        "moolatrikona"
+      ],
+      "subtle_difference": "Though all the three are good placements, there is a subtle difference in the mood of the planet and the results given by it."
+    }
+  },
+  "status": 200
+}

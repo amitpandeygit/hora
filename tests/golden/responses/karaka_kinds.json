@@ -1,0 +1,272 @@
+{
+  "body": {
+    "chara_procedure": [
+      "Take the eight planets \u2013 Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn and Rahu. For each planet, find its advancement from the beginning of the rasi occupied by it. For Rahu, measure the advancement from the end of his rasi.",
+      "Arrange them in the decreasing order of advancement.",
+      "The planet with the highest advancement is Atma Karaka (significator of self). We will denote him by AK. Find other chara karakas using Table 13."
+    ],
+    "chara_table": [
+      {
+        "advancement": "Highest",
+        "name": "Atma Karaka",
+        "note": "throws light on the inner self of a native",
+        "order": 1,
+        "shows": "Self",
+        "symbol": "AK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": null,
+        "name": "Amatya Karaka",
+        "note": "in practical terms, people who give advice \u2014 advisors and counsellors",
+        "order": 2,
+        "shows": "Ministers",
+        "symbol": "AmK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": null,
+        "name": "Bhratri Karaka",
+        "note": null,
+        "order": 3,
+        "shows": "Siblings",
+        "symbol": "BK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": null,
+        "name": "Matri Karaka",
+        "note": null,
+        "order": 4,
+        "shows": "Mother",
+        "symbol": "MK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": null,
+        "name": "Pitri Karaka",
+        "note": "can show a boss",
+        "order": 5,
+        "shows": "Father",
+        "symbol": "PiK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": null,
+        "name": "Putra Karaka",
+        "note": "can also show subordinates and followers",
+        "order": 6,
+        "shows": "Children",
+        "symbol": "PK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": null,
+        "name": "Jnaati Karaka",
+        "note": "commonly used for enemies or rivals; the literal meaning of 'jnaati' is 'paternal cousin'",
+        "order": 7,
+        "shows": "Rivals",
+        "symbol": "GK",
+        "symbol_aliases": [
+          "JK"
+        ]
+      },
+      {
+        "advancement": "Lowest",
+        "name": "Dara Karaka",
+        "note": null,
+        "order": 8,
+        "shows": "Spouse",
+        "symbol": "DK",
+        "symbol_aliases": []
+      }
+    ],
+    "chara_tie_break": "If two planets have the same degrees, we should compare minutes. If minutes are same, we should compare the seconds.",
+    "choosing": [
+      {
+        "kind": "naisargika",
+        "matter": "children",
+        "question": "birth of children, or simple events from their lives",
+        "use": "the 5th from Jupiter"
+      },
+      {
+        "kind": "chara",
+        "matter": "children",
+        "question": "children-related troubles that punish one's soul, or achievements and happiness related to children",
+        "use": "PK (putra karaka)"
+      },
+      {
+        "kind": "sthira",
+        "matter": "children",
+        "question": "timing the death of a child",
+        "use": "the sthira karaka for children (Jupiter)"
+      }
+    ],
+    "definition": "Karaka of a matter is the significator of the matter. He is the one who causes events related to that matter.",
+    "jnaati_pronunciation": "In 'jn', 'j' is the voiced palatal consonant and 'n' is the palatal nasal. A tough sound to pronounce correctly; some approximate it as 'gnaati' or 'gyaati'.",
+    "kinds": [
+      {
+        "also_shows": null,
+        "count": 9,
+        "examples": [],
+        "excludes": [],
+        "gloss": "natural significator",
+        "graha_names": [
+          "Sun",
+          "Moon",
+          "Mars",
+          "Mercury",
+          "Jupiter",
+          "Venus",
+          "Saturn",
+          "Rahu",
+          "Ketu"
+        ],
+        "grahas": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "key": "naisargika",
+        "name": "Naisargika karaka",
+        "not_limited_to": "human beings",
+        "presiding": "Brahma",
+        "presiding_because": "Brahma is the creator of everything that exists",
+        "read_as": "house_from_karaka",
+        "read_as_note": "Take the relevant house counted from the karaka, not the karaka himself: the 7th from Venus shows husband, not Venus",
+        "shows": "everything that exists in Brahma's creation and affects a person, impersonal things and matters included",
+        "shows_broadly": null,
+        "shows_contrast": "Naisargika karakas show not only human beings, but they show various impersonal things and matters.",
+        "used_for": "phalita jyotish \u2014 analysis of general results"
+      },
+      {
+        "also_shows": "how our karma (cumulative sum of actions) is carried from one life to another",
+        "count": 8,
+        "examples": [
+          "mother",
+          "father",
+          "wife",
+          "advisors"
+        ],
+        "excludes": [
+          {
+            "graha": 8,
+            "graha_name": "Ketu",
+            "reason": "Ketu stands for moksha (emancipation) and does not stand for any person who affects one's sustenance"
+          }
+        ],
+        "gloss": "variable significator",
+        "graha_names": [
+          "Sun",
+          "Moon",
+          "Mars",
+          "Mercury",
+          "Jupiter",
+          "Venus",
+          "Saturn",
+          "Rahu"
+        ],
+        "grahas": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "key": "chara",
+        "name": "Chara karaka",
+        "not_limited_to": null,
+        "presiding": "Vishnu",
+        "presiding_because": "Vishnu presides over activities related to sustenance, achievements and spiritual progress",
+        "read_as": "karaka_himself",
+        "read_as_note": "The karaka himself shows the matter: DK himself shows spouse, not the 7th from DK",
+        "shows": "people who play an important role in one's sustenance and achievements",
+        "shows_broadly": "people who play a role in one's life",
+        "shows_contrast": null,
+        "used_for": "raja yogas and spiritual progress"
+      },
+      {
+        "also_shows": "the destruction of the body, as Shiva presides over death",
+        "count": 7,
+        "examples": [],
+        "excludes": [
+          {
+            "graha": 7,
+            "graha_name": "Rahu",
+            "reason": "only the seven have physical bodies"
+          },
+          {
+            "graha": 8,
+            "graha_name": "Ketu",
+            "reason": "only the seven have physical bodies"
+          }
+        ],
+        "gloss": "fixed significator",
+        "graha_names": [
+          "Sun",
+          "Moon",
+          "Mars",
+          "Mercury",
+          "Jupiter",
+          "Venus",
+          "Saturn"
+        ],
+        "grahas": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "key": "sthira",
+        "name": "Sthira karaka",
+        "not_limited_to": null,
+        "presiding": "Shiva",
+        "presiding_because": "Shiva presides over death",
+        "read_as": "karaka_himself",
+        "read_as_note": "The karaka himself represents the relative's physical body: Jupiter is the husband's body in a female chart",
+        "shows": "the physical bodies of relatives",
+        "shows_broadly": null,
+        "shows_contrast": null,
+        "used_for": "timing the death of various near relatives"
+      }
+    ],
+    "meaning": "one who causes",
+    "measured_from_end_of_rasi": [
+      {
+        "graha": 7,
+        "graha_name": "Rahu"
+      }
+    ],
+    "pronounced": "kaaraka",
+    "shared_karakatwa": "Two grahas at exactly the same longitude hold a karakatwa together and the next karakatwa has no ruler; use the corresponding sthira karaka. This rarely becomes necessary, as two planets are rarely at exactly the same longitude.",
+    "usage_rules": [
+      {
+        "because": "Venus is the natural significator of marriage, and the 7th from Venus applies in both male and female charts",
+        "right": "the 7th from Venus to predict marriage",
+        "rule": "Sthira karakas should not be used in general predictive astrology in the place of naisargika karakas",
+        "wrong": "the 7th from Jupiter to predict marriage"
+      },
+      {
+        "because": "sthira karakas represent physical bodies; Jupiter is the husband's body, while the 7th from Venus is what shows the husband for timing marriage",
+        "right": "Jupiter for the death of a husband in a female chart",
+        "rule": "Use the sthira karaka only for timing death, where the karaka is the relative's body",
+        "wrong": "Venus for the death of a husband in a female chart"
+      }
+    ],
+    "warning": "One should not use the three types of karakas in a mixed-up way. Karakas of each type have a specific purpose. One should understand the distinction between chara, sthira and naisargika karakas clearly and use them accordingly.",
+    "word": "karaka"
+  },
+  "status": 200
+}

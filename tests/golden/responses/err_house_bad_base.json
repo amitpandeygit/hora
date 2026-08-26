@@ -1,0 +1,19 @@
+{
+  "body": {
+    "error": {
+      "details": [
+        {
+          "location": [
+            "path",
+            "base_house"
+          ],
+          "message": "Input should be less than or equal to 12",
+          "type": "less_than_equal"
+        }
+      ],
+      "message": "the request did not validate",
+      "type": "unprocessable"
+    }
+  },
+  "status": 422
+}

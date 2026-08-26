@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "unknown dasha system 'nonesuch'",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

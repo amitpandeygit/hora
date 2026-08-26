@@ -1,0 +1,425 @@
+{
+  "body": {
+    "tithis": [
+      {
+        "alternate_names": [
+          "Pratipat",
+          "Padyami"
+        ],
+        "lord": 0,
+        "lord_name": "Sun",
+        "name": "Pratipada",
+        "name_standard": "Pratipada",
+        "number": 1,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [
+          "Vidiya"
+        ],
+        "lord": 1,
+        "lord_name": "Moon",
+        "name": "Dwitiya",
+        "name_standard": "Dwitiya",
+        "number": 2,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [
+          "Tadiya"
+        ],
+        "lord": 2,
+        "lord_name": "Mars",
+        "name": "Tritiya",
+        "name_standard": "Tritiya",
+        "number": 3,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [
+          "Chaviti",
+          "Chauth"
+        ],
+        "lord": 3,
+        "lord_name": "Mercury",
+        "name": "Chaturthi",
+        "name_standard": "Chaturthi",
+        "number": 4,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "name": "Panchami",
+        "name_standard": "Panchami",
+        "number": 5,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 5,
+        "lord_name": "Venus",
+        "name": "Shashti",
+        "name_standard": "Shashthi",
+        "number": 6,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 6,
+        "lord_name": "Saturn",
+        "name": "Saptami",
+        "name_standard": "Saptami",
+        "number": 7,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 7,
+        "lord_name": "Rahu",
+        "name": "Ashtami",
+        "name_standard": "Ashtami",
+        "number": 8,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 0,
+        "lord_name": "Sun",
+        "name": "Navami",
+        "name_standard": "Navami",
+        "number": 9,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 1,
+        "lord_name": "Moon",
+        "name": "Dasami",
+        "name_standard": "Dashami",
+        "number": 10,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 2,
+        "lord_name": "Mars",
+        "name": "Ekadasi",
+        "name_standard": "Ekadashi",
+        "number": 11,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 3,
+        "lord_name": "Mercury",
+        "name": "Dwadasi",
+        "name_standard": "Dwadashi",
+        "number": 12,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "name": "Trayodasi",
+        "name_standard": "Trayodashi",
+        "number": 13,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 5,
+        "lord_name": "Venus",
+        "name": "Chaturdasi",
+        "name_standard": "Chaturdashi",
+        "number": 14,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [
+          "Paurnimasya",
+          "Poornima",
+          "Pournimasya"
+        ],
+        "lord": 6,
+        "lord_name": "Saturn",
+        "name": "Paurnami",
+        "name_standard": "Purnima",
+        "number": 15,
+        "paksha": 0,
+        "paksha_name": "Sukla",
+        "paksha_synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "alternate_names": [
+          "Pratipat",
+          "Padyami"
+        ],
+        "lord": 0,
+        "lord_name": "Sun",
+        "name": "Pratipada",
+        "name_standard": "Pratipada",
+        "number": 16,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [
+          "Vidiya"
+        ],
+        "lord": 1,
+        "lord_name": "Moon",
+        "name": "Dwitiya",
+        "name_standard": "Dwitiya",
+        "number": 17,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [
+          "Tadiya"
+        ],
+        "lord": 2,
+        "lord_name": "Mars",
+        "name": "Tritiya",
+        "name_standard": "Tritiya",
+        "number": 18,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [
+          "Chaviti",
+          "Chauth"
+        ],
+        "lord": 3,
+        "lord_name": "Mercury",
+        "name": "Chaturthi",
+        "name_standard": "Chaturthi",
+        "number": 19,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "name": "Panchami",
+        "name_standard": "Panchami",
+        "number": 20,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 5,
+        "lord_name": "Venus",
+        "name": "Shashti",
+        "name_standard": "Shashthi",
+        "number": 21,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 6,
+        "lord_name": "Saturn",
+        "name": "Saptami",
+        "name_standard": "Saptami",
+        "number": 22,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 7,
+        "lord_name": "Rahu",
+        "name": "Ashtami",
+        "name_standard": "Ashtami",
+        "number": 23,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 0,
+        "lord_name": "Sun",
+        "name": "Navami",
+        "name_standard": "Navami",
+        "number": 24,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 1,
+        "lord_name": "Moon",
+        "name": "Dasami",
+        "name_standard": "Dashami",
+        "number": 25,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 2,
+        "lord_name": "Mars",
+        "name": "Ekadasi",
+        "name_standard": "Ekadashi",
+        "number": 26,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 3,
+        "lord_name": "Mercury",
+        "name": "Dwadasi",
+        "name_standard": "Dwadashi",
+        "number": 27,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "name": "Trayodasi",
+        "name_standard": "Trayodashi",
+        "number": 28,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [],
+        "lord": 5,
+        "lord_name": "Venus",
+        "name": "Chaturdasi",
+        "name_standard": "Chaturdashi",
+        "number": 29,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      },
+      {
+        "alternate_names": [
+          "Paurnimasya",
+          "Poornima",
+          "Pournimasya"
+        ],
+        "lord": 7,
+        "lord_name": "Rahu",
+        "name": "Amavasya",
+        "name_standard": "Amavasya",
+        "number": 30,
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "paksha_synonyms": [
+          "Bahula"
+        ]
+      }
+    ]
+  },
+  "status": 200
+}

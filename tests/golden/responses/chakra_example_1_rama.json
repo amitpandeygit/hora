@@ -1,0 +1,224 @@
+{
+  "body": {
+    "body_count": 10,
+    "cells": [
+      {
+        "abbreviation": "Ar",
+        "bodies": [
+          {
+            "degrees_in_rasi": null,
+            "id": 0,
+            "kind": "graha",
+            "longitude": null,
+            "name": "Sun",
+            "rasi": 0
+          }
+        ],
+        "house": 10,
+        "is_empty": false,
+        "rasi": 0,
+        "rasi_name": "Aries",
+        "rasi_number": 1
+      },
+      {
+        "abbreviation": "Ta",
+        "bodies": [
+          {
+            "degrees_in_rasi": null,
+            "id": 3,
+            "kind": "graha",
+            "longitude": null,
+            "name": "Mercury",
+            "rasi": 1
+          }
+        ],
+        "house": 11,
+        "is_empty": false,
+        "rasi": 1,
+        "rasi_name": "Taurus",
+        "rasi_number": 2
+      },
+      {
+        "abbreviation": "Ge",
+        "bodies": [
+          {
+            "degrees_in_rasi": null,
+            "id": 8,
+            "kind": "graha",
+            "longitude": null,
+            "name": "Ketu",
+            "rasi": 2
+          }
+        ],
+        "house": 12,
+        "is_empty": false,
+        "rasi": 2,
+        "rasi_name": "Gemini",
+        "rasi_number": 3
+      },
+      {
+        "abbreviation": "Cn",
+        "bodies": [
+          {
+            "degrees_in_rasi": null,
+            "id": 1,
+            "kind": "graha",
+            "longitude": null,
+            "name": "Moon",
+            "rasi": 3
+          },
+          {
+            "degrees_in_rasi": null,
+            "id": 4,
+            "kind": "graha",
+            "longitude": null,
+            "name": "Jupiter",
+            "rasi": 3
+          },
+          {
+            "degrees_in_rasi": null,
+            "id": null,
+            "kind": "lagna",
+            "longitude": null,
+            "name": "Lagna",
+            "rasi": 3
+          }
+        ],
+        "house": 1,
+        "is_empty": false,
+        "rasi": 3,
+        "rasi_name": "Cancer",
+        "rasi_number": 4
+      },
+      {
+        "abbreviation": "Le",
+        "bodies": [],
+        "house": 2,
+        "is_empty": true,
+        "rasi": 4,
+        "rasi_name": "Leo",
+        "rasi_number": 5
+      },
+      {
+        "abbreviation": "Vi",
+        "bodies": [],
+        "house": 3,
+        "is_empty": true,
+        "rasi": 5,
+        "rasi_name": "Virgo",
+        "rasi_number": 6
+      },
+      {
+        "abbreviation": "Li",
+        "bodies": [
+          {
+            "degrees_in_rasi": null,
+            "id": 6,
+            "kind": "graha",
+            "longitude": null,
+            "name": "Saturn",
+            "rasi": 6
+          }
+        ],
+        "house": 4,
+        "is_empty": false,
+        "rasi": 6,
+        "rasi_name": "Libra",
+        "rasi_number": 7
+      },
+      {
+        "abbreviation": "Sc",
+        "bodies": [],
+        "house": 5,
+        "is_empty": true,
+        "rasi": 7,
+        "rasi_name": "Scorpio",
+        "rasi_number": 8
+      },
+      {
+        "abbreviation": "Sg",
+        "bodies": [
+          {
+            "degrees_in_rasi": null,
+            "id": 7,
+            "kind": "graha",
+            "longitude": null,
+            "name": "Rahu",
+            "rasi": 8
+          }
+        ],
+        "house": 6,
+        "is_empty": false,
+        "rasi": 8,
+        "rasi_name": "Sagittarius",
+        "rasi_number": 9
+      },
+      {
+        "abbreviation": "Cp",
+        "bodies": [
+          {
+            "degrees_in_rasi": null,
+            "id": 2,
+            "kind": "graha",
+            "longitude": null,
+            "name": "Mars",
+            "rasi": 9
+          }
+        ],
+        "house": 7,
+        "is_empty": false,
+        "rasi": 9,
+        "rasi_name": "Capricorn",
+        "rasi_number": 10
+      },
+      {
+        "abbreviation": "Aq",
+        "bodies": [],
+        "house": 8,
+        "is_empty": true,
+        "rasi": 10,
+        "rasi_name": "Aquarius",
+        "rasi_number": 11
+      },
+      {
+        "abbreviation": "Pi",
+        "bodies": [
+          {
+            "degrees_in_rasi": null,
+            "id": 5,
+            "kind": "graha",
+            "longitude": null,
+            "name": "Venus",
+            "rasi": 11
+          }
+        ],
+        "house": 9,
+        "is_empty": false,
+        "rasi": 11,
+        "rasi_name": "Pisces",
+        "rasi_number": 12
+      }
+    ],
+    "empty_rasis": [
+      4,
+      5,
+      7,
+      10
+    ],
+    "has_houses": true,
+    "occupied_rasis": [
+      0,
+      1,
+      2,
+      3,
+      6,
+      8,
+      9,
+      11
+    ],
+    "reference": "lagna",
+    "reference_rasi": 3,
+    "reference_rasi_name": "Cancer"
+  },
+  "status": 200
+}

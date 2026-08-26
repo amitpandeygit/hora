@@ -1,0 +1,54 @@
+{
+  "body": {
+    "alternate_names": [
+      "Chaviti",
+      "Chauth"
+    ],
+    "completed": 18,
+    "elapsed_in_tithi": 0.43333333,
+    "elongation": 216.43333333,
+    "ends_at": 228.0,
+    "fraction_elapsed": 0.03611111,
+    "full_name": "Krishna Chaturthi",
+    "index": 19,
+    "lord": 3,
+    "lord_name": "Mercury",
+    "name": "Chaturthi",
+    "number_in_paksha": 4,
+    "paksha": 1,
+    "paksha_name": "Krishna",
+    "raw_difference": -143.56666667,
+    "starts_at": 216.0,
+    "steps": [
+      {
+        "description": "Find the difference (Moon's longitude - Sun's longitude). Add 360 if the result is negative.",
+        "detail": "84.2000 - 227.7667 = -143.5667, + 360 = 216.4333",
+        "name": "elongation",
+        "number": 1,
+        "value": 216.43333333333334
+      },
+      {
+        "description": "Divide this result by 12. Ignore the remainder and take the quotient.",
+        "detail": "216.4333 / 12 = 18.0361, quotient 18",
+        "name": "completed",
+        "number": 2,
+        "value": 18
+      },
+      {
+        "description": "Add 1 to the quotient. You get a number from 1 to 30.",
+        "detail": "18 + 1 = 19",
+        "name": "index",
+        "number": 3,
+        "value": 19
+      },
+      {
+        "description": "Refer to Table 3 and find the name of the tithi. Write the classification of fortnight first, then the tithi name.",
+        "detail": "the 19th of 30 is the 4th of Krishna paksha, which is Chaturthi, so Krishna Chaturthi",
+        "name": "name",
+        "number": 4,
+        "value": 19
+      }
+    ]
+  },
+  "status": 200
+}

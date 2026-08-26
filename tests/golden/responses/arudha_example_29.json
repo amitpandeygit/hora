@@ -1,0 +1,384 @@
+{
+  "body": {
+    "lagna_sign": 5,
+    "lagna_sign_name": "Virgo",
+    "padas": [
+      {
+        "before_exception": 5,
+        "before_exception_name": "Virgo",
+        "count": 7,
+        "exception_applied": true,
+        "exception_position": 1,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 1,
+        "house_sign": 5,
+        "house_sign_name": "Virgo",
+        "lord": 3,
+        "lord_name": "Mercury",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 2,
+        "sign_name": "Gemini",
+        "special_name": "Arudha Lagna",
+        "special_symbol": "AL",
+        "specific_names": [
+          "Arudha lagna",
+          "Pada lagna",
+          "Arudha",
+          "Pada"
+        ],
+        "steps": null,
+        "symbol": "A1"
+      },
+      {
+        "before_exception": 4,
+        "before_exception_name": "Leo",
+        "count": 6,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 2,
+        "house_sign": 6,
+        "house_sign_name": "Libra",
+        "lord": 5,
+        "lord_name": "Venus",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 4,
+        "sign_name": "Leo",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Dhanarudha",
+          "Vittarudha",
+          "Dhana pada",
+          "Vitta pada"
+        ],
+        "steps": null,
+        "symbol": "A2"
+      },
+      {
+        "before_exception": 5,
+        "before_exception_name": "Virgo",
+        "count": 6,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 3,
+        "house_sign": 7,
+        "house_sign_name": "Scorpio",
+        "lord": 2,
+        "lord_name": "Mars",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 5,
+        "sign_name": "Virgo",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Bhatrarudha",
+          "Bhratri pada",
+          "Vikramarudha",
+          "Vikrama pada"
+        ],
+        "steps": null,
+        "symbol": "A3"
+      },
+      {
+        "before_exception": 4,
+        "before_exception_name": "Leo",
+        "count": 5,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 4,
+        "house_sign": 8,
+        "house_sign_name": "Sagittarius",
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 4,
+        "sign_name": "Leo",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Matri pada",
+          "Vahana pada",
+          "Sukha pada",
+          "Matrarudha",
+          "Vahanarudha",
+          "Sukharudha"
+        ],
+        "steps": null,
+        "symbol": "A4"
+      },
+      {
+        "before_exception": 3,
+        "before_exception_name": "Cancer",
+        "count": 4,
+        "exception_applied": true,
+        "exception_position": 7,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 5,
+        "house_sign": 9,
+        "house_sign_name": "Capricorn",
+        "lord": 6,
+        "lord_name": "Saturn",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 0,
+        "sign_name": "Aries",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Mantra pada",
+          "Mantrarudha",
+          "Putrarudha",
+          "Putra pada",
+          "Buddhi pada"
+        ],
+        "steps": null,
+        "symbol": "A5"
+      },
+      {
+        "before_exception": 2,
+        "before_exception_name": "Gemini",
+        "count": 3,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 6,
+        "house_sign": 10,
+        "house_sign_name": "Aquarius",
+        "lord": 6,
+        "lord_name": "Saturn",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 2,
+        "sign_name": "Gemini",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Roga pada",
+          "Satru pada",
+          "Rogarudha",
+          "Satrarudha"
+        ],
+        "steps": null,
+        "symbol": "A6"
+      },
+      {
+        "before_exception": 1,
+        "before_exception_name": "Taurus",
+        "count": 2,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 7,
+        "house_sign": 11,
+        "house_sign_name": "Pisces",
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 1,
+        "sign_name": "Taurus",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Dara pada",
+          "Dararudha"
+        ],
+        "steps": null,
+        "symbol": "A7"
+      },
+      {
+        "before_exception": 0,
+        "before_exception_name": "Aries",
+        "count": 1,
+        "exception_applied": true,
+        "exception_position": 1,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 8,
+        "house_sign": 0,
+        "house_sign_name": "Aries",
+        "lord": 2,
+        "lord_name": "Mars",
+        "lord_sign": 0,
+        "lord_sign_name": "Aries",
+        "sign": 9,
+        "sign_name": "Capricorn",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Mrityu pada",
+          "Kashta pada",
+          "Kashtarudha",
+          "Randhrarudha"
+        ],
+        "steps": null,
+        "symbol": "A8"
+      },
+      {
+        "before_exception": 9,
+        "before_exception_name": "Capricorn",
+        "count": 11,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 9,
+        "house_sign": 1,
+        "house_sign_name": "Taurus",
+        "lord": 5,
+        "lord_name": "Venus",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 9,
+        "sign_name": "Capricorn",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Bhagya pada",
+          "Bhagyarudha",
+          "Pitri pada",
+          "Pitrarudha",
+          "Dharma pada",
+          "Guru pada"
+        ],
+        "steps": null,
+        "symbol": "A9"
+      },
+      {
+        "before_exception": 8,
+        "before_exception_name": "Sagittarius",
+        "count": 10,
+        "exception_applied": true,
+        "exception_position": 7,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 10,
+        "house_sign": 2,
+        "house_sign_name": "Gemini",
+        "lord": 3,
+        "lord_name": "Mercury",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 5,
+        "sign_name": "Virgo",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Karma pada",
+          "Karmarudha",
+          "Swarga pada",
+          "Swargarudha",
+          "Rajya pada"
+        ],
+        "steps": null,
+        "symbol": "A10"
+      },
+      {
+        "before_exception": 1,
+        "before_exception_name": "Taurus",
+        "count": 12,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 11,
+        "house_sign": 3,
+        "house_sign_name": "Cancer",
+        "lord": 1,
+        "lord_name": "Moon",
+        "lord_sign": 2,
+        "lord_sign_name": "Gemini",
+        "sign": 1,
+        "sign_name": "Taurus",
+        "special_name": null,
+        "special_symbol": null,
+        "specific_names": [
+          "Labha pada",
+          "Labharudha"
+        ],
+        "steps": null,
+        "symbol": "A11"
+      },
+      {
+        "before_exception": 6,
+        "before_exception_name": "Libra",
+        "count": 8,
+        "exception_applied": false,
+        "exception_position": null,
+        "generic_names": [
+          "arudha pada",
+          "arudha",
+          "pada"
+        ],
+        "house": 12,
+        "house_sign": 4,
+        "house_sign_name": "Leo",
+        "lord": 0,
+        "lord_name": "Sun",
+        "lord_sign": 11,
+        "lord_sign_name": "Pisces",
+        "sign": 6,
+        "sign_name": "Libra",
+        "special_name": "Upapada Lagna",
+        "special_symbol": "UL",
+        "specific_names": [
+          "Upapada lagna",
+          "Upapada",
+          "Gaunapada",
+          "Vyayarudha",
+          "Moksha pada"
+        ],
+        "steps": null,
+        "symbol": "A12"
+      }
+    ]
+  },
+  "status": 200
+}

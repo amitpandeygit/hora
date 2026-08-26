@@ -1,0 +1,141 @@
+{
+  "body": {
+    "charts": [
+      {
+        "chart": "D3",
+        "counts_from": "the 1st, 5th and 9th from the rasi",
+        "degrees_in_rasi": 3.0,
+        "divisions": 3,
+        "dms": "3-00-00",
+        "name": "Drekkana",
+        "part_index": 2,
+        "part_size_degrees": 10.0,
+        "rasi": 6,
+        "rasi_name": "Libra",
+        "varga_longitude": 183.0,
+        "variant": null
+      },
+      {
+        "chart": "D5",
+        "counts_from": "Ar, Aq, Sg, Ge, Li (odd) or Ta, Vi, Pi, Cp, Sc (even)",
+        "degrees_in_rasi": 25.0,
+        "divisions": 5,
+        "dms": "25-00-00",
+        "name": "Panchamsa",
+        "part_index": 2,
+        "part_size_degrees": 6.0,
+        "rasi": 10,
+        "rasi_name": "Aquarius",
+        "varga_longitude": 325.0,
+        "variant": null
+      },
+      {
+        "chart": "D8",
+        "counts_from": "Ar, Sg or Le, by movable, fixed or dual",
+        "degrees_in_rasi": 28.0,
+        "divisions": 8,
+        "dms": "28-00-00",
+        "name": "Ashtamsa",
+        "part_index": 3,
+        "part_size_degrees": 3.75,
+        "rasi": 6,
+        "rasi_name": "Libra",
+        "varga_longitude": 208.0,
+        "variant": null
+      },
+      {
+        "chart": "D9",
+        "counts_from": "Ar, Cp, Li or Cn, by fiery, earthy, airy or watery",
+        "degrees_in_rasi": 9.0,
+        "divisions": 9,
+        "dms": "9-00-00",
+        "name": "Navamsa",
+        "part_index": 4,
+        "part_size_degrees": 3.3333333333,
+        "rasi": 9,
+        "rasi_name": "Capricorn",
+        "varga_longitude": 279.0,
+        "variant": null
+      },
+      {
+        "chart": "D11",
+        "counts_from": "the rasi reflected about Aries, counted anti-zodiacally",
+        "degrees_in_rasi": 1.0,
+        "divisions": 11,
+        "dms": "1-00-00",
+        "name": "Rudramsa",
+        "part_index": 5,
+        "part_size_degrees": 2.7272727273,
+        "rasi": 2,
+        "rasi_name": "Gemini",
+        "varga_longitude": 61.0,
+        "variant": null
+      },
+      {
+        "chart": "D24",
+        "counts_from": "Le (odd rasi) or Cn (even rasi)",
+        "degrees_in_rasi": 24.0,
+        "divisions": 24,
+        "dms": "24-00-00",
+        "name": "Chaturvimsamsa",
+        "part_index": 9,
+        "part_size_degrees": 1.25,
+        "rasi": 0,
+        "rasi_name": "Aries",
+        "varga_longitude": 24.0,
+        "variant": null
+      },
+      {
+        "chart": "D27",
+        "counts_from": "Ar, Cn, Li or Cp, by fiery, earthy, airy or watery",
+        "degrees_in_rasi": 27.0,
+        "divisions": 27,
+        "dms": "27-00-00",
+        "name": "Nakshatramsa",
+        "part_index": 10,
+        "part_size_degrees": 1.1111111111,
+        "rasi": 3,
+        "rasi_name": "Cancer",
+        "varga_longitude": 117.0,
+        "variant": null
+      },
+      {
+        "chart": "D30",
+        "counts_from": "five unequal arcs, by parity of the rasi",
+        "degrees_in_rasi": 3.75,
+        "divisions": 30,
+        "dms": "3-45-00",
+        "name": "Trimsamsa",
+        "part_index": 12,
+        "part_size_degrees": 1.0,
+        "rasi": 8,
+        "rasi_name": "Sagittarius",
+        "varga_longitude": 243.75,
+        "variant": null
+      },
+      {
+        "chart": "D60",
+        "counts_from": "the rasi itself, the part being 2 x degrees + 1",
+        "degrees_in_rasi": 0.0,
+        "divisions": 60,
+        "dms": "0-00-00",
+        "name": "Shashtyamsa",
+        "part_index": 23,
+        "part_size_degrees": 0.5,
+        "rasi": 0,
+        "rasi_name": "Aries",
+        "varga_longitude": 0.0,
+        "variant": null
+      }
+    ],
+    "input": {
+      "degrees": 71.0,
+      "degrees_in_rasi": 11.0,
+      "rasi": 2,
+      "rasi_dm": "11 Ge 00",
+      "rasi_name": "Gemini",
+      "sign_dm": "2s 11d 00'"
+    }
+  },
+  "status": 200
+}

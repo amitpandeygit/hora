@@ -1,0 +1,232 @@
+{
+  "body": {
+    "abhijit_active": false,
+    "date_local": "1972-10-01",
+    "day_length_hours": 11.99348,
+    "hora": {
+      "end_local": "1972-10-01 13:55:16",
+      "index": 8,
+      "lord": 0,
+      "lord_name": "Sun",
+      "start_local": "1972-10-01 12:55:16"
+    },
+    "input": {
+      "julian_day_ut": 2441591.833333333,
+      "local_time": "1972-10-01T13:30:00",
+      "place": {
+        "altitude": 0.0,
+        "latitude": 16.2,
+        "longitude": 81.13,
+        "name": "Machilipatnam"
+      },
+      "timezone": "Asia/Kolkata",
+      "utc": "1972-10-01T08:00:00+00:00",
+      "utc_offset_hours": 5.5
+    },
+    "karana": [
+      {
+        "ends_jd": 2441591.728623826,
+        "ends_local": "1972-10-01 10:59:13",
+        "index": 47,
+        "lord": null,
+        "lord_name": null,
+        "name": "Garija",
+        "name_standard": "Garija",
+        "number": 48
+      },
+      {
+        "ends_jd": 2441592.213896735,
+        "ends_local": "1972-10-01 22:38:01",
+        "index": 48,
+        "lord": null,
+        "lord_name": null,
+        "name": "Vanija",
+        "name_standard": "Vanija",
+        "number": 49
+      },
+      {
+        "ends_jd": 2441592.213899112,
+        "ends_local": "1972-10-01 22:38:01",
+        "index": 48,
+        "lord": null,
+        "lord_name": null,
+        "name": "Vanija",
+        "name_standard": "Vanija",
+        "number": 49
+      },
+      {
+        "ends_jd": 2441592.213900277,
+        "ends_local": "1972-10-01 22:38:01",
+        "index": 48,
+        "lord": null,
+        "lord_name": null,
+        "name": "Vanija",
+        "name_standard": "Vanija",
+        "number": 49
+      },
+      {
+        "ends_jd": 2441592.70402233,
+        "ends_local": "1972-10-02 10:23:48",
+        "index": 49,
+        "lord": null,
+        "lord_name": null,
+        "name": "Vishti",
+        "name_standard": "Vishti",
+        "number": 50
+      }
+    ],
+    "lunar_month": {
+      "amanta": {
+        "conjunction_rasi": 4,
+        "conjunction_rasi_name": "Leo",
+        "ends_local": "1972-10-07 13:38:38",
+        "index": 5,
+        "is_adhika": false,
+        "name": "Bhaadrapada",
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "reckoning": "amanta",
+        "starts_local": "1972-09-07 22:59:05"
+      },
+      "purnimanta": {
+        "conjunction_rasi": 4,
+        "conjunction_rasi_name": "Leo",
+        "ends_local": "1972-10-07 13:38:38",
+        "index": 6,
+        "is_adhika": false,
+        "name": "Aaswayuja",
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "reckoning": "purnimanta",
+        "starts_local": "1972-09-07 22:59:05"
+      }
+    },
+    "moon_longitude": 94.0596796,
+    "moonrise": "1972-10-01 00:27:57",
+    "moonset": "1972-10-01 13:47:48",
+    "nakshatra": [
+      {
+        "ends_jd": 2441591.779086421,
+        "ends_local": "1972-10-01 12:11:53",
+        "index": 6,
+        "lord": null,
+        "lord_name": null,
+        "name": "Punarvasu",
+        "name_standard": "Punarvasu",
+        "number": 7
+      },
+      {
+        "ends_jd": 2441591.779088944,
+        "ends_local": "1972-10-01 12:11:53",
+        "index": 6,
+        "lord": null,
+        "lord_name": null,
+        "name": "Punarvasu",
+        "name_standard": "Punarvasu",
+        "number": 7
+      },
+      {
+        "ends_jd": 2441591.779090182,
+        "ends_local": "1972-10-01 12:11:53",
+        "index": 6,
+        "lord": null,
+        "lord_name": null,
+        "name": "Punarvasu",
+        "name_standard": "Punarvasu",
+        "number": 7
+      },
+      {
+        "ends_jd": 2441592.78382824,
+        "ends_local": "1972-10-02 12:18:43",
+        "index": 7,
+        "lord": null,
+        "lord_name": null,
+        "name": "Pushyami",
+        "name_standard": "Pushya",
+        "number": 8
+      }
+    ],
+    "next_sunrise": "1972-10-02 05:55:22",
+    "night_length_hours": 12.008699,
+    "paksha": {
+      "index": 1,
+      "name": "Krishna"
+    },
+    "settings": {
+      "apparent_positions": false,
+      "ayanamsa": "lahiri",
+      "custom_ayanamsa_deg": null,
+      "dasha_year_length": "sidereal",
+      "house_system": "whole_sign",
+      "include_outer_planets": false,
+      "ketu_mode": "opposite_rahu",
+      "language": "en",
+      "name_scheme": "book",
+      "node_direction": "retrograde",
+      "node_type": "true",
+      "rahu_ketu_aspects": false,
+      "sanskrit_names": false,
+      "sunrise_mode": "disc_upper_limb",
+      "topocentric": false,
+      "upagraha_rise_point": "middle"
+    },
+    "solar_date": {
+      "day": 15,
+      "month": 5,
+      "month_name": "Virgo"
+    },
+    "sun_longitude": 164.75985382,
+    "sunrise": "1972-10-01 05:55:14",
+    "sunset": "1972-10-01 17:54:50",
+    "tithi": [
+      {
+        "ends_jd": 2441591.728623826,
+        "ends_local": "1972-10-01 10:59:13",
+        "index": 23,
+        "lord": 0,
+        "lord_name": "Sun",
+        "name": "Navami",
+        "name_standard": "Navami",
+        "number": 24
+      },
+      {
+        "ends_jd": 2441592.704022349,
+        "ends_local": "1972-10-02 10:23:48",
+        "index": 24,
+        "lord": 1,
+        "lord_name": "Moon",
+        "name": "Dasami",
+        "name_standard": "Dashami",
+        "number": 25
+      }
+    ],
+    "vaara": {
+      "index": 0,
+      "lord": 0,
+      "name": "Sunday"
+    },
+    "yoga": [
+      {
+        "ends_jd": 2441592.382203789,
+        "ends_local": "1972-10-02 02:40:22",
+        "index": 19,
+        "lord": null,
+        "lord_name": null,
+        "name": "Shiva",
+        "name_standard": "Shiva",
+        "number": 20
+      },
+      {
+        "ends_jd": 2441593.326636376,
+        "ends_local": "1972-10-03 01:20:21",
+        "index": 20,
+        "lord": null,
+        "lord_name": null,
+        "name": "Siddha",
+        "name_standard": "Siddha",
+        "number": 21
+      }
+    ]
+  },
+  "status": 200
+}

@@ -1,0 +1,60 @@
+# Generated from book section 2.2.5. See docs/open-items.md OI-12.
+schema_version: 1
+subject: element
+sources:
+  pvr-vaia:
+    title: 'Vedic Astrology: An Integrated Approach'
+    author: P.V.R. Narasimha Rao
+    section: 2.2.5 Rasis & Five Elements
+    first_published: 2000
+    licence_status: unconfirmed
+    licence_note: The author shares the book freely for reading. That is not an explicit licence to redistribute
+      the text commercially. These entries are stored but are NOT served publicly until the licence is
+      confirmed or the text is replaced. See docs/open-items.md OI-12.
+categorisation_note: These are worked examples of reading the 5th house by the element of its sign,
+  not a complete rule. The book gives four; there is no ether example because ether is in every rasi.
+entries:
+- element: 0
+  element_name: fire
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: The 5th house in a fiery sign may show a normally angry, aggressive or determined person.
+  terms:
+  - term: angry
+    category: temperament
+  - term: aggressive
+    category: temperament
+  - term: determined
+    category: temperament
+- element: 1
+  element_name: earth
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: The 5th house in an earthy sign may show a balanced, logical and stable person.
+  terms:
+  - term: balanced
+    category: temperament
+  - term: logical
+    category: temperament
+  - term: stable
+    category: temperament
+- element: 2
+  element_name: air
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: The 5th house in an airy sign may show someone with unstable and wandering emotions.
+  terms:
+  - term: unstable emotions
+    category: temperament
+  - term: wandering emotions
+    category: temperament
+- element: 3
+  element_name: water
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: The 5th house in a watery sign may show one with an imaginative and creative mind.
+  terms:
+  - term: imaginative
+    category: temperament
+  - term: creative
+    category: mind

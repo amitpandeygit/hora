@@ -1,0 +1,76 @@
+{
+  "body": {
+    "co_lord_names": [
+      "Mars",
+      "Ketu"
+    ],
+    "co_lords": [
+      2,
+      8
+    ],
+    "decided_by": "5b",
+    "determined": true,
+    "rasi": 7,
+    "rasi_name": "Scorpio",
+    "reason": "Mars advanced 23\u00b017'; Ketu advanced 24\u00b006' (from the end of the rasi)",
+    "rules": [
+      {
+        "decided": false,
+        "description": "If one of the co-lords is in the rasi, take the other planet",
+        "detail": "neither co-lord is in the rasi",
+        "evaluated": true,
+        "rule": "basic",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "If one planet is joined by more planets than the other, it is stronger",
+        "detail": "Mars with 0 other planets; Ketu with 0 other planets \u2014 tie",
+        "evaluated": true,
+        "rule": "1",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "More of Jupiter, Mercury and the dispositor conjoin or aspect it",
+        "detail": "Mars count 0; Ketu count 0 \u2014 tie",
+        "evaluated": true,
+        "rule": "2",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "If one planet is exalted and the other not, the exalted planet is stronger",
+        "detail": "Mars in Libra; Ketu in Cancer \u2014 tie",
+        "evaluated": true,
+        "rule": "3",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "Dual rasis are stronger than fixed rasis and fixed rasis are stronger than movable rasis",
+        "detail": "Mars in Libra (movable); Ketu in Cancer (movable) \u2014 tie",
+        "evaluated": true,
+        "rule": "4",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": true,
+        "description": "When finding the lord for arudha padas: take the planet more advanced in its rasi",
+        "detail": "Mars advanced 23\u00b017'; Ketu advanced 24\u00b006' (from the end of the rasi)",
+        "evaluated": true,
+        "rule": "5b",
+        "winner": 8,
+        "winner_name": "Ketu"
+      }
+    ],
+    "winner": 8,
+    "winner_name": "Ketu"
+  },
+  "status": 200
+}

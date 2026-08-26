@@ -1,0 +1,60 @@
+{
+  "body": {
+    "compound": [
+      {
+        "gloss": "good friend",
+        "label": "great_friend",
+        "sanskrit": "adhimitra"
+      },
+      {
+        "gloss": "friend",
+        "label": "friend",
+        "sanskrit": "mitra"
+      },
+      {
+        "gloss": "neutral",
+        "label": "neutral",
+        "sanskrit": "sama"
+      },
+      {
+        "gloss": "enemy",
+        "label": "enemy",
+        "sanskrit": "satru"
+      },
+      {
+        "gloss": "bad enemy",
+        "label": "great_enemy",
+        "sanskrit": "adhisatru"
+      }
+    ],
+    "dignities": {
+      "debilitated": "neecha",
+      "exalted": "uchcha",
+      "moolatrikona": "moolatrikona",
+      "own": "swakshetra"
+    },
+    "kinds": {
+      "compound": "panchadha",
+      "natural": "naisargika",
+      "temporary": "tatkaala"
+    },
+    "natural": [
+      {
+        "label": "friend",
+        "sanskrit": "mitra",
+        "value": 2
+      },
+      {
+        "label": "neutral",
+        "sanskrit": "sama",
+        "value": 1
+      },
+      {
+        "label": "enemy",
+        "sanskrit": "satru",
+        "value": 0
+      }
+    ]
+  },
+  "status": 200
+}

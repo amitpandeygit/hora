@@ -1,0 +1,119 @@
+{
+  "body": {
+    "input": {
+      "julian_day_ut": 2441591.833333333,
+      "local_time": "1972-10-01T13:30:00",
+      "place": {
+        "altitude": 0.0,
+        "latitude": 16.2,
+        "longitude": 81.13,
+        "name": "Machilipatnam"
+      },
+      "timezone": "Asia/Kolkata",
+      "utc": "1972-10-01T08:00:00+00:00",
+      "utc_offset_hours": 5.5
+    },
+    "lagna": {
+      "degrees_in_rasi": 29.4075857,
+      "dms": "29-24-27",
+      "longitude": 269.4075857,
+      "rasi": 8,
+      "rasi_dm": "29 Sg 24",
+      "rasi_name": "Sagittarius",
+      "sign_dm": "8s 29d 24'"
+    },
+    "minutes_since_sunrise": 454.770846,
+    "note": "Ghati Lagna moves 1.25 degrees for every minute of birthtime error (section 5.5), which makes it the most birthtime-sensitive point in the chart. Sree Lagna is derived from the Moon's nakshatra, not from elapsed time, so it carries no rate.",
+    "settings": {
+      "apparent_positions": false,
+      "ayanamsa": "lahiri",
+      "custom_ayanamsa_deg": null,
+      "dasha_year_length": "sidereal",
+      "house_system": "whole_sign",
+      "include_outer_planets": false,
+      "ketu_mode": "opposite_rahu",
+      "language": "en",
+      "name_scheme": "book",
+      "node_direction": "retrograde",
+      "node_type": "true",
+      "rahu_ketu_aspects": false,
+      "sanskrit_names": false,
+      "sunrise_mode": "disc_upper_limb",
+      "topocentric": false,
+      "upagraha_rise_point": "middle"
+    },
+    "special_lagnas": [
+      {
+        "abbreviation": "BL",
+        "degrees_in_rasi": 8.14193464,
+        "degrees_per_minute": 0.25,
+        "dms": "8-08-31",
+        "house": 2,
+        "id": 0,
+        "longitude": 278.14193464,
+        "name": "Bhaava Lagna",
+        "rasi": 9,
+        "rasi_dm": "8 Cp 09",
+        "rasi_name": "Capricorn",
+        "sign_dm": "9s 8d 09'",
+        "signifies": null
+      },
+      {
+        "abbreviation": "HL",
+        "degrees_in_rasi": 1.8346461,
+        "degrees_per_minute": 0.5,
+        "dms": "1-50-05",
+        "house": 6,
+        "id": 1,
+        "longitude": 31.8346461,
+        "name": "Hora Lagna",
+        "rasi": 1,
+        "rasi_dm": "1 Ta 50",
+        "rasi_name": "Taurus",
+        "sign_dm": "1s 1d 50'",
+        "signifies": "money, wealth and prosperity"
+      },
+      {
+        "abbreviation": "GL",
+        "degrees_in_rasi": 12.91278049,
+        "degrees_per_minute": 1.25,
+        "dms": "12-54-46",
+        "house": 5,
+        "id": 2,
+        "longitude": 12.91278049,
+        "name": "Ghati Lagna",
+        "rasi": 0,
+        "rasi_dm": "12 Ar 55",
+        "rasi_name": "Aries",
+        "sign_dm": "0s 12d 55'",
+        "signifies": "fame, power and authority"
+      },
+      {
+        "abbreviation": "SL",
+        "degrees_in_rasi": 19.01893477,
+        "degrees_per_minute": null,
+        "dms": "19-01-08",
+        "house": 2,
+        "id": 3,
+        "longitude": 289.01893477,
+        "name": "Sree Lagna",
+        "rasi": 9,
+        "rasi_dm": "19 Cp 01",
+        "rasi_name": "Capricorn",
+        "sign_dm": "9s 19d 01'",
+        "signifies": "prosperity"
+      }
+    ],
+    "sun_at_sunrise": {
+      "degrees_in_rasi": 14.44922318,
+      "dms": "14-26-57",
+      "longitude": 164.44922318,
+      "rasi": 5,
+      "rasi_dm": "14 Vi 27",
+      "rasi_name": "Virgo",
+      "sign_dm": "5s 14d 27'"
+    },
+    "sunrise": "1972-10-01 05:55:14"
+  },
+  "status": 200
+}

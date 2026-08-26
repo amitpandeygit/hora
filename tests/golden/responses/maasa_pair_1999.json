@@ -1,0 +1,83 @@
+{
+  "body": {
+    "month_name": "Jyeshtha",
+    "months": [
+      {
+        "approximate_gregorian": "May/June",
+        "conjunction_longitude": 30.383333333333333,
+        "conjunction_rasi": 1,
+        "conjunction_rasi_name": "Taurus",
+        "full_moon_nakshatra": "Jyeshtha",
+        "full_name": "Jyeshtha",
+        "index": 3,
+        "name": "Jyeshtha",
+        "name_book": "Jyeshtha",
+        "qualifier": null,
+        "steps": [
+          {
+            "description": "Find the rasi of the Sun-Moon conjunction that starts the month",
+            "detail": "30.3833 deg falls in Taurus",
+            "number": 1,
+            "value": "Taurus"
+          },
+          {
+            "description": "Look up Table 4: the rasi decides the name",
+            "detail": "Taurus starts Jyeshtha maasa (month), month 3 of 12",
+            "number": 2,
+            "value": "Jyeshtha"
+          },
+          {
+            "description": "Qualify the name if this rasi carries two conjunctions",
+            "detail": "no second conjunction stated, so the name stands unqualified",
+            "number": 3,
+            "value": "Jyeshtha"
+          }
+        ]
+      },
+      {
+        "approximate_gregorian": "May/June",
+        "conjunction_longitude": 58.483333333333334,
+        "conjunction_rasi": 1,
+        "conjunction_rasi_name": "Taurus",
+        "full_moon_nakshatra": "Jyeshtha",
+        "full_name": "Jyeshtha",
+        "index": 3,
+        "name": "Jyeshtha",
+        "name_book": "Jyeshtha",
+        "qualifier": null,
+        "steps": [
+          {
+            "description": "Find the rasi of the Sun-Moon conjunction that starts the month",
+            "detail": "58.4833 deg falls in Taurus",
+            "number": 1,
+            "value": "Taurus"
+          },
+          {
+            "description": "Look up Table 4: the rasi decides the name",
+            "detail": "Taurus starts Jyeshtha maasa (month), month 3 of 12",
+            "number": 2,
+            "value": "Jyeshtha"
+          },
+          {
+            "description": "Qualify the name if this rasi carries two conjunctions",
+            "detail": "no second conjunction stated, so the name stands unqualified",
+            "number": 3,
+            "value": "Jyeshtha"
+          }
+        ]
+      }
+    ],
+    "qualifier_meanings": {
+      "Adhika": "extra",
+      "Nija": "real"
+    },
+    "qualifier_undecided": "Section 1.3.8.2 states that one is Nija and the other Adhika, but not which. Neither is labelled here. See open item OI-3.",
+    "qualifiers": [
+      "Adhika",
+      "Nija"
+    ],
+    "rasi": 1,
+    "rasi_name": "Taurus"
+  },
+  "status": 200
+}

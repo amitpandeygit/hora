@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "Aquarius is owned by Saturn or Rahu; section 9.2 says to take the stronger lord, and section 15.5.1's cascade could not decide between them from what was given. Supply graha_longitudes so the cascade can reach its last rule, or stronger_lord={10: <graha>} to name one yourself.",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

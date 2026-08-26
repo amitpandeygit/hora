@@ -1,0 +1,96 @@
+{
+  "body": {
+    "approximation": "A hora is almost equal to an hour.",
+    "cycle_length": 7,
+    "day_length_note": "Section 1.3.11 divides the actual sunrise-to-sunrise interval into 24, so a hora is only approximately an hour. Its own worked example instead treats a hora as exactly one hour. day_length_hours defaults to 24, reproducing the example; pass the real interval for the other reading. See open item OI-40.",
+    "definition": "Each day starts at sunrise and ends at next day's sunrise. This period is divided into 24 equal parts and they are called horas.",
+    "first_hora_rule": "The first hora of any day is ruled by the lord of the weekday. After that, we list planets in the order mentioned above.",
+    "horas_per_day": 24,
+    "nominal_day_hours": 24.0,
+    "section": "1.3.11",
+    "speed_order": [
+      {
+        "graha": 6,
+        "name": "Saturn",
+        "position": 1
+      },
+      {
+        "graha": 4,
+        "name": "Jupiter",
+        "position": 2
+      },
+      {
+        "graha": 2,
+        "name": "Mars",
+        "position": 3
+      },
+      {
+        "graha": 0,
+        "name": "Sun",
+        "position": 4
+      },
+      {
+        "graha": 5,
+        "name": "Venus",
+        "position": 5
+      },
+      {
+        "graha": 3,
+        "name": "Mercury",
+        "position": 6
+      },
+      {
+        "graha": 1,
+        "name": "Moon",
+        "position": 7
+      }
+    ],
+    "speed_order_rule": "The lords of hora come in the order of decreasing speed with respect to earth: Saturn, Jupiter, Mars, Sun, Venus, Mercury and Moon. After Moon, we go back to Saturn and repeat the 7 planets.",
+    "title": "Hora",
+    "weekday_lords": [
+      {
+        "lord": 0,
+        "lord_name": "Sun",
+        "weekday": 0,
+        "weekday_name": "Sunday"
+      },
+      {
+        "lord": 1,
+        "lord_name": "Moon",
+        "weekday": 1,
+        "weekday_name": "Monday"
+      },
+      {
+        "lord": 2,
+        "lord_name": "Mars",
+        "weekday": 2,
+        "weekday_name": "Tuesday"
+      },
+      {
+        "lord": 3,
+        "lord_name": "Mercury",
+        "weekday": 3,
+        "weekday_name": "Wednesday"
+      },
+      {
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "weekday": 4,
+        "weekday_name": "Thursday"
+      },
+      {
+        "lord": 5,
+        "lord_name": "Venus",
+        "weekday": 5,
+        "weekday_name": "Friday"
+      },
+      {
+        "lord": 6,
+        "lord_name": "Saturn",
+        "weekday": 6,
+        "weekday_name": "Saturday"
+      }
+    ]
+  },
+  "status": 200
+}

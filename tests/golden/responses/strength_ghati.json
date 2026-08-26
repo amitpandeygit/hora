@@ -1,0 +1,9 @@
+{
+  "body": {
+    "ghati": 43,
+    "ghatis_per_hour": 2.5,
+    "hours_after_sunrise": 17.0,
+    "note": "Suppose sunrise was at 6 am and someone was born at 11 pm. So 17 hours were over. Each hour has 2.5 ghatis and 17 hours = 17 x 2.5 = 42.5. So the 43rd ghati was running at birth."
+  },
+  "status": 200
+}

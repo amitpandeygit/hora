@@ -1,0 +1,83 @@
+{
+  "body": {
+    "before_exception": 6,
+    "before_exception_name": "Libra",
+    "count": 3,
+    "exception_applied": false,
+    "exception_position": null,
+    "graha": 0,
+    "graha_name": "Sun",
+    "graha_sign": 2,
+    "graha_sign_name": "Gemini",
+    "owned": [
+      4
+    ],
+    "owned_decided_by": null,
+    "owned_names": [
+      "Leo"
+    ],
+    "owned_reason": "Sun owns only Leo",
+    "owned_sign": 4,
+    "owned_sign_name": "Leo",
+    "sign": 6,
+    "sign_name": "Libra",
+    "steps": [
+      {
+        "count": null,
+        "description": "Take the sign containing the planet of interest in the divisional chart of interest",
+        "detail": "Sun is in Gemini",
+        "name": "graha_sign",
+        "number": 1,
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      {
+        "count": null,
+        "description": "Find the sign owned by that planet",
+        "detail": "Sun owns only Leo",
+        "name": "owned_sign",
+        "number": 2,
+        "sign": 4,
+        "sign_name": "Leo"
+      },
+      {
+        "count": 3,
+        "description": "Count signs from the sign containing the planet of interest to the stronger sign owned by it, zodiacally",
+        "detail": "Gemini to Leo is 3",
+        "name": "count_to_owned",
+        "number": 3,
+        "sign": null,
+        "sign_name": null
+      },
+      {
+        "count": 3,
+        "description": "Count the same number of signs from the stronger sign owned",
+        "detail": "3 signs from Leo ends in Libra",
+        "name": "advance_from_owned",
+        "number": 4,
+        "sign": 6,
+        "sign_name": "Libra"
+      },
+      {
+        "count": null,
+        "description": "If the sign found is the 1st or 7th from the original sign containing the planet, take the 10th sign from it; otherwise no change",
+        "detail": "Libra is the 5th from Gemini, neither 1st nor 7th \u2014 no change",
+        "name": "apply_exception",
+        "number": 5,
+        "sign": 6,
+        "sign_name": "Libra"
+      },
+      {
+        "count": null,
+        "description": "The resulting sign contains the arudha pada of the planet of interest",
+        "detail": null,
+        "name": "graha_arudha",
+        "number": 6,
+        "sign": 6,
+        "sign_name": "Libra"
+      }
+    ],
+    "symbol": "AL(Su)"
+  },
+  "status": 200
+}

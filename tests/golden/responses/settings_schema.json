@@ -1,0 +1,229 @@
+{
+  "body": {
+    "defaults": {
+      "apparent_positions": false,
+      "ayanamsa": "lahiri",
+      "custom_ayanamsa_deg": null,
+      "dasha_year_length": "sidereal",
+      "house_system": "whole_sign",
+      "include_outer_planets": false,
+      "ketu_mode": "opposite_rahu",
+      "language": "en",
+      "name_scheme": "book",
+      "node_direction": "retrograde",
+      "node_type": "true",
+      "rahu_ketu_aspects": false,
+      "sanskrit_names": false,
+      "sunrise_mode": "disc_upper_limb",
+      "topocentric": false,
+      "upagraha_rise_point": "middle"
+    },
+    "schema": {
+      "$defs": {
+        "Ayanamsa": {
+          "enum": [
+            "lahiri",
+            "lahiri_1940",
+            "lahiri_icrc",
+            "raman",
+            "krishnamurti",
+            "krishnamurti_vp291",
+            "yukteshwar",
+            "jn_bhasin",
+            "fagan_bradley",
+            "true_citra",
+            "true_revati",
+            "true_pushya",
+            "true_mula",
+            "suryasiddhanta",
+            "aryabhata",
+            "ss_citra",
+            "ss_revati",
+            "sassanian",
+            "usha_shashi",
+            "deva_datta",
+            "tropical",
+            "custom"
+          ],
+          "title": "Ayanamsa",
+          "type": "string"
+        },
+        "DashaYearLength": {
+          "description": "Length of a 'year' when converting dasha durations to calendar time.",
+          "enum": [
+            "sidereal",
+            "tropical",
+            "civil",
+            "savana"
+          ],
+          "title": "DashaYearLength",
+          "type": "string"
+        },
+        "HouseSystem": {
+          "description": "Bhava (house) division schemes. JHora offers 17.",
+          "enum": [
+            "equal_lagna",
+            "whole_sign",
+            "sripati",
+            "kp",
+            "placidus",
+            "koch",
+            "porphyry",
+            "regiomontanus",
+            "campanus",
+            "vehlow",
+            "axial_rotation",
+            "horizontal",
+            "topocentric",
+            "alcabitus",
+            "morinus",
+            "kn_rao",
+            "pvr"
+          ],
+          "title": "HouseSystem",
+          "type": "string"
+        },
+        "KetuMode": {
+          "description": "How Ketu's longitude is derived.",
+          "enum": [
+            "opposite_rahu",
+            "true_south_node"
+          ],
+          "title": "KetuMode",
+          "type": "string"
+        },
+        "NameScheme": {
+          "enum": [
+            "book",
+            "standard"
+          ],
+          "title": "NameScheme",
+          "type": "string"
+        },
+        "NodeDirection": {
+          "description": "Whether the nodes are reported with their (always retrograde) motion.",
+          "enum": [
+            "retrograde",
+            "direct"
+          ],
+          "title": "NodeDirection",
+          "type": "string"
+        },
+        "NodeType": {
+          "description": "Whether Rahu/Ketu use the mean or the osculating (true) lunar node.",
+          "enum": [
+            "mean",
+            "true"
+          ],
+          "title": "NodeType",
+          "type": "string"
+        },
+        "SunriseMode": {
+          "description": "Sunrise definitions.\n\n``DISC_UPPER_LIMB`` is the default, because \u00a75.5 comment (3) of the book\nrecommends it outright: \"the time when the upper tip of the visual disk\nrepresenting Sun appears to be rising \u2026 The latter approach is recommended.\"\n\n``TRADITIONAL_HINDU`` is Swiss Ephemeris's ``SE_BIT_HINDU_RISING`` \u2014 centre\nof the disc, no refraction, ecliptic latitude disregarded \u2014 and is what\nPyJHora uses. It was the default until chapter 5 was read; the book\noutranks PyJHora, so it no longer is. See docs/book-deviations.md D-10.",
+          "enum": [
+            "traditional_hindu",
+            "disc_center",
+            "disc_upper_limb",
+            "geometric_center"
+          ],
+          "title": "SunriseMode",
+          "type": "string"
+        },
+        "UpagrahaRisePoint": {
+          "description": "Where inside its ruling graha's part a time-based upagraha rises.\n\nBook \u00a74.3 puts them at the middle of the part, except Maandi which rises at\nthe beginning. Footnote 9 records that \"some scholars suggest that Kaala\nrises at the beginning of Sun's part. The same thing applies to others.\"",
+          "enum": [
+            "middle",
+            "beginning"
+          ],
+          "title": "UpagrahaRisePoint",
+          "type": "string"
+        }
+      },
+      "description": "A complete calculation configuration.\n\nInstances are hashable-by-value and cheap to pass around; the ephemeris\nlayer keys its Swiss Ephemeris mode switches off these fields.",
+      "properties": {
+        "apparent_positions": {
+          "default": false,
+          "title": "Apparent Positions",
+          "type": "boolean"
+        },
+        "ayanamsa": {
+          "$ref": "#/$defs/Ayanamsa",
+          "default": "lahiri"
+        },
+        "custom_ayanamsa_deg": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Custom Ayanamsa Deg"
+        },
+        "dasha_year_length": {
+          "$ref": "#/$defs/DashaYearLength",
+          "default": "sidereal"
+        },
+        "house_system": {
+          "$ref": "#/$defs/HouseSystem",
+          "default": "whole_sign"
+        },
+        "include_outer_planets": {
+          "default": false,
+          "title": "Include Outer Planets",
+          "type": "boolean"
+        },
+        "ketu_mode": {
+          "$ref": "#/$defs/KetuMode",
+          "default": "opposite_rahu"
+        },
+        "language": {
+          "default": "en",
+          "pattern": "^[a-z]{2}$",
+          "title": "Language",
+          "type": "string"
+        },
+        "name_scheme": {
+          "$ref": "#/$defs/NameScheme",
+          "default": "book"
+        },
+        "node_direction": {
+          "$ref": "#/$defs/NodeDirection",
+          "default": "retrograde"
+        },
+        "node_type": {
+          "$ref": "#/$defs/NodeType",
+          "default": "true"
+        },
+        "rahu_ketu_aspects": {
+          "default": false,
+          "title": "Rahu Ketu Aspects",
+          "type": "boolean"
+        },
+        "sanskrit_names": {
+          "default": false,
+          "title": "Sanskrit Names",
+          "type": "boolean"
+        },
+        "sunrise_mode": {
+          "$ref": "#/$defs/SunriseMode",
+          "default": "disc_upper_limb"
+        },
+        "topocentric": {
+          "default": false,
+          "title": "Topocentric",
+          "type": "boolean"
+        },
+        "upagraha_rise_point": {
+          "$ref": "#/$defs/UpagrahaRisePoint",
+          "default": "middle"
+        }
+      },
+      "title": "Settings",
+      "type": "object"
+    }
+  },
+  "status": 200
+}

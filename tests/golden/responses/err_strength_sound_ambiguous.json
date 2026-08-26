@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "'d' is ambiguous in Table 37's Roman column (1: d (alveolar); 5: d (dental)). The Devanagari is unambiguous \u2014 pass that, or the sound number.",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

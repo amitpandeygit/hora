@@ -1,0 +1,25 @@
+{
+  "body": {
+    "decided_by": "1",
+    "determined": true,
+    "first": 0,
+    "first_name": "Aries",
+    "purpose": "phalita",
+    "reason": "Aries contains 2 planets; Libra contains 1 planet",
+    "rules": [
+      {
+        "decided": true,
+        "description": "If one rasi contains more planets than the other, it is stronger",
+        "detail": "Aries contains 2 planets; Libra contains 1 planet",
+        "rule": "1",
+        "winner": 0,
+        "winner_name": "Aries"
+      }
+    ],
+    "second": 6,
+    "second_name": "Libra",
+    "winner": 0,
+    "winner_name": "Aries"
+  },
+  "status": 200
+}

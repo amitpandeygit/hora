@@ -1,0 +1,180 @@
+{
+  "body": {
+    "houses": [
+      {
+        "categories": [
+          "trikona",
+          "kendra"
+        ],
+        "half": "invisible",
+        "house": 1,
+        "lord": 6,
+        "lord_name": "Saturn",
+        "purushartha": "dharma",
+        "rasi": 10,
+        "rasi_name": "Aquarius",
+        "signifies": "Physical body, complexion, appearance, head, intelligence, strength, energy, fame, success, nature of birth, caste"
+      },
+      {
+        "categories": [
+          "panaphara"
+        ],
+        "half": "invisible",
+        "house": 2,
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "purushartha": "artha",
+        "rasi": 11,
+        "rasi_name": "Pisces",
+        "signifies": "Wealth, assets, family, speech, eyes, mouth, face, voice, food"
+      },
+      {
+        "categories": [
+          "apoklima",
+          "upachaya"
+        ],
+        "half": "invisible",
+        "house": 3,
+        "lord": 2,
+        "lord_name": "Mars",
+        "purushartha": "kaama",
+        "rasi": 0,
+        "rasi_name": "Aries",
+        "signifies": "Younger co-borns, confidants, courage, mental strength, communication skills, creativity, throat, ears, arms, father's death (7th from 9th), expenditure on vehicles and house (12th from 4th), travels"
+      },
+      {
+        "categories": [
+          "kendra",
+          "chaturasra"
+        ],
+        "half": "invisible",
+        "house": 4,
+        "lord": 5,
+        "lord_name": "Venus",
+        "purushartha": "moksha",
+        "rasi": 1,
+        "rasi_name": "Taurus",
+        "signifies": "Mother, vehicles, house, lands, immovable property, motherland, childhood, wealth from real estate, education, relatives, happiness, comforts, pleasures, peace, state of mind, heart"
+      },
+      {
+        "categories": [
+          "trikona",
+          "panaphara"
+        ],
+        "half": "invisible",
+        "house": 5,
+        "lord": 3,
+        "lord_name": "Mercury",
+        "purushartha": "dharma",
+        "rasi": 2,
+        "rasi_name": "Gemini",
+        "signifies": "Children, poorvapunya (good deeds of previous lives), intelligence, knowledge & scholarship, devotion, mantras (prayers), stomach, digestive system, authority/power, fame, love, affection, emotions, judgment, speculation"
+      },
+      {
+        "categories": [
+          "apoklima",
+          "upachaya",
+          "dusthana"
+        ],
+        "half": "invisible",
+        "house": 6,
+        "lord": 1,
+        "lord_name": "Moon",
+        "purushartha": "artha",
+        "rasi": 3,
+        "rasi_name": "Cancer",
+        "signifies": "Enemies, service, servants, relatives, mental tension, injuries, health, diseases, agriculture, accidents, mental affliction, mother's younger brother, hips"
+      },
+      {
+        "categories": [
+          "kendra"
+        ],
+        "half": "visible",
+        "house": 7,
+        "lord": 0,
+        "lord_name": "Sun",
+        "purushartha": "kaama",
+        "rasi": 4,
+        "rasi_name": "Leo",
+        "signifies": "Marriage, marital life, life partner, sex, passion (and related happiness), long journeys, partners, business, death, the portion of the body below the navel"
+      },
+      {
+        "categories": [
+          "panaphara",
+          "dusthana",
+          "chaturasra"
+        ],
+        "half": "visible",
+        "house": 8,
+        "lord": 3,
+        "lord_name": "Mercury",
+        "purushartha": "moksha",
+        "rasi": 5,
+        "rasi_name": "Virgo",
+        "signifies": "Longevity, debts, disease, ill-fame, inheritance, loss of friends, occult studies, evils, gifts, unearned wealth, windfall, disgrace, secrets, genitals"
+      },
+      {
+        "categories": [
+          "trikona",
+          "apoklima"
+        ],
+        "half": "visible",
+        "house": 9,
+        "lord": 5,
+        "lord_name": "Venus",
+        "purushartha": "dharma",
+        "rasi": 6,
+        "rasi_name": "Libra",
+        "signifies": "Father, teacher, boss, fortune, religiousness, spirituality, God, higher studies & high knowledge, fortune in a foreign land, foreign trips, diksha (joining a religious order), past life and the cause of birth, grandchildren, principles, dharma, intuition, compassion, sympathy, leadership, charity, thighs"
+      },
+      {
+        "categories": [
+          "kendra",
+          "upachaya"
+        ],
+        "half": "visible",
+        "house": 10,
+        "lord": 2,
+        "lord_name": "Mars",
+        "purushartha": "artha",
+        "rasi": 7,
+        "rasi_name": "Scorpio",
+        "signifies": "Growth, profession, career, karma (action), conduct in society, fame, honors, awards, self-respect, dignity, knees"
+      },
+      {
+        "categories": [
+          "panaphara",
+          "upachaya"
+        ],
+        "half": "visible",
+        "house": 11,
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "purushartha": "kaama",
+        "rasi": 8,
+        "rasi_name": "Sagittarius",
+        "signifies": "Elder co-borns, income, gains, realization of hopes, friends, ankles"
+      },
+      {
+        "categories": [
+          "apoklima",
+          "dusthana"
+        ],
+        "half": "visible",
+        "house": 12,
+        "lord": 6,
+        "lord_name": "Saturn",
+        "purushartha": "moksha",
+        "rasi": 9,
+        "rasi_name": "Capricorn",
+        "signifies": "Losses, expenditure, punishment, imprisonment, hospitalization, pleasures in bed, misfortune, bad habits, sleep, meditation, donation, secret enemies, heaven, left eye, feet, residence away from the place of birth, moksha (emancipation/liberation)"
+      }
+    ],
+    "reference": "chandra_lagna",
+    "reference_name": "Chandra Lagna",
+    "reference_rasi": 10,
+    "reference_rasi_name": "Aquarius",
+    "shows": "matters from the perspective of mind"
+  },
+  "status": 200
+}

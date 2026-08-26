@@ -1,0 +1,89 @@
+{
+  "body": {
+    "before_exception": 6,
+    "before_exception_name": "Libra",
+    "count": 9,
+    "exception_applied": false,
+    "exception_position": null,
+    "generic_names": [
+      "arudha pada",
+      "arudha",
+      "pada"
+    ],
+    "house": 1,
+    "house_sign": 2,
+    "house_sign_name": "Gemini",
+    "lord": 3,
+    "lord_name": "Mercury",
+    "lord_sign": 10,
+    "lord_sign_name": "Aquarius",
+    "sign": 6,
+    "sign_name": "Libra",
+    "special_name": "Arudha Lagna",
+    "special_symbol": "AL",
+    "specific_names": [
+      "Arudha lagna",
+      "Pada lagna",
+      "Arudha",
+      "Pada"
+    ],
+    "steps": [
+      {
+        "count": null,
+        "description": "Take the sign containing the house of interest",
+        "detail": "house 1 from lagna in Gemini",
+        "name": "house_sign",
+        "number": 1,
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      {
+        "count": null,
+        "description": "Find the sign occupied by the lord of that house",
+        "detail": "lord of Gemini is Mercury",
+        "name": "lord_sign",
+        "number": 2,
+        "sign": 10,
+        "sign_name": "Aquarius"
+      },
+      {
+        "count": 9,
+        "description": "Count signs from the house of interest to the sign containing its lord, zodiacally",
+        "detail": "Gemini to Aquarius is 9",
+        "name": "count_to_lord",
+        "number": 3,
+        "sign": null,
+        "sign_name": null
+      },
+      {
+        "count": 9,
+        "description": "Count the same number of signs from the sign containing the lord",
+        "detail": "9 signs from Aquarius ends in Libra",
+        "name": "advance_from_lord",
+        "number": 4,
+        "sign": 6,
+        "sign_name": "Libra"
+      },
+      {
+        "count": null,
+        "description": "If the sign found is the 1st or 7th from the original, take the 10th sign from it; otherwise no change",
+        "detail": "Libra is the 5th from Gemini, neither 1st nor 7th \u2014 no change",
+        "name": "apply_exception",
+        "number": 5,
+        "sign": 6,
+        "sign_name": "Libra"
+      },
+      {
+        "count": null,
+        "description": "The resulting sign contains the arudha pada of the house of interest",
+        "detail": null,
+        "name": "arudha_pada",
+        "number": 6,
+        "sign": 6,
+        "sign_name": "Libra"
+      }
+    ],
+    "symbol": "A1"
+  },
+  "status": 200
+}

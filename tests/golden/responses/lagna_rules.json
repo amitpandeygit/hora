@@ -1,0 +1,49 @@
+{
+  "body": {
+    "birthtime_sensitivity_per_minute": {
+      "BL": 0.25,
+      "GL": 1.25,
+      "HL": 0.5
+    },
+    "lagnas": [
+      {
+        "abbreviation": "BL",
+        "degrees_per_minute": 0.25,
+        "derived_from": "the Sun's longitude at sunrise, advanced by elapsed time",
+        "id": 0,
+        "name": "Bhaava Lagna",
+        "one_rasi_per_minutes": 120.0,
+        "signifies": null
+      },
+      {
+        "abbreviation": "HL",
+        "degrees_per_minute": 0.5,
+        "derived_from": "the Sun's longitude at sunrise, advanced by elapsed time",
+        "id": 1,
+        "name": "Hora Lagna",
+        "one_rasi_per_minutes": 60.0,
+        "signifies": "money, wealth and prosperity"
+      },
+      {
+        "abbreviation": "GL",
+        "degrees_per_minute": 1.25,
+        "derived_from": "the Sun's longitude at sunrise, advanced by elapsed time",
+        "id": 2,
+        "name": "Ghati Lagna",
+        "one_rasi_per_minutes": 24.0,
+        "signifies": "fame, power and authority"
+      },
+      {
+        "abbreviation": "SL",
+        "degrees_per_minute": null,
+        "derived_from": "the Moon's progress through its nakshatra, applied to the lagna",
+        "id": 3,
+        "name": "Sree Lagna",
+        "one_rasi_per_minutes": null,
+        "signifies": "prosperity"
+      }
+    ],
+    "note": "Ghati Lagna moves 1.25 degrees for every minute of birthtime error (section 5.5), the most birthtime-sensitive point in the chart. Bhaava Lagna's rate follows the book's stated rate, not its numbered method \u2014 see docs/book-deviations.md D-11."
+  },
+  "status": 200
+}

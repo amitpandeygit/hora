@@ -1,0 +1,48 @@
+{
+  "body": {
+    "day_length_hours": 24.0,
+    "elapsed_hours": 15.5,
+    "hora_length_hours": 1.0,
+    "index": 16,
+    "lord": 1,
+    "lord_name": "Moon",
+    "position_in_cycle": 2,
+    "steps": [
+      {
+        "description": "Find the time elapsed since sunrise",
+        "detail": "15.5000 hours after sunrise",
+        "number": 1,
+        "value": 15.5
+      },
+      {
+        "description": "Divide the sunrise-to-sunrise period into 24 equal parts and see which one is running",
+        "detail": "15.5000 / 1.0000 gives the 16th hora since sunrise",
+        "number": 2,
+        "value": 16
+      },
+      {
+        "description": "The first hora belongs to the lord of the weekday, so this is the index-th planet from that lord",
+        "detail": "Wednesday belongs to Mercury, so this is the 16th planet from Mercury",
+        "number": 3,
+        "value": 16
+      },
+      {
+        "description": "Subtract multiples of 7, since the 7 planets repeat",
+        "detail": "16 reduces to 2",
+        "number": 4,
+        "value": 2
+      },
+      {
+        "description": "Read that position in the order of decreasing speed",
+        "detail": "the 2nd planet from Mercury is Moon",
+        "number": 5,
+        "value": "Moon"
+      }
+    ],
+    "weekday": 3,
+    "weekday_lord": 3,
+    "weekday_lord_name": "Mercury",
+    "weekday_name": "Wednesday"
+  },
+  "status": 200
+}

@@ -1,0 +1,471 @@
+# Generated from book section 2.3. See docs/open-items.md OI-12.
+schema_version: 1
+subject: rasi
+sources:
+  pvr-vaia:
+    title: 'Vedic Astrology: An Integrated Approach'
+    author: P.V.R. Narasimha Rao
+    section: 2.3 Indications of Rasis
+    first_published: 2000
+    licence_status: unconfirmed
+    licence_note: The author shares the book freely for reading. That is not an explicit licence to redistribute
+      the text commercially. These entries are stored but are NOT served publicly until the licence is
+      confirmed or the text is replaced. See docs/open-items.md OI-12.
+categorisation_note: The `verbatim` field is the author's list as printed. The `category` tag on each
+  term is OUR editorial judgement, not the author's, and is not part of the book.
+entries:
+- rasi: 0
+  rasi_name: Aries
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Dynamic, enterprising, valiant, ruddy, head, forests, large forehead, hasty, impulsive, restless,
+    thick eyebrows, leadership, overbearing, dry, lean, tall.
+  terms:
+  - term: dynamic
+    category: temperament
+  - term: enterprising
+    category: temperament
+  - term: valiant
+    category: temperament
+  - term: ruddy
+    category: appearance
+  - term: head
+    category: body_part
+  - term: forests
+    category: place
+  - term: large forehead
+    category: appearance
+  - term: hasty
+    category: temperament
+  - term: impulsive
+    category: temperament
+  - term: restless
+    category: temperament
+  - term: thick eyebrows
+    category: appearance
+  - term: leadership
+    category: profession
+  - term: overbearing
+    category: temperament
+  - term: dry
+    category: appearance
+  - term: lean
+    category: appearance
+  - term: tall
+    category: appearance
+- rasi: 1
+  rasi_name: Taurus
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Beautiful, face, stable, sluggish, loyal, meadows, plains, luxury halls, dining halls, eating
+    places, fine teeth, large eyes, luxurious, faithful, thick hair, stout.
+  terms:
+  - term: beautiful
+    category: appearance
+  - term: face
+    category: body_part
+  - term: stable
+    category: temperament
+  - term: sluggish
+    category: temperament
+  - term: loyal
+    category: temperament
+  - term: meadows
+    category: place
+  - term: plains
+    category: place
+  - term: luxury halls
+    category: place
+  - term: dining halls
+    category: place
+  - term: eating places
+    category: place
+  - term: fine teeth
+    category: appearance
+  - term: large eyes
+    category: appearance
+  - term: luxurious
+    category: temperament
+  - term: faithful
+    category: temperament
+  - term: thick hair
+    category: appearance
+  - term: stout
+    category: appearance
+- rasi: 2
+  rasi_name: Gemini
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Chest, garden, communication, journalism, schools, colleges, study rooms, cables, telephone,
+    newspapers, tall, well-built, prominent cheeks, thick hair, broad chest, curious, learned, jovial.
+  terms:
+  - term: chest
+    category: body_part
+  - term: garden
+    category: place
+  - term: communication
+    category: profession
+  - term: journalism
+    category: profession
+  - term: schools
+    category: place
+  - term: colleges
+    category: place
+  - term: study rooms
+    category: place
+  - term: cables
+    category: profession
+  - term: telephone
+    category: profession
+  - term: newspapers
+    category: profession
+  - term: tall
+    category: appearance
+  - term: well-built
+    category: appearance
+  - term: prominent cheeks
+    category: appearance
+  - term: thick hair
+    category: appearance
+  - term: broad chest
+    category: body_part
+  - term: curious
+    category: temperament
+  - term: learned
+    category: temperament
+  - term: jovial
+    category: temperament
+- rasi: 3
+  rasi_name: Cancer
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Heart, breast, watery fields, rivers, canals, kitchen, food, attractive, small build, emotional,
+    deeply attached, mother-like, sensitive.
+  terms:
+  - term: heart
+    category: body_part
+  - term: breast
+    category: body_part
+  - term: watery fields
+    category: place
+  - term: rivers
+    category: place
+  - term: canals
+    category: place
+  - term: kitchen
+    category: place
+  - term: food
+    category: profession
+  - term: attractive
+    category: appearance
+  - term: small build
+    category: appearance
+  - term: emotional
+    category: temperament
+  - term: deeply attached
+    category: temperament
+  - term: mother-like
+    category: temperament
+  - term: sensitive
+    category: temperament
+- rasi: 4
+  rasi_name: Leo
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Stomach, digestion, navel, mountains, forests, caves, deserts, palaces, parks, forts, boilers,
+    steel factories, thin, dry, hot, royal, self-pride, insolent, domineering.
+  terms:
+  - term: stomach
+    category: body_part
+  - term: digestion
+    category: body_part
+  - term: navel
+    category: body_part
+  - term: mountains
+    category: place
+  - term: forests
+    category: place
+  - term: caves
+    category: place
+  - term: deserts
+    category: place
+  - term: palaces
+    category: place
+  - term: parks
+    category: place
+  - term: forts
+    category: place
+  - term: boilers
+    category: place
+  - term: steel factories
+    category: place
+  - term: thin
+    category: appearance
+  - term: dry
+    category: appearance
+  - term: hot
+    category: appearance
+  - term: royal
+    category: profession
+  - term: self-pride
+    category: temperament
+  - term: insolent
+    category: temperament
+  - term: domineering
+    category: temperament
+- rasi: 5
+  rasi_name: Virgo
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Hip, appendix, lush gardens, fields, orchards, libraries, bookstores, farms, intelligent,
+    sharp, orator, nervous, physically weak, discretion, tactfulness.
+  terms:
+  - term: hip
+    category: body_part
+  - term: appendix
+    category: body_part
+  - term: lush gardens
+    category: place
+  - term: fields
+    category: place
+  - term: orchards
+    category: place
+  - term: libraries
+    category: place
+  - term: bookstores
+    category: place
+  - term: farms
+    category: place
+  - term: intelligent
+    category: temperament
+  - term: sharp
+    category: temperament
+  - term: orator
+    category: profession
+  - term: nervous
+    category: temperament
+  - term: physically weak
+    category: appearance
+  - term: discretion
+    category: temperament
+  - term: tactfulness
+    category: temperament
+- rasi: 6
+  rasi_name: Libra
+  source: pvr-vaia
+  licence_status: unconfirmed
+  transcription_notes: book capitalises "Businessmen" mid-list; kept as printed
+  verbatim: Groins, Businessmen, markets, trade centers, banks, hotels, amusement parks, entertainment,
+    toilets, cosmetics, balanced, wise, good talker.
+  terms:
+  - term: groins
+    category: body_part
+  - term: businessmen
+    category: profession
+  - term: markets
+    category: place
+  - term: trade centers
+    category: place
+  - term: banks
+    category: place
+  - term: hotels
+    category: place
+  - term: amusement parks
+    category: place
+  - term: entertainment
+    category: profession
+  - term: toilets
+    category: place
+  - term: cosmetics
+    category: profession
+  - term: balanced
+    category: temperament
+  - term: wise
+    category: temperament
+  - term: good talker
+    category: temperament
+- rasi: 7
+  rasi_name: Scorpio
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Private parts, holes, deep caves, mines, garrages, small build, dusky complexion, bright eyes,
+    secretive, scheming, occult, best friend or a worst enemy, peevish, sensitive.
+  transcription_notes: book prints "garrages"; the term list normalises it to "garages"
+  terms:
+  - term: private parts
+    category: body_part
+  - term: holes
+    category: place
+  - term: deep caves
+    category: place
+  - term: mines
+    category: place
+  - term: garages
+    category: place
+  - term: small build
+    category: appearance
+  - term: dusky complexion
+    category: appearance
+  - term: bright eyes
+    category: appearance
+  - term: secretive
+    category: temperament
+  - term: scheming
+    category: temperament
+  - term: occult
+    category: profession
+  - term: best friend or a worst enemy
+    category: temperament
+  - term: peevish
+    category: temperament
+  - term: sensitive
+    category: temperament
+- rasi: 8
+  rasi_name: Sagittarius
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Thighs, royal, attorneys, government offices, aircraft, falling, sparse hair, muscular, deep
+    eyes, uproght, honest, genial, gambler.
+  transcription_notes: book prints "uproght"; the term list normalises it to "upright"
+  terms:
+  - term: thighs
+    category: body_part
+  - term: royal
+    category: profession
+  - term: attorneys
+    category: profession
+  - term: government offices
+    category: place
+  - term: aircraft
+    category: profession
+  - term: falling
+    category: temperament
+  - term: sparse hair
+    category: appearance
+  - term: muscular
+    category: appearance
+  - term: deep eyes
+    category: appearance
+  - term: upright
+    category: temperament
+  - term: honest
+    category: temperament
+  - term: genial
+    category: temperament
+  - term: gambler
+    category: profession
+- rasi: 9
+  rasi_name: Capricorn
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Knees, marsh lands, watery places, alligators, beasts, bushes, slender buils, long neck, prominent
+    teeth, witty, perfectionist, patient, organizer, cautious, secretive, pragmatic.
+  transcription_notes: book prints "slender buils"; the term list normalises it to "slender build"
+  terms:
+  - term: knees
+    category: body_part
+  - term: marsh lands
+    category: place
+  - term: watery places
+    category: place
+  - term: alligators
+    category: temperament
+  - term: beasts
+    category: temperament
+  - term: bushes
+    category: place
+  - term: slender build
+    category: appearance
+  - term: long neck
+    category: appearance
+  - term: prominent teeth
+    category: appearance
+  - term: witty
+    category: temperament
+  - term: perfectionist
+    category: temperament
+  - term: patient
+    category: temperament
+  - term: organizer
+    category: profession
+  - term: cautious
+    category: temperament
+  - term: secretive
+    category: temperament
+  - term: pragmatic
+    category: temperament
+- rasi: 10
+  rasi_name: Aquarius
+  source: pvr-vaia
+  licence_status: unconfirmed
+  transcription_notes: book has a double space before "coarse hair"; kept as printed,
+    which needs a quoted scalar since YAML folding would collapse it
+  verbatim: "Ankles, charity, philosophy, tall, bony, small eyes, mountain spring, places with water, ill-formed teeth,  coarse hair, hard-working, stoic, honest."
+  terms:
+  - term: ankles
+    category: body_part
+  - term: charity
+    category: profession
+  - term: philosophy
+    category: profession
+  - term: tall
+    category: appearance
+  - term: bony
+    category: appearance
+  - term: small eyes
+    category: appearance
+  - term: mountain spring
+    category: place
+  - term: places with water
+    category: place
+  - term: ill-formed teeth
+    category: appearance
+  - term: coarse hair
+    category: appearance
+  - term: hard-working
+    category: temperament
+  - term: stoic
+    category: temperament
+  - term: honest
+    category: temperament
+- rasi: 11
+  rasi_name: Pisces
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Feet, oceans, seas, prisons, hospitals, hermitages, short, plump, large eyes, large eyebrows,
+    lazy, emotional, timid, honest, irresolute, talkative, intuitive.
+  terms:
+  - term: feet
+    category: body_part
+  - term: oceans
+    category: place
+  - term: seas
+    category: place
+  - term: prisons
+    category: place
+  - term: hospitals
+    category: place
+  - term: hermitages
+    category: place
+  - term: short
+    category: appearance
+  - term: plump
+    category: appearance
+  - term: large eyes
+    category: appearance
+  - term: large eyebrows
+    category: appearance
+  - term: lazy
+    category: temperament
+  - term: emotional
+    category: temperament
+  - term: timid
+    category: temperament
+  - term: honest
+    category: temperament
+  - term: irresolute
+    category: temperament
+  - term: talkative
+    category: temperament
+  - term: intuitive
+    category: temperament

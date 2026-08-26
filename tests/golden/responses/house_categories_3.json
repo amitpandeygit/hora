@@ -1,0 +1,125 @@
+{
+  "body": {
+    "base_house": 3,
+    "categories": [
+      {
+        "category": "trikona",
+        "derivation": null,
+        "houses": [
+          3,
+          7,
+          11
+        ],
+        "presiding_deity": "Goddess Lakshmi",
+        "shows": "Prosperity and flourishing",
+        "synonyms": [
+          "kona",
+          "trine"
+        ]
+      },
+      {
+        "category": "kendra",
+        "derivation": null,
+        "houses": [
+          3,
+          6,
+          9,
+          12
+        ],
+        "presiding_deity": "Sri Maha Vishnu",
+        "shows": "Sustenance and vital activity",
+        "synonyms": [
+          "quadrant",
+          "angle"
+        ]
+      },
+      {
+        "category": "panaphara",
+        "derivation": "the quadrants from the 2nd house",
+        "houses": [
+          1,
+          4,
+          7,
+          10
+        ],
+        "presiding_deity": null,
+        "shows": null,
+        "synonyms": [
+          "succedant"
+        ]
+      },
+      {
+        "category": "apoklima",
+        "derivation": "the quadrants from the 3rd house",
+        "houses": [
+          2,
+          5,
+          8,
+          11
+        ],
+        "presiding_deity": null,
+        "shows": null,
+        "synonyms": [
+          "precedant"
+        ]
+      },
+      {
+        "category": "upachaya",
+        "derivation": null,
+        "houses": [
+          1,
+          5,
+          8,
+          12
+        ],
+        "presiding_deity": null,
+        "shows": "Gains and growth",
+        "synonyms": []
+      },
+      {
+        "category": "dusthana",
+        "derivation": null,
+        "houses": [
+          2,
+          8,
+          10
+        ],
+        "presiding_deity": null,
+        "shows": "Setbacks and obstacles",
+        "synonyms": [
+          "trik sthana"
+        ]
+      },
+      {
+        "category": "chaturasra",
+        "derivation": null,
+        "houses": [
+          6,
+          10
+        ],
+        "presiding_deity": null,
+        "shows": null,
+        "synonyms": []
+      }
+    ],
+    "halves": {
+      "invisible": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "visible": [
+        1,
+        2,
+        9,
+        10,
+        11,
+        12
+      ]
+    }
+  },
+  "status": 200
+}

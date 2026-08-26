@@ -1,0 +1,32 @@
+{
+  "body": {
+    "applies_count": 0,
+    "available": true,
+    "avastha": 3,
+    "avastha_name": "Netrapaani",
+    "graha": 5,
+    "graha_name": "Venus",
+    "licence_status": "unconfirmed",
+    "note": null,
+    "results": [
+      {
+        "applies": null,
+        "conditional": true,
+        "reason": "needs the house (wants 1, 7, 10)",
+        "text": null
+      },
+      {
+        "applies": null,
+        "conditional": true,
+        "reason": "a sibling condition is undetermined",
+        "text": null
+      }
+    ],
+    "source": "pvr-vaia",
+    "text_withheld": true,
+    "transcription_notes": null,
+    "undetermined_count": 2,
+    "verbatim": null
+  },
+  "status": 200
+}

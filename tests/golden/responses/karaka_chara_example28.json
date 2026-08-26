@@ -1,0 +1,194 @@
+{
+  "body": {
+    "karakas": [
+      {
+        "advancement": {
+          "decimal": 28.28333333333333,
+          "degrees": 28,
+          "formatted": "28\u00b017'00\"",
+          "minutes": 17,
+          "seconds": 0
+        },
+        "graha": 7,
+        "graha_name": "Rahu",
+        "measured_from_end_of_rasi": true,
+        "name": "Atma Karaka",
+        "name_aliases": [],
+        "note": "throws light on the inner self of a native",
+        "order": 1,
+        "rasi": 3,
+        "rasi_name": "Cancer",
+        "shares_karakatwa": false,
+        "shows": "Self",
+        "symbol": "AK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": {
+          "decimal": 25.299999999999997,
+          "degrees": 25,
+          "formatted": "25\u00b018'00\"",
+          "minutes": 18,
+          "seconds": 0
+        },
+        "graha": 3,
+        "graha_name": "Mercury",
+        "measured_from_end_of_rasi": false,
+        "name": "Amatya Karaka",
+        "name_aliases": [],
+        "note": "in practical terms, people who give advice \u2014 advisors and counsellors",
+        "order": 2,
+        "rasi": 2,
+        "rasi_name": "Gemini",
+        "shares_karakatwa": false,
+        "shows": "Ministers",
+        "symbol": "AmK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": {
+          "decimal": 20.466666666666665,
+          "degrees": 20,
+          "formatted": "20\u00b028'00\"",
+          "minutes": 28,
+          "seconds": 0
+        },
+        "graha": 1,
+        "graha_name": "Moon",
+        "measured_from_end_of_rasi": false,
+        "name": "Bhratri Karaka",
+        "name_aliases": [],
+        "note": null,
+        "order": 3,
+        "rasi": 0,
+        "rasi_name": "Aries",
+        "shares_karakatwa": false,
+        "shows": "Siblings",
+        "symbol": "BK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": {
+          "decimal": 17.349999999999994,
+          "degrees": 17,
+          "formatted": "17\u00b021'00\"",
+          "minutes": 21,
+          "seconds": 0
+        },
+        "graha": 5,
+        "graha_name": "Venus",
+        "measured_from_end_of_rasi": false,
+        "name": "Matri Karaka",
+        "name_aliases": [],
+        "note": null,
+        "order": 4,
+        "rasi": 2,
+        "rasi_name": "Gemini",
+        "shares_karakatwa": false,
+        "shows": "Mother",
+        "symbol": "MK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": {
+          "decimal": 13.849999999999994,
+          "degrees": 13,
+          "formatted": "13\u00b051'00\"",
+          "minutes": 51,
+          "seconds": 0
+        },
+        "graha": 2,
+        "graha_name": "Mars",
+        "measured_from_end_of_rasi": false,
+        "name": "Pitri Karaka",
+        "name_aliases": [],
+        "note": "can show a boss",
+        "order": 5,
+        "rasi": 2,
+        "rasi_name": "Gemini",
+        "shares_karakatwa": false,
+        "shows": "Father",
+        "symbol": "PiK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": {
+          "decimal": 12.783333333333331,
+          "degrees": 12,
+          "formatted": "12\u00b047'00\"",
+          "minutes": 47,
+          "seconds": 0
+        },
+        "graha": 0,
+        "graha_name": "Sun",
+        "measured_from_end_of_rasi": false,
+        "name": "Putra Karaka",
+        "name_aliases": [],
+        "note": "can also show subordinates and followers",
+        "order": 6,
+        "rasi": 2,
+        "rasi_name": "Gemini",
+        "shares_karakatwa": false,
+        "shows": "Children",
+        "symbol": "PK",
+        "symbol_aliases": []
+      },
+      {
+        "advancement": {
+          "decimal": 5.666666666666664,
+          "degrees": 5,
+          "formatted": "5\u00b040'00\"",
+          "minutes": 40,
+          "seconds": 0
+        },
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "measured_from_end_of_rasi": false,
+        "name": "Jnaati Karaka",
+        "name_aliases": [
+          "Gnaati Karaka",
+          "Gyaati Karaka"
+        ],
+        "note": "commonly used for enemies or rivals; the literal meaning of 'jnaati' is 'paternal cousin'",
+        "order": 7,
+        "rasi": 1,
+        "rasi_name": "Taurus",
+        "shares_karakatwa": false,
+        "shows": "Rivals",
+        "symbol": "GK",
+        "symbol_aliases": [
+          "JK"
+        ]
+      },
+      {
+        "advancement": {
+          "decimal": 2.4666666666666686,
+          "degrees": 2,
+          "formatted": "2\u00b028'00\"",
+          "minutes": 28,
+          "seconds": 0
+        },
+        "graha": 6,
+        "graha_name": "Saturn",
+        "measured_from_end_of_rasi": false,
+        "name": "Dara Karaka",
+        "name_aliases": [],
+        "note": null,
+        "order": 8,
+        "rasi": 1,
+        "rasi_name": "Taurus",
+        "shares_karakatwa": false,
+        "shows": "Spouse",
+        "symbol": "DK",
+        "symbol_aliases": []
+      }
+    ],
+    "kind": "chara",
+    "presiding": "Vishnu",
+    "read_as": "karaka_himself",
+    "read_as_note": "The karaka himself shows the matter: DK himself shows spouse, not the 7th from DK",
+    "shared_karakatwa_note": "Two grahas at exactly the same longitude hold a karakatwa together and the next karakatwa has no ruler; use the corresponding sthira karaka. This rarely becomes necessary, as two planets are rarely at exactly the same longitude.",
+    "used_for": "raja yogas and spiritual progress"
+  },
+  "status": 200
+}

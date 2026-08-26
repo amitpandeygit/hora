@@ -1,0 +1,56 @@
+{
+  "body": {
+    "input": {
+      "lagna": null,
+      "minutes_since_sunrise": 766.0,
+      "moon": null,
+      "sun_at_sunrise": {
+        "degrees": 294.28333333,
+        "rasi_dm": "24 Cp 17",
+        "sign_dm": "9s 24d 17'"
+      }
+    },
+    "special_lagnas": [
+      {
+        "abbreviation": "BL",
+        "degrees_in_rasi": 5.78333333,
+        "degrees_per_minute": 0.25,
+        "dms": "5-47-00",
+        "id": 0,
+        "longitude": 125.78333333,
+        "name": "Bhaava Lagna",
+        "rasi": 4,
+        "rasi_dm": "5 Le 47",
+        "rasi_name": "Leo",
+        "signifies": null
+      },
+      {
+        "abbreviation": "HL",
+        "degrees_in_rasi": 17.28333333,
+        "degrees_per_minute": 0.5,
+        "dms": "17-17-00",
+        "id": 1,
+        "longitude": 317.28333333,
+        "name": "Hora Lagna",
+        "rasi": 10,
+        "rasi_dm": "17 Aq 17",
+        "rasi_name": "Aquarius",
+        "signifies": "money, wealth and prosperity"
+      },
+      {
+        "abbreviation": "GL",
+        "degrees_in_rasi": 21.78333333,
+        "degrees_per_minute": 1.25,
+        "dms": "21-47-00",
+        "id": 2,
+        "longitude": 171.78333333,
+        "name": "Ghati Lagna",
+        "rasi": 5,
+        "rasi_dm": "21 Vi 47",
+        "rasi_name": "Virgo",
+        "signifies": "fame, power and authority"
+      }
+    ]
+  },
+  "status": 200
+}

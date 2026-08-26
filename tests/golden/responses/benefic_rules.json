@@ -1,0 +1,67 @@
+{
+  "body": {
+    "benefic_names": [
+      "saumya graha",
+      "subha graha"
+    ],
+    "conditional": [
+      {
+        "graha": 1,
+        "name": "Moon"
+      },
+      {
+        "graha": 3,
+        "name": "Mercury"
+      }
+    ],
+    "counts": {
+      "conditional": 2,
+      "fixed_benefic": 2,
+      "fixed_malefic": 5
+    },
+    "equal_split_note": "Section 3.2.2 covers Mercury alone, with more benefics, and with more malefics. An equal split is covered by none of the three and is reported as neutral rather than forced. See OI-45.",
+    "fixed_benefics": [
+      {
+        "graha": 4,
+        "name": "Jupiter"
+      },
+      {
+        "graha": 5,
+        "name": "Venus"
+      }
+    ],
+    "fixed_malefics": [
+      {
+        "graha": 0,
+        "name": "Sun"
+      },
+      {
+        "graha": 2,
+        "name": "Mars"
+      },
+      {
+        "graha": 6,
+        "name": "Saturn"
+      },
+      {
+        "graha": 7,
+        "name": "Rahu"
+      },
+      {
+        "graha": 8,
+        "name": "Ketu"
+      }
+    ],
+    "inherent_nature_note": "This information is important because the results given by planets are based on their inherent nature.",
+    "malefic_names": [
+      "kroora graha",
+      "paapa graha"
+    ],
+    "mercury_rule": "Mercury becomes a natural benefic when he is alone or with more natural benefics. Mercury becomes a natural malefic when he is joined by more natural malefics.",
+    "moon_rule": "Waxing Moon of Sukla paksha is a natural benefic. Waning Moon of Krishna paksha is a natural malefic.",
+    "saturn_note": "Section 3.2.2's malefic list omits Saturn. Page 102 corroborates that it is one, so Saturn is kept as a fixed malefic. See PVR-2.",
+    "section": "3.2.2",
+    "title": "Benefics and Malefics"
+  },
+  "status": 200
+}

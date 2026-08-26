@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hora"
+version = "0.1.0"
+description = "Vedic astrology calculation engine and HTTP API, benchmarked against Jagannatha Hora 8.0"
+requires-python = ">=3.11"
+dependencies = [
+    "pyswisseph>=2.10.3",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic>=2.9",
+    "tzdata",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-cov", "httpx", "ruff", "pypdf", "mypy>=1.11"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.mypy]
+files = ["src/hora"]
+ignore_missing_imports = true
+# Swiss Ephemeris and pypdf ship no stubs; everything of ours is checked.
+warn_unused_ignores = true
+warn_redundant_casts = true

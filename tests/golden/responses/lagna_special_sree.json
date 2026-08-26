@@ -1,0 +1,34 @@
+{
+  "body": {
+    "input": {
+      "lagna": {
+        "degrees": 175.08333333,
+        "rasi_dm": "25 Vi 05",
+        "sign_dm": "5s 25d 05'"
+      },
+      "minutes_since_sunrise": null,
+      "moon": {
+        "degrees": 193.1,
+        "rasi_dm": "13 Li 06",
+        "sign_dm": "6s 13d 06'"
+      },
+      "sun_at_sunrise": null
+    },
+    "special_lagnas": [
+      {
+        "abbreviation": "SL",
+        "degrees_in_rasi": 18.78333333,
+        "degrees_per_minute": null,
+        "dms": "18-47-00",
+        "id": 3,
+        "longitude": 348.78333333,
+        "name": "Sree Lagna",
+        "rasi": 11,
+        "rasi_dm": "18 Pi 47",
+        "rasi_name": "Pisces",
+        "signifies": "prosperity"
+      }
+    ]
+  },
+  "status": 200
+}

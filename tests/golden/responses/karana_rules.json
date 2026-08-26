@@ -1,0 +1,181 @@
+{
+  "body": {
+    "count": 11,
+    "definition": "Each tithi is divided into 2 karanas.",
+    "first_once_only_slot": 58,
+    "first_repeating_slot": 2,
+    "karanas": [
+      {
+        "index": 1,
+        "name": "Bava",
+        "name_simple": "Bava",
+        "occurrences": 8,
+        "repeats": true,
+        "slots": [
+          2,
+          9,
+          16,
+          23,
+          30,
+          37,
+          44,
+          51
+        ]
+      },
+      {
+        "index": 2,
+        "name": "Balava",
+        "name_simple": "Balava",
+        "occurrences": 8,
+        "repeats": true,
+        "slots": [
+          3,
+          10,
+          17,
+          24,
+          31,
+          38,
+          45,
+          52
+        ]
+      },
+      {
+        "index": 3,
+        "name": "Kaulava",
+        "name_simple": "Kaulava",
+        "occurrences": 8,
+        "repeats": true,
+        "slots": [
+          4,
+          11,
+          18,
+          25,
+          32,
+          39,
+          46,
+          53
+        ]
+      },
+      {
+        "index": 4,
+        "name": "Taitula",
+        "name_simple": "Taitila",
+        "occurrences": 8,
+        "repeats": true,
+        "slots": [
+          5,
+          12,
+          19,
+          26,
+          33,
+          40,
+          47,
+          54
+        ]
+      },
+      {
+        "index": 5,
+        "name": "Garija",
+        "name_simple": "Garija",
+        "occurrences": 8,
+        "repeats": true,
+        "slots": [
+          6,
+          13,
+          20,
+          27,
+          34,
+          41,
+          48,
+          55
+        ]
+      },
+      {
+        "index": 6,
+        "name": "Vanija",
+        "name_simple": "Vanija",
+        "occurrences": 8,
+        "repeats": true,
+        "slots": [
+          7,
+          14,
+          21,
+          28,
+          35,
+          42,
+          49,
+          56
+        ]
+      },
+      {
+        "index": 7,
+        "name": "Vishti",
+        "name_simple": "Vishti",
+        "occurrences": 8,
+        "repeats": true,
+        "slots": [
+          8,
+          15,
+          22,
+          29,
+          36,
+          43,
+          50,
+          57
+        ]
+      },
+      {
+        "index": 8,
+        "name": "Sakuna",
+        "name_simple": "Shakuni",
+        "occurrences": 1,
+        "repeats": false,
+        "slots": [
+          58
+        ]
+      },
+      {
+        "index": 9,
+        "name": "Chatushpada",
+        "name_simple": "Chatushpada",
+        "occurrences": 1,
+        "repeats": false,
+        "slots": [
+          59
+        ]
+      },
+      {
+        "index": 10,
+        "name": "Naga",
+        "name_simple": "Naga",
+        "occurrences": 1,
+        "repeats": false,
+        "slots": [
+          60
+        ]
+      },
+      {
+        "index": 11,
+        "name": "Kimstughna",
+        "name_simple": "Kimstughna",
+        "occurrences": 1,
+        "repeats": false,
+        "slots": [
+          1
+        ]
+      }
+    ],
+    "karanas_per_tithi": 2,
+    "once_only_count": 4,
+    "once_only_rule": "The last 4 karanas come just once in a month, starting from the 2nd half of the 29th lunar day and ending at the 1st half of the first lunar day.",
+    "repeating_count": 7,
+    "repeating_rule": "The first 7 karanas repeat 8 times starting from the 2nd half of the first lunar day of a month.",
+    "repetitions": 8,
+    "section": "1.3.10",
+    "slots_per_month": 60,
+    "span_degrees": 6.0,
+    "title": "Karanas",
+    "wraps_the_month": "The four that come once straddle the month boundary: three close it and Kimstughna opens the next, so slot 1 carries the 11th name, not the 1st."
+  },
+  "status": 200
+}

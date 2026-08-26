@@ -1,0 +1,48 @@
+{
+  "body": {
+    "completed": 9,
+    "index": 10,
+    "meaning": "Danger",
+    "moon_longitude": 197.33333333333334,
+    "name": "Ganda",
+    "name_book": "Ganda",
+    "quotient": 9.837499999999999,
+    "raw_sum": 491.16666666666663,
+    "steps": [
+      {
+        "description": "Add the longitudes of Sun and Moon, removing 360 if the sum exceeds it",
+        "detail": "293.8333 + 197.3333 = 491.1667, - 360 = 131.1667",
+        "number": 1,
+        "value": 131.16666666666663
+      },
+      {
+        "description": "Divide the sum by the length of one nakshatra (13 deg 20', or 800')",
+        "detail": "7870.00' / 800' = 9.8375",
+        "number": 2,
+        "value": 9.837499999999999
+      },
+      {
+        "description": "Ignore fractions and take the integer part",
+        "detail": "9.8375 gives 9",
+        "number": 3,
+        "value": 9
+      },
+      {
+        "description": "Add 1 to it, and the result is the index of the yoga running",
+        "detail": "9 + 1 = 10",
+        "number": 4,
+        "value": 10
+      },
+      {
+        "description": "Refer to Table 5 and find the yoga corresponding to the index",
+        "detail": "the 10th yoga is 'Ganda' (Danger)",
+        "number": 5,
+        "value": "Ganda"
+      }
+    ],
+    "sun_longitude": 293.8333333333333,
+    "total": 131.16666666666663,
+    "total_minutes": 7869.999999999998
+  },
+  "status": 200
+}

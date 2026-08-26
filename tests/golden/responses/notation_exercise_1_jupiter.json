@@ -1,0 +1,13 @@
+{
+  "body": {
+    "degrees": 94.31666667,
+    "degrees_in_rasi": 4.31666667,
+    "dms": "4-19-00",
+    "input": "94\u00b019'",
+    "rasi": 3,
+    "rasi_dm": "4 Cn 19",
+    "rasi_name": "Cancer",
+    "sign_dm": "3s 4d 19'"
+  },
+  "status": 200
+}

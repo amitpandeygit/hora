@@ -1,0 +1,33 @@
+{
+  "name": "PVR Narasimha Rao 1972-10-01",
+  "source": "TO BE RECORDED FROM JAGANNATHA HORA 8.0",
+  "notes": "The worked example chart in 'Vedic Astrology: An Integrated Approach'. Expected values are null until transcribed from a real JHora run; the harness reports them as 'unverified', never as passing.",
+  "birth": {
+    "year": 1972, "month": 10, "day": 1,
+    "hour": 13, "minute": 30, "second": 0.0,
+    "tz_name": "Asia/Kolkata"
+  },
+  "place": { "latitude": 16.2, "longitude": 81.13, "altitude": 0.0, "name": "Machilipatnam, India" },
+  "settings": { "ayanamsa": "lahiri", "node_type": "true", "house_system": "whole_sign" },
+  "expected": {
+    "ayanamsa": null,
+    "lagna_longitude": null,
+    "graha_longitudes": {
+      "Sun": null, "Moon": null, "Mars": null, "Mercury": null,
+      "Jupiter": null, "Venus": null, "Saturn": null, "Rahu": null, "Ketu": null
+    },
+    "graha_retrograde": {
+      "Mars": null, "Mercury": null, "Jupiter": null, "Venus": null, "Saturn": null
+    },
+    "varga_signs": {
+      "D9": { "Lagna": null, "Sun": null, "Moon": null, "Mars": null, "Mercury": null,
+              "Jupiter": null, "Venus": null, "Saturn": null, "Rahu": null, "Ketu": null },
+      "D10": { "Lagna": null, "Sun": null, "Moon": null },
+      "D30": { "Lagna": null, "Sun": null, "Moon": null },
+      "D60": { "Lagna": null, "Sun": null, "Moon": null }
+    },
+    "dasha_balance": {
+      "vimshottari": { "lord": null, "years": null }
+    }
+  }
+}

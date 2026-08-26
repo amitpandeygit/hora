@@ -1,0 +1,74 @@
+{
+  "body": {
+    "graha": 0,
+    "relations": [
+      {
+        "compound": "great_friend",
+        "compound_gloss": "good friend",
+        "compound_name": "adhimitra",
+        "graha": 0,
+        "graha_name": "Sun",
+        "natural": "friend",
+        "other": 1,
+        "other_name": "Moon",
+        "temporary": "friend"
+      },
+      {
+        "compound": "great_friend",
+        "compound_gloss": "good friend",
+        "compound_name": "adhimitra",
+        "graha": 0,
+        "graha_name": "Sun",
+        "natural": "friend",
+        "other": 2,
+        "other_name": "Mars",
+        "temporary": "friend"
+      },
+      {
+        "compound": "friend",
+        "compound_gloss": "friend",
+        "compound_name": "mitra",
+        "graha": 0,
+        "graha_name": "Sun",
+        "natural": "neutral",
+        "other": 3,
+        "other_name": "Mercury",
+        "temporary": "friend"
+      },
+      {
+        "compound": "great_friend",
+        "compound_gloss": "good friend",
+        "compound_name": "adhimitra",
+        "graha": 0,
+        "graha_name": "Sun",
+        "natural": "friend",
+        "other": 4,
+        "other_name": "Jupiter",
+        "temporary": "friend"
+      },
+      {
+        "compound": "neutral",
+        "compound_gloss": "neutral",
+        "compound_name": "sama",
+        "graha": 0,
+        "graha_name": "Sun",
+        "natural": "enemy",
+        "other": 5,
+        "other_name": "Venus",
+        "temporary": "friend"
+      },
+      {
+        "compound": "great_enemy",
+        "compound_gloss": "bad enemy",
+        "compound_name": "adhisatru",
+        "graha": 0,
+        "graha_name": "Sun",
+        "natural": "enemy",
+        "other": 6,
+        "other_name": "Saturn",
+        "temporary": "enemy"
+      }
+    ]
+  },
+  "status": 200
+}

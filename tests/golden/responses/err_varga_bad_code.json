@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "divisions must be between 1 and 300, got 0",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

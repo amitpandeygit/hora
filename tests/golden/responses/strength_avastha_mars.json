@@ -1,0 +1,161 @@
+{
+  "body": {
+    "age": {
+      "band": [
+        18.0,
+        24.0
+      ],
+      "caution": "One should not be carried away with these avasthas. Just as there are some child prodigies and wizards with wrinkles, a planet can give good results irrespective of its age-related state. Age is just one of the factors deciding a person's productivity. Similarly, age-related state is just one of the factors deciding a planet's effectiveness.",
+      "degrees_in_rasi": 23.0,
+      "fraction": 0.5,
+      "meaning": "Adolescent",
+      "name": "Kumaara",
+      "rasi": 3,
+      "rasi_is_odd": false,
+      "rasi_name": "Cancer",
+      "results": "Half"
+    },
+    "alertness": {
+      "basis": "debilitated",
+      "meaning": "asleep",
+      "name": "Sushupta",
+      "results": "negligible",
+      "when": "in its debilitation rasi or a rasi owned by an enemy"
+    },
+    "graha": 2,
+    "graha_name": "Mars",
+    "in_mood": [
+      "Mudita",
+      "Kshudhita"
+    ],
+    "mood": [
+      {
+        "additional": false,
+        "applies": false,
+        "meaning": "bright",
+        "name": "Deepta",
+        "reason": "dignity is debilitated",
+        "when": "in its exaltation rasi"
+      },
+      {
+        "additional": false,
+        "applies": false,
+        "meaning": "doing well, contented, comfortable, natural",
+        "name": "Swastha",
+        "reason": "dignity is debilitated",
+        "when": "in its own rasi"
+      },
+      {
+        "additional": false,
+        "applies": true,
+        "meaning": "delighted",
+        "name": "Mudita",
+        "reason": "relation to lord is great_friend",
+        "when": "in a good friend's rasi"
+      },
+      {
+        "additional": false,
+        "applies": false,
+        "meaning": "peaceful",
+        "name": "Saanta",
+        "reason": "relation to lord is great_friend",
+        "when": "in a friend's rasi"
+      },
+      {
+        "additional": false,
+        "applies": false,
+        "meaning": "sad, depressed",
+        "name": "Deena",
+        "reason": "relation to lord is great_friend",
+        "when": "in a neutral planet's rasi"
+      },
+      {
+        "additional": false,
+        "applies": false,
+        "meaning": "distressed, miserable",
+        "name": "Duhkhita",
+        "reason": "relation to lord is great_friend",
+        "when": "in an enemy's rasi"
+      },
+      {
+        "additional": false,
+        "applies": false,
+        "meaning": "crippled, confused",
+        "name": "Vikala",
+        "reason": "joined by no malefic",
+        "when": "joined by malefic planets"
+      },
+      {
+        "additional": false,
+        "applies": false,
+        "meaning": "mischievous, scheming",
+        "name": "Khala",
+        "reason": "Cancer is owned by Moon",
+        "when": "in a malefic planet's rasi"
+      },
+      {
+        "additional": false,
+        "applies": false,
+        "meaning": "angry",
+        "name": "Kopita",
+        "reason": "Sun is not in the same rasi",
+        "when": "joined closely by Sun"
+      },
+      {
+        "additional": true,
+        "applies": null,
+        "meaning": "ashamed",
+        "name": "Lajjita",
+        "reason": "needs the house the planet occupies",
+        "when": "in the 5th house joined by Sun, Mars, Saturn, Rahu and Ketu"
+      },
+      {
+        "additional": true,
+        "applies": false,
+        "meaning": "proud",
+        "name": "Garvita",
+        "reason": "dignity is debilitated",
+        "when": "in its exaltation rasi or moolatrikona rasi"
+      },
+      {
+        "additional": true,
+        "applies": true,
+        "meaning": "hungry",
+        "name": "Kshudhita",
+        "reason": "conjoined by enemies",
+        "when": "in an enemy's rasi or conjoined by enemies or aspected by enemies or conjoined by Saturn"
+      },
+      {
+        "additional": true,
+        "applies": null,
+        "meaning": "thirsty",
+        "name": "Trishita",
+        "reason": "needs aspect data",
+        "when": "stationed in a watery rasi and aspected by enemies without the aspect of benefics"
+      },
+      {
+        "additional": true,
+        "applies": null,
+        "meaning": "delighted",
+        "name": "Mudita",
+        "reason": "needs aspect data",
+        "when": "in a friend's sign, conjoined or aspected by friends and conjoined by Jupiter"
+      },
+      {
+        "additional": true,
+        "applies": null,
+        "meaning": "shaken, agitated",
+        "name": "Kshobhita",
+        "reason": "needs aspect data",
+        "when": "conjoined by Sun and aspected by malefics or enemies"
+      }
+    ],
+    "undetermined": [
+      "Lajjita",
+      "Trishita",
+      "Mudita",
+      "Kshobhita"
+    ]
+  },
+  "status": 200
+}

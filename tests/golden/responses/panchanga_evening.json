@@ -1,0 +1,192 @@
+{
+  "body": {
+    "abhijit_active": false,
+    "date_local": "1990-06-15",
+    "day_length_hours": 13.962515,
+    "hora": {
+      "end_local": "1990-06-15 22:22:43",
+      "index": 17,
+      "lord": 1,
+      "lord_name": "Moon",
+      "start_local": "1990-06-15 21:22:43"
+    },
+    "input": {
+      "julian_day_ut": 2448058.177083333,
+      "local_time": "1990-06-15T21:45:00",
+      "place": {
+        "altitude": 0.0,
+        "latitude": 28.61,
+        "longitude": 77.21,
+        "name": "Delhi"
+      },
+      "timezone": "Asia/Kolkata",
+      "utc": "1990-06-15T16:15:00+00:00",
+      "utc_offset_hours": 5.5
+    },
+    "karana": [
+      {
+        "ends_jd": 2448057.739249057,
+        "ends_local": "1990-06-15 11:14:31",
+        "index": 42,
+        "lord": null,
+        "lord_name": null,
+        "name": "Vishti",
+        "name_standard": "Vishti",
+        "number": 43
+      },
+      {
+        "ends_jd": 2448058.223109066,
+        "ends_local": "1990-06-15 22:51:17",
+        "index": 43,
+        "lord": null,
+        "lord_name": null,
+        "name": "Bava",
+        "name_standard": "Bava",
+        "number": 44
+      },
+      {
+        "ends_jd": 2448058.700218395,
+        "ends_local": "1990-06-16 10:18:19",
+        "index": 44,
+        "lord": null,
+        "lord_name": null,
+        "name": "Balava",
+        "name_standard": "Balava",
+        "number": 45
+      }
+    ],
+    "lunar_month": {
+      "amanta": {
+        "conjunction_rasi": 1,
+        "conjunction_rasi_name": "Taurus",
+        "ends_local": "1990-06-23 00:25:09",
+        "index": 2,
+        "is_adhika": false,
+        "name": "Jyeshtha",
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "reckoning": "amanta",
+        "starts_local": "1990-05-24 17:17:39"
+      },
+      "purnimanta": {
+        "conjunction_rasi": 1,
+        "conjunction_rasi_name": "Taurus",
+        "ends_local": "1990-06-23 00:25:09",
+        "index": 3,
+        "is_adhika": false,
+        "name": "Aashaadha",
+        "paksha": 1,
+        "paksha_name": "Krishna",
+        "reckoning": "purnimanta",
+        "starts_local": "1990-05-24 17:17:39"
+      }
+    },
+    "moon_longitude": 324.00271208,
+    "moonrise": "1990-06-16 00:03:27",
+    "moonset": "1990-06-15 11:27:20",
+    "nakshatra": [
+      {
+        "ends_jd": 2448057.877744107,
+        "ends_local": "1990-06-15 14:33:57",
+        "index": 23,
+        "lord": null,
+        "lord_name": null,
+        "name": "Satabhishak",
+        "name_standard": "Shatabhisha",
+        "number": 24
+      },
+      {
+        "ends_jd": 2448058.865526286,
+        "ends_local": "1990-06-16 14:16:21",
+        "index": 24,
+        "lord": null,
+        "lord_name": null,
+        "name": "Poorvaabhaadra",
+        "name_standard": "Purva Bhadrapada",
+        "number": 25
+      }
+    ],
+    "next_sunrise": "1990-06-16 05:22:45",
+    "night_length_hours": 10.03913,
+    "paksha": {
+      "index": 1,
+      "name": "Krishna"
+    },
+    "settings": {
+      "apparent_positions": false,
+      "ayanamsa": "lahiri",
+      "custom_ayanamsa_deg": null,
+      "dasha_year_length": "sidereal",
+      "house_system": "whole_sign",
+      "include_outer_planets": false,
+      "ketu_mode": "opposite_rahu",
+      "language": "en",
+      "name_scheme": "book",
+      "node_direction": "retrograde",
+      "node_type": "true",
+      "rahu_ketu_aspects": false,
+      "sanskrit_names": false,
+      "sunrise_mode": "disc_upper_limb",
+      "topocentric": false,
+      "upagraha_rise_point": "middle"
+    },
+    "solar_date": {
+      "day": 1,
+      "month": 2,
+      "month_name": "Gemini"
+    },
+    "sun_longitude": 60.57698825,
+    "sunrise": "1990-06-15 05:22:39",
+    "sunset": "1990-06-15 19:20:24",
+    "tithi": [
+      {
+        "ends_jd": 2448058.223108133,
+        "ends_local": "1990-06-15 22:51:17",
+        "index": 21,
+        "lord": 6,
+        "lord_name": "Saturn",
+        "name": "Saptami",
+        "name_standard": "Saptami",
+        "number": 22
+      },
+      {
+        "ends_jd": 2448059.170603384,
+        "ends_local": "1990-06-16 21:35:40",
+        "index": 22,
+        "lord": 7,
+        "lord_name": "Rahu",
+        "name": "Ashtami",
+        "name_standard": "Ashtami",
+        "number": 23
+      }
+    ],
+    "vaara": {
+      "index": 5,
+      "lord": 5,
+      "name": "Friday"
+    },
+    "yoga": [
+      {
+        "ends_jd": 2448058.321945081,
+        "ends_local": "1990-06-16 01:13:36",
+        "index": 1,
+        "lord": null,
+        "lord_name": null,
+        "name": "Preeti",
+        "name_standard": "Priti",
+        "number": 2
+      },
+      {
+        "ends_jd": 2448059.234816983,
+        "ends_local": "1990-06-16 23:08:08",
+        "index": 2,
+        "lord": null,
+        "lord_name": null,
+        "name": "Aayushmaan",
+        "name_standard": "Ayushman",
+        "number": 3
+      }
+    ]
+  },
+  "status": 200
+}

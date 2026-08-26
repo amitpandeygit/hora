@@ -1,0 +1,815 @@
+# Per-graha results for each sayanaadi avastha — book section 15.4.4.
+#
+# These are NOT life stages. The sayanaadi avastha is a single natal state per
+# planet, fixed by the birth data through section 15.4.4's formula. Each entry
+# is "what this planet gives while it is in this state", keyed by
+# (avastha index, graha) — 12 x 9 = 108 when complete.
+#
+# Licence-gated like every verbatim source here. See docs/open-items.md OI-12.
+schema_version: 2
+subject: avastha
+qualifier_field: graha
+sources:
+  pvr-vaia:
+    title: 'Vedic Astrology: An Integrated Approach'
+    author: P.V.R. Narasimha Rao
+    section: 15.4.4 States Related to Activity
+    first_published: 2000
+    licence_status: unconfirmed
+    licence_note: The author shares the book freely for reading. That is not an explicit licence to redistribute
+      the text commercially. These entries are stored but are NOT served publicly until the licence is
+      confirmed or the text is replaced. See docs/open-items.md OI-12.
+categorisation_note: '`verbatim` is the author''s line as printed, including his typos ("dieases",
+  "welthy"). `results` is OUR decomposition of that line into conditional clauses; the square-bracket
+  conditions are the author''s, the machine-readable `when` structure is ours.'
+entries:
+
+# ---- 1 Sayana ----
+- avastha: 1
+  avastha_name: Sayana
+  graha: 0
+  graha_name: Sun
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Digestive troubles, diseases, stout legs, bile, piles, heart troubles.'
+  results:
+  - text: Digestive troubles, diseases, stout legs, bile, piles, heart troubles
+- avastha: 1
+  avastha_name: Sayana
+  graha: 1
+  graha_name: Moon
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Honorable, sluggish, lustful, spoils finances.'
+  results:
+  - text: Honorable, sluggish, lustful, spoils finances
+- avastha: 1
+  avastha_name: Sayana
+  graha: 2
+  graha_name: Mars
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Troubled, wounded, ulcers, itches.'
+  results:
+  - text: Troubled, wounded, ulcers, itches
+- avastha: 1
+  avastha_name: Sayana
+  graha: 3
+  graha_name: Mercury
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Addicted to pleasures, licentious, wicked, always hungry; [in lagna] lame, eyes like a bee.'
+  results:
+  - text: Addicted to pleasures, licentious, wicked, always hungry
+  - text: lame, eyes like a bee
+    when: {houses: [1]}
+- avastha: 1
+  avastha_name: Sayana
+  graha: 4
+  graha_name: Jupiter
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Strong, but weak voice, tawny complexion, prominent cheeks, afraid of enemies.'
+  results:
+  - text: Strong, but weak voice, tawny complexion, prominent cheeks, afraid of enemies
+- avastha: 1
+  avastha_name: Sayana
+  graha: 5
+  graha_name: Venus
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Strong, troubles of teeth, short-tempered, poor, licentious.'
+  results:
+  - text: Strong, troubles of teeth, short-tempered, poor, licentious
+- avastha: 1
+  avastha_name: Sayana
+  graha: 6
+  graha_name: Saturn
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Hungry, thirst, dieases in childhood, wealthy later.'
+  transcription_notes: '"dieases" is the book''s spelling and is kept.'
+  results:
+  - text: Hungry, thirst, dieases in childhood, wealthy later
+- avastha: 1
+  avastha_name: Sayana
+  graha: 7
+  graha_name: Rahu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Many miseries; [in Ar, Ta, Ge, Vi] wealth.'
+  results:
+  - text: Many miseries
+  - text: wealth
+    when: {rasis: [0, 1, 2, 5]}
+- avastha: 1
+  avastha_name: Sayana
+  graha: 8
+  graha_name: Ketu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Many diseases; [in Ar, Ta, Ge, Vi] wealth.'
+  results:
+  - text: Many diseases
+  - text: wealth
+    when: {rasis: [0, 1, 2, 5]}
+
+# ---- 2 Upavesana ----
+- avastha: 2
+  avastha_name: Upavesana
+  graha: 0
+  graha_name: Sun
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Poor, fond of quarrels, hard-hearted, loses money.'
+  results:
+  - text: Poor, fond of quarrels, hard-hearted, loses money
+- avastha: 2
+  avastha_name: Upavesana
+  graha: 1
+  graha_name: Moon
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'diseases, unintelligent, poor, merciless, does misdeeds, steals money.'
+  results:
+  - text: diseases, unintelligent, poor, merciless, does misdeeds, steals money
+- avastha: 2
+  avastha_name: Upavesana
+  graha: 2
+  graha_name: Mars
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Strong, sinful, liar, eminent, wealthy.'
+  results:
+  - text: Strong, sinful, liar, eminent, wealthy
+- avastha: 2
+  avastha_name: Upavesana
+  graha: 3
+  graha_name: Mercury
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[in lagna] good character; [conjoined/aspected by malefics] poor; [conjoined/aspected by
+    benefics] wealthy and happy.'
+  transcription_notes: Every clause is conditional; this entry has no unconditional result.
+  results:
+  - text: good character
+    when: {houses: [1]}
+  - text: poor
+    when: {associated_with: malefics}
+  - text: wealthy and happy
+    when: {associated_with: benefics}
+- avastha: 2
+  avastha_name: Upavesana
+  graha: 4
+  graha_name: Jupiter
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Talkative, troubled by enemies and kings, ulcers on feet, hands, feet.'
+  transcription_notes: '"feet" appears twice in the printed line; kept as printed.'
+  results:
+  - text: Talkative, troubled by enemies and kings, ulcers on feet, hands, feet
+- avastha: 2
+  avastha_name: Upavesana
+  graha: 5
+  graha_name: Venus
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Endowed with gems and gold, destroys enemies, honored by kings, happy.'
+  results:
+  - text: Endowed with gems and gold, destroys enemies, honored by kings, happy
+- avastha: 2
+  avastha_name: Upavesana
+  graha: 6
+  graha_name: Saturn
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Self-respect, punished by kings, troubles by enemies, faces dangers, ulcers.'
+  results:
+  - text: Self-respect, punished by kings, troubles by enemies, faces dangers, ulcers
+- avastha: 2
+  avastha_name: Upavesana
+  graha: 7
+  graha_name: Rahu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Distressed due to ulcers, royal association, honorable, but financial troubles.'
+  results:
+  - text: Distressed due to ulcers, royal association, honorable, but financial troubles
+- avastha: 2
+  avastha_name: Upavesana
+  graha: 8
+  graha_name: Ketu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Distressed due to ulcers, troubles from enemies, snakes and thieves, windy (vaata-related)
+    diseases.'
+  results:
+  - text: Distressed due to ulcers, troubles from enemies, snakes and thieves, windy (vaata-related) diseases
+
+# ---- 3 Netrapaani ----
+- avastha: 3
+  avastha_name: Netrapaani
+  graha: 0
+  graha_name: Sun
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Ever happy, wise, helps others, strong, wealthy, pleasures, favorite of kings.'
+  results:
+  - text: Ever happy, wise, helps others, strong, wealthy, pleasures, favorite of kings
+- avastha: 3
+  avastha_name: Netrapaani
+  graha: 1
+  graha_name: Moon
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Great diseases, garrulous, wicked, always bad actions.'
+  results:
+  - text: Great diseases, garrulous, wicked, always bad actions
+- avastha: 3
+  avastha_name: Netrapaani
+  graha: 2
+  graha_name: Mars
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[in lagna] penury; [elsewhere] ruler of a town.'
+  results:
+  - text: penury
+    when: {houses: [1]}
+  - text: ruler of a town
+    when: {otherwise: true}
+- avastha: 3
+  avastha_name: Netrapaani
+  graha: 3
+  graha_name: Mercury
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Honorable, no wisdom, no learning, no well-wishers; [in 5th] no happiness from wife and children,
+    many daughters, gains money from royal patronage.'
+  results:
+  - text: Honorable, no wisdom, no learning, no well-wishers
+  - text: no happiness from wife and children, many daughters, gains money from royal patronage
+    when: {houses: [5]}
+- avastha: 3
+  avastha_name: Netrapaani
+  graha: 4
+  graha_name: Jupiter
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Devoid of health and wealth, libidinous, likes entertainment, tawny complexion, moves with
+    people of a different class.'
+  results:
+  - text: Devoid of health and wealth, libidinous, likes entertainment, tawny complexion, moves with people
+      of a different class
+- avastha: 3
+  avastha_name: Netrapaani
+  graha: 5
+  graha_name: Venus
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[in lagna, 7th or 10th] troubles to eyes and loss of wealth; [else] large house.'
+  results:
+  - text: troubles to eyes and loss of wealth
+    when: {houses: [1, 7, 10]}
+  - text: large house
+    when: {otherwise: true}
+- avastha: 3
+  avastha_name: Netrapaani
+  graha: 6
+  graha_name: Saturn
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Charming wife, learned in arts, royal favors, friends, intelligent, good speaker.'
+  results:
+  - text: Charming wife, learned in arts, royal favors, friends, intelligent, good speaker
+- avastha: 3
+  avastha_name: Netrapaani
+  graha: 7
+  graha_name: Rahu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Eyes troubles, financial losses, troubles from wicked men, snakes and thieves.'
+  results:
+  - text: Eyes troubles, financial losses, troubles from wicked men, snakes and thieves
+- avastha: 3
+  avastha_name: Netrapaani
+  graha: 8
+  graha_name: Ketu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Eyes troubles, troubles from wicked men, snakes, thieves and rulers.'
+  results:
+  - text: Eyes troubles, troubles from wicked men, snakes, thieves and rulers
+
+# ---- 4 Prakaasana ----
+- avastha: 4
+  avastha_name: Prakaasana
+  graha: 0
+  graha_name: Sun
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Charitable, wealthy, good orator in assemblies, strong, good-looking.'
+  results:
+  - text: Charitable, wealthy, good orator in assemblies, strong, good-looking
+- avastha: 4
+  avastha_name: Prakaasana
+  graha: 1
+  graha_name: Moon
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Famous in world, virtuous, royal patronage, royal insignia, wealth, luxuries, regular visits
+    to shrines, many ornaments.'
+  results:
+  - text: Famous in world, virtuous, royal patronage, royal insignia, wealth, luxuries, regular visits
+      to shrines, many ornaments
+- avastha: 4
+  avastha_name: Prakaasana
+  graha: 2
+  graha_name: Mars
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Virtuous and honored by kings; [in 5th] loss of children; [in 5th with Rahu] faces a severe
+    fall.'
+  results:
+  - text: Virtuous and honored by kings
+  - text: loss of children
+    when: {houses: [5]}
+  - text: faces a severe fall
+    when: {houses: [5], joined_by: [7]}
+- avastha: 4
+  avastha_name: Prakaasana
+  graha: 3
+  graha_name: Mercury
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Charitable, kind, good deeds, scholar of many subjects, wise and destroyer of groups of wicked
+    men.'
+  results:
+  - text: Charitable, kind, good deeds, scholar of many subjects, wise and destroyer of groups of wicked
+      men
+- avastha: 4
+  avastha_name: Prakaasana
+  graha: 4
+  graha_name: Jupiter
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Virtuous, pure happiness and comfort, splendorous, visits holy places of Krishna; [if exalted]
+    excellent fame in the whole world, very opulent.'
+  results:
+  - text: Virtuous, pure happiness and comfort, splendorous, visits holy places of Krishna
+  - text: excellent fame in the whole world, very opulent
+    when: {dignity: [exalted]}
+- avastha: 4
+  avastha_name: Prakaasana
+  graha: 5
+  graha_name: Venus
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[exalted or in own/friendly rasi] has a conduct similar to a mighty elephant; equal to a
+    king, interested in poetry, arts and music.'
+  transcription_notes: The bracket opens the line, so whether the trailing clauses share the condition
+    is ambiguous in the printed text. Both are stored under the same condition, which is the reading the
+    sentence structure supports.
+  results:
+  - text: has a conduct similar to a mighty elephant
+    when: {dignity: [exalted, own, friend, great_friend]}
+  - text: equal to a king, interested in poetry, arts and music
+    when: {dignity: [exalted, own, friend, great_friend]}
+- avastha: 4
+  avastha_name: Prakaasana
+  graha: 6
+  graha_name: Saturn
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Virtuous, intelligent, opulent, likes entertainment, kind, devotee of Shiva.'
+  results:
+  - text: Virtuous, intelligent, opulent, likes entertainment, kind, devotee of Shiva
+- avastha: 4
+  avastha_name: Prakaasana
+  graha: 7
+  graha_name: Rahu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Prosperous in foreign places, virtuous, welthy, high position, good deeds, a chief in king''s
+    court, charming.'
+  transcription_notes: '"welthy" is the book''s spelling and is kept.'
+  results:
+  - text: Prosperous in foreign places, virtuous, welthy, high position, good deeds, a chief in king's
+      court, charming
+- avastha: 4
+  avastha_name: Prakaasana
+  graha: 8
+  graha_name: Ketu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Wealthy, righteous, lives abroad, enthusiastic, genuine, serves the king.'
+  results:
+  - text: Wealthy, righteous, lives abroad, enthusiastic, genuine, serves the king
+
+# ---- 5 Gamana ----
+- avastha: 5
+  avastha_name: Gamana
+  graha: 0
+  graha_name: Sun
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Lives in foreign lands, unhappy, lazy, unwise, poor, disturbed by fears, angry.'
+  results:
+  - text: Lives in foreign lands, unhappy, lazy, unwise, poor, disturbed by fears, angry
+- avastha: 5
+  avastha_name: Gamana
+  graha: 1
+  graha_name: Moon
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[if waning] sinful, cruel, eye troubles; [if waxing] troubled by fear.'
+  results:
+  - text: sinful, cruel, eye troubles
+    when: {moon_phase: waning}
+  - text: troubled by fear
+    when: {moon_phase: waxing}
+- avastha: 5
+  avastha_name: Gamana
+  graha: 2
+  graha_name: Mars
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Wanderer, boils, itches, quarrels with women, many wounds and ulcers.'
+  results:
+  - text: Wanderer, boils, itches, quarrels with women, many wounds and ulcers
+- avastha: 5
+  avastha_name: Gamana
+  graha: 3
+  graha_name: Mercury
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Visits the courts of kings frequently, wealthy.'
+  results:
+  - text: Visits the courts of kings frequently, wealthy
+- avastha: 5
+  avastha_name: Gamana
+  graha: 4
+  graha_name: Jupiter
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Brave, many friends, scholar, wealthy.'
+  results:
+  - text: Brave, many friends, scholar, wealthy
+- avastha: 5
+  avastha_name: Gamana
+  graha: 5
+  graha_name: Venus
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Mother doesn''t live long, separated from own people, fear from enemies.'
+  results:
+  - text: Mother doesn't live long, separated from own people, fear from enemies
+- avastha: 5
+  avastha_name: Gamana
+  graha: 6
+  graha_name: Saturn
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Rich, good sons, scholar at a king''s court, grabs other people''s land.'
+  results:
+  - text: Rich, good sons, scholar at a king's court, grabs other people's land
+- avastha: 5
+  avastha_name: Gamana
+  graha: 7
+  graha_name: Rahu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Many children, scholarly, wealthy, charitable and honored by a king.'
+  results:
+  - text: Many children, scholarly, wealthy, charitable and honored by a king
+- avastha: 5
+  avastha_name: Gamana
+  graha: 8
+  graha_name: Ketu
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Many children, scholarly, wealthy, charitable, virtuous, great man.'
+  results:
+  - text: Many children, scholarly, wealthy, charitable, virtuous, great man
+
+# ---- 6 Aagamana ----
+- {avastha: 6, avastha_name: Aagamana, graha: 0, graha_name: Sun, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Affairs with the wives of others, deserted by people, likes travels, cheat, dirty.',
+   results: [{text: Affairs with the wives of others, deserted by people, likes travels, cheat, dirty}]}
+- {avastha: 6, avastha_name: Aagamana, graha: 1, graha_name: Moon, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Honorable, diseases of feet, secret sins, poor, unintelligent, sad.',
+   results: [{text: Honorable, diseases of feet, secret sins, poor, unintelligent, sad}]}
+- {avastha: 6, avastha_name: Aagamana, graha: 2, graha_name: Mars, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Good character, endowed with gems, has weapons, destroyer of enemies.',
+   results: [{text: Good character, endowed with gems, has weapons, destroyer of enemies}]}
+- {avastha: 6, avastha_name: Aagamana, graha: 3, graha_name: Mercury, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Visits the courts of kings frequently, wealthy.',
+   transcription_notes: 'Identical to Mercury in Gamana (avastha 5), as printed.',
+   results: [{text: Visits the courts of kings frequently, wealthy}]}
+- {avastha: 6, avastha_name: Aagamana, graha: 4, graha_name: Jupiter, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Servants, excellent women and wealth always adore his abode.',
+   results: [{text: Servants, excellent women and wealth always adore his abode}]}
+- {avastha: 6, avastha_name: Aagamana, graha: 5, graha_name: Venus, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Wealthy, visits holy shrines, enthusiastic, diseases of hands and feet.',
+   results: [{text: Wealthy, visits holy shrines, enthusiastic, diseases of hands and feet}]}
+- {avastha: 6, avastha_name: Aagamana, graha: 6, graha_name: Saturn, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Separated from family, foolish, wanderer, miserable.',
+   results: [{text: Separated from family, foolish, wanderer, miserable}]}
+- {avastha: 6, avastha_name: Aagamana, graha: 7, graha_name: Rahu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Irritable, unintelligent, poor, wicked, miserly, libidinous.',
+   results: [{text: Irritable, unintelligent, poor, wicked, miserly, libidinous}]}
+- {avastha: 6, avastha_name: Aagamana, graha: 8, graha_name: Ketu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Diseases, loss of wealth, tale-bearer, hurts others.',
+   results: [{text: Diseases, loss of wealth, tale-bearer, hurts others}]}
+
+# ---- 7 Sabhaa ----
+- {avastha: 7, avastha_name: Sabhaa, graha: 0, graha_name: Sun, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Helps others, possesses wealth, gems and lands, virtuous, very strong, affectionate and kind.',
+   results: [{text: Helps others, possesses wealth, gems and lands, virtuous, very strong, affectionate and kind}]}
+- {avastha: 7, avastha_name: Sabhaa, graha: 1, graha_name: Moon, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Eminent, honored by kings, sexual pleasures, good character.',
+   results: [{text: Eminent, honored by kings, sexual pleasures, good character}]}
+- avastha: 7
+  avastha_name: Sabhaa
+  graha: 2
+  graha_name: Mars
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'A scholar in a king''s court, wealthy, honorable, charitable; [if exalted] skilled at wars,
+    successful, upholds dharma; [in trines] unlearned; [in 12th] devoid of happiness from wife and children.'
+  transcription_notes: '"[in trines]" is read as the 1st, 5th and 9th houses.'
+  results:
+  - text: A scholar in a king's court, wealthy, honorable, charitable
+  - text: skilled at wars, successful, upholds dharma
+    when: {dignity: [exalted]}
+  - text: unlearned
+    when: {houses: [1, 5, 9]}
+  - text: devoid of happiness from wife and children
+    when: {houses: [12]}
+- avastha: 7
+  avastha_name: Sabhaa
+  graha: 3
+  graha_name: Mercury
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[if exalted] highly wealthy and good deeds; wealthy, king or a minister, devotion to Vishnu
+    and Shiva, saattwik, obtains moksha.'
+  transcription_notes: The bracket opens the line and the second clause follows the semicolon without
+    a condition, so the second is read as unconditional.
+  results:
+  - text: highly wealthy and good deeds
+    when: {dignity: [exalted]}
+  - text: wealthy, king or a minister, devotion to Vishnu and Shiva, saattwik, obtains moksha
+- {avastha: 7, avastha_name: Sabhaa, graha: 4, graha_name: Jupiter, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Excellent speech, superior gems and wealth, , royal insignia, supremely learned.',
+   transcription_notes: 'The doubled comma ", ," is in the printed line and is kept.',
+   results: [{text: 'Excellent speech, superior gems and wealth, , royal insignia, supremely learned'}]}
+- {avastha: 7, avastha_name: Sabhaa, graha: 5, graha_name: Venus, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Eminent in a king''s court, virtuous, destroyer of enemies, wealthy and charitable.',
+   results: [{text: Eminent in a king's court, virtuous, destroyer of enemies, wealthy and charitable}]}
+- {avastha: 7, avastha_name: Sabhaa, graha: 6, graha_name: Saturn, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Displays excellent judicial knowledge in assemblies, excellent wealth and gems, exceedingly brilliant.',
+   results: [{text: Displays excellent judicial knowledge in assemblies, excellent wealth and gems, exceedingly brilliant}]}
+- {avastha: 7, avastha_name: Sabhaa, graha: 7, graha_name: Rahu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Scholarly, miserly, many virtues, wealthy, happy.',
+   results: [{text: Scholarly, miserly, many virtues, wealthy, happy}]}
+- {avastha: 7, avastha_name: Sabhaa, graha: 8, graha_name: Ketu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Garrulous, proud, miserly, licentious, skillful in evil subjects.',
+   results: [{text: Garrulous, proud, miserly, licentious, skillful in evil subjects}]}
+
+# ---- 8 Aagama ----
+- {avastha: 8, avastha_name: Aagama, graha: 0, graha_name: Sun, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Troubled by enemies, fickle-minded, cheat, emaciated, doesn''t follow good dharma and karma, wanton.',
+   results: [{text: Troubled by enemies, fickle-minded, cheat, emaciated, doesn't follow good dharma and karma, wanton}]}
+- avastha: 8
+  avastha_name: Aagama
+  graha: 1
+  graha_name: Moon
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[if waxing] Garrulous, virtuous; [if waning] two wives, sick, cheat, wicked.'
+  results:
+  - text: Garrulous, virtuous
+    when: {moon_phase: waxing}
+  - text: two wives, sick, cheat, wicked
+    when: {moon_phase: waning}
+- {avastha: 8, avastha_name: Aagama, graha: 2, graha_name: Mars, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Bad character and deeds, ear troubles, timid, friendly with evil-minded people.',
+   results: [{text: Bad character and deeds, ear troubles, timid, friendly with evil-minded people}]}
+- {avastha: 8, avastha_name: Aagama, graha: 3, graha_name: Mercury, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Serves mean people and makes money, two sons, one daugher who brings good name.',
+   transcription_notes: '"daugher" is the book''s spelling and is kept.',
+   results: [{text: Serves mean people and makes money, two sons, one daugher who brings good name}]}
+- {avastha: 8, avastha_name: Aagama, graha: 4, graha_name: Jupiter, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Many conveyances, comforts, honors, servants, happiness from progeny, knowledge, friends, learning and noble path.',
+   results: [{text: Many conveyances, comforts, honors, servants, happiness from progeny, knowledge, friends, learning and noble path}]}
+- {avastha: 8, avastha_name: Aagama, graha: 5, graha_name: Venus, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'No wealth, troubles from enemies, separation from children, diseases, unhappiness from spouse.',
+   results: [{text: No wealth, troubles from enemies, separation from children, diseases, unhappiness from spouse}]}
+- {avastha: 8, avastha_name: Aagama, graha: 6, graha_name: Saturn, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Diseases, not skillful, no royal patronage.',
+   results: [{text: Diseases, not skillful, no royal patronage}]}
+- {avastha: 8, avastha_name: Aagama, graha: 7, graha_name: Rahu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Financial losses, fear of enemies and litigation, depressed, separated from own people, emaciated, manipulative.',
+   results: [{text: Financial losses, fear of enemies and litigation, depressed, separated from own people, emaciated, manipulative}]}
+- {avastha: 8, avastha_name: Aagama, graha: 8, graha_name: Ketu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Notorious, sinful, litigation with own men, diseases, enemies.',
+   results: [{text: Notorious, sinful, litigation with own men, diseases, enemies}]}
+
+# ---- 9 Bhojana ----
+- {avastha: 9, avastha_name: Bhojana, graha: 0, graha_name: Sun, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Pains in joints, loss of wealth over opposite sex, loss of strength, lies, headaches, spreading lies, bad path.',
+   results: [{text: Pains in joints, loss of wealth over opposite sex, loss of strength, lies, headaches, spreading lies, bad path}]}
+- avastha: 9
+  avastha_name: Bhojana
+  graha: 1
+  graha_name: Moon
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[if waxing] Social status, honor, conveyances, wife and daughters, servants; [if waning]
+    these results will be hard to get.'
+  results:
+  - text: Social status, honor, conveyances, wife and daughters, servants
+    when: {moon_phase: waxing}
+  - text: these results will be hard to get
+    when: {moon_phase: waning}
+- avastha: 9
+  avastha_name: Bhojana
+  graha: 2
+  graha_name: Mars
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[if strong] sweet food; [if weak] means acts, dishonorable.'
+  transcription_notes: '"means acts" is the book''s wording and is kept; "mean acts" is the likely intent.
+    No measure in this book settles "strong"/"weak", so both clauses resolve as undetermined.'
+  results:
+  - text: sweet food
+    when: {strength: strong}
+  - text: means acts, dishonorable
+    when: {strength: weak}
+- {avastha: 9, avastha_name: Bhojana, graha: 3, graha_name: Mercury, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Financial losses in litigations, wrath of kings, no marital happiness.',
+   results: [{text: Financial losses in litigations, wrath of kings, no marital happiness}]}
+- {avastha: 9, avastha_name: Bhojana, graha: 4, graha_name: Jupiter, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Excellent food, wealth, royal insignia.',
+   results: [{text: Excellent food, wealth, royal insignia}]}
+- avastha: 9
+  avastha_name: Bhojana
+  graha: 5
+  graha_name: Venus
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[debilitated] wealthy, respected by scholars; [else] Distressed due to hunger, dieases, fear
+    from enemies.'
+  transcription_notes: '"dieases" is the book''s spelling and is kept.'
+  results:
+  - text: wealthy, respected by scholars
+    when: {dignity: [debilitated]}
+  - text: Distressed due to hunger, dieases, fear from enemies
+    when: {otherwise: true}
+- {avastha: 9, avastha_name: Bhojana, graha: 6, graha_name: Saturn, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Weak-sighted, delusion, enjoys tasty food.',
+   results: [{text: Weak-sighted, delusion, enjoys tasty food}]}
+- {avastha: 9, avastha_name: Bhojana, graha: 7, graha_name: Rahu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'No happiness from wife and children, bereft of good food, timid.',
+   results: [{text: No happiness from wife and children, bereft of good food, timid}]}
+- {avastha: 9, avastha_name: Bhojana, graha: 8, graha_name: Ketu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Hungry, sick, wanderer, poor.',
+   results: [{text: Hungry, sick, wanderer, poor}]}
+
+# ---- 10 Nriyalipsaa / Nrityalipsaa ----
+- {avastha: 10, avastha_name: Nrityalipsaa, graha: 0, graha_name: Sun, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Learned, scholar, good at discussing poetry, reverred by kings.',
+   transcription_notes: '"reverred" is the book''s spelling and is kept. The results heading spells the
+     avastha "Nrityalipsaa" where Table 36 spells it "Nriyalipsaa"; see D-20.',
+   results: [{text: Learned, scholar, good at discussing poetry, reverred by kings}]}
+- avastha: 10
+  avastha_name: Nrityalipsaa
+  graha: 1
+  graha_name: Moon
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[if waxing] strong, knowledge of poetry and music, connoisseur of arts; [if waning] sinful.'
+  results:
+  - text: strong, knowledge of poetry and music, connoisseur of arts
+    when: {moon_phase: waxing}
+  - text: sinful
+    when: {moon_phase: waning}
+- {avastha: 10, avastha_name: Nrityalipsaa, graha: 2, graha_name: Mars, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Wealthy though royal connections, has gold, diamonds and corals.',
+   transcription_notes: '"though" is the book''s wording and is kept; "through" is the likely intent.',
+   results: [{text: Wealthy though royal connections, has gold, diamonds and corals}]}
+- avastha: 10
+  avastha_name: Nrityalipsaa
+  graha: 3
+  graha_name: Mercury
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Honor, conveyances, gems, valorous, friends, progeny, learned in assemblies; [in a malefic
+    rasi] licentious, goes to prostitutes.'
+  results:
+  - text: Honor, conveyances, gems, valorous, friends, progeny, learned in assemblies
+  - text: licentious, goes to prostitutes
+    when: {rasi_lord: malefic}
+- {avastha: 10, avastha_name: Nrityalipsaa, graha: 4, graha_name: Jupiter, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Honored by kings, wealthy, learned in dharma sastra and tantra, revered by powerful men, respected by learned men, a scholar and faultless in grammar and etymology.',
+   results: [{text: Honored by kings, wealthy, learned in dharma sastra and tantra, revered by powerful men, respected by learned men, a scholar and faultless in grammar and etymology}]}
+- {avastha: 10, avastha_name: Nrityalipsaa, graha: 5, graha_name: Venus, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Skillful in literature, arts, music, meritorious and opulent.',
+   results: [{text: Skillful in literature, arts, music, meritorious and opulent}]}
+- {avastha: 10, avastha_name: Nrityalipsaa, graha: 6, graha_name: Saturn, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Righteous, opulent, honored by kings, brave and heroic at wars.',
+   results: [{text: Righteous, opulent, honored by kings, brave and heroic at wars}]}
+- {avastha: 10, avastha_name: Nrityalipsaa, graha: 7, graha_name: Rahu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Great disease, eye problems,  fear from enemies, financial losses.',
+   transcription_notes: 'The doubled space after "eye problems," is in the printed line and is kept.',
+   results: [{text: 'Great disease, eye problems,  fear from enemies, financial losses'}]}
+- {avastha: 10, avastha_name: Nrityalipsaa, graha: 8, graha_name: Ketu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Diseases, eye troubles, wicked, sinful.',
+   results: [{text: Diseases, eye troubles, wicked, sinful}]}
+
+# ---- 11 Kautuka ----
+- {avastha: 11, avastha_name: Kautuka, graha: 0, graha_name: Sun, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Happy, learned, performs yajnas (rites), stays at a king''s palace, good at discussing poetry, good-looking.',
+   results: [{text: Happy, learned, performs yajnas (rites), stays at a king's palace, good at discussing poetry, good-looking}]}
+- {avastha: 11, avastha_name: Kautuka, graha: 1, graha_name: Moon, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'King, wealthy, skillful in sexual acts.',
+   results: [{text: King, wealthy, skillful in sexual acts}]}
+- avastha: 11
+  avastha_name: Kautuka
+  graha: 2
+  graha_name: Mars
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: 'Curious, friends and children; [if exalted] honored by king and virtuous.'
+  results:
+  - text: Curious, friends and children
+  - text: honored by king and virtuous
+    when: {dignity: [exalted]}
+- avastha: 11
+  avastha_name: Kautuka
+  graha: 3
+  graha_name: Mercury
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[in lagna] skillful in music; [in 7th or 8th] addicted to courtesans; [in 9th] good deeds
+    and character, goes to heaven.'
+  results:
+  - text: skillful in music
+    when: {houses: [1]}
+  - text: addicted to courtesans
+    when: {houses: [7, 8]}
+  - text: good deeds and character, goes to heaven
+    when: {houses: [9]}
+- {avastha: 11, avastha_name: Kautuka, graha: 4, graha_name: Jupiter, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Curious, very kind, happy, honored, sons, famous.',
+   results: [{text: Curious, very kind, happy, honored, sons, famous}]}
+- {avastha: 11, avastha_name: Kautuka, graha: 5, graha_name: Venus, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Opulent, learned, famous and respected in assemblies.',
+   results: [{text: Opulent, learned, famous and respected in assemblies}]}
+- {avastha: 11, avastha_name: Kautuka, graha: 6, graha_name: Saturn, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Endowed with lands, wealthy, happy, pleasures from charming ladies, learned in poetry and arts.',
+   results: [{text: Endowed with lands, wealthy, happy, pleasures from charming ladies, learned in poetry and arts}]}
+- {avastha: 11, avastha_name: Kautuka, graha: 7, graha_name: Rahu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Wanderer, after other men''s wives, steals other men''s wealth.',
+   results: [{text: Wanderer, after other men's wives, steals other men's wealth}]}
+- {avastha: 11, avastha_name: Kautuka, graha: 8, graha_name: Ketu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Goes after courtesans, losses in profession, sinful, wanderer.',
+   results: [{text: Goes after courtesans, losses in profession, sinful, wanderer}]}
+
+# ---- 12 Nidraa ----
+- {avastha: 12, avastha_name: Nidraa, graha: 0, graha_name: Sun, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Drowsy, lives abroad, troubles to wife.',
+   results: [{text: Drowsy, lives abroad, troubles to wife}]}
+- avastha: 12
+  avastha_name: Nidraa
+  graha: 1
+  graha_name: Moon
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: '[if with Jupiter] eminent; [without Jupiter] loses wealth on females, troubles.'
+  results:
+  - text: eminent
+    when: {joined_by: [4]}
+  - text: loses wealth on females, troubles
+    when: {not_joined_by: [4]}
+- {avastha: 12, avastha_name: Nidraa, graha: 2, graha_name: Mars, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Angry, unintelligent, poor, wicked, fallen from the virtuous path, sick.',
+   results: [{text: Angry, unintelligent, poor, wicked, fallen from the virtuous path, sick}]}
+- {avastha: 12, avastha_name: Nidraa, graha: 3, graha_name: Mercury, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Uncomfortable sleep, troubles of neck, miseries, litigation with own men, loses wealth.',
+   results: [{text: Uncomfortable sleep, troubles of neck, miseries, litigation with own men, loses wealth}]}
+- {avastha: 12, avastha_name: Nidraa, graha: 4, graha_name: Jupiter, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Poor, unintelligent, foolish, no righteous acts.',
+   results: [{text: Poor, unintelligent, foolish, no righteous acts}]}
+- {avastha: 12, avastha_name: Nidraa, graha: 5, graha_name: Venus, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Serves others, criticizes others, garrulous, wanderer.',
+   results: [{text: Serves others, criticizes others, garrulous, wanderer}]}
+- {avastha: 12, avastha_name: Nidraa, graha: 6, graha_name: Saturn, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Rich, charming, good character, brave, destroys all enemies, skillful in dealing with women.',
+   results: [{text: Rich, charming, good character, brave, destroys all enemies, skillful in dealing with women}]}
+- {avastha: 12, avastha_name: Nidraa, graha: 7, graha_name: Rahu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Virtuous, good wife and children, happy, proud, bold, wealthy.',
+   results: [{text: Virtuous, good wife and children, happy, proud, bold, wealthy}]}
+- {avastha: 12, avastha_name: Nidraa, graha: 8, graha_name: Ketu, source: pvr-vaia, licence_status: unconfirmed,
+   verbatim: 'Virtuous, endowed with wealth and agricultural products, whiles away time with entertainment.',
+   results: [{text: Virtuous, endowed with wealth and agricultural products, whiles away time with entertainment}]}

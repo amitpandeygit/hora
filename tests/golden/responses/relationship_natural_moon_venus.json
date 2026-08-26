@@ -1,0 +1,19 @@
+{
+  "body": {
+    "enemy_houses": [
+      1,
+      6
+    ],
+    "friend_houses": [],
+    "from_exaltation_lord": true,
+    "graha": 1,
+    "graha_name": "Moon",
+    "other": 5,
+    "other_name": "Venus",
+    "reason": "Venus lords Moon's exaltation rasi; lords house(s) 1, 6, which are not friend houses \u2014 a friend and an enemy on account of owning two rasis",
+    "relation": "neutral",
+    "relation_name": "sama",
+    "table_7_relation": "neutral"
+  },
+  "status": 200
+}

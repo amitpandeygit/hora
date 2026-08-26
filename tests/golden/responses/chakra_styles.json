@@ -1,0 +1,37 @@
+{
+  "body": {
+    "bhava_name": "bhava",
+    "cells": 12,
+    "lagna_mark": "Asc",
+    "prepared_from": "the rasis occupied by all planets, upagrahas, lagna and special lagnas",
+    "sanskrit": "chakra",
+    "styles": [
+      {
+        "key": "south_indian",
+        "name": "South Indian style chart",
+        "note": "A rasi is always at a fixed position",
+        "rasi_based": true,
+        "ruled_by": "Jupiter"
+      },
+      {
+        "key": "north_indian",
+        "name": "North Indian style diamond chart",
+        "note": "A bhava is always at a fixed position. Lagna, marked \"Asc\", is always in the same visual area, and the rasi number is written in the box",
+        "rasi_based": false,
+        "ruled_by": "Venus"
+      },
+      {
+        "key": "east_indian",
+        "name": "East Indian style Sun chart",
+        "note": "A rasi is always at a fixed position, as in the South Indian format. Some people draw it with an enclosing rectangle",
+        "rasi_based": true,
+        "ruled_by": "Sun"
+      }
+    ],
+    "used_in_the_book": [
+      "south_indian",
+      "north_indian"
+    ]
+  },
+  "status": 200
+}

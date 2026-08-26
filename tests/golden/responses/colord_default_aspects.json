@@ -1,0 +1,58 @@
+{
+  "body": {
+    "co_lord_names": [
+      "Saturn",
+      "Rahu"
+    ],
+    "co_lords": [
+      6,
+      7
+    ],
+    "decided_by": "3",
+    "determined": true,
+    "rasi": 10,
+    "rasi_name": "Aquarius",
+    "reason": "Saturn in Libra (exalted); Rahu in Cancer",
+    "rules": [
+      {
+        "decided": false,
+        "description": "If one of the co-lords is in the rasi, take the other planet",
+        "detail": "neither co-lord is in the rasi",
+        "evaluated": true,
+        "rule": "basic",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "If one planet is joined by more planets than the other, it is stronger",
+        "detail": "Saturn with 0 other planets; Rahu with 0 other planets \u2014 tie",
+        "evaluated": true,
+        "rule": "1",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "More of Jupiter, Mercury and the dispositor conjoin or aspect it",
+        "detail": "Saturn count 0; Rahu count 0 \u2014 tie",
+        "evaluated": true,
+        "rule": "2",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": true,
+        "description": "If one planet is exalted and the other not, the exalted planet is stronger",
+        "detail": "Saturn in Libra (exalted); Rahu in Cancer",
+        "evaluated": true,
+        "rule": "3",
+        "winner": 6,
+        "winner_name": "Saturn"
+      }
+    ],
+    "winner": 6,
+    "winner_name": "Saturn"
+  },
+  "status": 200
+}

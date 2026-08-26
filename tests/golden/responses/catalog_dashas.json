@@ -1,0 +1,57 @@
+{
+  "body": {
+    "nakshatra_dashas": [
+      {
+        "key": "vimshottari",
+        "name": "Vimshottari",
+        "total_years": 120
+      },
+      {
+        "key": "ashtottari",
+        "name": "Ashtottari",
+        "total_years": 108
+      },
+      {
+        "key": "dwadasottari",
+        "name": "Dwadasottari",
+        "total_years": 112
+      },
+      {
+        "key": "shattrimsa_sama",
+        "name": "Shattrimsa Sama",
+        "total_years": 36
+      },
+      {
+        "key": "dwisaptati_sama",
+        "name": "Dwisaptati Sama",
+        "total_years": 72
+      },
+      {
+        "key": "chaturaseeti_sama",
+        "name": "Chaturaseeti Sama",
+        "total_years": 84
+      },
+      {
+        "key": "sataabdika",
+        "name": "Sataabdika",
+        "total_years": 100
+      },
+      {
+        "key": "shodasottari",
+        "name": "Shodasottari",
+        "total_years": 116
+      },
+      {
+        "key": "panchottari",
+        "name": "Panchottari",
+        "total_years": 105
+      },
+      {
+        "key": "shashtihayani",
+        "name": "Shashtihayani",
+        "total_years": 60
+      }
+    ]
+  },
+  "status": 200
+}

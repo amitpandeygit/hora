@@ -1,0 +1,305 @@
+{
+  "body": {
+    "nakshatras": [
+      {
+        "deity": "Aswini Kumara",
+        "ends": 13.33333333,
+        "index": 0,
+        "name": "Aswini",
+        "name_standard": "Ashwini",
+        "number": 1,
+        "starts": 0.0,
+        "vimsottari_lord": 8,
+        "vimsottari_lord_name": "Ketu"
+      },
+      {
+        "deity": "Yama",
+        "ends": 26.66666667,
+        "index": 1,
+        "name": "Bharani",
+        "name_standard": "Bharani",
+        "number": 2,
+        "starts": 13.33333333,
+        "vimsottari_lord": 5,
+        "vimsottari_lord_name": "Venus"
+      },
+      {
+        "deity": "Agni",
+        "ends": 40.0,
+        "index": 2,
+        "name": "Krittika",
+        "name_standard": "Krittika",
+        "number": 3,
+        "starts": 26.66666667,
+        "vimsottari_lord": 0,
+        "vimsottari_lord_name": "Sun"
+      },
+      {
+        "deity": "Bramha",
+        "ends": 53.33333333,
+        "index": 3,
+        "name": "Rohini",
+        "name_standard": "Rohini",
+        "number": 4,
+        "starts": 40.0,
+        "vimsottari_lord": 1,
+        "vimsottari_lord_name": "Moon"
+      },
+      {
+        "deity": "Moon",
+        "ends": 66.66666667,
+        "index": 4,
+        "name": "Mrigasira",
+        "name_standard": "Mrigashira",
+        "number": 5,
+        "starts": 53.33333333,
+        "vimsottari_lord": 2,
+        "vimsottari_lord_name": "Mars"
+      },
+      {
+        "deity": "Shiva",
+        "ends": 80.0,
+        "index": 5,
+        "name": "Aardra",
+        "name_standard": "Ardra",
+        "number": 6,
+        "starts": 66.66666667,
+        "vimsottari_lord": 7,
+        "vimsottari_lord_name": "Rahu"
+      },
+      {
+        "deity": "Aditi",
+        "ends": 93.33333333,
+        "index": 6,
+        "name": "Punarvasu",
+        "name_standard": "Punarvasu",
+        "number": 7,
+        "starts": 80.0,
+        "vimsottari_lord": 4,
+        "vimsottari_lord_name": "Jupiter"
+      },
+      {
+        "deity": "Jupiter",
+        "ends": 106.66666667,
+        "index": 7,
+        "name": "Pushyami",
+        "name_standard": "Pushya",
+        "number": 8,
+        "starts": 93.33333333,
+        "vimsottari_lord": 6,
+        "vimsottari_lord_name": "Saturn"
+      },
+      {
+        "deity": "Rahu",
+        "ends": 120.0,
+        "index": 8,
+        "name": "Aasresha",
+        "name_standard": "Ashlesha",
+        "number": 9,
+        "starts": 106.66666667,
+        "vimsottari_lord": 3,
+        "vimsottari_lord_name": "Mercury"
+      },
+      {
+        "deity": "Sun",
+        "ends": 133.33333333,
+        "index": 9,
+        "name": "Makha",
+        "name_standard": "Magha",
+        "number": 10,
+        "starts": 120.0,
+        "vimsottari_lord": 8,
+        "vimsottari_lord_name": "Ketu"
+      },
+      {
+        "deity": "Aryaman",
+        "ends": 146.66666667,
+        "index": 10,
+        "name": "Poorva Phalguni",
+        "name_standard": "Purva Phalguni",
+        "number": 11,
+        "starts": 133.33333333,
+        "vimsottari_lord": 5,
+        "vimsottari_lord_name": "Venus"
+      },
+      {
+        "deity": "Sun",
+        "ends": 160.0,
+        "index": 11,
+        "name": "Uttara Phalguni",
+        "name_standard": "Uttara Phalguni",
+        "number": 12,
+        "starts": 146.66666667,
+        "vimsottari_lord": 0,
+        "vimsottari_lord_name": "Sun"
+      },
+      {
+        "deity": "Viswakarma",
+        "ends": 173.33333333,
+        "index": 12,
+        "name": "Hasta",
+        "name_standard": "Hasta",
+        "number": 13,
+        "starts": 160.0,
+        "vimsottari_lord": 1,
+        "vimsottari_lord_name": "Moon"
+      },
+      {
+        "deity": "Vaayu",
+        "ends": 186.66666667,
+        "index": 13,
+        "name": "Chitra",
+        "name_standard": "Chitra",
+        "number": 14,
+        "starts": 173.33333333,
+        "vimsottari_lord": 2,
+        "vimsottari_lord_name": "Mars"
+      },
+      {
+        "deity": "Indra",
+        "ends": 200.0,
+        "index": 14,
+        "name": "Swaati",
+        "name_standard": "Swati",
+        "number": 15,
+        "starts": 186.66666667,
+        "vimsottari_lord": 7,
+        "vimsottari_lord_name": "Rahu"
+      },
+      {
+        "deity": "Mitra",
+        "ends": 213.33333333,
+        "index": 15,
+        "name": "Visaakha",
+        "name_standard": "Vishakha",
+        "number": 16,
+        "starts": 200.0,
+        "vimsottari_lord": 4,
+        "vimsottari_lord_name": "Jupiter"
+      },
+      {
+        "deity": "Indra",
+        "ends": 226.66666667,
+        "index": 16,
+        "name": "Anooraadha",
+        "name_standard": "Anuradha",
+        "number": 17,
+        "starts": 213.33333333,
+        "vimsottari_lord": 6,
+        "vimsottari_lord_name": "Saturn"
+      },
+      {
+        "deity": "Nirriti",
+        "ends": 240.0,
+        "index": 17,
+        "name": "Jyeshtha",
+        "name_standard": "Jyeshtha",
+        "number": 18,
+        "starts": 226.66666667,
+        "vimsottari_lord": 3,
+        "vimsottari_lord_name": "Mercury"
+      },
+      {
+        "deity": "Varuna",
+        "ends": 253.33333333,
+        "index": 18,
+        "name": "Moola",
+        "name_standard": "Mula",
+        "number": 19,
+        "starts": 240.0,
+        "vimsottari_lord": 8,
+        "vimsottari_lord_name": "Ketu"
+      },
+      {
+        "deity": "Viswadeva",
+        "ends": 266.66666667,
+        "index": 19,
+        "name": "Poorvaashaadha",
+        "name_standard": "Purva Ashadha",
+        "number": 20,
+        "starts": 253.33333333,
+        "vimsottari_lord": 5,
+        "vimsottari_lord_name": "Venus"
+      },
+      {
+        "deity": "Brahma",
+        "ends": 280.0,
+        "index": 20,
+        "name": "Uttaraashaadha",
+        "name_standard": "Uttara Ashadha",
+        "number": 21,
+        "starts": 266.66666667,
+        "vimsottari_lord": 0,
+        "vimsottari_lord_name": "Sun"
+      },
+      {
+        "deity": "Vishnu",
+        "ends": 293.33333333,
+        "index": 21,
+        "name": "Sravanam",
+        "name_standard": "Shravana",
+        "number": 22,
+        "starts": 280.0,
+        "vimsottari_lord": 1,
+        "vimsottari_lord_name": "Moon"
+      },
+      {
+        "deity": "Vasu",
+        "ends": 306.66666667,
+        "index": 22,
+        "name": "Dhanishtha",
+        "name_standard": "Dhanishta",
+        "number": 23,
+        "starts": 293.33333333,
+        "vimsottari_lord": 2,
+        "vimsottari_lord_name": "Mars"
+      },
+      {
+        "deity": "Varuna",
+        "ends": 320.0,
+        "index": 23,
+        "name": "Satabhishak",
+        "name_standard": "Shatabhisha",
+        "number": 24,
+        "starts": 306.66666667,
+        "vimsottari_lord": 7,
+        "vimsottari_lord_name": "Rahu"
+      },
+      {
+        "deity": "Ajacharana",
+        "ends": 333.33333333,
+        "index": 24,
+        "name": "Poorvaabhaadra",
+        "name_standard": "Purva Bhadrapada",
+        "number": 25,
+        "starts": 320.0,
+        "vimsottari_lord": 4,
+        "vimsottari_lord_name": "Jupiter"
+      },
+      {
+        "deity": "Ahirbudhanya",
+        "ends": 346.66666667,
+        "index": 25,
+        "name": "Uttaraabhaadra",
+        "name_standard": "Uttara Bhadrapada",
+        "number": 26,
+        "starts": 333.33333333,
+        "vimsottari_lord": 6,
+        "vimsottari_lord_name": "Saturn"
+      },
+      {
+        "deity": "Pooshan",
+        "ends": 360.0,
+        "index": 26,
+        "name": "Revati",
+        "name_standard": "Revati",
+        "number": 27,
+        "starts": 346.66666667,
+        "vimsottari_lord": 3,
+        "vimsottari_lord_name": "Mercury"
+      }
+    ],
+    "span_degrees": 13.333333333333334
+  },
+  "status": 200
+}

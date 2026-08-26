@@ -1,0 +1,17 @@
+{
+  "body": {
+    "charts": [
+      {
+        "cautioned": false,
+        "chart": "D10",
+        "divisions": 10,
+        "name": "Dasamsa",
+        "signifies": "Career, activities and achievements in society"
+      }
+    ],
+    "matter": "career",
+    "method": "We should remember which planets, rasis and houses show a particular matter and find links between them in the divisional chart of interest.",
+    "no_match_note": "The index is built from Table 11's own wording. A matter the book does not name returns no charts rather than a guess."
+  },
+  "status": 200
+}

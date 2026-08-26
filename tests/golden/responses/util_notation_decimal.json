@@ -1,0 +1,13 @@
+{
+  "body": {
+    "degrees": 167.75,
+    "degrees_in_rasi": 17.75,
+    "dms": "17-45-00",
+    "input": "167.75",
+    "rasi": 5,
+    "rasi_dm": "17 Vi 45",
+    "rasi_name": "Virgo",
+    "sign_dm": "5s 17d 45'"
+  },
+  "status": 200
+}

@@ -1,0 +1,921 @@
+{
+  "body": {
+    "friendly_house_note": "Section 3.4.3: a planet occupying a rasi owned by a mitra or adhimitra is in a friendly house; by a satru or adhisatru, an inimical house. A sama lord is neither.",
+    "grahas": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "includes_nodes": false,
+    "matrix": [
+      {
+        "graha": 0,
+        "graha_name": "Sun",
+        "relations": [
+          null,
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 0,
+            "graha_name": "Sun",
+            "natural": "friend",
+            "other": 1,
+            "other_name": "Moon",
+            "temporary": "friend"
+          },
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 0,
+            "graha_name": "Sun",
+            "natural": "friend",
+            "other": 2,
+            "other_name": "Mars",
+            "temporary": "friend"
+          },
+          {
+            "compound": "friend",
+            "compound_gloss": "friend",
+            "compound_name": "mitra",
+            "graha": 0,
+            "graha_name": "Sun",
+            "natural": "neutral",
+            "other": 3,
+            "other_name": "Mercury",
+            "temporary": "friend"
+          },
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 0,
+            "graha_name": "Sun",
+            "natural": "friend",
+            "other": 4,
+            "other_name": "Jupiter",
+            "temporary": "friend"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 0,
+            "graha_name": "Sun",
+            "natural": "enemy",
+            "other": 5,
+            "other_name": "Venus",
+            "temporary": "friend"
+          },
+          {
+            "compound": "great_enemy",
+            "compound_gloss": "bad enemy",
+            "compound_name": "adhisatru",
+            "graha": 0,
+            "graha_name": "Sun",
+            "natural": "enemy",
+            "other": 6,
+            "other_name": "Saturn",
+            "temporary": "enemy"
+          }
+        ]
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon",
+        "relations": [
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 1,
+            "graha_name": "Moon",
+            "natural": "friend",
+            "other": 0,
+            "other_name": "Sun",
+            "temporary": "friend"
+          },
+          null,
+          {
+            "compound": "enemy",
+            "compound_gloss": "enemy",
+            "compound_name": "satru",
+            "graha": 1,
+            "graha_name": "Moon",
+            "natural": "neutral",
+            "other": 2,
+            "other_name": "Mars",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 1,
+            "graha_name": "Moon",
+            "natural": "friend",
+            "other": 3,
+            "other_name": "Mercury",
+            "temporary": "friend"
+          },
+          {
+            "compound": "enemy",
+            "compound_gloss": "enemy",
+            "compound_name": "satru",
+            "graha": 1,
+            "graha_name": "Moon",
+            "natural": "neutral",
+            "other": 4,
+            "other_name": "Jupiter",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "enemy",
+            "compound_gloss": "enemy",
+            "compound_name": "satru",
+            "graha": 1,
+            "graha_name": "Moon",
+            "natural": "neutral",
+            "other": 5,
+            "other_name": "Venus",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "friend",
+            "compound_gloss": "friend",
+            "compound_name": "mitra",
+            "graha": 1,
+            "graha_name": "Moon",
+            "natural": "neutral",
+            "other": 6,
+            "other_name": "Saturn",
+            "temporary": "friend"
+          }
+        ]
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars",
+        "relations": [
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 2,
+            "graha_name": "Mars",
+            "natural": "friend",
+            "other": 0,
+            "other_name": "Sun",
+            "temporary": "friend"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 2,
+            "graha_name": "Mars",
+            "natural": "friend",
+            "other": 1,
+            "other_name": "Moon",
+            "temporary": "enemy"
+          },
+          null,
+          {
+            "compound": "great_enemy",
+            "compound_gloss": "bad enemy",
+            "compound_name": "adhisatru",
+            "graha": 2,
+            "graha_name": "Mars",
+            "natural": "enemy",
+            "other": 3,
+            "other_name": "Mercury",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 2,
+            "graha_name": "Mars",
+            "natural": "friend",
+            "other": 4,
+            "other_name": "Jupiter",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "friend",
+            "compound_gloss": "friend",
+            "compound_name": "mitra",
+            "graha": 2,
+            "graha_name": "Mars",
+            "natural": "neutral",
+            "other": 5,
+            "other_name": "Venus",
+            "temporary": "friend"
+          },
+          {
+            "compound": "friend",
+            "compound_gloss": "friend",
+            "compound_name": "mitra",
+            "graha": 2,
+            "graha_name": "Mars",
+            "natural": "neutral",
+            "other": 6,
+            "other_name": "Saturn",
+            "temporary": "friend"
+          }
+        ]
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury",
+        "relations": [
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 3,
+            "graha_name": "Mercury",
+            "natural": "friend",
+            "other": 0,
+            "other_name": "Sun",
+            "temporary": "friend"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 3,
+            "graha_name": "Mercury",
+            "natural": "enemy",
+            "other": 1,
+            "other_name": "Moon",
+            "temporary": "friend"
+          },
+          {
+            "compound": "enemy",
+            "compound_gloss": "enemy",
+            "compound_name": "satru",
+            "graha": 3,
+            "graha_name": "Mercury",
+            "natural": "neutral",
+            "other": 2,
+            "other_name": "Mars",
+            "temporary": "enemy"
+          },
+          null,
+          {
+            "compound": "friend",
+            "compound_gloss": "friend",
+            "compound_name": "mitra",
+            "graha": 3,
+            "graha_name": "Mercury",
+            "natural": "neutral",
+            "other": 4,
+            "other_name": "Jupiter",
+            "temporary": "friend"
+          },
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 3,
+            "graha_name": "Mercury",
+            "natural": "friend",
+            "other": 5,
+            "other_name": "Venus",
+            "temporary": "friend"
+          },
+          {
+            "compound": "enemy",
+            "compound_gloss": "enemy",
+            "compound_name": "satru",
+            "graha": 3,
+            "graha_name": "Mercury",
+            "natural": "neutral",
+            "other": 6,
+            "other_name": "Saturn",
+            "temporary": "enemy"
+          }
+        ]
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "relations": [
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "natural": "friend",
+            "other": 0,
+            "other_name": "Sun",
+            "temporary": "friend"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "natural": "friend",
+            "other": 1,
+            "other_name": "Moon",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "natural": "friend",
+            "other": 2,
+            "other_name": "Mars",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "natural": "enemy",
+            "other": 3,
+            "other_name": "Mercury",
+            "temporary": "friend"
+          },
+          null,
+          {
+            "compound": "great_enemy",
+            "compound_gloss": "bad enemy",
+            "compound_name": "adhisatru",
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "natural": "enemy",
+            "other": 5,
+            "other_name": "Venus",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "friend",
+            "compound_gloss": "friend",
+            "compound_name": "mitra",
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "natural": "neutral",
+            "other": 6,
+            "other_name": "Saturn",
+            "temporary": "friend"
+          }
+        ]
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus",
+        "relations": [
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 5,
+            "graha_name": "Venus",
+            "natural": "enemy",
+            "other": 0,
+            "other_name": "Sun",
+            "temporary": "friend"
+          },
+          {
+            "compound": "great_enemy",
+            "compound_gloss": "bad enemy",
+            "compound_name": "adhisatru",
+            "graha": 5,
+            "graha_name": "Venus",
+            "natural": "enemy",
+            "other": 1,
+            "other_name": "Moon",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "friend",
+            "compound_gloss": "friend",
+            "compound_name": "mitra",
+            "graha": 5,
+            "graha_name": "Venus",
+            "natural": "neutral",
+            "other": 2,
+            "other_name": "Mars",
+            "temporary": "friend"
+          },
+          {
+            "compound": "great_friend",
+            "compound_gloss": "good friend",
+            "compound_name": "adhimitra",
+            "graha": 5,
+            "graha_name": "Venus",
+            "natural": "friend",
+            "other": 3,
+            "other_name": "Mercury",
+            "temporary": "friend"
+          },
+          {
+            "compound": "enemy",
+            "compound_gloss": "enemy",
+            "compound_name": "satru",
+            "graha": 5,
+            "graha_name": "Venus",
+            "natural": "neutral",
+            "other": 4,
+            "other_name": "Jupiter",
+            "temporary": "enemy"
+          },
+          null,
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 5,
+            "graha_name": "Venus",
+            "natural": "friend",
+            "other": 6,
+            "other_name": "Saturn",
+            "temporary": "enemy"
+          }
+        ]
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn",
+        "relations": [
+          {
+            "compound": "great_enemy",
+            "compound_gloss": "bad enemy",
+            "compound_name": "adhisatru",
+            "graha": 6,
+            "graha_name": "Saturn",
+            "natural": "enemy",
+            "other": 0,
+            "other_name": "Sun",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 6,
+            "graha_name": "Saturn",
+            "natural": "enemy",
+            "other": 1,
+            "other_name": "Moon",
+            "temporary": "friend"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 6,
+            "graha_name": "Saturn",
+            "natural": "enemy",
+            "other": 2,
+            "other_name": "Mars",
+            "temporary": "friend"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 6,
+            "graha_name": "Saturn",
+            "natural": "friend",
+            "other": 3,
+            "other_name": "Mercury",
+            "temporary": "enemy"
+          },
+          {
+            "compound": "friend",
+            "compound_gloss": "friend",
+            "compound_name": "mitra",
+            "graha": 6,
+            "graha_name": "Saturn",
+            "natural": "neutral",
+            "other": 4,
+            "other_name": "Jupiter",
+            "temporary": "friend"
+          },
+          {
+            "compound": "neutral",
+            "compound_gloss": "neutral",
+            "compound_name": "sama",
+            "graha": 6,
+            "graha_name": "Saturn",
+            "natural": "friend",
+            "other": 5,
+            "other_name": "Venus",
+            "temporary": "enemy"
+          },
+          null
+        ]
+      }
+    ],
+    "per_graha": [
+      {
+        "compound": {
+          "enemies": [],
+          "friends": [
+            3
+          ],
+          "great_enemies": [
+            6
+          ],
+          "great_friends": [
+            1,
+            2,
+            4
+          ],
+          "neutrals": [
+            5
+          ]
+        },
+        "graha": 0,
+        "graha_name": "Sun",
+        "house": {
+          "lord": 2,
+          "lord_name": "Mars",
+          "owns_the_rasi": false,
+          "relation_to_lord": "great_friend",
+          "standing": "friendly"
+        },
+        "natural": {
+          "enemy": [
+            5,
+            6
+          ],
+          "friend": [
+            1,
+            2,
+            4
+          ],
+          "neutral": [
+            3
+          ]
+        },
+        "rasi": 0,
+        "rasi_name": "Aries",
+        "temporary": {
+          "enemies": [
+            6
+          ],
+          "friends": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      {
+        "compound": {
+          "enemies": [
+            2,
+            4,
+            5
+          ],
+          "friends": [
+            6
+          ],
+          "great_enemies": [],
+          "great_friends": [
+            0,
+            3
+          ],
+          "neutrals": []
+        },
+        "graha": 1,
+        "graha_name": "Moon",
+        "house": {
+          "lord": 1,
+          "lord_name": "Moon",
+          "owns_the_rasi": true,
+          "relation_to_lord": null,
+          "standing": "neither"
+        },
+        "natural": {
+          "enemy": [],
+          "friend": [
+            0,
+            3
+          ],
+          "neutral": [
+            2,
+            4,
+            5,
+            6
+          ]
+        },
+        "rasi": 3,
+        "rasi_name": "Cancer",
+        "temporary": {
+          "enemies": [
+            2,
+            4,
+            5
+          ],
+          "friends": [
+            0,
+            3,
+            6
+          ]
+        }
+      },
+      {
+        "compound": {
+          "enemies": [],
+          "friends": [
+            5,
+            6
+          ],
+          "great_enemies": [
+            3
+          ],
+          "great_friends": [
+            0
+          ],
+          "neutrals": [
+            1,
+            4
+          ]
+        },
+        "graha": 2,
+        "graha_name": "Mars",
+        "house": {
+          "lord": 6,
+          "lord_name": "Saturn",
+          "owns_the_rasi": false,
+          "relation_to_lord": "friend",
+          "standing": "friendly"
+        },
+        "natural": {
+          "enemy": [
+            3
+          ],
+          "friend": [
+            0,
+            1,
+            4
+          ],
+          "neutral": [
+            5,
+            6
+          ]
+        },
+        "rasi": 9,
+        "rasi_name": "Capricorn",
+        "temporary": {
+          "enemies": [
+            1,
+            3,
+            4
+          ],
+          "friends": [
+            0,
+            5,
+            6
+          ]
+        }
+      },
+      {
+        "compound": {
+          "enemies": [
+            2,
+            6
+          ],
+          "friends": [
+            4
+          ],
+          "great_enemies": [],
+          "great_friends": [
+            0,
+            5
+          ],
+          "neutrals": [
+            1
+          ]
+        },
+        "graha": 3,
+        "graha_name": "Mercury",
+        "house": {
+          "lord": 5,
+          "lord_name": "Venus",
+          "owns_the_rasi": false,
+          "relation_to_lord": "great_friend",
+          "standing": "friendly"
+        },
+        "natural": {
+          "enemy": [
+            1
+          ],
+          "friend": [
+            0,
+            5
+          ],
+          "neutral": [
+            2,
+            4,
+            6
+          ]
+        },
+        "rasi": 1,
+        "rasi_name": "Taurus",
+        "temporary": {
+          "enemies": [
+            2,
+            6
+          ],
+          "friends": [
+            0,
+            1,
+            4,
+            5
+          ]
+        }
+      },
+      {
+        "compound": {
+          "enemies": [],
+          "friends": [
+            6
+          ],
+          "great_enemies": [
+            5
+          ],
+          "great_friends": [
+            0
+          ],
+          "neutrals": [
+            1,
+            2,
+            3
+          ]
+        },
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "house": {
+          "lord": 1,
+          "lord_name": "Moon",
+          "owns_the_rasi": false,
+          "relation_to_lord": "neutral",
+          "standing": "neither"
+        },
+        "natural": {
+          "enemy": [
+            3,
+            5
+          ],
+          "friend": [
+            0,
+            1,
+            2
+          ],
+          "neutral": [
+            6
+          ]
+        },
+        "rasi": 3,
+        "rasi_name": "Cancer",
+        "temporary": {
+          "enemies": [
+            1,
+            2,
+            5
+          ],
+          "friends": [
+            0,
+            3,
+            6
+          ]
+        }
+      },
+      {
+        "compound": {
+          "enemies": [
+            4
+          ],
+          "friends": [
+            2
+          ],
+          "great_enemies": [
+            1
+          ],
+          "great_friends": [
+            3
+          ],
+          "neutrals": [
+            0,
+            6
+          ]
+        },
+        "graha": 5,
+        "graha_name": "Venus",
+        "house": {
+          "lord": 4,
+          "lord_name": "Jupiter",
+          "owns_the_rasi": false,
+          "relation_to_lord": "enemy",
+          "standing": "inimical"
+        },
+        "natural": {
+          "enemy": [
+            0,
+            1
+          ],
+          "friend": [
+            3,
+            6
+          ],
+          "neutral": [
+            2,
+            4
+          ]
+        },
+        "rasi": 11,
+        "rasi_name": "Pisces",
+        "temporary": {
+          "enemies": [
+            1,
+            4,
+            6
+          ],
+          "friends": [
+            0,
+            2,
+            3
+          ]
+        }
+      },
+      {
+        "compound": {
+          "enemies": [],
+          "friends": [
+            4
+          ],
+          "great_enemies": [
+            0
+          ],
+          "great_friends": [],
+          "neutrals": [
+            1,
+            2,
+            3,
+            5
+          ]
+        },
+        "graha": 6,
+        "graha_name": "Saturn",
+        "house": {
+          "lord": 5,
+          "lord_name": "Venus",
+          "owns_the_rasi": false,
+          "relation_to_lord": "neutral",
+          "standing": "neither"
+        },
+        "natural": {
+          "enemy": [
+            0,
+            1,
+            2
+          ],
+          "friend": [
+            3,
+            5
+          ],
+          "neutral": [
+            4
+          ]
+        },
+        "rasi": 6,
+        "rasi_name": "Libra",
+        "temporary": {
+          "enemies": [
+            0,
+            3,
+            5
+          ],
+          "friends": [
+            1,
+            2,
+            4
+          ]
+        }
+      }
+    ]
+  },
+  "status": 200
+}

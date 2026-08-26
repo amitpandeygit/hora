@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "Ayur dasas are not implemented: \"Aspect of all other planets is equally important\" does not say how to weigh them against the luminaries, so rule 2 cannot be computed for this purpose from the text alone.",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

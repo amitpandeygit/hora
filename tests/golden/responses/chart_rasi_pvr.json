@@ -1,0 +1,405 @@
+{
+  "body": {
+    "ayanamsa": {
+      "deg": 23.4764592,
+      "dms": "23-28-35"
+    },
+    "bhavas": [
+      {
+        "end": 270.0,
+        "house": 1,
+        "middle": 255.0,
+        "rasi": 8,
+        "rasi_name": "Sagittarius",
+        "start": 240.0
+      },
+      {
+        "end": 300.0,
+        "house": 2,
+        "middle": 285.0,
+        "rasi": 9,
+        "rasi_name": "Capricorn",
+        "start": 270.0
+      },
+      {
+        "end": 330.0,
+        "house": 3,
+        "middle": 315.0,
+        "rasi": 10,
+        "rasi_name": "Aquarius",
+        "start": 300.0
+      },
+      {
+        "end": 0.0,
+        "house": 4,
+        "middle": 345.0,
+        "rasi": 11,
+        "rasi_name": "Pisces",
+        "start": 330.0
+      },
+      {
+        "end": 30.0,
+        "house": 5,
+        "middle": 15.0,
+        "rasi": 0,
+        "rasi_name": "Aries",
+        "start": 0.0
+      },
+      {
+        "end": 60.0,
+        "house": 6,
+        "middle": 45.0,
+        "rasi": 1,
+        "rasi_name": "Taurus",
+        "start": 30.0
+      },
+      {
+        "end": 90.0,
+        "house": 7,
+        "middle": 75.0,
+        "rasi": 2,
+        "rasi_name": "Gemini",
+        "start": 60.0
+      },
+      {
+        "end": 120.0,
+        "house": 8,
+        "middle": 105.0,
+        "rasi": 3,
+        "rasi_name": "Cancer",
+        "start": 90.0
+      },
+      {
+        "end": 150.0,
+        "house": 9,
+        "middle": 135.0,
+        "rasi": 4,
+        "rasi_name": "Leo",
+        "start": 120.0
+      },
+      {
+        "end": 180.0,
+        "house": 10,
+        "middle": 165.0,
+        "rasi": 5,
+        "rasi_name": "Virgo",
+        "start": 150.0
+      },
+      {
+        "end": 210.0,
+        "house": 11,
+        "middle": 195.0,
+        "rasi": 6,
+        "rasi_name": "Libra",
+        "start": 180.0
+      },
+      {
+        "end": 240.0,
+        "house": 12,
+        "middle": 225.0,
+        "rasi": 7,
+        "rasi_name": "Scorpio",
+        "start": 210.0
+      }
+    ],
+    "grahas": [
+      {
+        "combust": false,
+        "degrees_in_rasi": 14.75985382,
+        "dignity": "enemy",
+        "dms": "14-45-35",
+        "house": 10,
+        "house_labels": [
+          "kendra",
+          "upachaya"
+        ],
+        "id": 0,
+        "latitude": -8.26e-05,
+        "longitude": 164.75985382,
+        "lord_of_houses": [
+          9
+        ],
+        "nakshatra": 12,
+        "nakshatra_name": "Hasta",
+        "name": "Sun",
+        "pada": 2,
+        "rasi": 5,
+        "rasi_dm": "14 Vi 46",
+        "rasi_name": "Virgo",
+        "retrograde": false,
+        "sign_dm": "5s 14d 46'",
+        "speed": 0.9836919,
+        "sun_separation": 0.0
+      },
+      {
+        "combust": false,
+        "degrees_in_rasi": 4.0596796,
+        "dignity": "own",
+        "dms": "4-03-35",
+        "house": 8,
+        "house_labels": [
+          "panaphara",
+          "dusthana"
+        ],
+        "id": 1,
+        "latitude": -0.39552886,
+        "longitude": 94.0596796,
+        "lord_of_houses": [
+          8
+        ],
+        "nakshatra": 7,
+        "nakshatra_name": "Pushya",
+        "name": "Moon",
+        "pada": 1,
+        "rasi": 3,
+        "rasi_dm": "4 Cn 04",
+        "rasi_name": "Cancer",
+        "retrograde": false,
+        "sign_dm": "3s 4d 04'",
+        "speed": 13.38347408,
+        "sun_separation": 70.700174
+      },
+      {
+        "combust": true,
+        "degrees_in_rasi": 6.76070886,
+        "dignity": "great_enemy",
+        "dms": "6-45-39",
+        "house": 10,
+        "house_labels": [
+          "kendra",
+          "upachaya"
+        ],
+        "id": 2,
+        "latitude": 0.93760304,
+        "longitude": 156.76070886,
+        "lord_of_houses": [
+          5,
+          12
+        ],
+        "nakshatra": 11,
+        "nakshatra_name": "Uttara Phalguni",
+        "name": "Mars",
+        "pada": 4,
+        "rasi": 5,
+        "rasi_dm": "6 Vi 46",
+        "rasi_name": "Virgo",
+        "retrograde": false,
+        "sign_dm": "5s 6d 46'",
+        "speed": 0.64516386,
+        "sun_separation": 7.999145
+      },
+      {
+        "combust": true,
+        "degrees_in_rasi": 23.52195216,
+        "dignity": "own",
+        "dms": "23-31-19",
+        "house": 10,
+        "house_labels": [
+          "kendra",
+          "upachaya"
+        ],
+        "id": 3,
+        "latitude": 0.41168641,
+        "longitude": 173.52195216,
+        "lord_of_houses": [
+          7,
+          10
+        ],
+        "nakshatra": 13,
+        "nakshatra_name": "Chitra",
+        "name": "Mercury",
+        "pada": 1,
+        "rasi": 5,
+        "rasi_dm": "23 Vi 31",
+        "rasi_name": "Virgo",
+        "retrograde": false,
+        "sign_dm": "5s 23d 31'",
+        "speed": 1.65481055,
+        "sun_separation": 8.762098
+      },
+      {
+        "combust": false,
+        "degrees_in_rasi": 7.08527342,
+        "dignity": "moolatrikona",
+        "dms": "7-05-07",
+        "house": 1,
+        "house_labels": [
+          "kendra",
+          "trikona"
+        ],
+        "id": 4,
+        "latitude": -0.03133121,
+        "longitude": 247.08527342,
+        "lord_of_houses": [
+          1,
+          4
+        ],
+        "nakshatra": 18,
+        "nakshatra_name": "Mula",
+        "name": "Jupiter",
+        "pada": 3,
+        "rasi": 8,
+        "rasi_dm": "7 Sg 05",
+        "rasi_name": "Sagittarius",
+        "retrograde": false,
+        "sign_dm": "8s 7d 05'",
+        "speed": 0.10830274,
+        "sun_separation": 82.32542
+      },
+      {
+        "combust": false,
+        "degrees_in_rasi": 1.94623817,
+        "dignity": "neutral",
+        "dms": "1-56-46",
+        "house": 9,
+        "house_labels": [
+          "apoklima",
+          "trikona"
+        ],
+        "id": 5,
+        "latitude": -0.07724156,
+        "longitude": 121.94623817,
+        "lord_of_houses": [
+          6,
+          11
+        ],
+        "nakshatra": 9,
+        "nakshatra_name": "Magha",
+        "name": "Venus",
+        "pada": 1,
+        "rasi": 4,
+        "rasi_dm": "1 Le 57",
+        "rasi_name": "Leo",
+        "retrograde": false,
+        "sign_dm": "4s 1d 57'",
+        "speed": 1.13222014,
+        "sun_separation": 42.813616
+      },
+      {
+        "combust": false,
+        "degrees_in_rasi": 27.11595625,
+        "dignity": "great_friend",
+        "dms": "27-06-57",
+        "house": 6,
+        "house_labels": [
+          "apoklima",
+          "dusthana",
+          "upachaya"
+        ],
+        "id": 6,
+        "latitude": -1.62772352,
+        "longitude": 57.11595625,
+        "lord_of_houses": [
+          2,
+          3
+        ],
+        "nakshatra": 4,
+        "nakshatra_name": "Mrigashira",
+        "name": "Saturn",
+        "pada": 2,
+        "rasi": 1,
+        "rasi_dm": "27 Ta 07",
+        "rasi_name": "Taurus",
+        "retrograde": false,
+        "sign_dm": "1s 27d 07'",
+        "speed": 0.00239042,
+        "sun_separation": 107.643898
+      },
+      {
+        "combust": false,
+        "degrees_in_rasi": 29.57882064,
+        "dignity": "debilitated",
+        "dms": "29-34-44",
+        "house": 1,
+        "house_labels": [
+          "kendra",
+          "trikona"
+        ],
+        "id": 7,
+        "latitude": 0.0,
+        "longitude": 269.57882064,
+        "lord_of_houses": [],
+        "nakshatra": 20,
+        "nakshatra_name": "Uttara Ashadha",
+        "name": "Rahu",
+        "pada": 1,
+        "rasi": 8,
+        "rasi_dm": "29 Sg 35",
+        "rasi_name": "Sagittarius",
+        "retrograde": true,
+        "sign_dm": "8s 29d 35'",
+        "speed": -0.00540332,
+        "sun_separation": 0.0
+      },
+      {
+        "combust": false,
+        "degrees_in_rasi": 29.57882064,
+        "dignity": "debilitated",
+        "dms": "29-34-44",
+        "house": 7,
+        "house_labels": [
+          "kendra",
+          "maraka"
+        ],
+        "id": 8,
+        "latitude": -0.0,
+        "longitude": 89.57882064,
+        "lord_of_houses": [],
+        "nakshatra": 6,
+        "nakshatra_name": "Punarvasu",
+        "name": "Ketu",
+        "pada": 3,
+        "rasi": 2,
+        "rasi_dm": "29 Ge 35",
+        "rasi_name": "Gemini",
+        "retrograde": true,
+        "sign_dm": "2s 29d 35'",
+        "speed": -0.00540332,
+        "sun_separation": 0.0
+      }
+    ],
+    "input": {
+      "julian_day_ut": 2441591.833333333,
+      "local_time": "1972-10-01T13:30:00",
+      "place": {
+        "altitude": 0.0,
+        "latitude": 16.2,
+        "longitude": 81.13,
+        "name": "Machilipatnam"
+      },
+      "timezone": "Asia/Kolkata",
+      "utc": "1972-10-01T08:00:00+00:00",
+      "utc_offset_hours": 5.5
+    },
+    "lagna": {
+      "degrees_in_rasi": 29.4075857,
+      "dms": "29-24-27",
+      "longitude": 269.4075857,
+      "midheaven": 190.03378831,
+      "rasi": 8,
+      "rasi_dm": "29 Sg 24",
+      "rasi_name": "Sagittarius",
+      "sign_dm": "8s 29d 24'"
+    },
+    "planetary_war": [],
+    "settings": {
+      "apparent_positions": false,
+      "ayanamsa": "lahiri",
+      "custom_ayanamsa_deg": null,
+      "dasha_year_length": "sidereal",
+      "house_system": "whole_sign",
+      "include_outer_planets": false,
+      "ketu_mode": "opposite_rahu",
+      "language": "en",
+      "name_scheme": "book",
+      "node_direction": "retrograde",
+      "node_type": "true",
+      "rahu_ketu_aspects": false,
+      "sanskrit_names": false,
+      "sunrise_mode": "disc_upper_limb",
+      "topocentric": false,
+      "upagraha_rise_point": "middle"
+    }
+  },
+  "status": 200
+}

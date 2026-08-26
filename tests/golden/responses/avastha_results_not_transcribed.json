@@ -1,0 +1,26 @@
+{
+  "body": {
+    "applies_count": 1,
+    "available": true,
+    "avastha": 12,
+    "avastha_name": "Nidraa",
+    "graha": 0,
+    "graha_name": "Sun",
+    "licence_status": "unconfirmed",
+    "note": null,
+    "results": [
+      {
+        "applies": true,
+        "conditional": false,
+        "reason": "unconditional",
+        "text": null
+      }
+    ],
+    "source": "pvr-vaia",
+    "text_withheld": true,
+    "transcription_notes": null,
+    "undetermined_count": 0,
+    "verbatim": null
+  },
+  "status": 200
+}

@@ -1,0 +1,173 @@
+{
+  "body": {
+    "chaayaa_grahas": {
+      "grahas": [
+        {
+          "aliases": [
+            "north node",
+            "head of dragon"
+          ],
+          "id": 7,
+          "name": "Rahu"
+        },
+        {
+          "aliases": [
+            "south node",
+            "tail of dragon"
+          ],
+          "id": 8,
+          "name": "Ketu"
+        }
+      ],
+      "term": "chaayaa graha (shadow planet)"
+    },
+    "essences": [
+      {
+        "aliases": [
+          "jeevaatmaamsa"
+        ],
+        "key": "jeeva",
+        "name": "jeevaamsa (living essence)"
+      },
+      {
+        "aliases": [],
+        "key": "paramaatma",
+        "name": "paramaatmaamsa (absolute and supreme essence)"
+      }
+    ],
+    "four_pillars": {
+      "conclusion_order": [
+        "grahas",
+        "rasis",
+        "vargas",
+        "bhavas"
+      ],
+      "ordering_note": "Section 6.7 lists the same four in a different order and calls divisional charts the third pillar. The numbering here follows section 1.3.5, which defines them. See docs/book-deviations.md D-23.",
+      "pillars": [
+        {
+          "english": "planets",
+          "number": 1,
+          "sanskrit": "grahas"
+        },
+        {
+          "english": "signs",
+          "number": 2,
+          "sanskrit": "rasis"
+        },
+        {
+          "english": "houses",
+          "number": 3,
+          "sanskrit": "bhavas"
+        },
+        {
+          "english": "divisional charts",
+          "number": 4,
+          "sanskrit": "varga chakras"
+        }
+      ],
+      "statement": "The science of Vedic astrology stands on the basis of 4 pillars"
+    },
+    "graha": {
+      "classical_count": 7,
+      "count": 9,
+      "definition": "a graha or a planet is a body that has considerable influence on the living beings on earth",
+      "note": "The words \"planet\" and \"star\" are used in a slightly different sense in astrology than in astronomy. Distant stars have negligible influence on us, but Sun, Moon and planets in the solar system have a great influence on our activities."
+    },
+    "lagna": {
+      "definition": "the point that rises on the eastern horizon as the earth rotates around itself",
+      "special_ascendants_term": "special ascendants"
+    },
+    "nakshatra": {
+      "abhijit_rule": "For the purpose of some special charts like Kota Chakra and Sarvatobhadra Chakra, we consider 28 nakshatras. The last quarter of Uttarashadha is known as \"Abhijit\". However, we consider 27 nakshatras for all other purposes.",
+      "count": 27,
+      "count_for_special_charts": 28,
+      "pada_gloss": "legs/feet",
+      "pada_span_degrees": 3.3333333333333335,
+      "padas_each": 4,
+      "span_degrees": 13.333333333333334,
+      "special_charts": [
+        "Kota Chakra",
+        "Sarvatobhadra Chakra"
+      ]
+    },
+    "nodes": {
+      "are_mathematical_points": "Rahu and Ketu are not real planets; they are just some mathematical points"
+    },
+    "paksha": [
+      {
+        "describes": "brighter fortnight",
+        "index": 0,
+        "name": "Sukla",
+        "synonyms": [
+          "Suddha"
+        ]
+      },
+      {
+        "describes": "darker fortnight",
+        "index": 1,
+        "name": "Krishna",
+        "synonyms": [
+          "Bahula"
+        ]
+      }
+    ],
+    "panchanga": {
+      "almanacs_called": "panchaangas",
+      "book_spelling": "Panchaanga",
+      "means": "one with 5 limbs"
+    },
+    "purushartha": {
+      "book_spelling": "purushaarthas",
+      "means": "purposes/goals of man"
+    },
+    "solar_calendar": {
+      "day_degrees": 1.0,
+      "days_per_month": 30,
+      "definition": "One year is the time in which Sun moves by 360 degrees and one month is the time in which Sun moves by 30 degrees. Each solar month has 30 days, where one day stands for exactly 1 degree motion of Sun.",
+      "month_degrees": 30.0,
+      "note": "Defined by the Sun's motion, not by elapsed days, so a solar month is not a fixed number of days",
+      "used_in": [
+        "dasas",
+        "Tajaka analysis"
+      ],
+      "year_degrees": 360.0
+    },
+    "upagraha": {
+      "count": 11,
+      "definition": "moving mathematical points",
+      "gloss": "sub-planets or satellites"
+    },
+    "upagraha_aliases": [
+      {
+        "aliases": [
+          "Indrachapa"
+        ],
+        "name": "Indrachaapa"
+      }
+    ],
+    "varga": {
+      "aliases": [
+        "divisional chart",
+        "harmonic chart"
+      ],
+      "definition": "We divide each rasi into n parts and map each part to a rasi again",
+      "independent_chart_rule": "In each divisional chart, we find houses and analyze the chart as if it were an independent chart",
+      "sanskrit": "varga chakra",
+      "signifies": "Each divisional chart throws light on a specific area of one's life"
+    },
+    "zodiac": {
+      "names": [
+        {
+          "means": "sidereal (fixed) zodiac \u2014 the one Vedic astrology uses",
+          "name": "nirayana"
+        },
+        {
+          "means": "tropical (moving) zodiac",
+          "name": "sayana"
+        }
+      ],
+      "used": "nirayana"
+    }
+  },
+  "status": 200
+}

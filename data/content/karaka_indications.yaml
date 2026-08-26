@@ -1,0 +1,81 @@
+# Generated from book chapter 8. See docs/open-items.md OI-12 for the licence
+# gate that applies to every verbatim entry in this directory.
+#
+# These are the interpretive readings the chapter gives for a graha *in a chara
+# karaka role*. They are not natural significations — those are Table 16, which
+# is calculation-adjacent reference data and lives in
+# core/constants/karaka.py.
+#
+# The subject id is the graha. The same graha reads differently in different
+# roles, so `graha_karaka_name` names the role and there may be more than one
+# entry per graha.
+schema_version: 1
+subject: graha_karaka
+sources:
+  pvr-vaia:
+    title: 'Vedic Astrology: An Integrated Approach'
+    author: P.V.R. Narasimha Rao
+    section: 8.2 Chara Karakas, and 8.5 Answer to Exercise
+    first_published: 2000
+    licence_status: unconfirmed
+    licence_note: The author shares the book freely for reading. That is not an explicit licence to redistribute
+      the text commercially. These entries are stored but are NOT served publicly until the licence is
+      confirmed or the text is replaced. See docs/open-items.md OI-12.
+categorisation_note: The `verbatim` field is the author's text as printed. The `category` tag on each
+  term is OUR editorial judgement, not the author's, and is not part of the book. Where the book makes
+  a reading conditional on the graha's strength, the condition is preserved in `verbatim` only, because
+  the term list has no field for it.
+entries:
+- graha_karaka: 7
+  graha_karaka_name: Rahu as Atma Karaka
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Rahu can show a spiritually advanced person or a saint on one hand and a revolutionary or
+    an outcast on the other.
+  transcription_notes: Example 28. The reading is for Rahu holding AK, not for Rahu generally.
+  terms:
+  - term: spiritually advanced person
+    category: person_type
+  - term: saint
+    category: person_type
+  - term: revolutionary
+    category: person_type
+  - term: outcast
+    category: person_type
+- graha_karaka: 3
+  graha_karaka_name: Mercury as Amatya Karaka
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Mercury represents the native's advisors and he shows intellectuals when strong and indecisive
+    people when weak.
+  transcription_notes: Example 28. Strength-dependent; the strength comparison is deferred to the chapter
+    "Strength of Planets and Rasis".
+  terms:
+  - term: advisors
+    category: person_type
+  - term: intellectuals
+    category: person_type
+  - term: indecisive people
+    category: person_type
+- graha_karaka: 3
+  graha_karaka_name: Mercury as Atma Karaka
+  source: pvr-vaia
+  licence_status: unconfirmed
+  verbatim: Mercury shows intellectuals, orators, journalists, good communicators, people who can move
+    with anyone, people who are liked by everyone, and, fickle-minded people.
+  transcription_notes: Answer to Exercise 11, section 8.5. A different role from the AmK reading above.
+  terms:
+  - term: intellectuals
+    category: person_type
+  - term: orators
+    category: person_type
+  - term: journalists
+    category: person_type
+  - term: good communicators
+    category: person_type
+  - term: people who can move with anyone
+    category: person_type
+  - term: people who are liked by everyone
+    category: person_type
+  - term: fickle-minded people
+    category: person_type

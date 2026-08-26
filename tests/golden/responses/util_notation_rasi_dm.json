@@ -1,0 +1,13 @@
+{
+  "body": {
+    "degrees": 205.51666667,
+    "degrees_in_rasi": 25.51666667,
+    "dms": "25-31-00",
+    "input": "25 Li 31",
+    "rasi": 6,
+    "rasi_dm": "25 Li 31",
+    "rasi_name": "Libra",
+    "sign_dm": "6s 25d 31'"
+  },
+  "status": 200
+}

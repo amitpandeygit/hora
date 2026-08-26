@@ -1,0 +1,130 @@
+{
+  "body": {
+    "graha": 0,
+    "graha_name": "Sun",
+    "groups": {
+      "dasavarga": {
+        "amsa": "Gopuraamsa",
+        "charts_in_group": 10,
+        "count": 4,
+        "strong_in": [
+          {
+            "chart": "D1",
+            "dignity": "exalted",
+            "rasi_name": "Aries"
+          },
+          {
+            "chart": "D2",
+            "dignity": "own",
+            "rasi_name": "Leo"
+          },
+          {
+            "chart": "D3",
+            "dignity": "moolatrikona",
+            "rasi_name": "Leo"
+          },
+          {
+            "chart": "D12",
+            "dignity": "moolatrikona",
+            "rasi_name": "Leo"
+          }
+        ]
+      },
+      "saptavarga": {
+        "amsa": "Chaamaraamsa",
+        "charts_in_group": 7,
+        "count": 4,
+        "strong_in": [
+          {
+            "chart": "D1",
+            "dignity": "exalted",
+            "rasi_name": "Aries"
+          },
+          {
+            "chart": "D2",
+            "dignity": "own",
+            "rasi_name": "Leo"
+          },
+          {
+            "chart": "D3",
+            "dignity": "moolatrikona",
+            "rasi_name": "Leo"
+          },
+          {
+            "chart": "D12",
+            "dignity": "moolatrikona",
+            "rasi_name": "Leo"
+          }
+        ]
+      },
+      "shadvarga": {
+        "amsa": "Chaamaraamsa",
+        "charts_in_group": 6,
+        "count": 4,
+        "strong_in": [
+          {
+            "chart": "D1",
+            "dignity": "exalted",
+            "rasi_name": "Aries"
+          },
+          {
+            "chart": "D2",
+            "dignity": "own",
+            "rasi_name": "Leo"
+          },
+          {
+            "chart": "D3",
+            "dignity": "moolatrikona",
+            "rasi_name": "Leo"
+          },
+          {
+            "chart": "D12",
+            "dignity": "moolatrikona",
+            "rasi_name": "Leo"
+          }
+        ]
+      },
+      "shodasavarga": {
+        "amsa": "Kandukaamsa",
+        "charts_in_group": 16,
+        "count": 5,
+        "strong_in": [
+          {
+            "chart": "D1",
+            "dignity": "exalted",
+            "rasi_name": "Aries"
+          },
+          {
+            "chart": "D2",
+            "dignity": "own",
+            "rasi_name": "Leo"
+          },
+          {
+            "chart": "D3",
+            "dignity": "moolatrikona",
+            "rasi_name": "Leo"
+          },
+          {
+            "chart": "D12",
+            "dignity": "moolatrikona",
+            "rasi_name": "Leo"
+          },
+          {
+            "chart": "D24",
+            "dignity": "exalted",
+            "rasi_name": "Aries"
+          }
+        ]
+      }
+    },
+    "input": {
+      "degrees": 10.0,
+      "degrees_in_rasi": 10.0,
+      "rasi": 0,
+      "rasi_dm": "10 Ar 00",
+      "rasi_name": "Aries",
+      "sign_dm": "0s 10d 00'"
+    }
+  },
+  "status": 200
+}

@@ -1,0 +1,35 @@
+{
+  "body": {
+    "approximate_gregorian": "May/June",
+    "conjunction_longitude": 58.483333333333334,
+    "conjunction_rasi": 1,
+    "conjunction_rasi_name": "Taurus",
+    "full_moon_nakshatra": "Jyeshtha",
+    "full_name": "Adhika Jyeshtha",
+    "index": 3,
+    "name": "Jyeshtha",
+    "name_book": "Jyeshtha",
+    "qualifier": "Adhika",
+    "steps": [
+      {
+        "description": "Find the rasi of the Sun-Moon conjunction that starts the month",
+        "detail": "58.4833 deg falls in Taurus",
+        "number": 1,
+        "value": "Taurus"
+      },
+      {
+        "description": "Look up Table 4: the rasi decides the name",
+        "detail": "Taurus starts Jyeshtha maasa (month), month 3 of 12",
+        "number": 2,
+        "value": "Jyeshtha"
+      },
+      {
+        "description": "Qualify the name if this rasi carries two conjunctions",
+        "detail": "Adhika means extra",
+        "number": 3,
+        "value": "Adhika Jyeshtha"
+      }
+    ]
+  },
+  "status": 200
+}

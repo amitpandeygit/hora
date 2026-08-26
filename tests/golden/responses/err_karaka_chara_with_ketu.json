@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "chara karakas do not include Ketu \u2014 Ketu stands for moksha (emancipation) and does not stand for any person who affects one's sustenance",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

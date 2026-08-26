@@ -1,0 +1,48 @@
+{
+  "body": {
+    "completed": 5,
+    "index": 6,
+    "meaning": "Great danger",
+    "moon_longitude": 134.71666666666667,
+    "name": "Atiganda",
+    "name_book": "Atiganda",
+    "quotient": 5.469999999999995,
+    "raw_sum": 432.9333333333333,
+    "steps": [
+      {
+        "description": "Add the longitudes of Sun and Moon, removing 360 if the sum exceeds it",
+        "detail": "298.2167 + 134.7167 = 432.9333, - 360 = 72.9333",
+        "number": 1,
+        "value": 72.93333333333328
+      },
+      {
+        "description": "Divide the sum by the length of one nakshatra (13 deg 20', or 800')",
+        "detail": "4376.00' / 800' = 5.4700",
+        "number": 2,
+        "value": 5.469999999999995
+      },
+      {
+        "description": "Ignore fractions and take the integer part",
+        "detail": "5.4700 gives 5",
+        "number": 3,
+        "value": 5
+      },
+      {
+        "description": "Add 1 to it, and the result is the index of the yoga running",
+        "detail": "5 + 1 = 6",
+        "number": 4,
+        "value": 6
+      },
+      {
+        "description": "Refer to Table 5 and find the yoga corresponding to the index",
+        "detail": "the 6th yoga is 'Atiganda' (Great danger)",
+        "number": 5,
+        "value": "Atiganda"
+      }
+    ],
+    "sun_longitude": 298.21666666666664,
+    "total": 72.93333333333328,
+    "total_minutes": 4375.999999999996
+  },
+  "status": 200
+}

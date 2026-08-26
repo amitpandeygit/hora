@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "reference 'chandra_lagna' was requested but no rasi for it was given; pass reference_rasi, or a lagna when the reference is the lagna",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

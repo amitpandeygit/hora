@@ -1,0 +1,470 @@
+{
+  "body": {
+    "activity": {
+      "footnotes_verified": true,
+      "formula": "((C x P x A) + M + G + L) mod 12",
+      "ghati_note": "Suppose sunrise was at 6 am and someone was born at 11 pm. So 17 hours were over. Each hour has 2.5 ghatis and 17 hours = 17 x 2.5 = 42.5. So the 43rd ghati was running at birth.",
+      "ghatis_per_hour": 2.5,
+      "most_important": "There are 12 possible states of a planet related to its activity. This state is the most important of all states.",
+      "navamsa_index_note": "For example, let us say Mercury is in 22Ge14. Each navamsa has a length of 3\u00b020' (1/9th of 30\u00b0) and 22\u00b014' in Ge is in the 7th navamsa of Ge (please note that we are not talking about the rasi occupied by the planet in navamsa). Then we use A = 7 for Mercury.",
+      "sound_numbers": [
+        {
+          "devanagari": [
+            "\u0905",
+            "\u0915",
+            "\u091b",
+            "\u0921",
+            "\u0927",
+            "\u092d",
+            "\u0935"
+          ],
+          "number": 1,
+          "roman": "a, ka, chh, d (alveolar), dh (dental), bh, v"
+        },
+        {
+          "devanagari": [
+            "\u0907",
+            "\u0916",
+            "\u091c",
+            "\u0922",
+            "\u0928",
+            "\u092e",
+            "\u0936"
+          ],
+          "number": 2,
+          "roman": "i, kh, j, dh (alveolar), n (dental), m, s/sh (palatal)"
+        },
+        {
+          "devanagari": [
+            "\u0909",
+            "\u0917",
+            "\u091d",
+            "\u0924",
+            "\u092a",
+            "\u092f",
+            "\u0937"
+          ],
+          "number": 3,
+          "roman": "u, g, jh, t, p, y, sh (alveolar)"
+        },
+        {
+          "devanagari": [
+            "\u090f",
+            "\u0918",
+            "\u091f",
+            "\u0925",
+            "\u092b",
+            "\u0930",
+            "\u0938"
+          ],
+          "number": 4,
+          "roman": "e, gh, t (alveolar), th (dental), ph, r, s (dental)"
+        },
+        {
+          "devanagari": [
+            "\u0913",
+            "\u091a",
+            "\u0920",
+            "\u0926",
+            "\u092c",
+            "\u0932",
+            "\u0939"
+          ],
+          "number": 5,
+          "roman": "o, ch, th (alveolar), d (dental), b, l, h"
+        }
+      ],
+      "states": [
+        {
+          "aliases": [],
+          "index": 1,
+          "meaning": "Lying down, resting",
+          "name": "Sayana"
+        },
+        {
+          "aliases": [],
+          "index": 2,
+          "meaning": "Sitting down",
+          "name": "Upavesana"
+        },
+        {
+          "aliases": [],
+          "index": 3,
+          "meaning": "Eyes and hands",
+          "name": "Netrapaani"
+        },
+        {
+          "aliases": [],
+          "index": 4,
+          "meaning": "Shining",
+          "name": "Prakaasana"
+        },
+        {
+          "aliases": [],
+          "index": 5,
+          "meaning": "Going (on the move)",
+          "name": "Gamana"
+        },
+        {
+          "aliases": [],
+          "index": 6,
+          "meaning": "Coming, returning",
+          "name": "Aagamana"
+        },
+        {
+          "aliases": [
+            "Sabhaa vasati"
+          ],
+          "index": 7,
+          "meaning": "Being at an assembly",
+          "name": "Sabhaa"
+        },
+        {
+          "aliases": [],
+          "index": 8,
+          "meaning": "Coming/Acquiring",
+          "name": "Aagama"
+        },
+        {
+          "aliases": [],
+          "index": 9,
+          "meaning": "Eating",
+          "name": "Bhojana"
+        },
+        {
+          "aliases": [
+            "Nrityalipsaa"
+          ],
+          "index": 10,
+          "meaning": "Longing to dance",
+          "name": "Nriyalipsaa"
+        },
+        {
+          "aliases": [],
+          "index": 11,
+          "meaning": "Being eager",
+          "name": "Kautuka"
+        },
+        {
+          "aliases": [],
+          "index": 12,
+          "meaning": "Sleeping",
+          "name": "Nidraa"
+        }
+      ],
+      "strength": [
+        {
+          "name": "vicheshta",
+          "remainder": 0,
+          "results": "very little"
+        },
+        {
+          "name": "drishti",
+          "remainder": 1,
+          "results": "medium"
+        },
+        {
+          "name": "cheshta",
+          "remainder": 2,
+          "results": "full"
+        }
+      ],
+      "terms": [
+        {
+          "name": "constellation",
+          "range": [
+            1,
+            27
+          ],
+          "symbol": "C",
+          "text": "the number of the constellation occupied by the planet (1 for Aswini, 2 for Bharani and so on)"
+        },
+        {
+          "name": "planet_index",
+          "range": [
+            1,
+            9
+          ],
+          "symbol": "P",
+          "text": "the index of the planet whose avastha we are finding (1 for Sun, 2 for Moon)"
+        },
+        {
+          "name": "navamsa_index",
+          "range": [
+            1,
+            9
+          ],
+          "symbol": "A",
+          "text": "the index of the amsa (navamsa) occupied by the planet in its rasi"
+        },
+        {
+          "name": "moon_constellation",
+          "range": [
+            1,
+            27
+          ],
+          "symbol": "M",
+          "text": "the constellation occupied by Moon"
+        },
+        {
+          "name": "ghati",
+          "range": [
+            1,
+            60
+          ],
+          "symbol": "G",
+          "text": "the ghati running at birth"
+        },
+        {
+          "name": "lagna_rasi",
+          "range": [
+            1,
+            12
+          ],
+          "symbol": "L",
+          "text": "the rasi occupied by lagna (1 for Ar, 2 for Ta and so on)"
+        }
+      ],
+      "verification_note": "Section 15.4.4 is fully checked against the book: Tables 36 and 37, the formula, the six term definitions, the planetary adjustments, footnotes 51 and 52, and all 108 per-graha result lines.",
+      "verified": true,
+      "vicheshta_remainder_note": "The book writes this case as \"A value of 3 (or 0)\". A remainder on division by 3 cannot be 3, so in practice only 0 arises."
+    },
+    "age": {
+      "caution": "One should not be carried away with these avasthas. Just as there are some child prodigies and wizards with wrinkles, a planet can give good results irrespective of its age-related state. Age is just one of the factors deciding a person's productivity. Similarly, age-related state is just one of the factors deciding a planet's effectiveness.",
+      "rows": [
+        {
+          "even_rasi": [
+            24.0,
+            30.0
+          ],
+          "fraction": 0.25,
+          "meaning": "Child",
+          "name": "Saisava",
+          "odd_rasi": [
+            0.0,
+            6.0
+          ],
+          "results": "Quarter"
+        },
+        {
+          "even_rasi": [
+            18.0,
+            24.0
+          ],
+          "fraction": 0.5,
+          "meaning": "Adolescent",
+          "name": "Kumaara",
+          "odd_rasi": [
+            6.0,
+            12.0
+          ],
+          "results": "Half"
+        },
+        {
+          "even_rasi": [
+            12.0,
+            18.0
+          ],
+          "fraction": 1.0,
+          "meaning": "Youth",
+          "name": "Yuva",
+          "odd_rasi": [
+            12.0,
+            18.0
+          ],
+          "results": "Full"
+        },
+        {
+          "even_rasi": [
+            6.0,
+            12.0
+          ],
+          "fraction": null,
+          "meaning": "Old",
+          "name": "Vriddha",
+          "odd_rasi": [
+            18.0,
+            24.0
+          ],
+          "results": "Some"
+        },
+        {
+          "even_rasi": [
+            0.0,
+            6.0
+          ],
+          "fraction": 0.0,
+          "meaning": "Dead",
+          "name": "Mrita",
+          "odd_rasi": [
+            24.0,
+            30.0
+          ],
+          "results": "None"
+        }
+      ],
+      "table": "Table 35: Avasthas related to age"
+    },
+    "alertness": [
+      {
+        "meaning": "awake",
+        "name": "Jaagrita",
+        "results": "full",
+        "when": "in its exaltation rasi or an own rasi"
+      },
+      {
+        "meaning": "dreaming",
+        "name": "Swapna",
+        "results": "medium",
+        "when": "in a rasi owned by a neutral or friendly planet"
+      },
+      {
+        "meaning": "asleep",
+        "name": "Sushupta",
+        "results": "negligible",
+        "when": "in its debilitation rasi or a rasi owned by an enemy"
+      }
+    ],
+    "effects": [
+      {
+        "avastha": "Kshudhita",
+        "effect": "the significations of the house containing the planet are affected",
+        "house": null
+      },
+      {
+        "avastha": "Kshobhita",
+        "effect": "the significations of the house containing the planet are affected",
+        "house": null
+      },
+      {
+        "avastha": "Lajjita",
+        "effect": "there may be losses related to progeny",
+        "house": 5
+      },
+      {
+        "avastha": "Kshobhita",
+        "effect": "there may be loss of spouse",
+        "house": 7
+      }
+    ],
+    "mood": [
+      {
+        "additional": false,
+        "meaning": "bright",
+        "name": "Deepta",
+        "needs": [],
+        "when": "in its exaltation rasi"
+      },
+      {
+        "additional": false,
+        "meaning": "doing well, contented, comfortable, natural",
+        "name": "Swastha",
+        "needs": [],
+        "when": "in its own rasi"
+      },
+      {
+        "additional": false,
+        "meaning": "delighted",
+        "name": "Mudita",
+        "needs": [],
+        "when": "in a good friend's rasi"
+      },
+      {
+        "additional": false,
+        "meaning": "peaceful",
+        "name": "Saanta",
+        "needs": [],
+        "when": "in a friend's rasi"
+      },
+      {
+        "additional": false,
+        "meaning": "sad, depressed",
+        "name": "Deena",
+        "needs": [],
+        "when": "in a neutral planet's rasi"
+      },
+      {
+        "additional": false,
+        "meaning": "distressed, miserable",
+        "name": "Duhkhita",
+        "needs": [],
+        "when": "in an enemy's rasi"
+      },
+      {
+        "additional": false,
+        "meaning": "crippled, confused",
+        "name": "Vikala",
+        "needs": [],
+        "when": "joined by malefic planets"
+      },
+      {
+        "additional": false,
+        "meaning": "mischievous, scheming",
+        "name": "Khala",
+        "needs": [],
+        "when": "in a malefic planet's rasi"
+      },
+      {
+        "additional": false,
+        "meaning": "angry",
+        "name": "Kopita",
+        "needs": [],
+        "when": "joined closely by Sun"
+      },
+      {
+        "additional": true,
+        "meaning": "ashamed",
+        "name": "Lajjita",
+        "needs": [
+          "house"
+        ],
+        "when": "in the 5th house joined by Sun, Mars, Saturn, Rahu and Ketu"
+      },
+      {
+        "additional": true,
+        "meaning": "proud",
+        "name": "Garvita",
+        "needs": [],
+        "when": "in its exaltation rasi or moolatrikona rasi"
+      },
+      {
+        "additional": true,
+        "meaning": "hungry",
+        "name": "Kshudhita",
+        "needs": [
+          "aspects"
+        ],
+        "when": "in an enemy's rasi or conjoined by enemies or aspected by enemies or conjoined by Saturn"
+      },
+      {
+        "additional": true,
+        "meaning": "thirsty",
+        "name": "Trishita",
+        "needs": [
+          "aspects"
+        ],
+        "when": "stationed in a watery rasi and aspected by enemies without the aspect of benefics"
+      },
+      {
+        "additional": true,
+        "meaning": "delighted",
+        "name": "Mudita",
+        "needs": [
+          "aspects"
+        ],
+        "when": "in a friend's sign, conjoined or aspected by friends and conjoined by Jupiter"
+      },
+      {
+        "additional": true,
+        "meaning": "shaken, agitated",
+        "name": "Kshobhita",
+        "needs": [
+          "aspects"
+        ],
+        "when": "conjoined by Sun and aspected by malefics or enemies"
+      }
+    ],
+    "section": "15.4 Avasthas (States)"
+  },
+  "status": 200
+}

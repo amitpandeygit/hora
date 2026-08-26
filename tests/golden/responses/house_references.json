@@ -1,0 +1,80 @@
+{
+  "body": {
+    "lagna_rasi": 11,
+    "references": [
+      {
+        "available": true,
+        "name": "Lagna",
+        "rasi": 11,
+        "rasi_name": "Pisces",
+        "reference": "lagna",
+        "shows": "true self",
+        "unavailable_because": null
+      },
+      {
+        "available": true,
+        "name": "Chandra Lagna",
+        "rasi": 3,
+        "rasi_name": "Cancer",
+        "reference": "chandra_lagna",
+        "shows": "matters from the perspective of mind",
+        "unavailable_because": null
+      },
+      {
+        "available": true,
+        "name": "Ravi Lagna",
+        "rasi": 5,
+        "rasi_name": "Virgo",
+        "reference": "ravi_lagna",
+        "shows": "matters from the perspective of soul",
+        "unavailable_because": null
+      },
+      {
+        "available": true,
+        "name": "Paaka Lagna",
+        "rasi": 3,
+        "rasi_name": "Cancer",
+        "reference": "paaka_lagna",
+        "shows": "matters related to the physical self",
+        "unavailable_because": null
+      },
+      {
+        "available": true,
+        "name": "Ghati Lagna",
+        "rasi": 5,
+        "rasi_name": "Virgo",
+        "reference": "ghati_lagna",
+        "shows": "self, from the point of view of power, authority and fame",
+        "unavailable_because": null
+      },
+      {
+        "available": true,
+        "name": "Hora Lagna",
+        "rasi": 8,
+        "rasi_name": "Sagittarius",
+        "reference": "hora_lagna",
+        "shows": "self, from the point of view of wealth",
+        "unavailable_because": null
+      },
+      {
+        "available": true,
+        "name": "Arudha Lagna",
+        "rasi": 7,
+        "rasi_name": "Scorpio",
+        "reference": "arudha_lagna",
+        "shows": "how a native is perceived, and status",
+        "unavailable_because": null
+      },
+      {
+        "available": false,
+        "name": "Karakamsa Lagna",
+        "rasi": null,
+        "rasi_name": null,
+        "reference": "karakamsa_lagna",
+        "shows": "the inner self",
+        "unavailable_because": "needs graha longitudes, not only rasis: the atma karaka is the graha of highest advancement within its rasi"
+      }
+    ]
+  },
+  "status": 200
+}

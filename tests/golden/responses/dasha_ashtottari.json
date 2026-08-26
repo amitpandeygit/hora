@@ -1,0 +1,144 @@
+{
+  "body": {
+    "balance_at_birth": {
+      "lord": 5,
+      "years": 19.85600464
+    },
+    "input": {
+      "julian_day_ut": 2441591.833333333,
+      "local_time": "1972-10-01T13:30:00",
+      "place": {
+        "altitude": 0.0,
+        "latitude": 16.2,
+        "longitude": 81.13,
+        "name": "Machilipatnam"
+      },
+      "timezone": "Asia/Kolkata",
+      "utc": "1972-10-01T08:00:00+00:00",
+      "utc_offset_hours": 5.5
+    },
+    "moon_longitude": 94.0596796,
+    "periods": [
+      {
+        "children": [],
+        "duration_days": 7670.383569,
+        "end": "1992-08-10 02:16:04",
+        "end_jd": 2448844.365319658,
+        "level": 1,
+        "lord": 5,
+        "lord_name": "Venus",
+        "start": "1971-08-10 17:03:43",
+        "start_jd": 2441173.9817509
+      },
+      {
+        "children": [],
+        "duration_days": 2191.538163,
+        "end": "1998-08-10 15:11:01",
+        "end_jd": 2451035.90348216,
+        "level": 1,
+        "lord": 0,
+        "lord_name": "Sun",
+        "start": "1992-08-10 02:16:04",
+        "start_jd": 2448844.365319658
+      },
+      {
+        "children": [],
+        "duration_days": 5478.845406,
+        "end": "2013-08-10 11:28:24",
+        "end_jd": 2456514.748888415,
+        "level": 1,
+        "lord": 1,
+        "lord_name": "Moon",
+        "start": "1998-08-10 15:11:01",
+        "start_jd": 2451035.90348216
+      },
+      {
+        "children": [],
+        "duration_days": 2922.050883,
+        "end": "2021-08-10 12:41:40",
+        "end_jd": 2459436.799771751,
+        "level": 1,
+        "lord": 2,
+        "lord_name": "Mars",
+        "start": "2013-08-10 11:28:24",
+        "start_jd": 2456514.748888415
+      },
+      {
+        "children": [],
+        "duration_days": 6209.358127,
+        "end": "2038-08-10 21:17:22",
+        "end_jd": 2465646.15789884,
+        "level": 1,
+        "lord": 3,
+        "lord_name": "Mercury",
+        "start": "2021-08-10 12:41:40",
+        "start_jd": 2459436.799771751
+      },
+      {
+        "children": [],
+        "duration_days": 3652.563604,
+        "end": "2048-08-10 10:48:58",
+        "end_jd": 2469298.72150301,
+        "level": 1,
+        "lord": 6,
+        "lord_name": "Saturn",
+        "start": "2038-08-10 21:17:22",
+        "start_jd": 2465646.15789884
+      },
+      {
+        "children": [],
+        "duration_days": 6939.870848,
+        "end": "2067-08-11 07:42:59",
+        "end_jd": 2476238.592350933,
+        "level": 1,
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "start": "2048-08-10 10:48:58",
+        "start_jd": 2469298.72150301
+      },
+      {
+        "children": [],
+        "duration_days": 4383.076325,
+        "end": "2079-08-11 09:32:54",
+        "end_jd": 2480621.668675937,
+        "level": 1,
+        "lord": 7,
+        "lord_name": "Rahu",
+        "start": "2067-08-11 07:42:59",
+        "start_jd": 2476238.592350933
+      }
+    ],
+    "running": [
+      {
+        "level": 1,
+        "lord": 5,
+        "lord_name": "Venus"
+      }
+    ],
+    "settings": {
+      "apparent_positions": false,
+      "ayanamsa": "lahiri",
+      "custom_ayanamsa_deg": null,
+      "dasha_year_length": "sidereal",
+      "house_system": "whole_sign",
+      "include_outer_planets": false,
+      "ketu_mode": "opposite_rahu",
+      "language": "en",
+      "name_scheme": "book",
+      "node_direction": "retrograde",
+      "node_type": "true",
+      "rahu_ketu_aspects": false,
+      "sanskrit_names": false,
+      "sunrise_mode": "disc_upper_limb",
+      "topocentric": false,
+      "upagraha_rise_point": "middle"
+    },
+    "system": {
+      "key": "ashtottari",
+      "name": "Ashtottari",
+      "total_years": 108
+    },
+    "year_length": "sidereal"
+  },
+  "status": 200
+}

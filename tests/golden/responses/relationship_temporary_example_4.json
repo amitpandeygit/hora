@@ -1,0 +1,46 @@
+{
+  "body": {
+    "enemies": [
+      6
+    ],
+    "enemy_names": [
+      "Saturn"
+    ],
+    "friend_names": [
+      "Moon",
+      "Mars",
+      "Mercury",
+      "Jupiter",
+      "Venus"
+    ],
+    "friend_rasi_names": [
+      "Taurus",
+      "Gemini",
+      "Cancer",
+      "Capricorn",
+      "Aquarius",
+      "Pisces"
+    ],
+    "friend_rasis": [
+      1,
+      2,
+      3,
+      9,
+      10,
+      11
+    ],
+    "friends": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "graha": 0,
+    "graha_name": "Sun",
+    "includes_nodes": false,
+    "rasi": 0,
+    "rasi_name": "Aries"
+  },
+  "status": 200
+}

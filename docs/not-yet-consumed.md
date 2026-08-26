@@ -1,0 +1,525 @@
+# Implemented but not yet consumed
+
+Data that is correct, verified against the book, and exposed through the API —
+but which **no calculation in this engine uses**.
+
+This is not a defect list. A reference table has to exist before the thing that
+consumes it can be built. It is here so that "chapter N is done" is never
+mistaken for "chapter N is working", and so nothing is quietly forgotten.
+
+`tests/unit/test_not_yet_consumed.py` checks this register against the code, so
+it cannot drift: an entry that becomes consumed, or a new symbol that becomes
+unconsumed, fails the suite.
+
+---
+
+## Register
+
+### Chapter 2 — rasi attributes (10)
+
+`RASI_LIMB` · `RASI_IS_ODD_FOOTED` · `RASI_DOSHA` · `RASI_GUNA` ·
+`RASI_DIRECTION` · `RASI_COLOR` · `RASI_IS_NIGHT` · `RASI_RISING` ·
+`RASI_VARNA` · `MODALITY_DEITY`
+
+| Symbol | What will consume it |
+|---|---|
+| `RASI_IS_ODD_FOOTED` | Chara and other rasi dasas — §2.2.3 says "used in some dasas" |
+| `RASI_IS_NIGHT` | Divaratri bala, in shadbala |
+| `RASI_VARNA` | Varna koota, in marriage compatibility |
+| `RASI_RISING` | Dasa result timing — §2.2.11 says seershodaya planets give results in the first half of their dasa |
+| `RASI_DIRECTION` | Dig analysis and the chakras |
+| the rest | Interpretation and medical astrology; reference only |
+
+### Chapter 2 — §2.2 reference vocabulary (15)
+
+Names, definitions and stated uses from §2.2.1 to §2.2.5. None drives a
+calculation; all are published on `/v1/util/tables/rasis` so a caller can name
+what a classification is and what the book says it is for.
+
+`ZODIAC_AS_VISHNU` · `LIMB_APPLIES_TO_NATIVE` · `ODD_EVEN_NAMES` ·
+`ODD_EVEN_USE` · `FOOTED_USE` · `MODALITY_NAMES_EN` · `MODALITY_DEITY_ROLE` ·
+`MODALITY_NATURE` · `TRINITY_NOTE` · `ELEMENT_DEFINITIONS` · `ETHER_NAME` ·
+`ETHER_NAME_SA` · `ETHER_IN_EVERY_RASI` · `ELEMENTS_UNDERLIE_EVERYTHING` ·
+`FIVE_ELEMENTS_BOOK_ORDER`
+
+| Symbol | What will consume it |
+|---|---|
+| `ODD_EVEN_NAMES` | Rasi dasas and the sex-of-children rule — §2.2.2 names both uses |
+| `MODALITY_NATURE`, `MODALITY_DEITY_ROLE`, `TRINITY_NOTE` | Interpretation; reference only |
+| `ELEMENT_DEFINITIONS`, `ETHER_*`, `FIVE_ELEMENTS_BOOK_ORDER` | Element-based interpretation; reference only |
+| the rest | Reference only |
+
+### Chapter 2 — §2.2.6 to §2.2.12 reference vocabulary (21)
+
+Names, glosses, definitions and stated uses. None drives a calculation; all are
+published on `/v1/util/tables/rasis`.
+
+`AYURVEDA_NOTE` · `DOSHA_NAMES_EN` · `DOSHA_ELEMENTS` · `DOSHA_SHOWS` ·
+`DOSHA_BODY_EXAMPLE` · `DOSHA_SHOWS_TYPO` · `TRIGUNA_NAME` · `TRIGUNA_NOTE` ·
+`GUNA_NAMES_ALT` · `GUNA_MEANINGS` · `GUNA_EFFECTS` · `DAY_NIGHT_NAMES` ·
+`DAY_NIGHT_PAIR_RULE` · `DAY_NIGHT_GOVERNOR` · `RISING_DESCRIPTIONS` ·
+`PRISHTHODAYA_NOTE` · `RISING_DASA_HALF` · `RISING_DASA_RULE` ·
+`VARNA_NAMES_EN` · `VARNA_DESCRIPTIONS` · `VARNA_ELEMENT`
+
+| Symbol | What will consume it |
+|---|---|
+| `RISING_DASA_HALF`, `RISING_DASA_RULE` | Dasa result timing — §2.2.11 states the rule; nothing implements it yet |
+| `DAY_NIGHT_GOVERNOR` | Divaratri bala, alongside `RASI_IS_NIGHT` |
+| `DOSHA_*` | Medical astrology; reference only |
+| the rest | Interpretation; reference only |
+
+### Chapter 3 — §3.1 to §3.2.7 reference vocabulary (6)
+
+Names, offices and stated uses. None drives a calculation; all are published on
+`/v1/util/tables/grahas`.
+
+`AVATARA_DESCRIPTIONS` · `BENEFIC_CLASS_NAMES` · `MALEFIC_CLASS_NAMES` ·
+`GRAHA_DEITY_ROLE` · `GRAHA_COLOR_USE` · `SEX_PREDICTION_NOTE`
+
+| Symbol | What will consume it |
+|---|---|
+| `SEX_PREDICTION_NOTE` | Sex-of-children prediction — §3.2.7 states the method; nothing implements it yet |
+| the rest | Interpretation; reference only |
+
+### Chapter 3 — §3.2.8 to §3.2.13 reference vocabulary (17)
+
+Governance clauses, glosses, definitions and stated uses. None drives a
+calculation; all are published on `/v1/util/tables/grahas`.
+
+`ELEMENT_GOVERNANCE` · `ELEMENT_GOVERNANCE_NOTE` ·
+`SHARES_ELEMENT_WITHOUT_RULING` · `SHARES_ELEMENT_PHRASE` ·
+`VARNA_NAMES_EN_3_2_9` · `VARNA_FORTE` · `VARNA_MEANS_NATURE_NOT_CASTE` ·
+`VARNA_CABINET_NOTE` · `GUNA_DEFINITIONS` · `SATTWA_MEANING` ·
+`SATTWA_MISCONCEPTION_NOTE` · `ABODE_NOTE` · `SAPTA_DHATU_NAME` ·
+`SAPTA_DHATU_NOTE` · `DHATU_DESCRIPTIONS` · `DHATU_AFFLICTION_NOTE` ·
+`TIME_PERIOD_USE`
+
+| Symbol | What will consume it |
+|---|---|
+| `SHARES_ELEMENT_WITHOUT_RULING` | Element-based analysis, where a sharer must not be treated as a ruler |
+| `TIME_PERIOD_USE` | Prasna — §3.2.13 says the periods are for horary; nothing implements it yet |
+| `DHATU_*` | Medical astrology; reference only |
+| the rest | Interpretation; reference only |
+
+### Chapter 3 — §3.2.14 to §3.3 reference vocabulary (11)
+
+Examples, names and the dignity analogy. None drives a calculation; all are
+published on `/v1/util/tables/grahas`.
+
+`TASTE_EXAMPLES` · `TASTE_USE` · `DIG_BALA_NAME` · `DIG_BALA_NOTE` ·
+`ALWAYS_STRONG_NOTE` · `RITU_RULERSHIP_NOTE` · `DHATU_MOOLA_JEEVA_MEANINGS` ·
+`DIGNITY_STRONG_PLACEMENTS` · `DIGNITY_STRONG_NOTE` · `DIGNITY_ANALOGY` ·
+`DIGNITY_SUBTLE_DIFFERENCE`
+
+| Symbol | What will consume it |
+|---|---|
+| `DIGNITY_ANALOGY` | Result wording — §3.3 says the three good placements differ in mood; nothing acts on that yet |
+| `TASTE_*` | Medical and food analysis; reference only |
+| the rest | Interpretation; reference only |
+
+### Chapter 3 — graha attributes (15)
+
+`GRAHA_AVATARA` · `GRAHA_GOVERNS` · `GRAHA_COLOR` · `GRAHA_CABINET` ·
+`GRAHA_DEITY` · `GRAHA_SEX` · `GRAHA_ELEMENT` · `GRAHA_VARNA` · `GRAHA_GUNA` ·
+`GRAHA_ABODE` · `GRAHA_DHATU` · `GRAHA_TIME_PERIOD` · `GRAHA_TASTE` ·
+`GRAHA_DHATU_MOOLA_JEEVA` · `RITU_RULER`
+
+| Symbol | What will consume it |
+|---|---|
+| `GRAHA_SEX` | Predicting the sex of children — §3.2.7 says so outright |
+| `GRAHA_TIME_PERIOD` | Prasna — §3.2.13 says "very useful in prasna or horary astrology" |
+| `GRAHA_DHATU` | Medical astrology |
+| `GRAHA_TASTE` | §3.2.14's dietary guidance during a dasa |
+| the rest | Interpretation; reference only |
+
+### Chapter 3 — strength rules (7)
+
+`STRONG_AT_NIGHT` · `STRONG_BY_DAY` · `STRONG_ALWAYS` ·
+`BENEFIC_STRONG_PAKSHA` · `BENEFIC_STRONG_AYANA` · `RASI_AYANA` ·
+`DIG_BALA_STRONG_HOUSE`
+
+**All seven feed shadbala**, which is Phase 2 and not built. They are the
+divaratri, paksha, ayana and dig components. This is the group most likely to
+surface a problem when it is finally wired up, because nothing exercises the
+values today beyond asserting they match the book.
+
+### Chapter 4 — upagraha natures (2)
+
+`VERY_MALEFIC_UPAGRAHAS` · `MALEFIC_UPAGRAHAS`
+
+§4.2 says of the five Sun-based upagrahas: *"Any houses occupied by them in rasi
+chart or divisional charts are spoiled by them."* **That judgement is not
+applied anywhere.** House analysis and yogas will need it.
+
+### Chapter 4 — §4.1 attribution (4)
+
+`UPAGRAHA_SOURCE` · `UPAGRAHA_NOT_PHYSICAL` · `UPAGRAHA_GROUP_COUNT` ·
+`UPAGRAHA_GROUPS`
+
+§4.1's attribution to Sage Parasara and its statement that the upagrahas are
+mathematical points rather than bodies. Reference only; nothing computes from
+them.
+
+### Chapter 4 — §4.3 prose and the two footnotes (6)
+
+`TIME_BASED_HARDER_NOTE` · `UPAGRAHA_NAME_VARIANTS` · `DAY_NIGHT_DEFINITION` ·
+`PARTS_PER_PERIOD` · `LONGITUDE_REDUCTION_NOTE` · `RISE_POINT_VARIANT_NOTE`
+
+| Symbol | What will consume it |
+|---|---|
+| `PARTS_PER_PERIOD` | Already implicit in `part_lords` and `part_bounds`, which hard-code 8; the constant exists so §4.3's statement has a name |
+| `RISE_POINT_VARIANT_NOTE` | Footnote 9's variant is already selectable via `Settings.upagraha_rise_point`; the note records why the setting exists |
+| the rest | Reference only |
+
+### Chapter 1 — nakshatra spelling variant (1)
+
+`NAKSHATRA_NAME_VARIANTS`
+
+The book spells one nakshatra two ways: Table 2 (§1.3.6) prints "Swaati",
+§5.7's Example 10 prints "Swathi". Reference only.
+
+### Chapter 5 — special lagnas
+
+Bhaava, Hora, Ghati and Sree lagna are computed on request at
+`POST /v1/chart/special-lagnas`, but no other calculation reads them. §5.6 says
+Hora Lagna shows money and Ghati Lagna power; §5.7 says Sree Lagna is used in
+Sudasa. None of that analysis exists yet.
+
+### Chapter 6 — significations and amsa names
+
+`VARGA_SIGNIFICATIONS` (Table 11) and `AMSA_NAMES` are published at
+`/v1/varga/rules` but no calculation reads them. §6.6 notes that yogas depend on
+amsabala — "lagna lord or ghati lagna lord in Simhaasanaamsa would make one very
+famous" — and no yoga engine exists yet.
+
+### Chapter 6 — §6.6 amsabala vocabulary (6)
+
+`AMSABALA_RULE` · `AMSABALA_IS_MONOTONIC` · `AMSABALA_DIGNITIES` ·
+`VARGA_GROUP_MEANINGS` · `DASAVARGA_NOTE` · `DASAVARGA_COMBINATIONS`
+
+§6.5's method constants are consumed by `services/varga_service.py` and are not
+listed here. These six are not.
+
+| Symbol | What will consume it |
+|---|---|
+| `DASAVARGA_COMBINATIONS` | §6.6.3's two yogas — lagna/GL lord in Simhaasanaamsa, quadrant lord with good amsabala. Both need the yoga chapters. See OI-54 |
+| `AMSABALA_DIGNITIES` | Already implicit in `amsabala`, which counts these three; the constant names them |
+| the rest | Reference only |
+
+### Chapter 6 — §6.4 the four planes (1)
+
+`KAARMIC_PLANE_IS_ABOVE`
+
+§6.4 groups the twenty charts into physical (1-12), mental (13-24),
+sub-conscious (25-36) and kaarmic (above 36) planes, by the number of
+divisions. Nothing computes with the grouping yet; interpretation will.
+
+### Chapter 6 — §6.2.1 and §6.2.2 reference (3)
+
+`D1_ALIAS` · `VARGA_BODY_DEFINITION` · `D2_INCOMPLETE_NOTE`
+
+| Symbol | What will consume it |
+|---|---|
+| `VARGA_BODY_DEFINITION` | The only statement that upagrahas and special lagnas belong in a divisional chart. `/v1/chart/vargas` takes graha longitudes only; extending it to any body is what this licenses |
+| the rest | Reference only |
+
+### Chapter 7 — §7.5 the house-division controversy (11)
+
+`HOUSES_ARE_FOUND_FROM` · `NARROW_VIEW_REJECTED` · `BHAAVA_CHAKRA_DEFINITION` ·
+`EQUAL_HOUSE_DEFINITION` · `EQUAL_HOUSE_IS_POPULAR` · `SRIPATHI_METHOD_NOTE` ·
+`EACH_RASI_IS_A_HOUSE` · `BPHS_HOUSE_DIVISION_ARGUMENT` ·
+`RASI_AND_VARGA_ARE_NOT_DIFFERENTIATED` · `IGNORE_OTHER_HOUSE_DIVISION_METHODS` ·
+`ARGALA_STHANA_FORWARD_REFERENCE`
+
+§7.5 settles a question the engine already answers: the default house system is
+whole sign and `house_of_rasi` counts rasis from the chosen reference. These
+record the argument, not a new calculation.
+
+| Symbol | What will consume it |
+|---|---|
+| `BPHS_HOUSE_DIVISION_ARGUMENT` | Consumed as policy: it is tie-break rule 4 in `docs/precedence.md` |
+| `ARGALA_STHANA_FORWARD_REFERENCE` | Chapter 10, "Aspects and Argalas" |
+| the rest | Reference only — they describe rejected methods |
+
+### Chapter 7 — §7.4.2 to §7.4.6 (18)
+
+`MAHA_VISHNU_EPITHET` · `QUADRANT_ABODE` · `QUADRANT_IS_SUSTENANCE` ·
+`QUADRANT_HOUSE_REASONS` · `QUADRANTS_SUSTAIN_EACH_OTHER` ·
+`MUTUAL_QUADRANTS_RULE` · `MUTUAL_QUADRANTS_DEFINITION` ·
+`MUTUAL_TRINES_DEFINITION` · `UPACHAYA_RULE` · `UPACHAYA_EXAMPLE` ·
+`DUSTHANA_RULE` · `DUSTHANA_STRENGTH_INVERSION` ·
+`DUSTHANA_STRENGTH_EXAMPLE` · `HALVES_RULE` · `HALVES_ARE_IN_EVERY_CHART` ·
+`HALVES_EXPLAIN_THE_TRIKONA_BASES` · `QUICK_SUMMARY` · `ARGALA_STHANA_SHOWS`
+
+The category tables and both halves are consumed; these are §7.4's prose,
+its two footnote definitions and its summary.
+
+| Symbol | What will consume it |
+|---|---|
+| `DUSTHANA_STRENGTH_INVERSION`, `DUSTHANA_STRENGTH_EXAMPLE` | A strength-aware house reading — see OI-58 |
+| `MUTUAL_QUADRANTS_RULE` | Planet-to-planet relations; nothing computes mutual-quadrant pairs yet |
+| `UPACHAYA_EXAMPLE` | A worked reading from arudha lagna; the pieces exist, nothing joins them |
+| `ARGALA_STHANA_SHOWS`, the fifth `QUICK_SUMMARY` row | Argalas, chapter 10, unaudited |
+| the rest | Reference only |
+
+### Chapter 7 — §7.4.1 trines and purushaarthas (10)
+
+`TRINE_ABODE` · `TRINE_IS_BENEFICIAL` · `PURUSHARTHA_TRIKONA_NAMES` ·
+`PURUSHARTHA_HOUSE_REASONS` · `DHARMA_IS_DECIDED_BY` ·
+`DHARMA_LITERAL_MEANING` · `DHARMA_NOTE` · `PURUSHARTHA_STRENGTH_RULE` ·
+`TRIKONA_DASA_NOTE` · `MUTUAL_TRINES_RULE`
+
+The purushaartha trikona table itself is consumed by the house service.
+These ten are §7.4.1's names, reasons and two forward references.
+
+| Symbol | What will consume it |
+|---|---|
+| `PURUSHARTHA_STRENGTH_RULE` | Digbala joined to the purushaartha trikonas — see OI-57 |
+| `TRIKONA_DASA_NOTE` | Trikona Dasa, a rasi dasa; `dasha/rasi/` is empty |
+| `MUTUAL_TRINES_RULE` | Planet-to-planet relations in a chart; nothing computes mutual-trine pairs yet |
+| the rest | Reference only |
+
+### Chapter 7 — §7.4 and footnote 14 (5)
+
+`DUSTHANA_GLOSS` · `CATEGORIES_ARE_RELATIVE` · `CATEGORIES_FROM_THIRD_HOUSE` ·
+`THREE_CHARTS_FOR_SPEECH_NOTE` · `SPEECH_CHART_ROLES`
+
+The seven categories and their relative computation are consumed by
+`charts/house.py` and `services/house_service.py`. These are §7.4's prose and
+footnote 14's per-chart roles.
+
+| Symbol | What will consume it |
+|---|---|
+| `SPEECH_CHART_ROLES` | Multi-chart reading — footnote 14 is the only place the book says what each of three charts contributes to one matter |
+| `CATEGORIES_FROM_THIRD_HOUSE` | The book's own worked answers; the relative computation reproduces all four |
+| the rest | Reference only |
+
+### Chapter 7 — §7.3.9 graha lagnas (7)
+
+`GRAHA_LAGNA_NAME` · `GRAHA_LAGNA_ALIAS` · `GRAHA_LAGNA_RULE` ·
+`GRAHA_LAGNA_PAIRS` · `GRAHA_LAGNA_STRENGTH_RULE` ·
+`NAISARGIKA_REFERENCE_RULE` · `NAISARGIKA_REFERENCE_EXAMPLES`
+
+Table 12 itself was already stored. These are §7.3.9's rule, its six worked
+pairs and the naisargika extension.
+
+| Symbol | What will consume it |
+|---|---|
+| `GRAHA_LAGNA_STRENGTH_RULE` | Choosing between a house from lagna and the same house from its graha. Needs a graha-versus-lagna strength comparison — see OI-56 |
+| `GRAHA_LAGNA_PAIRS` | The six matters the book reads from two references each |
+| `NAISARGIKA_REFERENCE_EXAMPLES` | Open-ended reference selection by natural significator; both cases name their divisional chart |
+| the rest | Reference only |
+
+### Chapter 7 — §7.3.6 to §7.3.8 and footnote 13 (10)
+
+`KARAKAMSA_REASON` · `KARAKAMSA_DEFINITION` · `KARAKAMSA_TWELFTH_RULE` ·
+`KARAKAMSA_MOKSHA_HOUSE` · `KARAKAMSA_MOKSHA_GRAHA` · `GHATI_LAGNA_SHOWS` ·
+`GHATI_LAGNA_USED_FOR` · `HORA_LAGNA_SHOWS` · `HORA_LAGNA_USED_FOR` ·
+`TRANSIT_DEFINITION`
+
+The karakamsa *calculation* is consumed — `charts/house.py:karakamsa_rasi`
+computes it and the reference now resolves. These are the statements around it.
+
+| Symbol | What will consume it |
+|---|---|
+| `KARAKAMSA_TWELFTH_RULE` | Needs a strength measure over the 12th house's occupants (chapter 15) joined to the graha deities (chapter 3). Nothing joins them yet |
+| `KARAKAMSA_MOKSHA_HOUSE`, `KARAKAMSA_MOKSHA_GRAHA` | The same rule's two operands |
+| `TRANSIT_DEFINITION` | The transit chapters |
+| the rest | Reference only; both echo chapter 5's significations |
+
+### Chapter 7 — §7.3.3 to §7.3.5 reference vocabulary (13)
+
+`RAVI_LAGNA_REASON` · `RAVI_LAGNA_SHOWS` · `RAVI_LAGNA_ALSO` ·
+`ARUDHA_LAGNA_SHOWS` · `PAAKA_LAGNA_DEFINITION` · `PAAKA_LAGNA_SHOWS` ·
+`PAAKA_LAGNA_REASON` · `PAAKA_LAGNA_USED_IN` · `PAAKA_LAGNA_EXAMPLES` ·
+`LAGNA_IS_CONCEPTUAL` · `TENTH_HOUSE_BY_REFERENCE` ·
+`FIFTH_HOUSE_IN_D24_BY_REFERENCE` · `SATURN_TRANSIT_BY_REFERENCE`
+
+The paaka lagna *calculation* is consumed — `charts/house.py:paaka_lagna_rasi`
+computes it and both of §7.3.5's worked cases reproduce. These are the
+statements about what each reference **means**, which nothing selects on yet.
+
+| Symbol | What will consume it |
+|---|---|
+| `FIFTH_HOUSE_IN_D24_BY_REFERENCE` | Reference selection — the book's clearest worked case: one house, one chart, three matters, three references |
+| `TENTH_HOUSE_BY_REFERENCE` | The same, for the 10th house |
+| `SATURN_TRANSIT_BY_REFERENCE` | Transit reading, which is a later chapter |
+| `RAVI_LAGNA_ALSO` | Vitality analysis; §7.3.3 makes the Sun a second reference for it |
+| the rest | Reference only |
+
+### Chapter 7 — §7.3 reference vocabulary (9)
+
+`THREE_CHOICES_RULE` · `FOURTH_HOUSE_BY_VARGA` ·
+`HOUSE_DIFFERS_BY_REFERENCE_EXAMPLE` · `MANY_PARAMETERS_NOTE` · `LAGNA_SHOWS` ·
+`LAGNA_SPIRIT_OF_I` · `LAGNA_NOT_FOR_STATUS` · `LAGNA_SEEN_FROM` ·
+`CHANDRA_LAGNA_REASON` · `CHANDRA_LAGNA_NOT_IGNORED` · `CHANDRA_LAGNA_EXAMPLE` ·
+`CHANDRA_LAGNA_SHOWS`
+
+§7.3's choose-meaning-by-varga rule is consumed by
+`services/house_service.py` and is deliberately absent from the list
+above — naming it in backticks here would make the register guard read it
+as listed.
+
+Note the Chandra Lagna signification exists twice with different wording:
+the §7.3.2 constant says "things from the perspective of mind" (the
+book's word) while the references table says "matters". The first is the
+transcription; the second is our own summary for the table.
+
+| Symbol | What will consume it |
+|---|---|
+| `LAGNA_NOT_FOR_STATUS` | Reference selection — §7.3.1 says status must be read from arudha lagna, not lagna. Nothing chooses a reference by matter yet |
+| `FOURTH_HOUSE_BY_VARGA` | The book's own four cases; `meanings_in_varga` reaches three of them |
+| the rest | Reference only |
+
+### Chapter 7 — §7.1 and §7.2 method (5)
+
+`HOUSE_REFERENCE_RULE` · `HOUSE_MEANING_DEPENDS_ON_REFERENCE` ·
+`HOUSE_MEANING_DEPENDS_ON_VARGA` · `HOUSES_FROM_HOUSES_EXAMPLES` ·
+`HOUSE_RESULTS_REFERENCE`
+
+§7.1's statements that a house's meaning depends on both the reference and the
+divisional chart. Neither axis is applied yet — nothing varies a signification
+by reference or by varga.
+
+| Symbol | What will consume it |
+|---|---|
+| `HOUSE_MEANING_DEPENDS_ON_REFERENCE` | Arudha-relative readings; the 11th from AL differs from the 11th from lagna |
+| `HOUSE_MEANING_DEPENDS_ON_VARGA` | Per-varga house meanings; the 4th in D-16 differs from the 4th in D-24 |
+| `HOUSES_FROM_HOUSES_EXAMPLES` | The three worked derivations; `house_service.derived` computes them, these are the book's own cases |
+| the rest | Reference only |
+
+### Chapter 7 — house significations and categories
+
+**This section used to list the four chapter-7 house tables — the
+significations, the categories, the purushartha trikonas and the graha lagna
+houses — as unconsumed. That was wrong**: `charts/house.py` reads all four.
+(Their names are deliberately spelled out in prose here rather than in code
+formatting, because the register's own test treats a backticked symbol as a
+live claim that it is unconsumed.) The claim survived because the old
+hand-typed `TRACKED` list did not include them, so the test that checks the
+register never looked. Corrected when `TRACKED` was made automatic.
+
+`MARAKA` is *consumed* — `classify_house` reports it in every chart
+response — but is **unverified against the book**. See
+[open-items.md](open-items.md#oi-23).
+
+### Benefic/malefic classification — now consumed
+
+The two natural benefic/malefic lists became consumed when chapter 15's
+avastha engine landed: `charts/avastha.py` needs them for Vikala ("joined by
+malefic planets"), Khala ("in a malefic planet's rasi"), Trishita ("without
+the aspect of benefics") and Kshobhita.
+
+Still true, and still a gap: §3.2.2's conditional cases — Mercury turning
+benefic or malefic by association, and the Moon by paksha — are **not
+implemented at all**, only the unconditional lists. Every avastha above is
+therefore judged on the unconditional classification.
+
+### Calendar (1)
+
+`SAMVATSARA_NAMES` — the sixty-year Jovian cycle. Nothing computes which
+samvatsara a date falls in.
+
+---
+
+
+### Reference vocabulary — names, spellings and glosses (82)
+
+Reachable through the API — mostly `/v1/util/tables/*` and `/v1/reference/*`,
+some through the rules endpoint of their own chapter, such as
+`/v1/house/rules`. No calculation reads any of them; they exist so the API can
+name things the way the book does.
+
+**This heading is a claim, and it is tested.** Twenty of these once sat here
+while being published nowhere — seventeen were not even re-exported from
+`hora.core.const`, and three more were returned by a service but stripped by
+its Pydantic response model. `tests/unit/test_register_claims.py` now asserts,
+per constant, that it is on the facade and that its content appears in some
+`/v1/util/*` or `/v1/reference/*` response. Adding a name here without wiring
+it up fails the suite. See [open-items.md](open-items.md#oi-31).
+
+`SOLAR_YEAR_DEGREES` · `SOLAR_MONTH_DEGREES` · `SOLAR_DAY_DEGREES` · `DAYS_PER_SOLAR_MONTH` · `SOLAR_CALENDAR_USED_IN` ·
+`NAKSHATRA_COUNT` · `NAKSHATRA_COUNT_SPECIAL` · `PADAS_PER_NAKSHATRA` · `PADA_GLOSS` · `TWENTY_EIGHT_NAKSHATRA_CHARTS` · `ABHIJIT_RULE` ·
+`VARGA_CHAKRA_NAME` · `VARGA_ALIASES` · `VARGA_DEFINITION` · `VARGA_SIGNIFIES_AN_AREA` · `VARGA_INDEPENDENT_CHART_RULE` · `FOUR_PILLARS` · `FOUR_PILLARS_CONCLUSION_ORDER` ·
+`BHAVA_NAME` · `HOUSE_DEFINITION` · `HOUSE_ORDER_WRAPS` · `HOUSE_COMMON_REFERENCES` · `HOUSE_DEFAULT_REFERENCE` · `HOUSE_DEFAULT_REFERENCE_RULE` ·
+`GRAHA_DEFINITION` · `GRAHA_DEFINITION_NOTE` · `NODES_ARE_MATHEMATICAL_POINTS` · `UPAGRAHA_DEFINITION` · `UPAGRAHA_GLOSS` · `UPAGRAHA_COUNT` · `LAGNA_DEFINITION` · `SPECIAL_ASCENDANT_TERM` ·
+`GRAHA_ABBR` · `GRAHA_NAMES_SA` · `RASI_NAMES_SA` · `RASI_NAMES_SA_BOOK` ·
+`MODALITY_NAMES` · `DIRECTION_NAMES` · `DOSHA_NAMES` ·
+`ELEMENT_NAMES_SA` · `ELEMENT_RULER` · `ELEMENT_SHARERS` · `GUNA_NAMES` ·
+`GUNA_ADJECTIVES` · `VARNA_NAMES` · `SEX_NAMES` · `RISING_NAMES` ·
+`AYANA_NAMES` · `RITU_NAMES` · `RITU_MEANINGS` · `RITU_MONTHS` ·
+`FOOTED_NAMES` · `ZODIAC_NAMES` · `ZODIAC_USED` · `NAKSHATRA_DEITY` ·
+`PANCHANGA_NAME_BOOK` · `PANCHANGA_MEANING` ·
+`PANCHANGA_ALMANAC_NAME` · `PURUSHARTHA_NAME_BOOK` · `PURUSHARTHA_MEANING` ·
+`PLANET_ELEMENT_NAMES` · `PLANET_ELEMENT_NAMES_SA` ·
+`PLANET_ELEMENT_ADJECTIVES` · `PLANET_ELEMENT_TATTVAS` ·
+`DHATU_MOOLA_JEEVA_NAMES` · `ESSENCE_NAMES` · `ESSENCE_ALIASES` ·
+`AVATARA_ALIASES` · `PURE_PARAMATMAMSA_AVATARAS` · `NODE_ALIASES` ·
+`CHAAYAA_GRAHAS` · `CHAAYAA_GRAHA_NAME` · `UPAGRAHA_ALIASES` ·
+`RELATIONSHIP_KINDS` · `COMPOUND_RELATION_NAMES` ·
+`COMPOUND_RELATION_GLOSSES` · `DIGNITY_NAMES_SA`
+
+Most were added by the inverted coverage sweep (see
+[page-sweep.md](page-sweep.md)), which found the book naming things the code
+had no word for. They are reference data by design and may stay unconsumed
+indefinitely — being listed here is the normal state, not a defect.
+
+### Tables a calculation duplicates rather than imports (12)
+
+These are verified and correct, but the code that needs them defines its own
+copy instead of importing these. **Two sources of truth for the same table.**
+Nothing is wrong today — `test_vimshottari_tables_agree` pins the pair that
+matters — but a future edit to one side would silently diverge.
+
+`VIMSHOTTARI_ORDER` · `VIMSHOTTARI_YEARS` · `NAKSHATRA_LORD` ·
+`TABLE_10_DAY` · `TABLE_10_NIGHT` · `TIME_BASED_UPAGRAHAS` ·
+`MALEFIC_STRONG_AYANA` · `MALEFIC_STRONG_PAKSHA` · `CO_LORDS_ONLY` ·
+`DEBILITATION_DEG` · `CHATURASRA` · `ABHIJIT_INDEX`
+
+`dasha/nakshatra/systems.py` carries its own `order` and `years` for
+Vimshottari; `constants/nakshatra.py` carries `VIMSHOTTARI_ORDER` and
+`VIMSHOTTARI_YEARS`. They agree today, verified. Deduplicating them is a
+behaviour-affecting refactor and is **not** being done unilaterally — raised as
+a decision, not a change.
+
+### Provenance declarations (4)
+
+`VERBATIM_FIELDS` · `VERBATIM_CONSTANTS` · `AVASTHA_VERBATIM_FIELDS` · `AVASTHA_VERBATIM_CONSTANTS`
+
+Not data — a declaration of *which* chapter-8 and chapter-15 strings are the author's words
+and which are our summary. No calculation reads them; they exist so that
+`test_declared_verbatim_fields_are_verbatim` can hold the line against a
+paraphrase drifting into a field that claims to be a transcription.
+
+They belong in `core/constants/` rather than in the test, because the claim
+travels with the data. A constant moved to another module should carry its
+provenance with it.
+
+Expected to stay unconsumed. If chapters 9 onward adopt the same pattern, these
+should generalise rather than multiply.
+
+## Separate concern: premature, unverified code
+
+### `src/hora/charts/aspects.py` — partly verified, partly premature
+
+Written during Phase 1 scaffolding, before the four-check standard existed. It
+holds graha drishti, rasi drishti and a virupa aspect table.
+
+Three problems:
+
+1. **Nothing imports it.** Not the chart builder, not any router, not a test.
+2. **No test references it**, so its tables are entirely unverified.
+3. **It was written from general knowledge, not from the book.** Aspects and
+   argalas are chapter 10, which has not been audited. Its contents have never
+   been checked against PVR.
+
+It should be treated as a draft, not as verified work, and re-derived from
+chapter 10 when we reach it. Tracked as [OI-18](open-items.md#oi-18).
+
+---
+
+## How to use this register
+
+When a chapter is reported complete, its "not yet consumed" entries are listed
+in that chapter's OI entry and mirrored here. When something becomes consumed,
+delete it from here — the test will tell you if you forgot.

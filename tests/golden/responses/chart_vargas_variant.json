@@ -1,0 +1,220 @@
+{
+  "body": {
+    "charts": {
+      "D2": {
+        "chart": "D2",
+        "grahas": [
+          {
+            "house": 6,
+            "id": 0,
+            "longitude": 329.51970765,
+            "name": "Sun",
+            "rasi": 10,
+            "rasi_name": "Aquarius",
+            "retrograde": false
+          },
+          {
+            "house": 2,
+            "id": 1,
+            "longitude": 188.11935919,
+            "name": "Moon",
+            "rasi": 6,
+            "rasi_name": "Libra",
+            "retrograde": false
+          },
+          {
+            "house": 6,
+            "id": 2,
+            "longitude": 313.52141772,
+            "name": "Mars",
+            "rasi": 10,
+            "rasi_name": "Aquarius",
+            "retrograde": false
+          },
+          {
+            "house": 7,
+            "id": 3,
+            "longitude": 347.04390432,
+            "name": "Mercury",
+            "rasi": 11,
+            "rasi_name": "Pisces",
+            "retrograde": false
+          },
+          {
+            "house": 12,
+            "id": 4,
+            "longitude": 134.17054683,
+            "name": "Jupiter",
+            "rasi": 4,
+            "rasi_name": "Leo",
+            "retrograde": false
+          },
+          {
+            "house": 4,
+            "id": 5,
+            "longitude": 243.89247634,
+            "name": "Venus",
+            "rasi": 8,
+            "rasi_name": "Sagittarius",
+            "retrograde": false
+          },
+          {
+            "house": 11,
+            "id": 6,
+            "longitude": 114.2319125,
+            "name": "Saturn",
+            "rasi": 3,
+            "rasi_name": "Cancer",
+            "retrograde": false
+          },
+          {
+            "house": 1,
+            "id": 7,
+            "longitude": 179.15764127,
+            "name": "Rahu",
+            "rasi": 5,
+            "rasi_name": "Virgo",
+            "retrograde": true
+          },
+          {
+            "house": 1,
+            "id": 8,
+            "longitude": 179.15764127,
+            "name": "Ketu",
+            "rasi": 5,
+            "rasi_name": "Virgo",
+            "retrograde": true
+          }
+        ],
+        "lagna": {
+          "longitude": 178.8151714,
+          "rasi": 5,
+          "rasi_name": "Virgo"
+        }
+      },
+      "D3": {
+        "chart": "D3",
+        "grahas": [
+          {
+            "house": 3,
+            "id": 0,
+            "longitude": 134.27956147,
+            "name": "Sun",
+            "rasi": 4,
+            "rasi_name": "Leo",
+            "retrograde": false
+          },
+          {
+            "house": 8,
+            "id": 1,
+            "longitude": 282.17903879,
+            "name": "Moon",
+            "rasi": 9,
+            "rasi_name": "Capricorn",
+            "retrograde": false
+          },
+          {
+            "house": 2,
+            "id": 2,
+            "longitude": 110.28212657,
+            "name": "Mars",
+            "rasi": 3,
+            "rasi_name": "Cancer",
+            "retrograde": false
+          },
+          {
+            "house": 4,
+            "id": 3,
+            "longitude": 160.56585647,
+            "name": "Mercury",
+            "rasi": 5,
+            "rasi_name": "Virgo",
+            "retrograde": false
+          },
+          {
+            "house": 11,
+            "id": 4,
+            "longitude": 21.25582025,
+            "name": "Jupiter",
+            "rasi": 0,
+            "rasi_name": "Aries",
+            "retrograde": false
+          },
+          {
+            "house": 11,
+            "id": 5,
+            "longitude": 5.83871451,
+            "name": "Venus",
+            "rasi": 0,
+            "rasi_name": "Aries",
+            "retrograde": false
+          },
+          {
+            "house": 4,
+            "id": 6,
+            "longitude": 171.34786875,
+            "name": "Saturn",
+            "rasi": 5,
+            "rasi_name": "Virgo",
+            "retrograde": false
+          },
+          {
+            "house": 1,
+            "id": 7,
+            "longitude": 88.73646191,
+            "name": "Rahu",
+            "rasi": 2,
+            "rasi_name": "Gemini",
+            "retrograde": true
+          },
+          {
+            "house": 7,
+            "id": 8,
+            "longitude": 268.73646191,
+            "name": "Ketu",
+            "rasi": 8,
+            "rasi_name": "Sagittarius",
+            "retrograde": true
+          }
+        ],
+        "lagna": {
+          "longitude": 88.2227571,
+          "rasi": 2,
+          "rasi_name": "Gemini"
+        }
+      }
+    },
+    "input": {
+      "julian_day_ut": 2441591.833333333,
+      "local_time": "1972-10-01T13:30:00",
+      "place": {
+        "altitude": 0.0,
+        "latitude": 16.2,
+        "longitude": 81.13,
+        "name": "Machilipatnam"
+      },
+      "timezone": "Asia/Kolkata",
+      "utc": "1972-10-01T08:00:00+00:00",
+      "utc_offset_hours": 5.5
+    },
+    "settings": {
+      "apparent_positions": false,
+      "ayanamsa": "lahiri",
+      "custom_ayanamsa_deg": null,
+      "dasha_year_length": "sidereal",
+      "house_system": "whole_sign",
+      "include_outer_planets": false,
+      "ketu_mode": "opposite_rahu",
+      "language": "en",
+      "name_scheme": "book",
+      "node_direction": "retrograde",
+      "node_type": "true",
+      "rahu_ketu_aspects": false,
+      "sanskrit_names": false,
+      "sunrise_mode": "disc_upper_limb",
+      "topocentric": false,
+      "upagraha_rise_point": "middle"
+    }
+  },
+  "status": 200
+}

@@ -1,0 +1,53 @@
+{
+  "body": {
+    "caveat": "The book decides this kind of comparison with shadbala, or with the 'very simple rules' it mentions for trivial determinations. Neither is implemented \u2014 shadbala is explicitly beyond the scope of the book, and the simple rules are not in the material transcribed so far. This verdict rests on avastha alone, which the book does not nominate for this purpose. Treat it as evidence, not as the answer.",
+    "measures": [
+      {
+        "available": false,
+        "key": "shadbala",
+        "name": "Shadbala",
+        "note": "Most computer software programs give shadbala, though there are minor differences between the definitions used by them",
+        "shows": "the strength of a planet from six sources \u2014 placement, time, directions, aspects, motion and inherent nature",
+        "used_for": "deciding which planet gives the results when two or more influence the same house or take part in a yoga; the strongest acts like a group leader on the group's behalf",
+        "why_not": "the book states that explaining the computation of shadbalas is beyond its scope, and refers the reader to Brihat Parasara Hora Sastram or 'Graha and Bhava Balas' by Dr. B.V. Raman"
+      },
+      {
+        "available": false,
+        "key": "ashtakavarga",
+        "name": "Ashtakavarga bala",
+        "note": null,
+        "shows": "how other planets support or oppose a planet \u2014 its ability to give its own results in harmony with other planetary forces, not its ability to lead a group",
+        "used_for": "judging whether a planet can deliver in a given area of life; a planet may be strong in one divisional chart and weak in another, and gives its results more effectively in the area of the first",
+        "why_not": "not yet implemented"
+      },
+      {
+        "available": true,
+        "key": "avastha",
+        "name": "Avastha bala",
+        "note": "States related to activity are a fourth family the chapter names; only age, alertness and mood are implemented here",
+        "shows": "the state a planet is in \u2014 its age, alertness, mood and activity",
+        "used_for": "judging whether a planet is in a fit state to give good results",
+        "why_not": null
+      },
+      {
+        "available": false,
+        "key": "vimsopaka",
+        "name": "Vimsopaka bala",
+        "note": null,
+        "shows": "the overall strength of a planet and its ability to play an important role in one's life, rather than in a specific area",
+        "used_for": "judging a planet's overall effectiveness in a life",
+        "why_not": "not yet implemented"
+      },
+      {
+        "available": false,
+        "key": "simple_rules",
+        "name": "Simple comparison rules",
+        "note": "These, not shadbala, are the rules \u00a79.2 needs for choosing the stronger of Mars and Ketu as lord of Scorpio",
+        "shows": "which of two planets or rasis is stronger, by short rules",
+        "used_for": "trivial determinations such as which planet initiates dasas and antardasas",
+        "why_not": "the chapter says these are 'very simple rules that are different from shadbala, ashtakavarga bala, avastha bala, Vimsopaka bala', but the rules themselves are not in the material transcribed so far"
+      }
+    ]
+  },
+  "status": 200
+}

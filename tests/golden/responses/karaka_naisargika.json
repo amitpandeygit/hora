@@ -1,0 +1,304 @@
+{
+  "body": {
+    "by_graha": [
+      {
+        "graha": 0,
+        "graha_name": "Sun",
+        "significations": [
+          {
+            "house": 1,
+            "matters": "Self, soul, constitution, health"
+          },
+          {
+            "house": 5,
+            "matters": "fame, power"
+          },
+          {
+            "house": 9,
+            "matters": "father, boss"
+          },
+          {
+            "house": 10,
+            "matters": "career, achievements"
+          }
+        ]
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon",
+        "significations": [
+          {
+            "house": 1,
+            "matters": "Mind"
+          },
+          {
+            "house": 4,
+            "matters": "mother, peace of mind"
+          },
+          {
+            "house": 11,
+            "matters": "friends"
+          }
+        ]
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars",
+        "significations": [
+          {
+            "house": 3,
+            "matters": "Courage, younger siblings"
+          },
+          {
+            "house": 4,
+            "matters": "real estate"
+          },
+          {
+            "house": 5,
+            "matters": "scholarship in Nyaya sastra, speculation"
+          },
+          {
+            "house": 6,
+            "matters": "enemies, diseases, accidents, loans"
+          }
+        ]
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury",
+        "significations": [
+          {
+            "house": 2,
+            "matters": "Speech"
+          },
+          {
+            "house": 4,
+            "matters": "learning"
+          },
+          {
+            "house": 5,
+            "matters": "memory, scholarship, students"
+          },
+          {
+            "house": 10,
+            "matters": "work, achievements, honors"
+          },
+          {
+            "house": 11,
+            "matters": "credits"
+          }
+        ]
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "significations": [
+          {
+            "house": 2,
+            "matters": "Family, wealth"
+          },
+          {
+            "house": 4,
+            "matters": "traditional learning"
+          },
+          {
+            "house": 5,
+            "matters": "children, intelligence"
+          },
+          {
+            "house": 9,
+            "matters": "teacher, religion, fortune"
+          },
+          {
+            "house": 11,
+            "matters": "elder brother, gains"
+          }
+        ]
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus",
+        "significations": [
+          {
+            "house": 4,
+            "matters": "Vehicles"
+          },
+          {
+            "house": 7,
+            "matters": "wife, husband, marital bliss"
+          },
+          {
+            "house": 12,
+            "matters": "bed pleasures"
+          }
+        ]
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn",
+        "significations": [
+          {
+            "house": 5,
+            "matters": "Following"
+          },
+          {
+            "house": 6,
+            "matters": "servants"
+          },
+          {
+            "house": 8,
+            "matters": "Longevity, troubles"
+          },
+          {
+            "house": 12,
+            "matters": "losses, hospitalization"
+          }
+        ]
+      },
+      {
+        "graha": 7,
+        "graha_name": "Rahu",
+        "significations": [
+          {
+            "house": 6,
+            "matters": "Accidents"
+          },
+          {
+            "house": 8,
+            "matters": "occult knowledge"
+          },
+          {
+            "house": 9,
+            "matters": "pilgrimages, going abroad"
+          }
+        ]
+      },
+      {
+        "graha": 8,
+        "graha_name": "Ketu",
+        "significations": [
+          {
+            "house": 8,
+            "matters": "Occult knowledge"
+          },
+          {
+            "house": 9,
+            "matters": "pilgrimages, going abroad"
+          },
+          {
+            "house": 12,
+            "matters": "moksha"
+          }
+        ]
+      }
+    ],
+    "counted_from_the_graha": true,
+    "definition": "Naisargika karakas are the natural significators of various matters.",
+    "kind": "naisargika",
+    "presiding": "Brahma",
+    "primary": [
+      {
+        "graha": 0,
+        "graha_name": "Sun",
+        "house": 1,
+        "signifies": "Self, physical constitution, soul, health"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "house": 2,
+        "signifies": "Family, wealth"
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars",
+        "house": 3,
+        "signifies": "Younger siblings, courage"
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon",
+        "house": 4,
+        "signifies": "Mother"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "house": 5,
+        "signifies": "Children"
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars",
+        "house": 6,
+        "signifies": "Enemies"
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus",
+        "house": 7,
+        "signifies": "Wife, husband, marital bliss, relationships"
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn",
+        "house": 8,
+        "signifies": "Longevity, troubles"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "house": 9,
+        "signifies": "Teacher, religion, fortune"
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury",
+        "house": 10,
+        "signifies": "Work, achievements, honors"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "house": 11,
+        "signifies": "Elder siblings"
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn",
+        "house": 12,
+        "signifies": "Losses"
+      }
+    ],
+    "read_as": "house_from_karaka",
+    "read_as_note": "Take the relevant house counted from the karaka, not the karaka himself: the 7th from Venus shows husband, not Venus",
+    "table_16_rule": "Mercury and 5th house show memory and so the 5th house from Mercury shows memory.",
+    "table_16_source": "In addition, we have various other matters allotted to different planets in classics. The list of the natural significations of various planets is listed in Table 16.",
+    "used_for": "phalita jyotish \u2014 analysis of general results",
+    "used_in": "These significations are used in general Phalita Jyotish.",
+    "worked_examples": [
+      {
+        "graha": 1,
+        "graha_name": "Moon",
+        "house": 4,
+        "shows": "mother",
+        "table": 15
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "house": 5,
+        "shows": "sons",
+        "table": 15
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury",
+        "house": 5,
+        "shows": "memory",
+        "table": 16
+      }
+    ]
+  },
+  "status": 200
+}

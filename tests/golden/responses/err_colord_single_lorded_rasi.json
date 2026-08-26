@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "Aries has one lord; \u00a715.5.1 applies to Scorpio and Aquarius",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

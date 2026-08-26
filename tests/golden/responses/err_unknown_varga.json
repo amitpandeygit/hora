@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "unknown varga 'Q9'",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

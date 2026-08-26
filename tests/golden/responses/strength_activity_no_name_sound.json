@@ -1,0 +1,84 @@
+{
+  "body": {
+    "aliases": [],
+    "formula": "((C x P x A) + M + G + L) mod 12",
+    "graha": 3,
+    "graha_name": "Mercury",
+    "index": 1,
+    "meaning": "Lying down, resting",
+    "name": "Sayana",
+    "sound_number": null,
+    "steps": [
+      {
+        "description": "C x P x A",
+        "detail": "7 x 4 x 7 = 196",
+        "name": "product",
+        "number": 1,
+        "value": 196
+      },
+      {
+        "description": "(C x P x A) + M + G + L",
+        "detail": "196 + 8 + 43 + 6 = 253",
+        "name": "sum",
+        "number": 2,
+        "value": 253
+      },
+      {
+        "description": "divide by 12 and take the remainder",
+        "detail": "253 mod 12 = 1",
+        "name": "index",
+        "number": 3,
+        "value": 1
+      },
+      {
+        "description": "look up Table 36",
+        "detail": "1 is Sayana (Lying down, resting)",
+        "name": "avastha",
+        "number": 4,
+        "value": 1
+      }
+    ],
+    "strength": null,
+    "strength_remainder": null,
+    "strength_results": null,
+    "terms": [
+      {
+        "name": "constellation",
+        "symbol": "C",
+        "text": "the number of the constellation occupied by the planet (1 for Aswini, 2 for Bharani and so on)",
+        "value": 7
+      },
+      {
+        "name": "planet_index",
+        "symbol": "P",
+        "text": "the index of the planet whose avastha we are finding (1 for Sun, 2 for Moon)",
+        "value": 4
+      },
+      {
+        "name": "navamsa_index",
+        "symbol": "A",
+        "text": "the index of the amsa (navamsa) occupied by the planet in its rasi",
+        "value": 7
+      },
+      {
+        "name": "moon_constellation",
+        "symbol": "M",
+        "text": "the constellation occupied by Moon",
+        "value": 8
+      },
+      {
+        "name": "ghati",
+        "symbol": "G",
+        "text": "the ghati running at birth",
+        "value": 43
+      },
+      {
+        "name": "lagna_rasi",
+        "symbol": "L",
+        "text": "the rasi occupied by lagna (1 for Ar, 2 for Ta and so on)",
+        "value": 6
+      }
+    ]
+  },
+  "status": 200
+}

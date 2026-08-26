@@ -1,0 +1,106 @@
+{
+  "body": {
+    "karakas": [
+      {
+        "graha_names": [
+          "Sun",
+          "Venus"
+        ],
+        "grahas": [
+          0,
+          5
+        ],
+        "note": "Footnote 26: some take Sun for daytime births and Venus for nighttime births",
+        "relative": "father",
+        "rule": "stronger"
+      },
+      {
+        "graha_names": [
+          "Moon",
+          "Mars"
+        ],
+        "grahas": [
+          1,
+          2
+        ],
+        "note": "Footnote 26: some take Moon for nighttime births and Mars for daytime births",
+        "relative": "mother",
+        "rule": "stronger"
+      },
+      {
+        "graha_names": [
+          "Mars"
+        ],
+        "grahas": [
+          2
+        ],
+        "note": null,
+        "relative": "younger siblings, brother-in-law and sister-in-law (spouses of siblings)",
+        "rule": "fixed"
+      },
+      {
+        "graha_names": [
+          "Mercury"
+        ],
+        "grahas": [
+          3
+        ],
+        "note": null,
+        "relative": "maternal relatives (uncles and aunts)",
+        "rule": "fixed"
+      },
+      {
+        "graha_names": [
+          "Jupiter"
+        ],
+        "grahas": [
+          4
+        ],
+        "note": null,
+        "relative": "husband, sons, paternal grandparents and other paternal relatives (uncles and aunts)",
+        "rule": "fixed"
+      },
+      {
+        "graha_names": [
+          "Venus"
+        ],
+        "grahas": [
+          5
+        ],
+        "note": null,
+        "relative": "wife, father-in-law, mother-in-law & maternal grandparents",
+        "rule": "fixed"
+      },
+      {
+        "graha_names": [
+          "Saturn"
+        ],
+        "grahas": [
+          6
+        ],
+        "note": "Footnote 27: some scholars give Saturn as the sthira karaka for children instead of elder siblings",
+        "relative": "elder siblings",
+        "rule": "fixed"
+      }
+    ],
+    "kind": "sthira",
+    "name_explained": "In Indian philosophy, death is nothing but praana (life) becoming sthira (fixed).",
+    "presiding": "Shiva",
+    "read_as": "karaka_himself",
+    "read_as_note": "The karaka himself represents the relative's physical body: Jupiter is the husband's body in a female chart",
+    "spouse": {
+      "female": {
+        "graha": 4,
+        "graha_name": "Jupiter"
+      },
+      "male": {
+        "graha": 5,
+        "graha_name": "Venus"
+      },
+      "note": "Footnote 28: some scholars take Jupiter as the sthira karaka of spouse in male charts also"
+    },
+    "strength_comparison_defined_in": "Strength of Planets and Rasis",
+    "used_for": "timing the death of various near relatives"
+  },
+  "status": 200
+}

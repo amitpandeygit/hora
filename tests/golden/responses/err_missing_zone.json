@@ -1,0 +1,18 @@
+{
+  "body": {
+    "error": {
+      "details": [
+        {
+          "location": [
+            "body"
+          ],
+          "message": "Value error, supply tz_name or utc_offset_hours",
+          "type": "value_error"
+        }
+      ],
+      "message": "the request did not validate",
+      "type": "unprocessable"
+    }
+  },
+  "status": 422
+}

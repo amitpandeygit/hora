@@ -1,0 +1,10 @@
+{
+  "body": {
+    "conditional": true,
+    "graha": 3,
+    "graha_name": "Mercury",
+    "nature": "malefic",
+    "reason": "Mercury is with more natural malefics, so he is a natural malefic"
+  },
+  "status": 200
+}

@@ -1,0 +1,242 @@
+{
+  "body": {
+    "arudhas": [
+      {
+        "before_exception": 8,
+        "before_exception_name": "Sagittarius",
+        "count": 5,
+        "exception_applied": false,
+        "exception_position": null,
+        "graha": 0,
+        "graha_name": "Sun",
+        "graha_sign": 0,
+        "graha_sign_name": "Aries",
+        "owned": [
+          4
+        ],
+        "owned_decided_by": null,
+        "owned_names": [
+          "Leo"
+        ],
+        "owned_reason": "Sun owns only Leo",
+        "owned_sign": 4,
+        "owned_sign_name": "Leo",
+        "sign": 8,
+        "sign_name": "Sagittarius",
+        "steps": null,
+        "symbol": "AL(Su)"
+      },
+      {
+        "before_exception": 5,
+        "before_exception_name": "Virgo",
+        "count": 3,
+        "exception_applied": false,
+        "exception_position": null,
+        "graha": 1,
+        "graha_name": "Moon",
+        "graha_sign": 1,
+        "graha_sign_name": "Taurus",
+        "owned": [
+          3
+        ],
+        "owned_decided_by": null,
+        "owned_names": [
+          "Cancer"
+        ],
+        "owned_reason": "Moon owns only Cancer",
+        "owned_sign": 3,
+        "owned_sign_name": "Cancer",
+        "sign": 5,
+        "sign_name": "Virgo",
+        "steps": null,
+        "symbol": "AL(Mo)"
+      },
+      {
+        "before_exception": 10,
+        "before_exception_name": "Aquarius",
+        "count": 11,
+        "exception_applied": false,
+        "exception_position": null,
+        "graha": 2,
+        "graha_name": "Mars",
+        "graha_sign": 2,
+        "graha_sign_name": "Gemini",
+        "owned": [
+          0,
+          7
+        ],
+        "owned_decided_by": "3",
+        "owned_names": [
+          "Aries",
+          "Scorpio"
+        ],
+        "owned_reason": "Aries is the stronger of Aries and Scorpio, by section 15.5.2 rule 3",
+        "owned_sign": 0,
+        "owned_sign_name": "Aries",
+        "sign": 10,
+        "sign_name": "Aquarius",
+        "steps": null,
+        "symbol": "AL(Ma)"
+      },
+      {
+        "before_exception": 1,
+        "before_exception_name": "Taurus",
+        "count": 12,
+        "exception_applied": false,
+        "exception_position": null,
+        "graha": 3,
+        "graha_name": "Mercury",
+        "graha_sign": 3,
+        "graha_sign_name": "Cancer",
+        "owned": [
+          2,
+          5
+        ],
+        "owned_decided_by": "4",
+        "owned_names": [
+          "Gemini",
+          "Virgo"
+        ],
+        "owned_reason": "Gemini is the stronger of Gemini and Virgo, by section 15.5.2 rule 4",
+        "owned_sign": 2,
+        "owned_sign_name": "Gemini",
+        "sign": 1,
+        "sign_name": "Taurus",
+        "steps": null,
+        "symbol": "AL(Me)"
+      },
+      {
+        "before_exception": 0,
+        "before_exception_name": "Aries",
+        "count": 5,
+        "exception_applied": false,
+        "exception_position": null,
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "graha_sign": 4,
+        "graha_sign_name": "Leo",
+        "owned": [
+          8,
+          11
+        ],
+        "owned_decided_by": "1",
+        "owned_names": [
+          "Sagittarius",
+          "Pisces"
+        ],
+        "owned_reason": "Sagittarius is the stronger of Sagittarius and Pisces, by section 15.5.2 rule 1",
+        "owned_sign": 8,
+        "owned_sign_name": "Sagittarius",
+        "sign": 0,
+        "sign_name": "Aries",
+        "steps": null,
+        "symbol": "AL(Ju)"
+      },
+      {
+        "before_exception": 7,
+        "before_exception_name": "Scorpio",
+        "count": 2,
+        "exception_applied": false,
+        "exception_position": null,
+        "graha": 5,
+        "graha_name": "Venus",
+        "graha_sign": 5,
+        "graha_sign_name": "Virgo",
+        "owned": [
+          1,
+          6
+        ],
+        "owned_decided_by": "4",
+        "owned_names": [
+          "Taurus",
+          "Libra"
+        ],
+        "owned_reason": "Libra is the stronger of Taurus and Libra, by section 15.5.2 rule 4",
+        "owned_sign": 6,
+        "owned_sign_name": "Libra",
+        "sign": 7,
+        "sign_name": "Scorpio",
+        "steps": null,
+        "symbol": "AL(Ve)"
+      },
+      {
+        "before_exception": 2,
+        "before_exception_name": "Gemini",
+        "count": 5,
+        "exception_applied": false,
+        "exception_position": null,
+        "graha": 6,
+        "graha_name": "Saturn",
+        "graha_sign": 6,
+        "graha_sign_name": "Libra",
+        "owned": [
+          9,
+          10
+        ],
+        "owned_decided_by": "2",
+        "owned_names": [
+          "Capricorn",
+          "Aquarius"
+        ],
+        "owned_reason": "Aquarius is the stronger of Capricorn and Aquarius, by section 15.5.2 rule 2",
+        "owned_sign": 10,
+        "owned_sign_name": "Aquarius",
+        "sign": 2,
+        "sign_name": "Gemini",
+        "steps": null,
+        "symbol": "AL(Sa)"
+      },
+      {
+        "before_exception": 1,
+        "before_exception_name": "Taurus",
+        "count": 4,
+        "exception_applied": true,
+        "exception_position": 7,
+        "graha": 7,
+        "graha_name": "Rahu",
+        "graha_sign": 7,
+        "graha_sign_name": "Scorpio",
+        "owned": [
+          10
+        ],
+        "owned_decided_by": null,
+        "owned_names": [
+          "Aquarius"
+        ],
+        "owned_reason": "Rahu owns only Aquarius",
+        "owned_sign": 10,
+        "owned_sign_name": "Aquarius",
+        "sign": 10,
+        "sign_name": "Aquarius",
+        "steps": null,
+        "symbol": "AL(Ra)"
+      },
+      {
+        "before_exception": 6,
+        "before_exception_name": "Libra",
+        "count": 12,
+        "exception_applied": false,
+        "exception_position": null,
+        "graha": 8,
+        "graha_name": "Ketu",
+        "graha_sign": 8,
+        "graha_sign_name": "Sagittarius",
+        "owned": [
+          7
+        ],
+        "owned_decided_by": null,
+        "owned_names": [
+          "Scorpio"
+        ],
+        "owned_reason": "Ketu owns only Scorpio",
+        "owned_sign": 7,
+        "owned_sign_name": "Scorpio",
+        "sign": 6,
+        "sign_name": "Libra",
+        "steps": null,
+        "symbol": "AL(Ke)"
+      }
+    ]
+  },
+  "status": 200
+}

@@ -1,0 +1,49 @@
+{
+  "body": {
+    "co_lord_names": [
+      "Saturn",
+      "Rahu"
+    ],
+    "co_lords": [
+      6,
+      7
+    ],
+    "decided_by": null,
+    "determined": false,
+    "rasi": 10,
+    "rasi_name": "Aquarius",
+    "reason": "rule 2 could not be evaluated",
+    "rules": [
+      {
+        "decided": false,
+        "description": "If one of the co-lords is in the rasi, take the other planet",
+        "detail": "neither co-lord is in the rasi",
+        "evaluated": true,
+        "rule": "basic",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": false,
+        "description": "If one planet is joined by more planets than the other, it is stronger",
+        "detail": "Saturn with 0 other planets; Rahu with 0 other planets \u2014 tie",
+        "evaluated": true,
+        "rule": "1",
+        "winner": null,
+        "winner_name": null
+      },
+      {
+        "decided": null,
+        "description": "More of Jupiter, Mercury and the dispositor conjoin or aspect it",
+        "detail": "no rasi aspects available; the cascade stops here rather than skipping to rule 3",
+        "evaluated": true,
+        "rule": "2",
+        "winner": null,
+        "winner_name": null
+      }
+    ],
+    "winner": null,
+    "winner_name": null
+  },
+  "status": 200
+}

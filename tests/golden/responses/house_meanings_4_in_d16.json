@@ -1,0 +1,17 @@
+{
+  "body": {
+    "chart": "D16",
+    "chart_signifies": "Vehicles, pleasures, comforts and discomforts",
+    "derivable": true,
+    "house": 4,
+    "house_signifies": "Mother, vehicles, house, lands, immovable property, motherland, childhood, wealth from real estate, education, relatives, happiness, comforts, pleasures, peace, state of mind, heart",
+    "limitation": "Shared meanings are the literal overlap of the two signification lists, so every word is the book's own. Where the link is semantic rather than literal the overlap is empty or partial - section 7.3's own D-12 case reads the 4th house as 'mother' because mother is a parent, which the tables do not say. See open item OI-55.",
+    "rule": "We have to note the area of life seen in the divisional chart under examination. We have to choose the meanings of houses that are relevant in that area of life.",
+    "shared_meanings": [
+      "comfort",
+      "pleasure",
+      "vehicle"
+    ]
+  },
+  "status": 200
+}

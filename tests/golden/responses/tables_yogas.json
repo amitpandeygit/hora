@@ -1,0 +1,251 @@
+{
+  "body": {
+    "span_degrees": 13.333333333333334,
+    "yogas": [
+      {
+        "ends": 13.33333333,
+        "index": 0,
+        "means": "Door bolt/supporting pillar",
+        "name": "Vishkambha",
+        "name_standard": "Vishkambha",
+        "number": 1,
+        "starts": 0.0
+      },
+      {
+        "ends": 26.66666667,
+        "index": 1,
+        "means": "Love/affection",
+        "name": "Preeti",
+        "name_standard": "Priti",
+        "number": 2,
+        "starts": 13.33333333
+      },
+      {
+        "ends": 40.0,
+        "index": 2,
+        "means": "Long-lived",
+        "name": "Aayushmaan",
+        "name_standard": "Ayushman",
+        "number": 3,
+        "starts": 26.66666667
+      },
+      {
+        "ends": 53.33333333,
+        "index": 3,
+        "means": "Long life of spouse (good fortune)",
+        "name": "Saubhaagya",
+        "name_standard": "Saubhagya",
+        "number": 4,
+        "starts": 40.0
+      },
+      {
+        "ends": 66.66666667,
+        "index": 4,
+        "means": "Splendid, bright",
+        "name": "Sobhana",
+        "name_standard": "Shobhana",
+        "number": 5,
+        "starts": 53.33333333
+      },
+      {
+        "ends": 80.0,
+        "index": 5,
+        "means": "Great danger",
+        "name": "Atiganda",
+        "name_standard": "Atiganda",
+        "number": 6,
+        "starts": 66.66666667
+      },
+      {
+        "ends": 93.33333333,
+        "index": 6,
+        "means": "One with good deeds",
+        "name": "Sukarman",
+        "name_standard": "Sukarma",
+        "number": 7,
+        "starts": 80.0
+      },
+      {
+        "ends": 106.66666667,
+        "index": 7,
+        "means": "Firmness",
+        "name": "Dhriti",
+        "name_standard": "Dhriti",
+        "number": 8,
+        "starts": 93.33333333
+      },
+      {
+        "ends": 120.0,
+        "index": 8,
+        "means": "Shiva's weapon of destruction (pain)",
+        "name": "Shoola",
+        "name_standard": "Shula",
+        "number": 9,
+        "starts": 106.66666667
+      },
+      {
+        "ends": 133.33333333,
+        "index": 9,
+        "means": "Danger",
+        "name": "Ganda",
+        "name_standard": "Ganda",
+        "number": 10,
+        "starts": 120.0
+      },
+      {
+        "ends": 146.66666667,
+        "index": 10,
+        "means": "Growth",
+        "name": "Vriddhi",
+        "name_standard": "Vriddhi",
+        "number": 11,
+        "starts": 133.33333333
+      },
+      {
+        "ends": 160.0,
+        "index": 11,
+        "means": "Fixed, constant",
+        "name": "Dhruva",
+        "name_standard": "Dhruva",
+        "number": 12,
+        "starts": 146.66666667
+      },
+      {
+        "ends": 173.33333333,
+        "index": 12,
+        "means": "Great blow",
+        "name": "Vyaaghaata",
+        "name_standard": "Vyaghata",
+        "number": 13,
+        "starts": 160.0
+      },
+      {
+        "ends": 186.66666667,
+        "index": 13,
+        "means": "Cheerful",
+        "name": "Harshana",
+        "name_standard": "Harshana",
+        "number": 14,
+        "starts": 173.33333333
+      },
+      {
+        "ends": 200.0,
+        "index": 14,
+        "means": "Diamond (strong)",
+        "name": "Vajra",
+        "name_standard": "Vajra",
+        "number": 15,
+        "starts": 186.66666667
+      },
+      {
+        "ends": 213.33333333,
+        "index": 15,
+        "means": "Accomplishment",
+        "name": "Siddhi",
+        "name_standard": "Siddhi",
+        "number": 16,
+        "starts": 200.0
+      },
+      {
+        "ends": 226.66666667,
+        "index": 16,
+        "means": "Great fall",
+        "name": "Vyatipaata",
+        "name_standard": "Vyatipata",
+        "number": 17,
+        "starts": 213.33333333
+      },
+      {
+        "ends": 240.0,
+        "index": 17,
+        "means": "Chief/best",
+        "name": "Variyan",
+        "name_standard": "Variyan",
+        "number": 18,
+        "starts": 226.66666667
+      },
+      {
+        "ends": 253.33333333,
+        "index": 18,
+        "means": "Obstacle/hindrance",
+        "name": "Parigha",
+        "name_standard": "Parigha",
+        "number": 19,
+        "starts": 240.0
+      },
+      {
+        "ends": 266.66666667,
+        "index": 19,
+        "means": "Lord Shiva (purity)",
+        "name": "Shiva",
+        "name_standard": "Shiva",
+        "number": 20,
+        "starts": 253.33333333
+      },
+      {
+        "ends": 280.0,
+        "index": 20,
+        "means": "Accomplished/ready",
+        "name": "Siddha",
+        "name_standard": "Siddha",
+        "number": 21,
+        "starts": 266.66666667
+      },
+      {
+        "ends": 293.33333333,
+        "index": 21,
+        "means": "Possible",
+        "name": "Saadhya",
+        "name_standard": "Sadhya",
+        "number": 22,
+        "starts": 280.0
+      },
+      {
+        "ends": 306.66666667,
+        "index": 22,
+        "means": "Auspicious",
+        "name": "Subha",
+        "name_standard": "Shubha",
+        "number": 23,
+        "starts": 293.33333333
+      },
+      {
+        "ends": 320.0,
+        "index": 23,
+        "means": "White, bright",
+        "name": "Sukla",
+        "name_standard": "Shukla",
+        "number": 24,
+        "starts": 306.66666667
+      },
+      {
+        "ends": 333.33333333,
+        "index": 24,
+        "means": "Creator (good knowledge and purity)",
+        "name": "Brahma",
+        "name_standard": "Brahma",
+        "number": 25,
+        "starts": 320.0
+      },
+      {
+        "ends": 346.66666667,
+        "index": 25,
+        "means": "Ruler of gods",
+        "name": "Indra",
+        "name_standard": "Indra",
+        "number": 26,
+        "starts": 333.33333333
+      },
+      {
+        "ends": 360.0,
+        "index": 26,
+        "means": "A class of gods",
+        "name": "Vaidhriti",
+        "name_standard": "Vaidhriti",
+        "number": 27,
+        "starts": 346.66666667
+      }
+    ]
+  },
+  "status": 200
+}

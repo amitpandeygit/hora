@@ -1,0 +1,38 @@
+{
+  "body": {
+    "applies_count": 3,
+    "available": true,
+    "avastha": 4,
+    "avastha_name": "Prakaasana",
+    "graha": 2,
+    "graha_name": "Mars",
+    "licence_status": "unconfirmed",
+    "note": null,
+    "results": [
+      {
+        "applies": true,
+        "conditional": false,
+        "reason": "unconditional",
+        "text": null
+      },
+      {
+        "applies": true,
+        "conditional": true,
+        "reason": "house 5, wants 5",
+        "text": null
+      },
+      {
+        "applies": true,
+        "conditional": true,
+        "reason": "house 5, wants 5; joined by [7], wants [7]",
+        "text": null
+      }
+    ],
+    "source": "pvr-vaia",
+    "text_withheld": true,
+    "transcription_notes": null,
+    "undetermined_count": 0,
+    "verbatim": null
+  },
+  "status": 200
+}

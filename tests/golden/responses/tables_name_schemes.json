@@ -1,0 +1,11 @@
+{
+  "body": {
+    "default": "book",
+    "note": "book = spellings as printed in 'Vedic Astrology: An Integrated Approach'. standard = common pan-Indian Sanskrit forms. Names are display only; integer indices are the stable contract.",
+    "schemes": [
+      "book",
+      "standard"
+    ]
+  },
+  "status": 200
+}

@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "rasi must be 0..11 (0 = Aries)",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}

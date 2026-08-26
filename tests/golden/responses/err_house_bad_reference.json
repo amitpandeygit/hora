@@ -1,0 +1,10 @@
+{
+  "body": {
+    "error": {
+      "details": null,
+      "message": "unknown reference 'nonesuch'; expected one of arudha_lagna, chandra_lagna, ghati_lagna, hora_lagna, karakamsa_lagna, lagna, paaka_lagna, ravi_lagna",
+      "type": "bad_request"
+    }
+  },
+  "status": 400
+}
