@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 34 waiting on evidence · 2 parked**
+**5 waiting on Amit · 35 waiting on evidence · 2 parked**
 
 ---
 
@@ -18,7 +18,7 @@ implemented. Do not act on these, and do not re-raise them each session.
 | OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
-| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. Chart 6 reproduces to 1' with mean and is 39' out with true |
+| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. Charts 6 **and 7** both reproduce with mean and are 39' and 12' out with true |
 
 Listed in the order I would take them: OI-39 is the only unambiguous defect and
 the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
@@ -271,41 +271,65 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
 
-### OI-68 — Chart 6 needs the **mean** node; our default is `true`
+### OI-70 — §10.7 step 3 is unvalidated: no counting rule fits both examples
 
-The first hard evidence in the project about which node convention the book
-uses, and it points against our default.
+Step 3: "If there are both, see if **more planets** cause argala or
+virodhargala." Two ways to count are defensible — every planet in an argala or
+virodhargala house (**literal**), or only those that do something, dropping a
+virodhargala whose paired argala house is empty and an argala that is itself
+obstructed (**effective**, using §10.6's own obstruction rule).
 
-Chart 6 (P.V. Narasimha Rao, §10.7's Example 35) prints its birth data — 28
-June 1921, 12:49 pm, 5h17m east, 79 E 09, 18 N 26 — so the whole chart can be
-recomputed rather than transcribed. It reproduces:
+Both worked examples read the **argala** as decisive. Neither count fits both:
 
-| Body | computed (mean node) | printed |
-|---|---|---|
-| Ascendant | 24 Vi 20 | 24 Vi 19 |
-| Sun | 13 Ge 17 | 13 Ge 16 |
-| Moon | 10 Pi 33 | 10 Pi 33 |
-| Mars | 13 Ge 34 | 13 Ge 33 |
-| Mercury | 27 Ge 41 | 27 Ge 40 |
-| Jupiter | 20 Le 06 | 20 Le 06 |
-| Venus | 27 Ar 40 | 27 Ar 40 |
-| Saturn | 26 Le 26 | 26 Le 26 |
-| **Rahu** | **0 Li 48** | **0 Li 47** |
+| Saturn as target | literal | effective | the book reads |
+|---|---|---|---|
+| Ex 35, Narasimha Rao | 3 v 3 tie | 0 v 1 → virodha | argala — writing, politics |
+| Ex 36, Reagan | 1 v 3 → virodha | 1 v 0 → argala | argala — acting |
 
-Every body within one arcminute, which is the book's own display rounding.
+**What both examples actually do is skip step 3.** They identify the argala and
+read it, weighing no obstruction, though both charts have one.
 
-Under `node_type = TRUE` — our default — Rahu computes to **1 Li 26**, thirty-
-nine arcminutes out. That is not rounding.
+So `dominant` implements a stated rule that **no worked example confirms**. It
+is returned because §10.7 states it, and should not be trusted until something
+validates it. The effective *counts* are returned as data; no
+`dominant_effective` verdict is offered, since that would be our judgement
+rather than PVR's.
 
-**What this is not.** One chart is one data point. JHora has the setting, and
-PVR may have used mean for this chart and true elsewhere; the reference chart
-(Chart 1, 1972) cannot settle it because its JHora output is still the empty
-stub of OI-1. Nothing else in the book has printed birth data *and* printed
-node positions that we have read so far.
+Where the book does give a verdict — "Sun's **unobstructed** argala on GL" —
+both counts agree, and "unobstructed" is the effective test applied to one
+argala rather than a tally.
+
+Related: OI-67 is the same question one level down, and step 4 is unavailable
+in both examples anyway.
+
+**Closes when:** an example applies step 3 where the counts differ, or JHora's
+argala output settles it.
+
+### OI-68 — Charts 6 and 7 both need the **mean** node; our default is `true`
+
+Two charts print their own birth data, so both can be recomputed rather than
+transcribed. Both reproduce every body to within one arcminute — **only with
+the mean node**.
+
+| Chart | Rahu, mean | Rahu, true | printed |
+|---|---|---|---|
+| 6 · Narasimha Rao, 1921, 5h17m **east** | 0 Li 48 | 1 Li 26 | 0 Li 47 |
+| 7 · Reagan, 1911, 6h **west** | 21 Ar 54 | 21 Ar 42 | 21 Ar 54 |
+
+Thirty-nine and twelve arcminutes out under `true`. Every other body in both
+charts — ascendant, seven grahas — lands within one arcminute, which is the
+book's own display rounding. The two charts share no dates, hemispheres or
+offsets, so the agreement is not an artefact of one setup.
+
+This is the only hard evidence in the project about which convention the book
+uses, and it points against our default. The reference chart (Chart 1, 1972)
+cannot settle it: its JHora output is still the empty stub of OI-1.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
-endpoint — chart, panchanga, karakas, dasa lords, argala. A test pins the
-evidence in both directions so it cannot be lost.
+endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by
+`test_chart_6_needs_the_mean_node` and
+`test_chart_7_confirms_oi_68_independently`, which assert the failure in both
+directions so the evidence cannot be lost.
 
 **Closes when:** you decide, or a JHora run of Chart 1 settles it.
 

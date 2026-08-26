@@ -1355,3 +1355,306 @@ def test_example_35_through_the_endpoint(client):
     assert sorted(g["graha_name"] for g in eleventh["grahas"]) == [
         "Mars", "Mercury", "Sun"]
     assert body["dominant"] is None
+
+
+# --------------------------------------------------------------------------
+# Chart 7 — Ronald Reagan
+# --------------------------------------------------------------------------
+
+CHART_7 = {
+    "Asc": "7 Sc 08", "Sun": "23 Cp 49", "Moon": "19 Ar 49",
+    "Mars": "11 Sg 19", "Merc": "28 Sg 49", "Jup": "21 Li 07",
+    "Ven": "10 Aq 56", "Sat": "8 Ar 12", "Rahu": "21 Ar 54",
+    "Ketu": "21 Li 54", "HL": "19 Le 41", "GL": "29 Sg 42",
+}
+
+CHART_7_BIRTH = {
+    "year": 1911, "month": 2, "day": 6, "hour": 2, "minute": 4,
+    "second": 0.0, "utc_offset_hours": -6.0,
+}
+CHART_7_PLACE = {"latitude": 41 + 38 / 60, "longitude": -(89 + 47 / 60)}
+
+CHART_7_CHARA_KARAKAS = {
+    "Merc": "AK", "Sun": "AmK", "Jup": "BK", "Moon": "MK",
+    "Mars": "PiK", "Ven": "PK", "Sat": "GK", "Rahu": "DK",
+}
+
+
+def _chart_7_rasis():
+    return {int(_NAME_TO_GRAHA[name]): int(lon(text) // 30)
+            for name, text in CHART_7.items() if name in _NAME_TO_GRAHA}
+
+
+def _chart_7_computed(node_type):
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_local
+
+    return compute_chart(
+        from_local(**CHART_7_BIRTH),
+        Place(name="Chart 7", **CHART_7_PLACE),
+        Settings(node_type=node_type),
+    )
+
+
+@pytest.mark.parametrize(
+    "body", [b for b in CHART_7 if b in _NAME_TO_GRAHA or b == "Asc"])
+def test_chart_7_derives_from_its_own_birth_data(body):
+    """Chart 7 prints its birth data too — 6 February 1911, 2:04 am, 6h west,
+    89 W 47, 41 N 38 — so it is computed, not transcribed. A western longitude
+    and a negative offset, unlike Chart 6.
+    """
+    from hora.core.const import GRAHA_NAMES
+    from hora.core.settings import NodeType
+
+    chart = _chart_7_computed(NodeType.MEAN)
+    expected = lon(CHART_7[body])
+    if body == "Asc":
+        got = chart.lagna_longitude
+    else:
+        graha = _NAME_TO_GRAHA[body]
+        got = next(p.longitude for g, p in chart.positions.items()
+                   if GRAHA_NAMES[g] == GRAHA_NAMES[graha])
+    assert abs(got - expected) < 1.5 / 60, f"{body}: {got:.4f} vs {expected:.4f}"
+
+
+def test_chart_7_confirms_oi_68_independently():
+    """**A second data point on the node default.** Chart 6 needed the mean
+    node; Chart 7 needs it too.
+
+    Mean gives Rahu at 21 Ar 54 — the printed value exactly. True gives
+    21 Ar 42, twelve arcminutes out, while every other body in the chart
+    matches to the arcminute.
+
+    Two charts, independently dated and placed, both pointing away from our
+    `node_type = TRUE` default. See OI-68.
+    """
+    from hora.core.settings import NodeType
+
+    printed = lon(CHART_7["Rahu"])
+    mean = _chart_7_computed(NodeType.MEAN).positions[int(Graha.RAHU)].longitude
+    true = _chart_7_computed(NodeType.TRUE).positions[int(Graha.RAHU)].longitude
+    assert abs(mean - printed) < 1.5 / 60
+    assert abs(true - printed) > 10 / 60
+
+
+@pytest.mark.parametrize("body,symbol", list(CHART_7_CHARA_KARAKAS.items()))
+def test_chart_7_confirms_its_printed_chara_karakas(body, symbol):
+    from hora.charts.karaka import chara_karakas
+
+    positions = {_NAME_TO_GRAHA[name]: lon(CHART_7[name])
+                 for name in CHART_7_CHARA_KARAKAS}
+    assigned = {k.graha: k.symbol for k in chara_karakas(positions)}
+    assert assigned[_NAME_TO_GRAHA[body]] == symbol
+
+
+# --------------------------------------------------------------------------
+# Example 36
+# --------------------------------------------------------------------------
+
+
+def test_example_36_venus_is_the_only_argala_on_saturn():
+    """"The only planet with an argala on Saturn is Venus in the 11th from
+    Saturn."
+
+    Saturn is in Aries; the 11th from Aries is Aquarius; Venus is at 10 Aq 56.
+    The other three argala houses — Taurus, Cancer and Leo — are all empty.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_7_rasis())
+    assert result["sign_name"] == "Aries"
+    occupied = {a["house"]: [g["graha_name"] for g in a["grahas"]]
+                for a in result["argalas"] if a["present"]}
+    assert occupied == {11: ["Venus"]}
+
+
+def test_example_36_venus_argala_is_unobstructed():
+    """The 11th is obstructed by the 3rd, which from Aries is Gemini — empty
+    in this chart. The example does not say so, but its reading depends on it.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_7_rasis())
+    eleventh = next(a for a in result["argalas"] if a["house"] == 11)
+    assert eleventh["obstructed"] is False
+    third = next(v for v in result["virodhargalas"] if v["house"] == 3)
+    assert RASI_ABBR[third["sign"]] == "Ge"
+    assert third["grahas"] == []
+
+
+def test_example_36_the_sun_has_no_argala_on_saturn():
+    """"In Example 35, Sun has an argala on Saturn and politics was the
+    native's livelihood. In this chart, on the other hand, Sun has no argala."
+
+    The Sun is at 23 Cp 49, and Capricorn is the **10th** from Aries — a
+    virodhargala house, not an argala one. So the Sun does not merely fail to
+    cause argala here; he obstructs.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_7_rasis())
+    for entry in result["argalas"]:
+        assert "Sun" not in [g["graha_name"] for g in entry["grahas"]]
+    tenth = next(v for v in result["virodhargalas"] if v["house"] == 10)
+    assert [g["graha_name"] for g in tenth["grahas"]] == ["Sun"]
+    assert (int(lon(CHART_7["Sun"]) // 30) - int(lon(CHART_7["Sat"]) // 30)) % 12 + 1 == 10
+
+
+def test_example_36_contrasts_with_example_35_on_the_same_karaka():
+    """Both examples ask the same question of the same karaka — the planets
+    with a decisive influence on livelihood and karma, read as argalas on
+    Saturn — and get different answers from different charts.
+
+    Example 35: Sun, Mars and Mercury in the 11th, and politics.
+    Example 36: Venus alone in the 11th, and acting.
+
+    Both use the 11th, §10.7's **catalyst** house.
+    """
+    rao = argala_service.on_karaka(Graha.SATURN, _chart_6_rasis())
+    reagan = argala_service.on_karaka(Graha.SATURN, _chart_7_rasis())
+    for result in (rao, reagan):
+        occupied = {a["house"] for a in result["argalas"] if a["present"]}
+        assert occupied == {11}
+    assert len(next(a for a in rao["argalas"] if a["house"] == 11)["grahas"]) == 3
+    assert len(next(a for a in reagan["argalas"] if a["house"] == 11)["grahas"]) == 1
+
+
+def test_example_36_the_suns_argala_on_gl_is_unobstructed():
+    """"His political power is indicated by Sun's unobstructed argala on GL."
+
+    GL is at 29 Sg 42, so Sagittarius. The Sun in Capricorn is the 2nd from
+    it — §10.7's "basic ingredient for the sustenance of a matter" — and the
+    12th from Sagittarius is Scorpio, which holds no planet. Unobstructed,
+    exactly as the example says.
+    """
+    gl_sign = int(lon(CHART_7["GL"]) // 30)
+    assert RASI_ABBR[gl_sign] == "Sg"
+    result = argala_service.on_sign(gl_sign, _chart_7_rasis())
+    second = next(a for a in result["argalas"] if a["house"] == 2)
+    assert [g["graha_name"] for g in second["grahas"]] == ["Sun"]
+    assert second["obstructed"] is False
+    assert second["argala_kind"] == "primary"
+    twelfth = next(v for v in result["virodhargalas"] if v["house"] == 12)
+    assert RASI_ABBR[twelfth["sign"]] == "Sc"
+    assert twelfth["grahas"] == []
+
+
+def test_example_36_takes_argala_on_a_special_lagna():
+    """§10.7 step 1 offers two targets — "the relevant house or the relevant
+    karaka". GL is neither: it is a special lagna, chapter 5's ghati lagna.
+
+    It works because argala is a property of a **sign**, as §10.6 says
+    ("argala on Vi and on the planets in Vi"), so any reference point resolves
+    through the sign it falls in. But the set of targets is wider than §10.7
+    states.
+    """
+    gl_sign = int(lon(CHART_7["GL"]) // 30)
+    by_sign = argala_service.on_sign(gl_sign, _chart_7_rasis())
+    assert by_sign["sign_name"] == "Sagittarius"
+    assert "karaka" not in by_sign
+
+
+def test_example_36_uses_gl_exactly_as_chapter_7_says_to():
+    """§7.3.7 gives ghati lagna "self, from the point of view of power,
+    authority and fame", and adds: "When we analyze promotions in career or
+    political power of politicians, this reference is very important."
+
+    Example 36 reads political power from GL. Two chapters apart, and the
+    second uses the first without citing it.
+    """
+    from hora.core.const import GHATI_LAGNA_SHOWS, GHATI_LAGNA_USED_FOR
+
+    assert "power, authority and fame" in GHATI_LAGNA_SHOWS
+    assert "political power of politicians" in GHATI_LAGNA_USED_FOR
+
+
+def test_example_36_reads_livelihood_from_saturn_and_power_from_gl():
+    """The example separates two questions the previous one ran together:
+    livelihood and karma from Saturn, political power from GL. Reagan's
+    Saturn gives acting; his GL gives politics.
+
+    Different targets, different answers, same chart — which is the point of
+    §10.7 step 1 saying "depending on the matter of interest".
+    """
+    saturn = argala_service.on_karaka(Graha.SATURN, _chart_7_rasis())
+    gl = argala_service.on_sign(int(lon(CHART_7["GL"]) // 30), _chart_7_rasis())
+    saturn_causers = {g["graha_name"] for a in saturn["argalas"]
+                      for g in a["grahas"]}
+    gl_causers = {g["graha_name"] for a in gl["argalas"] for g in a["grahas"]}
+    assert saturn_causers == {"Venus"}
+    assert "Sun" in gl_causers
+    assert saturn_causers != gl_causers
+
+
+def test_neither_tally_reproduces_both_worked_examples():
+    """**The finding, and it is a negative one.**
+
+    §10.7 step 3 says "see if more planets cause argala or virodhargala". Two
+    ways to count are defensible: every planet in an argala or virodhargala
+    house, or only those that actually do something — dropping a virodhargala
+    whose paired argala house is empty, and an argala that is itself
+    obstructed. The second uses §10.6's own obstruction rule.
+
+    Both examples read the **argala** as decisive. Neither tally agrees with
+    both:
+
+    ==================  ==========  ============  =========================
+    Saturn as target    literal     effective     the book's reading
+    ==================  ==========  ============  =========================
+    Ex 35, Narasimha    3 v 3 tie   0 v 1 → V     argala: writing, politics
+    Ex 36, Reagan       1 v 3 → V   1 v 0 → A     argala: acting
+    ==================  ==========  ============  =========================
+
+    The literal count contradicts Example 36; the effective count contradicts
+    Example 35. What both examples actually do is identify the argala and read
+    it — step 3 is never applied.
+
+    So `dominant` is an unvalidated computation of a stated rule, and no
+    `dominant_effective` is offered, because a verdict from the second column
+    would be ours rather than PVR's. See OI-70.
+    """
+    rao = argala_service.on_karaka(Graha.SATURN, _chart_6_rasis())
+    reagan = argala_service.on_karaka(Graha.SATURN, _chart_7_rasis())
+
+    assert (rao["argala_graha_count"], rao["virodhargala_graha_count"]) == (3, 3)
+    assert rao["dominant"] is None
+    assert (rao["effective_argala_graha_count"],
+            rao["effective_virodhargala_graha_count"]) == (0, 1)
+
+    assert (reagan["argala_graha_count"],
+            reagan["virodhargala_graha_count"]) == (1, 3)
+    assert reagan["dominant"] == "virodhargala"
+    assert (reagan["effective_argala_graha_count"],
+            reagan["effective_virodhargala_graha_count"]) == (1, 0)
+
+
+def test_no_effective_verdict_is_published():
+    """The effective *counts* follow from §10.6's obstruction rule and are
+    returned. A verdict built on them would not follow from anything PVR
+    wrote, so none is offered."""
+    result = argala_service.on_karaka(Graha.SATURN, _chart_7_rasis())
+    assert "effective_argala_graha_count" in result
+    assert "dominant_effective" not in result
+
+
+def test_the_gl_reading_is_unambiguous_under_either_count():
+    """Where the book does give a verdict — "Sun's **unobstructed** argala on
+    GL" — both counts agree, and the word "unobstructed" is itself the
+    effective test applied to a single argala.
+    """
+    gl = argala_service.on_sign(int(lon(CHART_7["GL"]) // 30), _chart_7_rasis())
+    assert gl["dominant"] == "argala"
+    assert gl["effective_argala_graha_count"] > gl["effective_virodhargala_graha_count"]
+    second = next(a for a in gl["argalas"] if a["house"] == 2)
+    assert second["obstructed"] is False
+
+
+def test_example_36_through_the_endpoints(client):
+    saturn = client.post("/v1/argala/karaka", json={
+        "graha": int(Graha.SATURN), "rasis": _chart_7_rasis()}).json()
+    eleventh = next(a for a in saturn["argalas"] if a["house"] == 11)
+    assert [g["graha_name"] for g in eleventh["grahas"]] == ["Venus"]
+    assert saturn["dominant"] == "virodhargala"
+    assert saturn["effective_argala_graha_count"] == 1
+    assert saturn["effective_virodhargala_graha_count"] == 0
+
+    gl = client.post("/v1/argala/sign", json={
+        "sign": int(lon(CHART_7["GL"]) // 30), "rasis": _chart_7_rasis()}).json()
+    second = next(a for a in gl["argalas"] if a["house"] == 2)
+    assert [g["graha_name"] for g in second["grahas"]] == ["Sun"]
+    assert second["obstructed"] is False

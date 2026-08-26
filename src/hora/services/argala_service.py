@@ -129,11 +129,29 @@ def on_sign(
     # this argala is unobstructed."
     obstructed = {v.house: bool(v.grahas) for v in virodhas}
 
+    # §10.6: an argala is obstructed when its paired house is occupied. An
+    # empty obstructor leaves it standing — "If Le (3rd from Ge) is empty,
+    # this argala is unobstructed."
+    obstructed = {v.house: bool(v.grahas) for v in virodhas}
+
     # §10.7 step 3: "If there are both, see if more planets cause argala or
     # virodhargala." Counted over every graha in every argala house against
     # every graha in every virodhargala house.
     argala_count = sum(len(e.grahas) for e in argalas)
     virodha_count = sum(len(e.grahas) for e in virodhas)
+
+    # The literal tally counts every virodhargala planet, including one whose
+    # paired argala house is empty and which therefore obstructs nothing.
+    # These two figures drop the ineffective ones, using §10.6's own
+    # obstruction rule. They are counts, **not** a verdict: neither tally
+    # reproduces both Examples 35 and 36, because the book runs step 3 in
+    # neither. See OI-70.
+    effective_argala = sum(
+        len(e.grahas) for e in argalas if not obstructed.get(e.paired_house, False))
+    effective_virodha = sum(
+        len(e.grahas) for e in virodhas
+        if any(a.house == e.paired_house and a.grahas for a in argalas))
+
     if argala_count == 0 and virodha_count == 0:
         dominant, reason = None, "neither argala nor virodhargala is present"
     elif argala_count > virodha_count:
@@ -157,6 +175,8 @@ def on_sign(
             len(e.grahas) for e in argalas if e.argala_kind == "secondary"),
         "dominant": dominant,
         "dominance_reason": reason,
+        "effective_argala_graha_count": effective_argala,
+        "effective_virodhargala_graha_count": effective_virodha,
         "ketu_sign": ketu,
         "argalas": [
             {**_row(e, occupants),

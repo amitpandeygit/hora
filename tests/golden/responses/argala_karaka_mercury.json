@@ -72,6 +72,8 @@
     "counted_anti_zodiacally": false,
     "dominance_reason": "more planets cause argala",
     "dominant": "argala",
+    "effective_argala_graha_count": 1,
+    "effective_virodhargala_graha_count": 1,
     "karaka": 3,
     "karaka_name": "Mercury",
     "ketu_sign": null,

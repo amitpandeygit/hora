@@ -86,6 +86,23 @@ class ArgalaOnSignOut(BaseModel):
     dominance_reason: str | None = Field(
         None, description="Why `dominant` is what it is, including why it is null"
     )
+    effective_argala_graha_count: int = Field(
+        0,
+        description=(
+            "Argala planets whose own house is not obstructed. Section 10.6 "
+            "says an argala stands when its paired house is empty."
+        ),
+    )
+    effective_virodhargala_graha_count: int = Field(
+        0,
+        description=(
+            "Virodhargala planets that actually obstruct something — those "
+            "whose paired argala house is occupied. A virodhargala on an empty "
+            "argala house blocks nothing."
+        ),
+    )
+    # No `dominant_effective`: a verdict from these counts would be ours, not
+    # the book's. See OI-70 — neither tally reproduces both worked examples.
     counted_anti_zodiacally: bool = Field(
         ...,
         description=(

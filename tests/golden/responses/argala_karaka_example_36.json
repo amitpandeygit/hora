@@ -1,6 +1,6 @@
 {
   "body": {
-    "argala_graha_count": 2,
+    "argala_graha_count": 1,
     "argalas": [
       {
         "argala_kind": "primary",
@@ -13,27 +13,22 @@
         "paired_house": 12,
         "present": false,
         "promoted_from_virodhargala": false,
-        "sign": 3,
-        "sign_name": "Cancer"
+        "sign": 1,
+        "sign_name": "Taurus"
       },
       {
         "argala_kind": "primary",
-        "grahas": [
-          {
-            "graha": 6,
-            "graha_name": "Saturn"
-          }
-        ],
+        "grahas": [],
         "house": 4,
         "kind": "argala",
         "obstructed": true,
         "obstructed_by": null,
         "obstructs": 10,
         "paired_house": 10,
-        "present": true,
+        "present": false,
         "promoted_from_virodhargala": false,
-        "sign": 5,
-        "sign_name": "Virgo"
+        "sign": 3,
+        "sign_name": "Cancer"
       },
       {
         "argala_kind": "primary",
@@ -51,35 +46,37 @@
         "paired_house": 3,
         "present": true,
         "promoted_from_virodhargala": false,
-        "sign": 0,
-        "sign_name": "Aries"
+        "sign": 10,
+        "sign_name": "Aquarius"
       },
       {
         "argala_kind": "secondary",
         "grahas": [],
         "house": 5,
         "kind": "argala",
-        "obstructed": false,
+        "obstructed": true,
         "obstructed_by": null,
         "obstructs": 9,
         "paired_house": 9,
         "present": false,
         "promoted_from_virodhargala": false,
-        "sign": 6,
-        "sign_name": "Libra"
+        "sign": 4,
+        "sign_name": "Leo"
       }
     ],
     "counted_anti_zodiacally": false,
-    "dominance_reason": "more planets cause argala",
-    "dominant": "argala",
+    "dominance_reason": "more planets cause virodhargala",
+    "dominant": "virodhargala",
     "effective_argala_graha_count": 1,
-    "effective_virodhargala_graha_count": 1,
-    "ketu_sign": null,
-    "primary_argala_graha_count": 2,
+    "effective_virodhargala_graha_count": 0,
+    "karaka": 6,
+    "karaka_name": "Saturn",
+    "ketu_sign": 6,
+    "primary_argala_graha_count": 1,
     "secondary_argala_graha_count": 0,
-    "sign": 2,
-    "sign_name": "Gemini",
-    "virodhargala_graha_count": 1,
+    "sign": 0,
+    "sign_name": "Aries",
+    "virodhargala_graha_count": 3,
     "virodhargalas": [
       {
         "argala_kind": "primary",
@@ -92,15 +89,15 @@
         "paired_house": 2,
         "present": false,
         "promoted_from_virodhargala": false,
-        "sign": 1,
-        "sign_name": "Taurus"
+        "sign": 11,
+        "sign_name": "Pisces"
       },
       {
         "argala_kind": "primary",
         "grahas": [
           {
-            "graha": 4,
-            "graha_name": "Jupiter"
+            "graha": 0,
+            "graha_name": "Sun"
           }
         ],
         "house": 10,
@@ -111,8 +108,8 @@
         "paired_house": 4,
         "present": true,
         "promoted_from_virodhargala": false,
-        "sign": 11,
-        "sign_name": "Pisces"
+        "sign": 9,
+        "sign_name": "Capricorn"
       },
       {
         "argala_kind": "primary",
@@ -125,22 +122,31 @@
         "paired_house": 11,
         "present": false,
         "promoted_from_virodhargala": false,
-        "sign": 4,
-        "sign_name": "Leo"
+        "sign": 2,
+        "sign_name": "Gemini"
       },
       {
         "argala_kind": "secondary",
-        "grahas": [],
+        "grahas": [
+          {
+            "graha": 2,
+            "graha_name": "Mars"
+          },
+          {
+            "graha": 3,
+            "graha_name": "Mercury"
+          }
+        ],
         "house": 9,
         "kind": "virodhargala",
         "obstructed": null,
         "obstructed_by": 5,
         "obstructs": null,
         "paired_house": 5,
-        "present": false,
+        "present": true,
         "promoted_from_virodhargala": false,
-        "sign": 10,
-        "sign_name": "Aquarius"
+        "sign": 8,
+        "sign_name": "Sagittarius"
       }
     ]
   },
