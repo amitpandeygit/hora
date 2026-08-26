@@ -539,3 +539,16 @@ ARGALA_DOMINANCE_UNDETERMINED = (
     "10.7 then says to compare the strengths, which needs a graha strength "
     "measure this engine does not yet have."
 )
+
+
+#: Example 35's premise. **Not from chapter 8.** Table 15 gives the 10th house
+#: — "Work, achievements, honors", and §7.2's own "karma (action)" — to
+#: *Mercury*, and Table 16's Saturn row lists only the 5th, 6th, 8th and 12th.
+#: Neither table assigns Saturn livelihood or karma.
+#:
+#: Recorded as the example's own claim rather than folded into the karaka
+#: tables. See docs/open-items.md OI-68.
+EXAMPLE_35_PREMISE = "Saturn is the significator of livelihood and karma."
+EXAMPLE_35_RULE = (
+    "Argalas on him denote decisive influences on livelihood and karma."
+)

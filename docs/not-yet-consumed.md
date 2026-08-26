@@ -517,6 +517,18 @@ derived from the book:
 unimported until a chapter derives it. Its tables should be treated as a draft.
 Tracked as [OI-18](open-items.md#oi-18).
 
+### Chapter 10 — Example 35's premise (2)
+
+`EXAMPLE_35_PREMISE` · `EXAMPLE_35_RULE`
+
+Example 35 asserts a karakatwa chapter 8 does not carry — Saturn for
+livelihood and karma. Held here as the example's own claim rather than added
+to Tables 15 or 16, which are transcribed. See OI-69.
+
+| Symbol | What will consume it |
+|---|---|
+| both | Nothing, unless OI-69 settles that the karaka tables may be extended from worked examples |
+
 ### Chapter 10 — §10.7 worked instances (1)
 
 `ARGALA_ROLE_EXAMPLES`

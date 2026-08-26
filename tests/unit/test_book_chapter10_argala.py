@@ -37,6 +37,8 @@ from hora.core.const import (
     ARGALA_USE_CONCLUSION,
     ARGALA_USE_PROCEDURE,
     ASPECT_SOURCE,
+    EXAMPLE_35_PREMISE,
+    EXAMPLE_35_RULE,
     INFLUENCE_RANKING,
     KETU_NOTE_EXAMPLE,
     KETU_REVERSES_ARGALA,
@@ -1105,3 +1107,251 @@ def test_10_7_exercise_16_rows_carry_a_dominance_verdict(client):
         counted = (house["argala_graha_count"], house["virodhargala_graha_count"])
         if counted[0] == counted[1]:
             assert house["dominant"] is None
+
+
+# --------------------------------------------------------------------------
+# Chart 6 — P.V. Narasimha Rao
+# --------------------------------------------------------------------------
+
+#: Chart 6's printed rasi longitudes.
+CHART_6 = {
+    "Asc": "24 Vi 19", "Sun": "13 Ge 16", "Moon": "10 Pi 33",
+    "Mars": "13 Ge 33", "Merc": "27 Ge 40", "Jup": "20 Le 06",
+    "Ven": "27 Ar 40", "Sat": "26 Le 26", "Rahu": "0 Li 47",
+    "Ketu": "0 Ar 47", "HL": "24 Cp 11", "GL": "25 Sg 59",
+}
+
+#: Chart 6's birth data, as printed under the diagram. The offset is 5h17m
+#: east, not the 5h30m of modern IST.
+CHART_6_BIRTH = {
+    "year": 1921, "month": 6, "day": 28, "hour": 12, "minute": 49,
+    "second": 0.0, "utc_offset_hours": 5 + 17 / 60,
+}
+CHART_6_PLACE = {"latitude": 18 + 26 / 60, "longitude": 79 + 9 / 60}
+
+CHART_6_CHARA_KARAKAS = {
+    "Rahu": "AK", "Merc": "AmK", "Ven": "BK", "Sat": "MK",
+    "Jup": "PiK", "Mars": "PK", "Sun": "GK", "Moon": "DK",
+}
+
+
+def _chart_6_rasis():
+    return {int(_NAME_TO_GRAHA[name]): int(lon(text) // 30)
+            for name, text in CHART_6.items() if name in _NAME_TO_GRAHA}
+
+
+def _chart_6_computed(node_type):
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_local
+
+    return compute_chart(
+        from_local(**CHART_6_BIRTH),
+        Place(name="Chart 6", **CHART_6_PLACE),
+        Settings(node_type=node_type),
+    )
+
+
+@pytest.mark.parametrize(
+    "body", [b for b in CHART_6 if b in _NAME_TO_GRAHA or b == "Asc"])
+def test_chart_6_derives_from_its_own_birth_data(body):
+    """Chart 6 is not transcribed — it is **computed** from the birth data
+    printed under it: 28 June 1921, 12:49 pm, 5h17m east, 79 E 09, 18 N 26.
+
+    Every body lands within one arcminute of the printed longitude, which is
+    the rounding in the book's own display. The nodes need the mean node; see
+    `test_chart_6_needs_the_mean_node`.
+    """
+    from hora.core.const import GRAHA_NAMES
+    from hora.core.settings import NodeType
+
+    chart = _chart_6_computed(NodeType.MEAN)
+    expected = lon(CHART_6[body])
+    if body == "Asc":
+        got = chart.lagna_longitude
+    else:
+        graha = _NAME_TO_GRAHA[body]
+        got = next(p.longitude for g, p in chart.positions.items()
+                   if GRAHA_NAMES[g] == GRAHA_NAMES[graha])
+    assert abs(got - expected) < 1.5 / 60, f"{body}: {got:.4f} vs {expected:.4f}"
+
+
+def test_chart_6_needs_the_mean_node():
+    """**Evidence on a live default.** Under the mean node, Rahu computes to
+    0 Li 48 against the printed 0 Li 47 — one arcminute, like every other
+    body. Under the true node it computes to 1 Li 26, thirty-nine arcminutes
+    out.
+
+    Our default is `node_type = TRUE`. Chart 6 is the first hard evidence in
+    the project about which the book uses, and it points the other way. Not
+    changed — see OI-68.
+    """
+    from hora.core.settings import NodeType
+
+    printed = lon(CHART_6["Rahu"])
+    mean = _chart_6_computed(NodeType.MEAN).positions[int(Graha.RAHU)].longitude
+    true = _chart_6_computed(NodeType.TRUE).positions[int(Graha.RAHU)].longitude
+    assert abs(mean - printed) < 1.5 / 60
+    assert abs(true - printed) > 30 / 60
+
+
+def test_chart_6_ketu_is_exactly_opposite_rahu():
+    """0 Li 47 and 0 Ar 47 — the printed chart keeps them exactly 180 apart,
+    which both node conventions do."""
+    assert (lon(CHART_6["Rahu"]) - lon(CHART_6["Ketu"])) % 360 == 180.0
+
+
+@pytest.mark.parametrize("body,symbol", list(CHART_6_CHARA_KARAKAS.items()))
+def test_chart_6_confirms_its_printed_chara_karakas(body, symbol):
+    """Chart 6 prints a chara karaka beside each graha. Recomputing them from
+    the longitudes with chapter 8's procedure reproduces all eight."""
+    from hora.charts.karaka import chara_karakas
+
+    positions = {_NAME_TO_GRAHA[name]: lon(CHART_6[name])
+                 for name in CHART_6_CHARA_KARAKAS}
+    assigned = {k.graha: k.symbol for k in chara_karakas(positions)}
+    assert assigned[_NAME_TO_GRAHA[body]] == symbol
+
+
+def test_chart_6_is_read_in_the_rasi_chart_not_the_navamsa():
+    """Unlike Chart 5's exercises, Example 35 works in the rasi chart: Saturn
+    is at 26 Le 26 and the example puts the 11th from him in Gemini, which is
+    only true of the rasi positions."""
+    saturn = int(lon(CHART_6["Sat"]) // 30)
+    assert RASI_ABBR[saturn] == "Le"
+    assert RASI_ABBR[(saturn + 10) % 12] == "Ge"
+
+
+# --------------------------------------------------------------------------
+# Example 35
+# --------------------------------------------------------------------------
+
+
+def test_example_35_the_premise_is_not_in_chapter_8():
+    """"Saturn is the significator of livelihood and karma."
+
+    Chapter 8 does not say so. Table 15 gives the 10th house — whose §7.2
+    signification includes "karma (action)" — to **Mercury**, and Table 16's
+    Saturn row lists only the 5th, 6th, 8th and 12th. Neither assigns Saturn
+    livelihood or karma.
+
+    Kept as the example's own claim rather than folded into the karaka
+    tables. See OI-68.
+    """
+    from hora.core.const import (
+        HOUSE_SIGNIFICATIONS,
+        NAISARGIKA_KARAKA,
+        NAISARGIKA_KARAKATWAS,
+    )
+
+    assert "livelihood and karma" in EXAMPLE_35_PREMISE
+    assert NAISARGIKA_KARAKA[10]["graha"] == Graha.MERCURY
+    assert "karma (action)" in HOUSE_SIGNIFICATIONS[10]
+    saturn_rows = dict(NAISARGIKA_KARAKATWAS[Graha.SATURN])
+    assert set(saturn_rows) == {5, 6, 8, 12}
+    assert not any("karma" in v or "livelihood" in v
+                   for v in saturn_rows.values())
+
+
+def test_example_35_argala_on_a_karaka_not_a_house():
+    """"Argalas on **him** denote decisive influences on livelihood and
+    karma."
+
+    On Saturn, not on the 10th house. §10.7 step 1's "or the relevant karaka"
+    in use, and the reason `/v1/argala/karaka` exists.
+    """
+    assert "Argalas on him" in EXAMPLE_35_RULE
+    result = argala_service.on_karaka(Graha.SATURN, _chart_6_rasis())
+    assert result["karaka_name"] == "Saturn"
+    assert result["sign_name"] == "Leo"
+
+
+def test_example_35_the_stated_answer():
+    """"Mercury, Mars and Sun have an argala on Saturn, as they are in the 11th
+    from him."
+
+    Saturn is in Leo; the 11th from Leo is Gemini; Gemini holds the Sun at
+    13 Ge 16, Mars at 13 Ge 33 and Mercury at 27 Ge 40.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_6_rasis())
+    eleventh = next(a for a in result["argalas"] if a["house"] == 11)
+    assert RASI_ABBR[eleventh["sign"]] == "Ge"
+    assert sorted(g["graha_name"] for g in eleventh["grahas"]) == [
+        "Mars", "Mercury", "Sun"]
+    assert eleventh["argala_kind"] == "primary"
+
+
+def test_example_35_uses_the_catalyst_role():
+    """The 11th is §10.7's catalyst — "the catalyst that can result in gains
+    for a matter". So Mercury, Mars and the Sun are catalysts for Saturn's
+    livelihood and karma, which fits the example's reading of writing,
+    scholarliness and politics as things that *brought* his career about.
+    """
+    assert ARGALA_HOUSE_ROLE[11]["verb"] == "catalyses"
+    assert "gains" in ARGALA_HOUSE_ROLE[11]["role"]
+
+
+def test_example_35_is_the_only_argala_on_saturn():
+    """The 2nd, 4th and 5th from Leo — Virgo, Scorpio and Sagittarius — are
+    all empty in Chart 6, so the 11th is the whole of the argala. That is why
+    the example names one house and stops.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_6_rasis())
+    occupied = {a["house"] for a in result["argalas"] if a["present"]}
+    assert occupied == {11}
+
+
+def test_example_35_the_book_does_not_run_step_3_here():
+    """What the engine adds beyond the example.
+
+    Rahu is in the 3rd from Saturn and Venus and Ketu in the 9th, so three
+    planets cause virodhargala against the three causing argala. §10.7 step 3
+    therefore ties, and step 4 — comparing strengths — is not available.
+
+    The example says none of this: it names the argala and reads its meaning.
+    Recorded so the engine's extra output is not mistaken for the book's.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_6_rasis())
+    assert result["argala_graha_count"] == 3
+    assert result["virodhargala_graha_count"] == 3
+    assert result["dominant"] is None
+    assert "compare the strengths" in result["dominance_reason"]
+    eleventh = next(a for a in result["argalas"] if a["house"] == 11)
+    assert eleventh["obstructed"] is True
+
+
+def test_example_35_the_third_house_rule_does_not_fire():
+    """Rahu alone is in the 3rd from Saturn. One malefic is not "several" on
+    any reading, so the obstruction stands as a virodhargala — and would flip
+    to an argala only at a threshold of one.
+    """
+    rasis = _chart_6_rasis()
+    result = argala_service.on_karaka(Graha.SATURN, rasis)
+    third = next(v for v in result["virodhargalas"] if v["house"] == 3)
+    assert [g["graha_name"] for g in third["grahas"]] == ["Rahu"]
+    assert third["kind"] == "virodhargala"
+    at_one = argala_service.on_karaka(Graha.SATURN, rasis, several=1)
+    assert any(a["promoted_from_virodhargala"] for a in at_one["argalas"])
+
+
+def test_example_35_the_meanings_are_the_books_and_are_not_computed():
+    """"Mercury's influence indicates writing and scholarliness. Sun and Mars
+    suggest politics."
+
+    §10.7 step 5's "guess", worked. Nothing in the response says any of this —
+    the engine names the three grahas and stops.
+    """
+    result = argala_service.on_karaka(Graha.SATURN, _chart_6_rasis())
+    eleventh = next(a for a in result["argalas"] if a["house"] == 11)
+    payload = repr(eleventh).lower()
+    for word in ("writing", "scholar", "politics", "livelihood"):
+        assert word not in payload
+
+
+def test_example_35_through_the_endpoint(client):
+    body = client.post("/v1/argala/karaka", json={
+        "graha": int(Graha.SATURN), "rasis": _chart_6_rasis()}).json()
+    eleventh = next(a for a in body["argalas"] if a["house"] == 11)
+    assert sorted(g["graha_name"] for g in eleventh["grahas"]) == [
+        "Mars", "Mercury", "Sun"]
+    assert body["dominant"] is None
