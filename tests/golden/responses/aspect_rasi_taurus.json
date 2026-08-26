@@ -1,0 +1,27 @@
+{
+  "body": {
+    "aspected_rasis": [
+      {
+        "rasi": 3,
+        "rasi_name": "Cancer"
+      },
+      {
+        "rasi": 6,
+        "rasi_name": "Libra"
+      },
+      {
+        "rasi": 9,
+        "rasi_name": "Capricorn"
+      }
+    ],
+    "aspects_modality": "movable",
+    "excluded_because": "adjacent",
+    "excluded_rasi": 0,
+    "excluded_rasi_name": "Aries",
+    "modality": "fixed",
+    "rasi": 1,
+    "rasi_name": "Taurus",
+    "rule": "A fixed rasi aspects all movable rasis except the one adjacent to it."
+  },
+  "status": 200
+}

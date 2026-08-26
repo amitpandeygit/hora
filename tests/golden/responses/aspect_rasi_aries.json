@@ -1,0 +1,27 @@
+{
+  "body": {
+    "aspected_rasis": [
+      {
+        "rasi": 4,
+        "rasi_name": "Leo"
+      },
+      {
+        "rasi": 7,
+        "rasi_name": "Scorpio"
+      },
+      {
+        "rasi": 10,
+        "rasi_name": "Aquarius"
+      }
+    ],
+    "aspects_modality": "fixed",
+    "excluded_because": "adjacent",
+    "excluded_rasi": 1,
+    "excluded_rasi_name": "Taurus",
+    "modality": "movable",
+    "rasi": 0,
+    "rasi_name": "Aries",
+    "rule": "A movable rasi aspects all fixed rasis except the one adjacent to it."
+  },
+  "status": 200
+}

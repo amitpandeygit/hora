@@ -7,7 +7,7 @@ one-line examples, which need no chart at all.
 """
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Path
 
 from hora.api.models_aspect import (
     AspectRulesOut,
@@ -17,6 +17,7 @@ from hora.api.models_aspect import (
     ChartAspectOut,
     GrahaAspectIn,
     GrahaAspectOut,
+    RasiAspectOut,
 )
 from hora.services import aspect_service
 
@@ -59,6 +60,21 @@ def between(req: BetweenIn) -> dict:
             rahu_ketu_aspects=req.rahu_ketu_aspects)
     except aspect_service.InputError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.get("/rasi/{rasi}", response_model=RasiAspectOut,
+            summary="Section 10.3: which rasis a rasi aspects, and which it excludes")
+def rasi(
+    rasi: int = Path(..., ge=0, le=11,
+                     description="Rasi index, 0 = Aries", examples=[0]),
+) -> dict:
+    """Rasi drishti with no graha involved.
+
+    Returns the rule that applied and the one sign it excluded, because
+    section 10.3's rules are stated as an exclusion and the excluded sign is
+    the part a reader gets wrong.
+    """
+    return aspect_service.rasi(rasi)
 
 
 @router.get("/rules", response_model=AspectRulesOut,

@@ -22,8 +22,16 @@ from hora.core.const import (
     ASPECTED_PLANET_RULE,
     ASPECTS_ARE_A_SKILL_NOTE,
     DRISHTI_MEANS,
+    FIGURE_2_NOTE,
     GRAHA_NAMES,
+    MODALITY_NAMES_EN,
     NAVAGRAHA,
+    RASI_DRISHTI_GRAHA_EXAMPLE,
+    RASI_DRISHTI_GRAHA_RULE,
+    RASI_DRISHTI_INTRO,
+    RASI_DRISHTI_IS_MUTUAL,
+    RASI_DRISHTI_RULES,
+    RASI_MODALITY,
     RASI_NAMES,
     SEVENTH_HOUSE_RULE,
     SPECIAL_ASPECT_BULLETS,
@@ -32,10 +40,15 @@ from hora.core.const import (
     Graha,
 )
 
+#: §10.3 names the modalities in English — "movable", "fixed", "dual" — which
+#: is exactly `MODALITY_NAMES_EN`, indexed the same way as `RASI_MODALITY`.
+#: Reusing it rather than restating the three words keeps one source.
+MODALITY_INDEX = {name: index for index, name in enumerate(MODALITY_NAMES_EN)}
+
 InputError = validate.InputError
 
 __all__ = [
-    "InputError", "chart", "graha", "rules",
+    "InputError", "between", "chart", "graha", "rasi", "rules",
 ]
 
 #: §10.2's own list of aspecting grahas, which is the seven. The nodes are not
@@ -106,8 +119,19 @@ def graha(
             for g, s in sorted(others.items())
             if g != graha_id and s in rasis
         ],
+        # §10.3: "A planet aspects the signs aspected by the sign it occupies.
+        # It also aspects the houses and planets in those signs." Same three
+        # columns as graha drishti, because Exercise 15 asks for all three.
         "rasi_drishti_rasis": [
-            {"rasi": r, "rasi_name": RASI_NAMES[r]} for r in rasi_drishti(rasi)
+            {"rasi": r, "rasi_name": RASI_NAMES[r],
+             "house": None if lagna_rasi is None else (r - int(lagna_rasi)) % 12 + 1}
+            for r in rasi_drishti(rasi)
+        ],
+        "rasi_drishti_grahas": [
+            {"graha": g, "graha_name": GRAHA_NAMES[g], "rasi": sign,
+             "rasi_name": RASI_NAMES[sign]}
+            for g, sign in sorted(others.items())
+            if g != graha_id and sign in rasi_drishti(rasi)
         ],
     }
 
@@ -128,18 +152,22 @@ def chart(
     if lagna_rasi is not None:
         validate.in_range("lagna_rasi", int(lagna_rasi), 0, 11)
 
-    aspecting = ASPECTING_GRAHAS
+    graha_drishti_casters = ASPECTING_GRAHAS
     if rahu_ketu_aspects:
-        aspecting = tuple(NAVAGRAHA)
+        graha_drishti_casters = tuple(NAVAGRAHA)
 
+    # Every graha present casts rasi drishti, nodes included: §10.3 makes it a
+    # property of the rasi, so nothing can be exempt. Exercise 15 asks about
+    # all nine where Exercise 14 asks about seven, for exactly that reason.
     return {
         "lagna_rasi": None if lagna_rasi is None else int(lagna_rasi),
         "lagna_rasi_name": None if lagna_rasi is None else RASI_NAMES[int(lagna_rasi)],
-        "aspecting_grahas": [int(g) for g in aspecting if g in rasis],
+        "aspecting_grahas": [int(g) for g in graha_drishti_casters if g in rasis],
+        "rasi_drishti_grahas": [int(g) for g in NAVAGRAHA if g in rasis],
         "grahas": [
             graha(g, rasis[g], lagna_rasi=lagna_rasi, others=rasis,
                   rahu_ketu_aspects=rahu_ketu_aspects)
-            for g in aspecting if g in rasis
+            for g in NAVAGRAHA if g in rasis
         ],
         "note": ASPECTED_PLANET_RULE,
     }
@@ -168,6 +196,43 @@ def between(
             graha_id, graha_rasi, target_rasi, rahu_ketu_aspects=rahu_ketu_aspects),
         "graha_aspects_houses": list(
             graha_drishti_houses(graha_id, rahu_ketu_aspects=rahu_ketu_aspects)),
+    }
+
+
+def rasi(rasi_index: int) -> dict:
+    """§10.3's rule for one rasi, with the rule and the excluded sign named.
+
+    No graha involved: rasi drishti is a property of the sign, and this is the
+    form Figure 2 draws.
+    """
+    validate.in_range("rasi", int(rasi_index), 0, 11)
+    rasi_index = int(rasi_index)
+    modality = MODALITY_NAMES_EN[RASI_MODALITY[rasi_index]]
+    rule = next(r for r in RASI_DRISHTI_RULES if r["modality"] == modality)
+    aspected = rasi_drishti(rasi_index)
+
+    # The one sign of the aspected modality that is left out. A dual rasi
+    # excludes only itself, which is why this is None there.
+    excluded = None
+    if modality != "dual":
+        target = MODALITY_INDEX[rule["aspects"]]
+        excluded = next(
+            s for s in range(12)
+            if RASI_MODALITY[s] == target and s not in aspected
+        )
+
+    return {
+        "rasi": rasi_index,
+        "rasi_name": RASI_NAMES[rasi_index],
+        "modality": modality,
+        "rule": rule["text"],
+        "aspects_modality": rule["aspects"],
+        "aspected_rasis": [
+            {"rasi": r, "rasi_name": RASI_NAMES[r]} for r in aspected
+        ],
+        "excluded_rasi": excluded,
+        "excluded_rasi_name": None if excluded is None else RASI_NAMES[excluded],
+        "excluded_because": rule["excludes"],
     }
 
 
@@ -201,4 +266,15 @@ def rules() -> dict:
             "Exercise 14's own answer lists Ketu and Rahu as aspected."
         ),
         "skill_note": ASPECTS_ARE_A_SKILL_NOTE,
+        "rasi_drishti_intro": RASI_DRISHTI_INTRO,
+        "rasi_drishti_rules": [dict(r) for r in RASI_DRISHTI_RULES],
+        "rasi_drishti_is_mutual": RASI_DRISHTI_IS_MUTUAL,
+        "rasi_drishti_graha_rule": RASI_DRISHTI_GRAHA_RULE,
+        "rasi_drishti_graha_example": RASI_DRISHTI_GRAHA_EXAMPLE,
+        "figure_2_note": FIGURE_2_NOTE,
+        # Figure 2 draws one undirected line per aspecting pair. Computed, so
+        # the count cannot drift from the rule.
+        "figure_2_line_count": len({
+            frozenset((s, t)) for s in range(12) for t in rasi_drishti(s)
+        }),
     }

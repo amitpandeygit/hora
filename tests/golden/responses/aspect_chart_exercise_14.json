@@ -40,16 +40,27 @@
         "graha_name": "Sun",
         "has_special_aspect": false,
         "rasi": 1,
+        "rasi_drishti_grahas": [
+          {
+            "graha": 5,
+            "graha_name": "Venus",
+            "rasi": 9,
+            "rasi_name": "Capricorn"
+          }
+        ],
         "rasi_drishti_rasis": [
           {
+            "house": 9,
             "rasi": 3,
             "rasi_name": "Cancer"
           },
           {
+            "house": 12,
             "rasi": 6,
             "rasi_name": "Libra"
           },
           {
+            "house": 3,
             "rasi": 9,
             "rasi_name": "Capricorn"
           }
@@ -73,16 +84,45 @@
         "graha_name": "Moon",
         "has_special_aspect": false,
         "rasi": 0,
-        "rasi_drishti_rasis": [
+        "rasi_drishti_grahas": [
           {
-            "rasi": 4,
-            "rasi_name": "Leo"
-          },
-          {
+            "graha": 2,
+            "graha_name": "Mars",
             "rasi": 7,
             "rasi_name": "Scorpio"
           },
           {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "rasi": 7,
+            "rasi_name": "Scorpio"
+          },
+          {
+            "graha": 7,
+            "graha_name": "Rahu",
+            "rasi": 4,
+            "rasi_name": "Leo"
+          },
+          {
+            "graha": 8,
+            "graha_name": "Ketu",
+            "rasi": 10,
+            "rasi_name": "Aquarius"
+          }
+        ],
+        "rasi_drishti_rasis": [
+          {
+            "house": 10,
+            "rasi": 4,
+            "rasi_name": "Leo"
+          },
+          {
+            "house": 1,
+            "rasi": 7,
+            "rasi_name": "Scorpio"
+          },
+          {
+            "house": 4,
             "rasi": 10,
             "rasi_name": "Aquarius"
           }
@@ -133,16 +173,33 @@
         "graha_name": "Mars",
         "has_special_aspect": true,
         "rasi": 7,
-        "rasi_drishti_rasis": [
+        "rasi_drishti_grahas": [
           {
-            "rasi": 9,
-            "rasi_name": "Capricorn"
-          },
-          {
+            "graha": 1,
+            "graha_name": "Moon",
             "rasi": 0,
             "rasi_name": "Aries"
           },
           {
+            "graha": 5,
+            "graha_name": "Venus",
+            "rasi": 9,
+            "rasi_name": "Capricorn"
+          }
+        ],
+        "rasi_drishti_rasis": [
+          {
+            "house": 3,
+            "rasi": 9,
+            "rasi_name": "Capricorn"
+          },
+          {
+            "house": 6,
+            "rasi": 0,
+            "rasi_name": "Aries"
+          },
+          {
+            "house": 9,
             "rasi": 3,
             "rasi_name": "Cancer"
           }
@@ -166,16 +223,27 @@
         "graha_name": "Mercury",
         "has_special_aspect": false,
         "rasi": 8,
+        "rasi_drishti_grahas": [
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "rasi": 5,
+            "rasi_name": "Virgo"
+          }
+        ],
         "rasi_drishti_rasis": [
           {
+            "house": 5,
             "rasi": 11,
             "rasi_name": "Pisces"
           },
           {
+            "house": 8,
             "rasi": 2,
             "rasi_name": "Gemini"
           },
           {
+            "house": 11,
             "rasi": 5,
             "rasi_name": "Virgo"
           }
@@ -226,16 +294,27 @@
         "graha_name": "Jupiter",
         "has_special_aspect": true,
         "rasi": 5,
+        "rasi_drishti_grahas": [
+          {
+            "graha": 3,
+            "graha_name": "Mercury",
+            "rasi": 8,
+            "rasi_name": "Sagittarius"
+          }
+        ],
         "rasi_drishti_rasis": [
           {
+            "house": 2,
             "rasi": 8,
             "rasi_name": "Sagittarius"
           },
           {
+            "house": 5,
             "rasi": 11,
             "rasi_name": "Pisces"
           },
           {
+            "house": 8,
             "rasi": 2,
             "rasi_name": "Gemini"
           }
@@ -259,16 +338,45 @@
         "graha_name": "Venus",
         "has_special_aspect": false,
         "rasi": 9,
-        "rasi_drishti_rasis": [
+        "rasi_drishti_grahas": [
           {
+            "graha": 0,
+            "graha_name": "Sun",
             "rasi": 1,
             "rasi_name": "Taurus"
           },
           {
+            "graha": 2,
+            "graha_name": "Mars",
+            "rasi": 7,
+            "rasi_name": "Scorpio"
+          },
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "rasi": 7,
+            "rasi_name": "Scorpio"
+          },
+          {
+            "graha": 7,
+            "graha_name": "Rahu",
+            "rasi": 4,
+            "rasi_name": "Leo"
+          }
+        ],
+        "rasi_drishti_rasis": [
+          {
+            "house": 7,
+            "rasi": 1,
+            "rasi_name": "Taurus"
+          },
+          {
+            "house": 10,
             "rasi": 4,
             "rasi_name": "Leo"
           },
           {
+            "house": 1,
             "rasi": 7,
             "rasi_name": "Scorpio"
           }
@@ -325,26 +433,162 @@
         "graha_name": "Saturn",
         "has_special_aspect": true,
         "rasi": 7,
-        "rasi_drishti_rasis": [
+        "rasi_drishti_grahas": [
           {
-            "rasi": 9,
-            "rasi_name": "Capricorn"
-          },
-          {
+            "graha": 1,
+            "graha_name": "Moon",
             "rasi": 0,
             "rasi_name": "Aries"
           },
           {
+            "graha": 5,
+            "graha_name": "Venus",
+            "rasi": 9,
+            "rasi_name": "Capricorn"
+          }
+        ],
+        "rasi_drishti_rasis": [
+          {
+            "house": 3,
+            "rasi": 9,
+            "rasi_name": "Capricorn"
+          },
+          {
+            "house": 6,
+            "rasi": 0,
+            "rasi_name": "Aries"
+          },
+          {
+            "house": 9,
             "rasi": 3,
             "rasi_name": "Cancer"
           }
         ],
         "rasi_name": "Scorpio"
+      },
+      {
+        "aspected_grahas": [
+          {
+            "graha": 8,
+            "graha_name": "Ketu",
+            "rasi": 10,
+            "rasi_name": "Aquarius"
+          }
+        ],
+        "aspected_rasis": [
+          {
+            "house": 4,
+            "house_from_graha": 7,
+            "rasi": 10,
+            "rasi_name": "Aquarius"
+          }
+        ],
+        "aspects_houses_from_itself": [
+          7
+        ],
+        "graha": 7,
+        "graha_name": "Rahu",
+        "has_special_aspect": false,
+        "rasi": 4,
+        "rasi_drishti_grahas": [
+          {
+            "graha": 1,
+            "graha_name": "Moon",
+            "rasi": 0,
+            "rasi_name": "Aries"
+          },
+          {
+            "graha": 5,
+            "graha_name": "Venus",
+            "rasi": 9,
+            "rasi_name": "Capricorn"
+          }
+        ],
+        "rasi_drishti_rasis": [
+          {
+            "house": 12,
+            "rasi": 6,
+            "rasi_name": "Libra"
+          },
+          {
+            "house": 3,
+            "rasi": 9,
+            "rasi_name": "Capricorn"
+          },
+          {
+            "house": 6,
+            "rasi": 0,
+            "rasi_name": "Aries"
+          }
+        ],
+        "rasi_name": "Leo"
+      },
+      {
+        "aspected_grahas": [
+          {
+            "graha": 7,
+            "graha_name": "Rahu",
+            "rasi": 4,
+            "rasi_name": "Leo"
+          }
+        ],
+        "aspected_rasis": [
+          {
+            "house": 10,
+            "house_from_graha": 7,
+            "rasi": 4,
+            "rasi_name": "Leo"
+          }
+        ],
+        "aspects_houses_from_itself": [
+          7
+        ],
+        "graha": 8,
+        "graha_name": "Ketu",
+        "has_special_aspect": false,
+        "rasi": 10,
+        "rasi_drishti_grahas": [
+          {
+            "graha": 1,
+            "graha_name": "Moon",
+            "rasi": 0,
+            "rasi_name": "Aries"
+          }
+        ],
+        "rasi_drishti_rasis": [
+          {
+            "house": 6,
+            "rasi": 0,
+            "rasi_name": "Aries"
+          },
+          {
+            "house": 9,
+            "rasi": 3,
+            "rasi_name": "Cancer"
+          },
+          {
+            "house": 12,
+            "rasi": 6,
+            "rasi_name": "Libra"
+          }
+        ],
+        "rasi_name": "Aquarius"
       }
     ],
     "lagna_rasi": 7,
     "lagna_rasi_name": "Scorpio",
-    "note": "We can decide the signs and houses aspected by a planet as above. If any planet occupies the aspected houses, then the planet is also aspected."
+    "note": "We can decide the signs and houses aspected by a planet as above. If any planet occupies the aspected houses, then the planet is also aspected.",
+    "rasi_drishti_grahas": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
   },
   "status": 200
 }

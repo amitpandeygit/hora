@@ -28,6 +28,13 @@ from hora.core.const import (
     ASPECTS_ARE_A_SKILL_NOTE,
     DRISHTI_MEANS,
     GRAHA_DRISHTI_HEADING_AS_PRINTED,
+    MODALITY_NAMES_EN,
+    RASI_DRISHTI_EXAMPLES,
+    RASI_DRISHTI_GRAHA_EXAMPLE,
+    RASI_DRISHTI_GRAHA_RULE,
+    RASI_DRISHTI_IS_MUTUAL,
+    RASI_DRISHTI_RULES,
+    RASI_MODALITY,
     SEVENTH_HOUSE_EXAMPLES,
     SEVENTH_HOUSE_RULE,
     SPECIAL_ASPECT_BULLETS,
@@ -36,6 +43,7 @@ from hora.core.const import (
     Graha,
 )
 from hora.services import aspect_service
+from hora.services.aspect_service import MODALITY_INDEX
 
 RASI_ABBR = ["Ar", "Ta", "Ge", "Cn", "Le", "Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi"]
 R = {name: index for index, name in enumerate(RASI_ABBR)}
@@ -447,9 +455,12 @@ def test_exercise_14_asks_about_seven_grahas_not_nine():
     Venus and Saturn" — the nodes are not asked about, matching §10.2 giving
     them no aspect."""
     chart = _exercise_14_chart()
-    assert len(chart["grahas"]) == 7
-    names = {r["graha_name"] for r in chart["grahas"]}
-    assert "Rahu" not in names and "Ketu" not in names
+    assert len(chart["aspecting_grahas"]) == 7
+    assert Graha.RAHU not in chart["aspecting_grahas"]
+    assert Graha.KETU not in chart["aspecting_grahas"]
+    for row in chart["grahas"]:
+        if row["graha"] in (Graha.RAHU, Graha.KETU):
+            assert [r["house_from_graha"] for r in row["aspected_rasis"]] == [7]
 
 
 def test_exercise_14_the_nodes_appear_as_aspected_though_they_aspect_nothing():
@@ -576,3 +587,363 @@ def test_chart_endpoint_rejects_an_empty_chart(client):
     response = client.post("/v1/aspect/chart", json={"rasis": {}})
     assert response.status_code == 400
     assert "at least one graha" in response.json()["error"]["message"]
+
+
+# --------------------------------------------------------------------------
+# 10.3 Rasi drishti
+# --------------------------------------------------------------------------
+
+
+def test_10_3_the_heading_is_spelled_correctly():
+    """§10.3 is printed "Rasi Drishti". §10.2's "Graha Drishri" is therefore a
+    misprint and not a variant spelling — the same word is set correctly one
+    section later."""
+    assert ASPECT_KINDS["rasi_drishti"]["name"] == "rasi drishti"
+    assert GRAHA_DRISHTI_HEADING_AS_PRINTED != "Graha Drishti"
+
+
+@pytest.mark.parametrize(
+    "modality,aspects,excludes",
+    [("movable", "fixed", "adjacent"), ("fixed", "movable", "adjacent"),
+     ("dual", "dual", "itself")],
+)
+def test_10_3_the_three_rules(modality, aspects, excludes):
+    """"A movable rasi aspects all fixed rasis except the one adjacent to it.
+    A fixed rasi aspects all movable rasis except the one adjacent to it. A
+    dual rasi aspects all other dual rasis."""
+    rule = next(r for r in RASI_DRISHTI_RULES if r["modality"] == modality)
+    assert rule["aspects"] == aspects
+    assert rule["excludes"] == excludes
+
+
+def test_10_3_movable_and_fixed_aspect_each_other_dual_only_itself():
+    """The three rules are two statements, not three: movable and fixed point
+    at each other, dual points at dual. So the modality graph has one mutual
+    pair and one self-loop, and nothing crosses between them.
+    """
+    by_modality = {r["modality"]: r["aspects"] for r in RASI_DRISHTI_RULES}
+    assert by_modality["movable"] == "fixed"
+    assert by_modality["fixed"] == "movable"
+    assert by_modality["dual"] == "dual"
+    for rasi in range(12):
+        target = MODALITY_INDEX[by_modality[MODALITY_NAMES_EN[RASI_MODALITY[rasi]]]]
+        assert {RASI_MODALITY[r] for r in rasi_drishti(rasi)} == {target}
+
+
+def test_10_3_every_rasi_aspects_exactly_three():
+    """Four rasis of each modality; a movable or fixed rasi drops one of the
+    four and a dual rasi drops itself. Either way three remain — so the count
+    is the same for all twelve, which is not obvious from the wording.
+    """
+    for rasi in range(12):
+        assert len(rasi_drishti(rasi)) == 3
+        assert rasi not in rasi_drishti(rasi)
+
+
+@pytest.mark.parametrize("example", RASI_DRISHTI_EXAMPLES, ids=lambda e: e["modality"])
+def test_10_3_the_three_worked_examples(example):
+    """"Ar... aspects Le, Sc and Aq." "Ta... aspects Cn, Li and Cp." "Ge...
+    aspects Vi, Sg and Pi." One example per rule."""
+    result = aspect_service.rasi(example["rasi"])
+    assert result["modality"] == example["modality"]
+    assert [r["rasi"] for r in result["aspected_rasis"]] == list(example["aspects"])
+    assert result["excluded_rasi"] == example["excluded"]
+
+
+def test_10_3_the_excluded_sign_is_the_next_one_for_a_movable_rasi():
+    """"Ar is a movable sign... except the one adjacent to it, i.e. Ta."
+
+    A movable rasi is always followed by a fixed one, so its adjacent fixed
+    sign is the **next** sign. Ar excludes Ta, not Pi.
+    """
+    for rasi in range(12):
+        if RASI_MODALITY[rasi] == MODALITY_INDEX["movable"]:
+            assert aspect_service.rasi(rasi)["excluded_rasi"] == (rasi + 1) % 12
+
+
+def test_10_3_the_excluded_sign_is_the_previous_one_for_a_fixed_rasi():
+    """"Ta is a fixed sign... except the one adjacent to it, i.e. Ar."
+
+    A fixed rasi is always preceded by a movable one, so its adjacent movable
+    sign is the **previous** sign. The word "adjacent" points in opposite
+    directions in the two rules, and the book resolves it only by example —
+    which is why both directions are pinned here.
+    """
+    for rasi in range(12):
+        if RASI_MODALITY[rasi] == MODALITY_INDEX["fixed"]:
+            assert aspect_service.rasi(rasi)["excluded_rasi"] == (rasi - 1) % 12
+
+
+def test_10_3_a_dual_rasi_excludes_nothing_but_itself():
+    """"A dual rasi aspects all **other** dual rasis" — no adjacency clause,
+    because a dual rasi has no adjacent dual rasi to exclude."""
+    for rasi in range(12):
+        if RASI_MODALITY[rasi] == MODALITY_INDEX["dual"]:
+            result = aspect_service.rasi(rasi)
+            assert result["excluded_rasi"] is None
+            assert result["excluded_because"] == "itself"
+
+
+def test_10_3_rasi_drishti_is_mutual():
+    """"It may be noted that sign Y will aspect sign X if sign X aspects sign
+    Y."
+
+    Checked for all 144 ordered pairs. §10.2 never claims this for graha
+    drishti, and graha drishti is not mutual — Jupiter in Ta aspects Saturn in
+    Cp but not the reverse.
+    """
+    assert "sign Y will aspect sign X" in RASI_DRISHTI_IS_MUTUAL
+    for a in range(12):
+        for b in range(12):
+            assert (b in rasi_drishti(a)) == (a in rasi_drishti(b)), (a, b)
+
+
+def test_figure_2_draws_eighteen_lines():
+    """"A line is drawn between every pair of signs that aspect each other."
+
+    Twelve signs aspecting three each is 36 directed aspects; mutuality halves
+    that to 18 undirected lines. Computed from the rules rather than counted
+    off the figure.
+    """
+    pairs = {frozenset((s, t)) for s in range(12) for t in rasi_drishti(s)}
+    assert len(pairs) == 18
+    assert aspect_service.rules()["figure_2_line_count"] == 18
+    assert all(len(p) == 2 for p in pairs)
+
+
+def test_figure_2_the_duals_form_a_closed_group():
+    """Ge, Vi, Sg and Pi aspect only each other — six of Figure 2's eighteen
+    lines make a complete quadrilateral among the duals, and no line leaves
+    it. The other twelve lines run between movable and fixed.
+    """
+    duals = [r for r in range(12) if RASI_MODALITY[r] == MODALITY_INDEX["dual"]]
+    dual_pairs = {frozenset((s, t)) for s in duals for t in rasi_drishti(s)}
+    assert len(dual_pairs) == 6
+    assert all(set(p) <= set(duals) for p in dual_pairs)
+
+
+def test_10_3_a_graha_inherits_its_rasis_aspects():
+    """"A planet aspects the signs aspected by the sign it occupies. It also
+    aspects the houses and planets in those signs."
+
+    All three columns, which is what Exercise 15 asks for.
+    """
+    assert "signs aspected by the sign it occupies" in RASI_DRISHTI_GRAHA_RULE
+    assert "houses and planets in those signs" in RASI_DRISHTI_GRAHA_RULE
+
+
+def test_10_3_the_libra_example():
+    """"a planet in Libra will aspect the houses and planets in Aq, Ta and
+    Le."
+
+    Libra is movable, so it aspects the fixed signs except the adjacent
+    Scorpio.
+    """
+    result = aspect_service.rasi(R["Li"])
+    assert [RASI_ABBR[r["rasi"]] for r in result["aspected_rasis"]] == [
+        "Aq", "Ta", "Le"]
+    assert result["excluded_rasi_name"] == "Scorpio"
+    assert "Aq, Ta and Le" in RASI_DRISHTI_GRAHA_EXAMPLE
+
+
+def test_10_3_two_grahas_in_one_rasi_share_their_rasi_drishti_exactly():
+    """Rasi drishti belongs to the sign, so co-located grahas cannot differ —
+    unlike graha drishti, where Mars and Saturn in one rasi reach different
+    signs. Both halves checked on the same pair.
+    """
+    chart = aspect_service.chart({Graha.MARS: R["Sc"], Graha.SATURN: R["Sc"]},
+                                 R["Sc"])
+    rows = {r["graha_name"]: r for r in chart["grahas"]}
+    assert rows["Mars"]["rasi_drishti_rasis"] == rows["Saturn"]["rasi_drishti_rasis"]
+    assert rows["Mars"]["aspected_rasis"] != rows["Saturn"]["aspected_rasis"]
+
+
+def test_10_3_the_nodes_cast_rasi_drishti_though_they_cast_no_graha_drishti():
+    """The asymmetry §10.1 sets up, made concrete: Exercise 14 asks about seven
+    grahas, Exercise 15 about nine. Rahu and Ketu get no graha drishti from
+    §10.2 but cannot be exempt from rasi drishti, which is the sign's.
+    """
+    chart = aspect_service.chart({Graha.RAHU: R["Le"], Graha.KETU: R["Aq"]})
+    rows = {r["graha_name"]: r for r in chart["grahas"]}
+    for node in ("Rahu", "Ketu"):
+        assert len(rows[node]["rasi_drishti_rasis"]) == 3
+        assert rows[node]["aspected_rasis"] == [
+            r for r in rows[node]["aspected_rasis"]
+            if r["house_from_graha"] == 7
+        ]
+    assert chart["aspecting_grahas"] == []
+    assert len(chart["rasi_drishti_grahas"]) == 2
+
+
+# --------------------------------------------------------------------------
+# Exercise 15
+# --------------------------------------------------------------------------
+
+#: The answer table, exactly as printed.
+EXERCISE_15 = [
+    ("Sun", ["Cn", "Li", "Cp"], [9, 12, 3], ["Venus"]),
+    ("Moon", ["Le", "Sc", "Aq"], [10, 1, 4], ["Rahu", "Mars", "Saturn", "Ketu"]),
+    ("Mars", ["Cp", "Ar", "Cn"], [3, 6, 9], ["Venus", "Moon"]),
+    ("Merc", ["Pi", "Ge", "Vi"], [5, 8, 11], ["Jupiter"]),
+    ("Jup", ["Sg", "Pi", "Ge"], [2, 5, 8], ["Mercury"]),
+    ("Ven", ["Ta", "Le", "Sc"], [7, 10, 1], ["Sun", "Rahu", "Mars", "Saturn"]),
+    ("Sat", ["Cp", "Ar", "Cn"], [3, 6, 9], ["Venus", "Moon"]),
+    ("Rahu", ["Li", "Cp", "Ar"], [12, 3, 6], ["Venus", "Moon"]),
+    ("Ketu", ["Ar", "Cn", "Li"], [6, 9, 12], ["Moon"]),
+]
+
+
+@pytest.mark.parametrize("body,rasis,houses,planets", EXERCISE_15)
+def test_exercise_15_reproduces_the_answer_table(body, rasis, houses, planets):
+    """Every cell of Exercise 15's answer, for all nine grahas, from the same
+    derived navamsa positions Exercise 14 uses."""
+    row = next(r for r in _exercise_14_chart()["grahas"]
+               if r["graha"] == _NAME_TO_GRAHA[body])
+    assert [RASI_ABBR[r["rasi"]] for r in row["rasi_drishti_rasis"]] == rasis
+    assert [r["house"] for r in row["rasi_drishti_rasis"]] == houses
+    assert sorted(g["graha_name"] for g in row["rasi_drishti_grahas"]) == \
+        sorted(planets)
+
+
+def test_exercise_15_asks_about_nine_grahas_where_exercise_14_asked_about_seven():
+    """"...by Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, **Rahu and
+    Ketu**." The two exercises differ by exactly the nodes, which is §10.1's
+    distinction stated as a task.
+    """
+    assert len(EXERCISE_15) == 9
+    assert len(EXERCISE_14) == 7
+    assert {b for b, *_ in EXERCISE_15} - {b for b, *_ in EXERCISE_14} == {
+        "Rahu", "Ketu"}
+
+
+def test_exercise_15_every_row_has_three_rasis():
+    """Unlike Exercise 14, where four grahas gave one rasi and three gave
+    three. Rasi drishti is uniform: three, always."""
+    assert all(len(rasis) == 3 for _, rasis, _, _ in EXERCISE_15)
+
+
+def test_exercise_15_mars_and_saturn_agree_exactly():
+    """Both in Scorpio, so their rows are identical in all three columns —
+    where Exercise 14 had them sharing only Taurus."""
+    mars = next(row for row in EXERCISE_15 if row[0] == "Mars")
+    saturn = next(row for row in EXERCISE_15 if row[0] == "Sat")
+    assert mars[1:] == saturn[1:]
+
+
+def test_exercise_15_rahu_and_ketu_do_not_aspect_each_other():
+    """Rahu in Le and Ketu in Aq are opposite, and both are fixed. A fixed rasi
+    aspects only movable rasis, so the nodes miss each other entirely — even
+    though they are always exactly opposite.
+    """
+    rows = {b: (r, h, p) for b, r, h, p in EXERCISE_15}
+    assert "Ketu" not in rows["Rahu"][2]
+    assert "Rahu" not in rows["Ketu"][2]
+
+
+def test_only_a_dual_rasi_aspects_its_own_opposite():
+    """Opposite signs always share a modality, so whether a rasi aspects its
+    own opposite is decided purely by which modality it is.
+
+    A movable rasi aspects only fixed and a fixed only movable, so neither
+    reaches its opposite. A dual rasi aspects the other duals — and its
+    opposite is one of them. So Ge does aspect Sg, while Ar misses Li and Ta
+    misses Sc.
+    """
+    for rasi in range(12):
+        opposite = (rasi + 6) % 12
+        assert RASI_MODALITY[rasi] == RASI_MODALITY[opposite]
+        is_dual = RASI_MODALITY[rasi] == MODALITY_INDEX["dual"]
+        assert (opposite in rasi_drishti(rasi)) is is_dual, rasi
+
+
+def test_the_seventh_house_coincides_with_a_rasi_drishti_only_for_a_dual_rasi():
+    """Graha drishti always includes the 7th; rasi drishti reaches the opposite
+    sign only from a dual rasi. So the *7th* is shared exactly when the graha
+    sits in a dual rasi.
+
+    In Exercise 15 that is Mercury in Sg (both reach Ge) and Jupiter in Vi
+    (both reach Pi).
+    """
+    shared_seventh = {}
+    for row in _exercise_14_chart()["grahas"]:
+        seventh = next(r["rasi"] for r in row["aspected_rasis"]
+                       if r["house_from_graha"] == 7)
+        if seventh in {r["rasi"] for r in row["rasi_drishti_rasis"]}:
+            shared_seventh[row["graha_name"]] = seventh
+            assert RASI_MODALITY[row["rasi"]] == MODALITY_INDEX["dual"]
+    assert shared_seventh == {"Mercury": R["Ge"], "Jupiter": R["Pi"]}
+
+
+def test_a_special_aspect_can_also_land_on_a_rasi_drishti_sign():
+    """The 7th is not the only way the two kinds can meet. Saturn in Sc casts
+    his **3rd**-house special aspect on Cp, and Sc's rasi drishti also reaches
+    Cp — so Saturn doubles up without any dual rasi involved.
+
+    Mars sits in the same sign and does not: his 4th, 7th and 8th from Sc are
+    Aq, Ta and Ge, none of which Scorpio aspects. So the coincidence depends
+    on the graha as well as the rasi, and cannot be predicted from modality
+    alone.
+    """
+    rows = {r["graha_name"]: r for r in _exercise_14_chart()["grahas"]}
+    def overlap(name):
+        return ({r["rasi"] for r in rows[name]["aspected_rasis"]} &
+                {r["rasi"] for r in rows[name]["rasi_drishti_rasis"]})
+    assert overlap("Saturn") == {R["Cp"]}
+    assert overlap("Mars") == set()
+    assert rows["Saturn"]["rasi"] == rows["Mars"]["rasi"] == R["Sc"]
+    saturn_third = next(r for r in rows["Saturn"]["aspected_rasis"]
+                        if r["house_from_graha"] == 3)
+    assert saturn_third["rasi"] == R["Cp"]
+
+
+def test_the_two_kinds_are_mostly_disjoint():
+    """Across Exercise 15's nine grahas only three overlap at all — Mercury and
+    Jupiter on the 7th, Saturn on his 3rd. The other six share nothing, so the
+    two kinds genuinely add information rather than restating each other.
+    """
+    overlapping = set()
+    for row in _exercise_14_chart()["grahas"]:
+        if ({r["rasi"] for r in row["aspected_rasis"]} &
+                {r["rasi"] for r in row["rasi_drishti_rasis"]}):
+            overlapping.add(row["graha_name"])
+    assert overlapping == {"Mercury", "Jupiter", "Saturn"}
+
+
+# --------------------------------------------------------------------------
+# The 10.3 endpoints
+# --------------------------------------------------------------------------
+
+
+def test_rasi_endpoint_answers_the_three_worked_examples(client):
+    for example in RASI_DRISHTI_EXAMPLES:
+        body = client.get(f"/v1/aspect/rasi/{example['rasi']}").json()
+        assert [r["rasi"] for r in body["aspected_rasis"]] == list(example["aspects"])
+        assert body["excluded_rasi"] == example["excluded"]
+
+
+def test_rasi_endpoint_validates_the_rasi(client):
+    assert client.get("/v1/aspect/rasi/12").status_code == 422
+    assert client.get("/v1/aspect/rasi/-1").status_code == 422
+
+
+def test_rules_endpoint_carries_the_rasi_drishti_half(client):
+    body = client.get("/v1/aspect/rules").json()
+    assert [r["modality"] for r in body["rasi_drishti_rules"]] == [
+        "movable", "fixed", "dual"]
+    assert body["figure_2_line_count"] == 18
+    assert "sign Y will aspect sign X" in body["rasi_drishti_is_mutual"]
+    assert "Aq, Ta and Le" in body["rasi_drishti_graha_example"]
+
+
+def test_chart_endpoint_answers_exercise_15(client):
+    rasis = {int(_NAME_TO_GRAHA[name]): d9_navamsa(lon(text)).sign
+             for name, text in CHART_5.items() if name in _NAME_TO_GRAHA}
+    body = client.post("/v1/aspect/chart", json={
+        "rasis": rasis, "lagna_rasi": R["Sc"]}).json()
+    rows = {r["graha_name"]: r for r in body["grahas"]}
+    assert [RASI_ABBR[r["rasi"]] for r in rows["Ketu"]["rasi_drishti_rasis"]] == [
+        "Ar", "Cn", "Li"]
+    assert [r["house"] for r in rows["Ketu"]["rasi_drishti_rasis"]] == [6, 9, 12]
+    assert [g["graha_name"] for g in rows["Ketu"]["rasi_drishti_grahas"]] == ["Moon"]
+    assert len(body["rasi_drishti_grahas"]) == 9
+    assert len(body["aspecting_grahas"]) == 7

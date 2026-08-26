@@ -106,3 +106,59 @@ ASPECTS_ARE_A_SKILL_NOTE = (
     "you can become good at it and this is an important skill required in "
     "interpreting charts."
 )
+
+
+# --------------------------------------------------------------------------
+# §10.3 Rasi drishti
+# --------------------------------------------------------------------------
+
+#: §10.3's three rules, in the order printed. Unlike §10.2's special aspects
+#: these *are* derivable — the modality decides everything — which is why
+#: `charts/aspects.py` computes them from `RASI_MODALITY` rather than storing
+#: twelve rows.
+RASI_DRISHTI_RULES: tuple[dict, ...] = (
+    {"modality": "movable", "aspects": "fixed", "excludes": "adjacent",
+     "text": "A movable rasi aspects all fixed rasis except the one adjacent "
+             "to it."},
+    {"modality": "fixed", "aspects": "movable", "excludes": "adjacent",
+     "text": "A fixed rasi aspects all movable rasis except the one adjacent "
+             "to it."},
+    {"modality": "dual", "aspects": "dual", "excludes": "itself",
+     "text": "A dual rasi aspects all other dual rasis."},
+)
+RASI_DRISHTI_INTRO = "Rasis aspect other rasis based on the following rules:"
+
+#: §10.3's three worked examples, one per rule.
+RASI_DRISHTI_EXAMPLES: tuple[dict, ...] = (
+    {"rasi": 0, "modality": "movable", "excluded": 1, "aspects": (4, 7, 10),
+     "text": "Ar is a movable sign. It aspects all the fixed signs except the "
+             "one adjacent to it, i.e. Ta. So Ar aspects Le, Sc and Aq."},
+    {"rasi": 1, "modality": "fixed", "excluded": 0, "aspects": (3, 6, 9),
+     "text": "Ta is a fixed sign. It aspects all the movable signs except the "
+             "one adjacent to it, i.e. Ar. So Ta aspects Cn, Li and Cp."},
+    {"rasi": 2, "modality": "dual", "excluded": None, "aspects": (5, 8, 11),
+     "text": "Ge is a dual sign. It aspects all other dual signs. So Ge "
+             "aspects Vi, Sg and Pi."},
+)
+
+#: §10.3 states mutuality outright, which §10.2's graha drishti never does.
+RASI_DRISHTI_IS_MUTUAL = (
+    "It may be noted that sign Y will aspect sign X if sign X aspects sign Y."
+)
+
+#: Figure 2 draws one line per aspecting pair. Mutuality is what makes an
+#: undirected line the right picture.
+FIGURE_2_NOTE = (
+    "A visual representation of rasi aspects is given in Figure 2. A line is "
+    "drawn between every pair of signs that aspect each other."
+)
+
+#: How a graha inherits its rasi's aspects, and what it reaches.
+RASI_DRISHTI_GRAHA_RULE = (
+    "A planet aspects the signs aspected by the sign it occupies. It also "
+    "aspects the houses and planets in those signs. This is called rasi "
+    "drishti (sign aspect)."
+)
+RASI_DRISHTI_GRAHA_EXAMPLE = (
+    "A planet in Libra will aspect the houses and planets in Aq, Ta and Le."
+)

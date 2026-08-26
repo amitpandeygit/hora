@@ -30,16 +30,20 @@
     "graha_name": "Jupiter",
     "has_special_aspect": true,
     "rasi": 2,
+    "rasi_drishti_grahas": [],
     "rasi_drishti_rasis": [
       {
+        "house": null,
         "rasi": 5,
         "rasi_name": "Virgo"
       },
       {
+        "house": null,
         "rasi": 8,
         "rasi_name": "Sagittarius"
       },
       {
+        "house": null,
         "rasi": 11,
         "rasi_name": "Pisces"
       }

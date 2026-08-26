@@ -33,6 +33,15 @@ class RasiRefOut(BaseModel):
     rasi_name: str
 
 
+class RasiDrishtiRasiOut(BaseModel):
+    rasi: int = Field(..., ge=0, le=11)
+    rasi_name: str
+    house: int | None = Field(
+        None, ge=1, le=12,
+        description="Null unless a lagna_rasi was given, as for graha drishti",
+    )
+
+
 class GrahaAspectOut(BaseModel):
     graha: int
     graha_name: str
@@ -56,11 +65,19 @@ class GrahaAspectOut(BaseModel):
             "aspected depends only on where a graha sits."
         ),
     )
-    rasi_drishti_rasis: list[RasiRefOut] = Field(
+    rasi_drishti_rasis: list[RasiDrishtiRasiOut] = Field(
         ...,
         description=(
-            "Section 10.1's second kind — the rasis aspected by the rasi this "
-            "graha occupies, which the graha inherits."
+            "Section 10.3's kind — the rasis aspected by the rasi this graha "
+            "occupies, which the graha inherits. Every graha casts these, "
+            "Rahu and Ketu included, because rasi drishti belongs to the sign."
+        ),
+    )
+    rasi_drishti_grahas: list[AspectedGrahaOut] = Field(
+        default_factory=list,
+        description=(
+            "Grahas in the rasi-drishti signs. Section 10.3: a planet "
+            '"also aspects the houses and planets in those signs".'
         ),
     )
 
@@ -95,7 +112,21 @@ class ChartAspectIn(BaseModel):
 class ChartAspectOut(BaseModel):
     lagna_rasi: int | None = None
     lagna_rasi_name: str | None = None
-    aspecting_grahas: list[int]
+    aspecting_grahas: list[int] = Field(
+        ...,
+        description=(
+            "Grahas casting **graha** drishti — the seven, unless "
+            "rahu_ketu_aspects is set. Exercise 14 asks about exactly these."
+        ),
+    )
+    rasi_drishti_grahas: list[int] = Field(
+        default_factory=list,
+        description=(
+            "Grahas casting **rasi** drishti — every graha present, nodes "
+            "included. Exercise 15 asks about all nine, which is the "
+            "difference section 10.1 sets up."
+        ),
+    )
     grahas: list[GrahaAspectOut]
     note: str
 
@@ -117,6 +148,31 @@ class BetweenOut(BaseModel):
     house_from_graha: int = Field(..., ge=1, le=12)
     aspects: bool
     graha_aspects_houses: list[int]
+
+
+class RasiDrishtiRuleOut(BaseModel):
+    modality: str = Field(..., examples=["movable", "fixed", "dual"])
+    aspects: str = Field(..., description="Which modality this one aspects")
+    excludes: str = Field(..., examples=["adjacent", "itself"])
+    text: str
+
+
+class RasiAspectOut(BaseModel):
+    rasi: int = Field(..., ge=0, le=11)
+    rasi_name: str
+    modality: str
+    rule: str
+    aspects_modality: str
+    aspected_rasis: list[RasiRefOut]
+    excluded_rasi: int | None = Field(
+        None, ge=0, le=11,
+        description=(
+            "The one sign of the aspected modality left out. Null for a dual "
+            "rasi, which excludes only itself."
+        ),
+    )
+    excluded_rasi_name: str | None = None
+    excluded_because: str
 
 
 class AspectKindOut(BaseModel):
@@ -153,3 +209,23 @@ class AspectRulesOut(BaseModel):
     aspecting_grahas: list[GrahaRefOut]
     nodes_note: str
     skill_note: str
+    rasi_drishti_intro: str
+    rasi_drishti_rules: list[RasiDrishtiRuleOut]
+    rasi_drishti_is_mutual: str = Field(
+        ...,
+        description=(
+            "Section 10.3 states mutuality outright. Section 10.2's graha "
+            "drishti never does, and is not mutual in general."
+        ),
+    )
+    rasi_drishti_graha_rule: str
+    rasi_drishti_graha_example: str
+    figure_2_note: str
+    figure_2_line_count: int = Field(
+        ...,
+        description=(
+            "How many lines Figure 2 draws — one per aspecting pair. Computed "
+            "from the rules, not stored."
+        ),
+        examples=[18],
+    )

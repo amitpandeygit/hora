@@ -37,7 +37,7 @@ calculation; all are published on `/v1/util/tables/rasis` so a caller can name
 what a classification is and what the book says it is for.
 
 `ZODIAC_AS_VISHNU` · `LIMB_APPLIES_TO_NATIVE` · `ODD_EVEN_NAMES` ·
-`ODD_EVEN_USE` · `FOOTED_USE` · `MODALITY_NAMES_EN` · `MODALITY_DEITY_ROLE` ·
+`ODD_EVEN_USE` · `FOOTED_USE` · `MODALITY_DEITY_ROLE` ·
 `MODALITY_NATURE` · `TRINITY_NOTE` · `ELEMENT_DEFINITIONS` · `ETHER_NAME` ·
 `ETHER_NAME_SA` · `ETHER_IN_EVERY_RASI` · `ELEMENTS_UNDERLIE_EVERYTHING` ·
 `FIVE_ELEMENTS_BOOK_ORDER`
@@ -517,16 +517,18 @@ derived from the book:
 unimported until a chapter derives it. Its tables should be treated as a draft.
 Tracked as [OI-18](open-items.md#oi-18).
 
-### Chapter 10 — §10.1 and §10.2 (2)
+### Chapter 10 — §10.1 to §10.3 (3)
 
-`GRAHA_DRISHTI_HEADING_AS_PRINTED` · `SEVENTH_HOUSE_EXAMPLES`
+`GRAHA_DRISHTI_HEADING_AS_PRINTED` · `SEVENTH_HOUSE_EXAMPLES` ·
+`RASI_DRISHTI_EXAMPLES`
 
 Everything else chapter 10 added is consumed by `services/aspect_service.py`.
 
 | Symbol | What will consume it |
 |---|---|
 | `GRAHA_DRISHTI_HEADING_AS_PRINTED` | Nothing — it records the heading's misprint ("Graha Drishri") so it is not mistaken for a term |
-| `SEVENTH_HOUSE_EXAMPLES` | §10.2's five one-line examples; used as test fixtures, not by a calculation |
+| `SEVENTH_HOUSE_EXAMPLES` | §10.2's five one-line examples; test fixtures, not a calculation |
+| `RASI_DRISHTI_EXAMPLES` | §10.3's three worked examples, one per rule; likewise fixtures |
 
 ---
 

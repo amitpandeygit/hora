@@ -249,6 +249,9 @@ CASES = [
         # 10.2's own example: Jupiter in Ta aspects Saturn in Cp.
         "graha": 4, "graha_rasi": 1, "target_rasi": 9,
     }),
+    ("aspect_rasi_aries", "GET", "/v1/aspect/rasi/0", None),
+    ("aspect_rasi_taurus", "GET", "/v1/aspect/rasi/1", None),
+    ("aspect_rasi_gemini", "GET", "/v1/aspect/rasi/2", None),
     ("err_aspect_empty_chart", "POST", "/v1/aspect/chart", {"rasis": {}}),
 
     ("karaka_kinds", "GET", "/v1/karaka/kinds", None),

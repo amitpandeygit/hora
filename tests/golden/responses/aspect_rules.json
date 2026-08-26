@@ -34,6 +34,8 @@
     ],
     "definition": "Planets aspect other planets, rasis and houses in astrology. A planet aspecting a house or a planet has some influence on the matters signified by that house or planet. The nature of the influence exerted and the degree to which that influence succeeds depends on the individual situation.",
     "drishti_means": "aspect",
+    "figure_2_line_count": 18,
+    "figure_2_note": "A visual representation of rasi aspects is given in Figure 2. A line is drawn between every pair of signs that aspect each other.",
     "kinds": [
       {
         "counted_from": "the graha",
@@ -53,6 +55,30 @@
       }
     ],
     "nodes_note": "Section 10.2 gives special aspects to Mars, Jupiter and Saturn only, and names no aspect for Rahu or Ketu. They are therefore not among the aspecting grahas by default, though they are aspected like any other graha when they occupy an aspected rasi. Exercise 14's own answer lists Ketu and Rahu as aspected.",
+    "rasi_drishti_graha_example": "A planet in Libra will aspect the houses and planets in Aq, Ta and Le.",
+    "rasi_drishti_graha_rule": "A planet aspects the signs aspected by the sign it occupies. It also aspects the houses and planets in those signs. This is called rasi drishti (sign aspect).",
+    "rasi_drishti_intro": "Rasis aspect other rasis based on the following rules:",
+    "rasi_drishti_is_mutual": "It may be noted that sign Y will aspect sign X if sign X aspects sign Y.",
+    "rasi_drishti_rules": [
+      {
+        "aspects": "fixed",
+        "excludes": "adjacent",
+        "modality": "movable",
+        "text": "A movable rasi aspects all fixed rasis except the one adjacent to it."
+      },
+      {
+        "aspects": "movable",
+        "excludes": "adjacent",
+        "modality": "fixed",
+        "text": "A fixed rasi aspects all movable rasis except the one adjacent to it."
+      },
+      {
+        "aspects": "dual",
+        "excludes": "itself",
+        "modality": "dual",
+        "text": "A dual rasi aspects all other dual rasis."
+      }
+    ],
     "seventh_house_rule": "All planets aspect the 7th house from them. Find the 7th house from the planet and the planet aspects that house.",
     "skill_note": "Look at a few charts and figure out which planets are aspecting which houses and which planets are aspecting which planets. With experience, you can become good at it and this is an important skill required in interpreting charts.",
     "special_aspect_rule": "In addition, Mars, Jupiter and Saturn have special aspects.",

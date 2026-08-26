@@ -1,0 +1,27 @@
+{
+  "body": {
+    "aspected_rasis": [
+      {
+        "rasi": 5,
+        "rasi_name": "Virgo"
+      },
+      {
+        "rasi": 8,
+        "rasi_name": "Sagittarius"
+      },
+      {
+        "rasi": 11,
+        "rasi_name": "Pisces"
+      }
+    ],
+    "aspects_modality": "dual",
+    "excluded_because": "itself",
+    "excluded_rasi": null,
+    "excluded_rasi_name": null,
+    "modality": "dual",
+    "rasi": 2,
+    "rasi_name": "Gemini",
+    "rule": "A dual rasi aspects all other dual rasis."
+  },
+  "status": 200
+}
