@@ -208,13 +208,13 @@ CHARA_KARAKAS: tuple[dict, ...] = (
 #: caller could read the rule the engine applies. Step 1's last sentence is the
 #: whole of Rahu's special case.
 CHARA_KARAKA_PROCEDURE: tuple[str, ...] = (
-    "Take the eight planets \u2013 Sun, Moon, Mars, Mercury, Jupiter, Venus, "
-    "Saturn and Rahu. For each planet, find its advancement from the beginning "
-    "of the rasi occupied by it. For Rahu, measure the advancement from the "
-    "end of his rasi.",
+    ("Take the eight planets \u2013 Sun, Moon, Mars, Mercury, Jupiter, Venus, "
+     "Saturn and Rahu. For each planet, find its advancement from the beginning "
+     "of the rasi occupied by it. For Rahu, measure the advancement from the "
+     "end of his rasi."),
     "Arrange them in the decreasing order of advancement.",
-    "The planet with the highest advancement is Atma Karaka (significator of "
-    "self). We will denote him by AK. Find other chara karakas using Table 13.",
+    ("The planet with the highest advancement is Atma Karaka (significator of "
+     "self). We will denote him by AK. Find other chara karakas using Table 13."),
 )
 
 #: §8.2's tie-break, distinct from the exact-tie case below: it says the

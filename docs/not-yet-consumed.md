@@ -500,21 +500,33 @@ should generalise rather than multiply.
 
 ## Separate concern: premature, unverified code
 
-### `src/hora/charts/aspects.py` — partly verified, partly premature
+### `src/hora/charts/aspects.py` — one function still premature
 
-Written during Phase 1 scaffolding, before the four-check standard existed. It
-holds graha drishti, rasi drishti and a virupa aspect table.
+Written during Phase 1 scaffolding from general knowledge, before the
+four-check standard existed. Three of its four public functions have since been
+derived from the book:
 
-Three problems:
+| Function | Status |
+|---|---|
+| `rasi_drishti` | Corrected against §15.5.1's worked example; imported by `charts/colord.py`. All three offset rows had been wrong — see OI-27, closed |
+| `graha_drishti_houses` | **Verified against chapter 10** — §10.2's rules, Example 34, Exercise 14's whole answer table. Wired into `services/aspect_service.py` |
+| `graha_aspects_sign` | Same |
+| `drishti_value` | **Still premature.** The virupa partial-aspect table for drik bala and ashtakavarga. Chapter 10 does not derive it, nothing imports it, and it has never been checked against PVR |
 
-1. **Nothing imports it.** Not the chart builder, not any router, not a test.
-2. **No test references it**, so its tables are entirely unverified.
-3. **It was written from general knowledge, not from the book.** Aspects and
-   argalas are chapter 10, which has not been audited. Its contents have never
-   been checked against PVR.
+`test_only_rasi_drishti_is_used_from_the_aspects_module` keeps `drishti_value`
+unimported until a chapter derives it. Its tables should be treated as a draft.
+Tracked as [OI-18](open-items.md#oi-18).
 
-It should be treated as a draft, not as verified work, and re-derived from
-chapter 10 when we reach it. Tracked as [OI-18](open-items.md#oi-18).
+### Chapter 10 — §10.1 and §10.2 (2)
+
+`GRAHA_DRISHTI_HEADING_AS_PRINTED` · `SEVENTH_HOUSE_EXAMPLES`
+
+Everything else chapter 10 added is consumed by `services/aspect_service.py`.
+
+| Symbol | What will consume it |
+|---|---|
+| `GRAHA_DRISHTI_HEADING_AS_PRINTED` | Nothing — it records the heading's misprint ("Graha Drishri") so it is not mistaken for a term |
+| `SEVENTH_HOUSE_EXAMPLES` | §10.2's five one-line examples; used as test fixtures, not by a calculation |
 
 ---
 

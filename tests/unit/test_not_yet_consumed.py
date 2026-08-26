@@ -112,21 +112,22 @@ def test_only_rasi_drishti_is_used_from_the_aspects_module(register_text):
     """`charts/aspects.py` is half verified now, and the halves must stay apart.
 
     `rasi_drishti` was corrected against section 15.5.1's worked example and is
-    imported by `charts/colord.py` (see docs/open-items.md OI-27). The graha
-    aspect functions beside it are still premature and unverified, and must
-    stay unimported until a chapter derives them.
+    imported by `charts/colord.py` (see docs/open-items.md OI-27).
 
-    When one of them is verified and wired in, add it here and shrink the
-    register's section.
+    `graha_drishti_houses` and `graha_aspects_sign` were verified against
+    **chapter 10** — §10.2's rules, Example 34 and Exercise 14's whole answer
+    table — and are now wired into `services/aspect_service.py`.
+
+    `drishti_value` is still unverified. It is the virupa partial-aspect table
+    used by drik bala and ashtakavarga, which chapter 10 does not derive, so it
+    must stay unimported until a chapter does.
     """
     aspects = SRC / "charts" / "aspects.py"
     if not aspects.is_file():
         pytest.skip("aspects.py has been removed")
 
-    verified = {"rasi_drishti"}
-    unverified = {
-        "graha_drishti_houses", "graha_aspects_sign", "drishti_value",
-    }
+    verified = {"rasi_drishti", "graha_drishti_houses", "graha_aspects_sign"}
+    unverified = {"drishti_value"}
     used = set()
     for rel, text in _source_files():
         if "charts.aspects" not in text and "from hora.charts import aspects" not in text:

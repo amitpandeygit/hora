@@ -1,0 +1,105 @@
+{
+  "body": {
+    "aspected_planet_example": "Jupiter in Ta will aspect Saturn in Cp, because Cp is the 9th house from Ta and Jupiter aspects the 9th from him.",
+    "aspected_planet_rule": "We can decide the signs and houses aspected by a planet as above. If any planet occupies the aspected houses, then the planet is also aspected.",
+    "aspecting_grahas": [
+      {
+        "graha": 0,
+        "graha_name": "Sun"
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon"
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars"
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter"
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus"
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn"
+      }
+    ],
+    "definition": "Planets aspect other planets, rasis and houses in astrology. A planet aspecting a house or a planet has some influence on the matters signified by that house or planet. The nature of the influence exerted and the degree to which that influence succeeds depends on the individual situation.",
+    "drishti_means": "aspect",
+    "kinds": [
+      {
+        "counted_from": "the graha",
+        "gloss": "planetary aspect",
+        "key": "graha_drishti",
+        "name": "graha drishti",
+        "rule": "Each planet aspects certain houses from it with graha drishti. The houses aspected are fixed based on the planet.",
+        "varies_by": "graha"
+      },
+      {
+        "counted_from": "the rasi occupied",
+        "gloss": "sign aspect",
+        "key": "rasi_drishti",
+        "name": "rasi drishti",
+        "rule": "Rasis aspect each other and a planet aspects the rasis aspected by the rasi occupied by it.",
+        "varies_by": "rasi"
+      }
+    ],
+    "nodes_note": "Section 10.2 gives special aspects to Mars, Jupiter and Saturn only, and names no aspect for Rahu or Ketu. They are therefore not among the aspecting grahas by default, though they are aspected like any other graha when they occupy an aspected rasi. Exercise 14's own answer lists Ketu and Rahu as aspected.",
+    "seventh_house_rule": "All planets aspect the 7th house from them. Find the 7th house from the planet and the planet aspects that house.",
+    "skill_note": "Look at a few charts and figure out which planets are aspecting which houses and which planets are aspecting which planets. With experience, you can become good at it and this is an important skill required in interpreting charts.",
+    "special_aspect_rule": "In addition, Mars, Jupiter and Saturn have special aspects.",
+    "special_aspects": [
+      {
+        "all_houses": [
+          5,
+          7,
+          9
+        ],
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "houses": [
+          5,
+          9
+        ],
+        "text": "Jupiter aspects the 5th and 9th houses from him, in addition to the 7th house."
+      },
+      {
+        "all_houses": [
+          4,
+          7,
+          8
+        ],
+        "graha": 2,
+        "graha_name": "Mars",
+        "houses": [
+          4,
+          8
+        ],
+        "text": "Mars aspects the 4th and 8th houses from him, in addition to the 7th house."
+      },
+      {
+        "all_houses": [
+          3,
+          7,
+          10
+        ],
+        "graha": 6,
+        "graha_name": "Saturn",
+        "houses": [
+          3,
+          10
+        ],
+        "text": "Saturn aspects the 3rd and 10th houses from him, in addition to the 7th house."
+      }
+    ]
+  },
+  "status": 200
+}

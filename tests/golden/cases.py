@@ -234,6 +234,23 @@ CASES = [
         "house": 1, "lagna_sign": 10,
         "graha_signs": {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0},
     }),
+    # Chapter 10 — aspects. The chart case is Exercise 14: Chart 5's navamsa,
+    # Scorpio lagna. Its whole answer table is a golden.
+    ("aspect_rules", "GET", "/v1/aspect/rules", None),
+    ("aspect_chart_exercise_14", "POST", "/v1/aspect/chart", {
+        "rasis": {0: 1, 1: 0, 2: 7, 3: 8, 4: 5, 5: 9, 6: 7, 7: 4, 8: 10},
+        "lagna_rasi": 7,
+    }),
+    ("aspect_graha_jupiter_gemini", "POST", "/v1/aspect/graha", {
+        # Example 34's first line: Jupiter in Ge aspects Li, Sg and Aq.
+        "graha": 4, "rasi": 2,
+    }),
+    ("aspect_between_jupiter_saturn", "POST", "/v1/aspect/between", {
+        # 10.2's own example: Jupiter in Ta aspects Saturn in Cp.
+        "graha": 4, "graha_rasi": 1, "target_rasi": 9,
+    }),
+    ("err_aspect_empty_chart", "POST", "/v1/aspect/chart", {"rasis": {}}),
+
     ("karaka_kinds", "GET", "/v1/karaka/kinds", None),
     ("karaka_sthira", "GET", "/v1/karaka/sthira", None),
     ("karaka_naisargika", "GET", "/v1/karaka/naisargika", None),

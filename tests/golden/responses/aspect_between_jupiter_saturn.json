@@ -1,0 +1,18 @@
+{
+  "body": {
+    "aspects": true,
+    "graha": 4,
+    "graha_aspects_houses": [
+      5,
+      7,
+      9
+    ],
+    "graha_name": "Jupiter",
+    "graha_rasi": 1,
+    "graha_rasi_name": "Taurus",
+    "house_from_graha": 9,
+    "target_rasi": 9,
+    "target_rasi_name": "Capricorn"
+  },
+  "status": 200
+}

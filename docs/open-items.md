@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**4 waiting on Amit · 28 waiting on evidence · 2 parked**
+**4 waiting on Amit · 29 waiting on evidence · 2 parked**
 
 ---
 
@@ -269,6 +269,35 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 **Closes when:** a semantic map is taken from the book (not from general
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
+
+### OI-63 — `SPECIAL_ASPECTS` gives Rahu and Ketu the 5th and 9th; §10.2 does not
+
+§10.2: "In addition, **Mars, Jupiter and Saturn** have special aspects." Three
+grahas, three bullets, no fourth. The chapter gives the nodes nothing beyond
+the 7th that "all planets" get.
+
+`core/constants/graha.py` carries:
+
+```python
+Graha.RAHU: (5, 9),   # optional in JHora; gated by settings.rahu_ketu_aspects
+Graha.KETU: (5, 9),
+```
+
+**No behaviour is wrong today** — `rahu_ketu_aspects` defaults False, so
+`graha_drishti_houses(RAHU)` returns `(7,)` and Exercise 14 reproduces exactly.
+The problem is provenance: 5 and 9 for the nodes is not in this chapter, and
+the comment cites JHora rather than PVR. It is the same shape as the
+`rasi_drishti` offsets that were wrong in all three rows (OI-27, closed) —
+written from general classical knowledge, not from the book.
+
+Some schools give the nodes 5/9/12, some 5/7/9, some none. Which one JHora
+implements has not been checked.
+
+Options: (a) confirm against JHora and cite it; (b) find PVR's own statement in
+a later chapter, if he makes one; (c) drop the entries and let the flag raise
+rather than silently return a school we cannot source.
+
+**Closes when:** the source for the nodes' 5 and 9 is named, or the entries go.
 
 ### OI-62 — the not-yet-consumed register counts publication as consumption
 

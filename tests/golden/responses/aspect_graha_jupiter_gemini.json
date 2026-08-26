@@ -1,0 +1,50 @@
+{
+  "body": {
+    "aspected_grahas": [],
+    "aspected_rasis": [
+      {
+        "house": null,
+        "house_from_graha": 5,
+        "rasi": 6,
+        "rasi_name": "Libra"
+      },
+      {
+        "house": null,
+        "house_from_graha": 7,
+        "rasi": 8,
+        "rasi_name": "Sagittarius"
+      },
+      {
+        "house": null,
+        "house_from_graha": 9,
+        "rasi": 10,
+        "rasi_name": "Aquarius"
+      }
+    ],
+    "aspects_houses_from_itself": [
+      5,
+      7,
+      9
+    ],
+    "graha": 4,
+    "graha_name": "Jupiter",
+    "has_special_aspect": true,
+    "rasi": 2,
+    "rasi_drishti_rasis": [
+      {
+        "rasi": 5,
+        "rasi_name": "Virgo"
+      },
+      {
+        "rasi": 8,
+        "rasi_name": "Sagittarius"
+      },
+      {
+        "rasi": 11,
+        "rasi_name": "Pisces"
+      }
+    ],
+    "rasi_name": "Gemini"
+  },
+  "status": 200
+}
