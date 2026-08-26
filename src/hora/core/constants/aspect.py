@@ -336,3 +336,130 @@ THIRD_HOUSE_MALEFIC_RULE = (
 #:
 #: Recorded rather than decided. See docs/open-items.md OI-65.
 SEVERAL_MALEFICS = 3
+
+
+# --------------------------------------------------------------------------
+# §10.5 Argala proper
+# --------------------------------------------------------------------------
+
+ARGALA_MEANS = "a bolt"
+ARGALA_DEFINITION = (
+    "Argala on a house shows the influences that intervene in its affairs, "
+    "decide some parts of it and close the bolt on it, so to speak."
+)
+ARGALA_IS_IMPORTANT = "Argala is a very important concept in Vedic astrology."
+ARGALA_IS_ADDITIONAL = (
+    "In addition to the influence caused by planets with graha drishti and "
+    "rasi drishti, there is another influence called “argala”."
+)
+
+#: §10.5 ranks all three influences in one passage. Ordinal, never numeric —
+#: "small", "more concrete", "decisive" are the only words given, and a weight
+#: would be our invention. See OI-64.
+INFLUENCE_RANKING: tuple[dict, ...] = (
+    {"rank": 1, "influence": "rasi drishti", "strength": "small",
+     "text": "Planet having rasi drishti have a small influence."},
+    {"rank": 2, "influence": "graha drishti", "strength": "more concrete",
+     "text": "Planets having graha drishti have a more concrete influence."},
+    {"rank": 3, "influence": "argala", "strength": "decisive",
+     "text": "Planets with argala simply decide some parts of the matter "
+             "signified by the house. The influence caused by argala is "
+             "decisive."},
+)
+
+#: §10.5's central rule. **Primary** — the word is the chapter's, and it is
+#: what separates these three houses from the 5th.
+PRIMARY_ARGALA_RULE = (
+    "A planet or house in the 2nd, 4th and 11th houses from a planet or house "
+    "causes primary argala on the latter."
+)
+SECONDARY_ARGALA_RULE = (
+    "Apart from the 2nd, 4th and 11th houses from a house, the 5th house from "
+    "a house has a secondary argala on it."
+)
+
+#: Which of the four argala houses is primary and which secondary. §10.6 lists
+#: all four together — "the 2nd, 4th, 11th and 5th" — in exactly this order,
+#: primary first; §10.5 is what says why.
+ARGALA_HOUSE_KIND: dict[int, str] = {
+    2: "primary", 4: "primary", 11: "primary", 5: "secondary",
+}
+
+#: §10.5 spells both terms two ways: "subhaargala"/"paapaargala" where it
+#: defines them, then "subhargala"/"papargala" in every example that follows.
+#: The definitions are the primary spellings; the variants are recorded so a
+#: reader matching against the book is not surprised.
+ARGALA_NATURE_SPELLING_VARIANTS: dict[str, list[str]] = {
+    "subhaargala": ["subhargala"],
+    "paapaargala": ["papargala", "papaargala"],
+}
+
+#: §10.5's three worked examples. Each names a matter, the house that shows it,
+#: and what the argala-causing houses contribute — which is the chapter's
+#: argument that the four houses are not arbitrary.
+ARGALA_EXAMPLES: tuple[dict, ...] = (
+    {
+        "matter": "education",
+        "house": 4,
+        "causes": (
+            {"house": 5, "from_house": 2, "shows": "intelligence"},
+            {"house": 7, "from_house": 4, "shows": "interaction with others"},
+            {"house": 2, "from_house": 11,
+             "shows": "overall character and samskara"},
+        ),
+        "conclusion": (
+            "intelligence, interaction and samskara are the things that decide "
+            "one's education. They have a decisive role."
+        ),
+    },
+    {
+        "matter": "short journeys",
+        "house": 3,
+        "causes": (
+            {"house": 4, "from_house": 2, "shows": "a vehicle"},
+            {"house": 6, "from_house": 4,
+             "shows": "someone to serve one by driving the vehicle"},
+        ),
+        "conclusion": (
+            "If one has papargala on 3rd from 4th, it may show trouble to the "
+            "journey because of the vehicle. If one has papargala on 3rd from "
+            "6th, it may show trouble to the journey because of the driver."
+        ),
+    },
+    {
+        "matter": "domestic harmony, comfort, well-being and happiness",
+        "house": 4,
+        "causes": (
+            {"house": 5, "from_house": 2, "shows": "children"},
+            {"house": 7, "from_house": 4, "shows": "wife"},
+            {"house": 2, "from_house": 11, "shows": "other family members"},
+        ),
+        "conclusion": (
+            "If a malefic in 5th has papargala on 4th, it may show domestic "
+            "clashes and lack of sukha (comfort/happiness) on account of a "
+            "child. If a benefic in 7th has subhargala on 4th, it may show "
+            "domestic happiness due to a caring partner."
+        ),
+    },
+)
+
+#: §10.5's two secondary-argala readings, both from the 5th house.
+SECONDARY_ARGALA_EXAMPLES: tuple[dict, ...] = (
+    {"matter": "learning", "house": 4, "causing_house": 8,
+     "shows": "the influence of hard work in learning",
+     "note": "Hard work is another decider."},
+    {"matter": "journey", "house": 3, "causing_house": 7,
+     "shows": "the influence of partners in a journey", "note": None},
+)
+
+#: §10.5's two named readings of a benefic and a malefic on the same house.
+ARGALA_NATURE_EXAMPLE = (
+    "If Jupiter is in 5th house, he will give intelligence and his subhargala "
+    "(benefic intervention) on 4th will help one's education. If Rahu is in "
+    "5th house, his papargala (malefic intervention) on 4th will cause "
+    "obstacles in one's education by way of poor intelligence."
+)
+ARGALA_NATURE_RULE = (
+    "Benefics and malefics in the houses causing argala cause good and bad "
+    "intervention."
+)

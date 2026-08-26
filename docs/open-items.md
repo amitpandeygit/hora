@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**4 waiting on Amit · 32 waiting on evidence · 2 parked**
+**4 waiting on Amit · 31 waiting on evidence · 2 parked**
 
 ---
 
@@ -269,20 +269,6 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 **Closes when:** a semantic map is taken from the book (not from general
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
-
-### OI-66 — §10.5 (Argala) has not been supplied; §10.6 was built without it
-
-§10.6 names the four argala houses outright — "the argala on it from the 2nd,
-4th, 11th and 5th houses from it" — so the computation is complete and
-Exercise 16's ninety-six cells all reproduce.
-
-But §10.5 is the section that *defines* argala, and it has not been read. Its
-own statements — what argala means, whether the four houses carry different
-weights, whether anything beyond nature distinguishes them — have had no pass.
-`ARGALA_BY_NATURE` currently holds only paapaargala and subhaargala, taken from
-§10.6's worked example rather than from §10.5's own definition.
-
-**Closes when:** §10.5 gets a sentence-level pass like every other section.
 
 ### OI-65 — how many malefics are "several" in §10.6's 3rd-house rule?
 

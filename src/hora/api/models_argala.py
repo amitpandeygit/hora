@@ -28,6 +28,15 @@ class ArgalaRowOut(BaseModel):
     obstructed_by: int | None = Field(
         None, description="Set on an argala row: the house that could block it"
     )
+    argala_kind: str = Field(
+        "primary",
+        examples=["primary", "secondary"],
+        description=(
+            "Section 10.5: the 2nd, 4th and 11th cause **primary** argala, the "
+            "5th a **secondary** one. A virodhargala inherits the kind of the "
+            "argala it obstructs, so the 9th is secondary."
+        ),
+    )
     present: bool = Field(
         ..., description="False when the house is empty — no argala arises at all"
     )
@@ -106,6 +115,21 @@ class ArgalaChartOut(BaseModel):
 class ArgalaPairOut(BaseModel):
     argala_house: int = Field(..., ge=1, le=12)
     virodhargala_house: int = Field(..., ge=1, le=12)
+    argala_kind: str = Field(..., examples=["primary", "secondary"])
+    text: str
+
+
+class InfluenceRankOut(BaseModel):
+    """Section 10.5 ranks the three influences in one passage.
+
+    `strength` is the chapter's own word — "small", "more concrete",
+    "decisive". Deliberately not a number: section 10.5 gives none, and a
+    weight would be our judgement inside PVR's rule. See OI-64.
+    """
+
+    rank: int = Field(..., ge=1, le=3, description="1 weakest, 3 strongest")
+    influence: str = Field(..., examples=["rasi drishti", "graha drishti", "argala"])
+    strength: str
     text: str
 
 
@@ -115,6 +139,15 @@ class ArgalaNatureOut(BaseModel):
 
 
 class ArgalaRulesOut(BaseModel):
+    argala_means: str = Field(..., examples=["a bolt"])
+    argala_definition: str
+    primary_rule: str
+    secondary_rule: str
+    house_kinds: dict[int, str] = Field(
+        ..., description="Which argala house is primary and which secondary"
+    )
+    nature_rule: str
+    influence_ranking: list[InfluenceRankOut]
     definition: str
     rule: str
     pairs: list[ArgalaPairOut]

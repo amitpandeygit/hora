@@ -22,9 +22,23 @@ from hora.charts.argala import (
 from hora.charts.vargas import d9_navamsa
 from hora.core.const import (
     ARGALA_BY_NATURE,
+    ARGALA_DEFINITION,
+    ARGALA_EXAMPLES,
+    ARGALA_HOUSE_KIND,
+    ARGALA_IS_ADDITIONAL,
+    ARGALA_IS_IMPORTANT,
+    ARGALA_MEANS,
+    ARGALA_NATURE_EXAMPLE,
+    ARGALA_NATURE_RULE,
+    ARGALA_NATURE_SPELLING_VARIANTS,
     ARGALA_PAIRS,
+    ASPECT_SOURCE,
+    INFLUENCE_RANKING,
     KETU_NOTE_EXAMPLE,
     KETU_REVERSES_ARGALA,
+    PRIMARY_ARGALA_RULE,
+    SECONDARY_ARGALA_EXAMPLES,
+    SECONDARY_ARGALA_RULE,
     SEVERAL_MALEFICS,
     THIRD_HOUSE_MALEFIC_RULE,
     VIRODHARGALA_DEFINITION,
@@ -466,3 +480,294 @@ def test_endpoints_reject_bad_input(client):
         "rasis": {}, "lagna_rasi": 0})
     assert response.status_code == 400
     assert "at least one graha" in response.json()["error"]["message"]
+
+
+# --------------------------------------------------------------------------
+# 10.5 Argala proper
+# --------------------------------------------------------------------------
+
+
+def test_10_5_argala_is_a_third_influence_beside_the_two_drishtis():
+    """"In addition to the influence caused by planets with graha drishti and
+    rasi drishti, there is another influence called "argala"."
+
+    So chapter 10 has three mechanisms, not two — which is why argala lives in
+    its own service rather than beside drishti.
+    """
+    assert "graha drishti and rasi drishti" in ARGALA_IS_ADDITIONAL
+    assert "another influence" in ARGALA_IS_ADDITIONAL
+    assert "very important" in ARGALA_IS_IMPORTANT
+
+
+def test_10_5_argala_means_a_bolt():
+    """"Literally speaking, argala means "a bolt". Argala on a house shows the
+    influences that intervene in its affairs, decide some parts of it and
+    close the bolt on it, so to speak."
+
+    The image is the definition: a bolt is what *closes* a matter, which is
+    why the influence is called decisive rather than merely strong.
+    """
+    assert ARGALA_MEANS == "a bolt"
+    assert "close the bolt on it" in ARGALA_DEFINITION
+    assert "decide some parts of it" in ARGALA_DEFINITION
+
+
+@pytest.mark.parametrize(
+    "rank,influence,strength",
+    [(1, "rasi drishti", "small"), (2, "graha drishti", "more concrete"),
+     (3, "argala", "decisive")],
+)
+def test_10_5_ranks_all_three_influences(rank, influence, strength):
+    """"Planet having rasi drishti have a small influence. Planets having graha
+    drishti have a more concrete influence... The influence caused by argala is
+    decisive."
+
+    The first time the book ranks all three in one passage, and it settles
+    §10.4's comparison: rasi drishti "limited", graha drishti "greater", and
+    now argala above both.
+    """
+    entry = INFLUENCE_RANKING[rank - 1]
+    assert entry["influence"] == influence
+    assert entry["strength"] == strength
+    assert entry["rank"] == rank
+
+
+def test_10_5_the_ranking_agrees_with_10_4s_comparison():
+    """§10.4 called graha drishti "greater influence" and rasi drishti
+    "limited influence on the neighbors". §10.5 puts them in the same order
+    and adds argala on top. The two sections agree.
+    """
+    assert "limited influence" in ASPECT_SOURCE["rasi_drishti"]["scope"]
+    assert "greater influence" in ASPECT_SOURCE["graha_drishti"]["scope"]
+    order = [r["influence"] for r in INFLUENCE_RANKING]
+    assert order.index("rasi drishti") < order.index("graha drishti")
+    assert order.index("graha drishti") < order.index("argala")
+
+
+def test_10_5_the_ranking_is_ordinal_and_carries_no_number():
+    """"small", "more concrete", "decisive" — three words, no weights. §10.5
+    ranks the influences and still declines to quantify them, so nothing here
+    may become a multiplier. See OI-64.
+    """
+    for entry in INFLUENCE_RANKING:
+        assert isinstance(entry["strength"], str)
+        assert not any(ch.isdigit() for ch in entry["strength"])
+    assert [r["rank"] for r in INFLUENCE_RANKING] == [1, 2, 3]
+
+
+def test_10_5_argala_closes_the_forward_reference_from_chapter_7():
+    """§7.4.6's quick summary listed "Argala sthanas: **Decisive influences**",
+    and footnote 18 deferred it to "the chapter on Aspects and Argalas".
+
+    §10.5 uses the same word: "The influence caused by argala is decisive."
+    The forward reference resolves, and the two chapters agree.
+    """
+    from hora.core.const import ARGALA_STHANA_FORWARD_REFERENCE, ARGALA_STHANA_SHOWS
+
+    assert ARGALA_STHANA_SHOWS == "Decisive influences"
+    assert "Aspects and Argalas" in ARGALA_STHANA_FORWARD_REFERENCE
+    argala = next(r for r in INFLUENCE_RANKING if r["influence"] == "argala")
+    assert argala["strength"] == "decisive"
+    assert "decisive" in argala["text"]
+
+
+# --------------------------------------------------------------------------
+# Primary and secondary argala
+# --------------------------------------------------------------------------
+
+
+def test_10_5_the_2nd_4th_and_11th_cause_primary_argala():
+    """"A planet or house in the 2nd, 4th and 11th houses from a planet or
+    house causes **primary** argala on the latter."""
+    assert "primary argala" in PRIMARY_ARGALA_RULE
+    assert {h for h, k in ARGALA_HOUSE_KIND.items() if k == "primary"} == {2, 4, 11}
+
+
+def test_10_5_the_5th_causes_secondary_argala():
+    """"Apart from the 2nd, 4th and 11th houses from a house, the 5th house
+    from a house has a **secondary** argala on it."
+
+    A separate sentence, several paragraphs later, and the only house the
+    chapter qualifies. §10.6 then lists all four together — "the 2nd, 4th,
+    11th and 5th" — in that order, primary first.
+    """
+    assert "secondary argala" in SECONDARY_ARGALA_RULE
+    assert [h for h, k in ARGALA_HOUSE_KIND.items() if k == "secondary"] == [5]
+    assert [a for a, _ in ARGALA_PAIRS] == [2, 4, 11, 5]
+
+
+def test_10_5_the_kind_is_carried_on_every_row():
+    """Not a footnote: each argala the engine returns says whether it is
+    primary or secondary, because §10.5 draws the distinction and a reading
+    built on the four as equals would be wrong.
+    """
+    result = argala_service.on_sign(R["Ge"], {Graha.MERCURY: R["Ge"]})
+    kinds = {a["house"]: a["argala_kind"] for a in result["argalas"]}
+    assert kinds == {2: "primary", 4: "primary", 11: "primary", 5: "secondary"}
+
+
+def test_10_5_a_virodhargala_inherits_the_kind_it_obstructs():
+    """The 9th obstructs the 5th, which is secondary; the other three obstruct
+    primary argalas. So the 9th-house obstruction is a secondary matter too,
+    and the response says so rather than leaving a caller to derive it.
+    """
+    result = argala_service.on_sign(R["Ge"], {Graha.MERCURY: R["Ge"]})
+    kinds = {v["house"]: v["argala_kind"] for v in result["virodhargalas"]}
+    assert kinds == {12: "primary", 10: "primary", 3: "primary", 9: "secondary"}
+    for a, v in ARGALA_PAIRS:
+        assert ARGALA_HOUSE_KIND[a] == kinds[v]
+
+
+def test_10_5_the_secondary_argala_still_obstructs_and_is_obstructed():
+    """Secondary does not mean exempt. §10.6 pairs the 9th with the 5th like
+    any other, and Exercise 16's answer table carries a 9th column."""
+    assert (5, 9) in ARGALA_PAIRS
+    row = next(h for h in _exercise_16()["houses"] if h["house"] == 5)
+    ninth = next(v for v in row["virodhargalas"] if v["house"] == 9)
+    assert [ABBR[g["graha_name"]] for g in ninth["grahas"]] == ["Mars", "Sat"]
+
+
+# --------------------------------------------------------------------------
+# 10.5's worked examples
+# --------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("example", ARGALA_EXAMPLES,
+                         ids=[e["matter"][:9] for e in ARGALA_EXAMPLES])
+def test_10_5_each_worked_example_counts_correctly(example):
+    """"The 2nd, 4th and 11th from the 4th house are 5th, 7th and 2nd houses
+    respectively." And for the 3rd house: "the 4th and 6th houses cause argala
+    on the 3rd house, being the 2nd and 4th from it".
+
+    Each example's arithmetic is checked rather than trusted.
+    """
+    for cause in example["causes"]:
+        expected = (example["house"] + cause["from_house"] - 2) % 12 + 1
+        assert cause["house"] == expected, cause
+
+
+def test_10_5_the_education_example():
+    """"One's intelligence (5th), interaction with others (7th) and overall
+    character and samskara (2nd) make or break one education."
+
+    The chapter's argument that the argala houses are not arbitrary: each one
+    signifies something that genuinely decides the matter.
+    """
+    education = ARGALA_EXAMPLES[0]
+    assert education["house"] == 4
+    assert [c["house"] for c in education["causes"]] == [5, 7, 2]
+    assert [c["shows"] for c in education["causes"]] == [
+        "intelligence", "interaction with others",
+        "overall character and samskara"]
+    assert "decisive role" in education["conclusion"]
+
+
+def test_10_5_the_journey_example_uses_only_two_of_the_three():
+    """"the 4th and 6th houses cause argala on the 3rd house, being the 2nd and
+    4th from it respectively!"
+
+    The 11th from the 3rd is the 1st, and the chapter simply does not use it
+    here. So an example naming fewer than three causes is not an omission —
+    it is the chapter choosing what is relevant.
+    """
+    journey = ARGALA_EXAMPLES[1]
+    assert journey["house"] == 3
+    assert len(journey["causes"]) == 2
+    assert [c["from_house"] for c in journey["causes"]] == [2, 4]
+    assert (3 + 11 - 2) % 12 + 1 == 1
+
+
+def test_10_5_the_same_house_reads_differently_for_different_matters():
+    """The 4th house appears twice — education and domestic harmony — with the
+    **same** three argala houses and completely different meanings: the 5th is
+    intelligence in one and children in the other, the 7th is interaction and
+    then a wife.
+
+    So the argala houses are fixed and their meaning is not. Nothing in the
+    engine assigns a meaning, and this is why.
+    """
+    education, _, domestic = ARGALA_EXAMPLES
+    assert education["house"] == domestic["house"] == 4
+    assert [c["house"] for c in education["causes"]] == \
+        [c["house"] for c in domestic["causes"]]
+    assert [c["shows"] for c in education["causes"]] != \
+        [c["shows"] for c in domestic["causes"]]
+
+
+def test_10_5_benefic_and_malefic_argala_on_the_same_house():
+    """"If Jupiter is in 5th house... his subhargala on 4th will help one's
+    education. If Rahu is in 5th house, his papargala on 4th will cause
+    obstacles."
+
+    Same house, same argala, opposite reading — decided entirely by the nature
+    of the graha sitting there.
+    """
+    assert "subhargala" in ARGALA_NATURE_EXAMPLE
+    assert "papargala" in ARGALA_NATURE_EXAMPLE
+    assert ARGALA_BY_NATURE["benefic"]["name"] == "subhaargala"
+    assert ARGALA_BY_NATURE["malefic"]["name"] == "paapaargala"
+    assert "good and bad intervention" in ARGALA_NATURE_RULE
+
+
+def test_10_5_spells_both_terms_two_ways():
+    """The definitions read "subhaargala" and "paapaargala"; every example
+    afterwards reads "subhargala" and "papargala".
+
+    The definitional spellings are kept as primary — §7.5's tie-break rule 2,
+    a definitional section beats a passing mention — and the variants are
+    recorded so a reader matching text against the book is not surprised.
+    """
+    assert ARGALA_NATURE_SPELLING_VARIANTS["subhaargala"] == ["subhargala"]
+    assert "papargala" in ARGALA_NATURE_SPELLING_VARIANTS["paapaargala"]
+    for primary, variants in ARGALA_NATURE_SPELLING_VARIANTS.items():
+        assert primary not in variants
+        assert all(len(v) < len(primary) for v in variants)
+
+
+@pytest.mark.parametrize("example", SECONDARY_ARGALA_EXAMPLES,
+                         ids=[e["matter"] for e in SECONDARY_ARGALA_EXAMPLES])
+def test_10_5_the_secondary_argala_examples(example):
+    """"argala of 8th house on 4th (8th is the 5th from 4th) shows the
+    influence of hard work in learning... argala of 7th house on 3rd (7th is
+    the 5th from 3rd) shows the influence of partners in a journey."""
+    assert (example["house"] + 5 - 2) % 12 + 1 == example["causing_house"]
+    assert ARGALA_HOUSE_KIND[5] == "secondary"
+
+
+def test_10_5_the_secondary_examples_extend_the_primary_ones():
+    """Both secondary examples reuse a matter the primary examples already
+    worked — learning from the 4th, journeys from the 3rd — and add one more
+    decider each. So the 5th is presented as a supplement, which is what
+    "secondary" means here.
+    """
+    primary_houses = {e["house"] for e in ARGALA_EXAMPLES}
+    assert {e["house"] for e in SECONDARY_ARGALA_EXAMPLES} <= primary_houses
+    assert "Hard work is another decider." == SECONDARY_ARGALA_EXAMPLES[0]["note"]
+
+
+# --------------------------------------------------------------------------
+# 10.5 on the endpoints
+# --------------------------------------------------------------------------
+
+
+def test_rules_endpoint_carries_the_10_5_half(client):
+    body = client.get("/v1/argala/rules").json()
+    assert body["argala_means"] == "a bolt"
+    assert "close the bolt on it" in body["argala_definition"]
+    assert "primary argala" in body["primary_rule"]
+    assert "secondary argala" in body["secondary_rule"]
+    assert body["house_kinds"] == {"2": "primary", "4": "primary",
+                                   "11": "primary", "5": "secondary"}
+    assert [r["strength"] for r in body["influence_ranking"]] == [
+        "small", "more concrete", "decisive"]
+    assert [p["argala_kind"] for p in body["pairs"]] == [
+        "primary", "primary", "primary", "secondary"]
+
+
+def test_chart_endpoint_marks_primary_and_secondary(client):
+    body = client.post("/v1/argala/chart", json={
+        "rasis": _navamsa(), "lagna_rasi": R["Sc"]}).json()
+    for house in body["houses"]:
+        kinds = {a["house"]: a["argala_kind"] for a in house["argalas"]}
+        assert kinds == {2: "primary", 4: "primary", 11: "primary",
+                         5: "secondary"}

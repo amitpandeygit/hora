@@ -4,6 +4,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 3,
@@ -22,6 +23,7 @@
             "sign_name": "Sagittarius"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 8,
@@ -40,6 +42,7 @@
             "sign_name": "Aquarius"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 4,
@@ -58,6 +61,7 @@
             "sign_name": "Virgo"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [],
             "house": 5,
             "kind": "argala",
@@ -78,6 +82,7 @@
         "sign_name": "Scorpio",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 12,
             "kind": "virodhargala",
@@ -91,6 +96,7 @@
             "sign_name": "Libra"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 7,
@@ -109,6 +115,7 @@
             "sign_name": "Leo"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 5,
@@ -127,6 +134,7 @@
             "sign_name": "Capricorn"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [],
             "house": 9,
             "kind": "virodhargala",
@@ -144,6 +152,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 5,
@@ -162,6 +171,7 @@
             "sign_name": "Capricorn"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 4,
             "kind": "argala",
@@ -175,6 +185,7 @@
             "sign_name": "Pisces"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 11,
             "kind": "argala",
@@ -188,6 +199,7 @@
             "sign_name": "Libra"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 1,
@@ -213,6 +225,7 @@
         "sign_name": "Sagittarius",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 2,
@@ -235,6 +248,7 @@
             "sign_name": "Scorpio"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 4,
@@ -253,6 +267,7 @@
             "sign_name": "Virgo"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 8,
@@ -271,6 +286,7 @@
             "sign_name": "Aquarius"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 7,
@@ -293,6 +309,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 8,
@@ -311,6 +328,7 @@
             "sign_name": "Aquarius"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 1,
@@ -329,6 +347,7 @@
             "sign_name": "Aries"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 2,
@@ -351,6 +370,7 @@
             "sign_name": "Scorpio"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 0,
@@ -376,6 +396,7 @@
         "sign_name": "Capricorn",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 3,
@@ -394,6 +415,7 @@
             "sign_name": "Sagittarius"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 10,
             "kind": "virodhargala",
@@ -407,6 +429,7 @@
             "sign_name": "Libra"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 3,
             "kind": "virodhargala",
@@ -420,6 +443,7 @@
             "sign_name": "Pisces"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 4,
@@ -442,6 +466,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 5,
@@ -460,6 +485,7 @@
             "sign_name": "Capricorn"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 2,
@@ -482,6 +508,7 @@
             "sign_name": "Scorpio"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 1,
@@ -500,6 +527,7 @@
             "sign_name": "Aries"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [],
             "house": 5,
             "kind": "argala",
@@ -520,6 +548,7 @@
         "sign_name": "Aquarius",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 12,
             "kind": "virodhargala",
@@ -533,6 +562,7 @@
             "sign_name": "Pisces"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 0,
@@ -551,6 +581,7 @@
             "sign_name": "Taurus"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 3,
@@ -569,6 +600,7 @@
             "sign_name": "Sagittarius"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [],
             "house": 9,
             "kind": "virodhargala",
@@ -586,6 +618,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 1,
@@ -604,6 +637,7 @@
             "sign_name": "Aries"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 4,
             "kind": "argala",
@@ -617,6 +651,7 @@
             "sign_name": "Gemini"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 5,
@@ -635,6 +670,7 @@
             "sign_name": "Capricorn"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [],
             "house": 5,
             "kind": "argala",
@@ -655,6 +691,7 @@
         "sign_name": "Pisces",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 8,
@@ -673,6 +710,7 @@
             "sign_name": "Aquarius"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 3,
@@ -691,6 +729,7 @@
             "sign_name": "Sagittarius"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 0,
@@ -709,6 +748,7 @@
             "sign_name": "Taurus"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 2,
@@ -735,6 +775,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 0,
@@ -753,6 +794,7 @@
             "sign_name": "Taurus"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 4,
             "kind": "argala",
@@ -766,6 +808,7 @@
             "sign_name": "Cancer"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 8,
@@ -784,6 +827,7 @@
             "sign_name": "Aquarius"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 7,
@@ -809,6 +853,7 @@
         "sign_name": "Aries",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 12,
             "kind": "virodhargala",
@@ -822,6 +867,7 @@
             "sign_name": "Pisces"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 5,
@@ -840,6 +886,7 @@
             "sign_name": "Capricorn"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 3,
             "kind": "virodhargala",
@@ -853,6 +900,7 @@
             "sign_name": "Gemini"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 3,
@@ -875,6 +923,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 2,
             "kind": "argala",
@@ -888,6 +937,7 @@
             "sign_name": "Gemini"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 7,
@@ -906,6 +956,7 @@
             "sign_name": "Leo"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 11,
             "kind": "argala",
@@ -919,6 +970,7 @@
             "sign_name": "Pisces"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 4,
@@ -944,6 +996,7 @@
         "sign_name": "Taurus",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 1,
@@ -962,6 +1015,7 @@
             "sign_name": "Aries"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 8,
@@ -980,6 +1034,7 @@
             "sign_name": "Aquarius"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 3,
             "kind": "virodhargala",
@@ -993,6 +1048,7 @@
             "sign_name": "Cancer"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 5,
@@ -1015,6 +1071,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 2,
             "kind": "argala",
@@ -1028,6 +1085,7 @@
             "sign_name": "Cancer"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 4,
@@ -1046,6 +1104,7 @@
             "sign_name": "Virgo"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 1,
@@ -1064,6 +1123,7 @@
             "sign_name": "Aries"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [],
             "house": 5,
             "kind": "argala",
@@ -1084,6 +1144,7 @@
         "sign_name": "Gemini",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 0,
@@ -1102,6 +1163,7 @@
             "sign_name": "Taurus"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 10,
             "kind": "virodhargala",
@@ -1115,6 +1177,7 @@
             "sign_name": "Pisces"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 7,
@@ -1133,6 +1196,7 @@
             "sign_name": "Leo"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 8,
@@ -1155,6 +1219,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 7,
@@ -1173,6 +1238,7 @@
             "sign_name": "Leo"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 4,
             "kind": "argala",
@@ -1186,6 +1252,7 @@
             "sign_name": "Libra"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 0,
@@ -1204,6 +1271,7 @@
             "sign_name": "Taurus"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 2,
@@ -1233,6 +1301,7 @@
         "sign_name": "Cancer",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 12,
             "kind": "virodhargala",
@@ -1246,6 +1315,7 @@
             "sign_name": "Gemini"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 1,
@@ -1264,6 +1334,7 @@
             "sign_name": "Aries"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 4,
@@ -1282,6 +1353,7 @@
             "sign_name": "Virgo"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [],
             "house": 9,
             "kind": "virodhargala",
@@ -1299,6 +1371,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 4,
@@ -1317,6 +1390,7 @@
             "sign_name": "Virgo"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 2,
@@ -1339,6 +1413,7 @@
             "sign_name": "Scorpio"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 11,
             "kind": "argala",
@@ -1352,6 +1427,7 @@
             "sign_name": "Gemini"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 3,
@@ -1377,6 +1453,7 @@
         "sign_name": "Leo",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 12,
             "kind": "virodhargala",
@@ -1390,6 +1467,7 @@
             "sign_name": "Cancer"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 0,
@@ -1408,6 +1486,7 @@
             "sign_name": "Taurus"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 3,
             "kind": "virodhargala",
@@ -1421,6 +1500,7 @@
             "sign_name": "Libra"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 1,
@@ -1443,6 +1523,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 2,
             "kind": "argala",
@@ -1456,6 +1537,7 @@
             "sign_name": "Libra"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 3,
@@ -1474,6 +1556,7 @@
             "sign_name": "Sagittarius"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 11,
             "kind": "argala",
@@ -1487,6 +1570,7 @@
             "sign_name": "Cancer"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 5,
@@ -1512,6 +1596,7 @@
         "sign_name": "Virgo",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 7,
@@ -1530,6 +1615,7 @@
             "sign_name": "Leo"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 10,
             "kind": "virodhargala",
@@ -1543,6 +1629,7 @@
             "sign_name": "Gemini"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 2,
@@ -1565,6 +1652,7 @@
             "sign_name": "Scorpio"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 0,
@@ -1587,6 +1675,7 @@
       {
         "argalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 2,
@@ -1609,6 +1698,7 @@
             "sign_name": "Scorpio"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 5,
@@ -1627,6 +1717,7 @@
             "sign_name": "Capricorn"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 7,
@@ -1645,6 +1736,7 @@
             "sign_name": "Leo"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [
               {
                 "graha": 8,
@@ -1670,6 +1762,7 @@
         "sign_name": "Libra",
         "virodhargalas": [
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 4,
@@ -1688,6 +1781,7 @@
             "sign_name": "Virgo"
           },
           {
+            "argala_kind": "primary",
             "grahas": [],
             "house": 10,
             "kind": "virodhargala",
@@ -1701,6 +1795,7 @@
             "sign_name": "Cancer"
           },
           {
+            "argala_kind": "primary",
             "grahas": [
               {
                 "graha": 3,
@@ -1719,6 +1814,7 @@
             "sign_name": "Sagittarius"
           },
           {
+            "argala_kind": "secondary",
             "grahas": [],
             "house": 9,
             "kind": "virodhargala",

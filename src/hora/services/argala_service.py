@@ -19,11 +19,18 @@ from hora.charts.argala import (
 from hora.core import validate
 from hora.core.const import (
     ARGALA_BY_NATURE,
+    ARGALA_DEFINITION,
+    ARGALA_HOUSE_KIND,
+    ARGALA_MEANS,
+    ARGALA_NATURE_RULE,
     ARGALA_PAIRS,
     GRAHA_NAMES,
+    INFLUENCE_RANKING,
     KETU_REVERSES_ARGALA,
     NAVAGRAHA,
+    PRIMARY_ARGALA_RULE,
     RASI_NAMES,
+    SECONDARY_ARGALA_RULE,
     SEVERAL_MALEFICS,
     THIRD_HOUSE_MALEFIC_RULE,
     VIRODHARGALA_DEFINITION,
@@ -86,6 +93,7 @@ def _row(entry, occupants) -> dict:
         "obstructs" if entry.kind == "argala" else "obstructed_by":
             entry.paired_house,
         "paired_house": entry.paired_house,
+        "argala_kind": entry.argala_kind,
         "present": bool(entry.grahas),
         "promoted_from_virodhargala": entry.promoted_from_virodhargala,
     }
@@ -159,10 +167,20 @@ def chart(
 def rules() -> dict:
     """§10.6's rules, and what the engine does not decide."""
     return {
+        "argala_means": ARGALA_MEANS,
+        "argala_definition": ARGALA_DEFINITION,
+        "primary_rule": PRIMARY_ARGALA_RULE,
+        "secondary_rule": SECONDARY_ARGALA_RULE,
+        "house_kinds": dict(ARGALA_HOUSE_KIND),
+        "nature_rule": ARGALA_NATURE_RULE,
+        # §10.5 ranks all three influences in one passage. Ordinal only — the
+        # chapter gives "small", "more concrete" and "decisive" and no number.
+        "influence_ranking": [dict(r) for r in INFLUENCE_RANKING],
         "definition": VIRODHARGALA_DEFINITION,
         "rule": VIRODHARGALA_RULE,
         "pairs": [
             {"argala_house": a, "virodhargala_house": v,
+             "argala_kind": ARGALA_HOUSE_KIND[a],
              "text": f"the {_ordinal(v)} obstructs the argala from the {_ordinal(a)}"}
             for a, v in ARGALA_PAIRS
         ],

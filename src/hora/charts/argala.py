@@ -5,11 +5,15 @@ and 9th from a house or planet obstruct the argala on it from the 2nd, 4th,
 11th and 5th *respectively*. So the four argala houses and their four
 obstructors are one table read two ways, and are stored that way.
 
-Two rules complicate the plain count:
-
 * **Ketu reverses the direction.** "If a sign contains Ketu, argalas and
   virodhargalas on it are counted anti-zodiacally." The reversal is a property
   of the *target* sign, not of the counting graha.
+§10.5 further splits the four: the 2nd, 4th and 11th cause **primary** argala
+and the 5th a **secondary** one. Every row carries which it is, and a
+virodhargala inherits the kind of the argala it obstructs.
+
+Two rules complicate the plain count:
+
 * **Several malefics in the 3rd cause argala instead.** How many "several" is
   the chapter never says, and Exercise 16's own answer table declines to fire
   it on two. See ``SEVERAL_MALEFICS`` and docs/open-items.md OI-65.
@@ -20,6 +24,7 @@ from dataclasses import dataclass
 
 from hora.core import validate
 from hora.core.const import (
+    ARGALA_HOUSE_KIND,
     ARGALA_PAIRS,
     SEVERAL_MALEFICS,
     Graha,
@@ -44,6 +49,10 @@ class Argala:
     grahas: tuple[int, ...]
     #: The house this one obstructs, or is obstructed by.
     paired_house: int
+    #: "primary" or "secondary". §10.5 makes the 2nd, 4th and 11th primary and
+    #: the 5th secondary; a virodhargala inherits the kind of the argala it
+    #: obstructs, so the 9th is secondary and the other three primary.
+    argala_kind: str = "primary"
     #: True when this row was moved from virodhargala to argala by §10.6's
     #: several-malefics-in-the-3rd rule.
     promoted_from_virodhargala: bool = False
@@ -112,7 +121,9 @@ def argalas_on_sign(
                 kind, promoted = "argala", True
             out.append(Argala(
                 kind=kind, house=house, sign=target, grahas=grahas,
-                paired_house=paired, promoted_from_virodhargala=promoted,
+                paired_house=paired,
+                argala_kind=ARGALA_HOUSE_KIND[argala_house],
+                promoted_from_virodhargala=promoted,
             ))
     return out
 

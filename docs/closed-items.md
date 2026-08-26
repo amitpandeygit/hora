@@ -32,6 +32,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | [OI-45](#oi-45) | §3.2.2's conditional benefics were never implemented |
 | [OI-46](#oi-46) | §3.1 and §3.2.1 to §3.2.7 rechecked against the book |
 | [OI-47](#oi-47) | §3.2.8 to §3.2.13 rechecked and published |
+| [OI-66](#oi-66) | §10.5 argala supplied; primary and secondary separated |
 
 ---
 
@@ -1289,3 +1290,31 @@ neither is the other — tested, so nobody later adds ether as a fifth
 `RASI_ELEMENT`.
 
 ---
+
+---
+
+## OI-66 — §10.5 (Argala) was not supplied; §10.6 was built without it · **CLOSED**
+
+§10.6 names the four argala houses outright — "the argala on it from the 2nd,
+4th, 11th and 5th houses from it" — so the computation is complete and
+Exercise 16's ninety-six cells all reproduce.
+
+But §10.5 is the section that *defines* argala, and it has not been read. Its
+own statements — what argala means, whether the four houses carry different
+weights, whether anything beyond nature distinguishes them — have had no pass.
+`ARGALA_BY_NATURE` currently holds only paapaargala and subhaargala, taken from
+§10.6's worked example rather than from §10.5's own definition.
+
+**Closes when:** §10.5 gets a sentence-level pass like every other section.
+
+**Closed 2026-08-27.** §10.5 supplied and given a sentence-level pass. It
+corrected the build: the 2nd, 4th and 11th cause **primary** argala and the 5th
+a **secondary** one — §10.6 lists all four together and never says so. Every
+argala row now carries its kind, and a virodhargala inherits the kind of the
+argala it obstructs.
+
+§10.5 also ranks all three of chapter 10's influences in one passage — rasi
+drishti "small", graha drishti "more concrete", argala "decisive" — which
+settles §10.4's comparison and closes §7.4.6's forward reference (footnote 18
+deferred "Argala sthanas: Decisive influences" to this chapter, and §10.5 uses
+the same word). Still ordinal; no number anywhere. See OI-64.

@@ -517,6 +517,22 @@ derived from the book:
 unimported until a chapter derives it. Its tables should be treated as a draft.
 Tracked as [OI-18](open-items.md#oi-18).
 
+### Chapter 10 — §10.5 prose and worked examples (6)
+
+`ARGALA_IS_ADDITIONAL` · `ARGALA_IS_IMPORTANT` · `ARGALA_EXAMPLES` ·
+`SECONDARY_ARGALA_EXAMPLES` · `ARGALA_NATURE_EXAMPLE` ·
+`ARGALA_NATURE_SPELLING_VARIANTS`
+
+§10.5's framing and its five worked readings. The rules they illustrate —
+primary/secondary, the pairing, the nature naming — are all consumed by
+`services/argala_service.py`; these are the prose around them.
+
+| Symbol | What will consume it |
+|---|---|
+| `ARGALA_EXAMPLES`, `SECONDARY_ARGALA_EXAMPLES` | Nothing computes them: they name what each argala house *means* for a matter, and the engine assigns no meanings. A reading layer would |
+| `ARGALA_NATURE_SPELLING_VARIANTS` | Text matching against the book; the engine uses the definitional spellings |
+| the rest | Reference only |
+
 ### Chapter 10 — §10.6 worked examples (2)
 
 `VIRODHARGALA_EXAMPLE` · `KETU_NOTE_EXAMPLE`
