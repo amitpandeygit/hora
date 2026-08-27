@@ -523,6 +523,20 @@ derived from the book:
 unimported until a chapter derives it. Its tables should be treated as a draft.
 Tracked as [OI-18](open-items.md#oi-18).
 
+### Chapter 11 — §11.5.4's worked example (1)
+
+`SANKHYA_EXAMPLE`
+
+Lord Sri Rama's chart, from §11.5.4. The section gives the six signs its seven
+planets occupy but not the chart, and **Figure 1 has not been supplied** — so
+the lagna is unknown and the yogas needing one cannot be run on it. What is
+checkable is the sign count (six, giving Daama) and that the six span three
+modalities, which rules out every Aasraya yoga that could have superseded it.
+
+| Symbol | What will consume it |
+|---|---|
+| `SANKHYA_EXAMPLE` | Nothing until Figure 1 arrives; then it becomes a chart fixture like Charts 5 to 8 |
+
 ### Chapter 10 — Exercise 17's technique (2)
 
 `STRENGTH_CRITERIA_USED` · `KARAKA_SIGN_ELEMENT_READING`

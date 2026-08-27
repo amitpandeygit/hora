@@ -295,6 +295,42 @@ verification against birth data as Charts 6 and 7 got.
 **Closes when:** you send Chart 8's page, or we accept the exercise as covered
 by the reconstruction alone.
 
+### OI-79 — §11.5.4's fallback rule makes two of its own seven unreachable
+
+§11.5.4: "These yogas apply if no other Naabhasa yogas mentioned previously
+are applicable in a chart."
+
+Taken literally, **Gola and Yuga can never be present**. Proved exhaustively:
+
+| yoga | needs | reachable in |
+|---|---|---|
+| Gola | 1 distinct sign | 0 of 144 sign × lagna combinations |
+| Yuga | 2 distinct signs | 0 of 792 sign-pair × lagna combinations |
+
+The reason is structural. Every set of one or two signs fits inside some
+seven-consecutive-sign window — the shorter arc between any two signs is at
+most six — and §11.5.3's five run-yogas (Naukaa, Koota, Chatra, Chaapa, Ardha
+Chandra) cover all twelve windows. So one of them always applies and always
+supersedes. One sign is also one modality, so an Aasraya yoga applies too.
+
+Three signs *can* escape every window (40 of 220 triples do), which is why
+Soola survives — rarely, in about 16% of three-sign charts.
+
+**We implement the rule as stated**, so both yogas are defined, transcribed and
+permanently absent. Their verdicts say so: the reason names the count *and* the
+yoga that superseded them, so nothing is hidden.
+
+Three readings, and the book supports none of them over the others:
+
+- the fallback is meant strictly, and Gola and Yuga are dead letters PVR
+  inherited from the classical list without checking;
+- "applicable" means something weaker than "detected" — perhaps only the
+  families §11.5 calls more important;
+- the run-yogas are meant to require the *whole* seven-sign span to be used,
+  not merely to contain the planets, which would free both.
+
+**Closes when:** JHora's Naabhasa output shows whether it ever reports Gola.
+
 ### OI-78 — is Vaapi Yoga two alternatives or one union?
 
 §11.5.3: "If all the planets are panaparas or in apoklimas, this yoga is
@@ -319,28 +355,6 @@ one section.
 `union_alternative` is kept on the spec, so switching readings is one line.
 
 **Closes when:** JHora's Naabhasa output settles it, or a worked chart appears.
-
-### OI-77 — 7 of §11.5's 32 Naabhasa yogas are named but not defined
-
-§11.5 classifies thirty-two:
-
-| family | count | status |
-|---|---|---|
-| Aasraya | 3 | defined in §11.5.1 |
-| Dala | 2 | defined in §11.5.2 |
-| Aakriti | 20 | defined in §11.5.3 |
-| Sankhya | 7 | **named only** |
-
-The seven Sankhya yogas are listed by name in §11.5's classification and
-defined in §11.5.4, which has not been supplied.
-
-They are **not registered**. A yoga the engine cannot detect must not appear
-among the verdicts, where `present: false` would read as a finding rather than
-a gap. They are published instead as `naabhasa_not_yet_defined` on
-`/v1/planetary-yoga/rules`, with a guard asserting the registered twenty-five
-and the pending seven come to exactly thirty-two and never overlap.
-
-**Closes when:** §11.5.4 is supplied.
 
 ### OI-74 — §11.3 guideline 2's "(respectively)" has nothing to pair with
 

@@ -154,17 +154,9 @@
         "section": "11.5.4"
       }
     ],
-    "naabhasa_gap_note": "Section 11.5 classifies 32 Naabhasa yogas. Sections 11.5.1, 11.5.2 and 11.5.3 define 25 of them; the Sankhya seven of section 11.5.4 are named only. They are listed here rather than registered, so that a yoga the engine cannot detect never appears among the verdicts where its absence would read as a finding.",
+    "naabhasa_gap_note": "Section 11.5 classifies 32 Naabhasa yogas and sections 11.5.1 to 11.5.4 define every one. Nothing is pending. They are listed here rather than registered, so that a yoga the engine cannot detect never appears among the verdicts where its absence would read as a finding.",
     "naabhasa_intro": "Naabhasa yogas are classified celestial combinations.",
-    "naabhasa_not_yet_defined": [
-      "Veenaa",
-      "Daama",
-      "Paasa",
-      "Kedaara",
-      "Soola",
-      "Yuga",
-      "Gola"
-    ],
+    "naabhasa_not_yet_defined": [],
     "naabhasa_timing_rule": "Results of other yogas may be felt primarily during the dasas of the planets and signs involved. But the results of Naabhasa yogas are felt in all dasas.",
     "node_note": "Three of the four Ravi yogas turn on \u201ca planet other than Moon\u201d. Chapter 11 never says whether Rahu and Ketu count as \u201ca planet\u201d, so it is a per-call choice and the nodes are excluded by default. See docs/open-items.md OI-73.",
     "panaphara_spelling_variants": [
@@ -180,6 +172,15 @@
     ],
     "ravi_intro": "Ravi yogas are the solar combinations. There are several yogas based on Sun.",
     "results_note": "The results each yoga gives are PVR's own prose and are withheld from this response under the licence gate of OI-12.",
+    "sankhya_basis": "Sankhya yogas are based on the number of distinct signs occupied by the seven planets combined. Rahu and Ketu are not included.",
+    "sankhya_excludes_nodes": "Rahu and Ketu are not included.",
+    "sankhya_is_a_fallback": "These yogas apply if no other Naabhasa yogas mentioned previously are applicable in a chart. These are the least important of all Naabhasa yogas.",
+    "sankhya_means": "a number",
+    "sankhya_unreachable": [
+      "gola",
+      "yuga"
+    ],
+    "sankhya_unreachable_note": "Taken as stated, section 11.5.4's fallback rule makes Gola and Yuga permanently absent: one or two distinct signs always fit inside a seven-sign window, and section 11.5.3's run yogas cover all twelve windows, so one of them always applies first. Both are still defined and evaluated, and their verdicts name what superseded them. See docs/open-items.md OI-79.",
     "sarpa_is_very_bad": "This is a very bad combination.",
     "sasa_means": "a hare or a rabbit",
     "sun_excluded_note": "The Sun cannot form a yoga about what accompanies him, so he is excluded from his own houses alongside the Moon.",

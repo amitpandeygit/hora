@@ -70,6 +70,10 @@ from hora.core.const import (
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
+    SANKHYA_BASIS,
+    SANKHYA_EXCLUDES_NODES,
+    SANKHYA_IS_A_FALLBACK,
+    SANKHYA_MEANS,
     SARPA_IS_VERY_BAD,
     SASA_MEANS,
     TATTVA_GLOSS_IN_3_2_8,
@@ -349,10 +353,22 @@ def rules() -> dict:
             key: list(values) for key, values in AAKRITI_NAME_VARIANTS.items()
         },
         "aakriti_order_differs": AAKRITI_ORDER_DIFFERS,
+        "sankhya_means": SANKHYA_MEANS,
+        "sankhya_basis": SANKHYA_BASIS,
+        "sankhya_excludes_nodes": SANKHYA_EXCLUDES_NODES,
+        "sankhya_is_a_fallback": SANKHYA_IS_A_FALLBACK,
+        "sankhya_unreachable": ["gola", "yuga"],
+        "sankhya_unreachable_note": (
+            "Taken as stated, section 11.5.4's fallback rule makes Gola and "
+            "Yuga permanently absent: one or two distinct signs always fit "
+            "inside a seven-sign window, and section 11.5.3's run yogas cover "
+            "all twelve windows, so one of them always applies first. Both are "
+            "still defined and evaluated, and their verdicts name what "
+            "superseded them. See docs/open-items.md OI-79."
+        ),
         "naabhasa_gap_note": (
-            "Section 11.5 classifies 32 Naabhasa yogas. Sections 11.5.1, "
-            "11.5.2 and 11.5.3 define 25 of them; the Sankhya seven of "
-            "section 11.5.4 are named only. They are listed here rather "
+            "Section 11.5 classifies 32 Naabhasa yogas and sections 11.5.1 "
+            "to 11.5.4 define every one. Nothing is pending. They are listed here rather "
             "than registered, so that a yoga the engine cannot detect never "
             "appears among the verdicts where its absence would read as a "
             "finding."

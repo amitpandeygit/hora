@@ -33,6 +33,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | [OI-46](#oi-46) | §3.1 and §3.2.1 to §3.2.7 rechecked against the book |
 | [OI-47](#oi-47) | §3.2.8 to §3.2.13 rechecked and published |
 | [OI-66](#oi-66) | §10.5 argala supplied; primary and secondary separated |
+| [OI-77](#oi-77) | all 32 Naabhasa yogas defined |
 
 ---
 
@@ -1318,3 +1319,35 @@ drishti "small", graha drishti "more concrete", argala "decisive" — which
 settles §10.4's comparison and closes §7.4.6's forward reference (footnote 18
 deferred "Argala sthanas: Decisive influences" to this chapter, and §10.5 uses
 the same word). Still ordinal; no number anywhere. See OI-64.
+
+---
+
+## OI-77 — the Naabhasa yogas were classified before they were defined · **CLOSED**
+
+§11.5 classifies thirty-two:
+
+| family | count | status |
+|---|---|---|
+| Aasraya | 3 | defined in §11.5.1 |
+| Dala | 2 | defined in §11.5.2 |
+| Aakriti | 20 | defined in §11.5.3 |
+| Sankhya | 7 | **named only** |
+
+The seven Sankhya yogas are listed by name in §11.5's classification and
+defined in §11.5.4, which has not been supplied.
+
+They are **not registered**. A yoga the engine cannot detect must not appear
+among the verdicts, where `present: false` would read as a finding rather than
+a gap. They are published instead as `naabhasa_not_yet_defined` on
+`/v1/planetary-yoga/rules`, with a guard asserting the registered twenty-five
+and the pending seven come to exactly thirty-two and never overlap.
+
+**Closes when:** §11.5.4 is supplied.
+
+**Closed 2026-08-27.** §11.5.4 supplied; all four families are defined and all
+thirty-two registered. The pending list is kept, and kept published, because
+the guard that holds "registered plus pending equals thirty-two" is what would
+catch a future family being classified and then forgotten.
+
+Two of the seven Sankhya yogas turn out to be unreachable under §11.5.4's own
+fallback rule — see OI-79.

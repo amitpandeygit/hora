@@ -548,12 +548,11 @@ NAABHASA_YOGAS: tuple[dict, ...] = (
 #: the book grades that way in its own definition rather than its results.
 SARPA_IS_VERY_BAD = "This is a very bad combination."
 
-#: Named in §11.5's classification but not yet defined for us. §11.5.3 closed
-#: the Aakriti twenty, so the Sankhya seven of §11.5.4 are what remain. Listed
-#: so the gap is visible in the API rather than showing as an absence.
-NAABHASA_NOT_YET_DEFINED: tuple[str, ...] = tuple(
-    NAABHASA_CLASSIFICATION["sankhya"]["names"]
-)
+#: Named in §11.5's classification but not defined for us. **Empty** — §11.5.4
+#: closed the last family. Kept, and kept published, because the guard that
+#: holds "registered plus pending equals thirty-two" is what would catch a
+#: future family being classified and forgotten.
+NAABHASA_NOT_YET_DEFINED: tuple[str, ...] = ()
 
 #: Footnotes 29 and 30, now supplied. They gloss the two Pancha Mahapurusha
 #: names that carry a marker in §11.4.
@@ -803,4 +802,70 @@ AAKRITI_NAME_VARIANTS: dict[str, tuple[str, ...]] = {
 AAKRITI_ORDER_DIFFERS = (
     "§11.5's classification lists Sringaataka before Vihangama; §11.5.3 "
     "defines Vihanga before Sringaataka."
+)
+
+
+# --------------------------------------------------------------------------
+# §11.5.4 Sankhya yogas
+# --------------------------------------------------------------------------
+
+SANKHYA_MEANS = "a number"
+SANKHYA_BASIS = (
+    "Sankhya yogas are based on the number of distinct signs occupied by the "
+    "seven planets combined. Rahu and Ketu are not included."
+)
+
+#: **The clearest statement in the book on the node question.** §11.5.3 said
+#: the nodes are "not counted as planets by many authors" — attribution.
+#: §11.5.4 rules: "Rahu and Ketu are not included." See OI-73.
+SANKHYA_EXCLUDES_NODES = "Rahu and Ketu are not included."
+
+#: §11.5.4's precedence rule. A Sankhya yoga is not merely weaker than the
+#: other Naabhasa families — it does not apply at all when one of them does.
+#: The only rule in chapter 11 where one yoga's presence depends on another's
+#: absence.
+SANKHYA_IS_A_FALLBACK = (
+    "These yogas apply if no other Naabhasa yogas mentioned previously are "
+    "applicable in a chart. These are the least important of all Naabhasa "
+    "yogas."
+)
+
+#: §11.5.4's worked example: Lord Sri Rama's chart, Figure 1. The section
+#: gives the signs occupied rather than the chart, so the sign count is
+#: checkable and the fallback condition is only partly so — Figure 1 has not
+#: been supplied and the lagna is unknown.
+SANKHYA_EXAMPLE = {
+    "chart": "Lord Sri Rama (Figure 1)",
+    "signs": ("Ar", "Ta", "Cn", "Li", "Cp", "Pi"),
+    "count": 6,
+    "yoga": "daama",
+    "figure_supplied": False,
+}
+
+#: The seven, by the number of distinct signs the seven planets occupy.
+#: Gola's definition is phrased differently — "if the seven planets are in one
+#: sign" rather than "occupy exactly 1 distinct sign" — but means the same.
+SANKHYA_YOGAS: tuple[dict, ...] = (
+    {"key": "veenaa", "name": "Veenaa Yoga", "signs": 7,
+     "name_means": "a stringed musical instrument",
+     "aliases": ("Vallaki Yoga",),
+     "alias_note": "This is also called Vallaki yoga by some authors."},
+    {"key": "daama", "name": "Daama Yoga", "signs": 6,
+     "name_means": "a wreath",
+     "aliases": ("Daamini Yoga",),
+     "alias_note": "Some authors call this Daamini yoga."},
+    {"key": "paasa", "name": "Paasa Yoga", "signs": 5,
+     "name_means": "a noose", "aliases": (), "alias_note": None},
+    {"key": "kedaara", "name": "Kedaara Yoga", "signs": 4,
+     "name_means": "a field", "aliases": (), "alias_note": None},
+    {"key": "soola", "name": "Soola Yoga", "signs": 3,
+     "name_means": "Shiva's weapon", "aliases": (), "alias_note": None},
+    {"key": "yuga", "name": "Yuga Yoga", "signs": 2,
+     "name_means": "a pair", "aliases": (), "alias_note": None},
+    {"key": "gola", "name": "Gola Yoga", "signs": 1,
+     "name_means": "a sphere or a globe", "aliases": (), "alias_note": None,
+     "definition_differs": (
+         "Gola alone is phrased “if the seven planets are in one sign” "
+         "rather than “occupy exactly 1 distinct sign”."
+     )},
 )

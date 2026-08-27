@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 40,
+    "evaluated": 47,
     "grahas_considered": [
       {
         "graha": 0,
@@ -43,13 +43,15 @@
     "paksha": null,
     "present": [
       "kemadruma",
-      "vosi"
+      "vosi",
+      "veenaa"
     ],
     "qualifiers_available": [],
     "qualifiers_unavailable": [
       "combustion"
     ],
     "results_killed_by_kemadruma": [
+      "veenaa",
       "vosi"
     ],
     "yogas": [
@@ -592,6 +594,153 @@
         "qualifiers": [],
         "reason": "Sun is in Capricorn and Mercury in Cancer; they are not together",
         "section": "11.2.4"
+      },
+      {
+        "aliases": [
+          "Vallaki Yoga"
+        ],
+        "definition": "If the seven planets occupy exactly 7 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "veenaa",
+        "name": "Veenaa Yoga",
+        "participants": [
+          {
+            "graha": 0,
+            "graha_name": "Sun",
+            "house_from_sun": null,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "graha": 1,
+            "graha_name": "Moon",
+            "house_from_sun": null,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": null,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "graha": 3,
+            "graha_name": "Mercury",
+            "house_from_sun": null,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": null,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "graha": 5,
+            "graha_name": "Venus",
+            "house_from_sun": null,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "house_from_sun": null,
+            "sign": 0,
+            "sign_name": "Aries"
+          }
+        ],
+        "present": true,
+        "qualifiers": [
+          "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas."
+        ],
+        "reason": "the seven planets occupy exactly 7 distinct signs (Aries, Gemini, Cancer, Virgo, Sagittarius, Capricorn, Pisces) and no earlier Naabhasa yoga applies",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [
+          "Daamini Yoga"
+        ],
+        "definition": "If the seven planets occupy exactly 6 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "daama",
+        "name": "Daama Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 7 distinct signs (Aries, Gemini, Cancer, Virgo, Sagittarius, Capricorn, Pisces), not 6",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 5 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "paasa",
+        "name": "Paasa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 7 distinct signs (Aries, Gemini, Cancer, Virgo, Sagittarius, Capricorn, Pisces), not 5",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 4 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "kedaara",
+        "name": "Kedaara Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 7 distinct signs (Aries, Gemini, Cancer, Virgo, Sagittarius, Capricorn, Pisces), not 4",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 3 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "soola",
+        "name": "Soola Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 7 distinct signs (Aries, Gemini, Cancer, Virgo, Sagittarius, Capricorn, Pisces), not 3",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 2 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "yuga",
+        "name": "Yuga Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 7 distinct signs (Aries, Gemini, Cancer, Virgo, Sagittarius, Capricorn, Pisces), not 2",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets are in one sign, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "gola",
+        "name": "Gola Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 7 distinct signs (Aries, Gemini, Cancer, Virgo, Sagittarius, Capricorn, Pisces), not 1",
+        "section": "11.5.4"
       }
     ]
   },

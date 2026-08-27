@@ -717,3 +717,133 @@ entries:
     category: circumstance
   - term: soft-natured
     category: temperament
+- planetary_yoga: veenaa
+  name: Veenaa Yoga
+  source: pvr-vaia
+  section: 11.5.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga likes music, dance and songs. He has many servants. He is wealthy, skillful
+    and a leader of men. Veenaa is a stringed musical instrument. This is also called Vallaki yoga by some authors.
+  terms:
+  - term: likes music, dance and songs
+    category: temperament
+  - term: many servants
+    category: circumstance
+  - term: wealthy
+    category: circumstance
+  - term: skillful
+    category: aptitude
+  - term: a leader of men
+    category: station
+- planetary_yoga: daama
+  name: Daama Yoga
+  source: pvr-vaia
+  section: 11.5.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is very rich and famous. He has many children. He has many gems. He helps
+    others. Daama means a wreath. Some authors call this Daamini yoga.
+  terms:
+  - term: very rich
+    category: circumstance
+  - term: famous
+    category: circumstance
+  - term: many children
+    category: circumstance
+  - term: helps others
+    category: temperament
+- planetary_yoga: paasa
+  name: Paasa Yoga
+  source: pvr-vaia
+  section: 11.5.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga has the risk of being imprisoned. He is capable in his work. He is talkataive.
+    He has many servants. He lacks character. Paasa means a noose.
+  transcription_notes: '"talkataive" is printed for "talkative". Transcribed as printed.'
+  terms:
+  - term: risk of being imprisoned
+    category: circumstance
+  - term: capable in his work
+    category: aptitude
+  - term: talkative
+    category: temperament
+  - term: many servants
+    category: circumstance
+  - term: lacks character
+    category: temperament
+- planetary_yoga: kedaara
+  name: Kedaara Yoga
+  source: pvr-vaia
+  section: 11.5.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is an agriculturist. He is happy wealthy and helpful to others. Kedaara means
+    a field.
+  transcription_notes: '"He is happy wealthy and helpful" is printed without the comma after "happy".'
+  terms:
+  - term: an agriculturist
+    category: station
+  - term: happy
+    category: temperament
+  - term: wealthy
+    category: circumstance
+  - term: helpful to others
+    category: temperament
+- planetary_yoga: soola
+  name: Soola Yoga
+  source: pvr-vaia
+  section: 11.5.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is sharp, lazy, violent, poor, prohibited and valiant. They win accolades
+    in wars. Soola is Shiva's weapon.
+  transcription_notes: '"prohibited" is printed among the qualities and is not obviously a rendering of any usual
+    term; transcribed as printed.'
+  terms:
+  - term: sharp
+    category: aptitude
+  - term: lazy
+    category: temperament
+  - term: violent
+    category: temperament
+  - term: poor
+    category: circumstance
+  - term: valiant
+    category: temperament
+  - term: win accolades in wars
+    category: circumstance
+- planetary_yoga: yuga
+  name: Yuga Yoga
+  source: pvr-vaia
+  section: 11.5.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is a heretic. He is poor and discarded in the world. He is irreligious. He
+    has no happiness from children and mother. Yuga means a pair.
+  transcription_notes: Unreachable under 11.5.4's own fallback rule — see docs/open-items.md OI-79.
+  terms:
+  - term: a heretic
+    category: temperament
+  - term: poor
+    category: circumstance
+  - term: discarded in the world
+    category: circumstance
+  - term: irreligious
+    category: temperament
+  - term: no happiness from children and mother
+    category: circumstance
+- planetary_yoga: gola
+  name: Gola Yoga
+  source: pvr-vaia
+  section: 11.5.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is strong, poor, dirty and uneducated. He is always sad. Gola means a sphere
+    or a globe.
+  transcription_notes: Unreachable under 11.5.4's own fallback rule — see docs/open-items.md OI-79.
+  terms:
+  - term: strong
+    category: physical
+  - term: poor
+    category: circumstance
+  - term: dirty
+    category: physical
+  - term: uneducated
+    category: aptitude
+  - term: always sad
+    category: temperament

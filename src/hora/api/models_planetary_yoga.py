@@ -280,6 +280,26 @@ class PlanetaryYogaRulesOut(BaseModel):
     )
     aakriti_name_variants: dict[str, list[str]]
     aakriti_order_differs: str
+    sankhya_means: str
+    sankhya_basis: str
+    sankhya_excludes_nodes: str = Field(
+        ...,
+        description=(
+            "Section 11.5.4 rules the nodes out outright, where section 11.5.3 "
+            "only reported that many authors do. The clearest statement in the "
+            "book on the question OI-73 asks."
+        ),
+    )
+    sankhya_is_a_fallback: str = Field(
+        ...,
+        description=(
+            "Sankhya yogas apply only when no earlier Naabhasa yoga does. The "
+            "one place in chapter 11 where a yoga's presence depends on "
+            "another's absence, rather than on its results being killed."
+        ),
+    )
+    sankhya_unreachable: list[str]
+    sankhya_unreachable_note: str
     naabhasa_gap_note: str
     frequency_note: str
     preferred_charts: list[str]

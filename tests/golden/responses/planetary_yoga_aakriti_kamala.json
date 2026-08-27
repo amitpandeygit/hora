@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 40,
+    "evaluated": 47,
     "grahas_considered": [
       {
         "graha": 0,
@@ -687,6 +687,101 @@
         "qualifiers": [],
         "reason": "Sun is in Aries and Mercury in Capricorn; they are not together",
         "section": "11.2.4"
+      },
+      {
+        "aliases": [
+          "Vallaki Yoga"
+        ],
+        "definition": "If the seven planets occupy exactly 7 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "veenaa",
+        "name": "Veenaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 7",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [
+          "Daamini Yoga"
+        ],
+        "definition": "If the seven planets occupy exactly 6 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "daama",
+        "name": "Daama Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 6",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 5 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "paasa",
+        "name": "Paasa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 5",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 4 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "kedaara",
+        "name": "Kedaara Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets do occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), but Rajju Yoga applies and Sankhya yogas apply only when no earlier Naabhasa yoga does",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 3 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "soola",
+        "name": "Soola Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 3",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 2 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "yuga",
+        "name": "Yuga Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 2",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets are in one sign, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "gola",
+        "name": "Gola Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 1",
+        "section": "11.5.4"
       }
     ]
   },

@@ -65,6 +65,12 @@ from hora.core.const import (
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
     RAVI_YOGAS,
+    SANKHYA_BASIS,
+    SANKHYA_EXAMPLE,
+    SANKHYA_EXCLUDES_NODES,
+    SANKHYA_IS_A_FALLBACK,
+    SANKHYA_MEANS,
+    SANKHYA_YOGAS,
     SARPA_IS_VERY_BAD,
     SASA_MEANS,
     TATTVA_GLOSS_IN_3_2_8,
@@ -562,8 +568,8 @@ def test_catalogue_lists_every_yoga_without_a_chart(client):
     body = client.get("/v1/planetary-yoga/catalogue").json()
     assert body["count"] == len(YOGA_REGISTRY)
     assert set(body["groups"]) == {
-        "ravi", "chandra", "mahapurusha",
-        "naabhasa_aasraya", "naabhasa_dala", "naabhasa_aakriti"}
+        "ravi", "chandra", "mahapurusha", "naabhasa_aasraya",
+        "naabhasa_dala", "naabhasa_aakriti", "naabhasa_sankhya"}
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -1519,21 +1525,15 @@ def test_11_5_the_four_families_come_to_thirty_two():
     assert len(set(names)) == 32, "no name appears in two families"
 
 
-def test_11_5_twenty_five_of_the_thirty_two_are_defined():
-    """§11.5.1, §11.5.2 and §11.5.3 define twenty-five. The Sankhya seven of
-    §11.5.4 are **named only**.
-
-    They are listed rather than registered: a yoga the engine cannot detect
-    must not appear among the verdicts, where `present: false` would read as a
-    finding instead of a gap.
+def test_11_5_the_pending_list_is_kept_even_though_it_is_empty():
+    """§11.5.4 closed the last family, so nothing is pending. The list and its
+    guard stay: "registered plus pending equals thirty-two" is what would
+    catch a future family being classified and then forgotten.
     """
     registered = {k for k, s in YOGA_REGISTRY.items()
                   if s.group.startswith("naabhasa_")}
-    assert len(registered) == 25
-    assert len(NAABHASA_NOT_YET_DEFINED) == 7
+    assert NAABHASA_NOT_YET_DEFINED == ()
     assert len(registered) + len(NAABHASA_NOT_YET_DEFINED) == 32
-    assert set(NAABHASA_NOT_YET_DEFINED) == set(
-        NAABHASA_CLASSIFICATION["sankhya"]["names"])
 
 
 def test_11_5_no_undefined_yoga_leaks_into_the_registry():
@@ -1545,16 +1545,16 @@ def test_11_5_no_undefined_yoga_leaks_into_the_registry():
     assert not (defined & set(NAABHASA_NOT_YET_DEFINED))
 
 
-def test_11_5_the_gap_is_one_whole_family_not_a_scatter():
-    """Aasraya, Dala and Aakriti are complete; Sankhya is entirely missing. So
-    the one section still to come is §11.5.4, not a handful of yogas spread
-    across four."""
-    registered = {s.group for k, s in YOGA_REGISTRY.items()
-                  if s.group.startswith("naabhasa_")}
-    assert registered == {"naabhasa_aasraya", "naabhasa_dala",
-                          "naabhasa_aakriti"}
-    assert set(NAABHASA_NOT_YET_DEFINED) == set(
-        NAABHASA_CLASSIFICATION["sankhya"]["names"])
+def test_11_5_every_family_has_as_many_registered_as_it_claims():
+    """Family by family, the classification's own count against the
+    registry."""
+    sizes = {}
+    for key, spec in YOGA_REGISTRY.items():
+        if spec.group.startswith("naabhasa_"):
+            sizes[spec.group.removeprefix("naabhasa_")] = sizes.get(
+                spec.group.removeprefix("naabhasa_"), 0) + 1
+    for family, entry in NAABHASA_CLASSIFICATION.items():
+        assert sizes[family] == entry["count"], family
 
 
 def test_11_5_naabhasa_results_are_felt_in_all_dasas():
@@ -2158,3 +2158,355 @@ def test_11_5_3_vaapi_reads_its_two_alternatives_separately():
     assert not evaluate_one("vaapi", mixed).present
     assert evaluate_one("vaapi", _spread([2, 5, 8, 11])).present
     assert evaluate_one("vaapi", _spread([3, 6, 9, 12])).present
+
+
+# --------------------------------------------------------------------------
+# 11.5.4 Sankhya yogas
+# --------------------------------------------------------------------------
+
+
+def _seven_in(signs, lagna=0, **extra):
+    """Place the seven planets across `signs` (sign indices, cycled)."""
+    return YogaInput(
+        rasis={int(g): signs[i % len(signs)] for i, g in enumerate(_SEVEN)},
+        lagna_rasi=lagna, paksha=0, **extra)
+
+
+def test_11_5_4_sankhya_means_a_number():
+    """"Sankhya means a number. Sankhya yogas are based on the number of
+    distinct signs occupied by the seven planets combined."""
+    assert SANKHYA_MEANS == "a number"
+    assert "number of distinct signs" in SANKHYA_BASIS
+
+
+def test_11_5_4_rules_the_nodes_out_outright():
+    """"Rahu and Ketu are **not included**."
+
+    §11.5.3 said the nodes are "not counted as planets by many authors" —
+    attribution. §11.5.4 rules. It is the clearest statement in the book on
+    the question OI-73 asks, so this family ignores `include_nodes` rather
+    than honouring it.
+    """
+    from hora.charts.planetary_yogas.sankhya import SEVEN_PLANETS
+
+    assert SANKHYA_EXCLUDES_NODES == "Rahu and Ketu are not included."
+    assert Graha.RAHU not in SEVEN_PLANETS
+    assert Graha.KETU not in SEVEN_PLANETS
+    assert len(SEVEN_PLANETS) == 7
+    # Three signs for the seven, plus the nodes in two more. Under a rule that
+    # counted nine, this would be five signs (Paasa); counting seven it is
+    # three (Soola), and the flag changes nothing either way.
+    # Aries, Gemini and Scorpio for the seven — a Soola chart that no earlier
+    # Naabhasa yoga supersedes. Rahu adds a fourth sign, so a rule counting
+    # nine would give Kedaara instead; counting seven it stays Soola, and the
+    # flag changes nothing either way.
+    base = {int(g): [R["Ar"], R["Ge"], R["Sc"]][i % 3]
+            for i, g in enumerate(_SEVEN)}
+    # The nodes go in Taurus and Scorpio — neither a quadrant from Aries, so
+    # no Dala yoga (which *does* count them) is stirred up and only the
+    # Sankhya count is under test.
+    with_nodes = {**base, int(Graha.RAHU): R["Ta"], int(Graha.KETU): R["Sc"]}
+    off = evaluate_one("soola", YogaInput(rasis=with_nodes, lagna_rasi=R["Ar"]))
+    on = evaluate_one("soola", YogaInput(rasis=with_nodes, lagna_rasi=R["Ar"],
+                                         include_nodes=True))
+    assert off.present is on.present is True
+    assert not evaluate_one("kedaara", YogaInput(rasis=with_nodes,
+                                                 lagna_rasi=R["Ar"])).present
+
+
+@pytest.mark.parametrize(
+    "key,signs,means",
+    [("veenaa", 7, "a stringed musical instrument"), ("daama", 6, "a wreath"),
+     ("paasa", 5, "a noose"), ("kedaara", 4, "a field"),
+     ("soola", 3, "Shiva's weapon"), ("yuga", 2, "a pair"),
+     ("gola", 1, "a sphere or a globe")],
+)
+def test_11_5_4_each_yoga_takes_one_count(key, signs, means):
+    """Seven yogas, seven counts, descending from 7 to 1."""
+    entry = next(y for y in SANKHYA_YOGAS if y["key"] == key)
+    assert entry["signs"] == signs
+    assert entry["name_means"] == means
+
+
+def test_11_5_4_the_seven_counts_are_exhaustive():
+    """Seven planets can occupy one to seven distinct signs and no other
+    number, and there is a yoga for each. So exactly one Sankhya yoga always
+    matches on count — which is why the fallback rule is needed to stop one
+    firing in every chart.
+    """
+    counts = {y["signs"] for y in SANKHYA_YOGAS}
+    assert counts == set(range(1, 8))
+    assert len(SANKHYA_YOGAS) == 7
+
+
+@pytest.mark.parametrize("count", range(1, 8))
+def test_11_5_4_exactly_one_count_matches_any_chart(count):
+    """Whatever the seven planets do, one and only one Sankhya yoga's count
+    is right."""
+    signs = [R[name] for name in ("Ar", "Ta", "Ge", "Cn", "Le", "Vi", "Li")]
+    chart = _seven_in(signs[:count])
+    matching = [y["key"] for y in SANKHYA_YOGAS
+                if len({chart.rasis[int(g)] for g in _SEVEN}) == y["signs"]]
+    assert len(matching) == 1
+    assert matching[0] == next(y["key"] for y in SANKHYA_YOGAS
+                               if y["signs"] == count)
+
+
+def test_11_5_4_the_worked_example_is_rama_and_gives_daama():
+    """"let us take the chart of Lord Sri Rama (see Figure 1). The signs
+    occupied by the seven planets are: Ar, Ta, Cn, Li, Cp and Pi. There are
+    six signs. This forms Daama yoga."
+
+    Figure 1 has not been supplied, so the lagna is unknown and the
+    Aakriti and Dala tests cannot be run on it. What **is** checkable is the
+    count, and that the signs span three modalities — so no Aasraya yoga can
+    supersede it.
+    """
+    assert SANKHYA_EXAMPLE["yoga"] == "daama"
+    assert SANKHYA_EXAMPLE["count"] == 6
+    assert len(SANKHYA_EXAMPLE["signs"]) == 6
+    assert SANKHYA_EXAMPLE["figure_supplied"] is False
+    modalities = {RASI_MODALITY[R[s]] for s in SANKHYA_EXAMPLE["signs"]}
+    assert len(modalities) > 1, "mixed modalities rule out every Aasraya yoga"
+    signs = [R[s] for s in SANKHYA_EXAMPLE["signs"]] + [R["Ar"]]
+    verdict = evaluate_one("daama", _seven_in(signs, lagna=R["Cn"]))
+    assert verdict.present
+
+
+# --------------------------------------------------------------------------
+# The fallback rule
+# --------------------------------------------------------------------------
+
+
+def test_11_5_4_is_a_fallback_not_merely_a_weaker_family():
+    """"These yogas apply **if no other Naabhasa yogas mentioned previously
+    are applicable** in a chart. These are the least important of all Naabhasa
+    yogas."
+
+    The first rule in the book where one yoga's *presence* depends on
+    another's absence. It is part of the definition — "apply if" — so unlike
+    Kemadruma's "kills the results", it governs `present`.
+    """
+    assert "apply if no other Naabhasa yogas" in SANKHYA_IS_A_FALLBACK
+    assert "least important" in SANKHYA_IS_A_FALLBACK
+
+
+def test_11_5_4_a_superseded_yoga_names_what_superseded_it():
+    """All seven planets in the quadrants from Aries occupy four distinct
+    signs, which is Kedaara's count — but Kamala and Rajju both apply, so
+    Kedaara does not.
+
+    The reason states the count *and* the yoga that displaced it, so nothing
+    is hidden behind the `present` flag.
+    """
+    chart = _seven_in([R["Ar"], R["Cn"], R["Li"], R["Cp"]], lagna=R["Ar"])
+    verdict = evaluate_one("kedaara", chart)
+    assert verdict.present is False
+    assert "do occupy 4 distinct signs" in verdict.reason
+    assert "applies and Sankhya yogas apply only when" in verdict.reason
+    earlier = {v.key for v in evaluate(chart) if v.present}
+    assert earlier & {"rajju", "kamala"}
+
+
+def test_11_5_4_at_most_one_sankhya_yoga_can_ever_hold():
+    """One count matches, and the other six cannot. Checked across charts of
+    every count."""
+    signs = [R[n] for n in ("Ar", "Ta", "Ge", "Cn", "Le", "Vi", "Li")]
+    for count in range(1, 8):
+        chart = _seven_in(signs[:count], lagna=R["Sc"])
+        present = [v.key for v in evaluate(chart, group="naabhasa_sankhya")
+                   if v.present]
+        assert len(present) <= 1, (count, present)
+
+
+def test_11_5_4_a_sankhya_yoga_never_holds_beside_an_earlier_naabhasa_yoga():
+    """The fallback stated as an invariant over many charts: no chart may
+    show both a Sankhya yoga and an Aasraya, Dala or Aakriti one.
+    """
+    from hora.charts.planetary_yogas.sankhya import _EARLIER_NAABHASA
+
+    charts = [
+        _seven_in([R["Ar"], R["Cn"], R["Li"], R["Cp"]], lagna=R["Ar"]),
+        _seven_in([R["Ar"], R["Ta"], R["Ge"], R["Cn"], R["Le"], R["Vi"],
+                   R["Li"]], lagna=R["Sc"]),
+        _seven_in([R["Ar"]], lagna=R["Cn"]),
+        _seven_in([R["Ta"], R["Le"], R["Sc"], R["Aq"]], lagna=R["Ta"]),
+    ]
+    for chart in charts:
+        verdicts = {v.key: v.present for v in evaluate(chart)}
+        sankhya = {k for k, s in YOGA_REGISTRY.items()
+                   if s.group == "naabhasa_sankhya" and verdicts[k]}
+        earlier = {k for k, s in YOGA_REGISTRY.items()
+                   if s.group in _EARLIER_NAABHASA and verdicts[k]}
+        assert not (sankhya and earlier), (sankhya, earlier)
+
+
+def test_11_5_4_the_fallback_checks_the_families_in_the_books_order():
+    """"no other Naabhasa yogas **mentioned previously**" — Aasraya, then
+    Dala, then Aakriti, which is the order §11.5 lists and §11.5.1 to §11.5.3
+    define. The yoga named as superseding is the one a reader reaches first.
+    """
+    from hora.charts.planetary_yogas.sankhya import _EARLIER_NAABHASA
+
+    assert _EARLIER_NAABHASA == (
+        "naabhasa_aasraya", "naabhasa_dala", "naabhasa_aakriti")
+    assert "naabhasa_sankhya" not in _EARLIER_NAABHASA
+
+
+def test_11_5_4_the_fallback_differs_from_kemadrumas_suppression():
+    """Two cross-yoga rules in one chapter, deliberately handled differently.
+
+    §11.3.4's Kemadruma "kills the results of other good yogas" — the yoga
+    still forms, and carries a qualifier. §11.5.4's Sankhya yogas "apply if no
+    other Naabhasa yoga is applicable" — they do not form at all.
+
+    The difference is in the book's own words: results against applicability.
+    """
+    assert "kills the results" in KEMADRUMA_KILLS_OTHER_YOGAS
+    assert "apply if" in SANKHYA_IS_A_FALLBACK
+    kemadruma_chart = dict(_kemadruma_chart().rasis)
+    body = planetary_yoga_service.chart(kemadruma_chart, lagna_rasi=R["Ta"])
+    killed = body["results_killed_by_kemadruma"]
+    for yoga in body["yogas"]:
+        if yoga["key"] in killed:
+            assert yoga["present"] is True
+
+
+def test_11_5_4_needs_all_seven_planets():
+    """The count is over the seven combined, so a missing planet would
+    undercount — and undercounting moves the answer to a different yoga rather
+    than merely weakening it.
+    """
+    partial = YogaInput(rasis={int(Graha.SUN): 0, int(Graha.MOON): 1},
+                        lagna_rasi=0)
+    verdict = evaluate_one("yuga", partial)
+    assert verdict.present is False
+    assert "cannot be decided" in verdict.reason
+
+
+def test_11_5_4_gola_is_phrased_differently_from_the_other_six():
+    """"If the seven planets **are in one sign**" — where the other six read
+    "occupy exactly N distinct signs". Same meaning, different wording;
+    recorded rather than normalised.
+    """
+    gola = next(y for y in SANKHYA_YOGAS if y["key"] == "gola")
+    assert "definition_differs" in gola
+    assert "are in one sign" in YOGA_REGISTRY["gola"].definition
+    for entry in SANKHYA_YOGAS:
+        if entry["key"] != "gola":
+            assert "distinct signs" in YOGA_REGISTRY[entry["key"]].definition
+
+
+@pytest.mark.parametrize(
+    "key,alias", [("veenaa", "Vallaki Yoga"), ("daama", "Daamini Yoga")])
+def test_11_5_4_two_yogas_carry_an_alias(key, alias):
+    """"This is also called Vallaki yoga by some authors." "Some authors call
+    this Daamini yoga." Only these two of the seven."""
+    assert YOGA_REGISTRY[key].aliases == (alias,)
+    without = [y["key"] for y in SANKHYA_YOGAS if not y["aliases"]]
+    assert len(without) == 5
+
+
+# --------------------------------------------------------------------------
+# The classification is now complete
+# --------------------------------------------------------------------------
+
+
+def test_all_thirty_two_naabhasa_yogas_are_now_defined():
+    """§11.5 classified thirty-two and §11.5.1 to §11.5.4 defined every one.
+    Nothing is left named-only."""
+    registered = {k for k, s in YOGA_REGISTRY.items()
+                  if s.group.startswith("naabhasa_")}
+    assert len(registered) == 32
+    assert NAABHASA_NOT_YET_DEFINED == ()
+    total = sum(e["count"] for e in NAABHASA_CLASSIFICATION.values())
+    assert len(registered) + len(NAABHASA_NOT_YET_DEFINED) == total == 32
+
+
+def test_the_four_families_are_all_registered():
+    groups_present = {s.group for s in YOGA_REGISTRY.values()
+                      if s.group.startswith("naabhasa_")}
+    assert groups_present == {
+        "naabhasa_aasraya", "naabhasa_dala", "naabhasa_aakriti",
+        "naabhasa_sankhya"}
+
+
+def test_every_classified_name_has_a_registered_yoga():
+    """Name by name, the classification list against the registry — the
+    strongest form of the completeness guard, since it catches a family that
+    was defined under a different name."""
+    from hora.core.const import AAKRITI_NAME_VARIANTS
+
+    registered = {s.name.replace(" Yoga", "") for s in YOGA_REGISTRY.values()}
+    variants = {v for values in AAKRITI_NAME_VARIANTS.values() for v in values}
+    for entry in NAABHASA_CLASSIFICATION.values():
+        for name in entry["names"]:
+            assert name in registered or name in variants, name
+
+
+def test_11_5_4_gola_can_never_be_present():
+    """**A consequence §11.5.4 does not mention.**
+
+    Gola needs all seven planets in one sign. One sign is one modality, so an
+    Aasraya yoga always applies; and one sign always fits inside a seven-sign
+    window, so a run-yoga applies too. The fallback rule then forbids Gola —
+    in every chart there is.
+
+    Checked exhaustively over all 12 signs by all 12 lagnas. See OI-79.
+    """
+    for sign in range(12):
+        for lagna in range(12):
+            data = YogaInput(rasis={int(g): sign for g in _SEVEN},
+                             lagna_rasi=lagna, paksha=0)
+            verdict = evaluate_one("gola", data)
+            assert verdict.present is False, (sign, lagna)
+            assert "applies and Sankhya yogas apply only" in verdict.reason
+
+
+def test_11_5_4_yuga_can_never_be_present_either():
+    """Two distinct signs are always within seven consecutive signs, because
+    the shorter arc between any two signs is at most six. §11.5.3's five
+    run-yogas cover all twelve seven-sign windows, so one of them always
+    applies and Yuga is always superseded.
+
+    Checked exhaustively over all 66 sign pairs by all 12 lagnas. See OI-79.
+    """
+    import itertools
+
+    for pair in itertools.combinations(range(12), 2):
+        for lagna in range(12):
+            data = YogaInput(
+                rasis={int(g): pair[i % 2] for i, g in enumerate(_SEVEN)},
+                lagna_rasi=lagna, paksha=0)
+            assert evaluate_one("yuga", data).present is False, (pair, lagna)
+
+
+def test_11_5_4_the_reason_gola_and_yuga_are_unreachable():
+    """The structural fact behind both: every set of one or two signs fits
+    inside some seven-consecutive-sign window, and three signs need not.
+    """
+    import itertools
+
+    windows = [{(start + step) % 12 for step in range(7)} for start in range(12)]
+    for size in (1, 2):
+        for combo in itertools.combinations(range(12), size):
+            assert any(set(combo) <= w for w in windows), combo
+    uncovered = [c for c in itertools.combinations(range(12), 3)
+                 if not any(set(c) <= w for w in windows)]
+    assert uncovered, "three signs can escape every window, which is why Soola can hold"
+
+
+def test_11_5_4_the_other_five_are_reachable():
+    """Veenaa, Daama, Paasa, Kedaara and Soola all occur. Soola is the rarest
+    — three signs must escape every seven-sign window and every other Aakriti
+    set — but it is not impossible.
+    """
+    reachable = {
+        # Not seven *consecutive* signs — that would sit inside a seven-sign
+        # window and give Naukaa instead. Scorpio breaks the run.
+        "veenaa": ([R["Ar"], R["Ta"], R["Ge"], R["Cn"], R["Le"], R["Vi"],
+                    R["Sc"]], R["Ar"]),
+        "soola": ([R["Ar"], R["Ge"], R["Sc"]], R["Ar"]),
+    }
+    for key, (signs, lagna) in reachable.items():
+        assert evaluate_one(key, _seven_in(signs, lagna=lagna)).present, key

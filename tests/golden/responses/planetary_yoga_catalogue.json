@@ -1,13 +1,14 @@
 {
   "body": {
-    "count": 40,
+    "count": 47,
     "groups": [
       "naabhasa_aakriti",
       "chandra",
       "mahapurusha",
       "naabhasa_aasraya",
       "naabhasa_dala",
-      "ravi"
+      "ravi",
+      "naabhasa_sankhya"
     ],
     "yogas": [
       {
@@ -379,6 +380,73 @@
         "key": "budha_aaditya",
         "name": "Budha-Aaditya Yoga",
         "section": "11.2.4"
+      },
+      {
+        "aliases": [
+          "Vallaki Yoga"
+        ],
+        "definition": "If the seven planets occupy exactly 7 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "veenaa",
+        "name": "Veenaa Yoga",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [
+          "Daamini Yoga"
+        ],
+        "definition": "If the seven planets occupy exactly 6 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "daama",
+        "name": "Daama Yoga",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 5 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "paasa",
+        "name": "Paasa Yoga",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 4 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "kedaara",
+        "name": "Kedaara Yoga",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 3 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "soola",
+        "name": "Soola Yoga",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets occupy exactly 2 distinct signs among them, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "yuga",
+        "name": "Yuga Yoga",
+        "section": "11.5.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If the seven planets are in one sign, this yoga is formed.",
+        "group": "naabhasa_sankhya",
+        "implies": [],
+        "key": "gola",
+        "name": "Gola Yoga",
+        "section": "11.5.4"
       }
     ]
   },
