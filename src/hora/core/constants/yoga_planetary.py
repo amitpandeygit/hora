@@ -888,3 +888,252 @@ SANKHYA_YOGAS: tuple[dict, ...] = (
          "rather than “occupy exactly 1 distinct sign”."
      )},
 )
+
+
+# --------------------------------------------------------------------------
+# §11.6 Other popular yogas
+# --------------------------------------------------------------------------
+
+POPULAR_YOGA_INTRO = "Some other important combinations will be listed below."
+
+#: §11.6's governing rule, and it binds **every** yoga in the section: a yoga
+#: is fully present only when the combinations hold *and* the planets are
+#: strong. Chapter 15's simple-rules measure is not built, so the engine can
+#: report the combinations and never fullness. See OI-81.
+POPULAR_YOGA_FULLNESS_RULE = (
+    "Sometimes the results of a dasa may be felt even if all the required "
+    "combinations are not present. But, for a yoga to be fully present, all "
+    "the required combinations must be present and the participating planets "
+    "must be strong."
+)
+STRENGTH_NOT_ASSESSED = (
+    "Section 11.6 requires the participating planets to be strong for the "
+    "yoga to be fully present. Strength is not computed — chapter 15's "
+    "simple-rules measure is not built — so this verdict reports the "
+    "combinations only."
+)
+
+#: Footnote 31, in full. Kartari is its own construction, reusable against any
+#: house or planet, and two of §11.6's yogas are built on it.
+KARTARI_MEANS = "scissors"
+KARTARI_DEFINITION = (
+    "Kartari literally means “scissors”. The 12th and 2nd houses from a "
+    "house cast kartari on it. If the 2nd and 12th from a house have benefics, "
+    "it is said to have a subha (benefic) kartari. Malefics in the same places "
+    "cause paapa (malefic) kartari."
+)
+KARTARI_EFFECT = (
+    "Subha kartari on any house does good to the matters of that house and "
+    "paapa kartari does harm."
+)
+KARTARI_IS_GENERAL = (
+    "Subha kartari and paapa kartari are also known as “subha kartari yoga” "
+    "and “paapa kartari yoga” and they can be seen with reference to any "
+    "house or planet."
+)
+KARTARI_HOUSES: tuple[int, ...] = (12, 2)
+
+#: §11.6's eighteen. `clauses` are what the engine can decide; `strength`
+#: lists what it cannot. `alternatives` holds an "Alternately, ..." rule, of
+#: which the whole clause set is an independent way to satisfy the yoga.
+POPULAR_YOGAS: tuple[dict, ...] = (
+    {
+        "key": "subha", "name": "Subha Yoga", "name_means": None,
+        "definition": (
+            "If lagna has benefics or has “subha kartari” — benefics in "
+            "12th and 2nd — then this yoga is present."
+        ),
+    },
+    {
+        "key": "asubha", "name": "Asubha Yoga", "name_means": None,
+        "definition": (
+            "If lagna has malefics or has “paapa kartari” — malefics in "
+            "12th and 2nd — then this yoga is present."
+        ),
+    },
+    {
+        "key": "gaja_kesari", "name": "Gaja-Kesari Yoga", "name_means": None,
+        "definition": (
+            "If (1) Jupiter is in a quadrant from Moon, (2) a benefic planet "
+            "conjoins or aspects Jupiter, and, (3) Jupiter is not debilitated "
+            "or combust or in an enemy's house, then this yoga is present."
+        ),
+        "variant": (
+            "Some authors consider Gaja-Kesari yoga to be present even when "
+            "Jupiter is in a quadrant from lagna and not Moon. If he is "
+            "strong, this yoga can be present even without a benefic's aspect "
+            "or conjunction."
+        ),
+        "printed_typo": "Juputer",
+    },
+    {
+        "key": "guru_mangala", "name": "Guru-Mangala Yoga", "name_means": None,
+        "definition": (
+            "If Jupiter and Mars are together or in the 7th house from each "
+            "other, then this yoga is present."
+        ),
+    },
+    {
+        "key": "amala", "name": "Amala Yoga", "name_means": "pure",
+        "definition": (
+            "If there are only natural benefics in the 10th house from lagna "
+            "or Moon, then this yoga is present."
+        ),
+        "reason": (
+            "Because the 10th house shows one conduct in society, situation of "
+            "only benefics there makes one's conduct in the society very pure."
+        ),
+    },
+    {
+        "key": "parvata", "name": "Parvata Yoga", "name_means": "a mountain",
+        "definition": (
+            "If (1) quadrants are occupied only by benefics and (2) the 7th "
+            "and 8th houses are either vacant or occupied only by benefics, "
+            "then this yoga is present."
+        ),
+    },
+    {
+        "key": "kaahala", "name": "Kaahala Yoga",
+        "name_means": "excessive. It also means mischievous",
+        "definition": (
+            "If (1) the 4th lord and Jupiter are in mutual quadrants and "
+            "(2) lagna lord is strong, then this yoga is present."
+        ),
+        "alternative": (
+            "Alternately, this yoga is present if the 4th lord is exalted or "
+            "in own sign and the 10th lord joins him."
+        ),
+        "footnote": "Some say “9th lord” instead of Jupiter",
+        "strength": ("lagna lord",),
+    },
+    {
+        "key": "chaamara", "name": "Chaamara Yoga",
+        "name_means": (
+            "something akin to the plume on the head of a horse. By waving it, "
+            "servants give relief to kings from heat (like a fan). It "
+            "basically stands for the trappings of power"
+        ),
+        "definition": (
+            "If the lagna lord is exalted in a quadrant with Jupiter's aspect "
+            "or two benefics join in 7th, 9th or 10th, then this yoga is "
+            "present."
+        ),
+    },
+    {
+        "key": "sankha", "name": "Sankha Yoga", "name_means": "a conch shell",
+        "definition": (
+            "If (1) lagna lord is strong and (2) 5th and 6th lords are in "
+            "mutual quadrants, then this yoga is present."
+        ),
+        "alternative": (
+            "Alternately, this yoga is present if (1) lagna lord and 10th lord "
+            "are together in a movable sign and (2) the 9th lord is strong."
+        ),
+        "strength": ("lagna lord", "9th lord"),
+    },
+    {
+        "key": "bheri", "name": "Bheri Yoga", "name_means": "a kettledrum",
+        "definition": (
+            "If (1) the 9th lord is strong and (2) 1st, 2nd, 7th and 12th "
+            "houses are occupied by planets, then this yoga is present."
+        ),
+        "alternative": (
+            "Alternately, this is yoga is present if (1) the 9th lord is "
+            "strong and (2) Jupiter, Venus and lagna lord are in mutual "
+            "quadrants."
+        ),
+        "strength": ("9th lord",),
+    },
+    {
+        "key": "mridanga", "name": "Mridanga Yoga",
+        "name_means": (
+            "a rich and elegant percussion instrument popular in south India"
+        ),
+        "definition": (
+            "If (1) there are planets in own and exaltation signs in quadrants "
+            "and trines and (2) lagna lord is strong, then this yoga is "
+            "present."
+        ),
+        "strength": ("lagna lord",),
+    },
+    {
+        "key": "sreenaatha", "name": "Sreenaatha Yoga",
+        "name_means": (
+            "the lord of great wealth and prosperity. It also means Vishnu"
+        ),
+        "definition": (
+            "If (1) the 7th lord is exalted in 10th and (2) 10th lord is with "
+            "9th lord, then this yoga is present."
+        ),
+        "footnote": (
+            "If this is to be applied strictly, 7th lord can be exalted in "
+            "10th only for Sagittarius lagna."
+        ),
+    },
+    {
+        "key": "matsya", "name": "Matsya Yoga", "name_means": "a fish",
+        "definition": (
+            "If (1) benefics are in lagna and 9th, (2) some planets are in "
+            "5th, and, (3) malefics are in chaturasras (4th and 8th houses), "
+            "then this yoga is present."
+        ),
+    },
+    {
+        "key": "koorma", "name": "Koorma Yoga", "name_means": "a tortoise",
+        "definition": (
+            "If (1) the 5th, 6th and 7th houses are occupied by benefics who "
+            "are in own, exaltation or friendly signs and (2) the 1st, 3rd and "
+            "11th houses are occupied by malefics who are in own or exaltation "
+            "signs, then this yoga is present."
+        ),
+    },
+    {
+        "key": "khadga", "name": "Khadga Yoga", "name_means": "a sword",
+        "definition": (
+            "If (1) the 2nd lord is in the 9th house, (2) the 9th lord is in "
+            "the 2nd house, and, (3) lagna lord is in a quadrant or a trine, "
+            "then this yoga is present."
+        ),
+    },
+    {
+        "key": "kusuma", "name": "Kusuma Yoga", "name_means": "a flower",
+        "definition": (
+            "If (1) lagna is in a fixed sign, (2) Venus is in a quadrant, "
+            "(3) Moon is in a trine with a benefic, and, (4) Saturn is in the "
+            "10th house, then this yoga is present."
+        ),
+    },
+    {
+        "key": "kalaanidhi", "name": "Kalaanidhi Yoga",
+        "name_means": "a treasure of arts and skills",
+        "definition": (
+            "If (1) Jupiter is in the 2nd house or the 5th house and (2) he is "
+            "conjoined or aspected by Mercury and Venus, then this yoga is "
+            "present."
+        ),
+    },
+    {
+        "key": "kalpadruma", "name": "Kalpadruma Yoga",
+        "name_means": "a celestial tree of the heaven",
+        "aliases": ("Paarijaata Yoga",),
+        "alias_note": (
+            "This yoga is also known as Paarijaata yoga. Paarijaata is a "
+            "celestial flower."
+        ),
+        "definition": (
+            "Consider (1) lagna lord, (2) his dispositor, (3) the latter's "
+            "dispositor in rasi and (4) in navamsa. If all the four planets "
+            "are all in quadrants, trines or exaltation signs, then this yoga "
+            "is present."
+        ),
+        "simplification_rejected": (
+            "Some authors have simplified this yoga and wrote that one of the "
+            "last two planets mentioned can bring the yoga if in a quadrant or "
+            "a trine or exaltation sign. Taking all the four planets make this "
+            "a less common yoga, which it ought to be. Let us follow Parasara."
+        ),
+    },
+)
+
+#: §11.6's own count, checked against the list.
+POPULAR_YOGA_COUNT = 18

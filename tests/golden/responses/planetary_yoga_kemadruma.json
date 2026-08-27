@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 47,
+    "evaluated": 65,
     "grahas_considered": [
       {
         "graha": 0,
@@ -43,6 +43,10 @@
     "paksha": null,
     "present": [
       "kemadruma",
+      "asubha",
+      "guru_mangala",
+      "parvata",
+      "bheri",
       "vosi",
       "veenaa"
     ],
@@ -51,6 +55,10 @@
       "combustion"
     ],
     "results_killed_by_kemadruma": [
+      "asubha",
+      "bheri",
+      "guru_mangala",
+      "parvata",
       "veenaa",
       "vosi"
     ],
@@ -562,6 +570,357 @@
         "qualifiers": [],
         "reason": "0 of the four quadrants from lagna are occupied wholly by natural malefics; 3 are needed",
         "section": "11.5.2",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If lagna has benefics or has \u201csubha kartari\u201d \u2014 benefics in 12th and 2nd \u2014 then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "subha",
+        "name": "Subha Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "lagna holds no benefic and has no subha kartari \u2014 the 2nd (Gemini) Mars; the 12th (Aries) Saturn",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If lagna has malefics or has \u201cpaapa kartari\u201d \u2014 malefics in 12th and 2nd \u2014 then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "asubha",
+        "name": "Asubha Yoga",
+        "participants": [
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": null,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "house_from_sun": null,
+            "sign": 0,
+            "sign_name": "Aries"
+          }
+        ],
+        "present": true,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only.",
+          "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas."
+        ],
+        "reason": "lagna has paapa kartari \u2014 the 2nd (Gemini) Mars; the 12th (Aries) Saturn",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) Jupiter is in a quadrant from Moon, (2) a benefic planet conjoins or aspects Jupiter, and, (3) Jupiter is not debilitated or combust or in an enemy's house, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "gaja_kesari",
+        "name": "Gaja-Kesari Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "no benefic conjoins or aspects Jupiter",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If Jupiter and Mars are together or in the 7th house from each other, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "guru_mangala",
+        "name": "Guru-Mangala Yoga",
+        "participants": [
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": null,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": null,
+            "sign": 2,
+            "sign_name": "Gemini"
+          }
+        ],
+        "present": true,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only.",
+          "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas."
+        ],
+        "reason": "Jupiter in Sagittarius and Mars in Gemini are in the 7th from each other",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If there are only natural benefics in the 10th house from lagna or Moon, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "amala",
+        "name": "Amala Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "the 10th from lagna is empty; the 10th from Moon is Mars",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) quadrants are occupied only by benefics and (2) the 7th and 8th houses are either vacant or occupied only by benefics, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "parvata",
+        "name": "Parvata Yoga",
+        "participants": [
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": null,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          }
+        ],
+        "present": true,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only.",
+          "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas."
+        ],
+        "reason": "the quadrants hold only benefics, and the 7th and 8th are vacant or hold only benefics",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) the 4th lord and Jupiter are in mutual quadrants and (2) lagna lord is strong, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "kaahala",
+        "name": "Kaahala Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only.",
+          "section 11.6 requires the lagna lord to be strong for this yoga; that is not assessed"
+        ],
+        "reason": "neither the 4th lord and Jupiter in mutual quadrants, nor the 4th lord dignified with the 10th lord joining him",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the lagna lord is exalted in a quadrant with Jupiter's aspect or two benefics join in 7th, 9th or 10th, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "chaamara",
+        "name": "Chaamara Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "the lagna lord is not exalted in a quadrant with Jupiter's aspect, and no two benefics join in the 7th, 9th or 10th",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) lagna lord is strong and (2) 5th and 6th lords are in mutual quadrants, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "sankha",
+        "name": "Sankha Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only.",
+          "section 11.6 requires the lagna lord, 9th lord to be strong for this yoga; that is not assessed"
+        ],
+        "reason": "neither the 5th and 6th lords in mutual quadrants, nor the lagna and 10th lords together in a movable sign",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) the 9th lord is strong and (2) 1st, 2nd, 7th and 12th houses are occupied by planets, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "bheri",
+        "name": "Bheri Yoga",
+        "participants": [
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": null,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "graha": 5,
+            "graha_name": "Venus",
+            "house_from_sun": null,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "present": true,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only.",
+          "section 11.6 requires the 9th lord to be strong for this yoga; that is not assessed",
+          "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas."
+        ],
+        "reason": "Jupiter, Venus and the lagna lord Venus are in mutual quadrants",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) there are planets in own and exaltation signs in quadrants and trines and (2) lagna lord is strong, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "mridanga",
+        "name": "Mridanga Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only.",
+          "section 11.6 requires the lagna lord to be strong for this yoga; that is not assessed"
+        ],
+        "reason": "no planet is in its own or exaltation sign in a quadrant or a trine",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) the 7th lord is exalted in 10th and (2) 10th lord is with 9th lord, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "sreenaatha",
+        "name": "Sreenaatha Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "the 7th lord Mars is not exalted in the 10th (Aquarius)",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) benefics are in lagna and 9th, (2) some planets are in 5th, and, (3) malefics are in chaturasras (4th and 8th houses), then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "matsya",
+        "name": "Matsya Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "no benefic in the 1st; no benefic in the 9th; no malefic in the 4th; no malefic in the 8th",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) the 5th, 6th and 7th houses are occupied by benefics who are in own, exaltation or friendly signs and (2) the 1st, 3rd and 11th houses are occupied by malefics who are in own or exaltation signs, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "koorma",
+        "name": "Koorma Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "the 5th has no benefic in an own, exaltation or friendly sign; the 6th has no benefic in an own, exaltation or friendly sign; the 7th has no benefic in an own, exaltation or friendly sign; the 1st has no malefic in an own or exaltation sign; the 3rd has no malefic in an own or exaltation sign; the 11th has no malefic in an own or exaltation sign",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) the 2nd lord is in the 9th house, (2) the 9th lord is in the 2nd house, and, (3) lagna lord is in a quadrant or a trine, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "khadga",
+        "name": "Khadga Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "the 2nd lord Mercury is not in the 9th; the 9th lord Saturn is not in the 2nd; the lagna lord Venus is not in a quadrant or a trine",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) lagna is in a fixed sign, (2) Venus is in a quadrant, (3) Moon is in a trine with a benefic, and, (4) Saturn is in the 10th house, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "kusuma",
+        "name": "Kusuma Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "Venus is not in a quadrant; no benefic is with the Moon; Saturn is not in the 10th",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (1) Jupiter is in the 2nd house or the 5th house and (2) he is conjoined or aspected by Mercury and Venus, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "kalaanidhi",
+        "name": "Kalaanidhi Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "Jupiter is in the 8th, not the 2nd or 5th",
+        "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [
+          "Paarijaata Yoga"
+        ],
+        "definition": "Consider (1) lagna lord, (2) his dispositor, (3) the latter's dispositor in rasi and (4) in navamsa. If all the four planets are all in quadrants, trines or exaltation signs, then this yoga is present.",
+        "group": "popular",
+        "implies": [],
+        "key": "kalpadruma",
+        "name": "Kalpadruma Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only."
+        ],
+        "reason": "the fourth link is a navamsa dispositor, which needs longitudes; it cannot be decided from signs alone",
+        "section": "11.6",
         "weakened": false
       },
       {

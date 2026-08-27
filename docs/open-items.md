@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 43 waiting on evidence · 2 parked**
+**5 waiting on Amit · 45 waiting on evidence · 2 parked**
 
 ---
 
@@ -270,6 +270,47 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 **Closes when:** a semantic map is taken from the book (not from general
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
+
+### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
+
+§11.6's preamble binds all eighteen:
+
+> "Sometimes the results of a dasa may be felt even if all the required
+> combinations are not present. But, for a yoga to be fully present, all the
+> required combinations must be present and the participating planets must be
+> strong."
+
+Strength is chapter 15's. Of its five measures only avastha bala is
+implemented; shadbala, ashtakavarga bala, vimsopaka bala and the simple
+comparison rules all carry `available: False`. None of them answers "is this
+planet strong" in the plain sense §11.6 asks for, so the engine can decide the
+combinations and nothing more.
+
+Four of the eighteen ask for a *named* lord's strength in the definition
+itself: Kaahala and Mridanga the lagna lord, Bheri the 9th lord, Sankha both.
+Their verdicts name that lord over and above the section-wide note.
+
+What we do: `present=True` means the combinations hold, never that the yoga is
+full, and **every** §11.6 verdict carries `STRENGTH_NOT_ASSESSED` saying so —
+tested exhaustively across the group, not sampled. The `/rules` endpoint
+carries the preamble and the note.
+
+**Closes when:** chapter 15's strength measure is implemented, and the four
+named-lord clauses can be decided rather than deferred.
+
+### OI-82 — §11.6's results prose has not been supplied
+
+The §11.6 material supplied gives each yoga's defining combinations,
+name meaning, footnotes and alternatives. No results paragraph for any of the
+eighteen has been transcribed, where §11.2 to §11.5 each have one.
+
+All eighteen have entries in `data/content/yoga_results.yaml` carrying
+`results_transcribed: false` and a null `verbatim`, so the registry-to-results
+exhaustiveness guard still holds and the gap is visible rather than reading as
+"this yoga has no results".
+
+**Closes when:** you supply the §11.6 results text, or confirm the section
+prints none.
 
 ### OI-80 — "applicable" in §11.5.4 excludes a weakened yoga, on the example's evidence
 

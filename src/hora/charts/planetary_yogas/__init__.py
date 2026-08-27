@@ -19,6 +19,7 @@ from hora.charts.planetary_yogas import aakriti as _aakriti  # noqa: F401
 from hora.charts.planetary_yogas import chandra as _chandra  # noqa: F401
 from hora.charts.planetary_yogas import mahapurusha as _mahapurusha  # noqa: F401
 from hora.charts.planetary_yogas import naabhasa as _naabhasa  # noqa: F401
+from hora.charts.planetary_yogas import popular as _popular  # noqa: F401
 from hora.charts.planetary_yogas import ravi as _ravi  # noqa: F401
 from hora.charts.planetary_yogas import sankhya as _sankhya  # noqa: F401
 from hora.charts.planetary_yogas.registry import (

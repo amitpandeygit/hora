@@ -2,7 +2,7 @@
   "body": {
     "error": {
       "details": null,
-      "message": "unknown yoga 'nonesuch'; expected one of adhi, anaphaa, ardha_chandra, bhadra, budha_aaditya, chaapa, chakra, chandra_mangala, chatra, daama, danda, duradhara, gadaa, gola, hala, hamsa, kamala, kedaara, kemadruma, koota, maalaa, maalavya, musala, nala, naukaa, paasa, rajju, ruchaka, sakata, sakti, samudra, sara, sarpa, sasa, soola, sringaataka, sunaphaa, ubhayachara, vaapi, vajra, veenaa, vesi, vihanga, vosi, yava, yoopa, yuga",
+      "message": "unknown yoga 'nonesuch'; expected one of adhi, amala, anaphaa, ardha_chandra, asubha, bhadra, bheri, budha_aaditya, chaamara, chaapa, chakra, chandra_mangala, chatra, daama, danda, duradhara, gadaa, gaja_kesari, gola, guru_mangala, hala, hamsa, kaahala, kalaanidhi, kalpadruma, kamala, kedaara, kemadruma, khadga, koorma, koota, kusuma, maalaa, maalavya, matsya, mridanga, musala, nala, naukaa, paasa, parvata, rajju, ruchaka, sakata, sakti, samudra, sankha, sara, sarpa, sasa, soola, sreenaatha, sringaataka, subha, sunaphaa, ubhayachara, vaapi, vajra, veenaa, vesi, vihanga, vosi, yava, yoopa, yuga",
       "type": "bad_request"
     }
   },

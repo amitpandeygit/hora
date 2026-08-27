@@ -20,6 +20,7 @@ from hora.charts.planetary_yogas import (
     evaluate_one,
     groups,
 )
+from hora.charts.planetary_yogas.popular import kartari
 from hora.core.const import (
     AAKRITI_BASIS,
     AAKRITI_MEANS,
@@ -42,9 +43,15 @@ from hora.core.const import (
     CHANDRA_MOON_FROM_SUN_GRADE,
     CHANDRA_YOGA_INTRO,
     CHANDRA_YOGAS,
+    CHATURASRA,
     COMBUSTION_WEAKENS_YOGA,
+    EXALTATION_DEG,
     HAMSA_MEANS,
     HAMSA_MISNAMED_IN_ITS_DEFINITION,
+    KARTARI_DEFINITION,
+    KARTARI_EFFECT,
+    KARTARI_HOUSES,
+    KARTARI_MEANS,
     KEMADRUMA_KILLS_OTHER_YOGAS,
     MAALAVYA_SPELLING_VARIANTS,
     MAHAPURUSHA_ELEMENT_RULERS_SENTENCE,
@@ -60,6 +67,11 @@ from hora.core.const import (
     NAABHASA_YOGAS,
     PANAPHARA_SPELLING_VARIANTS,
     PANCHA_BHOOTA_NAMES,
+    POPULAR_YOGA_COUNT,
+    POPULAR_YOGA_FULLNESS_RULE,
+    POPULAR_YOGA_INTRO,
+    POPULAR_YOGAS,
+    RASI_LORD,
     RASI_MODALITY,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
@@ -73,6 +85,7 @@ from hora.core.const import (
     SANKHYA_YOGAS,
     SARPA_IS_VERY_BAD,
     SASA_MEANS,
+    STRENGTH_NOT_ASSESSED,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
     WEAKENED_YOGA_IS_NOT_APPLICABLE,
@@ -570,7 +583,7 @@ def test_catalogue_lists_every_yoga_without_a_chart(client):
     assert body["count"] == len(YOGA_REGISTRY)
     assert set(body["groups"]) == {
         "ravi", "chandra", "mahapurusha", "naabhasa_aasraya",
-        "naabhasa_dala", "naabhasa_aakriti", "naabhasa_sankhya"}
+        "naabhasa_dala", "naabhasa_aakriti", "naabhasa_sankhya", "popular"}
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -2594,3 +2607,553 @@ def test_only_the_dala_yogas_can_be_weakened():
             if verdict.weakened:
                 assert YOGA_REGISTRY[verdict.key].group == "naabhasa_dala", \
                     verdict.key
+
+
+# --------------------------------------------------------------------------
+# 11.6 Other popular yogas
+#
+# The section's own preamble binds every one of them: "for a yoga to be fully
+# present, all the required combinations must be present *and the
+# participating planets must be strong*." Strength is chapter 15's, and it is
+# not built — so `present=True` here means the combinations hold, never that
+# the yoga is full. Every verdict says so. See OI-81.
+# --------------------------------------------------------------------------
+
+
+def _pop(lagna: str, paksha: int | None = None, **placements) -> YogaInput:
+    """A §11.6 input. These yogas count houses from lagna, so lagna is given."""
+    return YogaInput(
+        rasis={int(getattr(Graha, name)): R[sign]
+               for name, sign in placements.items()},
+        lagna_rasi=R[lagna],
+        paksha=paksha,
+    )
+
+
+def test_eighteen_popular_yogas_are_declared():
+    assert len(POPULAR_YOGAS) == POPULAR_YOGA_COUNT == 18
+    assert len({e["key"] for e in POPULAR_YOGAS}) == 18
+
+
+def test_every_popular_yoga_is_registered_under_its_section():
+    keys = {e["key"] for e in POPULAR_YOGAS}
+    registered = {k for k, s in YOGA_REGISTRY.items() if s.group == "popular"}
+    assert registered == keys
+    for key in keys:
+        assert YOGA_REGISTRY[key].section == "11.6"
+
+
+def test_the_fullness_rule_is_transcribed():
+    assert "all the required combinations must be present" in \
+        POPULAR_YOGA_FULLNESS_RULE
+    assert "must be strong" in POPULAR_YOGA_FULLNESS_RULE
+    assert "even if all the required combinations are not present" in \
+        POPULAR_YOGA_FULLNESS_RULE
+
+
+def test_no_popular_verdict_ever_claims_the_yoga_is_full():
+    """The governing constraint. Whatever the chart, every §11.6 verdict
+    carries the note that strength was not assessed — so nothing here can be
+    read as "fully present"."""
+    data = _pop("Ar", paksha=0, SUN="Ar", MOON="Ta", MARS="Ge", MERCURY="Cn",
+                JUPITER="Le", VENUS="Vi", SATURN="Li")
+    for verdict in evaluate(data):
+        if YOGA_REGISTRY[verdict.key].group != "popular":
+            continue
+        assert STRENGTH_NOT_ASSESSED in verdict.qualifiers, verdict.key
+
+
+def test_the_four_yogas_that_name_a_lord_say_which_one():
+    """§11.6 asks four of the eighteen for a *named* lord's strength. Those
+    four say so in their own qualifier, over and above the section-wide note."""
+    named = {e["key"]: e["strength"] for e in POPULAR_YOGAS if e.get("strength")}
+    assert named == {
+        "kaahala": ("lagna lord",),
+        "sankha": ("lagna lord", "9th lord"),
+        "bheri": ("9th lord",),
+        "mridanga": ("lagna lord",),
+    }
+    data = _pop("Ar", paksha=0, MOON="Cn", JUPITER="Li")
+    verdict = evaluate_one("kaahala", data)
+    assert any("lagna lord" in q and "not assessed" in q
+               for q in verdict.qualifiers)
+
+
+# --- footnote 31: kartari ---------------------------------------------------
+
+
+def test_kartari_is_cast_by_the_2nd_and_12th():
+    assert KARTARI_HOUSES == (12, 2)
+    assert KARTARI_MEANS == "scissors"
+
+
+def test_subha_kartari_needs_benefics_on_both_flanks():
+    cut = kartari(_pop("Ar", JUPITER="Pi", VENUS="Ta"), R["Ar"])
+    assert cut["subha"] is True
+    assert cut["paapa"] is False
+
+
+def test_paapa_kartari_needs_malefics_on_both_flanks():
+    cut = kartari(_pop("Ar", SATURN="Pi", MARS="Ta"), R["Ar"])
+    assert cut["paapa"] is True
+    assert cut["subha"] is False
+
+
+def test_a_mixed_pair_of_flanks_is_neither_kartari():
+    """"the 2nd *and* 12th" — one of each cuts neither way."""
+    cut = kartari(_pop("Ar", JUPITER="Pi", MARS="Ta"), R["Ar"])
+    assert cut["subha"] is False
+    assert cut["paapa"] is False
+
+
+def test_an_empty_flank_is_no_kartari_at_all():
+    cut = kartari(_pop("Ar", JUPITER="Pi"), R["Ar"])
+    assert cut["subha"] is False
+    assert cut["paapa"] is False
+
+
+def test_kartari_can_be_taken_from_any_sign_not_only_lagna():
+    """Footnote 31: "they can be seen with reference to any house or planet." """
+    data = _pop("Cp", JUPITER="Ar", VENUS="Ge")
+    assert kartari(data, R["Ta"])["subha"] is True
+    assert kartari(data, R["Ar"])["subha"] is False
+
+
+# --- subha and asubha -------------------------------------------------------
+
+
+def test_subha_by_a_benefic_in_lagna():
+    verdict = evaluate_one("subha", _pop("Ar", JUPITER="Ar"))
+    assert verdict.present is True
+    assert "lagna holds Jupiter" in verdict.reason
+
+
+def test_subha_by_kartari_alone():
+    verdict = evaluate_one("subha", _pop("Ar", JUPITER="Pi", VENUS="Ta"))
+    assert verdict.present is True
+    assert "subha kartari" in verdict.reason
+
+
+def test_subha_absent_says_both_ways_it_failed():
+    verdict = evaluate_one("subha", _pop("Ar", SATURN="Pi", MARS="Ta"))
+    assert verdict.present is False
+    assert "no benefic" in verdict.reason and "no subha kartari" in verdict.reason
+
+
+def test_asubha_is_the_same_test_with_malefics():
+    data = _pop("Ar", SATURN="Pi", MARS="Ta")
+    assert evaluate_one("asubha", data).present is True
+    assert evaluate_one("asubha", _pop("Ar", MARS="Ar")).present is True
+    assert evaluate_one("asubha", _pop("Ar", JUPITER="Pi", VENUS="Ta")).present \
+        is False
+
+
+# --- gaja-kesari ------------------------------------------------------------
+
+
+def test_gaja_kesari_needs_all_three_clauses():
+    verdict = evaluate_one("gaja_kesari",
+                           _pop("Ar", paksha=0, MOON="Ar", JUPITER="Cn",
+                                VENUS="Cn"))
+    assert verdict.present is True
+    assert set(verdict.participants) == {int(Graha.JUPITER), int(Graha.VENUS)}
+
+
+def test_gaja_kesari_fails_when_jupiter_is_not_in_a_quadrant_from_moon():
+    verdict = evaluate_one("gaja_kesari",
+                           _pop("Ar", paksha=0, MOON="Ar", JUPITER="Ge",
+                                VENUS="Ge"))
+    assert verdict.present is False
+    assert "3rd from Moon" in verdict.reason
+
+
+def test_gaja_kesari_fails_on_a_debilitated_jupiter():
+    verdict = evaluate_one("gaja_kesari",
+                           _pop("Ar", paksha=0, MOON="Li", JUPITER="Cp",
+                                VENUS="Cp"))
+    assert verdict.present is False
+    assert "debilitated" in verdict.reason
+
+
+def test_gaja_kesari_says_when_combustion_could_not_be_judged():
+    """Clause 3 names combustion, which needs longitudes. Without them the
+    yoga is not blocked — it is reported with the gap named."""
+    verdict = evaluate_one("gaja_kesari",
+                           _pop("Ar", paksha=0, MOON="Ar", JUPITER="Cn",
+                                VENUS="Cn"))
+    assert any("combustion could not be judged" in q for q in verdict.qualifiers)
+
+
+def test_gaja_kesari_records_the_variant_and_the_printed_typo():
+    entry = next(e for e in POPULAR_YOGAS if e["key"] == "gaja_kesari")
+    assert "quadrant from lagna and not Moon" in entry["variant"]
+    assert entry["printed_typo"] == "Juputer"
+
+
+# --- guru-mangala -----------------------------------------------------------
+
+
+def test_guru_mangala_when_they_are_together():
+    verdict = evaluate_one("guru_mangala", _pop("Ar", JUPITER="Cn", MARS="Cn"))
+    assert verdict.present is True
+    assert "together" in verdict.reason
+
+
+def test_guru_mangala_when_they_are_in_the_7th():
+    verdict = evaluate_one("guru_mangala", _pop("Ar", JUPITER="Cn", MARS="Cp"))
+    assert verdict.present is True
+    assert "7th from each other" in verdict.reason
+
+
+def test_guru_mangala_absent():
+    verdict = evaluate_one("guru_mangala", _pop("Ar", JUPITER="Cn", MARS="Le"))
+    assert verdict.present is False
+
+
+# --- amala ------------------------------------------------------------------
+
+
+def test_amala_from_lagna():
+    verdict = evaluate_one("amala", _pop("Ar", VENUS="Cp"))
+    assert verdict.present is True
+    assert "10th from lagna" in verdict.reason
+
+
+def test_amala_from_the_moon_too():
+    """"the 10th house from lagna **or** Moon"."""
+    verdict = evaluate_one("amala", _pop("Ar", paksha=0, MOON="Ta",
+                                         JUPITER="Aq"))
+    assert verdict.present is True
+    assert "10th from Moon" in verdict.reason
+
+
+def test_amala_is_spoiled_by_one_malefic():
+    """"**only** natural benefics" — a single malefic there ends it."""
+    verdict = evaluate_one("amala", _pop("Ar", VENUS="Cp", SATURN="Cp"))
+    assert verdict.present is False
+
+
+def test_amala_is_absent_when_the_tenth_is_empty():
+    assert evaluate_one("amala", _pop("Ar", VENUS="Ar")).present is False
+
+
+def test_amala_carries_the_reason_the_book_gives():
+    entry = next(e for e in POPULAR_YOGAS if e["key"] == "amala")
+    assert entry["name_means"] == "pure"
+    assert "conduct in society" in entry["reason"]
+
+
+# --- parvata ----------------------------------------------------------------
+
+
+def test_parvata_wants_clean_quadrants_and_a_clean_7th_and_8th():
+    verdict = evaluate_one("parvata", _pop("Ar", JUPITER="Cn", VENUS="Ar"))
+    assert verdict.present is True
+
+
+def test_parvata_is_broken_by_a_malefic_in_the_seventh():
+    verdict = evaluate_one("parvata", _pop("Ar", JUPITER="Cn", SATURN="Li"))
+    assert verdict.present is False
+    assert "Saturn in the 7th" in verdict.reason
+
+
+# --- kaahala ----------------------------------------------------------------
+
+
+def test_kaahala_by_the_fourth_lord_and_jupiter_in_mutual_quadrants():
+    verdict = evaluate_one("kaahala", _pop("Ar", paksha=0, MOON="Cn",
+                                           JUPITER="Li"))
+    assert verdict.present is True
+    assert "mutual quadrants" in verdict.reason
+
+
+def test_kaahala_by_the_printed_alternative():
+    """"the 4th lord is exalted or in own sign and the 10th lord joins him." """
+    verdict = evaluate_one("kaahala", _pop("Ar", paksha=0, MOON="Ta",
+                                           SATURN="Ta"))
+    assert verdict.present is True
+    assert "10th lord Saturn joins him" in verdict.reason
+
+
+def test_kaahala_absent():
+    verdict = evaluate_one("kaahala", _pop("Ar", paksha=0, MOON="Ge",
+                                           JUPITER="Le", SATURN="Sc"))
+    assert verdict.present is False
+
+
+def test_kaahala_footnote_offers_the_ninth_lord_for_jupiter():
+    entry = next(e for e in POPULAR_YOGAS if e["key"] == "kaahala")
+    assert "9th lord" in entry["footnote"]
+
+
+# --- chaamara ---------------------------------------------------------------
+
+
+def test_chaamara_by_an_exalted_lagna_lord_in_a_quadrant_with_jupiter():
+    verdict = evaluate_one("chaamara", _pop("Ar", MARS="Cp", JUPITER="Vi"))
+    assert verdict.present is True
+    assert "Jupiter's aspect" in verdict.reason
+
+
+def test_chaamara_by_two_benefics_in_the_7th_9th_or_10th():
+    verdict = evaluate_one("chaamara", _pop("Ar", JUPITER="Sg", VENUS="Sg"))
+    assert verdict.present is True
+    assert "two benefics" in verdict.reason
+
+
+def test_chaamara_absent():
+    assert evaluate_one("chaamara",
+                        _pop("Ar", MARS="Ge", JUPITER="Ta")).present is False
+
+
+# --- sankha -----------------------------------------------------------------
+
+
+def test_sankha_by_the_fifth_and_sixth_lords():
+    verdict = evaluate_one("sankha", _pop("Ar", SUN="Ar", MERCURY="Cn"))
+    assert verdict.present is True
+    assert "5th lord Sun and 6th lord Mercury" in verdict.reason
+
+
+def test_sankha_by_the_alternative_in_a_movable_sign():
+    verdict = evaluate_one("sankha", _pop("Ar", MARS="Cn", SATURN="Cn",
+                                          SUN="Ar", MERCURY="Ta"))
+    assert verdict.present is True
+    assert "movable sign" in verdict.reason
+
+
+def test_sankha_absent():
+    verdict = evaluate_one("sankha", _pop("Ar", SUN="Ta", MERCURY="Ge",
+                                          MARS="Ge", SATURN="Le"))
+    assert verdict.present is False
+
+
+# --- bheri ------------------------------------------------------------------
+
+
+def test_bheri_when_the_1st_2nd_7th_and_12th_are_all_occupied():
+    verdict = evaluate_one("bheri", _pop("Ar", SUN="Ar", MERCURY="Ta",
+                                         SATURN="Li", MARS="Pi"))
+    assert verdict.present is True
+
+
+def test_bheri_by_the_alternative_three_in_mutual_quadrants():
+    verdict = evaluate_one("bheri", _pop("Ar", JUPITER="Ar", VENUS="Cn",
+                                         MARS="Li"))
+    assert verdict.present is True
+    assert "mutual quadrants" in verdict.reason
+
+
+def test_bheri_names_which_houses_were_vacant():
+    verdict = evaluate_one("bheri", _pop("Ar", JUPITER="Ta", VENUS="Ge",
+                                         MARS="Le"))
+    assert verdict.present is False
+    assert "1st" in verdict.reason and "vacant" in verdict.reason
+
+
+# --- mridanga ---------------------------------------------------------------
+
+
+def test_mridanga_from_an_exalted_planet_in_a_quadrant():
+    verdict = evaluate_one("mridanga", _pop("Ar", SUN="Ar"))
+    assert verdict.present is True
+
+
+def test_mridanga_from_an_own_sign_in_a_trine():
+    verdict = evaluate_one("mridanga", _pop("Ar", SUN="Le"))
+    assert verdict.present is True
+    assert "5th" in verdict.reason
+
+
+def test_mridanga_absent_when_the_dignity_is_outside_quadrants_and_trines():
+    verdict = evaluate_one("mridanga", _pop("Ar", MERCURY="Ge"))
+    assert verdict.present is False
+
+
+# --- sreenaatha -------------------------------------------------------------
+
+
+def test_sreenaatha_in_the_only_lagna_that_admits_it():
+    verdict = evaluate_one("sreenaatha", _pop("Sg", MERCURY="Vi", SUN="Vi"))
+    assert verdict.present is True
+
+
+def test_sreenaatha_needs_the_tenth_lord_with_the_ninth():
+    verdict = evaluate_one("sreenaatha", _pop("Sg", MERCURY="Vi", SUN="Le"))
+    assert verdict.present is False
+    assert "not with the 9th lord" in verdict.reason
+
+
+def test_the_sreenaatha_footnote_holds_for_all_twelve_lagnas():
+    """"7th lord can be exalted in 10th only for Sagittarius lagna." Checked,
+    not taken on trust."""
+    entry = next(e for e in POPULAR_YOGAS if e["key"] == "sreenaatha")
+    assert "only for Sagittarius lagna" in entry["footnote"]
+    admits = []
+    for lagna in range(12):
+        seventh_lord = int(RASI_LORD[(lagna + 6) % 12])
+        tenth_sign = (lagna + 9) % 12
+        exalted = EXALTATION_DEG.get(seventh_lord)
+        if exalted is not None and int(exalted // 30) == tenth_sign:
+            admits.append(lagna)
+    assert admits == [R["Sg"]]
+
+
+# --- matsya -----------------------------------------------------------------
+
+
+def test_matsya_wants_benefics_planets_and_malefics_in_their_places():
+    verdict = evaluate_one("matsya", _pop("Ar", paksha=0, JUPITER="Ar",
+                                          VENUS="Sg", MERCURY="Le",
+                                          SATURN="Cn", MARS="Sc"))
+    assert verdict.present is True
+
+
+def test_matsya_uses_chapter_sevens_chaturasras():
+    """"malefics in chaturasras (4th and 8th)" — the same pair chapter 7
+    defines, not a fresh list."""
+    assert CHATURASRA == (4, 8)
+    verdict = evaluate_one("matsya", _pop("Ar", paksha=0, JUPITER="Ar",
+                                          VENUS="Sg", MERCURY="Le",
+                                          SATURN="Cn"))
+    assert verdict.present is False
+    assert "no malefic in the 8th" in verdict.reason
+
+
+# --- koorma -----------------------------------------------------------------
+
+
+def test_koorma_needs_dignified_benefics_and_dignified_malefics():
+    """Reachable only where Mercury's company turns him malefic: no chart with
+    one planet per house satisfies it, because the 3rd, 1st and 11th cannot
+    all hold a fixed natural malefic in its own or exaltation sign."""
+    verdict = evaluate_one("koorma",
+                           _pop("Ar", paksha=0, JUPITER="Le", MOON="Vi",
+                                VENUS="Li", SUN="Ar", MERCURY="Ge", MARS="Ge",
+                                SATURN="Aq"))
+    assert verdict.present is True
+
+
+def test_koorma_names_every_house_that_failed():
+    verdict = evaluate_one("koorma", _pop("Ar", paksha=0, JUPITER="Le",
+                                          MERCURY="Vi", VENUS="Li"))
+    assert verdict.present is False
+    for house in ("1st", "3rd", "11th"):
+        assert house in verdict.reason
+
+
+# --- khadga -----------------------------------------------------------------
+
+
+def test_khadga_is_an_exchange_between_the_2nd_and_9th_lords():
+    verdict = evaluate_one("khadga", _pop("Ar", VENUS="Sg", JUPITER="Ta",
+                                          MARS="Cn"))
+    assert verdict.present is True
+    assert "exchanged houses" in verdict.reason
+
+
+def test_khadga_also_needs_the_lagna_lord_placed_well():
+    verdict = evaluate_one("khadga", _pop("Ar", VENUS="Sg", JUPITER="Ta",
+                                          MARS="Ge"))
+    assert verdict.present is False
+    assert "lagna lord Mars" in verdict.reason
+
+
+# --- kusuma -----------------------------------------------------------------
+
+
+def test_kusuma_wants_a_fixed_lagna():
+    verdict = evaluate_one("kusuma", _pop("Ta", paksha=0, VENUS="Le",
+                                          MOON="Vi", JUPITER="Vi",
+                                          SATURN="Aq"))
+    assert verdict.present is True
+
+
+def test_kusuma_is_absent_from_a_movable_lagna():
+    verdict = evaluate_one("kusuma", _pop("Ar", paksha=0, VENUS="Cn",
+                                          MOON="Le", JUPITER="Le",
+                                          SATURN="Cp"))
+    assert verdict.present is False
+    assert "not a fixed sign" in verdict.reason
+
+
+def test_kusuma_needs_a_benefic_other_than_the_moon_with_the_moon():
+    verdict = evaluate_one("kusuma", _pop("Ta", paksha=0, VENUS="Le",
+                                          MOON="Vi", SATURN="Aq"))
+    assert verdict.present is False
+    assert "no benefic is with the Moon" in verdict.reason
+
+
+# --- kalaanidhi -------------------------------------------------------------
+
+
+def test_kalaanidhi_with_jupiter_in_the_second():
+    verdict = evaluate_one("kalaanidhi", _pop("Ar", JUPITER="Ta",
+                                              MERCURY="Ta", VENUS="Ta"))
+    assert verdict.present is True
+
+
+def test_kalaanidhi_is_absent_when_jupiter_is_elsewhere():
+    verdict = evaluate_one("kalaanidhi", _pop("Ar", JUPITER="Ge",
+                                              MERCURY="Ge", VENUS="Ge"))
+    assert verdict.present is False
+    assert "not the 2nd or 5th" in verdict.reason
+
+
+def test_kalaanidhi_needs_both_mercury_and_venus():
+    verdict = evaluate_one("kalaanidhi", _pop("Ar", JUPITER="Ta",
+                                              MERCURY="Ta", VENUS="Ar"))
+    assert verdict.present is False
+    assert "Venus" in verdict.reason
+
+
+# --- kalpadruma -------------------------------------------------------------
+
+
+def test_kalpadruma_keeps_all_four_planets():
+    """"Some authors have simplified this yoga... Let us follow Parasara." """
+    entry = next(e for e in POPULAR_YOGAS if e["key"] == "kalpadruma")
+    assert "Let us follow Parasara" in entry["simplification_rejected"]
+    assert entry["aliases"] == ("Paarijaata Yoga",)
+
+
+def test_kalpadruma_cannot_be_decided_from_signs_alone():
+    """Its fourth link is a *navamsa* dispositor, so a rasi-only chart is not
+    enough — and the verdict says that rather than reporting a bare absence."""
+    verdict = evaluate_one("kalpadruma", _pop("Ar", paksha=0, MARS="Cn",
+                                              MOON="Ta", VENUS="Pi"))
+    assert verdict.present is False
+    assert "navamsa dispositor" in verdict.reason
+    assert "needs longitudes" in verdict.reason
+
+
+def test_the_rules_endpoint_states_the_fullness_rule(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert "must be strong" in body["popular_fullness_rule"]
+    assert body["popular_strength_note"] == STRENGTH_NOT_ASSESSED
+    assert body["kartari_houses"] == [12, 2]
+    assert body["kartari_means"] == "scissors"
+    assert set(body["popular_yogas_needing_a_named_lord"]) == {
+        "kaahala", "sankha", "bheri", "mridanga"}
+
+
+def test_the_chart_endpoint_answers_every_popular_yoga(client):
+    body = client.post("/v1/planetary-yoga/chart", json={
+        "lagna_rasi": R["Ar"], "paksha": 0,
+        "rasis": {0: R["Ar"], 1: R["Ta"], 2: R["Ge"], 3: R["Cn"],
+                  4: R["Le"], 5: R["Vi"], 6: R["Li"]}}).json()
+    popular = [y for y in body["yogas"]
+               if YOGA_REGISTRY[y["key"]].group == "popular"]
+    assert len(popular) == 18
+    for yoga in popular:
+        assert yoga["reason"]
+        assert STRENGTH_NOT_ASSESSED in yoga["qualifiers"]
+
+
+def test_the_rules_endpoint_carries_footnote_31_as_printed(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["kartari_definition"] == KARTARI_DEFINITION
+    assert body["kartari_effect"] == KARTARI_EFFECT
+    assert "any house or planet" in body["kartari_is_general"]
+    assert body["popular_intro"] == POPULAR_YOGA_INTRO
+    assert body["popular_count"] == 18

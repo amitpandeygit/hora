@@ -326,6 +326,28 @@ class PlanetaryYogaRulesOut(BaseModel):
     timing_example: TimingExampleOut
     node_note: str
     results_note: str
+    popular_fullness_rule: str = Field(
+        description="Section 11.6's preamble. It binds all eighteen popular "
+                    "yogas: the combinations alone are not fullness.",
+    )
+    popular_strength_note: str = Field(
+        description="Why no section 11.6 verdict is ever reported as fully "
+                    "present. See docs/open-items.md OI-81.",
+    )
+    popular_yogas_needing_a_named_lord: dict[str, list[str]]
+    popular_intro: str
+    popular_count: int
+    kartari_means: str
+    kartari_houses: list[int]
+    kartari_definition: str = Field(
+        description="Footnote 31, as printed.",
+    )
+    kartari_effect: str
+    kartari_is_general: str = Field(
+        description="Footnote 31's closing sentence: kartari is not confined "
+                    "to the two yogas of section 11.6 that use it.",
+    )
+    kartari_note: str
     sun_excluded_note: str
 
 

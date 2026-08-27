@@ -49,6 +49,11 @@ from hora.core.const import (
     HAMSA_MEANS,
     HAMSA_MISNAMED_IN_ITS_DEFINITION,
     HOUSE_CATEGORIES,
+    KARTARI_DEFINITION,
+    KARTARI_EFFECT,
+    KARTARI_HOUSES,
+    KARTARI_IS_GENERAL,
+    KARTARI_MEANS,
     KEMADRUMA_EFFORT_NOTE,
     KEMADRUMA_KILLS_OTHER_YOGAS,
     MAALAVYA_SPELLING_VARIANTS,
@@ -66,6 +71,10 @@ from hora.core.const import (
     PANCHA_BHOOTA_NAMES,
     PLANET_ELEMENT_ADJECTIVES,
     PLANET_ELEMENT_TATTVAS,
+    POPULAR_YOGA_COUNT,
+    POPULAR_YOGA_FULLNESS_RULE,
+    POPULAR_YOGA_INTRO,
+    POPULAR_YOGAS,
     RASI_NAMES,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
@@ -76,6 +85,7 @@ from hora.core.const import (
     SANKHYA_MEANS,
     SARPA_IS_VERY_BAD,
     SASA_MEANS,
+    STRENGTH_NOT_ASSESSED,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
     UPACHAYA,
@@ -415,6 +425,25 @@ def rules() -> dict:
         "results_note": (
             "The results each yoga gives are PVR's own prose and are withheld "
             "from this response under the licence gate of OI-12."
+        ),
+        # 11.6 --------------------------------------------------------------
+        "popular_fullness_rule": POPULAR_YOGA_FULLNESS_RULE,
+        "popular_strength_note": STRENGTH_NOT_ASSESSED,
+        "popular_yogas_needing_a_named_lord": {
+            entry["key"]: list(entry["strength"])
+            for entry in POPULAR_YOGAS if entry.get("strength")
+        },
+        "popular_intro": POPULAR_YOGA_INTRO,
+        "popular_count": POPULAR_YOGA_COUNT,
+        "kartari_means": KARTARI_MEANS,
+        "kartari_houses": list(KARTARI_HOUSES),
+        "kartari_definition": KARTARI_DEFINITION,
+        "kartari_effect": KARTARI_EFFECT,
+        "kartari_is_general": KARTARI_IS_GENERAL,
+        "kartari_note": (
+            "Both flanks must carry the same nature — footnote 31 reads \u201cthe "
+            "2nd and 12th\u201d — so a benefic on one side and a malefic on the "
+            "other is neither subha nor paapa kartari."
         ),
         "sun_excluded_note": (
             "The Sun cannot form a yoga about what accompanies him, so he is "

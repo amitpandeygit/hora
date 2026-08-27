@@ -33,6 +33,15 @@
     "hamsa_means": "a swan",
     "hamsa_misnamed_in_its_definition": "Ruchaka",
     "hamsa_name_note": "Section 11.4.5's Definition calls the yoga \u201cRuchaka\u201d, which is Mars's yoga from section 11.4.1. The heading reads \u201cHamsa Yoga\u201d and is followed \u2014 see docs/book-deviations.md D-30.",
+    "kartari_definition": "Kartari literally means \u201cscissors\u201d. The 12th and 2nd houses from a house cast kartari on it. If the 2nd and 12th from a house have benefics, it is said to have a subha (benefic) kartari. Malefics in the same places cause paapa (malefic) kartari.",
+    "kartari_effect": "Subha kartari on any house does good to the matters of that house and paapa kartari does harm.",
+    "kartari_houses": [
+      12,
+      2
+    ],
+    "kartari_is_general": "Subha kartari and paapa kartari are also known as \u201csubha kartari yoga\u201d and \u201cpaapa kartari yoga\u201d and they can be seen with reference to any house or planet.",
+    "kartari_means": "scissors",
+    "kartari_note": "Both flanks must carry the same nature \u2014 footnote 31 reads \u201cthe 2nd and 12th\u201d \u2014 so a benefic on one side and a malefic on the other is neither subha nor paapa kartari.",
     "kemadruma_effort_note": "One with this yoga has to work hard and succeed through great efforts.",
     "kemadruma_is_a_qualifier_not_a_veto": "Section 11.3.4 says Kemadruma kills the *results* of other good yogas, not the yogas themselves. A yoga forming beside it is reported present with a qualifier, never suppressed.",
     "kemadruma_kills_other_yogas": "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas.",
@@ -165,6 +174,25 @@
     "pancha_bhoota_names": {
       "pancha bhootas": "five existences",
       "pancha tattvas": "five natures"
+    },
+    "popular_count": 18,
+    "popular_fullness_rule": "Sometimes the results of a dasa may be felt even if all the required combinations are not present. But, for a yoga to be fully present, all the required combinations must be present and the participating planets must be strong.",
+    "popular_intro": "Some other important combinations will be listed below.",
+    "popular_strength_note": "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only.",
+    "popular_yogas_needing_a_named_lord": {
+      "bheri": [
+        "9th lord"
+      ],
+      "kaahala": [
+        "lagna lord"
+      ],
+      "mridanga": [
+        "lagna lord"
+      ],
+      "sankha": [
+        "lagna lord",
+        "9th lord"
+      ]
     },
     "preferred_charts": [
       "D9",
