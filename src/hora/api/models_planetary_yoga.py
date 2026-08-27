@@ -44,6 +44,15 @@ class YogaVerdictOut(BaseModel):
             "11.2.4's combustion is the first. Never flips `present`."
         ),
     )
+    weakened: bool = Field(
+        False,
+        description=(
+            "True when the book itself says this yoga 'may not operate well' "
+            "— section 11.5.2's Dala clause. Distinct from `qualifiers`: a "
+            "weakened yoga does not block a Sankhya yoga under section "
+            "11.5.4's fallback. See OI-80."
+        ),
+    )
     implies: list[str] = Field(
         ...,
         description=(
@@ -296,6 +305,13 @@ class PlanetaryYogaRulesOut(BaseModel):
             "Sankhya yogas apply only when no earlier Naabhasa yoga does. The "
             "one place in chapter 11 where a yoga's presence depends on "
             "another's absence, rather than on its results being killed."
+        ),
+    )
+    weakened_yoga_is_not_applicable: str = Field(
+        ...,
+        description=(
+            "What 'applicable' means in section 11.5.4's fallback. Forced by "
+            "the section's own example — see docs/open-items.md OI-80."
         ),
     )
     sankhya_unreachable: list[str]

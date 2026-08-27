@@ -103,6 +103,11 @@ class YogaVerdict:
     #: Qualifiers that weaken the yoga without cancelling it — §11.2.4's
     #: combustion is the first. Never used to flip `present`.
     qualifiers: tuple[str, ...] = ()
+    #: True when the book itself says this yoga "may not operate well" —
+    #: §11.5.2's Dala clause. Distinct from `qualifiers`, which merely
+    #: annotate: this one is the book's own statement that the yoga does not
+    #: fully operate, and §11.5.4's fallback turns on it. See OI-80.
+    weakened: bool = False
 
 
 @dataclass(frozen=True, slots=True)

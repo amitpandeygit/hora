@@ -284,6 +284,13 @@ CASES = [
         "rasis": {0: 0, 1: 3, 2: 6, 3: 9, 4: 0, 5: 3, 6: 6},
         "lagna_rasi": 0, "paksha": 0,
     }),
+    ("planetary_yoga_rama_daama", "POST", "/v1/planetary-yoga/chart", {
+        # 11.5.4's example: Lord Sri Rama's chart, Figure 1 / 1.3.4 Example 1.
+        # Daama holds because its only earlier Naabhasa yoga is a weakened
+        # Sarpa. See OI-80.
+        "rasis": {0: 0, 3: 1, 8: 2, 1: 3, 4: 3, 6: 6, 7: 8, 2: 9, 5: 11},
+        "lagna_rasi": 3, "paksha": 0,
+    }),
     ("planetary_yoga_guidelines", "POST", "/v1/planetary-yoga/guidelines", {
         "rasis": {0: 0, 1: 2, 4: 4, 5: 5}, "paksha": 0,
     }),

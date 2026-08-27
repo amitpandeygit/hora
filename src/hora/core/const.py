@@ -600,6 +600,7 @@ from hora.core.constants.yoga_planetary import (
     SASA_MEANS,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
+    WEAKENED_YOGA_IS_NOT_APPLICABLE,
 )
 
 __all__ = [
@@ -1161,6 +1162,7 @@ __all__ = [
     "VIRODHARGALA_EXAMPLE",
     "VIRODHARGALA_RULE",
     "VISIBLE_HALF",
+    "WEAKENED_YOGA_IS_NOT_APPLICABLE",
     "YOGA_MEANINGS",
     "YOGA_NAMES",
     "YOGA_NAMES_BOOK",

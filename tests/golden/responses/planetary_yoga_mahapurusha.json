@@ -70,7 +70,8 @@
         "present": true,
         "qualifiers": [],
         "reason": "Mars is in Aries, his own sign, and the 7th from lagna",
-        "section": "11.4.1"
+        "section": "11.4.1",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -83,7 +84,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Mercury is in the 9th from lagna, not a quadrant",
-        "section": "11.4.2"
+        "section": "11.4.2",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -96,7 +98,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Saturn has no placement",
-        "section": "11.4.3"
+        "section": "11.4.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -109,7 +112,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Venus has no placement",
-        "section": "11.4.4"
+        "section": "11.4.4",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -130,7 +134,8 @@
         "present": true,
         "qualifiers": [],
         "reason": "Jupiter is in Cancer, his exaltation sign, and the 10th from lagna",
-        "section": "11.4.5"
+        "section": "11.4.5",
+        "weakened": false
       }
     ]
   },

@@ -79,6 +79,7 @@ from hora.core.const import (
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
     UPACHAYA,
+    WEAKENED_YOGA_IS_NOT_APPLICABLE,
     Graha,
 )
 
@@ -111,6 +112,7 @@ def _verdict(verdict, data: YogaInput) -> dict:
             for g in verdict.participants
         ],
         "qualifiers": list(verdict.qualifiers),
+        "weakened": verdict.weakened,
         "implies": list(spec.implies),
     }
 
@@ -357,6 +359,7 @@ def rules() -> dict:
         "sankhya_basis": SANKHYA_BASIS,
         "sankhya_excludes_nodes": SANKHYA_EXCLUDES_NODES,
         "sankhya_is_a_fallback": SANKHYA_IS_A_FALLBACK,
+        "weakened_yoga_is_not_applicable": WEAKENED_YOGA_IS_NOT_APPLICABLE,
         "sankhya_unreachable": ["gola", "yuga"],
         "sankhya_unreachable_note": (
             "Taken as stated, section 11.5.4's fallback rule makes Gola and "

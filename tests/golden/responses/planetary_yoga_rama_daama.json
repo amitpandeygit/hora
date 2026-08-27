@@ -35,17 +35,19 @@
     ],
     "group": null,
     "include_nodes": false,
-    "inputs_missing": [
-      "lagna_rasi",
-      "paksha"
-    ],
+    "inputs_missing": [],
     "kemadruma_present": false,
-    "lagna_rasi": null,
-    "paksha": null,
+    "lagna_rasi": 3,
+    "paksha": 0,
     "present": [
+      "ruchaka",
+      "sasa",
+      "hamsa",
+      "sarpa",
       "vesi",
       "vosi",
-      "ubhayachara"
+      "ubhayachara",
+      "daama"
     ],
     "qualifiers_available": [],
     "qualifiers_unavailable": [
@@ -63,7 +65,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -77,7 +79,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -93,7 +95,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -107,7 +109,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -121,7 +123,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -135,7 +137,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "Mars in the 7th is not a natural benefic",
         "section": "11.5.3",
         "weakened": false
       },
@@ -149,7 +151,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "Moon, Jupiter in the 1st is not a natural malefic; Saturn in the 4th is not a natural benefic; Sun in the 10th is not a natural benefic",
         "section": "11.5.3",
         "weakened": false
       },
@@ -163,7 +165,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -177,7 +179,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -191,7 +193,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -205,7 +207,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -219,7 +221,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -233,7 +235,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -247,7 +249,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -261,7 +263,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -275,7 +277,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -289,7 +291,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -303,7 +305,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -317,7 +319,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -331,7 +333,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "reason": "the planets span 1st, 4th, 7th, 9th, 10th, 11th, which no permitted set contains",
         "section": "11.5.3",
         "weakened": false
       },
@@ -345,7 +347,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from him",
+        "reason": "the 2nd from Moon is Leo and holds no qualifying planet",
         "section": "11.3.1",
         "weakened": false
       },
@@ -359,7 +361,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from him",
+        "reason": "the 12th from Moon is Gemini and holds no qualifying planet",
         "section": "11.3.2",
         "weakened": false
       },
@@ -376,7 +378,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from him",
+        "reason": "the 2nd from Moon is Leo and holds no qualifying planet; the 12th from Moon is Gemini and holds no qualifying planet",
         "section": "11.3.3",
         "weakened": false
       },
@@ -390,7 +392,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from her",
+        "reason": "Jupiter in the 1st from Moon; Jupiter in the 1st from lagna; Saturn in the 4th from lagna; Mars in the 7th from lagna; Sun in the 10th from lagna",
         "section": "11.3.4",
         "weakened": false
       },
@@ -404,7 +406,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement",
+        "reason": "Moon is in Cancer and Mars in Capricorn; they are not together",
         "section": "11.3.5",
         "weakened": false
       },
@@ -418,7 +420,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from her",
+        "reason": "Mercury, Jupiter, Venus are natural benefics outside the 6th, 7th and 8th from Moon",
         "section": "11.3.6",
         "weakened": false
       },
@@ -429,10 +431,18 @@
         "implies": [],
         "key": "ruchaka",
         "name": "Ruchaka Yoga",
-        "participants": [],
-        "present": false,
+        "participants": [
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": 7,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          }
+        ],
+        "present": true,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts quadrants from lagna; it cannot be decided",
+        "reason": "Mars is in Capricorn, his exaltation sign, and the 7th from lagna",
         "section": "11.4.1",
         "weakened": false
       },
@@ -446,7 +456,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Mercury has no placement",
+        "reason": "Mercury is in Taurus, not one of Gemini, Virgo; Mercury is in the 11th from lagna, not a quadrant",
         "section": "11.4.2",
         "weakened": false
       },
@@ -457,10 +467,18 @@
         "implies": [],
         "key": "sasa",
         "name": "Sasa Yoga",
-        "participants": [],
-        "present": false,
+        "participants": [
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "house_from_sun": 4,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "present": true,
         "qualifiers": [],
-        "reason": "Saturn has no placement",
+        "reason": "Saturn is in Libra, his exaltation sign, and the 4th from lagna",
         "section": "11.4.3",
         "weakened": false
       },
@@ -474,7 +492,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts quadrants from lagna; it cannot be decided",
+        "reason": "Venus is in the 9th from lagna, not a quadrant",
         "section": "11.4.4",
         "weakened": false
       },
@@ -485,10 +503,18 @@
         "implies": [],
         "key": "hamsa",
         "name": "Hamsa Yoga",
-        "participants": [],
-        "present": false,
+        "participants": [
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": 1,
+            "sign": 3,
+            "sign_name": "Cancer"
+          }
+        ],
+        "present": true,
         "qualifiers": [],
-        "reason": "Jupiter has no placement",
+        "reason": "Jupiter is in Cancer, his exaltation sign, and the 1st from lagna",
         "section": "11.4.5",
         "weakened": false
       },
@@ -502,7 +528,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "this yoga needs every planet placed and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "not every planet is in a movable sign: Mercury in Taurus, Venus in Pisces",
         "section": "11.5.1",
         "weakened": false
       },
@@ -516,7 +542,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "this yoga needs every planet placed and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "not every planet is in a fixed sign: Sun in Aries, Moon in Cancer, Mars in Capricorn and 3 more",
         "section": "11.5.1",
         "weakened": false
       },
@@ -530,7 +556,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "this yoga needs every planet placed and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "not every planet is in a dual sign: Sun in Aries, Moon in Cancer, Mars in Capricorn and 3 more",
         "section": "11.5.1",
         "weakened": false
       },
@@ -544,7 +570,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts quadrants from lagna; it cannot be decided",
+        "reason": "1 of the four quadrants from lagna are occupied wholly by natural benefics; 3 are needed",
         "section": "11.5.2",
         "weakened": false
       },
@@ -555,12 +581,36 @@
         "implies": [],
         "key": "sarpa",
         "name": "Sarpa Yoga",
-        "participants": [],
-        "present": false,
-        "qualifiers": [],
-        "reason": "no lagna was supplied, and this yoga counts quadrants from lagna; it cannot be decided",
+        "participants": [
+          {
+            "graha": 0,
+            "graha_name": "Sun",
+            "house_from_sun": 10,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": 7,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "house_from_sun": 4,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "present": true,
+        "qualifiers": [
+          "If a benefic also occupies one of the quadrants, this yoga may not operate well. (Moon in the 1st, Jupiter in the 1st)"
+        ],
+        "reason": "natural malefics occupy 3 quadrants from lagna \u2014 the 4th, the 7th, the 10th",
         "section": "11.5.2",
-        "weakened": false
+        "weakened": true
       },
       {
         "aliases": [],
@@ -571,16 +621,16 @@
         "name": "Vesi Yoga",
         "participants": [
           {
-            "graha": 2,
-            "graha_name": "Mars",
+            "graha": 3,
+            "graha_name": "Mercury",
             "house_from_sun": 2,
-            "sign": 4,
-            "sign_name": "Leo"
+            "sign": 1,
+            "sign_name": "Taurus"
           }
         ],
         "present": true,
         "qualifiers": [],
-        "reason": "Mars in the 2nd from Sun (Leo)",
+        "reason": "Mercury in the 2nd from Sun (Taurus)",
         "section": "11.2.1",
         "weakened": false
       },
@@ -596,13 +646,13 @@
             "graha": 5,
             "graha_name": "Venus",
             "house_from_sun": 12,
-            "sign": 2,
-            "sign_name": "Gemini"
+            "sign": 11,
+            "sign_name": "Pisces"
           }
         ],
         "present": true,
         "qualifiers": [],
-        "reason": "Venus in the 12th from Sun (Gemini)",
+        "reason": "Venus in the 12th from Sun (Pisces)",
         "section": "11.2.2",
         "weakened": false
       },
@@ -618,23 +668,23 @@
         "name": "Ubhayachara Yoga",
         "participants": [
           {
-            "graha": 2,
-            "graha_name": "Mars",
+            "graha": 3,
+            "graha_name": "Mercury",
             "house_from_sun": 2,
-            "sign": 4,
-            "sign_name": "Leo"
+            "sign": 1,
+            "sign_name": "Taurus"
           },
           {
             "graha": 5,
             "graha_name": "Venus",
             "house_from_sun": 12,
-            "sign": 2,
-            "sign_name": "Gemini"
+            "sign": 11,
+            "sign_name": "Pisces"
           }
         ],
         "present": true,
         "qualifiers": [],
-        "reason": "Mars, Venus in the 2nd from Sun (Leo) and the 12th from Sun (Gemini)",
+        "reason": "Mercury, Venus in the 2nd from Sun (Taurus) and the 12th from Sun (Pisces)",
         "section": "11.2.3",
         "weakened": false
       },
@@ -650,7 +700,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Mercury has no placement",
+        "reason": "Sun is in Aries and Mercury in Taurus; they are not together",
         "section": "11.2.4",
         "weakened": false
       },
@@ -666,7 +716,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "this yoga counts the signs of all seven planets and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "the seven planets occupy 6 distinct signs (Aries, Taurus, Cancer, Libra, Capricorn, Pisces), not 7",
         "section": "11.5.4",
         "weakened": false
       },
@@ -679,10 +729,60 @@
         "implies": [],
         "key": "daama",
         "name": "Daama Yoga",
-        "participants": [],
-        "present": false,
+        "participants": [
+          {
+            "graha": 0,
+            "graha_name": "Sun",
+            "house_from_sun": null,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "graha": 1,
+            "graha_name": "Moon",
+            "house_from_sun": null,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": null,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "graha": 3,
+            "graha_name": "Mercury",
+            "house_from_sun": null,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": null,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "graha": 5,
+            "graha_name": "Venus",
+            "house_from_sun": null,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "house_from_sun": null,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "present": true,
         "qualifiers": [],
-        "reason": "this yoga counts the signs of all seven planets and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "the seven planets occupy exactly 6 distinct signs (Aries, Taurus, Cancer, Libra, Capricorn, Pisces) and no earlier Naabhasa yoga applies",
         "section": "11.5.4",
         "weakened": false
       },
@@ -696,7 +796,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "this yoga counts the signs of all seven planets and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "the seven planets occupy 6 distinct signs (Aries, Taurus, Cancer, Libra, Capricorn, Pisces), not 5",
         "section": "11.5.4",
         "weakened": false
       },
@@ -710,7 +810,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "this yoga counts the signs of all seven planets and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "the seven planets occupy 6 distinct signs (Aries, Taurus, Cancer, Libra, Capricorn, Pisces), not 4",
         "section": "11.5.4",
         "weakened": false
       },
@@ -724,7 +824,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "this yoga counts the signs of all seven planets and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "the seven planets occupy 6 distinct signs (Aries, Taurus, Cancer, Libra, Capricorn, Pisces), not 3",
         "section": "11.5.4",
         "weakened": false
       },
@@ -738,7 +838,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "this yoga counts the signs of all seven planets and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "the seven planets occupy 6 distinct signs (Aries, Taurus, Cancer, Libra, Capricorn, Pisces), not 2",
         "section": "11.5.4",
         "weakened": false
       },
@@ -752,7 +852,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "this yoga counts the signs of all seven planets and Moon, Mercury, Jupiter, Saturn are missing; it cannot be decided",
+        "reason": "the seven planets occupy 6 distinct signs (Aries, Taurus, Cancer, Libra, Capricorn, Pisces), not 1",
         "section": "11.5.4",
         "weakened": false
       }

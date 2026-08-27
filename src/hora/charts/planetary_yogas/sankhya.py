@@ -65,16 +65,23 @@ def occupied_signs(data: YogaInput) -> tuple[int, ...] | None:
 
 
 def superseding_yoga(data: YogaInput) -> str | None:
-    """The first earlier Naabhasa yoga that applies, if any.
+    """The first earlier Naabhasa yoga that **applies**, if any.
 
     Evaluated in the book's own order — Aasraya, then Dala, then Aakriti — so
     the yoga named is the one a reader would reach first.
+
+    A yoga the book itself says "may not operate well" does **not** count as
+    applicable. §11.5.4's own worked example forces this: Lord Sri Rama's
+    chart is given as Daama, and the only earlier Naabhasa yoga in it is a
+    Sarpa carrying §11.5.2's weakening clause. Counting it would make the
+    section's rule contradict the section's example. See OI-80.
     """
     for group in _EARLIER_NAABHASA:
         for key, spec in YOGA_REGISTRY.items():
             if spec.group != group:
                 continue
-            if spec.detect(data).present:
+            verdict = spec.detect(data)
+            if verdict.present and not verdict.weakened:
                 return key
     return None
 

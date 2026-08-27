@@ -61,7 +61,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -74,7 +75,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [
@@ -89,7 +91,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -102,7 +105,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -115,7 +119,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -128,7 +133,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Sun in the 1st is not a natural benefic; Moon, Venus in the 4th is not a natural malefic; Mars, Saturn in the 7th is not a natural benefic; Mercury in the 10th is not a natural malefic",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -141,7 +147,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Jupiter in the 1st is not a natural malefic",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -204,7 +211,8 @@
         "present": true,
         "qualifiers": [],
         "reason": "all 7 planets lie in the 1st, the 4th, the 7th, the 10th; occupied: 1st, 4th, 7th, 10th",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -217,7 +225,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -230,7 +239,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -243,7 +253,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -256,7 +267,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -269,7 +281,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -282,7 +295,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -295,7 +309,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -308,7 +323,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -321,7 +337,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -334,7 +351,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -347,7 +365,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -360,7 +379,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
-        "section": "11.5.3"
+        "section": "11.5.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -373,7 +393,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the 2nd from Moon is Leo and holds no qualifying planet",
-        "section": "11.3.1"
+        "section": "11.3.1",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -386,7 +407,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the 12th from Moon is Gemini and holds no qualifying planet",
-        "section": "11.3.2"
+        "section": "11.3.2",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -402,7 +424,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the 2nd from Moon is Leo and holds no qualifying planet; the 12th from Moon is Gemini and holds no qualifying planet",
-        "section": "11.3.3"
+        "section": "11.3.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -415,7 +438,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Venus in the 1st from Moon; Sun, Jupiter in the 1st from lagna; Venus in the 4th from lagna; Mars, Saturn in the 7th from lagna; Mercury in the 10th from lagna",
-        "section": "11.3.4"
+        "section": "11.3.4",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -428,7 +452,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Moon is in Cancer and Mars in Libra; they are not together",
-        "section": "11.3.5"
+        "section": "11.3.5",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -441,7 +466,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Jupiter, Venus are natural benefics outside the 6th, 7th and 8th from Moon",
-        "section": "11.3.6"
+        "section": "11.3.6",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -454,7 +480,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Mars is in Libra, not one of Aries, Scorpio, Capricorn",
-        "section": "11.4.1"
+        "section": "11.4.1",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -467,7 +494,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Mercury is in Capricorn, not one of Gemini, Virgo",
-        "section": "11.4.2"
+        "section": "11.4.2",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -488,7 +516,8 @@
         "present": true,
         "qualifiers": [],
         "reason": "Saturn is in Libra, his exaltation sign, and the 7th from lagna",
-        "section": "11.4.3"
+        "section": "11.4.3",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -501,7 +530,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Venus is in Cancer, not one of Taurus, Libra, Pisces",
-        "section": "11.4.4"
+        "section": "11.4.4",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -514,7 +544,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Jupiter is in Aries, not one of Cancer, Sagittarius, Pisces",
-        "section": "11.4.5"
+        "section": "11.4.5",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -577,7 +608,8 @@
         "present": true,
         "qualifiers": [],
         "reason": "all 7 placed planets are in movable signs",
-        "section": "11.5.1"
+        "section": "11.5.1",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -590,7 +622,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "not every planet is in a fixed sign: Sun in Aries, Moon in Cancer, Mars in Libra and 4 more",
-        "section": "11.5.1"
+        "section": "11.5.1",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -603,7 +636,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "not every planet is in a dual sign: Sun in Aries, Moon in Cancer, Mars in Libra and 4 more",
-        "section": "11.5.1"
+        "section": "11.5.1",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -616,7 +650,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "2 of the four quadrants from lagna are occupied wholly by natural benefics; 3 are needed",
-        "section": "11.5.2"
+        "section": "11.5.2",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -629,7 +664,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "1 of the four quadrants from lagna are occupied wholly by natural malefics; 3 are needed",
-        "section": "11.5.2"
+        "section": "11.5.2",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -642,7 +678,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the 2nd from Sun is Taurus and holds no qualifying planet",
-        "section": "11.2.1"
+        "section": "11.2.1",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -655,7 +692,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the 12th from Sun is Pisces and holds no qualifying planet",
-        "section": "11.2.2"
+        "section": "11.2.2",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -671,7 +709,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the 2nd from Sun is Taurus and holds no qualifying planet; the 12th from Sun is Pisces and holds no qualifying planet",
-        "section": "11.2.3"
+        "section": "11.2.3",
+        "weakened": false
       },
       {
         "aliases": [
@@ -686,7 +725,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "Sun is in Aries and Mercury in Capricorn; they are not together",
-        "section": "11.2.4"
+        "section": "11.2.4",
+        "weakened": false
       },
       {
         "aliases": [
@@ -701,7 +741,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 7",
-        "section": "11.5.4"
+        "section": "11.5.4",
+        "weakened": false
       },
       {
         "aliases": [
@@ -716,7 +757,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 6",
-        "section": "11.5.4"
+        "section": "11.5.4",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -729,7 +771,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 5",
-        "section": "11.5.4"
+        "section": "11.5.4",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -742,7 +785,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the seven planets do occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), but Rajju Yoga applies and Sankhya yogas apply only when no earlier Naabhasa yoga does",
-        "section": "11.5.4"
+        "section": "11.5.4",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -755,7 +799,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 3",
-        "section": "11.5.4"
+        "section": "11.5.4",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -768,7 +813,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 2",
-        "section": "11.5.4"
+        "section": "11.5.4",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -781,7 +827,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "the seven planets occupy 4 distinct signs (Aries, Cancer, Libra, Capricorn), not 1",
-        "section": "11.5.4"
+        "section": "11.5.4",
+        "weakened": false
       }
     ]
   },

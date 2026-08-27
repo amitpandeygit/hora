@@ -199,7 +199,8 @@
       "sign": 4,
       "sign_name": "Leo",
       "text": "Suppose someone has Sun and Mercury together in Leo in D-10. Then that person has a powerful Budha-Aditya yoga in career. The results will be felt throughout one's life and the periods of Sun, Mercury and Leo will give those results in particular."
-    }
+    },
+    "weakened_yoga_is_not_applicable": "A yoga the book says \u201cmay not operate well\u201d does not count as applicable for section 11.5.4's fallback. Lord Sri Rama's chart forces this: its only earlier Naabhasa yoga is a weakened Sarpa, and the book gives the chart as Daama."
   },
   "status": 200
 }

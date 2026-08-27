@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 43 waiting on evidence · 2 parked**
+**5 waiting on Amit · 44 waiting on evidence · 2 parked**
 
 ---
 
@@ -294,6 +294,41 @@ verification against birth data as Charts 6 and 7 got.
 
 **Closes when:** you send Chart 8's page, or we accept the exercise as covered
 by the reconstruction alone.
+
+### OI-80 — "applicable" in §11.5.4 excludes a weakened yoga, on the example's evidence
+
+§11.5.4: "These yogas apply if no other Naabhasa yogas mentioned previously
+are **applicable** in a chart."
+
+Its own worked example decides what "applicable" means. Lord Sri Rama's chart
+— §1.3.4's Example 1, which Figure 1 draws, and a fixture here since chapter 1
+— is given as **Daama**. It contains exactly one earlier Naabhasa yoga:
+
+> **Sarpa.** Malefics hold the 4th, 7th and 10th from Cancer — Saturn in
+> Libra, Mars in Capricorn, the Sun in Aries. But Jupiter and the Moon hold
+> the lagna itself, and §11.5.2 says: "If a benefic also occupies one of the
+> quadrants, this yoga **may not operate well**."
+
+Count that Sarpa as applicable and it supersedes Daama, so §11.5.4's rule
+contradicts §11.5.4's example on the same page. Do not count it, and rule and
+example agree exactly.
+
+**So a yoga the book itself says may not operate well does not count as
+applicable.** Implemented as a `weakened` flag, set only by the Dala detectors
+— §11.5.2's clause is the only place the book says a yoga does not fully
+operate. Combustion (§11.2.4) and Kemadruma (§11.3.4) weaken *results*, which
+is a different claim, and they do not set it.
+
+**This is a judgement call.** It is the reading under which the section is
+self-consistent, which is why it was taken — but PVR never says it, and a
+reader could instead conclude that his example simply overlooked the Sarpa.
+Registered as PVR-13.
+
+It does not rescue Gola or Yuga (OI-79): those are superseded by Aasraya and
+Aakriti yogas, which carry no weakening clause at all.
+
+**Closes when:** JHora's Naabhasa output shows whether a weakened Dala yoga
+suppresses a Sankhya one.
 
 ### OI-79 — §11.5.4's fallback rule makes two of its own seven unreachable
 

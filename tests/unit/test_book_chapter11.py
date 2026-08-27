@@ -75,6 +75,7 @@ from hora.core.const import (
     SASA_MEANS,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
+    WEAKENED_YOGA_IS_NOT_APPLICABLE,
     Graha,
 )
 from hora.services import planetary_yoga_service
@@ -1548,11 +1549,11 @@ def test_11_5_no_undefined_yoga_leaks_into_the_registry():
 def test_11_5_every_family_has_as_many_registered_as_it_claims():
     """Family by family, the classification's own count against the
     registry."""
-    sizes = {}
-    for key, spec in YOGA_REGISTRY.items():
+    sizes: dict[str, int] = {}
+    for spec in YOGA_REGISTRY.values():
         if spec.group.startswith("naabhasa_"):
-            sizes[spec.group.removeprefix("naabhasa_")] = sizes.get(
-                spec.group.removeprefix("naabhasa_"), 0) + 1
+            family = spec.group.removeprefix("naabhasa_")
+            sizes[family] = sizes.get(family, 0) + 1
     for family, entry in NAABHASA_CLASSIFICATION.items():
         assert sizes[family] == entry["count"], family
 
@@ -2252,25 +2253,47 @@ def test_11_5_4_exactly_one_count_matches_any_chart(count):
                                if y["signs"] == count)
 
 
-def test_11_5_4_the_worked_example_is_rama_and_gives_daama():
-    """"let us take the chart of Lord Sri Rama (see Figure 1). The signs
-    occupied by the seven planets are: Ar, Ta, Cn, Li, Cp and Pi. There are
-    six signs. This forms Daama yoga."
+def _rama():
+    """Lord Sri Rama's chart — §1.3.4's Example 1, which Figure 1 draws.
 
-    Figure 1 has not been supplied, so the lagna is unknown and the
-    Aakriti and Dala tests cannot be run on it. What **is** checkable is the
-    count, and that the signs span three modalities — so no Aasraya yoga can
-    supersede it.
+    Reused from chapter 1's fixture rather than re-transcribed, so the two
+    chapters cannot drift apart.
     """
-    assert SANKHYA_EXAMPLE["yoga"] == "daama"
-    assert SANKHYA_EXAMPLE["count"] == 6
-    assert len(SANKHYA_EXAMPLE["signs"]) == 6
-    assert SANKHYA_EXAMPLE["figure_supplied"] is False
-    modalities = {RASI_MODALITY[R[s]] for s in SANKHYA_EXAMPLE["signs"]}
-    assert len(modalities) > 1, "mixed modalities rule out every Aasraya yoga"
-    signs = [R[s] for s in SANKHYA_EXAMPLE["signs"]] + [R["Ar"]]
-    verdict = evaluate_one("daama", _seven_in(signs, lagna=R["Cn"]))
+    from tests.unit.test_book_1_3_4 import RAMA_GRAHAS, RAMA_LAGNA
+
+    return YogaInput(
+        rasis={int(g): R[sign] for g, sign in RAMA_GRAHAS.items()},
+        lagna_rasi=R[RAMA_LAGNA], paksha=0)
+
+
+def test_11_5_4_the_worked_example_is_ramas_chart_from_chapter_1():
+    """"let us take the chart of Lord Sri Rama (see Figure 1)."
+
+    Figure 1 is §1.3.4's own Example 1, drawn in all three chart styles, and
+    chapter 1 has held it as a fixture since it was audited. So §11.5.4's
+    example is fully checkable — lagna and all.
+    """
+    from tests.unit.test_book_1_3_4 import RAMA_GRAHAS, RAMA_LAGNA
+
+    assert RAMA_LAGNA == SANKHYA_EXAMPLE["lagna"] == "Cn"
+    seven = {RAMA_GRAHAS[int(g)] for g in _SEVEN}
+    assert seven == set(SANKHYA_EXAMPLE["signs"])
+    assert len(seven) == SANKHYA_EXAMPLE["count"] == 6
+    assert SANKHYA_EXAMPLE["figure_supplied"] is True
+
+
+def test_11_5_4_ramas_chart_gives_daama():
+    """"The signs occupied by the seven planets are: Ar, Ta, Cn, Li, Cp and
+    Pi. There are six signs. This forms Daama yoga."
+
+    Six distinct signs, and the fallback lets it stand.
+    """
+    verdict = evaluate_one("daama", _rama())
     assert verdict.present
+    assert "exactly 6 distinct signs" in verdict.reason
+    others = [v.key for v in evaluate(_rama(), group="naabhasa_sankhya")
+              if v.present]
+    assert others == ["daama"]
 
 
 # --------------------------------------------------------------------------
@@ -2510,3 +2533,64 @@ def test_11_5_4_the_other_five_are_reachable():
     }
     for key, (signs, lagna) in reachable.items():
         assert evaluate_one(key, _seven_in(signs, lagna=lagna)).present, key
+
+
+def test_11_5_4_ramas_chart_is_what_settles_what_applicable_means():
+    """**The reconciliation.** Rama's chart contains exactly one earlier
+    Naabhasa yoga: **Sarpa**. Malefics hold the 4th, 7th and 10th from Cancer
+    — Saturn in Libra, Mars in Capricorn, the Sun in Aries — while Jupiter and
+    the Moon hold the lagna itself.
+
+    That fourth quadrant triggers §11.5.2's own clause: "If a benefic also
+    occupies one of the quadrants, this yoga may not operate well."
+
+    Counted as applicable, that Sarpa supersedes Daama and §11.5.4's rule
+    contradicts §11.5.4's example. Not counted, rule and example agree. So
+    "applicable" excludes a yoga the book itself says does not fully operate.
+
+    See OI-80 and PVR-13.
+    """
+    sarpa = evaluate_one("sarpa", _rama())
+    assert sarpa.present is True
+    assert sarpa.weakened is True
+    assert any("may not operate well" in q for q in sarpa.qualifiers)
+
+    naabhasa = [v.key for v in evaluate(_rama()) if v.present
+                and YOGA_REGISTRY[v.key].group.startswith("naabhasa_")]
+    assert set(naabhasa) == {"sarpa", "daama"}
+    assert "may not operate well" in WEAKENED_YOGA_IS_NOT_APPLICABLE
+
+
+def test_an_unweakened_yoga_still_supersedes():
+    """The exception is narrow: only a yoga the book calls impaired is passed
+    over. A clean Sarpa — no benefic in any quadrant — still blocks a Sankhya
+    yoga.
+    """
+    rasis = {int(Graha.MARS): R["Ta"], int(Graha.RAHU): R["Le"],
+             int(Graha.KETU): R["Aq"], int(Graha.SUN): R["Ge"],
+             int(Graha.MOON): R["Ge"], int(Graha.MERCURY): R["Vi"],
+             int(Graha.JUPITER): R["Sg"], int(Graha.VENUS): R["Pi"],
+             int(Graha.SATURN): R["Ar"]}
+    data = YogaInput(rasis=rasis, lagna_rasi=R["Sc"], paksha=1)
+    sarpa = evaluate_one("sarpa", data)
+    assert sarpa.present and sarpa.weakened is False
+    for spec in YOGA_REGISTRY.values():
+        if spec.group == "naabhasa_sankhya":
+            verdict = spec.detect(data)
+            if "do occupy" in verdict.reason:
+                assert verdict.present is False
+                assert "Sarpa Yoga applies" in verdict.reason
+
+
+def test_only_the_dala_yogas_can_be_weakened():
+    """The `weakened` flag exists for §11.5.2's clause alone. No other yoga in
+    the chapter carries a statement that it does not fully operate — combustion
+    and Kemadruma weaken *results*, which is a different thing.
+    """
+    charts = [_rama(), _kemadruma_chart(),
+              _seven_in([R["Ar"], R["Cn"], R["Li"], R["Cp"]], lagna=R["Ar"])]
+    for chart in charts:
+        for verdict in evaluate(chart):
+            if verdict.weakened:
+                assert YOGA_REGISTRY[verdict.key].group == "naabhasa_dala", \
+                    verdict.key

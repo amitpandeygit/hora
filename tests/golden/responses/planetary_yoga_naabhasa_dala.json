@@ -59,7 +59,8 @@
         "present": false,
         "qualifiers": [],
         "reason": "0 of the four quadrants from lagna are occupied wholly by natural benefics; 3 are needed",
-        "section": "11.5.2"
+        "section": "11.5.2",
+        "weakened": false
       },
       {
         "aliases": [],
@@ -96,7 +97,8 @@
           "Sun, Moon, Mercury, Jupiter, Venus, Saturn had no placement, so a contrary graha in a quadrant may have been missed"
         ],
         "reason": "natural malefics occupy 3 quadrants from lagna \u2014 the 4th, the 7th, the 10th",
-        "section": "11.5.2"
+        "section": "11.5.2",
+        "weakened": false
       }
     ]
   },

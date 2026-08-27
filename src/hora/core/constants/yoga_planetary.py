@@ -834,13 +834,32 @@ SANKHYA_IS_A_FALLBACK = (
 #: gives the signs occupied rather than the chart, so the sign count is
 #: checkable and the fallback condition is only partly so — Figure 1 has not
 #: been supplied and the lagna is unknown.
+#: Figure 1 is §1.3.4's own Example 1, drawn in all three chart styles, and
+#: `tests/unit/test_book_1_3_4.py` has held it as a fixture since chapter 1.
+#: So the example is fully checkable — lagna included.
 SANKHYA_EXAMPLE = {
-    "chart": "Lord Sri Rama (Figure 1)",
+    "chart": "Lord Sri Rama (Figure 1, from §1.3.4's Example 1)",
     "signs": ("Ar", "Ta", "Cn", "Li", "Cp", "Pi"),
     "count": 6,
     "yoga": "daama",
-    "figure_supplied": False,
+    "lagna": "Cn",
+    "figure_supplied": True,
 }
+
+#: What Rama's chart settles. The only earlier Naabhasa yoga in it is a Sarpa
+#: carrying §11.5.2's own weakening clause — benefics in the fourth quadrant.
+#: Counted as applicable, it would supersede Daama and make §11.5.4's rule
+#: contradict §11.5.4's example. Not counted, rule and example agree.
+#:
+#: So "applicable" is read as excluding a yoga the book itself says "may not
+#: operate well". See docs/open-items.md OI-80 and precedence.md PVR-13.
+WEAKENED_YOGA_IS_NOT_APPLICABLE = (
+    "A yoga the book says “may not operate well” does not count as applicable "
+    "for section 11.5.4's fallback. Lord Sri Rama's chart forces this: its "
+    "only earlier Naabhasa yoga is a weakened Sarpa, and the book gives the "
+    "chart as Daama."
+)
+
 
 #: The seven, by the number of distinct signs the seven planets occupy.
 #: Gola's definition is phrased differently — "if the seven planets are in one

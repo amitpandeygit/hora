@@ -136,6 +136,7 @@ def _make_dala_detector(key: str):
             )
 
         qualifiers: tuple[str, ...] = ()
+        weakened = bool(contrary)
         absent = [g for g in data.considered() if data.sign_of(g) is None]
         if absent:
             named = ", ".join(GRAHA_NAMES[g] for g in absent)
@@ -165,6 +166,7 @@ def _make_dala_detector(key: str):
             reason=(f"natural {wanted}s occupy {len(matching)} quadrants from "
                     f"lagna — {where}"),
             participants=participants, houses=houses, qualifiers=qualifiers,
+            weakened=weakened,
         )
 
     return detect
