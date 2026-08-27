@@ -37,18 +37,49 @@ class YogaInput:
         never read their absence as a negative finding.
     :param include_nodes: whether Rahu and Ketu count as "a planet" in a
         definition that says so. Off by default — see OI-73.
+    :param lagna_rasi: needed by §11.3.4's Kemadruma, the only yoga so far
+        that reads a house from the ascendant rather than from a graha. A
+        detector that needs it and does not have it must say so, not guess.
+    :param paksha: 0 Sukla, 1 Krishna. The Moon has no benefic nature without
+        it (§3.2.2), so a rule counting benefics is unanswerable without it.
     """
 
     rasis: dict[int, int]
     chart: str = "D1"
     positions: dict[int, PlanetPosition] | None = None
     include_nodes: bool = False
+    lagna_rasi: int | None = None
+    paksha: int | None = None
 
     def sign_of(self, graha: int) -> int | None:
         return self.rasis.get(int(graha))
 
     def occupants(self, sign: int) -> tuple[int, ...]:
         return tuple(g for g in sorted(self.rasis) if self.rasis[g] == sign)
+
+    def benefics(self) -> tuple[tuple[int, ...], tuple[int, ...]]:
+        """(benefics, undecidable) among the placed grahas, per §3.2.2.
+
+        The second tuple is grahas whose nature could not be judged from what
+        was supplied — the Moon without a paksha. A caller must be able to
+        tell "not a benefic" from "we could not say".
+        """
+        from hora.charts.benefic import BeneficError, nature
+
+        benefic: list[int] = []
+        unknown: list[int] = []
+        for graha in sorted(self.rasis):
+            companions = frozenset(
+                g for g in self.occupants(self.rasis[graha]) if g != graha
+            )
+            try:
+                result = nature(graha, paksha=self.paksha, companions=companions)
+            except BeneficError:
+                unknown.append(graha)
+                continue
+            if result.nature == "benefic":
+                benefic.append(graha)
+        return tuple(benefic), tuple(unknown)
 
     def considered(self) -> tuple[int, ...]:
         """Grahas a definition saying "a planet" may draw on."""

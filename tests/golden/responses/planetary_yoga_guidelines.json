@@ -1,0 +1,62 @@
+{
+  "body": {
+    "guideline_1": {
+      "category": "apoklima",
+      "house": 3,
+      "reason": "Moon is in the 3th from Sun, an apoklima",
+      "text": "If Moon is in a quadrant from Sun, then one may possess little wealth, intelligence and skills. If Moon is in a panapara from Sun, then one may possess average wealth, intelligence and skills. If Moon is in an apoklima from Sun, then one may possess a lot of wealth, intelligence and skills.",
+      "verdict": "a lot of wealth, intelligence and skills"
+    },
+    "guideline_2": {
+      "aspect_table": [
+        {
+          "birth_time": "day",
+          "effect": "good",
+          "graha": "jupiter"
+        },
+        {
+          "birth_time": "night",
+          "effect": "detrimental",
+          "graha": "jupiter"
+        },
+        {
+          "birth_time": "night",
+          "effect": "good",
+          "graha": "venus"
+        },
+        {
+          "birth_time": "day",
+          "effect": "detrimental",
+          "graha": "venus"
+        }
+      ],
+      "reason": "guideline 2 needs the Moon's navamsa, its lord's compound relationship to the Moon, whether the birth was by day, and Jupiter's and Venus's aspects on the Moon. It is not computed here \u2014 see docs/open-items.md OI-76.",
+      "respectively_note": "The word \u201c(respectively)\u201d pairs two things with two things. The only pair in reach is \u201cown navamsa or that of an adhimitra\u201d, which would give wealth from the first and comforts from the second. The book does not say so.",
+      "text": "If Moon is in own navamsa or that of an adhimitra (good friend), that is good. In such a situation, aspect of Jupiter on Moon beings wealth and comforts in the case of daytime birth (respectively). The same result is given by Venusian aspect on Moon in the case of night birth. On the other hand, Jupiter's aspect on Moon in a night birth and Venusian aspect on Moon in a daytime birth are detrimental to one's wealth and comforts.",
+      "verdict": null
+    },
+    "guideline_3": {
+      "benefics_in_upachaya": [
+        {
+          "graha": 4,
+          "graha_name": "Jupiter"
+        }
+      ],
+      "benefics_placed": [
+        {
+          "graha": 4,
+          "graha_name": "Jupiter"
+        },
+        {
+          "graha": 5,
+          "graha_name": "Venus"
+        }
+      ],
+      "reason": "1 of 2 placed natural benefics occupy an upachaya from Moon",
+      "text": "If all the natural benefics occupy upachayas (3rd, 6th, 10th and 11th) from Moon, one has great wealth. If two benefics occupy upachayas from Moon, the native has medium wealth. If only one benefic occupies an upachaya from Moon, the native has little wealth.",
+      "undecidable": [],
+      "verdict": "little wealth"
+    }
+  },
+  "status": 200
+}

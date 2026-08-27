@@ -2,7 +2,7 @@
   "body": {
     "error": {
       "details": null,
-      "message": "unknown yoga 'nonesuch'; expected one of budha_aaditya, ubhayachara, vesi, vosi",
+      "message": "unknown yoga 'nonesuch'; expected one of adhi, anaphaa, budha_aaditya, chandra_mangala, duradhara, kemadruma, sunaphaa, ubhayachara, vesi, vosi",
       "type": "bad_request"
     }
   },

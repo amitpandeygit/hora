@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 4,
+    "evaluated": 10,
     "grahas_considered": [
       {
         "graha": 0,
@@ -35,12 +35,101 @@
     ],
     "group": null,
     "include_nodes": false,
+    "inputs_missing": [
+      "lagna_rasi",
+      "paksha"
+    ],
+    "kemadruma_present": false,
+    "lagna_rasi": null,
+    "paksha": null,
     "present": [],
     "qualifiers_available": [],
     "qualifiers_unavailable": [
       "combustion"
     ],
+    "results_killed_by_kemadruma": [],
     "yogas": [
+      {
+        "aliases": [],
+        "definition": "If there are planets other than Sun in the 2nd house from Moon, this yoga is present.",
+        "group": "chandra",
+        "implies": [],
+        "key": "sunaphaa",
+        "name": "Sunaphaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 2nd from Moon is Scorpio and holds no qualifying planet",
+        "section": "11.3.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If there are planets other than Sun in the 12th house from Moon, this yoga is present.",
+        "group": "chandra",
+        "implies": [],
+        "key": "anaphaa",
+        "name": "Anaphaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 12th from Moon is Virgo and holds no qualifying planet",
+        "section": "11.3.2"
+      },
+      {
+        "aliases": [],
+        "definition": "If there are planets other than Sun in the 2nd and 12th houses from Moon, this yoga is present.",
+        "group": "chandra",
+        "implies": [
+          "sunaphaa",
+          "anaphaa"
+        ],
+        "key": "duradhara",
+        "name": "Duradhara Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 2nd from Moon is Scorpio and holds no qualifying planet; the 12th from Moon is Virgo and holds no qualifying planet",
+        "section": "11.3.3"
+      },
+      {
+        "aliases": [],
+        "definition": "If there are no planets other than Sun in the 1st, 2nd and 12th houses from Moon and if there are no planets other than Moon in the quadrants from lagna, this bad yoga is present.",
+        "group": "chandra",
+        "implies": [],
+        "key": "kemadruma",
+        "name": "Kemadruma Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "no lagna was supplied, and the second clause counts quadrants from lagna; this yoga cannot be decided",
+        "section": "11.3.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If Moon and Mars are together (in one sign), then this yoga is present.",
+        "group": "chandra",
+        "implies": [],
+        "key": "chandra_mangala",
+        "name": "Chandra-Mangala Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Mars has no placement",
+        "section": "11.3.5"
+      },
+      {
+        "aliases": [],
+        "definition": "If the natural benefics occupy 6th, 7th and 8th from Moon, this yoga is present.",
+        "group": "chandra",
+        "implies": [],
+        "key": "adhi",
+        "name": "Adhi Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "no natural benefic is placed",
+        "section": "11.3.6"
+      },
       {
         "aliases": [],
         "definition": "If there is a planet other than Moon in the 2nd house from Sun, then this yoga is present.",

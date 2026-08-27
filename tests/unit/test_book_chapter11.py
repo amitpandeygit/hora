@@ -21,12 +21,23 @@ from hora.charts.planetary_yogas import (
     groups,
 )
 from hora.core.const import (
+    ADHI_EXAMPLE_CONTRADICTS_RULE,
     BUDHA_AADITYA_CHART_NOTE,
     BUDHA_AADITYA_SPELLING_VARIANTS,
     BUDHA_AADITYA_TERMS,
     BUDHA_AADITYA_TIMING_PERIODS,
     BUDHA_AADITYA_TIMING_TEXT,
+    CHANDRA_ASPECT_BY_BIRTH_TIME,
+    CHANDRA_GUIDELINE_1,
+    CHANDRA_GUIDELINE_2,
+    CHANDRA_GUIDELINE_2_RESPECTIVELY_NOTE,
+    CHANDRA_GUIDELINE_3,
+    CHANDRA_MOON_FROM_SUN_GRADE,
+    CHANDRA_YOGA_INTRO,
+    CHANDRA_YOGAS,
     COMBUSTION_WEAKENS_YOGA,
+    KEMADRUMA_KILLS_OTHER_YOGAS,
+    PANAPHARA_SPELLING_VARIANTS,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
@@ -87,7 +98,7 @@ def test_every_verdict_carries_a_reason_either_way():
 def test_a_yoga_absent_for_want_of_the_sun_says_so():
     """Every Ravi yoga is read from the Sun. Without him the answer is not
     "absent" in the ordinary sense, and the reason distinguishes it."""
-    for verdict in evaluate(_in(MOON="Ar", JUPITER="Ta")):
+    for verdict in evaluate(_in(MOON="Ar", JUPITER="Ta"), group="ravi"):
         assert verdict.present is False
         assert "no placement" in verdict.reason
 
@@ -147,7 +158,8 @@ def test_11_2_what_a_ravi_yoga_is():
     """"Ravi yogas are the solar combinations. There are several yogas based
     on Sun."""
     assert "solar combinations" in RAVI_YOGA_INTRO
-    assert {spec.group for spec in YOGA_REGISTRY.values()} == {"ravi"}
+    ravi = {key for key, spec in YOGA_REGISTRY.items() if spec.group == "ravi"}
+    assert ravi == {"vesi", "vosi", "ubhayachara", "budha_aaditya"}
 
 
 def test_11_2_mercury_is_never_more_than_one_sign_from_the_sun():
@@ -492,14 +504,14 @@ def test_chart_endpoint_returns_every_yoga(client):
         "rasis": {0: R["Cn"], 2: R["Le"], 5: R["Ge"]}}).json()
     assert body["evaluated"] == len(YOGA_REGISTRY)
     assert len(body["yogas"]) == len(YOGA_REGISTRY)
-    assert sorted(body["present"]) == ["ubhayachara", "vesi", "vosi"]
+    assert {"ubhayachara", "vesi", "vosi"} <= set(body["present"])
     absent = [y for y in body["yogas"] if not y["present"]]
     assert all(y["reason"] for y in absent)
 
 
 def test_chart_endpoint_carries_the_definitions(client):
     body = client.post("/v1/planetary-yoga/chart", json={
-        "rasis": {0: R["Ar"]}}).json()
+        "rasis": {0: R["Ar"]}, "group": "ravi"}).json()
     for yoga in body["yogas"]:
         assert yoga["definition"]
         assert yoga["section"].startswith("11.2")
@@ -515,7 +527,7 @@ def test_one_endpoint_answers_a_single_yoga(client):
 def test_catalogue_lists_every_yoga_without_a_chart(client):
     body = client.get("/v1/planetary-yoga/catalogue").json()
     assert body["count"] == len(YOGA_REGISTRY)
-    assert body["groups"] == ["ravi"]
+    assert body["groups"] == ["chandra", "ravi"]
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -612,3 +624,535 @@ def test_the_nipuna_gloss_is_kept_where_the_book_puts_it():
     assert "Nipuna means an expert" in entry["verbatim"]
     assert "glosses the alias" in entry["transcription_notes"]
     assert "expert" not in {t["term"] for t in entry["terms"]}
+
+
+# --------------------------------------------------------------------------
+# 11.3 Chandra yogas
+# --------------------------------------------------------------------------
+
+
+def _moon(**placements) -> YogaInput:
+    return _in(**placements)
+
+
+def test_11_3_what_a_chandra_yoga_is():
+    """"Chandra yogas are the lunar combinations. There are several yogas
+    based on Moon."""
+    assert "lunar combinations" in CHANDRA_YOGA_INTRO
+    chandra = {k for k, s in YOGA_REGISTRY.items() if s.group == "chandra"}
+    assert chandra == {"sunaphaa", "anaphaa", "duradhara", "kemadruma",
+                       "chandra_mangala", "adhi"}
+
+
+@pytest.mark.parametrize(
+    "chandra,ravi",
+    [("sunaphaa", "vesi"), ("anaphaa", "vosi"),
+     ("duradhara", "ubhayachara"), ("chandra_mangala", "budha_aaditya")],
+)
+def test_four_chandra_yogas_mirror_a_ravi_yoga(chandra, ravi):
+    """§11.3.1 to §11.3.3 are §11.2.1 to §11.2.3 with Sun and Moon exchanged:
+    "a planet other than **Moon** in the 2nd from **Sun**" against "planets
+    other than **Sun** in the 2nd from **Moon**".
+
+    The same detector serves both, parameterised, so the mirror cannot drift.
+    """
+    spec = next(y for y in CHANDRA_YOGAS if y["key"] == chandra)
+    assert spec["mirrors"] == ravi
+    chandra_houses = tuple(spec["houses_from_moon"])
+    ravi_spec = next(y for y in RAVI_YOGAS if y["key"] == ravi)
+    assert chandra_houses == tuple(ravi_spec["houses_from_sun"])
+
+
+def test_the_mirror_is_exact_on_every_placement():
+    """Swap the Sun and the Moon in any chart and Vesi becomes Sunaphaa,
+    Vosi becomes Anaphaa, Ubhayachara becomes Duradhara.
+
+    Checked over every Sun sign and both flanking houses, not asserted from
+    the shared code.
+    """
+    for reference in range(12):
+        for other in ((reference + 1) % 12, (reference + 11) % 12):
+            solar = YogaInput(rasis={int(Graha.SUN): reference,
+                                     int(Graha.JUPITER): other})
+            lunar = YogaInput(rasis={int(Graha.MOON): reference,
+                                     int(Graha.JUPITER): other})
+            for ravi, chandra in (("vesi", "sunaphaa"), ("vosi", "anaphaa"),
+                                  ("ubhayachara", "duradhara")):
+                assert (evaluate_one(ravi, solar).present
+                        == evaluate_one(chandra, lunar).present), (reference, other)
+
+
+def test_11_3_1_sunaphaa_the_books_own_example():
+    """"If Moon is in Gemini and Jupiter and Mercury are in Cancer, then this
+    yoga is present."""
+    verdict = evaluate_one("sunaphaa", _moon(MOON="Ge", JUPITER="Cn", MERCURY="Cn"))
+    assert verdict.present
+    assert set(verdict.participants) == {int(Graha.JUPITER), int(Graha.MERCURY)}
+
+
+def test_11_3_2_anaphaa_the_books_own_example():
+    """"If Moon is in Aries and Jupiter and Venus are in Pisces, then this
+    yoga is present."""
+    verdict = evaluate_one("anaphaa", _moon(MOON="Ar", JUPITER="Pi", VENUS="Pi"))
+    assert verdict.present
+    assert set(verdict.houses.values()) == {12}
+
+
+def test_11_3_3_duradhara_the_books_own_example():
+    """"If Moon is in Cancer, Mars is in Leo and Venus is in Gemini, then this
+    yoga is present."""
+    verdict = evaluate_one("duradhara", _moon(MOON="Cn", MARS="Le", VENUS="Ge"))
+    assert verdict.present
+    assert verdict.houses == {int(Graha.MARS): 2, int(Graha.VENUS): 12}
+
+
+def test_duradhara_implies_sunaphaa_and_anaphaa():
+    """The lunar counterpart of Ubhayachara's containment, and asserted the
+    same way — over every Moon sign, not just the example."""
+    assert YOGA_REGISTRY["duradhara"].implies == ("sunaphaa", "anaphaa")
+    for moon in range(12):
+        rasis = {int(Graha.MOON): moon, int(Graha.MARS): (moon + 1) % 12,
+                 int(Graha.VENUS): (moon + 11) % 12}
+        verdicts = {v.key: v.present for v in evaluate(YogaInput(rasis=rasis))}
+        assert verdicts["duradhara"] and verdicts["sunaphaa"] and verdicts["anaphaa"]
+
+
+def test_the_sun_never_forms_a_chandra_yoga():
+    """"planets other than **Sun**" — the mirror of the Moon's exclusion from
+    the Ravi yogas."""
+    for moon in range(12):
+        for house in (1, 11):
+            rasis = {int(Graha.MOON): moon, int(Graha.SUN): (moon + house) % 12}
+            verdicts = {v.key: v.present
+                        for v in evaluate(YogaInput(rasis=rasis), group="chandra")}
+            assert not verdicts["sunaphaa"] and not verdicts["anaphaa"]
+
+
+def test_11_3_5_chandra_mangala_is_a_conjunction():
+    """"If Moon and Mars are together (in one sign), then this yoga is
+    present." — the same shape as Budha-Aaditya, and the same detector."""
+    assert evaluate_one("chandra_mangala", _moon(MOON="Le", MARS="Le")).present
+    apart = evaluate_one("chandra_mangala", _moon(MOON="Le", MARS="Vi"))
+    assert not apart.present
+    assert "not together" in apart.reason
+
+
+# --------------------------------------------------------------------------
+# 11.3.4 Kemadruma — the first negative yoga
+# --------------------------------------------------------------------------
+
+
+def _kemadruma_chart(**overrides):
+    """The book's example: lagna Taurus, Moon Virgo, everything else clear of
+    both lists.
+
+    The Sun sits in Capricorn with Jupiter in Sagittarius behind him, so Vosi
+    also forms — Kemadruma and another yoga can coexist, which is what makes
+    the "kills the results" rule testable at all.
+    """
+    rasis = {int(Graha.MOON): R["Vi"], int(Graha.SUN): R["Cp"],
+             int(Graha.JUPITER): R["Sg"], int(Graha.MARS): R["Ge"],
+             int(Graha.MERCURY): R["Cn"], int(Graha.VENUS): R["Pi"],
+             int(Graha.SATURN): R["Ar"]}
+    for name, sign in overrides.items():
+        rasis[int(getattr(Graha, name))] = R[sign]
+    return YogaInput(rasis=rasis, lagna_rasi=R["Ta"])
+
+
+def test_11_3_4_kemadruma_the_books_own_example():
+    """"If lagna is in Taurus, Moon is in Virgo, no planets other than Sun in
+    Leo, Virgo and Libra and no planets in Taurus, Leo, Scorpio and Aquarius,
+    then this yoga is present."
+
+    Both clauses check out: Leo, Virgo and Libra are the 12th, 1st and 2nd
+    from Virgo, and Taurus, Leo, Scorpio and Aquarius are the quadrants from
+    Taurus.
+    """
+    assert [RASI_ABBR[(R["Vi"] + h - 1) % 12] for h in (12, 1, 2)] == [
+        "Le", "Vi", "Li"]
+    assert [RASI_ABBR[(R["Ta"] + h - 1) % 12] for h in (1, 4, 7, 10)] == [
+        "Ta", "Le", "Sc", "Aq"]
+    assert evaluate_one("kemadruma", _kemadruma_chart()).present
+
+
+def test_11_3_4_either_clause_alone_breaks_it():
+    """"no planets ... in the 1st, 2nd and 12th houses from Moon **and** ...
+    no planets ... in the quadrants from lagna." Both must hold."""
+    near_moon = evaluate_one("kemadruma", _kemadruma_chart(JUPITER="Li"))
+    assert not near_moon.present
+    assert "from Moon" in near_moon.reason
+    in_quadrant = evaluate_one("kemadruma", _kemadruma_chart(JUPITER="Aq"))
+    assert not in_quadrant.present
+    assert "from lagna" in in_quadrant.reason
+
+
+def test_11_3_4_the_sun_is_exempt_near_the_moon_but_not_in_a_quadrant():
+    """The two clauses exempt different grahas: the first "other than Sun",
+    the second "other than Moon".
+
+    Leo falls in both lists in the book's own example — the 12th from Virgo
+    and the 4th from Taurus — so the Sun there is permitted by the first
+    clause and forbidden by the second. The stricter clause wins.
+    """
+    assert evaluate_one("kemadruma", _kemadruma_chart(SUN="Vi")).present
+    in_leo = evaluate_one("kemadruma", _kemadruma_chart(SUN="Le"))
+    assert not in_leo.present
+    assert "from lagna" in in_leo.reason
+
+
+def test_11_3_4_the_moon_in_a_quadrant_does_not_break_it():
+    """"no planets **other than Moon** in the quadrants from lagna" — so a
+    Moon in a quadrant is fine, which the book's example does not exercise."""
+    # Lagna Taurus, Moon Taurus — the Moon herself in a quadrant. The Sun sits
+    # in Aries, the 12th from her, where clause 1 exempts him and clause 2
+    # does not reach.
+    rasis = {int(Graha.MOON): R["Ta"], int(Graha.SUN): R["Ar"],
+             int(Graha.MARS): R["Cn"], int(Graha.MERCURY): R["Vi"],
+             int(Graha.JUPITER): R["Li"], int(Graha.VENUS): R["Sg"],
+             int(Graha.SATURN): R["Cp"]}
+    verdict = evaluate_one("kemadruma", YogaInput(rasis=rasis, lagna_rasi=R["Ta"]))
+    assert verdict.present
+
+
+def test_11_3_4_is_unanswerable_without_a_lagna():
+    """The only yoga so far that reads a house from the ascendant. Without one
+    it says it cannot be decided, rather than returning a bare False that
+    would read as "checked and absent".
+    """
+    rasis = _kemadruma_chart().rasis
+    verdict = evaluate_one("kemadruma", YogaInput(rasis=rasis))
+    assert verdict.present is False
+    assert "cannot be decided" in verdict.reason
+
+
+def test_kemadruma_and_the_three_lunar_yogas_are_mutually_exclusive():
+    """Kemadruma needs the 2nd and 12th from the Moon empty; Sunaphaa,
+    Anaphaa and Duradhara each need one of them occupied. So Kemadruma can
+    never hold beside them — checked over every Moon sign.
+    """
+    for moon in range(12):
+        rasis = {int(Graha.MOON): moon, int(Graha.JUPITER): (moon + 1) % 12}
+        data = YogaInput(rasis=rasis, lagna_rasi=(moon + 3) % 12)
+        verdicts = {v.key: v.present for v in evaluate(data, group="chandra")}
+        assert verdicts["sunaphaa"] is True, moon
+        assert verdicts["kemadruma"] is False, moon
+
+
+def test_11_3_4_kills_the_results_of_other_yogas_without_cancelling_them():
+    """"This bad yoga kills the results of other good yogas in the chart,
+    especially Chandra yogas."
+
+    It kills the *results*, not the yoga. So a yoga still forming beside
+    Kemadruma is reported present, with a qualifier — the same rule as
+    §11.2.4's combustion.
+    """
+    assert "kills the results" in KEMADRUMA_KILLS_OTHER_YOGAS
+    rasis = dict(_kemadruma_chart().rasis)
+    body = planetary_yoga_service.chart(rasis, lagna_rasi=R["Ta"])
+    assert body["kemadruma_present"] is True
+    killed = body["results_killed_by_kemadruma"]
+    assert killed, "some other yoga should still form"
+    for yoga in body["yogas"]:
+        if yoga["key"] in killed:
+            assert yoga["present"] is True
+            assert KEMADRUMA_KILLS_OTHER_YOGAS in yoga["qualifiers"]
+
+
+def test_the_kemadruma_qualifier_is_absent_when_kemadruma_is():
+    rasis = dict(_kemadruma_chart().rasis)
+    rasis[int(Graha.JUPITER)] = R["Li"]
+    body = planetary_yoga_service.chart(rasis, lagna_rasi=R["Ta"])
+    assert body["kemadruma_present"] is False
+    assert body["results_killed_by_kemadruma"] == []
+    for yoga in body["yogas"]:
+        assert KEMADRUMA_KILLS_OTHER_YOGAS not in yoga["qualifiers"]
+
+
+# --------------------------------------------------------------------------
+# 11.3.6 Adhi — where the example fails the rule
+# --------------------------------------------------------------------------
+
+
+def test_11_3_6_the_example_does_not_satisfy_the_rule():
+    """**The find.** §11.3.6's rule asks for the natural benefics in the 6th,
+    7th and 8th from the Moon. Its example puts the Moon in Taurus with the
+    benefics in Virgo and Leo — the **5th** and **4th** from Taurus.
+
+    The 6th, 7th and 8th from Taurus are Libra, Scorpio and Sagittarius, and
+    the example puts nothing there. See D-28 and PVR-11.
+    """
+    assert [RASI_ABBR[(R["Ta"] + h - 1) % 12] for h in (6, 7, 8)] == [
+        "Li", "Sc", "Sg"]
+    assert (R["Vi"] - R["Ta"]) % 12 + 1 == 5
+    assert (R["Le"] - R["Ta"]) % 12 + 1 == 4
+    as_printed = evaluate_one("adhi", YogaInput(
+        rasis={int(Graha.MOON): R["Ta"], int(Graha.MERCURY): R["Vi"],
+               int(Graha.JUPITER): R["Vi"], int(Graha.VENUS): R["Le"]},
+        paksha=0))
+    assert as_printed.present is False
+
+
+def test_11_3_6_the_rule_is_followed_not_the_example():
+    """Tie-break rule 1 — a stated rule beats its transcribed output. The
+    detector implements 6/7/8, and the same benefics hold the yoga once the
+    Moon is where the rule requires.
+
+    Moon in Pisces is the minimal repair: it makes Leo the 6th and Virgo the
+    7th. Recorded as the smallest change that reconciles them, not as a claim
+    about what PVR meant.
+    """
+    repaired = evaluate_one("adhi", YogaInput(
+        rasis={int(Graha.MOON): R["Pi"], int(Graha.MERCURY): R["Vi"],
+               int(Graha.JUPITER): R["Vi"], int(Graha.VENUS): R["Le"]},
+        paksha=0))
+    assert repaired.present is True
+    assert (R["Le"] - R["Pi"]) % 12 + 1 == 6
+    assert (R["Vi"] - R["Pi"]) % 12 + 1 == 7
+    assert "the rule is followed" in ADHI_EXAMPLE_CONTRADICTS_RULE.lower()
+
+
+def test_11_3_6_a_benefic_outside_the_three_houses_breaks_it():
+    """"If **the natural benefics** occupy 6th, 7th and 8th" — the benefics as
+    a group, not merely one of them. A benefic elsewhere breaks it.
+    """
+    verdict = evaluate_one("adhi", YogaInput(
+        rasis={int(Graha.MOON): R["Pi"], int(Graha.MERCURY): R["Vi"],
+               int(Graha.JUPITER): R["Vi"], int(Graha.VENUS): R["Ar"]},
+        paksha=0))
+    assert verdict.present is False
+    assert "Venus" in verdict.reason
+
+
+def test_11_3_6_the_moon_is_not_counted_against_herself():
+    """A waxing Moon is a natural benefic (§3.2.2) and can only ever be the
+    1st from herself. Counting her would make Adhi impossible for every
+    bright-half birth, so she is excluded from her own test.
+    """
+    bright = evaluate_one("adhi", YogaInput(
+        rasis={int(Graha.MOON): R["Pi"], int(Graha.MERCURY): R["Vi"],
+               int(Graha.JUPITER): R["Vi"], int(Graha.VENUS): R["Le"]},
+        paksha=0))
+    dark = evaluate_one("adhi", YogaInput(
+        rasis=bright and {int(Graha.MOON): R["Pi"], int(Graha.MERCURY): R["Vi"],
+                          int(Graha.JUPITER): R["Vi"], int(Graha.VENUS): R["Le"]},
+        paksha=1))
+    assert bright.present is True
+    assert dark.present is True
+
+
+def test_11_3_6_an_undecidable_benefic_is_flagged_not_assumed():
+    """Mercury's nature depends on his companions and the Moon's on the
+    paksha. Where a nature could not be judged, the verdict says so rather
+    than quietly treating the graha as non-benefic.
+    """
+    verdict = evaluate_one("adhi", YogaInput(
+        rasis={int(Graha.MOON): R["Pi"], int(Graha.JUPITER): R["Vi"],
+               int(Graha.VENUS): R["Le"], int(Graha.MARS): R["Ar"]}))
+    assert verdict.present is True
+    assert not verdict.qualifiers, "no undecidable benefic among these"
+
+
+def test_11_3_6_the_graded_result_is_not_computed():
+    """"becomes a king or a minister or an army chief, **depending on the
+    strength of the planets involved**."
+
+    Chapter 15's simple-rules measure would decide which; it is not built. The
+    engine reports the yoga and never the station.
+    """
+    verdict = evaluate_one("adhi", YogaInput(
+        rasis={int(Graha.MOON): R["Pi"], int(Graha.MERCURY): R["Vi"],
+               int(Graha.JUPITER): R["Vi"], int(Graha.VENUS): R["Le"]},
+        paksha=0))
+    payload = repr(verdict).lower()
+    for word in ("king", "minister", "army"):
+        assert word not in payload
+
+
+# --------------------------------------------------------------------------
+# 11.3 General Guidelines — not yogas
+# --------------------------------------------------------------------------
+
+
+def test_the_guidelines_are_not_in_the_registry():
+    """§11.3's three General Guidelines are graded readings, not
+    combinations: guideline 1 always yields a verdict because its categories
+    partition the twelve houses. Registering them would misreport them as
+    yogas.
+    """
+    keys = set(YOGA_REGISTRY)
+    for word in ("guideline", "quadrant_from_sun", "upachaya"):
+        assert not any(word in key for key in keys)
+
+
+def test_guideline_1_always_yields_exactly_one_verdict():
+    """"If Moon is in a quadrant from Sun ... a panapara ... an apoklima."
+
+    Kendras, panapharas and apoklimas partition the twelve houses, so the Moon
+    is always in exactly one of them and guideline 1 never abstains.
+    """
+    seen = set()
+    for offset in range(12):
+        result = planetary_yoga_service.guidelines(
+            {int(Graha.SUN): 0, int(Graha.MOON): offset})
+        first = result["guideline_1"]
+        assert first["verdict"] is not None, offset
+        seen.add(first["category"])
+    assert seen == {"kendra", "panaphara", "apoklima"}
+
+
+def test_guideline_1_grades_apoklimas_highest():
+    """The direction is counter-intuitive and worth pinning: the apoklimas,
+    the weakest houses elsewhere in the book, give "a lot of wealth" here,
+    while the quadrants give "little"."""
+    assert CHANDRA_MOON_FROM_SUN_GRADE["kendra"].startswith("little")
+    assert CHANDRA_MOON_FROM_SUN_GRADE["panaphara"].startswith("average")
+    assert CHANDRA_MOON_FROM_SUN_GRADE["apoklima"].startswith("a lot")
+
+
+def test_guideline_1_spells_panaphara_the_short_way():
+    """§11.3 writes "panapara"; chapter 7 writes "panaphara". Same category,
+    recorded rather than normalised. See D-29."""
+    assert PANAPHARA_SPELLING_VARIANTS == ("panapara",)
+    assert "panapara" in CHANDRA_GUIDELINE_1
+    assert "panaphara" not in CHANDRA_GUIDELINE_1
+
+
+def test_guideline_2_is_recorded_and_not_computed():
+    """It needs the Moon's navamsa, that navamsa lord's compound relationship
+    to the Moon, whether the birth was by day, and Jupiter's and Venus's
+    aspects on the Moon. Four chapters' machinery; not joined yet. See OI-76.
+    """
+    result = planetary_yoga_service.guidelines({int(Graha.MOON): 0})
+    second = result["guideline_2"]
+    assert second["verdict"] is None
+    assert "OI-76" in second["reason"]
+
+
+def test_guideline_2_the_same_aspect_helps_or_harms_by_time_of_birth():
+    """"Jupiter's aspect on Moon in a night birth and Venusian aspect on Moon
+    in a daytime birth are **detrimental**."
+
+    The benefit is not the graha's — it is the pairing. Jupiter is good by day
+    and bad by night; Venus is the reverse.
+    """
+    table = CHANDRA_ASPECT_BY_BIRTH_TIME
+    assert table[("jupiter", "day")] == "good"
+    assert table[("jupiter", "night")] == "detrimental"
+    assert table[("venus", "night")] == "good"
+    assert table[("venus", "day")] == "detrimental"
+
+
+def test_guideline_2_uses_chapter_3s_own_word_for_a_good_friend():
+    """"own navamsa or that of an **adhimitra (good friend)**."
+
+    Chapter 3's compound-relationship table names the great-friend grade
+    "adhimitra" and glosses it "good friend". Built from chapter 3 alone, used
+    here in chapter 11 without a cross-reference, and the two agree exactly.
+    """
+    from hora.core.const import COMPOUND_RELATION_GLOSSES, COMPOUND_RELATION_NAMES
+
+    assert COMPOUND_RELATION_NAMES["great_friend"] == "adhimitra"
+    assert COMPOUND_RELATION_GLOSSES["great_friend"] == "good friend"
+    assert "adhimitra (good friend)" in CHANDRA_GUIDELINE_2
+
+
+def test_guideline_2_records_its_own_ambiguity():
+    """"aspect of Jupiter on Moon beings wealth and comforts in the case of
+    daytime birth **(respectively)**."
+
+    "Respectively" pairs two things with two. The only pair in reach is "own
+    navamsa or that of an adhimitra". The book does not say so, and neither
+    do we. See OI-74.
+    """
+    assert "(respectively)" in CHANDRA_GUIDELINE_2
+    assert "own navamsa or that of an adhimitra" in \
+        CHANDRA_GUIDELINE_2_RESPECTIVELY_NOTE
+    assert "does not say" in CHANDRA_GUIDELINE_2_RESPECTIVELY_NOTE
+
+
+def test_guideline_2_keeps_the_books_typo():
+    """"beings wealth and comforts" — for "brings". Transcribed as printed."""
+    assert "beings wealth and comforts" in CHANDRA_GUIDELINE_2
+
+
+def test_guideline_3_grades_by_how_many_benefics_reach_an_upachaya():
+    """"If **all** the natural benefics occupy upachayas (3rd, 6th, 10th and
+    11th) from Moon, one has great wealth. If **two** ... medium wealth. If
+    only **one** ... little wealth."
+    """
+    from hora.core.const import UPACHAYA
+
+    assert UPACHAYA == (3, 6, 10, 11)
+    assert "3rd, 6th, 10th and 11th" in CHANDRA_GUIDELINE_3
+    moon = R["Ar"]
+    upachayas = [(moon + h - 1) % 12 for h in UPACHAYA]
+    one = planetary_yoga_service.guidelines(
+        {int(Graha.MOON): moon, int(Graha.JUPITER): upachayas[0],
+         int(Graha.VENUS): R["Ta"]}, paksha=1)
+    assert one["guideline_3"]["verdict"] == "little wealth"
+    both = planetary_yoga_service.guidelines(
+        {int(Graha.MOON): moon, int(Graha.JUPITER): upachayas[0],
+         int(Graha.VENUS): upachayas[1]}, paksha=1)
+    assert both["guideline_3"]["verdict"] == "great wealth"
+
+
+def test_guideline_3_all_outranks_the_count():
+    """"If all the natural benefics occupy upachayas ... great wealth" and
+    "If two benefics occupy upachayas ... medium".
+
+    Two benefics that are *all* the benefics there are must be "great", not
+    "medium" — the "all" clause is a stronger claim about the same
+    arrangement, and it wins.
+    """
+    moon = R["Ar"]
+    result = planetary_yoga_service.guidelines(
+        {int(Graha.MOON): moon, int(Graha.JUPITER): (moon + 2) % 12,
+         int(Graha.VENUS): (moon + 5) % 12}, paksha=1)
+    third = result["guideline_3"]
+    assert len(third["benefics_in_upachaya"]) == 2
+    assert third["verdict"] == "great wealth"
+
+
+def test_guideline_3_reports_an_undecidable_nature_separately():
+    """Without a paksha the Moon has no nature (§3.2.2). She is the reference
+    here so it does not change the count, but Mercury's can, and an
+    unjudgeable nature is listed rather than silently dropped.
+    """
+    result = planetary_yoga_service.guidelines(
+        {int(Graha.MOON): R["Ar"], int(Graha.JUPITER): R["Ge"]})
+    assert result["guideline_3"]["undecidable"] == []
+
+
+# --------------------------------------------------------------------------
+# The Chandra endpoints
+# --------------------------------------------------------------------------
+
+
+def test_chart_endpoint_evaluates_both_groups(client):
+    body = client.post("/v1/planetary-yoga/chart", json={
+        "rasis": {1: R["Ge"], 4: R["Cn"], 3: R["Cn"]}}).json()
+    assert body["evaluated"] == len(YOGA_REGISTRY)
+    assert "sunaphaa" in body["present"]
+
+
+def test_chart_endpoint_takes_a_lagna_for_kemadruma(client):
+    rasis = {int(k): v for k, v in _kemadruma_chart().rasis.items()}
+    body = client.post("/v1/planetary-yoga/chart", json={
+        "rasis": rasis, "lagna_rasi": R["Ta"]}).json()
+    assert "kemadruma" in body["present"]
+    assert body["kemadruma_present"] is True
+
+
+def test_guidelines_endpoint(client):
+    body = client.post("/v1/planetary-yoga/guidelines", json={
+        "rasis": {0: R["Ar"], 1: R["Ge"]}, "paksha": 0}).json()
+    assert body["guideline_1"]["category"] == "apoklima"
+    assert body["guideline_2"]["verdict"] is None
+    assert body["guideline_3"]["verdict"] is None
+
+
+def test_group_filter_is_validated(client):
+    response = client.post("/v1/planetary-yoga/chart", json={
+        "rasis": {0: 0}, "group": "nonesuch"})
+    assert response.status_code == 400
+    assert "unknown group" in response.json()["error"]["message"]

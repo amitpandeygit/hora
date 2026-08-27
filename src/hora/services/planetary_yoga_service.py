@@ -21,23 +21,39 @@ from hora.charts.planetary_yogas import (
 from hora.charts.planetary_yogas.registry import describe
 from hora.core import validate
 from hora.core.const import (
+    ADHI_EXAMPLE_CONTRADICTS_RULE,
     BUDHA_AADITYA_SPELLING_VARIANTS,
     BUDHA_AADITYA_TERMS,
     BUDHA_AADITYA_TIMING_CHART,
     BUDHA_AADITYA_TIMING_PERIODS,
     BUDHA_AADITYA_TIMING_SIGN,
     BUDHA_AADITYA_TIMING_TEXT,
+    CHANDRA_ASPECT_BY_BIRTH_TIME,
+    CHANDRA_BENEFICS_IN_UPACHAYA_GRADE,
+    CHANDRA_GUIDELINE_1,
+    CHANDRA_GUIDELINE_2,
+    CHANDRA_GUIDELINE_2_RESPECTIVELY_NOTE,
+    CHANDRA_GUIDELINE_3,
+    CHANDRA_MOON_FROM_SUN_GRADE,
+    CHANDRA_YOGA_INTRO,
     COMBUSTION_WEAKENS_YOGA,
     GRAHA_NAMES,
+    HOUSE_CATEGORIES,
+    KEMADRUMA_EFFORT_NOTE,
+    KEMADRUMA_KILLS_OTHER_YOGAS,
+    PANAPHARA_SPELLING_VARIANTS,
     RASI_NAMES,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
+    UPACHAYA,
+    Graha,
 )
 
 InputError = validate.InputError
 
-__all__ = ["InputError", "YogaError", "catalogue", "chart", "one", "rules"]
+__all__ = ["InputError", "YogaError", "catalogue", "chart", "guidelines",
+           "one", "rules"]
 
 #: Charts a caller may name. §11.2 singles out D-9 and D-10; the rest are
 #: accepted because the yoga arithmetic is chart-agnostic.
@@ -68,15 +84,22 @@ def _verdict(verdict, data: YogaInput) -> dict:
 
 
 def _input(rasis: dict[int, int], chart_code: str, include_nodes: bool,
-           positions=None) -> YogaInput:
+           positions=None, lagna_rasi: int | None = None,
+           paksha: int | None = None) -> YogaInput:
     if chart_code not in KNOWN_CHARTS:
         raise InputError(
             f"unknown chart {chart_code!r}; expected one of "
             f"{', '.join(KNOWN_CHARTS)}"
         )
+    if lagna_rasi is not None:
+        validate.in_range("lagna_rasi", int(lagna_rasi), 0, 11)
+    if paksha is not None:
+        validate.in_range("paksha", int(paksha), 0, 1)
     return YogaInput(
         rasis={int(g): int(s) for g, s in rasis.items()},
         chart=chart_code, include_nodes=include_nodes, positions=positions,
+        lagna_rasi=None if lagna_rasi is None else int(lagna_rasi),
+        paksha=None if paksha is None else int(paksha),
     )
 
 
@@ -86,24 +109,54 @@ def chart(
     chart_code: str = "D1",
     include_nodes: bool = False,
     group: str | None = None,
+    lagna_rasi: int | None = None,
+    paksha: int | None = None,
 ) -> dict:
-    """Every registered yoga on one chart, present or absent."""
-    data = _input(rasis, chart_code, include_nodes)
+    """Every registered yoga on one chart, present or absent.
+
+    `lagna_rasi` and `paksha` are optional because most yogas do not need
+    them. A yoga that does and lacks it says so in its own reason rather than
+    the whole call failing — §11.3.4 needs a lagna, §11.3.6 a paksha.
+    """
+    data = _input(rasis, chart_code, include_nodes, lagna_rasi=lagna_rasi,
+                  paksha=paksha)
     if group is not None and group not in groups():
         raise InputError(
             f"unknown group {group!r}; expected one of {', '.join(groups())}")
     verdicts = evaluate(data, group=group)
+    # §11.3.4: Kemadruma "kills the results of other good yogas in the chart,
+    # especially Chandra yogas". It kills the *results*, not the yoga, so it
+    # is applied as a qualifier and never flips another verdict's `present`.
+    kemadruma = next(
+        (v for v in verdicts if v.key == "kemadruma" and v.present), None)
+    killed = {v.key for v in verdicts
+              if kemadruma and v.present and v.key != "kemadruma"}
     return {
         "chart": chart_code,
         "group": group,
         "include_nodes": include_nodes,
+        "lagna_rasi": data.lagna_rasi,
+        "paksha": data.paksha,
+        "inputs_missing": [
+            name for name, value in (("lagna_rasi", data.lagna_rasi),
+                                     ("paksha", data.paksha))
+            if value is None
+        ],
         "grahas_considered": [
             {"graha": int(g), "graha_name": GRAHA_NAMES[g]}
             for g in data.considered()
         ],
         "evaluated": len(verdicts),
         "present": [v.key for v in verdicts if v.present],
-        "yogas": [_verdict(v, data) for v in verdicts],
+        "yogas": [
+            {**_verdict(v, data),
+             "qualifiers": (
+                 [*v.qualifiers, KEMADRUMA_KILLS_OTHER_YOGAS]
+                 if v.key in killed else list(v.qualifiers))}
+            for v in verdicts
+        ],
+        "kemadruma_present": bool(kemadruma),
+        "results_killed_by_kemadruma": sorted(killed),
         # A caller cannot tell from signs alone whether Mercury is combust, so
         # the response says which qualifiers could be judged at all.
         "qualifiers_available": [],
@@ -111,6 +164,90 @@ def chart(
         "chart_note": (
             RAVI_YOGA_FREQUENCY_NOTE if chart_code == "D1" else None
         ),
+    }
+
+
+def guidelines(
+    rasis: dict[int, int], *, paksha: int | None = None,
+) -> dict:
+    """§11.3's three General Guidelines.
+
+    **Not yogas.** Each is a graded reading: guideline 1 always yields one of
+    three verdicts because its three categories partition the twelve houses,
+    and guideline 3 grades by a count. They are computed and returned apart
+    from the registry so nothing reads them as combinations.
+    """
+    data = YogaInput(rasis={int(g): int(s) for g, s in rasis.items()},
+                     paksha=paksha)
+    sun = data.sign_of(Graha.SUN)
+    moon = data.sign_of(Graha.MOON)
+
+    first: dict = {"text": CHANDRA_GUIDELINE_1, "verdict": None,
+                   "category": None, "house": None}
+    if sun is None or moon is None:
+        first["reason"] = "guideline 1 needs both Sun and Moon"
+    else:
+        house = (moon - sun) % 12 + 1
+        category = next(
+            name for name in ("kendra", "panaphara", "apoklima")
+            if house in HOUSE_CATEGORIES[name]["houses"]
+        )
+        first.update(
+            house=house, category=category,
+            verdict=CHANDRA_MOON_FROM_SUN_GRADE[category],
+            reason=(f"Moon is in the {house}th from Sun, "
+                    f"{'a' if category != 'apoklima' else 'an'} {category}"),
+        )
+
+    benefics, undecidable = data.benefics()
+    third: dict = {"text": CHANDRA_GUIDELINE_3, "verdict": None}
+    if moon is None:
+        third["reason"] = "guideline 3 counts upachayas from Moon"
+    else:
+        upachaya = {(moon + h - 1) % 12 for h in UPACHAYA}
+        inside = tuple(g for g in benefics
+                       if int(g) != int(Graha.MOON) and data.rasis[g] in upachaya)
+        placed = tuple(g for g in benefics if int(g) != int(Graha.MOON))
+        count = len(inside)
+        # "If **all** the natural benefics occupy upachayas" outranks the
+        # counts: three benefics all in upachayas is "great wealth", not the
+        # "medium" the count of two would give.
+        verdict: str | None
+        if count and count == len(placed):
+            verdict = CHANDRA_BENEFICS_IN_UPACHAYA_GRADE["all"]
+        else:
+            verdict = CHANDRA_BENEFICS_IN_UPACHAYA_GRADE.get(count)
+        third.update(
+            verdict=verdict,
+            benefics_in_upachaya=[
+                {"graha": int(g), "graha_name": GRAHA_NAMES[g]} for g in inside],
+            benefics_placed=[
+                {"graha": int(g), "graha_name": GRAHA_NAMES[g]} for g in placed],
+            undecidable=[
+                {"graha": int(g), "graha_name": GRAHA_NAMES[g]}
+                for g in undecidable if int(g) != int(Graha.MOON)],
+            reason=(f"{count} of {len(placed)} placed natural benefics occupy "
+                    f"an upachaya from Moon"),
+        )
+
+    return {
+        "guideline_1": first,
+        "guideline_2": {
+            "text": CHANDRA_GUIDELINE_2,
+            "aspect_table": [
+                {"graha": graha, "birth_time": when, "effect": effect}
+                for (graha, when), effect in CHANDRA_ASPECT_BY_BIRTH_TIME.items()
+            ],
+            "respectively_note": CHANDRA_GUIDELINE_2_RESPECTIVELY_NOTE,
+            "verdict": None,
+            "reason": (
+                "guideline 2 needs the Moon's navamsa, its lord's compound "
+                "relationship to the Moon, whether the birth was by day, and "
+                "Jupiter's and Venus's aspects on the Moon. It is not computed "
+                "here — see docs/open-items.md OI-76."
+            ),
+        },
+        "guideline_3": third,
     }
 
 
@@ -136,6 +273,16 @@ def rules() -> dict:
     """Chapter 11's framing, and what the engine does not decide."""
     return {
         "ravi_intro": RAVI_YOGA_INTRO,
+        "chandra_intro": CHANDRA_YOGA_INTRO,
+        "kemadruma_kills_other_yogas": KEMADRUMA_KILLS_OTHER_YOGAS,
+        "kemadruma_effort_note": KEMADRUMA_EFFORT_NOTE,
+        "kemadruma_is_a_qualifier_not_a_veto": (
+            "Section 11.3.4 says Kemadruma kills the *results* of other good "
+            "yogas, not the yogas themselves. A yoga forming beside it is "
+            "reported present with a qualifier, never suppressed."
+        ),
+        "adhi_example_note": ADHI_EXAMPLE_CONTRADICTS_RULE,
+        "panaphara_spelling_variants": list(PANAPHARA_SPELLING_VARIANTS),
         "frequency_note": RAVI_YOGA_FREQUENCY_NOTE,
         "preferred_charts": list(RAVI_YOGA_PREFERRED_CHARTS),
         "budha_aaditya_terms": dict(BUDHA_AADITYA_TERMS),

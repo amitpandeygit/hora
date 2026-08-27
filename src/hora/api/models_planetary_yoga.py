@@ -75,8 +75,23 @@ class YogaChartIn(BaseModel):
         ),
     )
     group: str | None = Field(
-        None, examples=["ravi"],
+        None, examples=["ravi", "chandra"],
         description="Restrict to one group of yogas; omit for all",
+    )
+    lagna_rasi: int | None = Field(
+        None, ge=0, le=11,
+        description=(
+            "Needed by section 11.3.4's Kemadruma, the only yoga so far that "
+            "counts houses from the ascendant. Without it that yoga reports "
+            "that it cannot be decided, rather than a bare absent."
+        ),
+    )
+    paksha: int | None = Field(
+        None, ge=0, le=1,
+        description=(
+            "0 Sukla, 1 Krishna. The Moon has no benefic nature without it "
+            "(section 3.2.2), which section 11.3.6's Adhi and guideline 3 need."
+        ),
     )
 
 
@@ -84,6 +99,15 @@ class YogaChartOut(BaseModel):
     chart: str
     group: str | None = None
     include_nodes: bool
+    lagna_rasi: int | None = None
+    paksha: int | None = None
+    inputs_missing: list[str] = Field(
+        default_factory=list,
+        description=(
+            "Optional inputs that were not supplied. A yoga needing one of "
+            "these says so in its own `reason`; this is the summary."
+        ),
+    )
     grahas_considered: list[GrahaRefOut] = Field(
         ...,
         description=(
@@ -102,6 +126,15 @@ class YogaChartOut(BaseModel):
             "out on the way here."
         ),
     )
+    kemadruma_present: bool = Field(
+        False,
+        description=(
+            "Section 11.3.4's Kemadruma 'kills the results of other good "
+            "yogas'. When present, every other holding yoga carries that as a "
+            "qualifier — it kills the results, never the yoga."
+        ),
+    )
+    results_killed_by_kemadruma: list[str] = Field(default_factory=list)
     qualifiers_available: list[str]
     qualifiers_unavailable: list[str] = Field(
         ...,
@@ -152,6 +185,18 @@ class TimingExampleOut(BaseModel):
 
 class PlanetaryYogaRulesOut(BaseModel):
     ravi_intro: str
+    chandra_intro: str
+    kemadruma_kills_other_yogas: str
+    kemadruma_effort_note: str
+    kemadruma_is_a_qualifier_not_a_veto: str
+    adhi_example_note: str = Field(
+        ...,
+        description=(
+            "Section 11.3.6's example does not satisfy its own rule. The rule "
+            "is followed — see docs/book-deviations.md D-28."
+        ),
+    )
+    panaphara_spelling_variants: list[str]
     frequency_note: str
     preferred_charts: list[str]
     budha_aaditya_terms: dict[str, str]
@@ -162,3 +207,55 @@ class PlanetaryYogaRulesOut(BaseModel):
     node_note: str
     results_note: str
     sun_excluded_note: str
+
+
+class GuidelineIn(BaseModel):
+    rasis: dict[int, int] = Field(..., examples=[{0: 0, 1: 2}])
+    paksha: int | None = Field(None, ge=0, le=1)
+
+
+class GuidelineOneOut(BaseModel):
+    text: str
+    verdict: str | None
+    category: str | None = None
+    house: int | None = None
+    reason: str
+
+
+class GuidelineAspectRowOut(BaseModel):
+    graha: str
+    birth_time: str
+    effect: str
+
+
+class GuidelineTwoOut(BaseModel):
+    text: str
+    aspect_table: list[GuidelineAspectRowOut]
+    respectively_note: str
+    verdict: str | None
+    reason: str
+
+
+class GuidelineThreeOut(BaseModel):
+    text: str
+    verdict: str | None
+    benefics_in_upachaya: list[GrahaRefOut] = Field(default_factory=list)
+    benefics_placed: list[GrahaRefOut] = Field(default_factory=list)
+    undecidable: list[GrahaRefOut] = Field(
+        default_factory=list,
+        description="Grahas whose benefic nature could not be judged from the input",
+    )
+    reason: str
+
+
+class GuidelinesOut(BaseModel):
+    """Section 11.3's three General Guidelines.
+
+    Not yogas. Each is a graded reading — guideline 1 always yields one of
+    three verdicts, because kendras, panapharas and apoklimas partition the
+    twelve houses — so they are returned apart from the registry.
+    """
+
+    guideline_1: GuidelineOneOut
+    guideline_2: GuidelineTwoOut
+    guideline_3: GuidelineThreeOut

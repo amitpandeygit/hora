@@ -853,3 +853,59 @@ is stored with the short spelling as printed.
 
 Same treatment as [D-20](#), [D-21](#) and [D-25](#). Pinned by
 `test_11_2_4_the_name_is_spelled_two_ways_on_one_page`.
+
+---
+
+## D-28 · §11.3.6 Adhi Yoga's example does not satisfy its own rule
+
+**Status: closed.** The rule is followed. Registered as
+[PVR-11](precedence.md).
+
+The rule:
+
+> "If the natural benefics occupy **6th, 7th and 8th** from Moon, this yoga is
+> present."
+
+The example, immediately after it:
+
+> "If Moon is in **Taurus**, Mercury and Jupiter in **Virgo** and Venus is
+> **Leo**, then this yoga is present."
+
+Counted inclusively from Taurus, Virgo is the **5th** and Leo the **4th**. The
+6th, 7th and 8th from Taurus are Libra, Scorpio and Sagittarius, and the
+example puts nothing in any of them. The example fails the rule outright, not
+by one house.
+
+**What we do:** implement 6/7/8 — [precedence.md](precedence.md) tie-break rule
+1, a stated rule beats its transcribed output. The rule also matches the
+classical Adhi Yoga, where the example matches nothing.
+
+**The minimal repair**, recorded as an observation and not as a claim about
+what PVR meant: with the Moon in **Pisces** instead of Taurus, Leo becomes the
+6th and Virgo the 7th, and the example holds exactly. One substitution
+reconciles them; changing the rule instead would need the houses to read 4th,
+5th and 6th, which no source supports.
+
+Pinned by `test_11_3_6_the_example_does_not_satisfy_the_rule`, which asserts
+the example is **absent** under the rule, and
+`test_11_3_6_the_rule_is_followed_not_the_example`.
+
+---
+
+## D-29 · §11.3 spells panaphara "panapara"
+
+**Status: closed.** Both recorded; chapter 7's spelling is primary.
+
+§11.3's first General Guideline reads:
+
+> "If Moon is in a **panapara** from Sun, then one may possess average wealth"
+
+Chapter 7 §7.4 names the category "panaphara" throughout, and
+`HOUSE_CATEGORIES` uses that. The `ph` is dropped here.
+
+**What we do:** the category keeps chapter 7's spelling, since §7.4 is the
+definitional section — [precedence.md](precedence.md) tie-break rule 2 —
+and `PANAPHARA_SPELLING_VARIANTS` records "panapara". Same treatment as
+[D-20](#), [D-21](#), [D-25](#) and [D-27](#).
+
+Pinned by `test_guideline_1_spells_panaphara_the_short_way`.

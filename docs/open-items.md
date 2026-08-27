@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 38 waiting on evidence · 2 parked**
+**5 waiting on Amit · 41 waiting on evidence · 2 parked**
 
 ---
 
@@ -294,6 +294,71 @@ verification against birth data as Charts 6 and 7 got.
 
 **Closes when:** you send Chart 8's page, or we accept the exercise as covered
 by the reconstruction alone.
+
+### OI-74 — §11.3 guideline 2's "(respectively)" has nothing to pair with
+
+> "In such a situation, aspect of Jupiter on Moon beings wealth and comforts in
+> the case of daytime birth **(respectively)**."
+
+"Respectively" pairs an ordered list with another ordered list. Here it follows
+"wealth and comforts" — two things — and the only two-item list in reach is the
+sentence before it: "own navamsa **or** that of an adhimitra".
+
+Read that way, an own-navamsa Moon gives *wealth* and an adhimitra's navamsa
+gives *comforts*. That is the only reading in which the word does any work.
+
+The book does not say so, and guideline 2 is not computed anyway (OI-76), so
+nothing turns on it yet. Recorded because a later reader will otherwise have to
+rediscover that the word is unexplained.
+
+Also in the same sentence: "beings" for "brings", transcribed as printed.
+
+**Closes when:** a later chapter uses guideline 2 with a worked chart, or JHora
+shows which reading it implements.
+
+### OI-75 — must all three of Adhi Yoga's houses be occupied?
+
+§11.3.6: "If the natural benefics occupy 6th, 7th and 8th from Moon, this yoga
+is present."
+
+Two readings:
+
+- **every** natural benefic sits in one of those three houses (what we
+  implement), or
+- benefics occupy **all three** houses, one apiece at least.
+
+The book's own example cannot settle it, because the example does not satisfy
+the rule at all (D-28). Repaired minimally — Moon to Pisces — it puts benefics
+in the 6th and 7th and leaves the **8th empty**, which supports our reading and
+rules out the stricter one. But that rests on a repair we chose.
+
+We also exclude the Moon from her own test: a waxing Moon is a natural benefic
+(§3.2.2) and can only ever be the 1st from herself, so counting her would make
+Adhi impossible for every bright-half birth.
+
+**Closes when:** a worked Adhi chart appears, or JHora's yoga output settles it.
+
+### OI-76 — §11.3 guideline 2 needs four chapters joined and is not computed
+
+> "If Moon is in own navamsa or that of an adhimitra (good friend), that is
+> good. In such a situation, aspect of Jupiter on Moon beings wealth and
+> comforts in the case of daytime birth..."
+
+To decide it the engine must join:
+
+- the Moon's **navamsa** and that navamsa's lord — chapter 6;
+- the compound **relationship** between the Moon and that lord, to test for
+  adhimitra — §3.4;
+- whether the birth was by **day or night** — chapter 5 / the panchanga;
+- **Jupiter's and Venus's graha drishti** on the Moon — §10.2.
+
+Every piece is built. Nothing joins them, so the guideline is returned with its
+text, its day/night table and a null verdict saying what is missing.
+
+This is the first rule in the book needing four chapters at once, and it is
+worth doing properly rather than approximately.
+
+**Closes when:** the join is written and checked against a worked chart.
 
 ### OI-73 — do Rahu and Ketu count as "a planet" in the Ravi yogas?
 

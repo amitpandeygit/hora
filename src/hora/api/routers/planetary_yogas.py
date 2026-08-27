@@ -8,6 +8,8 @@ from __future__ import annotations
 from fastapi import APIRouter, HTTPException, Query
 
 from hora.api.models_planetary_yoga import (
+    GuidelineIn,
+    GuidelinesOut,
     PlanetaryYogaRulesOut,
     YogaCatalogueOut,
     YogaChartIn,
@@ -31,7 +33,8 @@ def chart(req: YogaChartIn) -> dict:
     try:
         return planetary_yoga_service.chart(
             req.rasis, chart_code=req.chart,
-            include_nodes=req.include_nodes, group=req.group)
+            include_nodes=req.include_nodes, group=req.group,
+            lagna_rasi=req.lagna_rasi, paksha=req.paksha)
     except (planetary_yoga_service.InputError,
             planetary_yoga_service.YogaError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -44,6 +47,23 @@ def one(req: YogaOneIn) -> dict:
         return planetary_yoga_service.one(
             req.key, req.rasis, chart_code=req.chart,
             include_nodes=req.include_nodes)
+    except (planetary_yoga_service.InputError,
+            planetary_yoga_service.YogaError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/guidelines", response_model=GuidelinesOut,
+             summary="Section 11.3's three General Guidelines — graded readings, not yogas")
+def guidelines(req: GuidelineIn) -> dict:
+    """Kept apart from the yogas deliberately.
+
+    Guideline 1 always yields a verdict, because its three house categories
+    partition the zodiac; guideline 3 grades by a count. Neither is a
+    combination that is present or absent, so returning them among the yogas
+    would misreport them.
+    """
+    try:
+        return planetary_yoga_service.guidelines(req.rasis, paksha=req.paksha)
     except (planetary_yoga_service.InputError,
             planetary_yoga_service.YogaError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

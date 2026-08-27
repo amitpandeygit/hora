@@ -1,5 +1,6 @@
 {
   "body": {
+    "adhi_example_note": "Section 11.3.6's example places the Moon in Taurus and the benefics in Virgo and Leo, which are the 5th and 4th from Taurus. The rule asks for the 6th, 7th and 8th. The rule is followed.",
     "budha_aaditya_spelling_variants": [
       "Budha-Aditya"
     ],
@@ -9,10 +10,17 @@
       "nipuna": "an expert",
       "yoga": "togetherness"
     },
+    "chandra_intro": "Chandra yogas are the lunar combinations. There are several yogas based on Moon.",
     "combustion_is_a_qualifier_not_a_veto": "Section 11.2.4 says a yoga formed by a combust planet loses \u201csome of their power to do good\u201d, not all of it. A combust yoga is therefore reported as present with a qualifier, never suppressed.",
     "combustion_note": "If Mercury is too close to Sun, he is combust (asta or astangata). Yogas formed by combust planets lose some of their power to do good.",
     "frequency_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
+    "kemadruma_effort_note": "One with this yoga has to work hard and succeed through great efforts.",
+    "kemadruma_is_a_qualifier_not_a_veto": "Section 11.3.4 says Kemadruma kills the *results* of other good yogas, not the yogas themselves. A yoga forming beside it is reported present with a qualifier, never suppressed.",
+    "kemadruma_kills_other_yogas": "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas.",
     "node_note": "Three of the four Ravi yogas turn on \u201ca planet other than Moon\u201d. Chapter 11 never says whether Rahu and Ketu count as \u201ca planet\u201d, so it is a per-call choice and the nodes are excluded by default. See docs/open-items.md OI-73.",
+    "panaphara_spelling_variants": [
+      "panapara"
+    ],
     "preferred_charts": [
       "D9",
       "D10"

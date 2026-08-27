@@ -14,7 +14,7 @@ sources:
   pvr-vaia:
     title: 'Vedic Astrology: An Integrated Approach'
     author: P.V.R. Narasimha Rao
-    section: 11.2 Ravi Yogas
+    section: 11.2 Ravi Yogas and 11.3 Chandra Yogas
     first_published: 2000
     licence_status: unconfirmed
     licence_note: The author shares the book freely for reading. That is not an explicit licence to redistribute
@@ -89,3 +89,102 @@ entries:
     category: circumstance
   - term: happy
     category: temperament
+- planetary_yoga: sunaphaa
+  name: Sunaphaa Yoga
+  source: pvr-vaia
+  section: 11.3.1
+  licence_status: unconfirmed
+  verbatim: One born with this yoga becomes a king or an equal. He is intelligent, wealthy and famous.
+    He has self-earned wealth.
+  terms:
+  - term: a king or an equal
+    category: station
+  - term: intelligent
+    category: aptitude
+  - term: wealthy
+    category: circumstance
+  - term: famous
+    category: circumstance
+  - term: self-earned wealth
+    category: circumstance
+- planetary_yoga: anaphaa
+  name: Anaphaa Yoga
+  source: pvr-vaia
+  section: 11.3.2
+  licence_status: unconfirmed
+  verbatim: One born with this yoga becomes a king with good looks. His body is free from disease. He
+    is a man of character and has great reputation. He is surrounded by comforts.
+  terms:
+  - term: a king with good looks
+    category: station
+  - term: body free from disease
+    category: physical
+  - term: a man of character
+    category: temperament
+  - term: great reputation
+    category: circumstance
+  - term: surrounded by comforts
+    category: circumstance
+- planetary_yoga: duradhara
+  name: Duradhara Yoga
+  source: pvr-vaia
+  section: 11.3.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga enjoys many pleasures. He is charitable. He owns wealth and vehicles.
+    He has good servants.
+  terms:
+  - term: many pleasures
+    category: circumstance
+  - term: charitable
+    category: temperament
+  - term: wealth and vehicles
+    category: circumstance
+  - term: good servants
+    category: circumstance
+- planetary_yoga: kemadruma
+  name: Kemadruma Yoga
+  source: pvr-vaia
+  section: 11.3.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is unlucky, bereft of intelligence and learning and afflicted by poverty
+    and trouble. This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas.
+    One with this yoga has to work hard and succeed through great efforts.
+  transcription_notes: The middle sentence is a rule about other yogas rather than a result of this one.
+    It is applied as a qualifier by the engine and kept here because it is printed inside the Results paragraph.
+  terms:
+  - term: unlucky
+    category: circumstance
+  - term: bereft of intelligence and learning
+    category: aptitude
+  - term: afflicted by poverty and trouble
+    category: circumstance
+  - term: has to work hard and succeed through great efforts
+    category: temperament
+- planetary_yoga: chandra_mangala
+  name: Chandra-Mangala Yoga
+  source: pvr-vaia
+  section: 11.3.5
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is worldly wise and materially successful. He may earn money through
+    unscrupulous means. He may treat mother or other women badly.
+  terms:
+  - term: worldly wise
+    category: temperament
+  - term: materially successful
+    category: circumstance
+  - term: may earn money through unscrupulous means
+    category: temperament
+  - term: may treat mother or other women badly
+    category: temperament
+- planetary_yoga: adhi
+  name: Adhi Yoga
+  source: pvr-vaia
+  section: 11.3.6
+  licence_status: unconfirmed
+  verbatim: One born with this yoga becomes a king or a minister or an army chief, depending on the strength
+    of the planets involved.
+  transcription_notes: The result is graded by strength, which chapter 15's simple-rules measure would
+    decide and which is not built. The engine reports the yoga, never which of the three stations.
+  terms:
+  - term: a king or a minister or an army chief
+    category: station

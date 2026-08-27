@@ -36,22 +36,22 @@
     "group": null,
     "include_nodes": false,
     "inputs_missing": [
-      "lagna_rasi",
       "paksha"
     ],
-    "kemadruma_present": false,
-    "lagna_rasi": null,
+    "kemadruma_present": true,
+    "lagna_rasi": 1,
     "paksha": null,
     "present": [
-      "vesi",
-      "vosi",
-      "ubhayachara"
+      "kemadruma",
+      "vosi"
     ],
     "qualifiers_available": [],
     "qualifiers_unavailable": [
       "combustion"
     ],
-    "results_killed_by_kemadruma": [],
+    "results_killed_by_kemadruma": [
+      "vosi"
+    ],
     "yogas": [
       {
         "aliases": [],
@@ -63,7 +63,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from him",
+        "reason": "the 2nd from Moon is Libra and holds no qualifying planet",
         "section": "11.3.1"
       },
       {
@@ -76,7 +76,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from him",
+        "reason": "the 12th from Moon is Leo and holds no qualifying planet",
         "section": "11.3.2"
       },
       {
@@ -92,7 +92,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from him",
+        "reason": "the 2nd from Moon is Libra and holds no qualifying planet; the 12th from Moon is Leo and holds no qualifying planet",
         "section": "11.3.3"
       },
       {
@@ -103,9 +103,9 @@
         "key": "kemadruma",
         "name": "Kemadruma Yoga",
         "participants": [],
-        "present": false,
+        "present": true,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from her",
+        "reason": "the 1st, 2nd and 12th from Moon (Virgo, Libra, Leo) hold no planet but the Sun, and the quadrants from lagna (Taurus, Leo, Scorpio, Aquarius) hold no planet but the Moon",
         "section": "11.3.4"
       },
       {
@@ -118,7 +118,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement",
+        "reason": "Moon is in Virgo and Mars in Gemini; they are not together",
         "section": "11.3.5"
       },
       {
@@ -131,7 +131,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Moon has no placement; this yoga is read from her",
+        "reason": "Mercury, Jupiter are natural benefics outside the 6th, 7th and 8th from Moon",
         "section": "11.3.6"
       },
       {
@@ -141,18 +141,10 @@
         "implies": [],
         "key": "vesi",
         "name": "Vesi Yoga",
-        "participants": [
-          {
-            "graha": 2,
-            "graha_name": "Mars",
-            "house_from_sun": 2,
-            "sign": 4,
-            "sign_name": "Leo"
-          }
-        ],
-        "present": true,
+        "participants": [],
+        "present": false,
         "qualifiers": [],
-        "reason": "Mars in the 2nd from Sun (Leo)",
+        "reason": "the 2nd from Sun is Aquarius and holds no qualifying planet",
         "section": "11.2.1"
       },
       {
@@ -164,16 +156,18 @@
         "name": "Vosi Yoga",
         "participants": [
           {
-            "graha": 5,
-            "graha_name": "Venus",
+            "graha": 4,
+            "graha_name": "Jupiter",
             "house_from_sun": 12,
-            "sign": 2,
-            "sign_name": "Gemini"
+            "sign": 8,
+            "sign_name": "Sagittarius"
           }
         ],
         "present": true,
-        "qualifiers": [],
-        "reason": "Venus in the 12th from Sun (Gemini)",
+        "qualifiers": [
+          "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas."
+        ],
+        "reason": "Jupiter in the 12th from Sun (Sagittarius)",
         "section": "11.2.2"
       },
       {
@@ -186,25 +180,10 @@
         ],
         "key": "ubhayachara",
         "name": "Ubhayachara Yoga",
-        "participants": [
-          {
-            "graha": 2,
-            "graha_name": "Mars",
-            "house_from_sun": 2,
-            "sign": 4,
-            "sign_name": "Leo"
-          },
-          {
-            "graha": 5,
-            "graha_name": "Venus",
-            "house_from_sun": 12,
-            "sign": 2,
-            "sign_name": "Gemini"
-          }
-        ],
-        "present": true,
+        "participants": [],
+        "present": false,
         "qualifiers": [],
-        "reason": "Mars, Venus in the 2nd from Sun (Leo) and the 12th from Sun (Gemini)",
+        "reason": "the 2nd from Sun is Aquarius and holds no qualifying planet",
         "section": "11.2.3"
       },
       {
@@ -219,7 +198,7 @@
         "participants": [],
         "present": false,
         "qualifiers": [],
-        "reason": "Mercury has no placement",
+        "reason": "Sun is in Capricorn and Mercury in Cancer; they are not together",
         "section": "11.2.4"
       }
     ]

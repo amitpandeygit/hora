@@ -263,6 +263,14 @@ CASES = [
         # Every yoga absent, each with its reason — the exhaustiveness case.
         "rasis": {0: 0, 1: 6},
     }),
+    ("planetary_yoga_kemadruma", "POST", "/v1/planetary-yoga/chart", {
+        # 11.3.4's shape: Kemadruma holds and kills Vosi's results beside it.
+        "rasis": {1: 5, 0: 9, 4: 8, 2: 2, 3: 3, 5: 11, 6: 0},
+        "lagna_rasi": 1,
+    }),
+    ("planetary_yoga_guidelines", "POST", "/v1/planetary-yoga/guidelines", {
+        "rasis": {0: 0, 1: 2, 4: 4, 5: 5}, "paksha": 0,
+    }),
     ("err_planetary_yoga_unknown_key", "POST", "/v1/planetary-yoga/one",
      {"key": "nonesuch", "rasis": {0: 0}}),
 
