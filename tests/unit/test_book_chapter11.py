@@ -20,6 +20,7 @@ from hora.charts.planetary_yogas import (
     evaluate_one,
     groups,
 )
+from hora.charts.planetary_yogas._shared import ordinal
 from hora.charts.planetary_yogas.popular import kartari
 from hora.core.const import (
     AAKRITI_BASIS,
@@ -30,6 +31,8 @@ from hora.core.const import (
     AAKRITI_YOGAS,
     AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
+    ADHI_HOUSES_FROM_MOON,
+    BRAHMA_VARIATION,
     BUDHA_AADITYA_CHART_NOTE,
     BUDHA_AADITYA_SPELLING_VARIANTS,
     BUDHA_AADITYA_TERMS,
@@ -45,6 +48,7 @@ from hora.core.const import (
     CHANDRA_YOGAS,
     CHATURASRA,
     COMBUSTION_WEAKENS_YOGA,
+    DUSTHANA_LORD_IN_OWN_HOUSE,
     EXALTATION_DEG,
     GRAHA_NAMES,
     HAMSA_MEANS,
@@ -61,6 +65,8 @@ from hora.core.const import (
     KARTARI_MEANS,
     KEMADRUMA_KILLS_OTHER_YOGAS,
     KENDRA,
+    LAGNAADHI_GLOSS,
+    LAGNAADHI_HOUSES,
     MAALAVYA_SPELLING_VARIANTS,
     MAHAPURUSHA_ELEMENT_RULERS_SENTENCE,
     MAHAPURUSHA_FOOTNOTES_UNREAD,
@@ -76,10 +82,15 @@ from hora.core.const import (
     NAABHASA_YOGAS,
     PANAPHARA_SPELLING_VARIANTS,
     PANCHA_BHOOTA_NAMES,
+    PARIVARTANA_FOOTNOTE,
+    POPULAR_YOGA_CONTINUED_COUNT,
     POPULAR_YOGA_COUNT,
     POPULAR_YOGA_FULLNESS_RULE,
     POPULAR_YOGA_INTRO,
+    POPULAR_YOGA_TOTAL,
     POPULAR_YOGAS,
+    POPULAR_YOGAS_ALL,
+    POPULAR_YOGAS_CONTINUED,
     RASI_LORD,
     RASI_MODALITY,
     RAVI_YOGA_FREQUENCY_NOTE,
@@ -98,6 +109,9 @@ from hora.core.const import (
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
     TRIKONA,
+    TRIMURTHI_NOTE,
+    TRIMURTHI_YOGAS,
+    UPACHAYA,
     WEAKENED_YOGA_IS_NOT_APPLICABLE,
     Graha,
 )
@@ -1147,7 +1161,6 @@ def test_guideline_3_grades_by_how_many_benefics_reach_an_upachaya():
     11th) from Moon, one has great wealth. If **two** ... medium wealth. If
     only **one** ... little wealth."
     """
-    from hora.core.const import UPACHAYA
 
     assert UPACHAYA == (3, 6, 10, 11)
     assert "3rd, 6th, 10th and 11th" in CHANDRA_GUIDELINE_3
@@ -2641,12 +2654,14 @@ def _pop(lagna: str, paksha: int | None = None, **placements) -> YogaInput:
 
 
 def test_eighteen_popular_yogas_are_declared():
+    """The eighteen printed before the Shivaji example. Thirty more follow
+    it — see the section further down."""
     assert len(POPULAR_YOGAS) == POPULAR_YOGA_COUNT == 18
     assert len({e["key"] for e in POPULAR_YOGAS}) == 18
 
 
 def test_every_popular_yoga_is_registered_under_its_section():
-    keys = {e["key"] for e in POPULAR_YOGAS}
+    keys = {e["key"] for e in POPULAR_YOGAS_ALL}
     registered = {k for k, s in YOGA_REGISTRY.items() if s.group == "popular"}
     assert registered == keys
     for key in keys:
@@ -3144,7 +3159,8 @@ def test_the_rules_endpoint_states_the_fullness_rule(client):
     assert body["kartari_houses"] == [12, 2]
     assert body["kartari_means"] == "scissors"
     assert set(body["popular_yogas_needing_a_named_lord"]) == {
-        "kaahala", "sankha", "bheri", "mridanga"}
+        "kaahala", "sankha", "bheri", "mridanga",
+        "lakshmi", "saarada", "vasumati", "gandharva", "go"}
 
 
 def test_the_chart_endpoint_answers_every_popular_yoga(client):
@@ -3154,7 +3170,7 @@ def test_the_chart_endpoint_answers_every_popular_yoga(client):
                   4: R["Le"], 5: R["Vi"], 6: R["Li"]}}).json()
     popular = [y for y in body["yogas"]
                if YOGA_REGISTRY[y["key"]].group == "popular"]
-    assert len(popular) == 18
+    assert len(popular) == 48
     for yoga in popular:
         assert yoga["reason"]
         assert STRENGTH_NOT_ASSESSED in yoga["qualifiers"]
@@ -3166,7 +3182,9 @@ def test_the_rules_endpoint_carries_footnote_31_as_printed(client):
     assert body["kartari_effect"] == KARTARI_EFFECT
     assert "any house or planet" in body["kartari_is_general"]
     assert body["popular_intro"] == POPULAR_YOGA_INTRO
-    assert body["popular_count"] == 18
+    assert body["popular_count"] == 48
+    assert body["popular_count_before_the_example"] == 18
+    assert body["popular_count_after_the_example"] == 30
 
 
 # --------------------------------------------------------------------------
@@ -3419,3 +3437,669 @@ def test_footnote_34_is_withheld_under_the_licence_gate(client):
     payload = repr(body).lower()
     for word in ("yuddhapriyah", "principled", "likes wars"):
         assert word not in payload
+
+
+# --------------------------------------------------------------------------
+# 11.6, continued — the thirty printed after the Shivaji example
+#
+# These are NOT Shivaji's yogas. His chart is used for Kalpadruma alone; the
+# section's list simply runs on past it. Unlike the first eighteen, each of
+# these prints its own Results sentence.
+# --------------------------------------------------------------------------
+
+
+def _pl(lagna: str, paksha: int | None = None, **longitudes) -> YogaInput:
+    """A §11.6 input built from longitudes, so navamsa is reachable.
+
+    Four of the thirty read the D-9 and two ask for deep exaltation, and
+    none of those can be answered from signs alone.
+    """
+    from hora.core.ephemeris.base import PlanetPosition
+
+    positions = {
+        int(getattr(Graha, name)): PlanetPosition(
+            graha=int(getattr(Graha, name)), longitude=lon, latitude=0.0,
+            distance=1.0, speed_longitude=0.5, speed_latitude=0.0,
+            speed_distance=0.0)
+        for name, lon in longitudes.items()
+    }
+    return YogaInput(
+        rasis={g: int(p.longitude // 30) for g, p in positions.items()},
+        positions=positions, lagna_rasi=R[lagna], paksha=paksha)
+
+
+def _deg(sign: str, degrees: float = 15.0) -> float:
+    return R[sign] * 30 + degrees
+
+
+def _navamsa_lon(sign: str, want_lord: str) -> float:
+    """A longitude inside `sign` whose navamsa sign `want_lord` rules.
+
+    Derived, not guessed — the yogas that read the D-9 need a chart built
+    backwards from the navamsa, and hand-picked degrees got it wrong twice.
+    """
+    from hora.charts.vargas import d9_navamsa
+
+    for index in range(9):
+        lon = R[sign] * 30 + index * (30 / 9) + 1.5
+        if int(RASI_LORD[d9_navamsa(lon).sign]) == int(getattr(Graha, want_lord)):
+            return round(lon, 3)
+    raise AssertionError(f"no navamsa of {sign} is ruled by {want_lord}")
+
+
+def test_thirty_more_popular_yogas_are_declared():
+    assert len(POPULAR_YOGAS_CONTINUED) == POPULAR_YOGA_CONTINUED_COUNT == 30
+    assert len(POPULAR_YOGAS_ALL) == POPULAR_YOGA_TOTAL == 48
+    assert len({e["key"] for e in POPULAR_YOGAS_ALL}) == 48
+
+
+def test_the_thirty_are_registered_under_the_same_section():
+    for entry in POPULAR_YOGAS_CONTINUED:
+        spec = YOGA_REGISTRY[entry["key"]]
+        assert spec.section == "11.6"
+        assert spec.group == "popular"
+
+
+def test_the_preamble_binds_these_thirty_too():
+    """§11.6's fullness rule was printed before the first eighteen; the list
+    is one list, so it governs these as well. See OI-81."""
+    data = _pl("Ar", paksha=0, SUN=_deg("Ar"), MOON=_deg("Ta"),
+               MARS=_deg("Ge"), MERCURY=_deg("Cn"), JUPITER=_deg("Le"),
+               VENUS=_deg("Vi"), SATURN=_deg("Li"))
+    keys = {e["key"] for e in POPULAR_YOGAS_CONTINUED}
+    for verdict in evaluate(data):
+        if verdict.key in keys:
+            assert STRENGTH_NOT_ASSESSED in verdict.qualifiers, verdict.key
+
+
+# --- Lagnaadhi --------------------------------------------------------------
+
+
+def test_lagnaadhi_wants_benefics_in_the_7th_and_8th():
+    verdict = evaluate_one("lagnaadhi", _pl("Ar", VENUS=_deg("Li"),
+                                            JUPITER=_deg("Sc")))
+    assert verdict.present is True
+
+
+def test_lagnaadhi_is_broken_by_a_malefic_reaching_those_benefics():
+    """"no malefics conjoin **or aspect** these planets" — the second clause
+    is about the benefics, not about the houses."""
+    verdict = evaluate_one("lagnaadhi", _pl("Ar", VENUS=_deg("Li"),
+                                            JUPITER=_deg("Sc"),
+                                            SATURN=_deg("Li")))
+    assert verdict.present is False
+    assert "Saturn joins Venus" in verdict.reason
+
+
+def test_lagnaadhi_is_not_the_same_rule_as_adhi():
+    """§11.6 says it "means Adhi Yoga from lagna", but Adhi takes the 6th,
+    7th and 8th from Moon and this takes only the 7th and 8th. See D-35."""
+    assert LAGNAADHI_HOUSES == (7, 8)
+    assert ADHI_HOUSES_FROM_MOON == (6, 7, 8)
+    assert "means Adhi Yoga from lagna" in LAGNAADHI_GLOSS
+    # Moon in Libra puts the 6th, 7th and 8th from her in Pisces, Aries and
+    # Taurus — nowhere near the benefics — while the 7th and 8th from lagna
+    # hold both of them. Adhi fails, Lagnaadhi holds, on one chart.
+    data = _pl("Ar", paksha=0, MOON=_deg("Li", 2), VENUS=_deg("Li", 20),
+               JUPITER=_deg("Sc"))
+    assert evaluate_one("lagnaadhi", data).present is True
+    assert evaluate_one("adhi", data).present is False
+
+
+# --- the Trimurthi three ----------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "key,from_house,houses",
+    [("hari", 2, (2, 12, 8)), ("hara", 7, (4, 9, 8)), ("brahma", 1, (4, 10, 11))],
+)
+def test_the_trimurthi_yogas_count_from_a_lord_not_from_lagna(
+        key, from_house, houses):
+    """Hari from the 2nd lord, Hara from the 7th, Brahma from the lagna lord.
+    Each chart below puts that lord in Aries and benefics in the three houses
+    counted from there."""
+    from hora.charts.planetary_yogas._shared import house_sign
+
+    lord_sign = R["Ar"]
+    targets = [house_sign(lord_sign, h) for h in houses]
+    lord = int(RASI_LORD[(R["Ar"] + from_house - 1) % 12])
+    # The lord may himself be one of the benefics, and he is needed in Aries,
+    # so he is taken out of the pool that fills the three houses.
+    pool = [name for name in ("JUPITER", "MERCURY", "VENUS", "MOON")
+            if int(getattr(Graha, name)) != lord]
+    placement = {name: _deg(RASI_ABBR[sign])
+                 for name, sign in zip(pool, targets)}
+    placement[GRAHA_NAMES[lord].upper()] = _deg("Ar")
+    verdict = evaluate_one(key, _pl("Ar", paksha=0, **placement))
+    assert verdict.present is True, verdict.reason
+    assert f"the {ordinal(from_house)} lord" in verdict.reason
+
+
+def test_hari_names_the_houses_that_had_no_benefic():
+    verdict = evaluate_one("hari", _pl("Ar", VENUS=_deg("Ar"),
+                                       JUPITER=_deg("Ta")))
+    assert verdict.present is False
+    assert "8th" in verdict.reason and "12th" in verdict.reason
+
+
+def test_the_trimurthi_note_is_recorded():
+    assert TRIMURTHI_YOGAS == ("hari", "hara", "brahma")
+    assert "Hari Hara Brahma yoga" in TRIMURTHI_NOTE
+    assert "Trimurthi Yogas" in TRIMURTHI_NOTE
+    for key in TRIMURTHI_YOGAS:
+        assert key in YOGA_REGISTRY
+
+
+def test_brahmas_second_definition_is_carried_not_detected():
+    """NOTE (2) gives an unrelated second rule. The first is what runs; the
+    variation is recorded so it is visibly not dropped."""
+    assert "Jupiter is in a quadrant from the 9th lord" in BRAHMA_VARIATION
+    entry = next(e for e in POPULAR_YOGAS_CONTINUED if e["key"] == "brahma")
+    assert entry["variant"] == BRAHMA_VARIATION
+    assert "4th, 10th and 11th" in entry["definition"]
+
+
+# --- the four that read the navamsa -----------------------------------------
+
+
+def test_vishnu_needs_a_third_planet_from_the_navamsa():
+    jupiter = _navamsa_lon("Ta", "MERCURY")
+    verdict = evaluate_one("vishnu", _pl("Ar", JUPITER=jupiter,
+                                         SATURN=_deg("Ta", 20),
+                                         MERCURY=_deg("Ta", 25)))
+    assert verdict.present is True
+    assert "navamsa" in verdict.reason
+
+
+def test_vishnu_fails_when_that_third_planet_is_elsewhere():
+    jupiter = _navamsa_lon("Ta", "MERCURY")
+    verdict = evaluate_one("vishnu", _pl("Ar", JUPITER=jupiter,
+                                         SATURN=_deg("Ta", 20),
+                                         MERCURY=_deg("Ge", 5)))
+    assert verdict.present is False
+    assert "is not in the 2nd" in verdict.reason
+
+
+def test_gouri_reads_the_navamsa_of_the_tenth_lord():
+    verdict = evaluate_one("gouri", _pl("Ar", SATURN=_navamsa_lon("Aq", "MARS"),
+                                        MARS=_deg("Cp", 10)))
+    assert verdict.present is True
+
+
+def test_gouri_says_when_the_lagna_lord_is_the_same_planet():
+    """"lagna lord joins him" is met by identity here, which the book does
+    not discuss. The verdict says so rather than hiding it."""
+    verdict = evaluate_one("gouri", _pl("Ar", SATURN=_navamsa_lon("Aq", "MARS"),
+                                        MARS=_deg("Cp", 10)))
+    assert any("met by identity" in q for q in verdict.qualifiers)
+
+
+def test_chandikaa_needs_a_fixed_lagna_the_sixth_lord_and_the_sun():
+    verdict = evaluate_one("chandikaa", _pl(
+        "Ta", VENUS=_navamsa_lon("Sc", "JUPITER"),
+        SATURN=_navamsa_lon("Cp", "JUPITER"),
+        JUPITER=_deg("Ar", 5), SUN=_deg("Ar", 8)))
+    assert verdict.present is True
+
+
+def test_chandikaa_fails_on_a_movable_lagna():
+    verdict = evaluate_one("chandikaa", _pl(
+        "Ar", VENUS=_navamsa_lon("Sc", "JUPITER"),
+        SATURN=_navamsa_lon("Cp", "JUPITER"),
+        JUPITER=_deg("Ar", 5), SUN=_deg("Ar", 8)))
+    assert verdict.present is False
+    assert "not a fixed sign" in verdict.reason
+
+
+def test_bhaarathi_takes_any_of_the_2nd_5th_or_11th_lords():
+    verdict = evaluate_one("bhaarathi", _pl(
+        "Ar", VENUS=_navamsa_lon("Ta", "SUN"), SUN=_deg("Ar", 10),
+        JUPITER=_deg("Ar", 20), MERCURY=_deg("Ge", 5), SATURN=_deg("Ge", 6)))
+    assert verdict.present is True
+    assert "2nd lord" in verdict.reason
+
+
+def test_bhaarathis_printed_grammar_is_recorded():
+    """"the lord of the sign occupied in navamsa by 2nd, 5th or 11th lord
+    exalted and joins the 9th lord" — no verb before "exalted"."""
+    entry = next(e for e in POPULAR_YOGAS_CONTINUED
+                 if e["key"] == "bhaarathi")
+    assert "no verb before" in entry["printed_typo"]
+
+
+@pytest.mark.parametrize("key", ["vishnu", "gouri", "chandikaa", "bhaarathi"])
+def test_the_navamsa_four_say_so_when_longitudes_are_missing(key):
+    """A sign-only chart cannot answer these, and the verdict names the
+    reason instead of reporting a bare absence.
+
+    A fixed lagna, because Chandikaa settles on a movable one without ever
+    reaching the navamsa — clause 1 alone decides it.
+    """
+    data = YogaInput(
+        rasis={int(Graha.SUN): R["Ar"], int(Graha.SATURN): R["Ta"],
+               int(Graha.VENUS): R["Ge"], int(Graha.JUPITER): R["Cn"],
+               int(Graha.MERCURY): R["Le"], int(Graha.MARS): R["Vi"]},
+        lagna_rasi=R["Ta"])
+    verdict = evaluate_one(key, data)
+    assert verdict.present is False
+    assert "navamsa" in verdict.reason
+
+
+def test_chandikaa_settles_on_a_movable_lagna_without_the_navamsa():
+    """Clause 1 is decidable from signs alone, so a movable lagna is a plain
+    absence rather than an undecidable one."""
+    data = YogaInput(rasis={int(Graha.SUN): R["Ar"]}, lagna_rasi=R["Ar"])
+    verdict = evaluate_one("chandikaa", data)
+    assert verdict.present is False
+    assert "not a fixed sign" in verdict.reason
+    assert "navamsa" not in verdict.reason
+
+
+# --- the rest, one at a time ------------------------------------------------
+
+
+def test_siva_is_a_three_way_rotation_of_the_5th_9th_and_10th():
+    verdict = evaluate_one("siva", _pl("Ar", SUN=_deg("Sg"),
+                                       JUPITER=_deg("Cp"), SATURN=_deg("Le")))
+    assert verdict.present is True
+
+
+def test_siva_names_each_lord_that_is_out_of_place():
+    verdict = evaluate_one("siva", _pl("Ar", SUN=_deg("Ar"),
+                                       JUPITER=_deg("Ar"), SATURN=_deg("Ar")))
+    assert verdict.present is False
+    for house in ("5th", "9th", "10th"):
+        assert f"the {house} lord" in verdict.reason
+
+
+def test_trilochana_wants_sun_moon_and_mars_in_mutual_trines():
+    verdict = evaluate_one("trilochana", _pl("Ar", paksha=0, SUN=_deg("Ar"),
+                                             MOON=_deg("Le"), MARS=_deg("Sg")))
+    assert verdict.present is True
+
+
+def test_trilochana_absent():
+    verdict = evaluate_one("trilochana", _pl("Ar", paksha=0, SUN=_deg("Ar"),
+                                             MOON=_deg("Ta"), MARS=_deg("Sg")))
+    assert verdict.present is False
+    assert "not in mutual trines" in verdict.reason
+
+
+def test_lakshmi_needs_a_dignified_ninth_lord_in_a_quadrant():
+    verdict = evaluate_one("lakshmi", _pl("Ta", SATURN=_deg("Aq")))
+    assert verdict.present is True
+    assert "his own sign" in verdict.reason
+
+
+def test_lakshmi_separates_undignified_from_badly_placed():
+    assert "neither his own sign nor his exaltation sign" in \
+        evaluate_one("lakshmi", _pl("Ta", SATURN=_deg("Ar"))).reason
+    assert "not a quadrant" in \
+        evaluate_one("lakshmi", _pl("Ta", SATURN=_deg("Cp"))).reason
+
+
+def test_saarada_needs_all_five_clauses():
+    verdict = evaluate_one("saarada", _pl(
+        "Cp", paksha=0, VENUS=_deg("Ta"), MERCURY=_deg("Ar"), SUN=_deg("Le"),
+        MOON=_deg("Cp"), JUPITER=_deg("Ta"), MARS=_deg("Sc")))
+    assert verdict.present is True
+
+
+def test_saarada_names_every_clause_that_failed():
+    verdict = evaluate_one("saarada", _pl("Cp", paksha=0, SUN=_deg("Ar"),
+                                          MERCURY=_deg("Ta"), MOON=_deg("Ge"),
+                                          MARS=_deg("Cn"), VENUS=_deg("Le")))
+    assert verdict.present is False
+    assert "Sun is not in Leo" in verdict.reason
+    assert "Mars is not in the 11th" in verdict.reason
+
+
+def test_saraswathi_lets_the_three_sit_apart():
+    """"not necessarily together" — three separate houses is the point."""
+    verdict = evaluate_one("saraswathi", _pl("Sg", MERCURY=_deg("Ge"),
+                                             JUPITER=_deg("Sg"),
+                                             VENUS=_deg("Cp")))
+    assert verdict.present is True
+
+
+def test_saraswathi_needs_jupiter_well_placed_by_sign():
+    verdict = evaluate_one("saraswathi", _pl("Sg", MERCURY=_deg("Ge"),
+                                             JUPITER=_deg("Cp"),
+                                             VENUS=_deg("Ar")))
+    assert verdict.present is False
+    assert "Jupiter is in neither an own nor a friendly" in verdict.reason
+
+
+def test_amsaavatara_wants_all_three_in_quadrants_with_saturn_exalted():
+    verdict = evaluate_one("amsaavatara", _pl("Ar", JUPITER=_deg("Cn"),
+                                              VENUS=_deg("Cp"),
+                                              SATURN=_deg("Li")))
+    assert verdict.present is True
+
+
+def test_amsaavatara_absent_when_saturn_is_only_in_a_quadrant():
+    verdict = evaluate_one("amsaavatara", _pl("Ar", JUPITER=_deg("Cn"),
+                                              VENUS=_deg("Cp"),
+                                              SATURN=_deg("Cn")))
+    assert verdict.present is False
+    assert "Saturn is not exalted" in verdict.reason
+
+
+def test_devendra_needs_two_exchanges_and_a_fixed_lagna():
+    verdict = evaluate_one("devendra", _pl("Ta", MERCURY=_deg("Aq"),
+                                           SATURN=_deg("Ge"),
+                                           VENUS=_deg("Pi"),
+                                           JUPITER=_deg("Ta")))
+    assert verdict.present is True
+
+
+def test_footnote_35_defines_the_exchange():
+    assert "2nd lord is in the 10th house" in PARIVARTANA_FOOTNOTE
+    assert "parivartana" in PARIVARTANA_FOOTNOTE
+
+
+def test_indra_needs_the_exchange_and_the_moon():
+    assert evaluate_one("indra", _pl("Ar", paksha=0, SUN=_deg("Aq"),
+                                     SATURN=_deg("Le"),
+                                     MOON=_deg("Le"))).present is True
+    verdict = evaluate_one("indra", _pl("Ar", paksha=0, SUN=_deg("Aq"),
+                                        SATURN=_deg("Le"), MOON=_deg("Ar")))
+    assert verdict.present is False
+    assert "Moon is not in the 5th" in verdict.reason
+
+
+def test_ravi_yoga_is_not_one_of_section_11_2s_ravi_yogas():
+    """§11.2's four are a *family* called Ravi yogas. This is a single yoga
+    of that name, printed in §11.6."""
+    assert YOGA_REGISTRY["ravi"].section == "11.6"
+    assert YOGA_REGISTRY["vesi"].group == "ravi"
+    assert YOGA_REGISTRY["ravi"].group == "popular"
+    entry = next(e for e in POPULAR_YOGAS_CONTINUED if e["key"] == "ravi")
+    assert "Not to be confused" in entry["alias_note"]
+
+
+def test_ravi_needs_the_sun_in_the_10th_and_its_lord_in_the_3rd():
+    verdict = evaluate_one("ravi", _pl("Cn", SUN=_deg("Ar"), MARS=_deg("Vi"),
+                                       SATURN=_deg("Vi")))
+    assert verdict.present is True
+    assert "with Saturn" in verdict.reason
+
+
+def test_ravi_says_when_the_tenth_lord_is_saturn_himself():
+    verdict = evaluate_one("ravi", _pl("Ar", SUN=_deg("Cp"), SATURN=_deg("Ge")))
+    assert verdict.present is True
+    assert any("met by identity" in q for q in verdict.qualifiers)
+
+
+def test_bhaaskara_chains_sun_moon_mercury_and_jupiter():
+    verdict = evaluate_one("bhaaskara", _pl("Ar", paksha=0, SUN=_deg("Ar"),
+                                            MOON=_deg("Pi"),
+                                            MERCURY=_deg("Ta"),
+                                            JUPITER=_deg("Cn")))
+    assert verdict.present is True
+
+
+def test_bhaaskara_absent():
+    verdict = evaluate_one("bhaaskara", _pl("Ar", paksha=0, SUN=_deg("Ar"),
+                                            MOON=_deg("Sc"),
+                                            MERCURY=_deg("Ta"),
+                                            JUPITER=_deg("Cn")))
+    assert verdict.present is False
+    assert "not the 12th" in verdict.reason
+
+
+def test_kulavardhana_needs_every_planet_in_one_of_three_signs():
+    """"each planet occupies the 5th house from **either** lagna or Moon or
+    Sun" — three target signs, and nothing outside them."""
+    verdict = evaluate_one("kulavardhana", _pl(
+        "Ar", paksha=0, SUN=_deg("Le"), MOON=_deg("Sg"), MARS=_deg("Ar"),
+        MERCURY=_deg("Le"), JUPITER=_deg("Sg"), VENUS=_deg("Ar"),
+        SATURN=_deg("Le")))
+    assert verdict.present is True
+
+
+def test_kulavardhana_names_the_planets_that_fall_outside():
+    verdict = evaluate_one("kulavardhana", _pl(
+        "Ar", paksha=0, SUN=_deg("Le"), MOON=_deg("Sg"), SATURN=_deg("Ta")))
+    assert verdict.present is False
+    assert "Saturn" in verdict.reason
+
+
+def test_vasumati_counts_upachayas_from_lagna():
+    """The reference is unstated; lagna is used, as everywhere else in
+    §11.6. See OI-84."""
+    assert UPACHAYA == (3, 6, 10, 11)
+    verdict = evaluate_one("vasumati", _pl("Ar", JUPITER=_deg("Ge")))
+    assert verdict.present is True
+    assert "3rd, 6th, 10th, 11th" in verdict.reason
+
+
+def test_vasumati_reports_the_stricter_reading_as_a_qualifier():
+    """One benefic in an upachaya is enough on the plain reading. A verdict
+    says which benefics sit outside, so a stricter caller can decide."""
+    verdict = evaluate_one("vasumati", _pl("Ar", JUPITER=_deg("Ge"),
+                                           VENUS=_deg("Ta")))
+    assert verdict.present is True
+    assert any("OI-84" in q for q in verdict.qualifiers)
+
+
+def test_vasumati_reports_the_printed_fullness_clause():
+    """"malefics should not occupy upachayas" is about full results, not
+    about presence, so it is a qualifier."""
+    verdict = evaluate_one("vasumati", _pl("Ar", JUPITER=_deg("Ge"),
+                                           SATURN=_deg("Ge")))
+    assert verdict.present is True
+    assert any("no malefic in an upachaya" in q for q in verdict.qualifiers)
+
+
+def test_gandharva_needs_all_four_clauses():
+    verdict = evaluate_one("gandharva", _pl("Cn", paksha=0, MARS=_deg("Ta"),
+                                            MOON=_deg("Pi"),
+                                            JUPITER=_deg("Sc"),
+                                            SUN=_deg("Ar")))
+    assert verdict.present is True
+
+
+def test_gandharva_absent():
+    verdict = evaluate_one("gandharva", _pl("Cn", paksha=0, MARS=_deg("Ta"),
+                                            MOON=_deg("Pi"),
+                                            JUPITER=_deg("Sc"),
+                                            SUN=_deg("Ta")))
+    assert verdict.present is False
+    assert "Sun is not exalted" in verdict.reason
+
+
+def test_go_reads_jupiters_moolatrikona_arc_when_longitudes_allow():
+    """"strong in his moolatrikona" — Sagittarius 0° to 10°, per chapter 3."""
+    assert int(MOOLATRIKONA[Graha.JUPITER][0]) == R["Sg"]
+    inside = evaluate_one("go", _pl("Cn", paksha=0, JUPITER=_deg("Sg", 5),
+                                    SUN=_deg("Sg", 6), MOON=_deg("Ta")))
+    assert inside.present is True
+    outside = evaluate_one("go", _pl("Cn", paksha=0, JUPITER=_deg("Sg", 25),
+                                     SUN=_deg("Sg", 26), MOON=_deg("Ta")))
+    assert outside.present is False
+    assert "moolatrikona" in outside.reason
+
+
+def test_chapa_needs_the_exchange_and_an_exalted_lagna_lord():
+    verdict = evaluate_one("chapa", _pl("Cp", SATURN=_deg("Li"),
+                                        MARS=_deg("Li"), VENUS=_deg("Ar")))
+    assert verdict.present is True
+
+
+def test_chapa_absent():
+    verdict = evaluate_one("chapa", _pl("Cp", SATURN=_deg("Ar"),
+                                        MARS=_deg("Li"), VENUS=_deg("Ar")))
+    assert verdict.present is False
+    assert "not exalted" in verdict.reason
+
+
+def test_pushkala_reads_the_moons_dispositor_three_ways():
+    verdict = evaluate_one("pushkala", _pl("Ar", paksha=0, MARS=_deg("Ta"),
+                                           MOON=_deg("Ta"), VENUS=_deg("Li"),
+                                           JUPITER=_deg("Ar")))
+    assert verdict.present is True
+
+
+def test_pushkalas_printed_numbering_is_recorded():
+    """The clauses are printed (1), (2), (2), (4)."""
+    entry = next(e for e in POPULAR_YOGAS_CONTINUED if e["key"] == "pushkala")
+    assert "(1), (2), (2), (4)" in entry["printed_typo"]
+    assert entry["definition"].count("(2)") == 2
+
+
+def test_makuta_counts_the_ninth_twice_over():
+    verdict = evaluate_one("makuta", _pl("Ta", SATURN=_deg("Aq"),
+                                         JUPITER=_deg("Li"), VENUS=_deg("Ge")))
+    assert verdict.present is True
+
+
+def test_makuta_absent():
+    verdict = evaluate_one("makuta", _pl("Ta", SATURN=_deg("Aq"),
+                                         JUPITER=_deg("Sg"), VENUS=_deg("Le")))
+    assert verdict.present is False
+    assert "not the 9th" in verdict.reason
+
+
+@pytest.mark.parametrize("key,house",
+                         [("harsha", 6), ("sarala", 8), ("vimala", 12)])
+def test_the_three_lord_in_own_house_yogas(key, house):
+    """§11.6 closes with three of one shape: the 6th, 8th and 12th lords in
+    their own houses."""
+    assert DUSTHANA_LORD_IN_OWN_HOUSE == ("harsha", "sarala", "vimala")
+    lord_sign = RASI_ABBR[(R["Ar"] + house - 1) % 12]
+    lord = int(RASI_LORD[(R["Ar"] + house - 1) % 12])
+    verdict = evaluate_one(key, _pl(
+        "Ar", paksha=0, **{GRAHA_NAMES[lord].upper(): _deg(lord_sign)}))
+    assert verdict.present is True
+    assert f"the {ordinal(house)} lord" in verdict.reason
+
+
+@pytest.mark.parametrize("key", ["harsha", "sarala", "vimala"])
+def test_those_three_are_absent_when_the_lord_is_in_lagna(key):
+    verdict = evaluate_one(key, _pl("Ar", paksha=0, MERCURY=_deg("Ar"),
+                                    MARS=_deg("Ar"), JUPITER=_deg("Ar")))
+    assert verdict.present is False
+    assert "not the" in verdict.reason
+
+
+# --- deep exaltation, which the book never bounds ---------------------------
+
+
+@pytest.mark.parametrize("key,lord_house", [("jaya", 10), ("vidyut", 11)])
+def test_deep_exaltation_is_a_definite_absence_outside_the_sign(key, lord_house):
+    """When the planet is not even in his exaltation sign, "deep" does not
+    matter and the verdict is a plain absence."""
+    verdict = evaluate_one(key, _pl("Ar", paksha=0, SATURN=_deg("Ar"),
+                                    VENUS=_deg("Ar"), MERCURY=_deg("Ar")))
+    assert verdict.present is False
+    assert "not in deep exaltation" in verdict.reason
+
+
+def test_jaya_says_the_depth_is_undecided_when_the_lord_is_exalted():
+    """lagna Aries: the 10th lord is Saturn, exalted in Libra; the 6th lord
+    Mercury is debilitated in Pisces. Every clause holds except one the book
+    never bounds — how near the exact degree counts as deep. See OI-83."""
+    verdict = evaluate_one("jaya", _pl("Ar", SATURN=_deg("Li", 20),
+                                       MERCURY=_deg("Pi", 5)))
+    assert verdict.present is False
+    assert "cannot be decided" in verdict.reason
+    assert "no threshold" in verdict.reason
+    assert any("OI-83" in q for q in verdict.qualifiers)
+
+
+def test_the_undecided_verdict_still_names_the_distance():
+    """A caller who has their own threshold can apply it."""
+    verdict = evaluate_one("jaya", _pl("Ar", SATURN=_deg("Li", 20),
+                                       MERCURY=_deg("Pi", 5)))
+    assert "from his exact exaltation degree" in verdict.reason
+    assert "20° Libra" in verdict.reason
+
+
+# --- results ----------------------------------------------------------------
+
+
+def test_all_thirty_have_their_results_transcribed():
+    """The other half of §11.6 does print results, unlike the first
+    eighteen — OI-82 is now about those eighteen only."""
+    entries = {e["planetary_yoga"]: e for e in _results()["entries"]}
+    for spec in POPULAR_YOGAS_CONTINUED:
+        entry = entries[spec["key"]]
+        assert entry["results_transcribed"] is True, spec["key"]
+        assert entry["verbatim"].startswith("One born with this yoga"), spec["key"]
+
+
+def test_the_trimurthi_three_share_one_results_sentence():
+    """Hari, Hara and Brahma are given word for word the same result."""
+    entries = {e["planetary_yoga"]: e for e in _results()["entries"]}
+    texts = {entries[key]["verbatim"] for key in TRIMURTHI_YOGAS}
+    assert len(texts) == 1
+    assert "happy, learned and blessed with wealth and children" in texts.pop()
+
+
+@pytest.mark.parametrize("key,typo", [("go", "resepcted"),
+                                      ("saarada", "autere")])
+def test_the_printed_typos_in_the_results_are_kept(key, typo):
+    entry = next(e for e in _results()["entries"] if e["planetary_yoga"] == key)
+    assert typo in entry["verbatim"]
+    assert typo in entry["transcription_notes"]
+
+
+def test_the_thirty_results_are_still_licence_gated(client):
+    body = client.post("/v1/planetary-yoga/chart", json={
+        "lagna_rasi": R["Ar"], "paksha": 0,
+        "rasis": {0: R["Ar"], 1: R["Ta"], 6: R["Li"]}}).json()
+    payload = repr(body).lower()
+    for word in ("invincible", "unsullied", "tapaswi", "aristocratic"):
+        assert word not in payload
+
+
+# --- what Shivaji actually has ----------------------------------------------
+
+
+def test_shivaji_has_none_of_the_thirty():
+    """The section's list runs on past his example, but it is only used for
+    Kalpadruma. None of the thirty is his."""
+    keys = {e["key"] for e in POPULAR_YOGAS_CONTINUED}
+    present = {v.key for v in evaluate(_chart_9()) if v.present}
+    assert not (present & keys)
+
+
+def test_chart_9s_full_verdict_is_still_the_same_five():
+    present = {v.key for v in evaluate(_chart_9()) if v.present}
+    assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma"}
+
+
+# --- what the thirty find in the two charts the book gives -------------------
+
+
+def test_ramas_chart_gives_lakshmi_yoga():
+    """The 9th lord Jupiter is exalted in Cancer, which is the lagna itself —
+    an own-or-exaltation 9th lord in a quadrant. Not asserted from the book;
+    the detector reaches it from the chart chapter 1 already supplied."""
+    verdict = evaluate_one("lakshmi", _rama())
+    assert verdict.present is True
+    assert "his exaltation sign, Cancer" in verdict.reason
+    assert any("lagna lord to be strong" in q for q in verdict.qualifiers)
+
+
+def test_ramas_chart_is_the_case_oi_84_is_about():
+    """Vasumati on Rama's chart is exactly the unsettled reading: one benefic
+    in an upachaya, three outside, and two malefics inside. Present on the
+    plain reading, absent on the strict one — and the verdict says both."""
+    verdict = evaluate_one("vasumati", _rama())
+    assert verdict.present is True
+    assert "Mercury occupies upachayas" in verdict.reason
+    assert any("stricter reading" in q and "OI-84" in q
+               for q in verdict.qualifiers)
+    assert any("no malefic in an upachaya" in q for q in verdict.qualifiers)
+
+
+def test_ramas_chart_has_exactly_these_yogas_across_all_ninety_five():
+    """Pinned whole, so a later change to any detector has to account for the
+    chart the book itself works through."""
+    present = {v.key for v in evaluate(_rama()) if v.present}
+    assert present == {
+        "ruchaka", "sasa", "hamsa", "sarpa", "vesi", "vosi", "ubhayachara",
+        "daama", "subha", "gaja_kesari", "guru_mangala", "sankha", "mridanga",
+        "lakshmi", "vasumati"}

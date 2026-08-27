@@ -16,6 +16,13 @@
     "aakriti_reading_rule": "Where a definition's subject is \u201call the planets\u201d, the test is that every planet lies in the named houses. Where the subject is a house \u2014 \u201clagna and the 7th houses are occupied by natural benefics\u201d \u2014 that house must be occupied.",
     "aasraya_basis": "Aasraya yogas are based on the signs occupied by planets. If all the planets are in movable signs or in fixed signs or in dual signs, these yogas arise.",
     "adhi_example_note": "Section 11.3.6's example places the Moon in Taurus and the benefics in Virgo and Leo, which are the 5th and 4th from Taurus. The rule asks for the 6th, 7th and 8th. The rule is followed.",
+    "adhi_houses_from_moon": [
+      6,
+      7,
+      8
+    ],
+    "brahma_variation": "If (1) Jupiter is in a quadrant from the 9th lord, (2) Venus is in a quadrant from the 11th lord, and, (3) Mercury is in a quadrant from the 1st lord or 10th lord, then this yoga is present.",
+    "brahma_variation_note": "NOTE (2) gives a second, unrelated definition of Brahma yoga. The first one \u2014 benefics in the 4th, 10th and 11th from lagna lord \u2014 is the one detected; the variation is carried here so a caller can see it was not silently dropped.",
     "budha_aaditya_spelling_variants": [
       "Budha-Aditya"
     ],
@@ -28,6 +35,12 @@
     "chandra_intro": "Chandra yogas are the lunar combinations. There are several yogas based on Moon.",
     "combustion_is_a_qualifier_not_a_veto": "Section 11.2.4 says a yoga formed by a combust planet loses \u201csome of their power to do good\u201d, not all of it. A combust yoga is therefore reported as present with a qualifier, never suppressed.",
     "combustion_note": "If Mercury is too close to Sun, he is combust (asta or astangata). Yogas formed by combust planets lose some of their power to do good.",
+    "deep_exaltation_note": "Jaya and Vidyut require a planet in \u201cdeep exaltation\u201d. The book gives the exact exaltation degree but no tolerance around it, so neither yoga is ever reported present: when the planet is not in his exaltation sign the verdict is a definite absence, and when he is, the verdict names his distance from the exact degree and says the depth is undecided. See docs/open-items.md OI-83.",
+    "dusthana_lord_in_own_house": [
+      "harsha",
+      "sarala",
+      "vimala"
+    ],
     "footnotes_unread": [],
     "frequency_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
     "hamsa_means": "a swan",
@@ -62,6 +75,12 @@
     "kemadruma_effort_note": "One with this yoga has to work hard and succeed through great efforts.",
     "kemadruma_is_a_qualifier_not_a_veto": "Section 11.3.4 says Kemadruma kills the *results* of other good yogas, not the yogas themselves. A yoga forming beside it is reported present with a qualifier, never suppressed.",
     "kemadruma_kills_other_yogas": "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas.",
+    "lagnaadhi_gloss": "Adhi means over or above. We have already seen Adhi Yoga among Chandra yogas. Lagnaadhi yoga means Adhi Yoga from lagna.",
+    "lagnaadhi_houses": [
+      7,
+      8
+    ],
+    "lagnaadhi_note": "Section 11.6 says Lagnaadhi yoga \u201cmeans Adhi Yoga from lagna\u201d, but its definition takes only the 7th and 8th, where section 11.3.6\u2019s Adhi takes the 6th, 7th and 8th from Moon. The definition is followed. See docs/book-deviations.md D-35.",
     "maalavya_spelling_variants": [
       "Malavya"
     ],
@@ -192,7 +211,16 @@
       "pancha bhootas": "five existences",
       "pancha tattvas": "five natures"
     },
-    "popular_count": 18,
+    "parivartana_footnote": "That means that the 2nd lord is in the 10th house and the 10th lord is in the 2nd house. Exchange is called \u201cparivartana\u201d in Sanskrit.",
+    "parivartana_sanskrit": "parivartana",
+    "parivartana_yogas": [
+      "devendra",
+      "indra",
+      "chapa"
+    ],
+    "popular_count": 48,
+    "popular_count_after_the_example": 30,
+    "popular_count_before_the_example": 18,
     "popular_fullness_rule": "Sometimes the results of a dasa may be felt even if all the required combinations are not present. But, for a yoga to be fully present, all the required combinations must be present and the participating planets must be strong.",
     "popular_intro": "Some other important combinations will be listed below.",
     "popular_strength_note": "Section 11.6 requires the participating planets to be strong for the yoga to be fully present. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the combinations only.",
@@ -200,15 +228,30 @@
       "bheri": [
         "9th lord"
       ],
+      "gandharva": [
+        "Sun"
+      ],
+      "go": [
+        "Jupiter"
+      ],
       "kaahala": [
+        "lagna lord"
+      ],
+      "lakshmi": [
         "lagna lord"
       ],
       "mridanga": [
         "lagna lord"
       ],
+      "saarada": [
+        "Sun"
+      ],
       "sankha": [
         "lagna lord",
         "9th lord"
+      ],
+      "vasumati": [
+        "benefics occupying upachayas"
       ]
     },
     "preferred_charts": [
@@ -245,6 +288,14 @@
       "sign_name": "Leo",
       "text": "Suppose someone has Sun and Mercury together in Leo in D-10. Then that person has a powerful Budha-Aditya yoga in career. The results will be felt throughout one's life and the periods of Sun, Mercury and Leo will give those results in particular."
     },
+    "trimurthi_combined_name": "Hari Hara Brahma yoga",
+    "trimurthi_note": "Some authors combine Hari yoga, Hara yoga and Brahma yoga and call it \u201cHari Hara Brahma yoga\u201d. Also, these three yogas are known as Trimurthi Yogas. Brahma is the Creator; Hari is the Sustainer; and, Shiva is the Destroyer. They form the Trinity of Gods (Trimurthis).",
+    "trimurthi_yogas": [
+      "hari",
+      "hara",
+      "brahma"
+    ],
+    "vasumati_reference_note": "Vasumati says only \u201cbenefics occupy upachayas\u201d, naming no reference and no count. Houses are counted from lagna, as everywhere else in section 11.6, and one benefic in an upachaya is enough; a verdict says how many benefics sit outside them so a stricter reading stays available. See docs/open-items.md OI-84.",
     "weakened_yoga_is_not_applicable": "A yoga the book says \u201cmay not operate well\u201d does not count as applicable for section 11.5.4's fallback. Lord Sri Rama's chart forces this: its only earlier Naabhasa yoga is a weakened Sarpa, and the book gives the chart as Daama."
   },
   "status": 200

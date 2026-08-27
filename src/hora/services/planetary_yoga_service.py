@@ -30,6 +30,8 @@ from hora.core.const import (
     AAKRITI_READING_RULE,
     AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
+    ADHI_HOUSES_FROM_MOON,
+    BRAHMA_VARIATION,
     BUDHA_AADITYA_SPELLING_VARIANTS,
     BUDHA_AADITYA_TERMS,
     BUDHA_AADITYA_TIMING_CHART,
@@ -45,6 +47,7 @@ from hora.core.const import (
     CHANDRA_MOON_FROM_SUN_GRADE,
     CHANDRA_YOGA_INTRO,
     COMBUSTION_WEAKENS_YOGA,
+    DUSTHANA_LORD_IN_OWN_HOUSE,
     ELEMENT_RULER,
     GRAHA_NAMES,
     HAMSA_MEANS,
@@ -64,6 +67,8 @@ from hora.core.const import (
     KARTARI_MEANS,
     KEMADRUMA_EFFORT_NOTE,
     KEMADRUMA_KILLS_OTHER_YOGAS,
+    LAGNAADHI_GLOSS,
+    LAGNAADHI_HOUSES,
     MAALAVYA_SPELLING_VARIANTS,
     MAHAPURUSHA_ELEMENT_ROLE,
     MAHAPURUSHA_ELEMENT_RULERS_SENTENCE,
@@ -77,12 +82,16 @@ from hora.core.const import (
     NAABHASA_TIMING_RULE,
     PANAPHARA_SPELLING_VARIANTS,
     PANCHA_BHOOTA_NAMES,
+    PARIVARTANA_FOOTNOTE,
+    PARIVARTANA_SANSKRIT,
     PLANET_ELEMENT_ADJECTIVES,
     PLANET_ELEMENT_TATTVAS,
+    POPULAR_YOGA_CONTINUED_COUNT,
     POPULAR_YOGA_COUNT,
     POPULAR_YOGA_FULLNESS_RULE,
     POPULAR_YOGA_INTRO,
-    POPULAR_YOGAS,
+    POPULAR_YOGA_TOTAL,
+    POPULAR_YOGAS_ALL,
     RASI_NAMES,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
@@ -96,6 +105,9 @@ from hora.core.const import (
     STRENGTH_NOT_ASSESSED,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
+    TRIMURTHI_COMBINED_NAME,
+    TRIMURTHI_NOTE,
+    TRIMURTHI_YOGAS,
     UPACHAYA,
     WEAKENED_YOGA_IS_NOT_APPLICABLE,
     Graha,
@@ -439,7 +451,7 @@ def rules() -> dict:
         "popular_strength_note": STRENGTH_NOT_ASSESSED,
         "popular_yogas_needing_a_named_lord": {
             entry["key"]: list(entry["strength"])
-            for entry in POPULAR_YOGAS if entry.get("strength")
+            for entry in POPULAR_YOGAS_ALL if entry.get("strength")
         },
         "popular_intro": POPULAR_YOGA_INTRO,
         # 11.6's only worked example: Chart 9, Chatrapati Shivaji.
@@ -469,7 +481,47 @@ def rules() -> dict:
         "kalpadruma_result_word_sanskrit": (
             KALPADRUMA_RESULT_WORD_SANSKRIT if serving_unconfirmed_allowed() else None
         ),
-        "popular_count": POPULAR_YOGA_COUNT,
+        "popular_count": POPULAR_YOGA_TOTAL,
+        "popular_count_before_the_example": POPULAR_YOGA_COUNT,
+        "popular_count_after_the_example": POPULAR_YOGA_CONTINUED_COUNT,
+        "trimurthi_note": TRIMURTHI_NOTE,
+        "trimurthi_yogas": list(TRIMURTHI_YOGAS),
+        "trimurthi_combined_name": TRIMURTHI_COMBINED_NAME,
+        "brahma_variation": BRAHMA_VARIATION,
+        "brahma_variation_note": (
+            "NOTE (2) gives a second, unrelated definition of Brahma yoga. "
+            "The first one \u2014 benefics in the 4th, 10th and 11th from lagna "
+            "lord \u2014 is the one detected; the variation is carried here so a "
+            "caller can see it was not silently dropped."
+        ),
+        "parivartana_footnote": PARIVARTANA_FOOTNOTE,
+        "parivartana_sanskrit": PARIVARTANA_SANSKRIT,
+        "parivartana_yogas": ["devendra", "indra", "chapa"],
+        "lagnaadhi_gloss": LAGNAADHI_GLOSS,
+        "lagnaadhi_note": (
+            "Section 11.6 says Lagnaadhi yoga \u201cmeans Adhi Yoga from lagna\u201d, "
+            "but its definition takes only the 7th and 8th, where section "
+            "11.3.6\u2019s Adhi takes the 6th, 7th and 8th from Moon. The "
+            "definition is followed. See docs/book-deviations.md D-35."
+        ),
+        "lagnaadhi_houses": list(LAGNAADHI_HOUSES),
+        "adhi_houses_from_moon": list(ADHI_HOUSES_FROM_MOON),
+        "dusthana_lord_in_own_house": list(DUSTHANA_LORD_IN_OWN_HOUSE),
+        "deep_exaltation_note": (
+            "Jaya and Vidyut require a planet in \u201cdeep exaltation\u201d. The book "
+            "gives the exact exaltation degree but no tolerance around it, so "
+            "neither yoga is ever reported present: when the planet is not in "
+            "his exaltation sign the verdict is a definite absence, and when "
+            "he is, the verdict names his distance from the exact degree and "
+            "says the depth is undecided. See docs/open-items.md OI-83."
+        ),
+        "vasumati_reference_note": (
+            "Vasumati says only \u201cbenefics occupy upachayas\u201d, naming no "
+            "reference and no count. Houses are counted from lagna, as "
+            "everywhere else in section 11.6, and one benefic in an upachaya "
+            "is enough; a verdict says how many benefics sit outside them so "
+            "a stricter reading stays available. See docs/open-items.md OI-84."
+        ),
         "kartari_means": KARTARI_MEANS,
         "kartari_houses": list(KARTARI_HOUSES),
         "kartari_definition": KARTARI_DEFINITION,

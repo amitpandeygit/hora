@@ -351,7 +351,33 @@ class PlanetaryYogaRulesOut(BaseModel):
     )
     popular_yogas_needing_a_named_lord: dict[str, list[str]]
     popular_intro: str
-    popular_count: int
+    popular_count: int = Field(
+        description="Every yoga section 11.6 defines, both sides of the "
+                    "Shivaji example.",
+    )
+    popular_count_before_the_example: int
+    popular_count_after_the_example: int
+    trimurthi_note: str
+    trimurthi_yogas: list[str]
+    trimurthi_combined_name: str
+    brahma_variation: str = Field(
+        description="NOTE (2)'s second definition of Brahma yoga. Carried, "
+                    "not detected — the first definition is the one used.",
+    )
+    brahma_variation_note: str
+    parivartana_footnote: str
+    parivartana_sanskrit: str
+    parivartana_yogas: list[str]
+    lagnaadhi_gloss: str
+    lagnaadhi_note: str
+    lagnaadhi_houses: list[int]
+    adhi_houses_from_moon: list[int]
+    dusthana_lord_in_own_house: list[str]
+    deep_exaltation_note: str = Field(
+        description="Why Jaya and Vidyut are never reported present. See "
+                    "docs/open-items.md OI-83.",
+    )
+    vasumati_reference_note: str
     kalpadruma_example: KalpadrumaExampleOut
     kalpadruma_results_footnote: str | None = Field(
         description="Footnote 34. PVR's own prose, so it is withheld under "

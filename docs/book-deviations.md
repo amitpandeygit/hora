@@ -1051,3 +1051,27 @@ conditions — those are decided in the rasi chart and the yoga is present for
 Shivaji either way. The sentence is transcribed verbatim in
 `KALPADRUMA_EXAMPLE_CONCLUSION`, the disputed phrase is isolated in
 `KALPADRUMA_EXAMPLE_NAVAMSA_LAGNA_CLAIM`, and both readings are tested.
+
+## D-35 · §11.6 says Lagnaadhi "means Adhi Yoga from lagna", but the two rules differ
+
+**Status: recorded.** The definition is followed, not the gloss.
+
+§11.6: "If (1) the 7th and 8th houses from lagna are occupied by benefics and
+(2) no malefics conjoin or aspect these planets, then this yoga is present...
+We have already seen Adhi Yoga among Chandra yogas. Lagnaadhi yoga means Adhi
+Yoga from lagna."
+
+§11.3.6's Adhi takes the **6th, 7th and 8th** from Moon. Lagnaadhi's own
+definition takes the **7th and 8th** from lagna. If it were literally "Adhi
+from lagna" it would take three houses, not two — and it adds a second clause
+Adhi does not have, that no malefic conjoins or aspects those benefics.
+
+**What we do:** the definition governs, per
+[precedence.md](precedence.md) tie-break rule 2 — the sentence that states the
+rule outranks the sentence that glosses the name. `LAGNAADHI_HOUSES` is
+`(7, 8)` and `ADHI_HOUSES_FROM_MOON` is `(6, 7, 8)`, both served on `/rules`,
+and a test builds one chart on which Adhi is absent and Lagnaadhi is present
+so the difference is not merely asserted.
+
+Note this is the second time §11.6 attaches a name to a rule that does not
+match it — see D-30, where §11.4.5's Hamsa definition calls the yoga Ruchaka.

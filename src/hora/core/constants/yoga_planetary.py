@@ -1179,3 +1179,230 @@ KALPADRUMA_EXAMPLE_CHAIN: tuple[str, ...] = ("Sun", "Saturn", "Venus", "Saturn")
 #: and no special lagna the chart draws sits in Gemini either. See
 #: docs/book-deviations.md D-34.
 KALPADRUMA_EXAMPLE_NAVAMSA_LAGNA_CLAIM = "Venus is in a lagna"
+
+
+# --------------------------------------------------------------------------
+# 11.6, continued — thirty more popular yogas
+#
+# The section's list runs on past the Shivaji example. These thirty are not
+# Shivaji's yogas; he is used only for Kalpadruma. Unlike the first eighteen,
+# each of these prints its own Results sentence, which is transcribed in
+# data/content/yoga_results.yaml.
+# --------------------------------------------------------------------------
+
+#: Footnote 35, defining the exchange three of these yogas turn on.
+PARIVARTANA_FOOTNOTE = (
+    "That means that the 2nd lord is in the 10th house and the 10th lord is "
+    "in the 2nd house. Exchange is called \u201cparivartana\u201d in Sanskrit.")
+
+PARIVARTANA_SANSKRIT = "parivartana"
+
+#: NOTE (1) after Brahma yoga.
+TRIMURTHI_NOTE = (
+    "Some authors combine Hari yoga, Hara yoga and Brahma yoga and call it "
+    "\u201cHari Hara Brahma yoga\u201d. Also, these three yogas are known as "
+    "Trimurthi Yogas. Brahma is the Creator; Hari is the Sustainer; and, "
+    "Shiva is the Destroyer. They form the Trinity of Gods (Trimurthis).")
+
+TRIMURTHI_YOGAS: tuple[str, ...] = ("hari", "hara", "brahma")
+TRIMURTHI_COMBINED_NAME = "Hari Hara Brahma yoga"
+
+#: NOTE (2) after Brahma yoga: a second definition, kept beside the first.
+BRAHMA_VARIATION = (
+    "If (1) Jupiter is in a quadrant from the 9th lord, (2) Venus is in a "
+    "quadrant from the 11th lord, and, (3) Mercury is in a quadrant from the "
+    "1st lord or 10th lord, then this yoga is present.")
+
+#: §11.6 says Lagnaadhi "means Adhi Yoga from lagna", but its own definition
+#: takes only the 7th and 8th, where §11.3.6's Adhi takes the 6th, 7th and
+#: 8th from Moon. The definition is followed. See docs/book-deviations.md.
+LAGNAADHI_GLOSS = (
+    "Adhi means over or above. We have already seen Adhi Yoga among Chandra "
+    "yogas. Lagnaadhi yoga means Adhi Yoga from lagna.")
+LAGNAADHI_HOUSES: tuple[int, ...] = (7, 8)
+ADHI_HOUSES_FROM_MOON: tuple[int, ...] = (6, 7, 8)
+
+POPULAR_YOGAS_CONTINUED: tuple[dict, ...] = (
+    {"key": "lagnaadhi", "name": "Lagnaadhi Yoga", "name_means": None,
+     "definition": ("If (1) the 7th and 8th houses from lagna are occupied by "
+                    "benefics and (2) no malefics conjoin or aspect these "
+                    "planets, then this yoga is present."),
+     "gloss": LAGNAADHI_GLOSS},
+    {"key": "hari", "name": "Hari Yoga",
+     "name_means": "a name of Lord Vishnu",
+     "definition": ("If benefics occupy the 2nd, 12th and 8th houses counted "
+                    "from the 2nd lord, then this yoga is present."),
+     "reason": ("The 2nd house is the house of food and money and it is a "
+                "trine from karma sthana \u2013 the 10th house. It stands for "
+                "sustenance and its lord represents Hari \u2013 Sustainer of "
+                "Hindu Trinity \u2013 in a chart.")},
+    {"key": "hara", "name": "Hara Yoga",
+     "name_means": "a name of Lord Shiva",
+     "definition": ("If benefics occupy the 4th, 9th and 8th houses counted "
+                    "from the 7th lord, then this yoga is present."),
+     "reason": ("The 7th house rules death and Shiva is represented by its "
+                "lord. This is why the 7th house shows genitalia and Shiva "
+                "is worshipped in the form of a Linga \u2013 Phallus \u2013 in "
+                "Hindu temples.")},
+    {"key": "brahma", "name": "Brahma Yoga",
+     "name_means": "the creator of this universe",
+     "definition": ("If benefics occupy the 4th, 10th and 11th houses counted "
+                    "from lagna lord, then this yoga is present."),
+     "reason": ("Lagna rules birth and the Creator is represented in a chart "
+                "by lagna lord."),
+     "variant": BRAHMA_VARIATION},
+    {"key": "vishnu", "name": "Vishnu Yoga", "name_means": None,
+     "definition": ("If (1) the 9th and 10th lords are in the 2nd house and "
+                    "(2) the lord of the sign occupied in navamsa by the 9th "
+                    "lord in rasi chart is also in the 2nd house, then this "
+                    "yoga is present."),
+     "needs_navamsa": True},
+    {"key": "siva", "name": "Siva Yoga",
+     "name_means": "one of the Trinity of Gods",
+     "definition": ("If (1) the 5th lord is in the 9th house, (2) the 9th "
+                    "lord is in the 10th house, and, (3) the 10th lord is in "
+                    "the 5th house, then this yoga is present.")},
+    {"key": "trilochana", "name": "Trilochana Yoga",
+     "name_means": ("\u201cone with three eyes\u201d. It is another name of Lord "
+                    "Siva, who has a hidden eye in His forehead"),
+     "definition": ("If Sun, Moon and Mars are in mutual trines, then this "
+                    "yoga is present.")},
+    {"key": "gouri", "name": "Gouri Yoga",
+     "name_means": ("a form of Parvati \u2013 Lord Siva\u2019s wife. She is an "
+                    "epitome of marital bliss and purity"),
+     "definition": ("If the lord of the sign occupied in navamsa by the 10th "
+                    "lord is exalted in the 10th house and lagna lord joins "
+                    "him, then this yoga is present."),
+     "needs_navamsa": True},
+    {"key": "chandikaa", "name": "Chandikaa Yoga",
+     "name_means": ("an aggressive form of Parvati. She kills demons "
+                    "mercilessly"),
+     "definition": ("If (1) lagna is in a fixed sign aspected by 6th lord and "
+                    "(2) Sun joins the lords of the signs occupied in navamsa "
+                    "by 6th and 9th lords, then this yoga is present."),
+     "needs_navamsa": True},
+    {"key": "lakshmi", "name": "Lakshmi Yoga",
+     "name_means": "Vishnu\u2019s wife. She is the goddess of prosperity",
+     "definition": ("If (1) the 9th lord is in an own sign or in his "
+                    "exaltation sign that happens to be quadrant from lagna "
+                    "and (2) lagna lord is strong, then this yoga is present."),
+     "strength": ("lagna lord",)},
+    {"key": "saarada", "name": "Saarada Yoga",
+     "name_means": ("another name of Saraswathi, the goddess of learning"),
+     "definition": ("If (1) the 10th lord is in the 5th house, (2) Mercury is "
+                    "in a quadrant, (3) Sun is strong in Leo, (4) Mercury or "
+                    "Jupiter is in a trine from Moon, and, (5) Mars is in "
+                    "11th, then this yoga is present."),
+     "strength": ("Sun",)},
+    {"key": "bhaarathi", "name": "Bhaarathi Yoga",
+     "name_means": ("another name of Saraswathi, the goddess of learning"),
+     "definition": ("If the lord of the sign occupied in navamsa by 2nd, 5th "
+                    "or 11th lord exalted and joins the 9th lord, then this "
+                    "yoga is present."),
+     "printed_typo": ("the definition reads \u201cis occupied in navamsa by 2nd, "
+                      "5th or 11th lord exalted and joins\u201d, with no verb "
+                      "before \u201cexalted\u201d; read as \u201cis exalted and joins\u201d"),
+     "needs_navamsa": True},
+    {"key": "saraswathi", "name": "Saraswathi Yoga",
+     "name_means": "the goddess of learning",
+     "definition": ("If (1) each of Mercury, Jupiter and Venus occupies a "
+                    "quadrant or a trine or the 2nd house (not necessarily "
+                    "together) and (2) Jupiter is in an own or friendly or "
+                    "exaltation sign, then this yoga is present.")},
+    {"key": "amsaavatara", "name": "Amsaavatara Yoga",
+     "name_means": "one who is an incarnation of a part of the Lord",
+     "definition": ("If Jupiter, Venus and exalted Saturn are in quadrants, "
+                    "then this yoga is present.")},
+    {"key": "devendra", "name": "Devendra Yoga",
+     "name_means": "the ruler of gods",
+     "definition": ("If (1) lagna is in a fixed sign, (2) 2nd and 10th lords "
+                    "have an exchange, and, (3) lagna and 11th lords have an "
+                    "exchange, then this yoga is present."),
+     "footnote": PARIVARTANA_FOOTNOTE},
+    {"key": "indra", "name": "Indra Yoga",
+     "name_means": "the ruler of gods",
+     "definition": ("If (1) the 5th and 11th lords have an exchange and (2) "
+                    "Moon occupies the 5th house, then this yoga is present.")},
+    {"key": "ravi", "name": "Ravi Yoga", "name_means": "Sun",
+     "definition": ("If (1) Sun is in the 10th house and (2) the 10th lord is "
+                    "in the 3rd house with Saturn, then this yoga is present."),
+     "alias_note": ("Not to be confused with the four Ravi yogas of section "
+                    "11.2, which are a family and not a yoga of this name.")},
+    {"key": "bhaaskara", "name": "Bhaaskara Yoga",
+     "name_means": "\u201cone with bright rays\u201d. It is a name of Sun",
+     "definition": ("If (1) Moon is in the 12th from Sun, (2) Mercury is in "
+                    "the 2nd from Sun, and, (3) Jupiter is in the 5th or 9th "
+                    "from Moon, then this yoga is present.")},
+    {"key": "kulavardhana", "name": "Kulavardhana Yoga",
+     "name_means": ("Kula means \u201clineage or community\u201d. Vardhana means "
+                    "\u201cone who makes it grow and prosper\u201d"),
+     "definition": ("If each planet occupies the 5th house from either lagna "
+                    "or Moon or Sun, then this yoga is present.")},
+    {"key": "vasumati", "name": "Vasumati Yoga", "name_means": "earth",
+     "definition": ("If benefics occupy upachayas, then this yoga is "
+                    "present."),
+     "fullness": ("For it to give full results, malefics should not occupy "
+                  "upachayas and the benefics occupying upachayas should be "
+                  "strong."),
+     "strength": ("benefics occupying upachayas",)},
+    {"key": "gandharva", "name": "Gandharva Yoga",
+     "name_means": ("a class of gods with excellent skills in singing and "
+                    "other fine arts"),
+     "definition": ("If (1) the 10th lord is in a trine from the 7th house, "
+                    "(2) lagna lord is conjoined or aspected by Jupiter, (3) "
+                    "Sun is exalted and strong, and, (4) Moon is in the 9th "
+                    "house, then this yoga is present."),
+     "strength": ("Sun",)},
+    {"key": "go", "name": "Go Yoga", "name_means": "a cow",
+     "definition": ("If (1) Jupiter is strong in his moolatrikona, (2) the "
+                    "lord of the 2nd house is with Jupiter, and, (3) lagna "
+                    "lord is exalted, then this yoga is present."),
+     "strength": ("Jupiter",),
+     "printed_typo": "resepcted"},
+    {"key": "vidyut", "name": "Vidyut Yoga",
+     "name_means": "a lightning bolt or electricity",
+     "definition": ("If (1) the 11th lord is in deep exaltation, (2) he joins "
+                    "Venus, and, (3) the two of them are in a quadrant from "
+                    "lagna lord, then this yoga is present."),
+     "needs_longitudes": True},
+    {"key": "chapa", "name": "Chapa Yoga", "name_means": "a bow",
+     "definition": ("If (1) the 4th and 10th lords have an exchange and (2) "
+                    "lagna lord is exalted, then this yoga is present.")},
+    {"key": "pushkala", "name": "Pushkala Yoga", "name_means": "abundant",
+     "definition": ("If (1) lagna lord is with Moon, (2) dispositor of Moon "
+                    "is in a quadrant or in the house of an adhimitra (good "
+                    "friend), (2) dispositor of Moon aspects lagna, and, (4) "
+                    "there is a planet in lagna, then this yoga is present."),
+     "printed_typo": ("the clauses are numbered (1), (2), (2), (4); the third "
+                      "is read as (3)")},
+    {"key": "makuta", "name": "Makuta Yoga", "name_means": "crown",
+     "definition": ("If (1) Jupiter is in the 9th house from the 9th lord, "
+                    "(2) the 9th house from Jupiter has a benefic, and, (3) "
+                    "Saturn is in the 10th house, then this yoga is present.")},
+    {"key": "jaya", "name": "Jaya Yoga", "name_means": "victorious",
+     "definition": ("If (1) the 10th lord is in deep exaltation and (2) the "
+                    "6th lord is debilitated, then this yoga is present."),
+     "needs_longitudes": True},
+    {"key": "harsha", "name": "Harsha Yoga", "name_means": "joyous",
+     "definition": ("If the 6th lord occupies the 6th house, then this yoga "
+                    "is present.")},
+    {"key": "sarala", "name": "Sarala Yoga", "name_means": "straight-forward",
+     "definition": ("If the 8th lord occupies the 8th house, then this yoga "
+                    "is present.")},
+    {"key": "vimala", "name": "Vimala Yoga", "name_means": "pure",
+     "definition": ("If the 12th lord occupies the 12th house, then this yoga "
+                    "is present.")},
+)
+
+#: §11.6's three "the lord occupies his own house" yogas, printed together
+#: at the end of the section: Harsha (6th), Sarala (8th) and Vimala (12th).
+DUSTHANA_LORD_IN_OWN_HOUSE: tuple[str, ...] = ("harsha", "sarala", "vimala")
+
+
+POPULAR_YOGA_CONTINUED_COUNT = len(POPULAR_YOGAS_CONTINUED)
+
+#: Every §11.6 yoga, first eighteen and the thirty that follow the Shivaji
+#: example. They are one list in the book; the split here is only the order
+#: in which the section was read.
+POPULAR_YOGAS_ALL: tuple[dict, ...] = POPULAR_YOGAS + POPULAR_YOGAS_CONTINUED
+POPULAR_YOGA_TOTAL = len(POPULAR_YOGAS_ALL)

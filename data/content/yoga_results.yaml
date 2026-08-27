@@ -1045,3 +1045,249 @@ entries:
     combinations only. No results paragraph for it has been transcribed, so nothing
     is served. See docs/open-items.md OI-82.
   terms: []
+- planetary_yoga: lagnaadhi
+  name: Lagnaadhi Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga becomes a great person. He is learned and happy."
+  terms: []
+- planetary_yoga: hari
+  name: Hari Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is happy, learned and blessed with wealth and children."
+  transcription_notes: "Word for word the same sentence Hara yoga and Brahma yoga are given."
+  terms: []
+- planetary_yoga: hara
+  name: Hara Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is happy, learned and blessed with wealth and children."
+  transcription_notes: "Word for word the same sentence Hari yoga and Brahma yoga are given."
+  terms: []
+- planetary_yoga: brahma
+  name: Brahma Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is happy, learned and blessed with wealth and children."
+  transcription_notes: "Word for word the same sentence Hari yoga and Hara yoga are given."
+  terms: []
+- planetary_yoga: vishnu
+  name: Vishnu Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is fortunate, learned, long-lived and liked by kings. He is a worshipper of Vishnu."
+  terms: []
+- planetary_yoga: siva
+  name: Siva Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is wise and virtuous. He is a conqueror. He can be an army chief or a businessman."
+  terms: []
+- planetary_yoga: trilochana
+  name: Trilochana Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is wealthy, intelligent, long-lived and victorious over enemies. He achieves everything without many obstacles."
+  terms: []
+- planetary_yoga: gouri
+  name: Gouri Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is from a respectable family and he is religious and virtuous. He is blessed with happiness from family."
+  terms: []
+- planetary_yoga: chandikaa
+  name: Chandikaa Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is aggressive, charitable, wealthy, famous and long-lived."
+  terms: []
+- planetary_yoga: lakshmi
+  name: Lakshmi Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga becomes a king. He is blessed with good looks, character, wealth and many children. He is principled and famous."
+  terms: []
+- planetary_yoga: saarada
+  name: Saarada Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is blessed with wealth, spouse and children. He is happy, learned, principled and liked by kings. He is a tapaswi (autere pursuer of knowledge)."
+  transcription_notes: "The book prints “autere” for “austere”. Transcribed as printed."
+  terms: []
+- planetary_yoga: bhaarathi
+  name: Bhaarathi Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is a great scholar. He is intelligent, religious, good-looking and famous."
+  terms: []
+- planetary_yoga: saraswathi
+  name: Saraswathi Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is very learned, skillful, intelligent, rich and famous. He is praised by all."
+  terms: []
+- planetary_yoga: amsaavatara
+  name: Amsaavatara Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga becomes a king or an equal. He is learned and pleasure-loving. He has unsullied reputation."
+  terms: []
+- planetary_yoga: devendra
+  name: Devendra Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is a leader of men. He is handsome, romantic, long-lived and famous."
+  terms: []
+- planetary_yoga: indra
+  name: Indra Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga becomes a king. He is bold, famous and long-lived."
+  terms: []
+- planetary_yoga: ravi
+  name: Ravi Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is learned, passionate and respected by kings."
+  terms: []
+- planetary_yoga: bhaaskara
+  name: Bhaaskara Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is wealthy, valorous and aristocratic. He is learned in sastras, astrology and music. He has a good personality."
+  terms: []
+- planetary_yoga: kulavardhana
+  name: Kulavardhana Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is happy, wealthy and brings name to his lineage and community. He has an unbroken line of worthy successors."
+  terms: []
+- planetary_yoga: vasumati
+  name: Vasumati Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga has abundant wealth."
+  terms: []
+- planetary_yoga: gandharva
+  name: Gandharva Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is skillful and famous in fine arts."
+  terms: []
+- planetary_yoga: go
+  name: Go Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is from a respectable family. He is wealthy and resepcted by all."
+  transcription_notes: "The book prints “resepcted” for “respected”. Transcribed as printed."
+  terms: []
+- planetary_yoga: vidyut
+  name: Vidyut Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga becomes a king or an equal. He is wealthy, pleasure-loving and charitable."
+  terms: []
+- planetary_yoga: chapa
+  name: Chapa Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga works for a king and commands a lot of wealth."
+  terms: []
+- planetary_yoga: pushkala
+  name: Pushkala Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is eloquent, wealthy,  famous and respected by kings."
+  transcription_notes: "The book prints two spaces before “famous”. Transcribed as printed."
+  terms: []
+- planetary_yoga: makuta
+  name: Makuta Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is a powerful leader of men. He often manages unruly activities."
+  terms: []
+- planetary_yoga: jaya
+  name: Jaya Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is happy, successful, victorious over enemies and long-lived."
+  terms: []
+- planetary_yoga: harsha
+  name: Harsha Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is happy, strong, good-natured and invincible."
+  terms: []
+- planetary_yoga: sarala
+  name: Sarala Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is long-lived, fearless, learned, celebrated and prosperous. He is a terror to his enemies."
+  terms: []
+- planetary_yoga: vimala
+  name: Vimala Yoga
+  source: pvr-vaia
+  section: '11.6'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is noble, frugal, happy and independent."
+  terms: []

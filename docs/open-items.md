@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 45 waiting on evidence · 2 parked**
+**5 waiting on Amit · 47 waiting on evidence · 2 parked**
 
 ---
 
@@ -271,6 +271,45 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
 
+### OI-83 — "deep exaltation" has an exact degree but no tolerance
+
+Jaya wants the 10th lord "in deep exaltation"; Vidyut wants the 11th lord the
+same. The book gives each planet's exact exaltation degree — Sun 10° Aries,
+Saturn 20° Libra and so on — but never says how near that degree counts as
+*deep*. A whole sign is plainly too wide, or the word adds nothing; an exact
+match never happens.
+
+**What we do:** neither yoga is ever reported present, and the two failures are
+kept apart. When the planet is not in his exaltation sign at all the verdict is
+a plain, definite absence — which settles almost every chart. When he *is*
+there, the verdict names his distance from the exact degree, says section 11.6
+gives no threshold, and carries a qualifier pointing here. A caller with their
+own threshold has the number they need.
+
+**Closes when:** you give a tolerance, or a later chapter defines it, or
+JHora's output shows what it uses.
+
+### OI-84 — Vasumati names no reference and no count
+
+"If benefics occupy upachayas, then this yoga is present." Upachayas from
+what — lagna, Moon, Sun? And how many benefics: one, or all of them?
+
+§11.3's guideline 3 counts benefics in upachayas **from Moon** and grades the
+result — all of them is great wealth, two is medium, one is little. Vasumati
+neither names Moon nor grades.
+
+**What we do:** houses are counted from **lagna**, as everywhere else in
+§11.6, and one benefic in an upachaya is enough — the plain reading, and the
+one the printed fullness clause implies when it says "the benefics occupying
+upachayas should be strong", which presumes some do and some may not. Any
+verdict that is present also names the benefics sitting outside the upachayas,
+so a caller wanting the stricter "all of them" reading has what they need
+without the engine choosing for them. The fullness clause's other half — "no
+malefic should occupy upachayas" — is reported as a qualifier, never as part
+of the presence test, because the book attaches it to full results.
+
+**Closes when:** you settle the reference and the count.
+
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 
 §11.6's preamble binds all eighteen:
@@ -298,13 +337,17 @@ carries the preamble and the note.
 **Closes when:** chapter 15's strength measure is implemented, and the four
 named-lord clauses can be decided rather than deferred.
 
-### OI-82 — §11.6's results prose has not been supplied
+### OI-82 — the first eighteen §11.6 yogas have no results prose
 
-The §11.6 material supplied gives each yoga's defining combinations,
-name meaning, footnotes and alternatives. No results paragraph for any of the
-eighteen has been transcribed, where §11.2 to §11.5 each have one.
+The §11.6 material supplied for the eighteen printed **before** the Shivaji
+example gives each yoga's defining combinations, name meaning, footnotes and
+alternatives, but no results paragraph, where §11.2 to §11.5 each have one.
 
-All eighteen have entries in `data/content/yoga_results.yaml` carrying
+The thirty printed **after** that example each carry their own Results
+sentence, and all thirty are transcribed. So the gap is specific to the first
+eighteen, not to the section.
+
+Those eighteen have entries in `data/content/yoga_results.yaml` carrying
 `results_transcribed: false` and a null `verbatim`, so the registry-to-results
 exhaustiveness guard still holds and the gap is visible rather than reading as
 "this yoga has no results".
