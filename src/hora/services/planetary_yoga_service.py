@@ -21,6 +21,12 @@ from hora.charts.planetary_yogas import (
 from hora.charts.planetary_yogas.registry import describe
 from hora.core import validate
 from hora.core.const import (
+    AAKRITI_BASIS,
+    AAKRITI_MEANS,
+    AAKRITI_NAME_VARIANTS,
+    AAKRITI_NODES_NOTE,
+    AAKRITI_ORDER_DIFFERS,
+    AAKRITI_READING_RULE,
     AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
     BUDHA_AADITYA_SPELLING_VARIANTS,
@@ -335,10 +341,18 @@ def rules() -> dict:
         # nowhere we have read. Listed so the gap shows in the API rather than
         # looking like an absence.
         "naabhasa_not_yet_defined": list(NAABHASA_NOT_YET_DEFINED),
+        "aakriti_means": AAKRITI_MEANS,
+        "aakriti_basis": AAKRITI_BASIS,
+        "aakriti_nodes_note": AAKRITI_NODES_NOTE,
+        "aakriti_reading_rule": AAKRITI_READING_RULE,
+        "aakriti_name_variants": {
+            key: list(values) for key, values in AAKRITI_NAME_VARIANTS.items()
+        },
+        "aakriti_order_differs": AAKRITI_ORDER_DIFFERS,
         "naabhasa_gap_note": (
-            "Section 11.5 classifies 32 Naabhasa yogas and sections 11.5.1 and "
-            "11.5.2 define five of them. The other 27 — the Aakriti and "
-            "Sankhya families — are named only. They are listed here rather "
+            "Section 11.5 classifies 32 Naabhasa yogas. Sections 11.5.1, "
+            "11.5.2 and 11.5.3 define 25 of them; the Sankhya seven of "
+            "section 11.5.4 are named only. They are listed here rather "
             "than registered, so that a yoga the engine cannot detect never "
             "appears among the verdicts where its absence would read as a "
             "finding."

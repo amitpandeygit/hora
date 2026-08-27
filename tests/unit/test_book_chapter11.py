@@ -21,6 +21,12 @@ from hora.charts.planetary_yogas import (
     groups,
 )
 from hora.core.const import (
+    AAKRITI_BASIS,
+    AAKRITI_MEANS,
+    AAKRITI_NAME_VARIANTS,
+    AAKRITI_NODES_NOTE,
+    AAKRITI_ORDER_DIFFERS,
+    AAKRITI_YOGAS,
     AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
     BUDHA_AADITYA_CHART_NOTE,
@@ -555,8 +561,9 @@ def test_one_endpoint_answers_a_single_yoga(client):
 def test_catalogue_lists_every_yoga_without_a_chart(client):
     body = client.get("/v1/planetary-yoga/catalogue").json()
     assert body["count"] == len(YOGA_REGISTRY)
-    assert body["groups"] == ["chandra", "mahapurusha",
-                              "naabhasa_aasraya", "naabhasa_dala", "ravi"]
+    assert set(body["groups"]) == {
+        "ravi", "chandra", "mahapurusha",
+        "naabhasa_aasraya", "naabhasa_dala", "naabhasa_aakriti"}
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -1512,9 +1519,9 @@ def test_11_5_the_four_families_come_to_thirty_two():
     assert len(set(names)) == 32, "no name appears in two families"
 
 
-def test_11_5_only_five_of_the_thirty_two_are_defined_so_far():
-    """§11.5.1 and §11.5.2 define five. The other twenty-seven are **named
-    only**.
+def test_11_5_twenty_five_of_the_thirty_two_are_defined():
+    """§11.5.1, §11.5.2 and §11.5.3 define twenty-five. The Sankhya seven of
+    §11.5.4 are **named only**.
 
     They are listed rather than registered: a yoga the engine cannot detect
     must not appear among the verdicts, where `present: false` would read as a
@@ -1522,9 +1529,11 @@ def test_11_5_only_five_of_the_thirty_two_are_defined_so_far():
     """
     registered = {k for k, s in YOGA_REGISTRY.items()
                   if s.group.startswith("naabhasa_")}
-    assert len(registered) == 5
-    assert len(NAABHASA_NOT_YET_DEFINED) == 27
+    assert len(registered) == 25
+    assert len(NAABHASA_NOT_YET_DEFINED) == 7
     assert len(registered) + len(NAABHASA_NOT_YET_DEFINED) == 32
+    assert set(NAABHASA_NOT_YET_DEFINED) == set(
+        NAABHASA_CLASSIFICATION["sankhya"]["names"])
 
 
 def test_11_5_no_undefined_yoga_leaks_into_the_registry():
@@ -1536,13 +1545,16 @@ def test_11_5_no_undefined_yoga_leaks_into_the_registry():
     assert not (defined & set(NAABHASA_NOT_YET_DEFINED))
 
 
-def test_11_5_the_defined_five_are_the_first_two_families():
-    """Aasraya and Dala, whole. The gap is Aakriti and Sankhya entire, not a
-    scatter across all four — so the missing sections are §11.5.3 and
-    §11.5.4."""
-    defined = {y["name"].replace(" Yoga", "") for y in NAABHASA_YOGAS}
-    assert defined == set(NAABHASA_CLASSIFICATION["aasraya"]["names"]) | set(
-        NAABHASA_CLASSIFICATION["dala"]["names"])
+def test_11_5_the_gap_is_one_whole_family_not_a_scatter():
+    """Aasraya, Dala and Aakriti are complete; Sankhya is entirely missing. So
+    the one section still to come is §11.5.4, not a handful of yogas spread
+    across four."""
+    registered = {s.group for k, s in YOGA_REGISTRY.items()
+                  if s.group.startswith("naabhasa_")}
+    assert registered == {"naabhasa_aasraya", "naabhasa_dala",
+                          "naabhasa_aakriti"}
+    assert set(NAABHASA_NOT_YET_DEFINED) == set(
+        NAABHASA_CLASSIFICATION["sankhya"]["names"])
 
 
 def test_11_5_naabhasa_results_are_felt_in_all_dasas():
@@ -1807,3 +1819,342 @@ def test_11_5_2_both_examples_leave_the_ascendant_empty():
         lagna_rasi=R["Ar"], paksha=0))
     assert with_first.present
     assert 1 in with_first.houses.values()
+
+
+# --------------------------------------------------------------------------
+# 11.5.3 Aakriti yogas
+# --------------------------------------------------------------------------
+
+_SEVEN = (Graha.SUN, Graha.MOON, Graha.MARS, Graha.MERCURY, Graha.JUPITER,
+          Graha.VENUS, Graha.SATURN)
+
+
+def _spread(houses, lagna=0, **extra):
+    """Place the seven across `houses`, counted from `lagna`."""
+    rasis = {int(g): (lagna + houses[i % len(houses)] - 1) % 12
+             for i, g in enumerate(_SEVEN)}
+    return YogaInput(rasis=rasis, lagna_rasi=lagna, paksha=0, **extra)
+
+
+def test_11_5_3_aakriti_means_a_shape():
+    """"Aakriti means a shape and the many of these yogas are based on the
+    shape of the arrangement of planets in a chart."""
+    assert AAKRITI_MEANS == "a shape"
+    assert "shape of the arrangement of planets" in AAKRITI_BASIS
+
+
+def test_11_5_3_answers_the_node_question_for_this_family():
+    """"In all these yogas, Rahu and Ketu are **not counted as planets by many
+    authors**."
+
+    The closest the book comes to settling OI-73, and it settles it by
+    attribution rather than by ruling — "by many authors", not "we do not".
+    Our default already excludes them, so §11.5.3 confirms rather than changes
+    anything.
+    """
+    assert "not counted as planets by many authors" in AAKRITI_NODES_NOTE
+    default = YogaInput(rasis={int(Graha.SUN): 0})
+    assert Graha.RAHU not in default.considered()
+    assert Graha.KETU not in default.considered()
+
+
+def test_11_5_3_has_all_twenty():
+    """The Aakriti family is twenty, and §11.5.3 defines every one."""
+    assert len(AAKRITI_YOGAS) == 20
+    registered = {k for k, s in YOGA_REGISTRY.items()
+                  if s.group == "naabhasa_aakriti"}
+    assert len(registered) == 20
+    assert registered == {y["key"] for y in AAKRITI_YOGAS}
+
+
+def test_11_5_3_every_yoga_is_glossed():
+    """Unlike Nala in §11.5.1, all twenty Aakriti names get a meaning."""
+    for entry in AAKRITI_YOGAS:
+        assert entry["name_means"], entry["key"]
+
+
+def test_11_5_3_the_reading_rule_comes_from_the_books_grammar():
+    """**The rule that decides eighteen of the twenty.**
+
+    Where the subject is "all the planets" — "If all the planets occupy 1st
+    and 7th houses" — the test is confinement: every planet lies in the named
+    houses. Where the subject is a house — "lagna and the 7th houses **are
+    occupied by** natural benefics" — that house must hold something.
+
+    Only Vajra and Yava take the second form, and they are exactly the two
+    that need natures.
+    """
+    occupancy = {y["key"] for y in AAKRITI_YOGAS if "benefic_houses" in y}
+    assert occupancy == {"vajra", "yava"}
+    confinement = {y["key"] for y in AAKRITI_YOGAS if "alternatives" in y}
+    assert len(confinement) == 18
+    assert not (occupancy & confinement)
+    for entry in AAKRITI_YOGAS:
+        if entry["key"] in occupancy:
+            assert "are occupied by" in entry["definition"]
+        else:
+            assert "are occupied by" not in entry["definition"]
+
+
+@pytest.mark.parametrize(
+    "key,houses",
+    [("gadaa", [4, 7]), ("sakata", [1, 7]), ("vihanga", [4, 10]),
+     ("sringaataka", [1, 5, 9]), ("hala", [2, 6, 10]),
+     ("kamala", [1, 4, 7, 10]), ("vaapi", [2, 5, 8, 11]),
+     ("yoopa", [1, 2, 3, 4]), ("sara", [4, 5, 6, 7]),
+     ("sakti", [7, 8, 9, 10]), ("danda", [10, 11, 12, 1]),
+     ("naukaa", [1, 2, 3, 4, 5, 6, 7]), ("koota", [4, 5, 6, 7, 8, 9, 10]),
+     ("chatra", [7, 8, 9, 10, 11, 12, 1]),
+     ("chaapa", [10, 11, 12, 1, 2, 3, 4]),
+     ("ardha_chandra", [2, 3, 4, 5, 6, 7, 8]),
+     ("chakra", [1, 3, 5, 7, 9, 11]), ("samudra", [2, 4, 6, 8, 10, 12])],
+)
+def test_11_5_3_each_confinement_yoga_fires_on_its_own_houses(key, houses):
+    """Eighteen yogas, each on the houses its definition names."""
+    verdict = evaluate_one(key, _spread(houses))
+    assert verdict.present, (key, verdict.reason)
+
+
+def test_11_5_3_gadaa_takes_the_four_successive_quadrant_pairs():
+    """"two **successive** quadrants from lagna... For example, 4th and 7th
+    (or 10th and 1st)."
+
+    Successive in the quadrant cycle 1 to 4 to 7 to 10 and round again — four
+    pairs, derived rather than typed out.
+    """
+    gadaa = next(y for y in AAKRITI_YOGAS if y["key"] == "gadaa")
+    assert set(gadaa["alternatives"]) == {(1, 4), (4, 7), (7, 10), (10, 1)}
+    for pair in gadaa["alternatives"]:
+        assert evaluate_one("gadaa", _spread(list(pair))).present, pair
+
+
+def test_11_5_3_the_three_pair_yogas_cover_every_quadrant_pair():
+    """Gadaa's four successive pairs plus Sakata's 1st-7th and Vihanga's
+    4th-10th are all six pairs of quadrants there are. Nothing is left over
+    and nothing overlaps.
+    """
+    from itertools import combinations
+
+    gadaa = next(y for y in AAKRITI_YOGAS if y["key"] == "gadaa")
+    pairs = {frozenset(p) for p in gadaa["alternatives"]}
+    pairs |= {frozenset((1, 7)), frozenset((4, 10))}
+    assert pairs == {frozenset(p) for p in combinations((1, 4, 7, 10), 2)}
+    assert len(pairs) == 6
+
+
+def test_11_5_3_hala_excludes_the_lagna_trine_structurally():
+    """"mutual trines **but not trines from lagna**... in other words, 2nd,
+    6th and 10th, or 3rd, 7th and 11th, or 4th, 8th and 12th."
+
+    The 1st-5th-9th set is simply not among Hala's alternatives, so the
+    exclusion needs no separate check — a chart on the lagna trine gives
+    Sringaataka and never Hala.
+    """
+    hala = next(y for y in AAKRITI_YOGAS if y["key"] == "hala")
+    assert set(hala["alternatives"]) == {(2, 6, 10), (3, 7, 11), (4, 8, 12)}
+    assert (1, 5, 9) not in hala["alternatives"]
+    on_trine = _spread([1, 5, 9])
+    assert evaluate_one("sringaataka", on_trine).present
+    assert not evaluate_one("hala", on_trine).present
+
+
+def test_11_5_3_hala_and_sringaataka_take_the_four_trine_sets_between_them():
+    """Four trine sets exist — one starting at each of the 1st, 2nd, 3rd and
+    4th. Sringaataka takes the lagna's, Hala the other three."""
+    hala = next(y for y in AAKRITI_YOGAS if y["key"] == "hala")
+    sringaataka = next(y for y in AAKRITI_YOGAS if y["key"] == "sringaataka")
+    all_sets = {tuple(sorted((base, base + 4, base + 8))) for base in (1, 2, 3, 4)}
+    covered = {tuple(sorted(a)) for a in hala["alternatives"]}
+    covered |= {tuple(sorted(a)) for a in sringaataka["alternatives"]}
+    assert covered == all_sets
+    assert len(all_sets) == 4
+
+
+def test_11_5_3_vajra_and_yava_are_exact_mirrors():
+    """Vajra: benefics in the 1st and 7th, malefics in the 4th and 10th.
+    Yava: the same houses with the natures swapped. Two definitions differing
+    in two words.
+    """
+    vajra = next(y for y in AAKRITI_YOGAS if y["key"] == "vajra")
+    yava = next(y for y in AAKRITI_YOGAS if y["key"] == "yava")
+    assert vajra["benefic_houses"] == yava["malefic_houses"] == (1, 7)
+    assert vajra["malefic_houses"] == yava["benefic_houses"] == (4, 10)
+
+
+def test_11_5_3_vajra_and_yava_cannot_both_hold():
+    """The same four houses cannot hold benefics and malefics both ways
+    round."""
+    vajra_chart = YogaInput(
+        rasis={int(Graha.JUPITER): 0, int(Graha.VENUS): 6,
+               int(Graha.MARS): 3, int(Graha.SATURN): 9},
+        lagna_rasi=0, paksha=0)
+    assert evaluate_one("vajra", vajra_chart).present
+    assert not evaluate_one("yava", vajra_chart).present
+
+
+def test_11_5_3_vajra_needs_its_houses_actually_occupied():
+    """"lagna and the 7th houses **are occupied by** natural benefics" — the
+    house is the subject, so an empty house fails and the reason says which.
+    """
+    verdict = evaluate_one("vajra", YogaInput(
+        rasis={int(Graha.JUPITER): 0, int(Graha.MARS): 3,
+               int(Graha.SATURN): 9},
+        lagna_rasi=0, paksha=0))
+    assert not verdict.present
+    assert "the 7th" in verdict.reason and "empty" in verdict.reason
+
+
+def test_11_5_3_the_four_run_yogas_start_at_the_four_quadrants():
+    """Naukaa from the 1st, Koota from the 4th, Chatra from the 7th, Chaapa
+    from the 10th — the four quadrants, one each."""
+    starts = {}
+    for key in ("naukaa", "koota", "chatra", "chaapa"):
+        entry = next(y for y in AAKRITI_YOGAS if y["key"] == key)
+        assert len(entry["alternatives"]) == 1
+        starts[key] = entry["alternatives"][0][0]
+    assert starts == {"naukaa": 1, "koota": 4, "chatra": 7, "chaapa": 10}
+
+
+def test_11_5_3_ardha_chandra_takes_every_other_starting_house():
+    """"the 7 signs starting from a panapara or an apoklima" — the eight
+    houses that are not quadrants.
+
+    So the five seven-sign yogas between them cover all twelve possible
+    starts: four quadrants and eight others.
+    """
+    entry = next(y for y in AAKRITI_YOGAS if y["key"] == "ardha_chandra")
+    starts = {a[0] for a in entry["alternatives"]}
+    assert starts == {2, 3, 5, 6, 8, 9, 11, 12}
+    assert len(starts) == 8
+    assert starts | {1, 4, 7, 10} == set(range(1, 13))
+    for start in sorted(starts):
+        houses = [(start - 1 + step) % 12 + 1 for step in range(7)]
+        assert evaluate_one("ardha_chandra", _spread(houses)).present, start
+
+
+def test_11_5_3_chakra_and_samudra_partition_the_houses():
+    """Chakra takes the odd houses and Samudra the even. Between them, all
+    twelve, with no overlap — so a chart can never form both."""
+    chakra = next(y for y in AAKRITI_YOGAS if y["key"] == "chakra")
+    samudra = next(y for y in AAKRITI_YOGAS if y["key"] == "samudra")
+    odd, even = set(chakra["alternatives"][0]), set(samudra["alternatives"][0])
+    assert odd == {1, 3, 5, 7, 9, 11}
+    assert even == {2, 4, 6, 8, 10, 12}
+    assert not (odd & even)
+    assert odd | even == set(range(1, 13))
+    on_odd = _spread([1, 3, 5, 7, 9, 11])
+    assert evaluate_one("chakra", on_odd).present
+    assert not evaluate_one("samudra", on_odd).present
+
+
+def test_11_5_3_the_four_four_house_runs_start_at_the_quadrants_too():
+    """Yoopa from the 1st, Sara from the 4th, Sakti from the 7th, Danda from
+    the 10th — the same four starting points as the seven-sign yogas, with a
+    shorter run."""
+    starts = {}
+    for key in ("yoopa", "sara", "sakti", "danda"):
+        entry = next(y for y in AAKRITI_YOGAS if y["key"] == key)
+        houses = entry["alternatives"][0]
+        assert len(houses) == 4
+        starts[key] = houses[0]
+    assert starts == {"yoopa": 1, "sara": 4, "sakti": 7, "danda": 10}
+
+
+def test_11_5_3_confinement_yields_real_containments():
+    """Confinement makes narrower yogas imply wider ones, and the engine
+    reports every one that holds rather than picking a "best" fit.
+
+    All planets on the lagna trine gives Sringaataka *and* Chakra, since the
+    1st, 5th and 9th are all odd houses.
+    """
+    present = {v.key for v in evaluate(_spread([1, 5, 9])) if v.present}
+    assert {"sringaataka", "chakra"} <= present
+
+
+def test_11_5_3_a_movable_lagna_links_kamala_to_rajju():
+    """A cross-family consequence. The quadrants from a movable sign are the
+    four movable signs, so all planets in quadrants from Aries means all
+    planets in movable signs — Kamala and Rajju together.
+    """
+    present = {v.key for v in evaluate(_spread([1, 4, 7, 10], lagna=R["Ar"]))
+               if v.present}
+    assert {"kamala", "rajju"} <= present
+    from_fixed = {v.key for v in evaluate(_spread([1, 4, 7, 10], lagna=R["Ta"]))
+                  if v.present}
+    assert "kamala" in from_fixed
+    assert "musala" in from_fixed
+    assert "rajju" not in from_fixed
+
+
+def test_11_5_3_needs_a_lagna_and_a_full_chart():
+    """Every Aakriti yoga counts houses from lagna, and "all the planets" is
+    universal — so both a missing lagna and a missing planet are answered with
+    "cannot be decided" rather than a bare absent.
+    """
+    houses = [1, 4]
+    no_lagna = YogaInput(rasis={int(Graha.SUN): 0})
+    assert "cannot be decided" in evaluate_one("gadaa", no_lagna).reason
+    partial = YogaInput(rasis={int(Graha.SUN): 0, int(Graha.MOON): 3},
+                        lagna_rasi=0)
+    verdict = evaluate_one("gadaa", partial)
+    assert verdict.present is False
+    assert "cannot be decided" in verdict.reason
+    assert evaluate_one("gadaa", _spread(houses)).present
+
+
+def test_11_5_3_the_reason_names_the_span_when_a_yoga_fails():
+    """An absent confinement yoga says where the planets actually are, so a
+    caller can see why no permitted set contained them."""
+    verdict = evaluate_one("sakata", _spread([1, 2, 3]))
+    assert not verdict.present
+    assert "span" in verdict.reason
+
+
+def test_11_5_3_the_classification_and_the_headings_disagree_on_two_names():
+    """§11.5's list writes "Vihangama" and "Ardhachandra"; §11.5.3's headings
+    write "Vihanga" and "Ardha Chandra", and Vihanga's text adds a third form,
+    "Vihaga".
+
+    The headings win — a definitional section beats a passing mention. See
+    D-33.
+    """
+    assert AAKRITI_NAME_VARIANTS["vihanga"] == ("Vihangama", "Vihaga")
+    assert AAKRITI_NAME_VARIANTS["ardha_chandra"] == ("Ardhachandra",)
+    assert YOGA_REGISTRY["vihanga"].name == "Vihanga Yoga"
+    assert YOGA_REGISTRY["ardha_chandra"].name == "Ardha Chandra Yoga"
+    listed = set(NAABHASA_CLASSIFICATION["aakriti"]["names"])
+    assert "Vihangama" in listed and "Ardhachandra" in listed
+
+
+def test_11_5_3_vihaga_is_carried_as_an_alias():
+    """"Some authors call this Vihaga yoga." Recorded as an alias, so a caller
+    matching that name finds the yoga."""
+    assert YOGA_REGISTRY["vihanga"].aliases == ("Vihaga Yoga",)
+
+
+def test_11_5_3_the_classification_orders_two_yogas_differently():
+    """§11.5 lists Sringaataka before Vihangama; §11.5.3 defines Vihanga
+    before Sringaataka. A third disagreement between the two passages, and the
+    only one that is not about spelling."""
+    listed = list(NAABHASA_CLASSIFICATION["aakriti"]["names"])
+    assert listed.index("Sringaataka") < listed.index("Vihangama")
+    defined = [y["key"] for y in AAKRITI_YOGAS]
+    assert defined.index("vihanga") < defined.index("sringaataka")
+    assert "Sringaataka before Vihangama" in AAKRITI_ORDER_DIFFERS
+
+
+def test_11_5_3_vaapi_reads_its_two_alternatives_separately():
+    """"If all the planets are panaparas or in apoklimas."
+
+    Read as two alternatives — all in the panapharas, or all in the apoklimas
+    — not as their union. The union reading would make Vaapi simply "no planet
+    in a quadrant", which is a much weaker claim. Recorded as OI-78; the union
+    is kept on the spec so the other reading is one line away.
+    """
+    entry = next(y for y in AAKRITI_YOGAS if y["key"] == "vaapi")
+    assert entry["alternatives"] == ((2, 5, 8, 11), (3, 6, 9, 12))
+    assert set(entry["union_alternative"]) == {2, 3, 5, 6, 8, 9, 11, 12}
+    mixed = _spread([2, 3, 5, 6])
+    assert not evaluate_one("vaapi", mixed).present
+    assert evaluate_one("vaapi", _spread([2, 5, 8, 11])).present
+    assert evaluate_one("vaapi", _spread([3, 6, 9, 12])).present

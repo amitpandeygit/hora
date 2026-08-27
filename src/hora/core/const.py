@@ -541,6 +541,13 @@ from hora.core.constants.varga import (
     VARGA_SIGNIFIES_AN_AREA,
 )
 from hora.core.constants.yoga_planetary import (
+    AAKRITI_BASIS,
+    AAKRITI_MEANS,
+    AAKRITI_NAME_VARIANTS,
+    AAKRITI_NODES_NOTE,
+    AAKRITI_ORDER_DIFFERS,
+    AAKRITI_READING_RULE,
+    AAKRITI_YOGAS,
     AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
     BUDHA_AADITYA_CHART_NOTE,
@@ -590,6 +597,13 @@ from hora.core.constants.yoga_planetary import (
 )
 
 __all__ = [
+    "AAKRITI_BASIS",
+    "AAKRITI_MEANS",
+    "AAKRITI_NAME_VARIANTS",
+    "AAKRITI_NODES_NOTE",
+    "AAKRITI_ORDER_DIFFERS",
+    "AAKRITI_READING_RULE",
+    "AAKRITI_YOGAS",
     "AASRAYA_BASIS",
     "ABHIJIT_END",
     "ABHIJIT_INDEX",

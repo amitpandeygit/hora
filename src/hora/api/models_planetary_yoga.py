@@ -260,6 +260,26 @@ class PlanetaryYogaRulesOut(BaseModel):
             "we have read. Listed so the gap is visible."
         ),
     )
+    aakriti_means: str
+    aakriti_basis: str
+    aakriti_nodes_note: str = Field(
+        ...,
+        description=(
+            "Section 11.5.3 is the closest the book comes to settling whether "
+            "the nodes count as planets, and it settles it by attribution: "
+            "'not counted as planets by many authors'. See OI-73."
+        ),
+    )
+    aakriti_reading_rule: str = Field(
+        ...,
+        description=(
+            "The book's own grammar decides eighteen of the twenty: subject "
+            "'all the planets' means confinement, subject 'the house is "
+            "occupied by' means the house must hold something."
+        ),
+    )
+    aakriti_name_variants: dict[str, list[str]]
+    aakriti_order_differs: str
     naabhasa_gap_note: str
     frequency_note: str
     preferred_charts: list[str]

@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 42 waiting on evidence · 2 parked**
+**5 waiting on Amit · 43 waiting on evidence · 2 parked**
 
 ---
 
@@ -295,7 +295,32 @@ verification against birth data as Charts 6 and 7 got.
 **Closes when:** you send Chart 8's page, or we accept the exercise as covered
 by the reconstruction alone.
 
-### OI-77 — 27 of §11.5's 32 Naabhasa yogas are named but not defined
+### OI-78 — is Vaapi Yoga two alternatives or one union?
+
+§11.5.3: "If all the planets are panaparas or in apoklimas, this yoga is
+formed."
+
+Two readings:
+
+- **two alternatives** — all the planets in the panapharas (2nd, 5th, 8th,
+  11th), *or* all of them in the apoklimas (3rd, 6th, 9th, 12th);
+- **one union** — all the planets somewhere in those eight houses, which is
+  the same as saying no planet is in a quadrant.
+
+We implement the first. The sentence reads as two alternatives, and the union
+reading makes Vaapi a much weaker claim — merely the complement of Kamala,
+which is "all the planets are in quadrants".
+
+Against that: §11.5.3's Ardha Chandra uses the same "or" for a union of
+starting points — "the 7 signs starting from a panapara **or** an apoklima" —
+where eight starts are all admitted. So the same word carries both senses in
+one section.
+
+`union_alternative` is kept on the spec, so switching readings is one line.
+
+**Closes when:** JHora's Naabhasa output settles it, or a worked chart appears.
+
+### OI-77 — 7 of §11.5's 32 Naabhasa yogas are named but not defined
 
 §11.5 classifies thirty-two:
 
@@ -303,20 +328,19 @@ by the reconstruction alone.
 |---|---|---|
 | Aasraya | 3 | defined in §11.5.1 |
 | Dala | 2 | defined in §11.5.2 |
-| Aakriti | 20 | **named only** |
+| Aakriti | 20 | defined in §11.5.3 |
 | Sankhya | 7 | **named only** |
 
-The twenty Aakriti and seven Sankhya yogas are listed by name in §11.5's
-classification and defined in §11.5.3 and §11.5.4, which have not been
-supplied.
+The seven Sankhya yogas are listed by name in §11.5's classification and
+defined in §11.5.4, which has not been supplied.
 
 They are **not registered**. A yoga the engine cannot detect must not appear
 among the verdicts, where `present: false` would read as a finding rather than
 a gap. They are published instead as `naabhasa_not_yet_defined` on
-`/v1/planetary-yoga/rules`, with a guard asserting the registered five and the
-pending twenty-seven come to exactly thirty-two and never overlap.
+`/v1/planetary-yoga/rules`, with a guard asserting the registered twenty-five
+and the pending seven come to exactly thirty-two and never overlap.
 
-**Closes when:** §11.5.3 and §11.5.4 are supplied.
+**Closes when:** §11.5.4 is supplied.
 
 ### OI-74 — §11.3 guideline 2's "(respectively)" has nothing to pair with
 
@@ -402,16 +426,16 @@ they do not settle it either.
 response lists `grahas_considered` so the choice is visible in the output and
 not only in the request.
 
-**§11.5.1 raises the stakes and §11.5.2 narrows the question.** The Aasraya
-yogas say "**all the planets** are exclusively in movable signs", so two extra
-grahas must agree and the flag matters more. But §11.5.2's Dala yogas say
-"natural benefics" and "natural malefics" instead, which §3.2.2 settles — and
-§11.5.2's own Sarpa example is built from Mars, **Rahu and Ketu**. So the flag
-governs the phrase "a planet" only, and the Dala detectors ignore it. A
-detector that honoured it there would fail the book's own example.
-
-Note the nodes can never make an Aasraya yoga *impossible*: they are always six
-signs apart, and six signs apart is always the same modality.
+**§11.5 sharpens it three ways.** §11.5.1's Aasraya yogas say "**all the
+planets**", so two extra grahas must agree and the flag matters more — though
+it can never make the yoga impossible, since the nodes are always six signs
+apart and six signs apart is always the same modality. §11.5.2's Dala yogas say
+"natural benefics/malefics" instead, which §3.2.2 settles, and their own Sarpa
+example is built from Mars, **Rahu and Ketu** — so the flag governs the phrase
+"a planet" only, and those detectors ignore it. And §11.5.3's preamble is the
+closest the book comes to an answer: "Rahu and Ketu are **not counted as
+planets by many authors**" — matching our default, but attribution rather than
+a ruling, and scoped to the Aakriti twenty.
 
 The default is the conservative one — it under-reports rather than
 over-reports — but it *is* a choice, and it is not PVR's.

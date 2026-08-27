@@ -1,14 +1,54 @@
 {
   "body": {
-    "count": 40,
-    "groups": [
-      "naabhasa_aakriti",
-      "chandra",
-      "mahapurusha",
-      "naabhasa_aasraya",
-      "naabhasa_dala",
-      "ravi"
+    "chart": "D1",
+    "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
+    "evaluated": 40,
+    "grahas_considered": [
+      {
+        "graha": 0,
+        "graha_name": "Sun"
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon"
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars"
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter"
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus"
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn"
+      }
     ],
+    "group": null,
+    "include_nodes": false,
+    "inputs_missing": [],
+    "kemadruma_present": false,
+    "lagna_rasi": 0,
+    "paksha": 0,
+    "present": [
+      "kamala",
+      "sasa",
+      "rajju"
+    ],
+    "qualifiers_available": [],
+    "qualifiers_unavailable": [
+      "combustion"
+    ],
+    "results_killed_by_kemadruma": [],
     "yogas": [
       {
         "aliases": [],
@@ -17,6 +57,10 @@
         "implies": [],
         "key": "gadaa",
         "name": "Gadaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -26,6 +70,10 @@
         "implies": [],
         "key": "sakata",
         "name": "Sakata Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -37,6 +85,10 @@
         "implies": [],
         "key": "vihanga",
         "name": "Vihanga Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -46,6 +98,10 @@
         "implies": [],
         "key": "sringaataka",
         "name": "Sringaataka Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -55,6 +111,10 @@
         "implies": [],
         "key": "hala",
         "name": "Hala Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -64,6 +124,10 @@
         "implies": [],
         "key": "vajra",
         "name": "Vajra Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Sun in the 1st is not a natural benefic; Moon, Venus in the 4th is not a natural malefic; Mars, Saturn in the 7th is not a natural benefic; Mercury in the 10th is not a natural malefic",
         "section": "11.5.3"
       },
       {
@@ -73,6 +137,10 @@
         "implies": [],
         "key": "yava",
         "name": "Yava Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Jupiter in the 1st is not a natural malefic",
         "section": "11.5.3"
       },
       {
@@ -82,6 +150,60 @@
         "implies": [],
         "key": "kamala",
         "name": "Kamala Yoga",
+        "participants": [
+          {
+            "graha": 0,
+            "graha_name": "Sun",
+            "house_from_sun": 1,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "graha": 1,
+            "graha_name": "Moon",
+            "house_from_sun": 4,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": 7,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "graha": 3,
+            "graha_name": "Mercury",
+            "house_from_sun": 10,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": 1,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "graha": 5,
+            "graha_name": "Venus",
+            "house_from_sun": 4,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "house_from_sun": 7,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "present": true,
+        "qualifiers": [],
+        "reason": "all 7 planets lie in the 1st, the 4th, the 7th, the 10th; occupied: 1st, 4th, 7th, 10th",
         "section": "11.5.3"
       },
       {
@@ -91,6 +213,10 @@
         "implies": [],
         "key": "vaapi",
         "name": "Vaapi Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -100,6 +226,10 @@
         "implies": [],
         "key": "yoopa",
         "name": "Yoopa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -109,6 +239,10 @@
         "implies": [],
         "key": "sara",
         "name": "Sara Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -118,6 +252,10 @@
         "implies": [],
         "key": "sakti",
         "name": "Sakti Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -127,6 +265,10 @@
         "implies": [],
         "key": "danda",
         "name": "Danda Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -136,6 +278,10 @@
         "implies": [],
         "key": "naukaa",
         "name": "Naukaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -145,6 +291,10 @@
         "implies": [],
         "key": "koota",
         "name": "Koota Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -154,6 +304,10 @@
         "implies": [],
         "key": "chatra",
         "name": "Chatra Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -163,6 +317,10 @@
         "implies": [],
         "key": "chaapa",
         "name": "Chaapa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -172,6 +330,10 @@
         "implies": [],
         "key": "ardha_chandra",
         "name": "Ardha Chandra Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -181,6 +343,10 @@
         "implies": [],
         "key": "chakra",
         "name": "Chakra Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -190,6 +356,10 @@
         "implies": [],
         "key": "samudra",
         "name": "Samudra Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the planets span 1st, 4th, 7th, 10th, which no permitted set contains",
         "section": "11.5.3"
       },
       {
@@ -199,6 +369,10 @@
         "implies": [],
         "key": "sunaphaa",
         "name": "Sunaphaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 2nd from Moon is Leo and holds no qualifying planet",
         "section": "11.3.1"
       },
       {
@@ -208,6 +382,10 @@
         "implies": [],
         "key": "anaphaa",
         "name": "Anaphaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 12th from Moon is Gemini and holds no qualifying planet",
         "section": "11.3.2"
       },
       {
@@ -220,6 +398,10 @@
         ],
         "key": "duradhara",
         "name": "Duradhara Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 2nd from Moon is Leo and holds no qualifying planet; the 12th from Moon is Gemini and holds no qualifying planet",
         "section": "11.3.3"
       },
       {
@@ -229,6 +411,10 @@
         "implies": [],
         "key": "kemadruma",
         "name": "Kemadruma Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Venus in the 1st from Moon; Sun, Jupiter in the 1st from lagna; Venus in the 4th from lagna; Mars, Saturn in the 7th from lagna; Mercury in the 10th from lagna",
         "section": "11.3.4"
       },
       {
@@ -238,6 +424,10 @@
         "implies": [],
         "key": "chandra_mangala",
         "name": "Chandra-Mangala Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Moon is in Cancer and Mars in Libra; they are not together",
         "section": "11.3.5"
       },
       {
@@ -247,6 +437,10 @@
         "implies": [],
         "key": "adhi",
         "name": "Adhi Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Jupiter, Venus are natural benefics outside the 6th, 7th and 8th from Moon",
         "section": "11.3.6"
       },
       {
@@ -256,6 +450,10 @@
         "implies": [],
         "key": "ruchaka",
         "name": "Ruchaka Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Mars is in Libra, not one of Aries, Scorpio, Capricorn",
         "section": "11.4.1"
       },
       {
@@ -265,6 +463,10 @@
         "implies": [],
         "key": "bhadra",
         "name": "Bhadra Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Mercury is in Capricorn, not one of Gemini, Virgo",
         "section": "11.4.2"
       },
       {
@@ -274,6 +476,18 @@
         "implies": [],
         "key": "sasa",
         "name": "Sasa Yoga",
+        "participants": [
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "house_from_sun": 7,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "present": true,
+        "qualifiers": [],
+        "reason": "Saturn is in Libra, his exaltation sign, and the 7th from lagna",
         "section": "11.4.3"
       },
       {
@@ -283,6 +497,10 @@
         "implies": [],
         "key": "maalavya",
         "name": "Maalavya Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Venus is in Cancer, not one of Taurus, Libra, Pisces",
         "section": "11.4.4"
       },
       {
@@ -292,6 +510,10 @@
         "implies": [],
         "key": "hamsa",
         "name": "Hamsa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Jupiter is in Aries, not one of Cancer, Sagittarius, Pisces",
         "section": "11.4.5"
       },
       {
@@ -301,6 +523,60 @@
         "implies": [],
         "key": "rajju",
         "name": "Rajju Yoga",
+        "participants": [
+          {
+            "graha": 0,
+            "graha_name": "Sun",
+            "house_from_sun": null,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "graha": 1,
+            "graha_name": "Moon",
+            "house_from_sun": null,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": null,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "graha": 3,
+            "graha_name": "Mercury",
+            "house_from_sun": null,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": null,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "graha": 5,
+            "graha_name": "Venus",
+            "house_from_sun": null,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "house_from_sun": null,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "present": true,
+        "qualifiers": [],
+        "reason": "all 7 placed planets are in movable signs",
         "section": "11.5.1"
       },
       {
@@ -310,6 +586,10 @@
         "implies": [],
         "key": "musala",
         "name": "Musala Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "not every planet is in a fixed sign: Sun in Aries, Moon in Cancer, Mars in Libra and 4 more",
         "section": "11.5.1"
       },
       {
@@ -319,6 +599,10 @@
         "implies": [],
         "key": "nala",
         "name": "Nala Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "not every planet is in a dual sign: Sun in Aries, Moon in Cancer, Mars in Libra and 4 more",
         "section": "11.5.1"
       },
       {
@@ -328,6 +612,10 @@
         "implies": [],
         "key": "maalaa",
         "name": "Maalaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "2 of the four quadrants from lagna are occupied wholly by natural benefics; 3 are needed",
         "section": "11.5.2"
       },
       {
@@ -337,6 +625,10 @@
         "implies": [],
         "key": "sarpa",
         "name": "Sarpa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "1 of the four quadrants from lagna are occupied wholly by natural malefics; 3 are needed",
         "section": "11.5.2"
       },
       {
@@ -346,6 +638,10 @@
         "implies": [],
         "key": "vesi",
         "name": "Vesi Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 2nd from Sun is Taurus and holds no qualifying planet",
         "section": "11.2.1"
       },
       {
@@ -355,6 +651,10 @@
         "implies": [],
         "key": "vosi",
         "name": "Vosi Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 12th from Sun is Pisces and holds no qualifying planet",
         "section": "11.2.2"
       },
       {
@@ -367,6 +667,10 @@
         ],
         "key": "ubhayachara",
         "name": "Ubhayachara Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 2nd from Sun is Taurus and holds no qualifying planet; the 12th from Sun is Pisces and holds no qualifying planet",
         "section": "11.2.3"
       },
       {
@@ -378,6 +682,10 @@
         "implies": [],
         "key": "budha_aaditya",
         "name": "Budha-Aaditya Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Sun is in Aries and Mercury in Capricorn; they are not together",
         "section": "11.2.4"
       }
     ]

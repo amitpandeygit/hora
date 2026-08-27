@@ -278,6 +278,12 @@ CASES = [
         "rasis": {2: 1, 7: 4, 8: 10}, "lagna_rasi": 7, "paksha": 0,
         "group": "naabhasa_dala",
     }),
+    ("planetary_yoga_aakriti_kamala", "POST", "/v1/planetary-yoga/chart", {
+        # All seven in the quadrants from an Aries lagna: Kamala, and Rajju
+        # too, since the quadrants from a movable sign are all movable.
+        "rasis": {0: 0, 1: 3, 2: 6, 3: 9, 4: 0, 5: 3, 6: 6},
+        "lagna_rasi": 0, "paksha": 0,
+    }),
     ("planetary_yoga_guidelines", "POST", "/v1/planetary-yoga/guidelines", {
         "rasis": {0: 0, 1: 2, 4: 4, 5: 5}, "paksha": 0,
     }),

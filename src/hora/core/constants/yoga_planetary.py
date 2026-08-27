@@ -548,16 +548,259 @@ NAABHASA_YOGAS: tuple[dict, ...] = (
 #: the book grades that way in its own definition rather than its results.
 SARPA_IS_VERY_BAD = "This is a very bad combination."
 
-#: Named in §11.5's classification but not yet defined for us. Twenty-seven of
-#: the thirty-two. Listed so the gap is visible in the API rather than showing
-#: as an absence.
+#: Named in §11.5's classification but not yet defined for us. §11.5.3 closed
+#: the Aakriti twenty, so the Sankhya seven of §11.5.4 are what remain. Listed
+#: so the gap is visible in the API rather than showing as an absence.
 NAABHASA_NOT_YET_DEFINED: tuple[str, ...] = tuple(
-    name
-    for group in ("aakriti", "sankhya")
-    for name in NAABHASA_CLASSIFICATION[group]["names"]
+    NAABHASA_CLASSIFICATION["sankhya"]["names"]
 )
 
 #: Footnotes 29 and 30, now supplied. They gloss the two Pancha Mahapurusha
 #: names that carry a marker in §11.4.
 SASA_MEANS = "a hare or a rabbit"
 HAMSA_MEANS = "a swan"
+
+
+# --------------------------------------------------------------------------
+# §11.5.3 Aakriti yogas
+# --------------------------------------------------------------------------
+
+AAKRITI_MEANS = "a shape"
+AAKRITI_BASIS = (
+    "Aakriti means a shape and the many of these yogas are based on the shape "
+    "of the arrangement of planets in a chart."
+)
+
+#: §11.5.3 answers the question OI-73 asks, for this family at least — and
+#: attributes it rather than ruling: "by many authors".
+AAKRITI_NODES_NOTE = (
+    "In all these yogas, Rahu and Ketu are not counted as planets by many "
+    "authors."
+)
+
+#: **The grammar rule that decides every definition here.** Eighteen of the
+#: twenty read "all the planets occupy X" — the planets are the subject, so
+#: the test is *confinement*: every planet lies in X. Vajra and Yava alone
+#: read "the Nth house is occupied by ..." — the house is the subject, so
+#: those houses must actually hold something.
+AAKRITI_READING_RULE = (
+    "Where a definition's subject is “all the planets”, the test is that "
+    "every planet lies in the named houses. Where the subject is a house "
+    "— “lagna and the 7th houses are occupied by natural benefics” "
+    "— that house must be occupied."
+)
+
+_KENDRA_HOUSES = (1, 4, 7, 10)
+_PANAPHARA_HOUSES = (2, 5, 8, 11)
+_APOKLIMA_HOUSES = (3, 6, 9, 12)
+
+
+def _run(start: int, length: int) -> tuple[int, ...]:
+    return tuple((start - 1 + step) % 12 + 1 for step in range(length))
+
+
+#: §11.5.3's twenty. `alternatives` is the set of house-lists any one of which
+#: the planets may be confined to; a yoga with one alternative names one list.
+#: Derived where the book derives it — Gadaa's "two successive quadrants" is
+#: computed from the quadrants, not typed out.
+AAKRITI_YOGAS: tuple[dict, ...] = (
+    {
+        "key": "gadaa", "name": "Gadaa Yoga", "name_means": "a mace or a bludgeon",
+        "definition": (
+            "If all the planets occupy two successive quadrants from lagna, "
+            "this yoga is formed."
+        ),
+        "alternatives": tuple(
+            (_KENDRA_HOUSES[i], _KENDRA_HOUSES[(i + 1) % 4]) for i in range(4)
+        ),
+        "example_note": "4th and 7th (or 10th and 1st)",
+    },
+    {
+        "key": "sakata", "name": "Sakata Yoga", "name_means": "a cart",
+        "definition": (
+            "If all the planets occupy 1st and 7th houses from lagna, this "
+            "yoga is formed."
+        ),
+        "alternatives": ((1, 7),),
+    },
+    {
+        "key": "vihanga", "name": "Vihanga Yoga", "name_means": "a bird",
+        "definition": (
+            "If all the planets occupy 4th and 10th houses from lagna, this "
+            "yoga is formed."
+        ),
+        "alternatives": ((4, 10),),
+        "aliases": ("Vihaga Yoga",),
+        "alias_note": "Some authors call this Vihaga yoga.",
+    },
+    {
+        "key": "sringaataka", "name": "Sringaataka Yoga",
+        "name_means": "a cross-road junction",
+        "name_means_note": "It has some other popular meanings too.",
+        "definition": (
+            "If all the planets occupy trines (1st, 5th and 9th) from lagna, "
+            "this yoga is formed."
+        ),
+        "alternatives": ((1, 5, 9),),
+    },
+    {
+        "key": "hala", "name": "Hala Yoga", "name_means": "a plough",
+        "definition": (
+            "If all the planets occupy mutual trines but not trines from "
+            "lagna, this yoga is formed."
+        ),
+        "alternatives": ((2, 6, 10), (3, 7, 11), (4, 8, 12)),
+        "excludes_alternative": (1, 5, 9),
+    },
+    {
+        "key": "vajra", "name": "Vajra Yoga", "name_means": "a diamond",
+        "definition": (
+            "If lagna and the 7th houses are occupied by natural benefics and "
+            "the 4th and 10th houses are occupied by natural malefics, this "
+            "yoga is formed."
+        ),
+        "benefic_houses": (1, 7), "malefic_houses": (4, 10),
+    },
+    {
+        "key": "yava", "name": "Yava Yoga",
+        "name_means": "a grain among other things",
+        "definition": (
+            "If lagna and the 7th houses are occupied by natural malefics and "
+            "the 4th and 10th houses are occupied by natural benefics, this "
+            "yoga is formed."
+        ),
+        "benefic_houses": (4, 10), "malefic_houses": (1, 7),
+    },
+    {
+        "key": "kamala", "name": "Kamala Yoga", "name_means": "a lotus",
+        "definition": (
+            "If all the planets are in quadrants from lagna, this yoga is "
+            "formed."
+        ),
+        "alternatives": (_KENDRA_HOUSES,),
+    },
+    {
+        "key": "vaapi", "name": "Vaapi Yoga",
+        "name_means": "a pond or a water tank or a well",
+        "definition": (
+            "If all the planets are panaparas or in apoklimas, this yoga is "
+            "formed."
+        ),
+        "alternatives": (_PANAPHARA_HOUSES, _APOKLIMA_HOUSES),
+        "union_alternative": _PANAPHARA_HOUSES + _APOKLIMA_HOUSES,
+    },
+    {
+        "key": "yoopa", "name": "Yoopa Yoga",
+        "name_means": "a pillar and in particular a sacrificial post",
+        "definition": (
+            "If all the planets are in 1st, 2nd, 3rd and 4th houses from "
+            "lagna, this yoga is formed."
+        ),
+        "alternatives": (_run(1, 4),),
+    },
+    {
+        "key": "sara", "name": "Sara Yoga", "name_means": "an arrow",
+        "definition": (
+            "If all the planets are in 4th, 5th, 6th and 7th houses from "
+            "lagna, this yoga is formed."
+        ),
+        "alternatives": (_run(4, 4),),
+    },
+    {
+        "key": "sakti", "name": "Sakti Yoga",
+        "name_means": "energy, and it is also a powerful weapon",
+        "definition": (
+            "If all the planets are in 7th, 8th, 9th and 10th houses from "
+            "lagna, this yoga is formed."
+        ),
+        "alternatives": (_run(7, 4),),
+    },
+    {
+        "key": "danda", "name": "Danda Yoga",
+        "name_means": "a stick used to punish people",
+        "definition": (
+            "If all the planets are in 10th, 11th, 12th and 1st houses from "
+            "lagna, this yoga is formed."
+        ),
+        "alternatives": (_run(10, 4),),
+    },
+    {
+        "key": "naukaa", "name": "Naukaa Yoga", "name_means": "a ship",
+        "definition": (
+            "If all the planets occupy the 7 signs from lagna, this yoga is "
+            "formed."
+        ),
+        "alternatives": (_run(1, 7),),
+    },
+    {
+        "key": "koota", "name": "Koota Yoga", "name_means": "a group",
+        "name_means_note": "It has several other meanings.",
+        "definition": (
+            "If all the planets occupy the 7 signs from the 4th house, this "
+            "yoga is formed."
+        ),
+        "alternatives": (_run(4, 7),),
+    },
+    {
+        "key": "chatra", "name": "Chatra Yoga", "name_means": "an umbrella",
+        "definition": (
+            "If all the planets occupy the 7 signs from the 7th house, this "
+            "yoga is formed."
+        ),
+        "alternatives": (_run(7, 7),),
+    },
+    {
+        "key": "chaapa", "name": "Chaapa Yoga", "name_means": "a bow",
+        "definition": (
+            "If all the planets occupy the 7 signs from the 10th house, this "
+            "yoga is formed."
+        ),
+        "alternatives": (_run(10, 7),),
+    },
+    {
+        "key": "ardha_chandra", "name": "Ardha Chandra Yoga",
+        "name_means": "half-Moon",
+        "definition": (
+            "If all the planets occupy the 7 signs starting from a panapara "
+            "or an apoklima, this yoga is formed."
+        ),
+        "alternatives": tuple(
+            _run(start, 7)
+            for start in sorted(_PANAPHARA_HOUSES + _APOKLIMA_HOUSES)
+        ),
+    },
+    {
+        "key": "chakra", "name": "Chakra Yoga", "name_means": "a wheel",
+        "name_means_note": "Chakravarti means an emperor.",
+        "definition": (
+            "If all the planets occupy 1st, 3rd, 5th, 7th, 9th and 11th "
+            "houses, this yoga is formed."
+        ),
+        "alternatives": ((1, 3, 5, 7, 9, 11),),
+    },
+    {
+        "key": "samudra", "name": "Samudra Yoga",
+        "name_means": "a sea or an ocean",
+        "name_means_note": (
+            "Samudra is also the name of the God of Ocean, who has a lot of "
+            "wealth and many gems with him."
+        ),
+        "definition": (
+            "If all the planets occupy 2nd, 4th, 6th, 8th, 10th and 12th "
+            "houses, this yoga is formed."
+        ),
+        "alternatives": ((2, 4, 6, 8, 10, 12),),
+    },
+)
+
+#: §11.5's classification list and §11.5.3's own headings disagree on two
+#: names and on one ordering. The headings win — a definitional section beats
+#: a passing mention. See docs/book-deviations.md D-33.
+AAKRITI_NAME_VARIANTS: dict[str, tuple[str, ...]] = {
+    "vihanga": ("Vihangama", "Vihaga"),
+    "ardha_chandra": ("Ardhachandra",),
+}
+AAKRITI_ORDER_DIFFERS = (
+    "§11.5's classification lists Sringaataka before Vihangama; §11.5.3 "
+    "defines Vihanga before Sringaataka."
+)

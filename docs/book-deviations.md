@@ -990,3 +990,37 @@ the order differs. Eight chapters apart, with no cross-reference either way.
 
 Pinned by `test_11_4_repeats_3_2_8_and_they_agree` and
 `test_11_4_glosses_the_tattvas_differently_from_3_2_8`.
+
+---
+
+## D-33 · §11.5's classification and §11.5.3's headings disagree three times
+
+**Status: closed.** The headings win; the variants are recorded.
+
+§11.5 lists the twenty Aakriti yogas by name; §11.5.3 then defines them under
+headings. The two passages disagree in three places:
+
+| | §11.5's list | §11.5.3's heading | also |
+|---|---|---|---|
+| bird yoga | Vihanga**ma** | Vihanga | "Some authors call this **Vihaga** yoga" |
+| half-Moon yoga | Ardhachandra | Ardha Chandra (two words) | |
+| order | Sringaataka **before** Vihangama | Vihanga **before** Sringaataka | |
+
+The third is not a spelling: the two passages put the same two yogas in
+different order.
+
+**What we do:** the registry carries the heading forms — "Vihanga Yoga" and
+"Ardha Chandra Yoga" — since §11.5.3 is the definitional section and §11.5's
+list is a passing mention ([precedence.md](precedence.md) tie-break rule 2).
+`AAKRITI_NAME_VARIANTS` records "Vihangama", "Vihaga" and "Ardhachandra", and
+"Vihaga Yoga" is carried as a registry alias so a caller matching that name
+finds the yoga. The classification list itself is transcribed as printed, so
+both forms survive.
+
+Same family as [D-27](#) and [D-31](#), where a heading and the prose beneath
+it disagreed — but this time the disagreement is between two *sections*, which
+is why the ordering difference shows up too.
+
+Pinned by `test_11_5_3_the_classification_and_the_headings_disagree_on_two_names`,
+`test_11_5_3_vihaga_is_carried_as_an_alias` and
+`test_11_5_3_the_classification_orders_two_yogas_differently`.

@@ -1,13 +1,3 @@
-# Results of the planetary yogas — book chapter 11 onward.
-#
-# What a yoga GIVES, as PVR states it. The detection rules are calculation and
-# live in core/constants/yoga_planetary.py; these are interpretive prose and
-# are licence-gated like every verbatim source here. See docs/open-items.md
-# OI-12.
-#
-# The subject id is the yoga key from the registry in
-# charts/planetary_yogas/. A key here that no longer exists in the registry is
-# a transcription left behind; the guard test catches it.
 schema_version: 1
 subject: planetary_yoga
 sources:
@@ -18,18 +8,18 @@ sources:
     first_published: 2000
     licence_status: unconfirmed
     licence_note: The author shares the book freely for reading. That is not an explicit licence to redistribute
-      the text commercially. These entries are stored but are NOT served publicly until the licence is
-      confirmed or the text is replaced. See docs/open-items.md OI-12.
-categorisation_note: The `verbatim` field is the author's text as printed. The `term` list is OUR editorial
-  split of it and is not part of the book.
+      the text commercially. These entries are stored but are NOT served publicly until the licence is confirmed
+      or the text is replaced. See docs/open-items.md OI-12.
+categorisation_note: The `verbatim` field is the author's text as printed. The `term` list is OUR editorial split
+  of it and is not part of the book.
 entries:
 - planetary_yoga: vesi
   name: Vesi Yoga
   source: pvr-vaia
   section: 11.2.1
   licence_status: unconfirmed
-  verbatim: One born with this yoga has a balanced outlook. He is truthful, tall and sluggish. He is happy
-    and comfortable even with little wealth.
+  verbatim: One born with this yoga has a balanced outlook. He is truthful, tall and sluggish. He is happy and
+    comfortable even with little wealth.
   terms:
   - term: balanced outlook
     category: temperament
@@ -74,10 +64,10 @@ entries:
   source: pvr-vaia
   section: 11.2.4
   licence_status: unconfirmed
-  verbatim: One born with this yoga is intelligent and skillful in all works. He is well-known, respected
-    and happy. Nipuna means an expert.
-  transcription_notes: The last sentence glosses the alias rather than stating a result; kept because it
-    is printed inside the Results paragraph.
+  verbatim: One born with this yoga is intelligent and skillful in all works. He is well-known, respected and
+    happy. Nipuna means an expert.
+  transcription_notes: The last sentence glosses the alias rather than stating a result; kept because it is printed
+    inside the Results paragraph.
   terms:
   - term: intelligent
     category: aptitude
@@ -94,8 +84,8 @@ entries:
   source: pvr-vaia
   section: 11.3.1
   licence_status: unconfirmed
-  verbatim: One born with this yoga becomes a king or an equal. He is intelligent, wealthy and famous.
-    He has self-earned wealth.
+  verbatim: One born with this yoga becomes a king or an equal. He is intelligent, wealthy and famous. He has
+    self-earned wealth.
   terms:
   - term: a king or an equal
     category: station
@@ -112,8 +102,8 @@ entries:
   source: pvr-vaia
   section: 11.3.2
   licence_status: unconfirmed
-  verbatim: One born with this yoga becomes a king with good looks. His body is free from disease. He
-    is a man of character and has great reputation. He is surrounded by comforts.
+  verbatim: One born with this yoga becomes a king with good looks. His body is free from disease. He is a man
+    of character and has great reputation. He is surrounded by comforts.
   terms:
   - term: a king with good looks
     category: station
@@ -130,8 +120,8 @@ entries:
   source: pvr-vaia
   section: 11.3.3
   licence_status: unconfirmed
-  verbatim: One born with this yoga enjoys many pleasures. He is charitable. He owns wealth and vehicles.
-    He has good servants.
+  verbatim: One born with this yoga enjoys many pleasures. He is charitable. He owns wealth and vehicles. He has
+    good servants.
   terms:
   - term: many pleasures
     category: circumstance
@@ -146,11 +136,11 @@ entries:
   source: pvr-vaia
   section: 11.3.4
   licence_status: unconfirmed
-  verbatim: One born with this yoga is unlucky, bereft of intelligence and learning and afflicted by poverty
-    and trouble. This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas.
-    One with this yoga has to work hard and succeed through great efforts.
-  transcription_notes: The middle sentence is a rule about other yogas rather than a result of this one.
-    It is applied as a qualifier by the engine and kept here because it is printed inside the Results paragraph.
+  verbatim: One born with this yoga is unlucky, bereft of intelligence and learning and afflicted by poverty and
+    trouble. This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas. One with
+    this yoga has to work hard and succeed through great efforts.
+  transcription_notes: The middle sentence is a rule about other yogas rather than a result of this one. It is
+    applied as a qualifier by the engine and kept here because it is printed inside the Results paragraph.
   terms:
   - term: unlucky
     category: circumstance
@@ -165,8 +155,8 @@ entries:
   source: pvr-vaia
   section: 11.3.5
   licence_status: unconfirmed
-  verbatim: One born with this yoga is worldly wise and materially successful. He may earn money through
-    unscrupulous means. He may treat mother or other women badly.
+  verbatim: One born with this yoga is worldly wise and materially successful. He may earn money through unscrupulous
+    means. He may treat mother or other women badly.
   terms:
   - term: worldly wise
     category: temperament
@@ -181,10 +171,10 @@ entries:
   source: pvr-vaia
   section: 11.3.6
   licence_status: unconfirmed
-  verbatim: One born with this yoga becomes a king or a minister or an army chief, depending on the strength
-    of the planets involved.
-  transcription_notes: The result is graded by strength, which chapter 15's simple-rules measure would
-    decide and which is not built. The engine reports the yoga, never which of the three stations.
+  verbatim: One born with this yoga becomes a king or a minister or an army chief, depending on the strength of
+    the planets involved.
+  transcription_notes: The result is graded by strength, which chapter 15's simple-rules measure would decide
+    and which is not built. The engine reports the yoga, never which of the three stations.
   terms:
   - term: a king or a minister or an army chief
     category: station
@@ -193,10 +183,9 @@ entries:
   source: pvr-vaia
   section: 11.4.1
   licence_status: unconfirmed
-  verbatim: One born with this yoga is a great man of fiery nature. He has a lot of enthusiasm. He is a
-    natural leader. He loves to fight wars and he is victorious over enemies. He is discriminative and
-    a devotee of learned people. He is well-versed in occult sciences. He has good taste. He is always
-    successful.
+  verbatim: One born with this yoga is a great man of fiery nature. He has a lot of enthusiasm. He is a natural
+    leader. He loves to fight wars and he is victorious over enemies. He is discriminative and a devotee of learned
+    people. He is well-versed in occult sciences. He has good taste. He is always successful.
   terms:
   - term: a great man of fiery nature
     category: temperament
@@ -215,10 +204,10 @@ entries:
   source: pvr-vaia
   section: 11.4.2
   licence_status: unconfirmed
-  verbatim: One born with this yoga is a great man of earthy nature. He is lion-like. He is learned in
-    all respects. He has a good build of body and a deep voice. He has sattwa guna. He knows yoga well.
-    He is always surrounded by relatives, friends and family and enjoys his wealth with them. He maintains
-    cleanliness in everything and he is very systematic. He has a spirit of independence. He is religious.
+  verbatim: One born with this yoga is a great man of earthy nature. He is lion-like. He is learned in all respects.
+    He has a good build of body and a deep voice. He has sattwa guna. He knows yoga well. He is always surrounded
+    by relatives, friends and family and enjoys his wealth with them. He maintains cleanliness in everything and
+    he is very systematic. He has a spirit of independence. He is religious.
   terms:
   - term: a great man of earthy nature
     category: temperament
@@ -241,11 +230,11 @@ entries:
   source: pvr-vaia
   section: 11.4.3
   licence_status: unconfirmed
-  verbatim: One born with this yoga is a great man of airy nature. He is rabbit-like. He is wise and enjoys
-    wandering. He is comfortable in forests, mountains and forts. He is valorous and has a slender build.
-    He knows the weaknesses of others. He is lively, but has some vacillation. He is charitable.
-  transcription_notes: '"rabbit-like" carries footnote 29, whose text has not been supplied. Sasa is the
-    Sanskrit for hare or rabbit, which is what the sentence is glossing.'
+  verbatim: One born with this yoga is a great man of airy nature. He is rabbit-like. He is wise and enjoys wandering.
+    He is comfortable in forests, mountains and forts. He is valorous and has a slender build. He knows the weaknesses
+    of others. He is lively, but has some vacillation. He is charitable.
+  transcription_notes: '"rabbit-like" carries footnote 29, whose text has not been supplied. Sasa is the Sanskrit
+    for hare or rabbit, which is what the sentence is glossing.'
   terms:
   - term: a great man of airy nature
     category: temperament
@@ -264,10 +253,10 @@ entries:
   source: pvr-vaia
   section: 11.4.4
   licence_status: unconfirmed
-  verbatim: One born with this yoga is a great man of watery nature. He emits a lustre akin to moonlight.
-    He enjoys tasty food. He has luxuries. He has excellent health. He is well-versed in arts.
-  transcription_notes: The heading spells the name "Maalavya" and the Definition beneath it "Malavya".
-    See docs/book-deviations.md D-31.
+  verbatim: One born with this yoga is a great man of watery nature. He emits a lustre akin to moonlight. He enjoys
+    tasty food. He has luxuries. He has excellent health. He is well-versed in arts.
+  transcription_notes: The heading spells the name "Maalavya" and the Definition beneath it "Malavya". See docs/book-deviations.md
+    D-31.
   terms:
   - term: a great man of watery nature
     category: temperament
@@ -285,10 +274,10 @@ entries:
   section: 11.4.5
   licence_status: unconfirmed
   verbatim: One born with this yoga is a great man of ethery nature. He is swan-like. He has spiritual strength
-    and purity. He is respected by everyone. He is very passionate. He becomes a king. He has all comforts.
-    He enjoys life fully. He is a clever conversationalist and endowed with good speech.
-  transcription_notes: '"swan-like" carries footnote 30, whose text has not been supplied. Hamsa is the
-    Sanskrit for swan. The Definition above these results misnames the yoga "Ruchaka"; see D-30.'
+    and purity. He is respected by everyone. He is very passionate. He becomes a king. He has all comforts. He
+    enjoys life fully. He is a clever conversationalist and endowed with good speech.
+  transcription_notes: '"swan-like" carries footnote 30, whose text has not been supplied. Hamsa is the Sanskrit
+    for swan. The Definition above these results misnames the yoga "Ruchaka"; see D-30.'
   terms:
   - term: a great man of ethery nature
     category: temperament
@@ -307,10 +296,10 @@ entries:
   source: pvr-vaia
   section: 11.5.1
   licence_status: unconfirmed
-  verbatim: One born with this yoga likes to travel. He has good looks and flourishes in foreign countries.
-    He is cruel. Rajju means a rope.
-  transcription_notes: The last sentence glosses the name rather than stating a result, like Nipuna's in
-    11.2.4. Kept because it is printed inside the same paragraph.
+  verbatim: One born with this yoga likes to travel. He has good looks and flourishes in foreign countries. He
+    is cruel. Rajju means a rope.
+  transcription_notes: The last sentence glosses the name rather than stating a result, like Nipuna's in 11.2.4.
+    Kept because it is printed inside the same paragraph.
   terms:
   - term: likes to travel
     category: temperament
@@ -325,8 +314,8 @@ entries:
   source: pvr-vaia
   section: 11.5.1
   licence_status: unconfirmed
-  verbatim: One born with this yoga has honor, wisdom and wealth. Kings like him. He is famous. He has many
-    children. He has a firm spirit. Musala means a pestle.
+  verbatim: One born with this yoga has honor, wisdom and wealth. Kings like him. He is famous. He has many children.
+    He has a firm spirit. Musala means a pestle.
   terms:
   - term: honor, wisdom and wealth
     category: circumstance
@@ -343,8 +332,8 @@ entries:
   source: pvr-vaia
   section: 11.5.1
   licence_status: unconfirmed
-  verbatim: One born with this yoga has a poor physique. He accumulates money. He has good looks and helps
-    relatives. He is skillful.
+  verbatim: One born with this yoga has a poor physique. He accumulates money. He has good looks and helps relatives.
+    He is skillful.
   transcription_notes: Unlike Rajju and Musala, the book gives no gloss for the name Nala.
   terms:
   - term: a poor physique
@@ -362,8 +351,8 @@ entries:
   source: pvr-vaia
   section: 11.5.2
   licence_status: unconfirmed
-  verbatim: One born with this yoga is always happy. He has nice clothes, vehicles, luxuries and friendship
-    of many women. Maalaa means a garland.
+  verbatim: One born with this yoga is always happy. He has nice clothes, vehicles, luxuries and friendship of
+    many women. Maalaa means a garland.
   terms:
   - term: always happy
     category: temperament
@@ -376,8 +365,8 @@ entries:
   source: pvr-vaia
   section: 11.5.2
   licence_status: unconfirmed
-  verbatim: One born with this yoga is miserable, unhappy, cruel, poor and dependent on others for food.
-    This is a very bad combination. Sarpa means a serpant.
+  verbatim: One born with this yoga is miserable, unhappy, cruel, poor and dependent on others for food. This
+    is a very bad combination. Sarpa means a serpant.
   transcription_notes: '"serpant" is printed for "serpent". Transcribed as printed.'
   terms:
   - term: miserable
@@ -388,3 +377,343 @@ entries:
     category: temperament
   - term: poor and dependent on others for food
     category: circumstance
+- planetary_yoga: gadaa
+  name: Gadaa Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga possesses wealth, gold and gems. He performs yajnas (sacrificial rites). He
+    knows sastras (sciences) and songs. Gadaa means a mace or a bludgeon.
+  terms:
+  - term: wealth, gold and gems
+    category: circumstance
+  - term: performs yajnas
+    category: temperament
+  - term: knows sastras and songs
+    category: aptitude
+- planetary_yoga: sakata
+  name: Sakata Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga suffers from diseases. He has ugly nails. He is foolish. He doesn't have friends
+    and family. He lives pulling carts. Sakata means a cart.
+  terms:
+  - term: suffers from diseases
+    category: physical
+  - term: ugly nails
+    category: physical
+  - term: foolish
+    category: aptitude
+  - term: no friends and family
+    category: circumstance
+  - term: lives pulling carts
+    category: station
+- planetary_yoga: vihanga
+  name: Vihanga Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga loves to wander. He works as a messenger. He likes sex. He has no shame and
+    he likes to quarrel. Vihanga means a bird. Some authors call this Vihaga yoga.
+  transcription_notes: The classification in 11.5 lists this yoga as "Vihangama"; the heading here reads "Vihanga"
+    and the text adds "Some authors call this Vihaga yoga". Three forms. See docs/book-deviations.md D-33.
+  terms:
+  - term: loves to wander
+    category: temperament
+  - term: works as a messenger
+    category: station
+  - term: no shame
+    category: temperament
+  - term: likes to quarrel
+    category: temperament
+- planetary_yoga: sringaataka
+  name: Sringaataka Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is happy and liked by kings. He has a noble wife and hates women. He is wealthy.
+    Sringaataka means a cross-road junction. It has some other popular meanings too.
+  terms:
+  - term: happy
+    category: temperament
+  - term: liked by kings
+    category: circumstance
+  - term: a noble wife
+    category: circumstance
+  - term: hates women
+    category: temperament
+  - term: wealthy
+    category: circumstance
+- planetary_yoga: hala
+  name: Hala Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga becomes a farmer. He eats a lot of food. He is poor. He is deserted by friends
+    and relatives. He is unhappy and worried. Hala means a plough.
+  terms:
+  - term: becomes a farmer
+    category: station
+  - term: eats a lot of food
+    category: temperament
+  - term: poor
+    category: circumstance
+  - term: deserted by friends and relatives
+    category: circumstance
+  - term: unhappy and worried
+    category: temperament
+- planetary_yoga: vajra
+  name: Vajra Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is happy in the early and late parts of life. He has valour. He is not fortunate,
+    but he has no desires either. He fights. Vajra means a diamond.
+  terms:
+  - term: happy in the early and late parts of life
+    category: circumstance
+  - term: valour
+    category: temperament
+  - term: not fortunate
+    category: circumstance
+  - term: no desires
+    category: temperament
+- planetary_yoga: yava
+  name: Yava Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga observes religious rules. He is happy in the middle part of life. He has wealth
+    and good children. He is charitable. He is strong-minded. Yava means a grain among other things.
+  terms:
+  - term: observes religious rules
+    category: temperament
+  - term: happy in the middle part of life
+    category: circumstance
+  - term: wealth and good children
+    category: circumstance
+  - term: charitable
+    category: temperament
+  - term: strong-minded
+    category: temperament
+- planetary_yoga: kamala
+  name: Kamala Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga becomes a king. He has a strong character. He is famous and long-lived. He
+    is pure and performs many good deeds. Kamala means a lotus.
+  terms:
+  - term: becomes a king
+    category: station
+  - term: a strong character
+    category: temperament
+  - term: famous and long-lived
+    category: circumstance
+  - term: performs many good deeds
+    category: temperament
+- planetary_yoga: vaapi
+  name: Vaapi Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga has a mind capable of amassing wealth. He has all comforts. He becomes a king.
+    Vaapi means a pond or a water tank or a well.
+  terms:
+  - term: a mind capable of amassing wealth
+    category: aptitude
+  - term: all comforts
+    category: circumstance
+  - term: becomes a king
+    category: station
+- planetary_yoga: yoopa
+  name: Yoopa Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga has spiritual knowledge and knowledge of yajnas (sacrificial rites). His wife
+    is with him always. He has sattwa guna. He observes all the religious rules. Yoopa means a pillar and in particular
+    a sacrificial post.
+  terms:
+  - term: spiritual knowledge
+    category: aptitude
+  - term: knowledge of yajnas
+    category: aptitude
+  - term: sattwa guna
+    category: temperament
+  - term: observes all the religious rules
+    category: temperament
+- planetary_yoga: sara
+  name: Sara Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga makes arrows. He heads prisons. He is a hunter. He eats meats. He tortures
+    people. Sara means an arrow.
+  terms:
+  - term: makes arrows
+    category: station
+  - term: heads prisons
+    category: station
+  - term: a hunter
+    category: station
+  - term: tortures people
+    category: temperament
+- planetary_yoga: sakti
+  name: Sakti Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga are unhappy, poor, unsuccessful, unworthy, lazy, long-lived and firm. They
+    have sharp minds in war. Sakti means energy and it is also a powerful weapon.
+  transcription_notes: '"One born with this yoga ARE unhappy" is printed as such, singular subject with a plural
+    verb. Transcribed as printed.'
+  terms:
+  - term: unhappy
+    category: temperament
+  - term: poor
+    category: circumstance
+  - term: unsuccessful
+    category: circumstance
+  - term: lazy
+    category: temperament
+  - term: long-lived
+    category: physical
+  - term: sharp minds in war
+    category: aptitude
+- planetary_yoga: danda
+  name: Danda Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga lose wife and children and their people will desert them. They are unhappy
+    and serve mean people. Danda means a stick used to punish people.
+  terms:
+  - term: lose wife and children
+    category: circumstance
+  - term: deserted by their people
+    category: circumstance
+  - term: unhappy
+    category: temperament
+  - term: serve mean people
+    category: station
+- planetary_yoga: naukaa
+  name: Naukaa Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga make money on things related to water. They have many desires. They are well-known.
+    They are wicked, rough and miserly. Naukaa means a ship.
+  terms:
+  - term: money on things related to water
+    category: station
+  - term: many desires
+    category: temperament
+  - term: well-known
+    category: circumstance
+  - term: wicked, rough and miserly
+    category: temperament
+- planetary_yoga: koota
+  name: Koota Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga becomes a jailer. He is a liar. He lives in hills and forts. He is poor and
+    cruel. Koota means a group. It has several other meanings.
+  terms:
+  - term: becomes a jailer
+    category: station
+  - term: a liar
+    category: temperament
+  - term: lives in hills and forts
+    category: circumstance
+  - term: poor and cruel
+    category: temperament
+- planetary_yoga: chatra
+  name: Chatra Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga will help his people. He is kind and liked by many kings. He is intelligent.
+    He is happy in the early and late parts of life. He is long-lived. Chatra means an umbrella.
+  terms:
+  - term: helps his people
+    category: temperament
+  - term: kind
+    category: temperament
+  - term: liked by many kings
+    category: circumstance
+  - term: intelligent
+    category: aptitude
+  - term: long-lived
+    category: physical
+- planetary_yoga: chaapa
+  name: Chaapa Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga becomes a liar, thief and a protector of secrets. He wanders in forests. He
+    is unfortunate. He is happy in the middle part of his life. Chaapa means a bow.
+  terms:
+  - term: a liar
+    category: temperament
+  - term: thief
+    category: station
+  - term: a protector of secrets
+    category: temperament
+  - term: wanders in forests
+    category: circumstance
+  - term: unfortunate
+    category: circumstance
+- planetary_yoga: ardha_chandra
+  name: Ardha Chandra Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga becomes an army chief. He has a good physique. Kings like him. He is strong
+    and possesses gems, gold and many ornaments. Ardha Chandra means half-Moon.
+  transcription_notes: The classification in 11.5 writes "Ardhachandra" as one word; the heading here reads "Ardha
+    Chandra". See docs/book-deviations.md D-33.
+  terms:
+  - term: becomes an army chief
+    category: station
+  - term: a good physique
+    category: physical
+  - term: Kings like him
+    category: circumstance
+  - term: strong
+    category: physical
+  - term: gems, gold and many ornaments
+    category: circumstance
+- planetary_yoga: chakra
+  name: Chakra Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga becomes a great emperor. Diamond-studded crowns of many kings touch his feet
+    (i.e. many kings prostate before him). Chakra means a wheel. Chakravarti means an emperor.
+  terms:
+  - term: becomes a great emperor
+    category: station
+  - term: many kings prostate before him
+    category: circumstance
+- planetary_yoga: samudra
+  name: Samudra Yoga
+  source: pvr-vaia
+  section: 11.5.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga owns a lot of wealth and many gems. He has luxuries. He likes people. Their
+    fortune and greatness are stable. They are soft-natured. Samudra means a sea or an ocean. Samudra is also
+    the name of the God of Ocean, who has a lot of wealth and many gems with him.
+  terms:
+  - term: a lot of wealth and many gems
+    category: circumstance
+  - term: luxuries
+    category: circumstance
+  - term: likes people
+    category: temperament
+  - term: fortune and greatness are stable
+    category: circumstance
+  - term: soft-natured
+    category: temperament

@@ -1,5 +1,19 @@
 {
   "body": {
+    "aakriti_basis": "Aakriti means a shape and the many of these yogas are based on the shape of the arrangement of planets in a chart.",
+    "aakriti_means": "a shape",
+    "aakriti_name_variants": {
+      "ardha_chandra": [
+        "Ardhachandra"
+      ],
+      "vihanga": [
+        "Vihangama",
+        "Vihaga"
+      ]
+    },
+    "aakriti_nodes_note": "In all these yogas, Rahu and Ketu are not counted as planets by many authors.",
+    "aakriti_order_differs": "\u00a711.5's classification lists Sringaataka before Vihangama; \u00a711.5.3 defines Vihanga before Sringaataka.",
+    "aakriti_reading_rule": "Where a definition's subject is \u201call the planets\u201d, the test is that every planet lies in the named houses. Where the subject is a house \u2014 \u201clagna and the 7th houses are occupied by natural benefics\u201d \u2014 that house must be occupied.",
     "aasraya_basis": "Aasraya yogas are based on the signs occupied by planets. If all the planets are in movable signs or in fixed signs or in dual signs, these yogas arise.",
     "adhi_example_note": "Section 11.3.6's example places the Moon in Taurus and the benefics in Virgo and Leo, which are the 5th and 4th from Taurus. The rule asks for the 6th, 7th and 8th. The rule is followed.",
     "budha_aaditya_spelling_variants": [
@@ -140,29 +154,9 @@
         "section": "11.5.4"
       }
     ],
-    "naabhasa_gap_note": "Section 11.5 classifies 32 Naabhasa yogas and sections 11.5.1 and 11.5.2 define five of them. The other 27 \u2014 the Aakriti and Sankhya families \u2014 are named only. They are listed here rather than registered, so that a yoga the engine cannot detect never appears among the verdicts where its absence would read as a finding.",
+    "naabhasa_gap_note": "Section 11.5 classifies 32 Naabhasa yogas. Sections 11.5.1, 11.5.2 and 11.5.3 define 25 of them; the Sankhya seven of section 11.5.4 are named only. They are listed here rather than registered, so that a yoga the engine cannot detect never appears among the verdicts where its absence would read as a finding.",
     "naabhasa_intro": "Naabhasa yogas are classified celestial combinations.",
     "naabhasa_not_yet_defined": [
-      "Gadaa",
-      "Sakata",
-      "Sringaataka",
-      "Vihangama",
-      "Hala",
-      "Vajra",
-      "Yava",
-      "Kamala",
-      "Vaapi",
-      "Yoopa",
-      "Sara",
-      "Sakti",
-      "Danda",
-      "Naukaa",
-      "Koota",
-      "Chatra",
-      "Chaapa",
-      "Ardhachandra",
-      "Chakra",
-      "Samudra",
       "Veenaa",
       "Daama",
       "Paasa",
