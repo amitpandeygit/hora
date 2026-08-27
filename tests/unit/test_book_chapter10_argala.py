@@ -1,8 +1,9 @@
-"""Chapter 10 §10.6 — Virodhargala, and Exercise 16.
+"""Chapter 10 §10.5 and §10.6 — Argala, virodhargala, and Exercise 16.
 
-§10.5 (Argala proper) has not been supplied yet. §10.6 names the four argala
-houses outright — the 2nd, 4th, 11th and 5th — so the computation is complete
-without it, but §10.5's own statements still need a pass. See OI-66.
+§10.5 defines argala and splits the four houses: the 2nd, 4th and 11th cause
+**primary** argala, the 5th a **secondary** one. §10.6 lists all four together
+and never says so, so a build from §10.6 alone treats them as equal — which is
+what OI-66 recorded and closed.
 
 Exercise 16 is solved in Chart 5's **navamsa**, like Exercises 14 and 15: its
 house labels run 1st (Sc) to 12th (Li), which is Scorpio lagna. All twelve
@@ -1664,29 +1665,145 @@ def test_example_36_through_the_endpoints(client):
 
 
 # --------------------------------------------------------------------------
-# Exercise 17 — Chart 8, which was not supplied
+# Exercise 17 — Chart 8
 # --------------------------------------------------------------------------
 
-#: **Reconstructed, not transcribed.** Chart 8 itself was never given to us.
-#: These placements are *derived* from Exercise 17's own hint and answer, and
-#: the derivation is provably unique — see
-#: `test_exercise_17_chart_8_placements_are_forced`. Lagna, the Moon and every
-#: longitude remain unknown, so this is not a chart fixture and cannot be used
-#: as one. See OI-71.
-CHART_8_PARTIAL = {
-    Graha.SATURN: "Cn",
-    Graha.VENUS: "Li", Graha.JUPITER: "Li", Graha.MERCURY: "Li",
-    Graha.SUN: "Sc", Graha.MARS: "Sc", Graha.KETU: "Sc",
-    Graha.RAHU: "Ta",
+#: Chart 8, as printed on page 109. Supplied after Exercise 17 was first
+#: worked, so the eight signs below were originally *reconstructed* from the
+#: Hint — and all eight proved correct. The Moon and the lagna are the two
+#: things the reconstruction could not reach.
+CHART_8 = {
+    "Asc": "13 Sc 14", "Sun": "16 Sc 20", "Moon": "20 Aq 15",
+    "Mars": "25 Sc 30", "Merc": "28 Li 09", "Jup": "21 Li 27",
+    "Ven": "24 Li 47", "Sat": "15 Cn 39", "Rahu": "18 Ta 36",
+    "Ketu": "18 Sc 36", "HL": "10 Sc 16", "GL": "2 Sc 40",
 }
+
+#: Chart 8's birth data, as printed under the diagram.
+CHART_8_BIRTH = {
+    "year": 1946, "month": 12, "day": 2, "hour": 6, "minute": 45,
+    "second": 0.0, "utc_offset_hours": 1.0,
+}
+CHART_8_PLACE = {"latitude": 38 + 6 / 60, "longitude": 15 + 39 / 60}
+
+#: The chara karakas printed beside each planet.
+CHART_8_CHARA_KARAKAS = {
+    "Merc": "AK", "Mars": "AmK", "Ven": "BK", "Jup": "MK",
+    "Moon": "PiK", "Sun": "PK", "Sat": "GK", "Rahu": "DK",
+}
+
+#: What Exercise 17's Hint asserts, kept for the tests that check it.
+CHART_8_HINT_CLAIMS = (
+    "Being in own house, Venus dominates over Jupiter and Mercury.",
+    "Being the most advanced planet, Mercury is also strong.",
+    ("Mars dominates over Sun and Ketu, being in own house and being more "
+     "advanced than Ketu \u2013 the other owner of Sc."),
+)
 
 
 def _chart_8_rasis():
-    return {int(g): R[sign] for g, sign in CHART_8_PARTIAL.items()}
+    return {int(_NAME_TO_GRAHA[name]): int(lon(text) // 30)
+            for name, text in CHART_8.items() if name in _NAME_TO_GRAHA}
+
+
+def _chart_8_lagna():
+    return int(lon(CHART_8["Asc"]) // 30)
+
+
+@pytest.mark.parametrize("body", list(CHART_8))
+def test_chart_8_derives_from_its_own_birth_data(body):
+    """Chart 8 prints its birth data — 2 December 1946, 6:45 am, 1h east,
+    15 E 39, 38 N 06 — so it is computed, not transcribed, like Charts 6
+    and 7.
+
+    **It says nothing about OI-68.** Unlike Charts 6 and 7, this one does not
+    separate the node conventions: the mean node gives Rahu 18 Ta 37 and the
+    true node 18 Ta 39, against a printed 18 Ta 36. Both are inside the
+    tolerance here, so the mean setting below is for consistency with the
+    other charts and is not evidence.
+    """
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import GRAHA_NAMES
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    chart = compute_chart(
+        from_local(**CHART_8_BIRTH),
+        Place(name="Chart 8", **CHART_8_PLACE),
+        Settings(node_type=NodeType.MEAN))
+    expected = lon(CHART_8[body])
+    if body == "Asc":
+        got = chart.lagna_longitude
+    elif body in _NAME_TO_GRAHA:
+        graha = _NAME_TO_GRAHA[body]
+        got = next(p.longitude for g, p in chart.positions.items()
+                   if GRAHA_NAMES[g] == GRAHA_NAMES[graha])
+    else:
+        pytest.skip(f"{body} is a special lagna, checked elsewhere")
+    assert abs(got - expected) < 1.5 / 60, f"{body}: {got:.4f} vs {expected:.4f}"
+
+
+@pytest.mark.parametrize("body,symbol", list(CHART_8_CHARA_KARAKAS.items()))
+def test_chart_8_confirms_its_printed_chara_karakas(body, symbol):
+    """Chart 8 prints a chara karaka beside each planet. Recomputing them from
+    the longitudes with chapter 8's procedure reproduces all eight — which the
+    reconstruction could not check, having no degrees.
+    """
+    from hora.charts.karaka import chara_karakas
+
+    positions = {_NAME_TO_GRAHA[name]: lon(CHART_8[name])
+                 for name in CHART_8_CHARA_KARAKAS}
+    assigned = {k.graha: k.symbol for k in chara_karakas(positions)}
+    assert assigned[_NAME_TO_GRAHA[body]] == symbol
+
+
+def test_exercise_17_hint_mercury_is_the_most_advanced_planet():
+    """"Being the **most advanced** planet, Mercury is also strong."
+
+    A degree comparison, so the reconstruction could not check it. Mercury at
+    28 Li 09 is 28.15 degrees into his sign — further than any other graha.
+    """
+    advancement = {name: lon(text) % 30 for name, text in CHART_8.items()
+                   if name in _NAME_TO_GRAHA}
+    assert max(advancement, key=advancement.get) == "Merc"
+    assert CHART_8_HINT_CLAIMS[1].startswith("Being the most advanced planet")
+
+
+def test_exercise_17_hint_mars_is_more_advanced_than_ketu():
+    """"Mars dominates over Sun and Ketu, being in own house and being **more
+    advanced than Ketu** — the other owner of Sc."
+
+    Mars at 25 Sc 30 against Ketu at 18 Sc 36, both in Scorpio. Also a degree
+    comparison the reconstruction could not make.
+    """
+    assert lon(CHART_8["Mars"]) % 30 > lon(CHART_8["Ketu"]) % 30
+    assert int(lon(CHART_8["Mars"]) // 30) == int(lon(CHART_8["Ketu"]) // 30)
+
+
+def test_exercise_17_hint_venus_is_in_his_own_house():
+    """"Being in own house, Venus dominates over Jupiter and Mercury." All
+    three are in Libra, and Libra is Venus's."""
+    from hora.core.const import RASI_LORD
+
+    libra = int(lon(CHART_8["Ven"]) // 30)
+    assert RASI_LORD[libra] == Graha.VENUS
+    for name in ("Jup", "Merc"):
+        assert int(lon(CHART_8[name]) // 30) == libra
+
+
+def test_chart_8_lagna_and_moon_were_beyond_the_reconstruction():
+    """The two things working backwards from the Hint could not reach: the
+    Moon has no part in Exercise 17's reasoning, and the lagna is never
+    mentioned.
+    """
+    assert RASI_ABBR[_chart_8_lagna()] == "Sc"
+    assert RASI_ABBR[int(lon(CHART_8["Moon"]) // 30)] == "Aq"
 
 
 def test_exercise_17_chart_8_placements_are_forced():
-    """Chart 8 was not supplied. Two statements in Exercise 17 pin Saturn:
+    """Exercise 17 arrived before Chart 8 did, and two statements in its Hint
+    pin Saturn on their own. Kept now that the chart is here, because it shows
+    how much the Hint alone determines:
 
     * "Mars is very strong in the **5th house from Saturn**" and "being in own
       house" — so Mars is in Aries or Scorpio, five houses on from Saturn;
@@ -1704,6 +1821,9 @@ def test_exercise_17_chart_8_placements_are_forced():
         and RASI_ELEMENT[saturn] == water
     ]
     assert solutions == [(R["Cn"], R["Sc"])]
+    # And Chart 8 confirms it.
+    assert int(lon(CHART_8["Sat"]) // 30) == R["Cn"]
+    assert int(lon(CHART_8["Mars"]) // 30) == R["Sc"]
 
 
 def test_exercise_17_the_remaining_placements_follow():

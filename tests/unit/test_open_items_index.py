@@ -134,3 +134,44 @@ def test_no_code_cites_an_open_item_that_does_not_exist():
 
     assert cited, "the sweep found no citations, so it is not working"
     assert not (cited - known), sorted(cited - known)
+
+
+def test_no_chart_or_figure_is_called_missing_when_we_have_it():
+    """A claim that the book has not given us something must be true.
+
+    This guard exists because it once was not. `SANKHYA_EXAMPLE` recorded
+    "Figure 1 has not been supplied" and an open item sent Amit looking for a
+    chart that was already a fixture in `tests/unit/test_book_1_3_4.py`, with
+    the Figure 1 link written in its own docstring. He could not find it,
+    and handed over the whole book to unblock the work.
+
+    So: every "Chart N"/"Figure N" the repo says is missing must genuinely
+    have no fixture. Cheap to check, and the cost of not checking was real.
+    """
+    import re
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    claim = re.compile(
+        r"(Chart|Figure)\s+(\d+)[^.\n]{0,80}?"
+        r"(has not been (supplied|given)|was not supplied|not been given to us)",
+        re.IGNORECASE)
+
+    fixtures: set[str] = set()
+    for path in (root / "tests").rglob("*.py"):
+        fixtures |= set(re.findall(r"^(CHART_\d+|RAMA_GRAHAS)\s*=",
+                                   path.read_text(), re.MULTILINE))
+
+    problems = []
+    for folder in ("docs", "tests", "src"):
+        for path in sorted((root / folder).rglob("*")):
+            if path.suffix not in (".md", ".py") or "__pycache__" in str(path):
+                continue
+            if path.name == Path(__file__).name:
+                continue
+            for kind, number, _, _ in claim.findall(path.read_text()):
+                if f"CHART_{number}" in fixtures:
+                    problems.append(
+                        f"{path.relative_to(root)} says {kind} {number} is "
+                        f"missing, but CHART_{number} is a fixture")
+    assert not problems, "\n  ".join(problems)

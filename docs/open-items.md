@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 44 waiting on evidence · 2 parked**
+**5 waiting on Amit · 43 waiting on evidence · 2 parked**
 
 ---
 
@@ -270,30 +270,6 @@ rather than presenting a partial method as complete. Nothing invents a synonym.
 **Closes when:** a semantic map is taken from the book (not from general
 knowledge), or you accept the overlap as a hint for callers to pick from —
 which is what we do today.
-
-### OI-71 — Chart 8 was never supplied; Exercise 17 works from a reconstruction
-
-Exercise 17 reads Chart 8. The chart itself has not been given to us — only the
-exercise, its hint and its answer.
-
-Seven placements are recoverable from the answer text, and the recovery is
-**provably unique**: Mars is "in the 5th house from Saturn" and "in own house",
-and Saturn is "in a watery sign". Mars in Aries would put Saturn in
-Sagittarius, which is fiery. Only Mars in Scorpio with Saturn in Cancer
-satisfies both.
-
-The rest then follows and is independently confirmed by the text: Venus in the
-4th is Libra, "own sign"; Rahu in the 11th is Taurus, putting Ketu in Scorpio,
-"the other owner of Sc". Mercury and Jupiter join Venus in Libra, the Sun joins
-Mars and Ketu in Scorpio.
-
-**Lagna, the Moon and every longitude remain unknown.** So `CHART_8_PARTIAL` is
-a reconstruction for testing the argala geometry, explicitly not a chart
-fixture, and it cannot be used as one — no houses, no chara karakas, no
-verification against birth data as Charts 6 and 7 got.
-
-**Closes when:** you send Chart 8's page, or we accept the exercise as covered
-by the reconstruction alone.
 
 ### OI-80 — "applicable" in §11.5.4 excludes a weakened yoga, on the example's evidence
 
@@ -763,11 +739,10 @@ Everything but the letters is thrown away. So the check that gives
 - punctuation — "&" against "and", parentheses, commas;
 - word boundaries — a phrase split differently still matches.
 
-It catches a paraphrase. It does not catch a normalisation, which is the
-failure mode `core/constants/karaka.py`'s own docstring warns about: chapter 2
-lost three of the author's typos that way. §8.3's list is a live instance —
-the book capitalises every relative ("Younger siblings"), we store lowercase,
-and the check is satisfied.
+It catches a paraphrase, not a normalisation — the failure mode
+`core/constants/karaka.py`'s own docstring warns about. §8.3's list is a live
+instance: the book capitalises every relative, we store lowercase, and the
+check is satisfied.
 
 The flattening exists because PDF extraction inserts line breaks and
 hyphenation. But only whitespace and soft hyphens genuinely need normalising;
@@ -781,11 +756,9 @@ The docstring has been corrected to state the real guarantee, and
 `test_the_verbatim_check_is_case_and_punctuation_insensitive` pins the
 weakness so it is not mistaken for a stronger one.
 
-**Run 2026-08-27 against the PDF: all 109 fidelity checks pass.** That is
-weaker evidence than it sounds, and for exactly the reason above — the
-comparison cannot see the two known discrepancies (OI-60's "Dara karaka",
-§8.3's capitalised relatives), so it would pass whether or not they were
-fixed.
+**Run 2026-08-27: all 109 fidelity checks pass** — weaker evidence than it
+sounds, since the comparison cannot see either known discrepancy and would
+pass whether or not they were fixed.
 
 **Closes when:** the stricter comparison is written and run against the PDF,
 and whatever it flags is settled.

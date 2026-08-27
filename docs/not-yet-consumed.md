@@ -527,11 +527,11 @@ Tracked as [OI-18](open-items.md#oi-18).
 
 `SANKHYA_EXAMPLE`
 
-Lord Sri Rama's chart, from §11.5.4. The section gives the six signs its seven
-planets occupy but not the chart, and **Figure 1 has not been supplied** — so
-the lagna is unknown and the yogas needing one cannot be run on it. What is
-checkable is the sign count (six, giving Daama) and that the six span three
-modalities, which rules out every Aasraya yoga that could have superseded it.
+Lord Sri Rama's chart, from §11.5.4. Figure 1 **was** supplied — it is
+§1.3.4's own Example 1, and `tests/unit/test_book_1_3_4.py` has held it as a
+fixture since chapter 1 was audited. So the example is fully checkable, lagna
+included, and chapter 11's test imports chapter 1's fixture rather than
+restating it.
 
 | Symbol | What will consume it |
 |---|---|

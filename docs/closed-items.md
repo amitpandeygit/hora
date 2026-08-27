@@ -34,6 +34,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | [OI-47](#oi-47) | §3.2.8 to §3.2.13 rechecked and published |
 | [OI-66](#oi-66) | §10.5 argala supplied; primary and secondary separated |
 | [OI-77](#oi-77) | all 32 Naabhasa yogas defined |
+| [OI-71](#oi-71) | Chart 8 supplied; the reconstruction was correct |
 
 ---
 
@@ -1351,3 +1352,242 @@ catch a future family being classified and then forgotten.
 
 Two of the seven Sankhya yogas turn out to be unreachable under §11.5.4's own
 fallback rule — see OI-79.
+
+---
+
+## OI-71 — Chart 8 was worked from a reconstruction · **CLOSED**
+
+Exercise 17 reads Chart 8. The chart itself has not been given to us — only the
+exercise, its hint and its answer.
+
+Seven placements are recoverable from the answer text, and the recovery is
+**provably unique**: Mars is "in the 5th house from Saturn" and "in own house",
+and Saturn is "in a watery sign". Mars in Aries would put Saturn in
+Sagittarius, which is fiery. Only Mars in Scorpio with Saturn in Cancer
+satisfies both.
+
+The rest then follows and is independently confirmed by the text: Venus in the
+4th is Libra, "own sign"; Rahu in the 11th is Taurus, putting Ketu in Scorpio,
+"the other owner of Sc". Mercury and Jupiter join Venus in Libra, the Sun joins
+Mars and Ketu in Scorpio.
+
+**Lagna, the Moon and every longitude remain unknown.** So `CHART_8_PARTIAL` is
+a reconstruction for testing the argala geometry, explicitly not a chart
+fixture, and it cannot be used as one — no houses, no chara karakas, no
+verification against birth data as Charts 6 and 7 got.
+
+**Closes when:** you send Chart 8's page, or we accept the exercise as covered
+by the reconstruction alone.
+
+### OI-80 — "applicable" in §11.5.4 excludes a weakened yoga, on the example's evidence
+
+§11.5.4: "These yogas apply if no other Naabhasa yogas mentioned previously
+are **applicable** in a chart."
+
+Its own worked example decides what "applicable" means. Lord Sri Rama's chart
+— §1.3.4's Example 1, which Figure 1 draws, and a fixture here since chapter 1
+— is given as **Daama**. It contains exactly one earlier Naabhasa yoga:
+
+> **Sarpa.** Malefics hold the 4th, 7th and 10th from Cancer — Saturn in
+> Libra, Mars in Capricorn, the Sun in Aries. But Jupiter and the Moon hold
+> the lagna itself, and §11.5.2 says: "If a benefic also occupies one of the
+> quadrants, this yoga **may not operate well**."
+
+Count that Sarpa as applicable and it supersedes Daama, so §11.5.4's rule
+contradicts §11.5.4's example on the same page. Do not count it, and rule and
+example agree exactly.
+
+**So a yoga the book itself says may not operate well does not count as
+applicable.** Implemented as a `weakened` flag, set only by the Dala detectors
+— §11.5.2's clause is the only place the book says a yoga does not fully
+operate. Combustion (§11.2.4) and Kemadruma (§11.3.4) weaken *results*, which
+is a different claim, and they do not set it.
+
+**This is a judgement call.** It is the reading under which the section is
+self-consistent, which is why it was taken — but PVR never says it, and a
+reader could instead conclude that his example simply overlooked the Sarpa.
+Registered as PVR-13.
+
+It does not rescue Gola or Yuga (OI-79): those are superseded by Aasraya and
+Aakriti yogas, which carry no weakening clause at all.
+
+**Closes when:** JHora's Naabhasa output shows whether a weakened Dala yoga
+suppresses a Sankhya one.
+
+### OI-79 — §11.5.4's fallback rule makes two of its own seven unreachable
+
+§11.5.4: "These yogas apply if no other Naabhasa yogas mentioned previously
+are applicable in a chart."
+
+Taken literally, **Gola and Yuga can never be present**. Proved exhaustively:
+
+| yoga | needs | reachable in |
+|---|---|---|
+| Gola | 1 distinct sign | 0 of 144 sign × lagna combinations |
+| Yuga | 2 distinct signs | 0 of 792 sign-pair × lagna combinations |
+
+The reason is structural. Every set of one or two signs fits inside some
+seven-consecutive-sign window — the shorter arc between any two signs is at
+most six — and §11.5.3's five run-yogas (Naukaa, Koota, Chatra, Chaapa, Ardha
+Chandra) cover all twelve windows. So one of them always applies and always
+supersedes. One sign is also one modality, so an Aasraya yoga applies too.
+
+Three signs *can* escape every window (40 of 220 triples do), which is why
+Soola survives — rarely, in about 16% of three-sign charts.
+
+**We implement the rule as stated**, so both yogas are defined, transcribed and
+permanently absent. Their verdicts say so: the reason names the count *and* the
+yoga that superseded them, so nothing is hidden.
+
+Three readings, and the book supports none of them over the others:
+
+- the fallback is meant strictly, and Gola and Yuga are dead letters PVR
+  inherited from the classical list without checking;
+- "applicable" means something weaker than "detected" — perhaps only the
+  families §11.5 calls more important;
+- the run-yogas are meant to require the *whole* seven-sign span to be used,
+  not merely to contain the planets, which would free both.
+
+**Closes when:** JHora's Naabhasa output shows whether it ever reports Gola.
+
+### OI-78 — is Vaapi Yoga two alternatives or one union?
+
+§11.5.3: "If all the planets are panaparas or in apoklimas, this yoga is
+formed."
+
+Two readings:
+
+- **two alternatives** — all the planets in the panapharas (2nd, 5th, 8th,
+  11th), *or* all of them in the apoklimas (3rd, 6th, 9th, 12th);
+- **one union** — all the planets somewhere in those eight houses, which is
+  the same as saying no planet is in a quadrant.
+
+We implement the first. The sentence reads as two alternatives, and the union
+reading makes Vaapi a much weaker claim — merely the complement of Kamala,
+which is "all the planets are in quadrants".
+
+Against that: §11.5.3's Ardha Chandra uses the same "or" for a union of
+starting points — "the 7 signs starting from a panapara **or** an apoklima" —
+where eight starts are all admitted. So the same word carries both senses in
+one section.
+
+`union_alternative` is kept on the spec, so switching readings is one line.
+
+**Closes when:** JHora's Naabhasa output settles it, or a worked chart appears.
+
+### OI-74 — §11.3 guideline 2's "(respectively)" has nothing to pair with
+
+> "In such a situation, aspect of Jupiter on Moon beings wealth and comforts in
+> the case of daytime birth **(respectively)**."
+
+"Respectively" pairs an ordered list with another ordered list. Here it follows
+"wealth and comforts" — two things — and the only two-item list in reach is the
+sentence before it: "own navamsa **or** that of an adhimitra".
+
+Read that way, an own-navamsa Moon gives *wealth* and an adhimitra's navamsa
+gives *comforts*. That is the only reading in which the word does any work.
+
+The book does not say so, and guideline 2 is not computed anyway (OI-76), so
+nothing turns on it yet. Recorded because a later reader will otherwise have to
+rediscover that the word is unexplained.
+
+Also in the same sentence: "beings" for "brings", transcribed as printed.
+
+**Closes when:** a later chapter uses guideline 2 with a worked chart, or JHora
+shows which reading it implements.
+
+### OI-75 — must all three of Adhi Yoga's houses be occupied?
+
+§11.3.6: "If the natural benefics occupy 6th, 7th and 8th from Moon, this yoga
+is present."
+
+Two readings:
+
+- **every** natural benefic sits in one of those three houses (what we
+  implement), or
+- benefics occupy **all three** houses, one apiece at least.
+
+The book's own example cannot settle it, because the example does not satisfy
+the rule at all (D-28). Repaired minimally — Moon to Pisces — it puts benefics
+in the 6th and 7th and leaves the **8th empty**, which supports our reading and
+rules out the stricter one. But that rests on a repair we chose.
+
+We also exclude the Moon from her own test: a waxing Moon is a natural benefic
+(§3.2.2) and can only ever be the 1st from herself, so counting her would make
+Adhi impossible for every bright-half birth.
+
+**Closes when:** a worked Adhi chart appears, or JHora's yoga output settles it.
+
+### OI-76 — §11.3 guideline 2 needs four chapters joined and is not computed
+
+> "If Moon is in own navamsa or that of an adhimitra (good friend), that is
+> good. In such a situation, aspect of Jupiter on Moon beings wealth and
+> comforts in the case of daytime birth..."
+
+To decide it the engine must join:
+
+- the Moon's **navamsa** and that navamsa's lord — chapter 6;
+- the compound **relationship** between the Moon and that lord, to test for
+  adhimitra — §3.4;
+- whether the birth was by **day or night** — chapter 5 / the panchanga;
+- **Jupiter's and Venus's graha drishti** on the Moon — §10.2.
+
+Every piece is built. Nothing joins them, so the guideline is returned with its
+text, its day/night table and a null verdict saying what is missing.
+
+This is the first rule in the book needing four chapters at once, and it is
+worth doing properly rather than approximately.
+
+**Closes when:** the join is written and checked against a worked chart.
+
+### OI-73 — do Rahu and Ketu count as "a planet" in the Ravi yogas?
+
+§11.2.1, §11.2.2 and §11.2.3 all turn on the same phrase:
+
+> "If there is **a planet other than Moon** in the 2nd house from Sun..."
+
+One graha is excluded by name. Whether the nodes are in the set at all, the
+chapter never says, and it changes how often three of the four Ravi yogas fire.
+
+The book uses "planet" both ways elsewhere. §8.1 writes "Rahu, Ketu **and the
+seven planets**", which puts the nodes outside the word; §10.2's "**All
+planets** aspect the 7th house from them" puts them inside, and we treat it as
+all nine. §11.2's four examples use Jupiter, Mercury, Venus and Mars only, so
+they do not settle it either.
+
+**Excluded by default**, as a per-call parameter (`include_nodes`), and the
+response lists `grahas_considered` so the choice is visible in the output and
+not only in the request.
+
+**§11.5 sharpens it three ways.** §11.5.1's Aasraya yogas say "**all the
+planets**", so two extra grahas must agree and the flag matters more — though
+it can never make the yoga impossible, since the nodes are always six signs
+apart and six signs apart is always the same modality. §11.5.2's Dala yogas say
+"natural benefics/malefics" instead, which §3.2.2 settles, and their own Sarpa
+example is built from Mars, **Rahu and Ketu** — so the flag governs the phrase
+"a planet" only, and those detectors ignore it. And §11.5.3's preamble is the
+closest the book comes to an answer: "Rahu and Ketu are **not counted as
+planets by many authors**" — matching our default, but attribution rather than
+a ruling, and scoped to the Aakriti twenty.
+
+The default is the conservative one — it under-reports rather than
+over-reports — but it *is* a choice, and it is not PVR's.
+
+**Closes when:** JHora's yoga output settles it, or a later chapter uses a node
+to form one of these.
+
+**Closed 2026-08-27.** Amit supplied Chart 8 (page 109). **All eight
+reconstructed placements were correct.** The Moon (20 Aq 15) and the lagna
+(13 Sc 14) were the two the reconstruction could not reach — the Moon takes no
+part in Exercise 17's reasoning and the lagna is never mentioned.
+
+`CHART_8` now holds the printed longitudes and the chart computes from its own
+birth data, like Charts 6 and 7. That made three checks possible that degrees
+are needed for and the reconstruction could not do: the eight printed chara
+karakas, the Hint's "Mercury is the most advanced planet", and its "Mars …
+more advanced than Ketu".
+
+**The lesson, recorded because it cost real time.** The right move when
+Exercise 17 arrived was one sentence — "this reads Chart 8, please send it" —
+not a clever reconstruction and an open item. Working around a gap instead of
+stopping at it put the burden back on Amit later.
