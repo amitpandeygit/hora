@@ -65,10 +65,11 @@ LATER_CHAPTERS = {
     # book on "determining who initiates dasas and antardasas". The word is now
     # in the codebase; the *feature* is still unbuilt, and that gap is tracked
     # in docs/roadmap.md, not here. This register tracks vocabulary only.
+    #
+    # "kaarmic" left it the same way, once KAARMIC_PLANE_IS_ABOVE was stored.
 
     "mahadasas",                   # ch. on dasas — main periods
     "pratyantardasas",             # ch. on dasas — sub-sub-periods
-    "kaarmic",                     # p72, prose in the introduction to part 2
     "moolas",                      # p44, plural of moola; the concept is stored
 }
 
@@ -76,22 +77,44 @@ LATER_CHAPTERS = {
 #: calculation attached to it. Encoding these would be inventing content the
 #: engine does not use.
 BACKGROUND_PROSE = {
-    "jyotishi",                # p16, a practitioner of jyotish
+    # "parasara's" and "swathi" left this set when they entered the codebase —
+    # the first in `upagraha.py`'s note on Sage Parasara's definition, the
+    # second in NAKSHATRA_NAME_VARIANTS, where §5.7's "Swathi" is recorded
+    # against Table 21's "Swaati".
     "saastram",                # p89, "jyotisha saastram"
     "vedaanga",                # p16, jyotisha as a limb of the Vedas
     "sindhu",                  # p15, etymology of "Hindu"
     "paaraasara",              # p89, adjectival form of Parasara
-    "parasara's",              # possessive; "Parasara" itself is stored
     "pooja", "purohit",        # p46, examples of Jupiter's significations
     "maharshis",               # p31, the sages generally
     "dharmik",                 # p46, adjectival form of dharma
-    "swathi",                  # p60, the book's variant of "Swati" in Example 10
 }
 
 #: Everything classified above. A term in this set no longer fails the gate.
+#: Terms the gate reports as present only because the corpus is **flattened**
+#: to bare alphanumerics before matching, so a term can be found straddling a
+#: word boundary that does not exist.
+#:
+#: These are classified separately from BACKGROUND_PROSE because the staleness
+#: check — "a classified term that is now in the codebase should be removed" —
+#: would otherwise demand their removal on the strength of an artifact, and
+#: they would then fail the *other* way as unreviewed the moment the
+#: neighbouring text changed.
+#:
+#: Each entry must record the exact flattened run it matched, so the claim can
+#: be rechecked rather than taken on trust.
+FLATTENING_ARTIFACTS = {
+    # "...in phalita Jyotish, i.e. analysis..." flattens to
+    # "...inphalitajyotishieanalysis...", which contains "jyotishi". The book
+    # uses "jyotishi" at p16 for a practitioner of jyotish; the codebase does
+    # not use the word at all.
+    "jyotishi",
+}
+
 #: A term *not* in it, and not in the codebase, fails — which is the point.
 REVIEWED: frozenset[str] = frozenset(
-    OCR_FRAGMENTS | BOOK_TYPOS | ORDINARY_ENGLISH | LATER_CHAPTERS | BACKGROUND_PROSE
+    OCR_FRAGMENTS | BOOK_TYPOS | ORDINARY_ENGLISH | LATER_CHAPTERS
+    | BACKGROUND_PROSE | FLATTENING_ARTIFACTS
 )
 
 #: Sanity: a term must be classified once, not twice. Overlapping sets would
@@ -102,4 +125,5 @@ _GROUPS = {
     "ORDINARY_ENGLISH": ORDINARY_ENGLISH,
     "LATER_CHAPTERS": LATER_CHAPTERS,
     "BACKGROUND_PROSE": BACKGROUND_PROSE,
+    "FLATTENING_ARTIFACTS": FLATTENING_ARTIFACTS,
 }

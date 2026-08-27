@@ -781,6 +781,12 @@ The docstring has been corrected to state the real guarantee, and
 `test_the_verbatim_check_is_case_and_punctuation_insensitive` pins the
 weakness so it is not mistaken for a stronger one.
 
+**Run 2026-08-27 against the PDF: all 109 fidelity checks pass.** That is
+weaker evidence than it sounds, and for exactly the reason above — the
+comparison cannot see the two known discrepancies (OI-60's "Dara karaka",
+§8.3's capitalised relatives), so it would pass whether or not they were
+fixed.
+
 **Closes when:** the stricter comparison is written and run against the PDF,
 and whatever it flags is settled.
 

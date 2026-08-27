@@ -143,6 +143,18 @@ so, and the numbers are printed by a script:
 
 ```
 HORA_BOOK_PDF=... python scripts/book_coverage.py     # unreviewed terms
+
+**The PDF lives outside the repo** and is never committed — see
+[licensing.md](licensing.md). On Amit's machine it is at:
+
+    /Users/amitpandey/Documents/startup/personal/jyotish/book/vedic_astro_textbook.pdf
+
+Exporting `HORA_BOOK_PDF` to that path turns on 567 further checks: 109
+source-fidelity comparisons, 60 page-ledger assertions and the inverted
+coverage gate. **Run them before saying a chapter is done.** They were dark for
+most of this project's life, which is why the tally in
+[open-items.md](open-items.md) used to say the strongest evidence of
+completeness was switched off.
 HORA_BOOK_PDF=... pytest tests/unit/test_book_pages.py # page ledger
 ```
 
