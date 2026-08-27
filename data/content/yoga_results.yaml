@@ -14,7 +14,7 @@ sources:
   pvr-vaia:
     title: 'Vedic Astrology: An Integrated Approach'
     author: P.V.R. Narasimha Rao
-    section: 11.2 Ravi Yogas and 11.3 Chandra Yogas
+    section: 11.2 Ravi Yogas, 11.3 Chandra Yogas and 11.4 Pancha Mahapurusha Yogas
     first_published: 2000
     licence_status: unconfirmed
     licence_note: The author shares the book freely for reading. That is not an explicit licence to redistribute
@@ -188,3 +188,117 @@ entries:
   terms:
   - term: a king or a minister or an army chief
     category: station
+- planetary_yoga: ruchaka
+  name: Ruchaka Yoga
+  source: pvr-vaia
+  section: 11.4.1
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is a great man of fiery nature. He has a lot of enthusiasm. He is a
+    natural leader. He loves to fight wars and he is victorious over enemies. He is discriminative and
+    a devotee of learned people. He is well-versed in occult sciences. He has good taste. He is always
+    successful.
+  terms:
+  - term: a great man of fiery nature
+    category: temperament
+  - term: a lot of enthusiasm
+    category: temperament
+  - term: a natural leader
+    category: station
+  - term: victorious over enemies
+    category: circumstance
+  - term: well-versed in occult sciences
+    category: aptitude
+  - term: always successful
+    category: circumstance
+- planetary_yoga: bhadra
+  name: Bhadra Yoga
+  source: pvr-vaia
+  section: 11.4.2
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is a great man of earthy nature. He is lion-like. He is learned in
+    all respects. He has a good build of body and a deep voice. He has sattwa guna. He knows yoga well.
+    He is always surrounded by relatives, friends and family and enjoys his wealth with them. He maintains
+    cleanliness in everything and he is very systematic. He has a spirit of independence. He is religious.
+  terms:
+  - term: a great man of earthy nature
+    category: temperament
+  - term: lion-like
+    category: physical
+  - term: learned in all respects
+    category: aptitude
+  - term: a good build of body and a deep voice
+    category: physical
+  - term: sattwa guna
+    category: temperament
+  - term: very systematic
+    category: temperament
+  - term: a spirit of independence
+    category: temperament
+  - term: religious
+    category: temperament
+- planetary_yoga: sasa
+  name: Sasa Yoga
+  source: pvr-vaia
+  section: 11.4.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is a great man of airy nature. He is rabbit-like. He is wise and enjoys
+    wandering. He is comfortable in forests, mountains and forts. He is valorous and has a slender build.
+    He knows the weaknesses of others. He is lively, but has some vacillation. He is charitable.
+  transcription_notes: '"rabbit-like" carries footnote 29, whose text has not been supplied. Sasa is the
+    Sanskrit for hare or rabbit, which is what the sentence is glossing.'
+  terms:
+  - term: a great man of airy nature
+    category: temperament
+  - term: rabbit-like
+    category: physical
+  - term: wise and enjoys wandering
+    category: temperament
+  - term: a slender build
+    category: physical
+  - term: lively, but has some vacillation
+    category: temperament
+  - term: charitable
+    category: temperament
+- planetary_yoga: maalavya
+  name: Maalavya Yoga
+  source: pvr-vaia
+  section: 11.4.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is a great man of watery nature. He emits a lustre akin to moonlight.
+    He enjoys tasty food. He has luxuries. He has excellent health. He is well-versed in arts.
+  transcription_notes: The heading spells the name "Maalavya" and the Definition beneath it "Malavya".
+    See docs/book-deviations.md D-31.
+  terms:
+  - term: a great man of watery nature
+    category: temperament
+  - term: a lustre akin to moonlight
+    category: physical
+  - term: luxuries
+    category: circumstance
+  - term: excellent health
+    category: physical
+  - term: well-versed in arts
+    category: aptitude
+- planetary_yoga: hamsa
+  name: Hamsa Yoga
+  source: pvr-vaia
+  section: 11.4.5
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is a great man of ethery nature. He is swan-like. He has spiritual strength
+    and purity. He is respected by everyone. He is very passionate. He becomes a king. He has all comforts.
+    He enjoys life fully. He is a clever conversationalist and endowed with good speech.
+  transcription_notes: '"swan-like" carries footnote 30, whose text has not been supplied. Hamsa is the
+    Sanskrit for swan. The Definition above these results misnames the yoga "Ruchaka"; see D-30.'
+  terms:
+  - term: a great man of ethery nature
+    category: temperament
+  - term: swan-like
+    category: physical
+  - term: spiritual strength and purity
+    category: temperament
+  - term: respected by everyone
+    category: circumstance
+  - term: becomes a king
+    category: station
+  - term: a clever conversationalist and endowed with good speech
+    category: aptitude

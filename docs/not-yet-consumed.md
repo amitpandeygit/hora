@@ -445,19 +445,25 @@ it up fails the suite. See [open-items.md](open-items.md#oi-31).
 `GRAHA_DEFINITION` · `GRAHA_DEFINITION_NOTE` · `NODES_ARE_MATHEMATICAL_POINTS` · `UPAGRAHA_DEFINITION` · `UPAGRAHA_GLOSS` · `UPAGRAHA_COUNT` · `LAGNA_DEFINITION` · `SPECIAL_ASCENDANT_TERM` ·
 `GRAHA_ABBR` · `GRAHA_NAMES_SA` · `RASI_NAMES_SA` · `RASI_NAMES_SA_BOOK` ·
 `MODALITY_NAMES` · `DIRECTION_NAMES` · `DOSHA_NAMES` ·
-`ELEMENT_NAMES_SA` · `ELEMENT_RULER` · `ELEMENT_SHARERS` · `GUNA_NAMES` ·
+`ELEMENT_NAMES_SA` · `ELEMENT_SHARERS` · `GUNA_NAMES` ·
 `GUNA_ADJECTIVES` · `VARNA_NAMES` · `SEX_NAMES` · `RISING_NAMES` ·
 `AYANA_NAMES` · `RITU_NAMES` · `RITU_MEANINGS` · `RITU_MONTHS` ·
 `FOOTED_NAMES` · `ZODIAC_NAMES` · `ZODIAC_USED` · `NAKSHATRA_DEITY` ·
 `PANCHANGA_NAME_BOOK` · `PANCHANGA_MEANING` ·
 `PANCHANGA_ALMANAC_NAME` · `PURUSHARTHA_NAME_BOOK` · `PURUSHARTHA_MEANING` ·
 `PLANET_ELEMENT_NAMES` · `PLANET_ELEMENT_NAMES_SA` ·
-`PLANET_ELEMENT_ADJECTIVES` · `PLANET_ELEMENT_TATTVAS` ·
 `DHATU_MOOLA_JEEVA_NAMES` · `ESSENCE_NAMES` · `ESSENCE_ALIASES` ·
 `AVATARA_ALIASES` · `PURE_PARAMATMAMSA_AVATARAS` · `NODE_ALIASES` ·
 `CHAAYAA_GRAHAS` · `CHAAYAA_GRAHA_NAME` · `UPAGRAHA_ALIASES` ·
 `RELATIONSHIP_KINDS` · `COMPOUND_RELATION_NAMES` ·
 `COMPOUND_RELATION_GLOSSES` · `DIGNITY_NAMES_SA`
+
+**Three left this list in chapter 11.** The element-ruler table and the two
+tattva name lists were transcribed from §3.2.8 and sat here unconsumed. §11.4's
+Pancha Mahapurusha yogas read them — each yoga takes its ruler's element — so
+they are now consumed by a calculation eight chapters later. That is the
+register working as intended: a constant recorded early, consumed when the book
+finally uses it.
 
 Most were added by the inverted coverage sweep (see
 [page-sweep.md](page-sweep.md)), which found the book naming things the code

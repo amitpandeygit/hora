@@ -36,12 +36,23 @@ from hora.core.const import (
     CHANDRA_YOGA_INTRO,
     CHANDRA_YOGAS,
     COMBUSTION_WEAKENS_YOGA,
+    HAMSA_MISNAMED_IN_ITS_DEFINITION,
     KEMADRUMA_KILLS_OTHER_YOGAS,
+    MAALAVYA_SPELLING_VARIANTS,
+    MAHAPURUSHA_ELEMENT_RULERS_SENTENCE,
+    MAHAPURUSHA_FOOTNOTES_UNREAD,
+    MAHAPURUSHA_INTRO,
+    MAHAPURUSHA_REFERENCE_RULE,
+    MAHAPURUSHA_TERMS,
+    MAHAPURUSHA_YOGAS,
     PANAPHARA_SPELLING_VARIANTS,
+    PANCHA_BHOOTA_NAMES,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
     RAVI_YOGAS,
+    TATTVA_GLOSS_IN_3_2_8,
+    TATTVA_GLOSS_IN_11_4,
     Graha,
 )
 from hora.services import planetary_yoga_service
@@ -527,7 +538,7 @@ def test_one_endpoint_answers_a_single_yoga(client):
 def test_catalogue_lists_every_yoga_without_a_chart(client):
     body = client.get("/v1/planetary-yoga/catalogue").json()
     assert body["count"] == len(YOGA_REGISTRY)
-    assert body["groups"] == ["chandra", "ravi"]
+    assert body["groups"] == ["chandra", "mahapurusha", "ravi"]
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -582,7 +593,8 @@ def test_every_registered_yoga_has_its_results_transcribed():
     """The other half of exhaustiveness: a yoga the engine detects but whose
     results were never transcribed would read as having none."""
     entries = {e["planetary_yoga"] for e in _results()["entries"]}
-    assert entries == set(YOGA_REGISTRY)
+    missing = set(YOGA_REGISTRY) - entries
+    assert not missing, f"detected but no results transcribed: {sorted(missing)}"
 
 
 def test_no_results_entry_is_left_behind_by_a_renamed_key():
@@ -1156,3 +1168,294 @@ def test_group_filter_is_validated(client):
         "rasis": {0: 0}, "group": "nonesuch"})
     assert response.status_code == 400
     assert "unknown group" in response.json()["error"]["message"]
+
+
+# --------------------------------------------------------------------------
+# 11.4 Pancha Mahapurusha yogas
+# --------------------------------------------------------------------------
+
+
+def test_11_4_the_name_is_glossed():
+    """"Pancha means five and mahapurusha means a great person."""
+    assert MAHAPURUSHA_TERMS == {"pancha": "five",
+                                 "mahapurusha": "a great person"}
+    assert "5 kinds of great persons" in MAHAPURUSHA_INTRO
+
+
+def test_11_4_there_are_exactly_five():
+    """"5 kinds of great persons", one per element, one per graha."""
+    keys = {k for k, s in YOGA_REGISTRY.items() if s.group == "mahapurusha"}
+    assert keys == {"ruchaka", "bhadra", "sasa", "maalavya", "hamsa"}
+    assert len(MAHAPURUSHA_YOGAS) == 5
+
+
+def test_11_4_the_five_grahas_are_the_non_luminaries():
+    """Mars, Mercury, Saturn, Venus and Jupiter — the Sun, the Moon and both
+    nodes take no part. That is what makes them five rather than seven or
+    nine.
+    """
+    grahas = {y["graha"] for y in MAHAPURUSHA_YOGAS}
+    assert grahas == {Graha.MARS, Graha.MERCURY, Graha.SATURN,
+                      Graha.VENUS, Graha.JUPITER}
+    assert Graha.SUN not in grahas and Graha.MOON not in grahas
+    assert Graha.RAHU not in grahas and Graha.KETU not in grahas
+
+
+def test_11_4_the_five_tattvas_as_printed():
+    """"Agni tattva (fiery nature), Bhoo tattva (earthy nature), Vaayu tattva
+    (airy nature), Jala tattva (watery nature), Aakaasa tattva (ethery
+    nature)."""
+    from hora.core.const import PLANET_ELEMENT_ADJECTIVES, PLANET_ELEMENT_TATTVAS
+
+    assert PLANET_ELEMENT_TATTVAS == (
+        "agni tattva", "bhoo tattva", "vaayu tattva", "jala tattva",
+        "aakaasa tattva")
+    assert PLANET_ELEMENT_ADJECTIVES == (
+        "fiery", "earthy", "airy", "watery", "ethery")
+
+
+def test_11_4_repeats_3_2_8_and_they_agree():
+    """§3.2.8 gave the five elements and their rulers; §11.4 restates them.
+
+    "Mars, Mercury, Saturn, Venus and Jupiter (respectively) represent these 5
+    elements" — and `ELEMENT_RULER`, transcribed from §3.2.8 alone, is exactly
+    that list in exactly that order. "Respectively" only works if the order
+    matches, and it does.
+    """
+    from hora.core.const import ELEMENT_RULER
+
+    order = [ELEMENT_RULER[i] for i in range(5)]
+    assert order == [Graha.MARS, Graha.MERCURY, Graha.SATURN,
+                     Graha.VENUS, Graha.JUPITER]
+    assert "(respectively)" in MAHAPURUSHA_ELEMENT_RULERS_SENTENCE
+
+
+def test_11_4_each_yoga_takes_its_rulers_element():
+    """Ruchaka is Mars's and gives "a great man of fiery nature"; Bhadra is
+    Mercury's and gives "earthy"; and so down the five. Checked against
+    §3.2.8's table rather than against the results prose.
+    """
+    from hora.core.const import ELEMENT_RULER, PLANET_ELEMENT_ADJECTIVES
+
+    for entry in MAHAPURUSHA_YOGAS:
+        index = entry["element_index"]
+        assert ELEMENT_RULER[index] == entry["graha"], entry["key"]
+        assert PLANET_ELEMENT_ADJECTIVES[index], entry["key"]
+
+
+def test_11_4_names_the_set_two_ways():
+    """"These are called pancha bhootas (five existences) or pancha tattvas
+    (five natures)." Both names and both glosses, which §3.2.8 does not give.
+    """
+    assert PANCHA_BHOOTA_NAMES == {
+        "pancha bhootas": "five existences",
+        "pancha tattvas": "five natures"}
+
+
+def test_11_4_glosses_the_tattvas_differently_from_3_2_8():
+    """§3.2.8 writes "Aakaasa tattva (ethery **element**)"; §11.4 writes
+    "(ethery **nature**)". The same five, glossed with different words in the
+    two sections. Recorded rather than normalised — see D-32.
+    """
+    assert TATTVA_GLOSS_IN_11_4 == "nature"
+    assert TATTVA_GLOSS_IN_3_2_8 == "element"
+    assert TATTVA_GLOSS_IN_11_4 != TATTVA_GLOSS_IN_3_2_8
+
+
+# --------------------------------------------------------------------------
+# The one construction, five times
+# --------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("entry", MAHAPURUSHA_YOGAS, ids=lambda e: e["key"])
+def test_11_4_the_printed_signs_are_derived_not_transcribed(entry):
+    """"In other words, Mars should be in Ar, Sc or Cp" — "in other words",
+    so the sign list is the rule's consequence, not a second rule.
+
+    Derived from `RASI_LORD` and `EXALTATION_DEG` and checked against every
+    printed list. A change to either table that broke a yoga would fail here.
+    """
+    from hora.charts.planetary_yogas.mahapurusha import dignified_signs
+
+    computed = {RASI_ABBR[s] for s in dignified_signs(entry["graha"])}
+    assert computed == set(entry["printed_signs"]), entry["key"]
+
+
+def test_11_4_mercury_alone_has_two_signs_not_three():
+    """Virgo is both Mercury's own sign and his exaltation sign, so his set
+    collapses to two where every other graha here has three.
+
+    §11.4.2 prints exactly that — "Mercury should be in Ge or Vi" — so the
+    book noticed. Worth pinning, because a naive "two own signs plus one
+    exaltation" would give three and admit a sign that does not exist.
+    """
+    from hora.charts.planetary_yogas.mahapurusha import dignified_signs
+
+    sizes = {e["key"]: len(dignified_signs(e["graha"])) for e in MAHAPURUSHA_YOGAS}
+    assert sizes["bhadra"] == 2
+    assert all(size == 3 for key, size in sizes.items() if key != "bhadra")
+    assert len(MAHAPURUSHA_YOGAS[1]["printed_signs"]) == 2
+
+
+@pytest.mark.parametrize("entry", MAHAPURUSHA_YOGAS, ids=lambda e: e["key"])
+def test_11_4_each_worked_example(entry):
+    """"As an example, a native with lagna in Li and Mars in Ar will have this
+    yoga" — and the same shape for each of the five."""
+    example = entry["example"]
+    verdict = evaluate_one(entry["key"], YogaInput(
+        rasis={int(entry["graha"]): R[example["graha_sign"]]},
+        lagna_rasi=R[example["lagna"]]))
+    assert verdict.present, entry["key"]
+    house = (R[example["graha_sign"]] - R[example["lagna"]]) % 12 + 1
+    assert house in (1, 4, 7, 10)
+    assert verdict.houses == {int(entry["graha"]): house}
+
+
+def test_11_4_the_examples_use_four_different_quadrants():
+    """The five examples land on the 7th, 4th, 10th, 10th and 4th — three of
+    the four quadrants, never the 1st. So none of them exercises a graha in
+    the ascendant itself, which the rule plainly allows.
+    """
+    houses = {
+        (R[e["example"]["graha_sign"]] - R[e["example"]["lagna"]]) % 12 + 1
+        for e in MAHAPURUSHA_YOGAS
+    }
+    assert houses == {4, 7, 10}
+    verdict = evaluate_one("ruchaka", YogaInput(
+        rasis={int(Graha.MARS): R["Ar"]}, lagna_rasi=R["Ar"]))
+    assert verdict.present
+    assert verdict.houses == {int(Graha.MARS): 1}
+
+
+def test_11_4_both_halves_are_required():
+    """A dignified graha outside a quadrant, and a quadrant graha without
+    dignity, each fail — and the reason names which half was missing."""
+    outside = evaluate_one("ruchaka", YogaInput(
+        rasis={int(Graha.MARS): R["Ar"]}, lagna_rasi=R["Ta"]))
+    assert not outside.present
+    assert "not a quadrant" in outside.reason
+    undignified = evaluate_one("ruchaka", YogaInput(
+        rasis={int(Graha.MARS): R["Ge"]}, lagna_rasi=R["Ge"]))
+    assert not undignified.present
+    assert "not one of" in undignified.reason
+
+
+def test_11_4_the_verdict_names_own_sign_or_exaltation():
+    """Both qualify, and which one it was is part of the evidence."""
+    own = evaluate_one("sasa", YogaInput(
+        rasis={int(Graha.SATURN): R["Cp"]}, lagna_rasi=R["Cp"]))
+    assert "his own sign" in own.reason
+    exalted = evaluate_one("sasa", YogaInput(
+        rasis={int(Graha.SATURN): R["Li"]}, lagna_rasi=R["Cp"]))
+    assert "his exaltation sign" in exalted.reason
+
+
+def test_11_4_is_unanswerable_without_a_lagna():
+    """Like Kemadruma, and for the same reason: quadrants are counted from the
+    ascendant."""
+    for entry in MAHAPURUSHA_YOGAS:
+        verdict = evaluate_one(entry["key"], YogaInput(
+            rasis={int(entry["graha"]): R[entry["printed_signs"][0]]}))
+        assert verdict.present is False
+        assert "cannot be decided" in verdict.reason
+
+
+def test_11_4_does_not_apply_from_the_moon():
+    """"This yoga does not apply from Moon."
+
+    The first place in the book that rules a reference **out**. Chapter 7 made
+    every reference relative and §7.3 lists eight of them; §11.4 excludes one
+    by name, five times over.
+
+    So no Moon-reference option exists on the input at all — a caller cannot
+    ask for it and get a wrong answer.
+    """
+    assert "does not apply from Moon" in MAHAPURUSHA_REFERENCE_RULE
+    fields = YogaInput.__dataclass_fields__
+    assert "lagna_rasi" in fields
+    assert not any("moon" in field for field in fields)
+
+
+def test_11_4_applies_mainly_in_the_rasi_chart():
+    """"it applies mainly in rasi chart" — the opposite of §11.2, which sends
+    the Ravi yogas to D-9 and D-10.
+
+    A non-rasi chart is flagged rather than refused, since "mainly" is not
+    "only".
+    """
+    assert "mainly in rasi chart" in MAHAPURUSHA_REFERENCE_RULE
+    assert "less common in divisional charts" in RAVI_YOGA_FREQUENCY_NOTE
+    d1 = evaluate_one("ruchaka", YogaInput(
+        rasis={int(Graha.MARS): R["Ar"]}, lagna_rasi=R["Li"]))
+    d9 = evaluate_one("ruchaka", YogaInput(
+        rasis={int(Graha.MARS): R["Ar"]}, lagna_rasi=R["Li"], chart="D9"))
+    assert d1.present and d9.present
+    assert MAHAPURUSHA_REFERENCE_RULE not in d1.qualifiers
+    assert MAHAPURUSHA_REFERENCE_RULE in d9.qualifiers
+
+
+def test_11_4_more_than_one_can_hold_at_once():
+    """Nothing makes the five exclusive: the yogas read different grahas, and
+    a chart can satisfy several. Mars in Aries and Jupiter in Cancer with
+    Aries rising gives two.
+    """
+    verdicts = {v.key: v.present for v in evaluate(
+        YogaInput(rasis={int(Graha.MARS): R["Ar"], int(Graha.JUPITER): R["Cn"]},
+                  lagna_rasi=R["Ar"]), group="mahapurusha")}
+    assert verdicts["ruchaka"] and verdicts["hamsa"]
+    assert not verdicts["bhadra"]
+
+
+# --------------------------------------------------------------------------
+# The two name errors
+# --------------------------------------------------------------------------
+
+
+def test_11_4_5_the_definition_calls_hamsa_by_ruchakas_name():
+    """**The find.** §11.4.5's heading reads "Hamsa Yoga" and its Definition
+    opens: "If Jupiter is in a quadrant in own sign or exaltation sign, it is
+    called **Ruchaka** yoga."
+
+    Ruchaka is Mars's yoga, defined four sections earlier. The sentence is
+    §11.4.1's with the graha swapped and the name left behind.
+
+    It cannot be right: §11.4 promises "5 kinds of great persons", and two
+    yogas sharing a name would leave four names for five yogas. See D-30 and
+    PVR-12.
+    """
+    assert HAMSA_MISNAMED_IN_ITS_DEFINITION == "Ruchaka"
+    assert YOGA_REGISTRY["hamsa"].name == "Hamsa Yoga"
+    assert YOGA_REGISTRY["ruchaka"].name == "Ruchaka Yoga"
+    names = {s.name for k, s in YOGA_REGISTRY.items()
+             if s.group == "mahapurusha"}
+    assert len(names) == 5, "five yogas need five names"
+
+
+def test_11_4_4_maalavya_is_spelled_two_ways():
+    """The heading reads "Maalavya Yoga"; the Definition beneath it reads "it
+    is called Malavya yoga". One page, two spellings — the same slip as
+    Budha-Aaditya's in §11.2.4. See D-31.
+    """
+    assert MAALAVYA_SPELLING_VARIANTS == ("Malavya",)
+    assert YOGA_REGISTRY["maalavya"].name == "Maalavya Yoga"
+
+
+def test_the_two_name_errors_are_of_different_kinds():
+    """Worth separating: §11.4.4's is a spelling variant of the right name,
+    §11.4.5's is the wrong name outright. The first is transcribed, the second
+    is overruled.
+    """
+    assert "Malavya" in "Maalavya"[1:] or "Maalavya".replace("a", "", 1) == "Malavya"
+    assert HAMSA_MISNAMED_IN_ITS_DEFINITION != "Hamsa"
+
+
+def test_footnotes_29_and_30_have_not_been_supplied():
+    """"He is rabbit-like²⁹" in §11.4.3 and "He is swan-like³⁰" in §11.4.5.
+    The footnote text has not been given to us; the name meanings recorded
+    come from the results sentences themselves, not from the footnotes.
+    """
+    assert MAHAPURUSHA_FOOTNOTES_UNREAD == (29, 30)
+    by_key = {y["key"]: y for y in MAHAPURUSHA_YOGAS}
+    assert by_key["sasa"]["name_means"] == "rabbit"
+    assert by_key["hamsa"]["name_means"] == "swan"
+    assert by_key["ruchaka"]["name_means"] is None

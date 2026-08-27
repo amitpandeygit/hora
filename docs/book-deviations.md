@@ -909,3 +909,84 @@ and `PANAPHARA_SPELLING_VARIANTS` records "panapara". Same treatment as
 [D-20](#), [D-21](#), [D-25](#) and [D-27](#).
 
 Pinned by `test_guideline_1_spells_panaphara_the_short_way`.
+
+---
+
+## D-30 · §11.4.5's definition calls Hamsa Yoga by Ruchaka's name
+
+**Status: closed.** The heading is followed. Registered as
+[PVR-12](precedence.md).
+
+The heading:
+
+> **11.4.5   Hamsa Yoga**
+
+The Definition immediately beneath it:
+
+> "If Jupiter is in a quadrant in own sign or exaltation sign, it is called
+> **Ruchaka** yoga."
+
+Ruchaka is **Mars's** yoga, defined four sections earlier at §11.4.1. The
+sentence is §11.4.1's with the graha swapped and the name left behind — the
+rest of it, down to "This yoga does not apply from Moon", is word for word the
+same.
+
+**Why the heading wins**, on three independent grounds:
+
+1. §11.4 promises "5 kinds of great persons". Two yogas sharing a name leaves
+   four names for five yogas, which the section cannot mean.
+2. The Results paragraph beneath calls the native "swan-like", and *hamsa* is
+   the Sanskrit for swan. Ruchaka has no such gloss.
+3. The five yogas are one per element in the order Mars, Mercury, Saturn,
+   Venus, Jupiter. Jupiter's slot is the fifth and cannot also be the first.
+
+Tie-break rule 4 — corroboration elsewhere breaks a tie — and here three
+separate things corroborate the heading.
+
+**What we do:** the registry carries "Hamsa Yoga" for Jupiter's and "Ruchaka
+Yoga" for Mars's, and a test asserts the five yogas have five distinct names.
+`HAMSA_MISNAMED_IN_ITS_DEFINITION` records the misprint.
+
+Pinned by `test_11_4_5_the_definition_calls_hamsa_by_ruchakas_name`.
+
+---
+
+## D-31 · §11.4.4 spells Maalavya two ways
+
+**Status: closed.** Heading spelling primary; the variant recorded.
+
+The heading reads "**Maalavya** Yoga"; the Definition beneath it reads "it is
+called **Malavya** yoga". One `a` dropped, on the same page — the same slip as
+[D-27](#), where §11.2.4's heading reads "Budha-Aaditya" and its worked reading
+"Budha-Aditya".
+
+**What we do:** the registry carries "Maalavya Yoga", the heading's form, and
+`MAALAVYA_SPELLING_VARIANTS` records "Malavya".
+
+Worth separating from [D-30](#) above, on the same two pages: this is a
+spelling variant of the **right** name, that one is the **wrong** name. The
+first is transcribed, the second is overruled.
+
+Pinned by `test_11_4_4_maalavya_is_spelled_two_ways`.
+
+---
+
+## D-32 · §3.2.8 and §11.4 gloss the five tattvas differently
+
+**Status: closed.** Both recorded; nothing to compute.
+
+§3.2.8 writes each as "<Sanskrit> tattva (<adjective> **element**)" — for
+instance "Aakaasa tattva (ethery element) is ruled by Jupiter". §11.4's bullet
+list writes "Aakaasa tattva (ethery **nature**)", and calls the set "pancha
+bhootas (five existences) or pancha tattvas (five **natures**)".
+
+Same five, same order, same rulers — a different noun in the gloss.
+
+**What matters is that everything else agrees.** `ELEMENT_RULER` and
+`PLANET_ELEMENT_ADJECTIVES` were transcribed from §3.2.8 alone, and §11.4's
+"Mars, Mercury, Saturn, Venus and Jupiter (respectively)" reproduces that order
+exactly — which is the whole load-bearing part, since "respectively" fails if
+the order differs. Eight chapters apart, with no cross-reference either way.
+
+Pinned by `test_11_4_repeats_3_2_8_and_they_agree` and
+`test_11_4_glosses_the_tattvas_differently_from_3_2_8`.

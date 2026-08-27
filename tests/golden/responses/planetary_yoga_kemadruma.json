@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 10,
+    "evaluated": 15,
     "grahas_considered": [
       {
         "graha": 0,
@@ -133,6 +133,71 @@
         "qualifiers": [],
         "reason": "Mercury, Jupiter are natural benefics outside the 6th, 7th and 8th from Moon",
         "section": "11.3.6"
+      },
+      {
+        "aliases": [],
+        "definition": "If Mars is in a quadrant in own sign or exaltation sign, it is called Ruchaka yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "ruchaka",
+        "name": "Ruchaka Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Mars is in Gemini, not one of Aries, Scorpio, Capricorn; Mars is in the 2nd from lagna, not a quadrant",
+        "section": "11.4.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If Mercury is in a quadrant in own sign or exaltation sign, it is called Bhadra yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "bhadra",
+        "name": "Bhadra Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Mercury is in Cancer, not one of Gemini, Virgo; Mercury is in the 3rd from lagna, not a quadrant",
+        "section": "11.4.2"
+      },
+      {
+        "aliases": [],
+        "definition": "If Saturn is in a quadrant in own sign or exaltation sign, it is called Sasa yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "sasa",
+        "name": "Sasa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Saturn is in Aries, not one of Libra, Capricorn, Aquarius; Saturn is in the 12th from lagna, not a quadrant",
+        "section": "11.4.3"
+      },
+      {
+        "aliases": [],
+        "definition": "If Venus is in a quadrant in own sign or exaltation sign, it is called Maalavya yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "maalavya",
+        "name": "Maalavya Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Venus is in the 11th from lagna, not a quadrant",
+        "section": "11.4.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If Jupiter is in a quadrant in own sign or exaltation sign, it is called Hamsa yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "hamsa",
+        "name": "Hamsa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Jupiter is in the 8th from lagna, not a quadrant",
+        "section": "11.4.5"
       },
       {
         "aliases": [],

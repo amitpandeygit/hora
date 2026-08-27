@@ -1,0 +1,138 @@
+{
+  "body": {
+    "chart": "D1",
+    "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
+    "evaluated": 5,
+    "grahas_considered": [
+      {
+        "graha": 0,
+        "graha_name": "Sun"
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon"
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars"
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter"
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus"
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn"
+      }
+    ],
+    "group": "mahapurusha",
+    "include_nodes": false,
+    "inputs_missing": [
+      "paksha"
+    ],
+    "kemadruma_present": false,
+    "lagna_rasi": 6,
+    "paksha": null,
+    "present": [
+      "ruchaka",
+      "hamsa"
+    ],
+    "qualifiers_available": [],
+    "qualifiers_unavailable": [
+      "combustion"
+    ],
+    "results_killed_by_kemadruma": [],
+    "yogas": [
+      {
+        "aliases": [],
+        "definition": "If Mars is in a quadrant in own sign or exaltation sign, it is called Ruchaka yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "ruchaka",
+        "name": "Ruchaka Yoga",
+        "participants": [
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": 7,
+            "sign": 0,
+            "sign_name": "Aries"
+          }
+        ],
+        "present": true,
+        "qualifiers": [],
+        "reason": "Mars is in Aries, his own sign, and the 7th from lagna",
+        "section": "11.4.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If Mercury is in a quadrant in own sign or exaltation sign, it is called Bhadra yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "bhadra",
+        "name": "Bhadra Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Mercury is in the 9th from lagna, not a quadrant",
+        "section": "11.4.2"
+      },
+      {
+        "aliases": [],
+        "definition": "If Saturn is in a quadrant in own sign or exaltation sign, it is called Sasa yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "sasa",
+        "name": "Sasa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Saturn has no placement",
+        "section": "11.4.3"
+      },
+      {
+        "aliases": [],
+        "definition": "If Venus is in a quadrant in own sign or exaltation sign, it is called Maalavya yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "maalavya",
+        "name": "Maalavya Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Venus has no placement",
+        "section": "11.4.4"
+      },
+      {
+        "aliases": [],
+        "definition": "If Jupiter is in a quadrant in own sign or exaltation sign, it is called Hamsa yoga.",
+        "group": "mahapurusha",
+        "implies": [],
+        "key": "hamsa",
+        "name": "Hamsa Yoga",
+        "participants": [
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": 10,
+            "sign": 3,
+            "sign_name": "Cancer"
+          }
+        ],
+        "present": true,
+        "qualifiers": [],
+        "reason": "Jupiter is in Cancer, his exaltation sign, and the 10th from lagna",
+        "section": "11.4.5"
+      }
+    ]
+  },
+  "status": 200
+}

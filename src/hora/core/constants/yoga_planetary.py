@@ -326,3 +326,94 @@ ADHI_EXAMPLE_CONTRADICTS_RULE = (
     "Virgo and Leo, which are the 5th and 4th from Taurus. The rule asks for "
     "the 6th, 7th and 8th. The rule is followed."
 )
+
+
+# --------------------------------------------------------------------------
+# §11.4 Pancha Mahapurusha yogas
+# --------------------------------------------------------------------------
+
+MAHAPURUSHA_TERMS = {"pancha": "five", "mahapurusha": "a great person"}
+MAHAPURUSHA_INTRO = (
+    "Pancha mahapurusha yogas give the combinations that produce 5 kinds of "
+    "great persons."
+)
+
+#: §11.4 restates §3.2.8's five elements and adds two names for the set.
+#: `PLANET_ELEMENT_TATTVAS` and `ELEMENT_RULER` in `constants/graha.py` were
+#: transcribed from §3.2.8 and agree with §11.4 exactly — including the order,
+#: which is what "(respectively)" depends on.
+PANCHA_BHOOTA_NAMES = {
+    "pancha bhootas": "five existences",
+    "pancha tattvas": "five natures",
+}
+MAHAPURUSHA_ELEMENT_RULERS_SENTENCE = (
+    "Mars, Mercury, Saturn, Venus and Jupiter (respectively) represent these "
+    "5 elements."
+)
+MAHAPURUSHA_ELEMENT_ROLE = (
+    "Pancha mahapurusha yogas produce five kinds of great persons with one of "
+    "these 5 elements playing a predominant role in their personalities."
+)
+
+#: §11.4 writes "(fiery nature)" where §3.2.8 writes "(fiery element)".
+#: Same five, differently glossed. See docs/book-deviations.md D-32.
+TATTVA_GLOSS_IN_11_4 = "nature"
+TATTVA_GLOSS_IN_3_2_8 = "element"
+
+#: The five, in §11.4's order. `graha` is the ruler; `element_index` indexes
+#: `PLANET_ELEMENT_NAMES`. The sign set is **derived** from `RASI_LORD` and
+#: `EXALTATION_DEG` rather than transcribed — §11.4 prints it as "in other
+#: words", so it is the rule's consequence, not a separate rule.
+MAHAPURUSHA_YOGAS: tuple[dict, ...] = (
+    {
+        "key": "ruchaka", "name": "Ruchaka Yoga", "section": "11.4.1",
+        "graha": Graha.MARS, "element_index": 0, "printed_signs": ("Ar", "Sc", "Cp"),
+        "example": {"lagna": "Li", "graha_sign": "Ar"},
+        "name_means": None,
+    },
+    {
+        "key": "bhadra", "name": "Bhadra Yoga", "section": "11.4.2",
+        "graha": Graha.MERCURY, "element_index": 1, "printed_signs": ("Ge", "Vi"),
+        "example": {"lagna": "Ge", "graha_sign": "Vi"},
+        "name_means": None,
+    },
+    {
+        "key": "sasa", "name": "Sasa Yoga", "section": "11.4.3",
+        "graha": Graha.SATURN, "element_index": 2, "printed_signs": ("Cp", "Aq", "Li"),
+        "example": {"lagna": "Cp", "graha_sign": "Li"},
+        "name_means": "rabbit",
+    },
+    {
+        "key": "maalavya", "name": "Maalavya Yoga", "section": "11.4.4",
+        "graha": Graha.VENUS, "element_index": 3, "printed_signs": ("Ta", "Li", "Pi"),
+        "example": {"lagna": "Ge", "graha_sign": "Pi"},
+        "name_means": None,
+    },
+    {
+        "key": "hamsa", "name": "Hamsa Yoga", "section": "11.4.5",
+        "graha": Graha.JUPITER, "element_index": 4, "printed_signs": ("Sg", "Pi", "Cn"),
+        "example": {"lagna": "Sg", "graha_sign": "Pi"},
+        "name_means": "swan",
+    },
+)
+
+#: The sentence every one of the five repeats. Two restrictions, and the
+#: second is the opposite of §11.2's preference for D-9 and D-10.
+MAHAPURUSHA_REFERENCE_RULE = (
+    "This yoga does not apply from Moon and it applies mainly in rasi chart."
+)
+
+#: §11.4.5's Definition opens "If Jupiter is in a quadrant in own sign or
+#: exaltation sign, it is called **Ruchaka** yoga." Ruchaka is Mars's yoga,
+#: named in §11.4.1. The heading reads "Hamsa Yoga" and is followed.
+#: See docs/book-deviations.md D-30 and precedence.md PVR-12.
+HAMSA_MISNAMED_IN_ITS_DEFINITION = "Ruchaka"
+
+#: §11.4.4's heading reads "Maalavya Yoga"; its Definition reads "Malavya
+#: yoga". See docs/book-deviations.md D-31.
+MAALAVYA_SPELLING_VARIANTS: tuple[str, ...] = ("Malavya",)
+
+#: Footnotes 29 and 30 hang off "rabbit-like" in §11.4.3's results and
+#: "swan-like" in §11.4.5's. Their text has not been supplied; the name
+#: meanings above come from the results sentences themselves.
+MAHAPURUSHA_FOOTNOTES_UNREAD: tuple[int, ...] = (29, 30)

@@ -268,6 +268,11 @@ CASES = [
         "rasis": {1: 5, 0: 9, 4: 8, 2: 2, 3: 3, 5: 11, 6: 0},
         "lagna_rasi": 1,
     }),
+    ("planetary_yoga_mahapurusha", "POST", "/v1/planetary-yoga/chart", {
+        # 11.4.1's example (lagna Li, Mars in Ar) plus Jupiter exalted in Cn,
+        # so two of the five hold at once and three do not.
+        "rasis": {2: 0, 4: 3, 3: 2}, "lagna_rasi": 6, "group": "mahapurusha",
+    }),
     ("planetary_yoga_guidelines", "POST", "/v1/planetary-yoga/guidelines", {
         "rasis": {0: 0, 1: 2, 4: 4, 5: 5}, "paksha": 0,
     }),

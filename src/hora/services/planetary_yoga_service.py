@@ -37,15 +37,29 @@ from hora.core.const import (
     CHANDRA_MOON_FROM_SUN_GRADE,
     CHANDRA_YOGA_INTRO,
     COMBUSTION_WEAKENS_YOGA,
+    ELEMENT_RULER,
     GRAHA_NAMES,
+    HAMSA_MISNAMED_IN_ITS_DEFINITION,
     HOUSE_CATEGORIES,
     KEMADRUMA_EFFORT_NOTE,
     KEMADRUMA_KILLS_OTHER_YOGAS,
+    MAALAVYA_SPELLING_VARIANTS,
+    MAHAPURUSHA_ELEMENT_ROLE,
+    MAHAPURUSHA_ELEMENT_RULERS_SENTENCE,
+    MAHAPURUSHA_FOOTNOTES_UNREAD,
+    MAHAPURUSHA_INTRO,
+    MAHAPURUSHA_REFERENCE_RULE,
+    MAHAPURUSHA_TERMS,
     PANAPHARA_SPELLING_VARIANTS,
+    PANCHA_BHOOTA_NAMES,
+    PLANET_ELEMENT_ADJECTIVES,
+    PLANET_ELEMENT_TATTVAS,
     RASI_NAMES,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
+    TATTVA_GLOSS_IN_3_2_8,
+    TATTVA_GLOSS_IN_11_4,
     UPACHAYA,
     Graha,
 )
@@ -274,6 +288,29 @@ def rules() -> dict:
     return {
         "ravi_intro": RAVI_YOGA_INTRO,
         "chandra_intro": CHANDRA_YOGA_INTRO,
+        "mahapurusha_terms": dict(MAHAPURUSHA_TERMS),
+        "mahapurusha_intro": MAHAPURUSHA_INTRO,
+        "pancha_bhoota_names": dict(PANCHA_BHOOTA_NAMES),
+        "mahapurusha_element_rulers": MAHAPURUSHA_ELEMENT_RULERS_SENTENCE,
+        "mahapurusha_element_role": MAHAPURUSHA_ELEMENT_ROLE,
+        "mahapurusha_reference_rule": MAHAPURUSHA_REFERENCE_RULE,
+        "mahapurusha_elements": [
+            {"tattva": PLANET_ELEMENT_TATTVAS[index],
+             "gloss_in_11_4": f"{PLANET_ELEMENT_ADJECTIVES[index]} {TATTVA_GLOSS_IN_11_4}",
+             "gloss_in_3_2_8": f"{PLANET_ELEMENT_ADJECTIVES[index]} {TATTVA_GLOSS_IN_3_2_8}",
+             "graha": int(ELEMENT_RULER[index]),
+             "graha_name": GRAHA_NAMES[ELEMENT_RULER[index]]}
+            for index in range(5)
+        ],
+        "maalavya_spelling_variants": list(MAALAVYA_SPELLING_VARIANTS),
+        "hamsa_misnamed_in_its_definition": HAMSA_MISNAMED_IN_ITS_DEFINITION,
+        "hamsa_name_note": (
+            "Section 11.4.5's Definition calls the yoga "
+            f"\u201c{HAMSA_MISNAMED_IN_ITS_DEFINITION}\u201d, which is Mars's "
+            "yoga from section 11.4.1. The heading reads \u201cHamsa Yoga\u201d "
+            "and is followed \u2014 see docs/book-deviations.md D-30."
+        ),
+        "footnotes_unread": list(MAHAPURUSHA_FOOTNOTES_UNREAD),
         "kemadruma_kills_other_yogas": KEMADRUMA_KILLS_OTHER_YOGAS,
         "kemadruma_effort_note": KEMADRUMA_EFFORT_NOTE,
         "kemadruma_is_a_qualifier_not_a_veto": (

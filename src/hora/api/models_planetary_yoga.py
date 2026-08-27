@@ -183,6 +183,17 @@ class TimingExampleOut(BaseModel):
     periods: list[TimingPeriodsOut]
 
 
+class MahapurushaElementOut(BaseModel):
+    tattva: str = Field(..., examples=["agni tattva"])
+    gloss_in_11_4: str = Field(..., examples=["fiery nature"])
+    gloss_in_3_2_8: str = Field(
+        ..., examples=["fiery element"],
+        description="Section 3.2.8 glosses the same five with 'element'; see D-32",
+    )
+    graha: int
+    graha_name: str
+
+
 class PlanetaryYogaRulesOut(BaseModel):
     ravi_intro: str
     chandra_intro: str
@@ -197,6 +208,28 @@ class PlanetaryYogaRulesOut(BaseModel):
         ),
     )
     panaphara_spelling_variants: list[str]
+    mahapurusha_terms: dict[str, str]
+    mahapurusha_intro: str
+    pancha_bhoota_names: dict[str, str]
+    mahapurusha_element_rulers: str
+    mahapurusha_element_role: str
+    mahapurusha_reference_rule: str = Field(
+        ...,
+        description=(
+            "Two restrictions section 11.4 repeats for each of the five: the "
+            "yoga does not apply from the Moon — the first place in the book "
+            "that rules a reference out — and it applies mainly in the rasi "
+            "chart, the opposite of section 11.2's preference."
+        ),
+    )
+    mahapurusha_elements: list[MahapurushaElementOut]
+    maalavya_spelling_variants: list[str]
+    hamsa_misnamed_in_its_definition: str
+    hamsa_name_note: str
+    footnotes_unread: list[int] = Field(
+        ...,
+        description="Footnotes referenced in the text whose wording we do not have",
+    )
     frequency_note: str
     preferred_charts: list[str]
     budha_aaditya_terms: dict[str, str]
