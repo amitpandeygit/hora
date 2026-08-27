@@ -1,6 +1,6 @@
 {
   "body": {
-    "count": 95,
+    "count": 98,
     "groups": [
       "naabhasa_aakriti",
       "chandra",
@@ -8,6 +8,7 @@
       "naabhasa_aasraya",
       "naabhasa_dala",
       "popular",
+      "raaja",
       "ravi",
       "naabhasa_sankhya"
     ],
@@ -774,6 +775,35 @@
         "key": "vimala",
         "name": "Vimala Yoga",
         "section": "11.6"
+      },
+      {
+        "aliases": [],
+        "definition": "If the lord of a quadrant and the lord of a trine have one of the three kinds of associations mentioned above, it forms a Raaja Yoga. Lagna can be taken as a quadrant or a trine here. It is both.",
+        "group": "raaja",
+        "implies": [],
+        "key": "raaja_basic",
+        "name": "Basic Raaja Yoga",
+        "section": "11.7.1"
+      },
+      {
+        "aliases": [],
+        "definition": "This is a special case of the above yoga. If the lords of dharma sthana (9th) and karma sthana (10th) form a raja yoga, it is known by this special name.",
+        "group": "raaja",
+        "implies": [
+          "raaja_basic"
+        ],
+        "key": "dharma_karmadhipati",
+        "name": "Dharma-Karmadhipati Yoga",
+        "section": "11.7.1"
+      },
+      {
+        "aliases": [],
+        "definition": "The 6th, 8th and 12th houses are known as trik sthanas or dusthanas (bad houses). If their lords occupies dusthanas or conjoin dusthanas, it results in this yoga.",
+        "group": "raaja",
+        "implies": [],
+        "key": "vipareeta_raaja",
+        "name": "Vipareeta Raaja Yoga",
+        "section": "11.7.1"
       },
       {
         "aliases": [],

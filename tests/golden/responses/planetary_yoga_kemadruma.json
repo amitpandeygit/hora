@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 95,
+    "evaluated": 98,
     "grahas_considered": [
       {
         "graha": 0,
@@ -49,6 +49,8 @@
       "bheri",
       "vasumati",
       "sarala",
+      "raaja_basic",
+      "vipareeta_raaja",
       "vosi",
       "veenaa"
     ],
@@ -61,9 +63,11 @@
       "bheri",
       "guru_mangala",
       "parvata",
+      "raaja_basic",
       "sarala",
       "vasumati",
       "veenaa",
+      "vipareeta_raaja",
       "vosi"
     ],
     "yogas": [
@@ -1436,6 +1440,80 @@
         ],
         "reason": "the 12th lord Mars is in the 2nd, not the 12th",
         "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the lord of a quadrant and the lord of a trine have one of the three kinds of associations mentioned above, it forms a Raaja Yoga. Lagna can be taken as a quadrant or a trine here. It is both.",
+        "group": "raaja",
+        "implies": [],
+        "key": "raaja_basic",
+        "name": "Basic Raaja Yoga",
+        "participants": [
+          {
+            "graha": 0,
+            "graha_name": "Sun",
+            "house_from_sun": null,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "graha": 3,
+            "graha_name": "Mercury",
+            "house_from_sun": null,
+            "sign": 3,
+            "sign_name": "Cancer"
+          }
+        ],
+        "present": true,
+        "qualifiers": [
+          "Saturn lords both a quadrant (10th) and a trine (9th); section 11.7.1 asks for an association between two planets and does not say whether one planet holding both sides is itself a Raaja Yoga. See docs/open-items.md OI-85",
+          "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas."
+        ],
+        "reason": "Sun (lord of the 4th) and Mercury (lord of the 5th) by mutual graha drishti",
+        "section": "11.7.1",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "This is a special case of the above yoga. If the lords of dharma sthana (9th) and karma sthana (10th) form a raja yoga, it is known by this special name.",
+        "group": "raaja",
+        "implies": [
+          "raaja_basic"
+        ],
+        "key": "dharma_karmadhipati",
+        "name": "Dharma-Karmadhipati Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Saturn lords the most important trine and the most important quadrant at once; section 11.7.1 does not say what that alone amounts to. See docs/open-items.md OI-85"
+        ],
+        "reason": "the 9th and 10th are both lorded by Saturn, so there are not two planets to associate",
+        "section": "11.7.1",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "The 6th, 8th and 12th houses are known as trik sthanas or dusthanas (bad houses). If their lords occupies dusthanas or conjoin dusthanas, it results in this yoga.",
+        "group": "raaja",
+        "implies": [],
+        "key": "vipareeta_raaja",
+        "name": "Vipareeta Raaja Yoga",
+        "participants": [
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": null,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          }
+        ],
+        "present": true,
+        "qualifiers": [
+          "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas."
+        ],
+        "reason": "the 8th lord Jupiter is in the 8th",
+        "section": "11.7.1",
         "weakened": false
       },
       {

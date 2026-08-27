@@ -227,6 +227,13 @@ class KalpadrumaExampleOut(BaseModel):
     navamsa_lagna_note: str
 
 
+class RaajaAssociationOut(BaseModel):
+    """One of the three associations section 11.7.1 names."""
+
+    key: str
+    text: str
+
+
 class PlanetaryYogaRulesOut(BaseModel):
     ravi_intro: str
     chandra_intro: str
@@ -378,6 +385,37 @@ class PlanetaryYogaRulesOut(BaseModel):
                     "docs/open-items.md OI-83.",
     )
     vasumati_reference_note: str
+    raaja_intro: str
+    raaja_count: int
+    raaja_definitions: dict[str, str]
+    dharma_karmadhipati_results: str | None = Field(
+        description="Withheld under the licence gate of OI-12. The printed "
+                    "sentence breaks off mid-clause — see OI-87.",
+    )
+    raaja_means: str
+    raaja_basic_premise: str
+    raaja_association_rule: str
+    raaja_associations: list[RaajaAssociationOut]
+    lagna_is_both_quadrant_and_trine: bool
+    raaja_lagna_note: str
+    mutual_drishti_is_both_ways_note: str
+    dharma_sthana: int
+    karma_sthana: int
+    dharma_karmadhipati_reason: str
+    trik_sthana_names: list[str]
+    dusthanas: list[int]
+    vipareeta_means: str
+    vipareeta_reason: str
+    vipareeta_ideal_case: str
+    vipareeta_ideal_houses: list[int]
+    vipareeta_ideal_note: str = Field(
+        description="Why the ideal case can name two houses that are not "
+                    "dusthanas. See docs/open-items.md OI-86.",
+    )
+    yogakaraka_note: str = Field(
+        description="What the engine does about one planet lording both a "
+                    "quadrant and a trine. See docs/open-items.md OI-85.",
+    )
     kalpadruma_example: KalpadrumaExampleOut
     kalpadruma_results_footnote: str | None = Field(
         description="Footnote 34. PVR's own prose, so it is withheld under "

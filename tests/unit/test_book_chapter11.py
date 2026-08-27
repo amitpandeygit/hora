@@ -48,6 +48,10 @@ from hora.core.const import (
     CHANDRA_YOGAS,
     CHATURASRA,
     COMBUSTION_WEAKENS_YOGA,
+    DHARMA_KARMADHIPATI_REASON,
+    DHARMA_KARMADHIPATI_RESULTS_TRUNCATED,
+    DHARMA_STHANA,
+    DUSTHANA,
     DUSTHANA_LORD_IN_OWN_HOUSE,
     EXALTATION_DEG,
     GRAHA_NAMES,
@@ -59,12 +63,14 @@ from hora.core.const import (
     KALPADRUMA_RESULT_WORD_SANSKRIT,
     KALPADRUMA_RESULT_WORDS,
     KALPADRUMA_RESULTS_FOOTNOTE,
+    KARMA_STHANA,
     KARTARI_DEFINITION,
     KARTARI_EFFECT,
     KARTARI_HOUSES,
     KARTARI_MEANS,
     KEMADRUMA_KILLS_OTHER_YOGAS,
     KENDRA,
+    LAGNA_IS_BOTH_QUADRANT_AND_TRINE,
     LAGNAADHI_GLOSS,
     LAGNAADHI_HOUSES,
     MAALAVYA_SPELLING_VARIANTS,
@@ -91,6 +97,13 @@ from hora.core.const import (
     POPULAR_YOGAS,
     POPULAR_YOGAS_ALL,
     POPULAR_YOGAS_CONTINUED,
+    RAAJA_ASSOCIATION_RULE,
+    RAAJA_ASSOCIATIONS,
+    RAAJA_BASIC_PREMISE,
+    RAAJA_MEANS,
+    RAAJA_YOGA_COUNT,
+    RAAJA_YOGA_INTRO,
+    RAAJA_YOGAS,
     RASI_LORD,
     RASI_MODALITY,
     RAVI_YOGA_FREQUENCY_NOTE,
@@ -108,10 +121,13 @@ from hora.core.const import (
     STRENGTH_NOT_ASSESSED,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
+    TRIK_STHANA_NAMES,
     TRIKONA,
     TRIMURTHI_NOTE,
     TRIMURTHI_YOGAS,
     UPACHAYA,
+    VIPAREETA_IDEAL_HOUSES,
+    VIPAREETA_MEANS,
     WEAKENED_YOGA_IS_NOT_APPLICABLE,
     Graha,
 )
@@ -607,7 +623,8 @@ def test_catalogue_lists_every_yoga_without_a_chart(client):
     assert body["count"] == len(YOGA_REGISTRY)
     assert set(body["groups"]) == {
         "ravi", "chandra", "mahapurusha", "naabhasa_aasraya",
-        "naabhasa_dala", "naabhasa_aakriti", "naabhasa_sankhya", "popular"}
+        "naabhasa_dala", "naabhasa_aakriti", "naabhasa_sankhya", "popular",
+        "raaja"}
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -3408,7 +3425,8 @@ def test_every_yoga_chart_9_actually_has():
     """Five of the sixty-five, across four sections. Pinned so a later change
     to any detector has to account for this chart."""
     present = {v.key for v in evaluate(_chart_9()) if v.present}
-    assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma"}
+    assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma",
+                       "raaja_basic"}
 
 
 def test_chart_9_is_a_daama_yoga_like_ramas():
@@ -4067,7 +4085,8 @@ def test_shivaji_has_none_of_the_thirty():
 
 def test_chart_9s_full_verdict_is_still_the_same_five():
     present = {v.key for v in evaluate(_chart_9()) if v.present}
-    assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma"}
+    assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma",
+                       "raaja_basic"}
 
 
 # --- what the thirty find in the two charts the book gives -------------------
@@ -4102,4 +4121,349 @@ def test_ramas_chart_has_exactly_these_yogas_across_all_ninety_five():
     assert present == {
         "ruchaka", "sasa", "hamsa", "sarpa", "vesi", "vosi", "ubhayachara",
         "daama", "subha", "gaja_kesari", "guru_mangala", "sankha", "mridanga",
-        "lakshmi", "vasumati"}
+        "lakshmi", "vasumati", "raaja_basic", "dharma_karmadhipati"}
+
+
+# --------------------------------------------------------------------------
+# 11.7 Raaja yogas
+#
+# The first is a family, not one combination: every quadrant lord against
+# every trine lord, tested for the three associations §11.7.1 names. Nothing
+# in this section asks for strength, so these verdicts carry no strength note.
+# --------------------------------------------------------------------------
+
+
+def _raaja(lagna: str, **placements) -> YogaInput:
+    return YogaInput(
+        rasis={int(getattr(Graha, name)): R[sign]
+               for name, sign in placements.items()},
+        lagna_rasi=R[lagna])
+
+
+def test_11_7_what_a_raaja_yoga_is():
+    """"Raaja means a king. Raaja yogas are the combinations that give power
+    and prosperity to a native. They make one the best in something." """
+    assert RAAJA_MEANS == "a king"
+    assert "power and prosperity" in RAAJA_YOGA_INTRO
+    assert "the best in something" in RAAJA_YOGA_INTRO
+
+
+def test_the_three_raaja_yogas_are_registered():
+    assert len(RAAJA_YOGAS) == RAAJA_YOGA_COUNT == 3
+    for entry in RAAJA_YOGAS:
+        spec = YOGA_REGISTRY[entry["key"]]
+        assert spec.section == "11.7.1"
+        assert spec.group == "raaja"
+
+
+def test_lakshmi_in_the_trines_and_vishnu_in_the_quadrants():
+    """The premise the section opens with, transcribed."""
+    assert "Lord Vishnu sits in the quadrants" in RAAJA_BASIC_PREMISE
+    assert "Goddess Lakshmi sits in the trines" in RAAJA_BASIC_PREMISE
+    assert KENDRA == (1, 4, 7, 10)
+    assert TRIKONA == (1, 5, 9)
+
+
+def test_the_three_associations_are_transcribed_in_order():
+    keys = [entry["key"] for entry in RAAJA_ASSOCIATIONS]
+    assert keys == ["conjunction", "mutual_drishti", "parivartana"]
+    assert "conjoined" in RAAJA_ASSOCIATIONS[0]["text"]
+    assert "graha drishti" in RAAJA_ASSOCIATIONS[1]["text"]
+    assert "parivartana (exchange)" in RAAJA_ASSOCIATIONS[2]["text"]
+    assert "4th lord is in the 5th house" in RAAJA_ASSOCIATIONS[2]["text"]
+
+
+def test_lagna_counts_as_a_quadrant_and_a_trine():
+    """"Lagna can be taken as a quadrant or a trine here. It is both." """
+    from hora.charts.planetary_yogas.raaja import kendra_lords, trikona_lords
+
+    assert LAGNA_IS_BOTH_QUADRANT_AND_TRINE is True
+    assert "It is both" in RAAJA_ASSOCIATION_RULE
+    data = _raaja("Ar")
+    lagna_lord = int(Graha.MARS)
+    assert 1 in kendra_lords(data)[lagna_lord]
+    assert 1 in trikona_lords(data)[lagna_lord]
+
+
+# --- the three associations, one at a time ----------------------------------
+
+
+def test_raaja_yoga_by_conjunction():
+    """lagna Aries: the 4th lord Moon and the 5th lord Sun together."""
+    verdict = evaluate_one("raaja_basic", _raaja("Ar", MOON="Cn", SUN="Cn"))
+    assert verdict.present is True
+    assert "by conjunction" in verdict.reason
+
+
+def test_raaja_yoga_by_parivartana():
+    """The book's own example: the 4th lord in the 5th house and the 5th lord
+    in the 4th."""
+    verdict = evaluate_one("raaja_basic", _raaja("Ar", MOON="Le", SUN="Cn"))
+    assert verdict.present is True
+    assert "by parivartana" in verdict.reason
+
+
+def test_raaja_yoga_by_mutual_graha_drishti():
+    verdict = evaluate_one("raaja_basic", _raaja("Ar", VENUS="Ar",
+                                                 JUPITER="Li"))
+    assert verdict.present is True
+    assert "mutual graha drishti" in verdict.reason
+
+
+def test_one_sided_graha_drishti_is_not_an_association():
+    """"aspect **each other**". Saturn's 3rd, Mars's 4th and 8th and
+    Jupiter's 5th and 9th are one-way, so a single aspect is not enough."""
+    from hora.charts.planetary_yogas.raaja import mutual_drishti
+
+    # lagna Aries: Saturn lords the 10th, Sun the 5th. Saturn in Aries aspects
+    # the 3rd from himself, Gemini; the Sun there does not aspect back.
+    data = _raaja("Ar", SATURN="Ar", SUN="Ge")
+    assert mutual_drishti(data, int(Graha.SATURN), int(Graha.SUN)) is False
+    assert evaluate_one("raaja_basic", data).present is False
+
+
+def test_a_planet_is_never_associated_with_himself():
+    from hora.charts.planetary_yogas.raaja import association
+
+    data = _raaja("Ar", MARS="Cn")
+    assert association(data, int(Graha.MARS), int(Graha.MARS)) is None
+
+
+def test_raaja_basic_absent_says_all_three_were_tried():
+    verdict = evaluate_one("raaja_basic", _raaja(
+        "Ar", MOON="Ta", SUN="Ge", VENUS="Cn", JUPITER="Le", MARS="Vi",
+        SATURN="Sc", MERCURY="Sg"))
+    assert verdict.present is False
+    for word in ("conjoined", "graha drishti", "parivartana"):
+        assert word in verdict.reason
+
+
+# --- one planet on both sides -----------------------------------------------
+
+
+def test_exactly_six_lagnas_put_one_planet_on_both_sides():
+    """Derived from the book's own house lists, not asserted. The lagna lord
+    is excluded — the book already says lagna is both. See OI-85."""
+    from hora.charts.planetary_yogas.raaja import yogakaraka
+
+    found = {}
+    for index, abbr in enumerate(RASI_ABBR):
+        both = yogakaraka(YogaInput(rasis={}, lagna_rasi=index))
+        if both:
+            found[abbr] = {GRAHA_NAMES[g]: houses for g, houses in both.items()}
+    assert set(found) == {"Ta", "Cn", "Le", "Li", "Cp", "Aq"}
+    assert found["Cn"] == {"Mars": ((10,), (5,))}
+    assert found["Ta"] == {"Saturn": ((10,), (9,))}
+
+
+def test_that_planet_is_reported_but_not_counted():
+    verdict = evaluate_one("raaja_basic", _raaja("Cn", MARS="Ar"))
+    assert verdict.present is False
+    assert any("lords both a quadrant" in q and "OI-85" in q
+               for q in verdict.qualifiers)
+
+
+def test_the_lagna_lord_alone_never_raises_that_qualifier():
+    """He holds both sides in every chart, so saying so every time is noise."""
+    verdict = evaluate_one("raaja_basic", _raaja("Ar", MOON="Ta"))
+    assert not any("lords both a quadrant" in q for q in verdict.qualifiers)
+
+
+# --- Dharma-Karmadhipati ----------------------------------------------------
+
+
+def test_dharma_karmadhipati_is_the_9th_and_10th_lords():
+    assert DHARMA_STHANA == 9
+    assert KARMA_STHANA == 10
+    assert "most important trine" in DHARMA_KARMADHIPATI_REASON
+    assert "most important quadrant" in DHARMA_KARMADHIPATI_REASON
+    verdict = evaluate_one("dharma_karmadhipati",
+                           _raaja("Ar", JUPITER="Ar", SATURN="Ar"))
+    assert verdict.present is True
+    assert "by conjunction" in verdict.reason
+
+
+def test_dharma_karmadhipati_implies_the_basic_yoga():
+    """"This is a special case of the above yoga." Declared in the registry
+    and true on a chart."""
+    assert YOGA_REGISTRY["dharma_karmadhipati"].implies == ("raaja_basic",)
+    data = _raaja("Ar", JUPITER="Ar", SATURN="Ar")
+    assert evaluate_one("dharma_karmadhipati", data).present is True
+    assert evaluate_one("raaja_basic", data).present is True
+
+
+def test_dharma_karmadhipati_is_unreachable_for_taurus_lagna():
+    """Capricorn and Aquarius are the only adjacent pair of signs under one
+    lord, so Taurus is the only lagna whose 9th and 10th lords are one
+    planet — and there are then never two planets to associate. See OI-85."""
+    unreachable = []
+    for index, abbr in enumerate(RASI_ABBR):
+        ninth = int(RASI_LORD[(index + 8) % 12])
+        tenth = int(RASI_LORD[(index + 9) % 12])
+        if ninth == tenth:
+            unreachable.append(abbr)
+    assert unreachable == ["Ta"]
+    verdict = evaluate_one("dharma_karmadhipati", _raaja("Ta", SATURN="Ar"))
+    assert verdict.present is False
+    assert "both lorded by Saturn" in verdict.reason
+
+
+def test_the_dharma_karmadhipati_results_sentence_is_kept_broken():
+    """"He is fortunate and." — printed exactly so. See OI-87."""
+    assert DHARMA_KARMADHIPATI_RESULTS_TRUNCATED.endswith("He is fortunate and.")
+    entry = next(e for e in _results()["entries"]
+                 if e["planetary_yoga"] == "dharma_karmadhipati")
+    assert entry["verbatim"] == DHARMA_KARMADHIPATI_RESULTS_TRUNCATED
+    assert "breaks off mid-clause" in entry["transcription_notes"]
+
+
+# --- Vipareeta Raaja --------------------------------------------------------
+
+
+def test_the_dusthanas_are_the_6th_8th_and_12th():
+    assert DUSTHANA == (6, 8, 12)
+    assert TRIK_STHANA_NAMES == ("trik sthanas", "dusthanas")
+    assert VIPAREETA_MEANS == "extreme"
+
+
+def test_vipareeta_from_one_dusthana_lord_in_a_dusthana():
+    """"the results of this yoga may be experienced with just one or two
+    dusthana lords occupying a dusthana." """
+    verdict = evaluate_one("vipareeta_raaja", _raaja("Ar", MERCURY="Sc"))
+    assert verdict.present is True
+    assert "the 6th lord Mercury is in the 8th" in verdict.reason
+
+
+def test_vipareeta_reports_the_ideal_case_as_a_qualifier():
+    verdict = evaluate_one("vipareeta_raaja", _raaja("Ar", MERCURY="Vi",
+                                                    MARS="Vi", JUPITER="Vi"))
+    assert verdict.present is True
+    assert any("this is the ideal case" in q for q in verdict.qualifiers)
+
+
+def test_the_ideal_case_is_spoiled_by_another_planet():
+    """"with no other planets conjoining them"."""
+    verdict = evaluate_one("vipareeta_raaja", _raaja(
+        "Ar", MERCURY="Vi", MARS="Vi", JUPITER="Vi", VENUS="Vi"))
+    assert verdict.present is True
+    assert any("not the ideal case" in q and "Venus joins them" in q
+               for q in verdict.qualifiers)
+
+
+def test_the_ideal_case_can_land_outside_the_dusthanas():
+    """The 3rd and 11th are not dusthanas, so three lords heaped there occupy
+    none — the yoga is reached by the *second* clause. See OI-86."""
+    assert VIPAREETA_IDEAL_HOUSES == (6, 8, 12, 3, 11)
+    verdict = evaluate_one("vipareeta_raaja", _raaja("Ar", MERCURY="Ge",
+                                                    MARS="Ge", JUPITER="Ge"))
+    assert verdict.present is True
+    assert "conjoined" in verdict.reason
+    assert "occupies" not in verdict.reason
+    assert any("ideal case" in q for q in verdict.qualifiers)
+
+
+def test_vipareeta_absent_when_no_clause_fires():
+    verdict = evaluate_one("vipareeta_raaja", _raaja("Ar", MERCURY="Ar",
+                                                    MARS="Ta", JUPITER="Cn"))
+    assert verdict.present is False
+    assert "no lord of the 6th, 8th or 12th occupies a dusthana" in \
+        verdict.reason
+
+
+def test_every_lagna_has_three_distinct_dusthana_lords():
+    """Checked, because the ideal case wants all three together and would be
+    meaningless if two houses shared a lord."""
+    for index in range(12):
+        lords = {int(RASI_LORD[(index + house - 1) % 12])
+                 for house in DUSTHANA}
+        assert len(lords) == 3, RASI_ABBR[index]
+
+
+def test_vipareetas_printed_typos_are_kept():
+    entry = next(e for e in RAAJA_YOGAS if e["key"] == "vipareeta_raaja")
+    assert "their lords occupies" in entry["printed_typo"]
+    results = next(e for e in _results()["entries"]
+                   if e["planetary_yoga"] == "vipareeta_raaja")
+    assert "tremedous" in results["verbatim"]
+
+
+# --- the section on the API -------------------------------------------------
+
+
+def test_the_rules_endpoint_carries_section_11_7(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["raaja_means"] == "a king"
+    assert body["lagna_is_both_quadrant_and_trine"] is True
+    assert [a["key"] for a in body["raaja_associations"]] == [
+        "conjunction", "mutual_drishti", "parivartana"]
+    assert body["dusthanas"] == [6, 8, 12]
+    assert body["vipareeta_ideal_houses"] == [6, 8, 12, 3, 11]
+    assert "OI-85" in body["yogakaraka_note"]
+    assert "OI-86" in body["vipareeta_ideal_note"]
+
+
+def test_the_raaja_group_is_evaluated_with_the_rest(client):
+    body = client.post("/v1/planetary-yoga/chart", json={
+        "lagna_rasi": R["Ar"],
+        "rasis": {1: R["Cn"], 0: R["Cn"], 4: R["Ar"], 6: R["Ar"]}}).json()
+    raaja = [y for y in body["yogas"]
+             if YOGA_REGISTRY[y["key"]].group == "raaja"]
+    assert len(raaja) == 3
+    assert {y["key"] for y in raaja if y["present"]} == {
+        "raaja_basic", "dharma_karmadhipati"}
+
+
+def test_no_raaja_verdict_carries_a_strength_note():
+    """§11.6's preamble governs §11.6. Nothing in §11.7.1 asks for strength,
+    so borrowing that note here would be inventing a requirement."""
+    data = _raaja("Ar", MOON="Cn", SUN="Cn", JUPITER="Ar", SATURN="Ar",
+                  MERCURY="Sc")
+    for verdict in evaluate(data):
+        if YOGA_REGISTRY[verdict.key].group == "raaja":
+            assert STRENGTH_NOT_ASSESSED not in verdict.qualifiers
+
+
+def test_ramas_chart_has_dharma_karmadhipati_yoga():
+    """The 9th lord Jupiter and the 10th lord Mars in mutual graha drishti —
+    the most important trine's lord with the most important quadrant's.
+    Reached by the detector, not asserted from the book."""
+    verdict = evaluate_one("dharma_karmadhipati", _rama())
+    assert verdict.present is True
+    assert "mutual graha drishti" in verdict.reason
+    assert set(verdict.participants) == {int(Graha.JUPITER), int(Graha.MARS)}
+
+
+def test_ramas_lagna_makes_mars_lord_of_a_quadrant_and_a_trine():
+    """Cancer lagna: Mars lords the 10th and the 5th. Reported on the basic
+    yoga's verdict, and not counted as forming it. See OI-85."""
+    verdict = evaluate_one("raaja_basic", _rama())
+    assert verdict.present is True
+    assert any("Mars lords both a quadrant (10th) and a trine (5th)" in q
+               for q in verdict.qualifiers)
+
+
+def test_shivajis_chart_has_the_basic_raaja_yoga_only():
+    """Leo lagna: the lagna lord Sun and the 5th lord Jupiter conjoined in
+    Aquarius. The 9th and 10th lords do not associate, so the special case
+    does not follow."""
+    basic = evaluate_one("raaja_basic", _chart_9())
+    assert basic.present is True
+    assert "Sun (lord of the 1st) and Jupiter (lord of the 5th) by conjunction" \
+        in basic.reason
+    assert evaluate_one("dharma_karmadhipati", _chart_9()).present is False
+    assert evaluate_one("vipareeta_raaja", _chart_9()).present is False
+
+
+def test_the_rules_endpoint_serves_the_three_definitions(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["raaja_count"] == 3
+    assert set(body["raaja_definitions"]) == {
+        "raaja_basic", "dharma_karmadhipati", "vipareeta_raaja"}
+    assert "trik sthanas or dusthanas" in \
+        body["raaja_definitions"]["vipareeta_raaja"]
+
+
+def test_the_dharma_karmadhipati_results_are_licence_gated(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["dharma_karmadhipati_results"] is None
+    assert "righteous" not in repr(body).lower()

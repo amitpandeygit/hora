@@ -1406,3 +1406,104 @@ POPULAR_YOGA_CONTINUED_COUNT = len(POPULAR_YOGAS_CONTINUED)
 #: in which the section was read.
 POPULAR_YOGAS_ALL: tuple[dict, ...] = POPULAR_YOGAS + POPULAR_YOGAS_CONTINUED
 POPULAR_YOGA_TOTAL = len(POPULAR_YOGAS_ALL)
+
+
+# --------------------------------------------------------------------------
+# 11.7 Raaja yogas
+# --------------------------------------------------------------------------
+
+RAAJA_MEANS = "a king"
+
+RAAJA_YOGA_INTRO = (
+    "Raaja means a king. Raaja yogas are the combinations that give power and "
+    "prosperity to a native. They make one the best in something.")
+
+RAAJA_BASIC_PREMISE = (
+    "In any chart, Lord Vishnu sits in the quadrants and Goddess Lakshmi sits "
+    "in the trines. If the lord of a quadrant is associated with the lord of "
+    "a trine, that association brings the combined blessings of Lakshmi and "
+    "Vishnu. This is called a Raaja Yoga. The native is powerful and "
+    "prosperous.")
+
+#: The three associations §11.7.1 names, in the order printed.
+RAAJA_ASSOCIATIONS: tuple[dict, ...] = (
+    {"key": "conjunction",
+     "text": "The two planets are conjoined,"},
+    {"key": "mutual_drishti",
+     "text": "The two planets aspect each other with graha drishti, or,"},
+    {"key": "parivartana",
+     "text": ("The two planets have a parivartana (exchange). For example, if "
+              "the 4th lord is in the 5th house and the 5th lord is in the "
+              "4th house, then we say that there is a parivartana between the "
+              "4th and 5th lords. This is an association.")},
+)
+
+RAAJA_ASSOCIATION_RULE = (
+    "If the lord of a quadrant and the lord of a trine have one of the three "
+    "kinds of associations mentioned above, it forms a Raaja Yoga. Lagna can "
+    "be taken as a quadrant or a trine here. It is both.")
+
+#: "Lagna can be taken as a quadrant or a trine here. It is both."
+LAGNA_IS_BOTH_QUADRANT_AND_TRINE = True
+
+DHARMA_KARMADHIPATI_DEFINITION = (
+    "This is a special case of the above yoga. If the lords of dharma sthana "
+    "(9th) and karma sthana (10th) form a raja yoga, it is known by this "
+    "special name.")
+
+DHARMA_KARMADHIPATI_REASON = (
+    "The 9th house is the most important trine and the 10th house is the most "
+    "important quadrant. Raja yoga involving the lords of these two houses is "
+    "excellent.")
+
+#: Printed exactly so, breaking off mid-sentence.
+DHARMA_KARMADHIPATI_RESULTS_TRUNCATED = (
+    "One born with this yoga is sincere, devoted and righteous. He is "
+    "fortunate and.")
+
+DHARMA_STHANA = 9
+KARMA_STHANA = 10
+
+TRIK_STHANA_NAMES: tuple[str, ...] = ("trik sthanas", "dusthanas")
+
+VIPAREETA_MEANS = "extreme"
+
+VIPAREETA_DEFINITION = (
+    "The 6th, 8th and 12th houses are known as trik sthanas or dusthanas (bad "
+    "houses). If their lords occupies dusthanas or conjoin dusthanas, it "
+    "results in this yoga.")
+
+VIPAREETA_REASON = (
+    "Because dusthanas show the obstacles one faces in life, situation of "
+    "dusthana lords in dusthanas shows that obstacles will run into obstacles "
+    "themselves. One experiences tremendous success in the face of obstacles.")
+
+VIPAREETA_IDEAL_CASE = (
+    "In the ideal case, the lords of the 6th, 8th and 12th houses will all be "
+    "together in one of the three houses (or the 3rd house or the 11th "
+    "house), with no other planets conjoining them. But the results of this "
+    "yoga may be experienced with just one or two dusthana lords occupying a "
+    "dusthana.")
+
+#: The ideal case admits two houses that are not dusthanas at all.
+VIPAREETA_IDEAL_HOUSES: tuple[int, ...] = (6, 8, 12, 3, 11)
+
+RAAJA_YOGAS: tuple[dict, ...] = (
+    {"key": "raaja_basic", "name": "Basic Raaja Yoga", "name_means": None,
+     "definition": RAAJA_ASSOCIATION_RULE,
+     "premise": RAAJA_BASIC_PREMISE},
+    {"key": "dharma_karmadhipati", "name": "Dharma-Karmadhipati Yoga",
+     "name_means": ("dharma sthana is the 9th and karma sthana is the 10th; "
+                    "adhipati means lord"),
+     "definition": DHARMA_KARMADHIPATI_DEFINITION,
+     "reason": DHARMA_KARMADHIPATI_REASON},
+    {"key": "vipareeta_raaja", "name": "Vipareeta Raaja Yoga",
+     "name_means": VIPAREETA_MEANS,
+     "definition": VIPAREETA_DEFINITION,
+     "reason": VIPAREETA_REASON,
+     "ideal": VIPAREETA_IDEAL_CASE,
+     "printed_typo": ("the definition reads “their lords occupies "
+                      "dusthanas”; read as “occupy”")},
+)
+
+RAAJA_YOGA_COUNT = len(RAAJA_YOGAS)

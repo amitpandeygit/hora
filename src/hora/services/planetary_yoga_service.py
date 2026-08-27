@@ -47,6 +47,11 @@ from hora.core.const import (
     CHANDRA_MOON_FROM_SUN_GRADE,
     CHANDRA_YOGA_INTRO,
     COMBUSTION_WEAKENS_YOGA,
+    DHARMA_KARMADHIPATI_DEFINITION,
+    DHARMA_KARMADHIPATI_REASON,
+    DHARMA_KARMADHIPATI_RESULTS_TRUNCATED,
+    DHARMA_STHANA,
+    DUSTHANA,
     DUSTHANA_LORD_IN_OWN_HOUSE,
     ELEMENT_RULER,
     GRAHA_NAMES,
@@ -60,6 +65,7 @@ from hora.core.const import (
     KALPADRUMA_RESULT_WORD_SANSKRIT,
     KALPADRUMA_RESULT_WORDS,
     KALPADRUMA_RESULTS_FOOTNOTE,
+    KARMA_STHANA,
     KARTARI_DEFINITION,
     KARTARI_EFFECT,
     KARTARI_HOUSES,
@@ -67,6 +73,7 @@ from hora.core.const import (
     KARTARI_MEANS,
     KEMADRUMA_EFFORT_NOTE,
     KEMADRUMA_KILLS_OTHER_YOGAS,
+    LAGNA_IS_BOTH_QUADRANT_AND_TRINE,
     LAGNAADHI_GLOSS,
     LAGNAADHI_HOUSES,
     MAALAVYA_SPELLING_VARIANTS,
@@ -92,6 +99,12 @@ from hora.core.const import (
     POPULAR_YOGA_INTRO,
     POPULAR_YOGA_TOTAL,
     POPULAR_YOGAS_ALL,
+    RAAJA_ASSOCIATION_RULE,
+    RAAJA_ASSOCIATIONS,
+    RAAJA_BASIC_PREMISE,
+    RAAJA_MEANS,
+    RAAJA_YOGA_COUNT,
+    RAAJA_YOGA_INTRO,
     RASI_NAMES,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
@@ -105,10 +118,16 @@ from hora.core.const import (
     STRENGTH_NOT_ASSESSED,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
+    TRIK_STHANA_NAMES,
     TRIMURTHI_COMBINED_NAME,
     TRIMURTHI_NOTE,
     TRIMURTHI_YOGAS,
     UPACHAYA,
+    VIPAREETA_DEFINITION,
+    VIPAREETA_IDEAL_CASE,
+    VIPAREETA_IDEAL_HOUSES,
+    VIPAREETA_MEANS,
+    VIPAREETA_REASON,
     WEAKENED_YOGA_IS_NOT_APPLICABLE,
     Graha,
 )
@@ -531,6 +550,64 @@ def rules() -> dict:
             "Both flanks must carry the same nature — footnote 31 reads \u201cthe "
             "2nd and 12th\u201d — so a benefic on one side and a malefic on the "
             "other is neither subha nor paapa kartari."
+        ),
+        # 11.7 --------------------------------------------------------------
+        "raaja_intro": RAAJA_YOGA_INTRO,
+        "raaja_count": RAAJA_YOGA_COUNT,
+        "raaja_definitions": {
+            "raaja_basic": RAAJA_ASSOCIATION_RULE,
+            "dharma_karmadhipati": DHARMA_KARMADHIPATI_DEFINITION,
+            "vipareeta_raaja": VIPAREETA_DEFINITION,
+        },
+        # PVR's own prose, so it carries OI-12's gate. The sentence is cut
+        # off in the book \u2014 see docs/open-items.md OI-87.
+        "dharma_karmadhipati_results": (
+            DHARMA_KARMADHIPATI_RESULTS_TRUNCATED
+            if serving_unconfirmed_allowed() else None
+        ),
+        "raaja_means": RAAJA_MEANS,
+        "raaja_basic_premise": RAAJA_BASIC_PREMISE,
+        "raaja_association_rule": RAAJA_ASSOCIATION_RULE,
+        "raaja_associations": [
+            {"key": entry["key"], "text": entry["text"]}
+            for entry in RAAJA_ASSOCIATIONS
+        ],
+        "lagna_is_both_quadrant_and_trine": LAGNA_IS_BOTH_QUADRANT_AND_TRINE,
+        "raaja_lagna_note": (
+            "\u201cLagna can be taken as a quadrant or a trine here. It is "
+            "both.\u201d So the lagna lord is counted on both sides of every "
+            "pairing."
+        ),
+        "mutual_drishti_is_both_ways_note": (
+            "Association (2) reads \u201caspect **each other** with graha "
+            "drishti\u201d. Graha drishti is not symmetric \u2014 Saturn\u2019s 3rd and "
+            "10th, Mars\u2019s 4th and 8th and Jupiter\u2019s 5th and 9th are "
+            "one-sided \u2014 so one planet aspecting the other is not an "
+            "association here."
+        ),
+        "dharma_sthana": DHARMA_STHANA,
+        "karma_sthana": KARMA_STHANA,
+        "dharma_karmadhipati_reason": DHARMA_KARMADHIPATI_REASON,
+        "trik_sthana_names": list(TRIK_STHANA_NAMES),
+        "dusthanas": list(DUSTHANA),
+        "vipareeta_means": VIPAREETA_MEANS,
+        "vipareeta_reason": VIPAREETA_REASON,
+        "vipareeta_ideal_case": VIPAREETA_IDEAL_CASE,
+        "vipareeta_ideal_houses": list(VIPAREETA_IDEAL_HOUSES),
+        "vipareeta_ideal_note": (
+            "The ideal case names the 3rd and the 11th, which are not "
+            "dusthanas. Three dusthana lords heaped there occupy no dusthana "
+            "but do conjoin one another, which is why the second clause of "
+            "the definition \u2014 \u201cor conjoin dusthanas\u201d \u2014 is tested "
+            "alongside the first. See docs/open-items.md OI-86."
+        ),
+        "yogakaraka_note": (
+            "For six lagnas \u2014 Taurus, Cancer, Leo, Libra, Capricorn and "
+            "Aquarius \u2014 one planet lords a quadrant and a trine that are "
+            "different houses. Section 11.7.1 asks for an association between "
+            "two planets and says nothing about one planet holding both "
+            "sides, so the engine reports the fact as a qualifier and draws "
+            "no conclusion. See docs/open-items.md OI-85."
         ),
         "sun_excluded_note": (
             "The Sun cannot form a yoga about what accompanies him, so he is "

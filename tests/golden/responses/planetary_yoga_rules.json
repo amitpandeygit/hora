@@ -36,10 +36,18 @@
     "combustion_is_a_qualifier_not_a_veto": "Section 11.2.4 says a yoga formed by a combust planet loses \u201csome of their power to do good\u201d, not all of it. A combust yoga is therefore reported as present with a qualifier, never suppressed.",
     "combustion_note": "If Mercury is too close to Sun, he is combust (asta or astangata). Yogas formed by combust planets lose some of their power to do good.",
     "deep_exaltation_note": "Jaya and Vidyut require a planet in \u201cdeep exaltation\u201d. The book gives the exact exaltation degree but no tolerance around it, so neither yoga is ever reported present: when the planet is not in his exaltation sign the verdict is a definite absence, and when he is, the verdict names his distance from the exact degree and says the depth is undecided. See docs/open-items.md OI-83.",
+    "dharma_karmadhipati_reason": "The 9th house is the most important trine and the 10th house is the most important quadrant. Raja yoga involving the lords of these two houses is excellent.",
+    "dharma_karmadhipati_results": null,
+    "dharma_sthana": 9,
     "dusthana_lord_in_own_house": [
       "harsha",
       "sarala",
       "vimala"
+    ],
+    "dusthanas": [
+      6,
+      8,
+      12
     ],
     "footnotes_unread": [],
     "frequency_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
@@ -63,6 +71,7 @@
     "kalpadruma_result_word_sanskrit": null,
     "kalpadruma_result_words": [],
     "kalpadruma_results_footnote": null,
+    "karma_sthana": 10,
     "kartari_definition": "Kartari literally means \u201cscissors\u201d. The 12th and 2nd houses from a house cast kartari on it. If the 2nd and 12th from a house have benefics, it is said to have a subha (benefic) kartari. Malefics in the same places cause paapa (malefic) kartari.",
     "kartari_effect": "Subha kartari on any house does good to the matters of that house and paapa kartari does harm.",
     "kartari_houses": [
@@ -75,6 +84,7 @@
     "kemadruma_effort_note": "One with this yoga has to work hard and succeed through great efforts.",
     "kemadruma_is_a_qualifier_not_a_veto": "Section 11.3.4 says Kemadruma kills the *results* of other good yogas, not the yogas themselves. A yoga forming beside it is reported present with a qualifier, never suppressed.",
     "kemadruma_kills_other_yogas": "This bad yoga kills the results of other good yogas in the chart, especially Chandra yogas.",
+    "lagna_is_both_quadrant_and_trine": true,
     "lagnaadhi_gloss": "Adhi means over or above. We have already seen Adhi Yoga among Chandra yogas. Lagnaadhi yoga means Adhi Yoga from lagna.",
     "lagnaadhi_houses": [
       7,
@@ -129,6 +139,7 @@
       "mahapurusha": "a great person",
       "pancha": "five"
     },
+    "mutual_drishti_is_both_ways_note": "Association (2) reads \u201caspect **each other** with graha drishti\u201d. Graha drishti is not symmetric \u2014 Saturn\u2019s 3rd and 10th, Mars\u2019s 4th and 8th and Jupiter\u2019s 5th and 9th are one-sided \u2014 so one planet aspecting the other is not an association here.",
     "naabhasa_classification": [
       {
         "basis": "the signs occupied by planets",
@@ -258,6 +269,31 @@
       "D9",
       "D10"
     ],
+    "raaja_association_rule": "If the lord of a quadrant and the lord of a trine have one of the three kinds of associations mentioned above, it forms a Raaja Yoga. Lagna can be taken as a quadrant or a trine here. It is both.",
+    "raaja_associations": [
+      {
+        "key": "conjunction",
+        "text": "The two planets are conjoined,"
+      },
+      {
+        "key": "mutual_drishti",
+        "text": "The two planets aspect each other with graha drishti, or,"
+      },
+      {
+        "key": "parivartana",
+        "text": "The two planets have a parivartana (exchange). For example, if the 4th lord is in the 5th house and the 5th lord is in the 4th house, then we say that there is a parivartana between the 4th and 5th lords. This is an association."
+      }
+    ],
+    "raaja_basic_premise": "In any chart, Lord Vishnu sits in the quadrants and Goddess Lakshmi sits in the trines. If the lord of a quadrant is associated with the lord of a trine, that association brings the combined blessings of Lakshmi and Vishnu. This is called a Raaja Yoga. The native is powerful and prosperous.",
+    "raaja_count": 3,
+    "raaja_definitions": {
+      "dharma_karmadhipati": "This is a special case of the above yoga. If the lords of dharma sthana (9th) and karma sthana (10th) form a raja yoga, it is known by this special name.",
+      "raaja_basic": "If the lord of a quadrant and the lord of a trine have one of the three kinds of associations mentioned above, it forms a Raaja Yoga. Lagna can be taken as a quadrant or a trine here. It is both.",
+      "vipareeta_raaja": "The 6th, 8th and 12th houses are known as trik sthanas or dusthanas (bad houses). If their lords occupies dusthanas or conjoin dusthanas, it results in this yoga."
+    },
+    "raaja_intro": "Raaja means a king. Raaja yogas are the combinations that give power and prosperity to a native. They make one the best in something.",
+    "raaja_lagna_note": "\u201cLagna can be taken as a quadrant or a trine here. It is both.\u201d So the lagna lord is counted on both sides of every pairing.",
+    "raaja_means": "a king",
     "ravi_intro": "Ravi yogas are the solar combinations. There are several yogas based on Sun.",
     "results_note": "The results each yoga gives are PVR's own prose and are withheld from this response under the licence gate of OI-12.",
     "sankhya_basis": "Sankhya yogas are based on the number of distinct signs occupied by the seven planets combined. Rahu and Ketu are not included.",
@@ -288,6 +324,10 @@
       "sign_name": "Leo",
       "text": "Suppose someone has Sun and Mercury together in Leo in D-10. Then that person has a powerful Budha-Aditya yoga in career. The results will be felt throughout one's life and the periods of Sun, Mercury and Leo will give those results in particular."
     },
+    "trik_sthana_names": [
+      "trik sthanas",
+      "dusthanas"
+    ],
     "trimurthi_combined_name": "Hari Hara Brahma yoga",
     "trimurthi_note": "Some authors combine Hari yoga, Hara yoga and Brahma yoga and call it \u201cHari Hara Brahma yoga\u201d. Also, these three yogas are known as Trimurthi Yogas. Brahma is the Creator; Hari is the Sustainer; and, Shiva is the Destroyer. They form the Trinity of Gods (Trimurthis).",
     "trimurthi_yogas": [
@@ -296,7 +336,19 @@
       "brahma"
     ],
     "vasumati_reference_note": "Vasumati says only \u201cbenefics occupy upachayas\u201d, naming no reference and no count. Houses are counted from lagna, as everywhere else in section 11.6, and one benefic in an upachaya is enough; a verdict says how many benefics sit outside them so a stricter reading stays available. See docs/open-items.md OI-84.",
-    "weakened_yoga_is_not_applicable": "A yoga the book says \u201cmay not operate well\u201d does not count as applicable for section 11.5.4's fallback. Lord Sri Rama's chart forces this: its only earlier Naabhasa yoga is a weakened Sarpa, and the book gives the chart as Daama."
+    "vipareeta_ideal_case": "In the ideal case, the lords of the 6th, 8th and 12th houses will all be together in one of the three houses (or the 3rd house or the 11th house), with no other planets conjoining them. But the results of this yoga may be experienced with just one or two dusthana lords occupying a dusthana.",
+    "vipareeta_ideal_houses": [
+      6,
+      8,
+      12,
+      3,
+      11
+    ],
+    "vipareeta_ideal_note": "The ideal case names the 3rd and the 11th, which are not dusthanas. Three dusthana lords heaped there occupy no dusthana but do conjoin one another, which is why the second clause of the definition \u2014 \u201cor conjoin dusthanas\u201d \u2014 is tested alongside the first. See docs/open-items.md OI-86.",
+    "vipareeta_means": "extreme",
+    "vipareeta_reason": "Because dusthanas show the obstacles one faces in life, situation of dusthana lords in dusthanas shows that obstacles will run into obstacles themselves. One experiences tremendous success in the face of obstacles.",
+    "weakened_yoga_is_not_applicable": "A yoga the book says \u201cmay not operate well\u201d does not count as applicable for section 11.5.4's fallback. Lord Sri Rama's chart forces this: its only earlier Naabhasa yoga is a weakened Sarpa, and the book gives the chart as Daama.",
+    "yogakaraka_note": "For six lagnas \u2014 Taurus, Cancer, Leo, Libra, Capricorn and Aquarius \u2014 one planet lords a quadrant and a trine that are different houses. Section 11.7.1 asks for an association between two planets and says nothing about one planet holding both sides, so the engine reports the fact as a qualifier and draws no conclusion. See docs/open-items.md OI-85."
   },
   "status": 200
 }

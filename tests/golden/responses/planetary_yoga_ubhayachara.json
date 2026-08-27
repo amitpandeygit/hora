@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 95,
+    "evaluated": 98,
     "grahas_considered": [
       {
         "graha": 0,
@@ -1244,6 +1244,50 @@
         "qualifiers": [],
         "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
         "section": "11.6",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the lord of a quadrant and the lord of a trine have one of the three kinds of associations mentioned above, it forms a Raaja Yoga. Lagna can be taken as a quadrant or a trine here. It is both.",
+        "group": "raaja",
+        "implies": [],
+        "key": "raaja_basic",
+        "name": "Basic Raaja Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "section": "11.7.1",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "This is a special case of the above yoga. If the lords of dharma sthana (9th) and karma sthana (10th) form a raja yoga, it is known by this special name.",
+        "group": "raaja",
+        "implies": [
+          "raaja_basic"
+        ],
+        "key": "dharma_karmadhipati",
+        "name": "Dharma-Karmadhipati Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "section": "11.7.1",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "The 6th, 8th and 12th houses are known as trik sthanas or dusthanas (bad houses). If their lords occupies dusthanas or conjoin dusthanas, it results in this yoga.",
+        "group": "raaja",
+        "implies": [],
+        "key": "vipareeta_raaja",
+        "name": "Vipareeta Raaja Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "no lagna was supplied, and this yoga counts houses from lagna; it cannot be decided",
+        "section": "11.7.1",
         "weakened": false
       },
       {

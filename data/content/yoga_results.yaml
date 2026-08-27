@@ -1291,3 +1291,30 @@ entries:
   results_transcribed: true
   verbatim: "One born with this yoga is noble, frugal, happy and independent."
   terms: []
+- planetary_yoga: raaja_basic
+  name: Basic Raaja Yoga
+  source: pvr-vaia
+  section: '11.7.1'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "The native is powerful and prosperous."
+  transcription_notes: "Printed inside the definition paragraph rather than as a separate Results sentence."
+  terms: []
+- planetary_yoga: dharma_karmadhipati
+  name: Dharma-Karmadhipati Yoga
+  source: pvr-vaia
+  section: '11.7.1'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One born with this yoga is sincere, devoted and righteous. He is fortunate and."
+  transcription_notes: "The sentence breaks off mid-clause in the book: “He is fortunate and.” Transcribed as printed. See docs/open-items.md OI-87."
+  terms: []
+- planetary_yoga: vipareeta_raaja
+  name: Vipareeta Raaja Yoga
+  source: pvr-vaia
+  section: '11.7.1'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "One having this yoga experiences tremedous success, typically after an initial struggle."
+  transcription_notes: "The book prints “tremedous” for “tremendous”. Transcribed as printed."
+  terms: []

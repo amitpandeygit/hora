@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 47 waiting on evidence · 2 parked**
+**5 waiting on Amit · 50 waiting on evidence · 2 parked**
 
 ---
 
@@ -309,6 +309,73 @@ malefic should occupy upachayas" — is reported as a qualifier, never as part
 of the presence test, because the book attaches it to full results.
 
 **Closes when:** you settle the reference and the count.
+
+### OI-85 — one planet lording both a quadrant and a trine
+
+§11.7.1 asks for "the lord of a quadrant ... associated with the lord of a
+trine", and every association it names needs **two** planets: conjoined, in
+mutual drishti, or exchanging signs. A planet cannot do any of those with
+himself.
+
+But for six lagnas one planet lords a quadrant and a trine that are different
+houses. Derived from the book's own house lists, not asserted:
+
+| lagna | planet | quadrant | trine |
+|---|---|---|---|
+| Taurus | Saturn | 10th | 9th |
+| Cancer | Mars | 10th | 5th |
+| Leo | Mars | 4th | 9th |
+| Libra | Saturn | 4th | 5th |
+| Capricorn | Venus | 10th | 5th |
+| Aquarius | Venus | 4th | 9th |
+
+The lagna lord is a separate, trivial case the book has already handled —
+"Lagna can be taken as a quadrant or a trine here. It is both" — so he holds
+both sides in every chart and is excluded from the table above.
+
+Taurus alone also makes Dharma-Karmadhipati unreachable: Saturn lords both the
+9th (Capricorn) and the 10th (Aquarius), so for that lagna the two lords can
+never associate. It is the only lagna whose 9th and 10th share a lord —
+Capricorn and Aquarius are the only adjacent pair of signs under one lord.
+
+**What we do:** nothing is concluded. `raaja_basic` reports such a planet as a
+qualifier naming the houses, and `dharma_karmadhipati` says outright when the
+two lords are one planet. Neither is counted as forming the yoga.
+
+**Closes when:** a later section discusses it, or you decide.
+
+### OI-86 — Vipareeta's second clause, and an ideal case that escapes the rule
+
+The definition: "If their lords occupies dusthanas **or conjoin dusthanas**,
+it results in this yoga." The first clause is plain. The second is not — a
+planet cannot conjoin a house, so "conjoin dusthanas" has to mean conjoining
+the lords of dusthanas.
+
+The ideal case is what settles it: "the lords of the 6th, 8th and 12th houses
+will all be together in one of the three houses (**or the 3rd house or the
+11th house**)". The 3rd and 11th are not dusthanas. Three dusthana lords
+together in the 3rd occupy no dusthana at all, so under the first clause alone
+the book's own ideal case would not form the yoga. Under the second clause it
+does — they conjoin each other.
+
+**What we do:** both clauses are tested, and a verdict says which one fired.
+The ideal case is reported as a qualifier, never as the presence test, because
+the book itself says "the results of this yoga may be experienced with just one
+or two dusthana lords occupying a dusthana".
+
+**Closes when:** you confirm the reading, or JHora's output settles it.
+
+### OI-87 — §11.7.1's Dharma-Karmadhipati results sentence is cut off
+
+Printed: "One born with this yoga is sincere, devoted and righteous. He is
+fortunate and."
+
+The sentence stops mid-clause. Transcribed exactly as printed in
+`data/content/yoga_results.yaml` with a note, rather than being completed or
+trimmed. Nothing calculational turns on it.
+
+**Closes when:** you supply the missing words, or confirm the book prints it
+this way.
 
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 
