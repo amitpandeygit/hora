@@ -25,6 +25,11 @@ CATEGORIES_BY_SUBJECT = {
     # Avastha results carry conditional clauses, not tagged keywords: the
     # decomposition lives in `results`, so `terms` is empty for this subject.
     "avastha": set(),
+    # Chapter 11's yoga results describe a person rather than a matter, so
+    # they need their own tags: what they are like, what they can do, what
+    # befalls them, and where they stand.
+    "planetary_yoga": {"temperament", "aptitude", "physical", "circumstance",
+                       "station"},
 }
 
 #: Section 2.3's set, kept under its old name for the rasi-specific tests.

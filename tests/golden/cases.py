@@ -251,6 +251,21 @@ CASES = [
     }),
     # Chapter 10 §10.6 — argala. The chart case is Exercise 16: Chart 5's
     # navamsa, Scorpio lagna, all twelve houses and all ninety-six cells.
+    # Chapter 11 — planetary yogas. Distinct from /v1/yoga, the nithya yoga.
+    ("planetary_yoga_catalogue", "GET", "/v1/planetary-yoga/catalogue", None),
+    ("planetary_yoga_rules", "GET", "/v1/planetary-yoga/rules", None),
+    ("planetary_yoga_ubhayachara", "POST", "/v1/planetary-yoga/chart", {
+        # 11.2.3's example: Sun in Cancer, Mars in Leo, Venus in Gemini.
+        # All three Ravi house-yogas hold at once.
+        "rasis": {0: 3, 2: 4, 5: 2},
+    }),
+    ("planetary_yoga_none_present", "POST", "/v1/planetary-yoga/chart", {
+        # Every yoga absent, each with its reason — the exhaustiveness case.
+        "rasis": {0: 0, 1: 6},
+    }),
+    ("err_planetary_yoga_unknown_key", "POST", "/v1/planetary-yoga/one",
+     {"key": "nonesuch", "rasis": {0: 0}}),
+
     ("argala_rules", "GET", "/v1/argala/rules", None),
     ("argala_chart_exercise_16", "POST", "/v1/argala/chart", {
         "rasis": {0: 1, 1: 0, 2: 7, 3: 8, 4: 5, 5: 9, 6: 7, 7: 4, 8: 10},

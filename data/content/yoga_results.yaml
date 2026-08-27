@@ -1,0 +1,91 @@
+# Results of the planetary yogas — book chapter 11 onward.
+#
+# What a yoga GIVES, as PVR states it. The detection rules are calculation and
+# live in core/constants/yoga_planetary.py; these are interpretive prose and
+# are licence-gated like every verbatim source here. See docs/open-items.md
+# OI-12.
+#
+# The subject id is the yoga key from the registry in
+# charts/planetary_yogas/. A key here that no longer exists in the registry is
+# a transcription left behind; the guard test catches it.
+schema_version: 1
+subject: planetary_yoga
+sources:
+  pvr-vaia:
+    title: 'Vedic Astrology: An Integrated Approach'
+    author: P.V.R. Narasimha Rao
+    section: 11.2 Ravi Yogas
+    first_published: 2000
+    licence_status: unconfirmed
+    licence_note: The author shares the book freely for reading. That is not an explicit licence to redistribute
+      the text commercially. These entries are stored but are NOT served publicly until the licence is
+      confirmed or the text is replaced. See docs/open-items.md OI-12.
+categorisation_note: The `verbatim` field is the author's text as printed. The `term` list is OUR editorial
+  split of it and is not part of the book.
+entries:
+- planetary_yoga: vesi
+  name: Vesi Yoga
+  source: pvr-vaia
+  section: 11.2.1
+  licence_status: unconfirmed
+  verbatim: One born with this yoga has a balanced outlook. He is truthful, tall and sluggish. He is happy
+    and comfortable even with little wealth.
+  terms:
+  - term: balanced outlook
+    category: temperament
+  - term: truthful
+    category: temperament
+  - term: tall
+    category: physical
+  - term: sluggish
+    category: temperament
+  - term: happy and comfortable even with little wealth
+    category: circumstance
+- planetary_yoga: vosi
+  name: Vosi Yoga
+  source: pvr-vaia
+  section: 11.2.2
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is skillful, charitable, famous, learned and strong.
+  terms:
+  - term: skillful
+    category: aptitude
+  - term: charitable
+    category: temperament
+  - term: famous
+    category: circumstance
+  - term: learned
+    category: aptitude
+  - term: strong
+    category: physical
+- planetary_yoga: ubhayachara
+  name: Ubhayachara Yoga
+  source: pvr-vaia
+  section: 11.2.3
+  licence_status: unconfirmed
+  verbatim: One born with this yoga has all comforts. He is a king or an equal.
+  terms:
+  - term: all comforts
+    category: circumstance
+  - term: a king or an equal
+    category: station
+- planetary_yoga: budha_aaditya
+  name: Budha-Aaditya Yoga
+  source: pvr-vaia
+  section: 11.2.4
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is intelligent and skillful in all works. He is well-known, respected
+    and happy. Nipuna means an expert.
+  transcription_notes: The last sentence glosses the alias rather than stating a result; kept because it
+    is printed inside the Results paragraph.
+  terms:
+  - term: intelligent
+    category: aptitude
+  - term: skillful in all works
+    category: aptitude
+  - term: well-known
+    category: circumstance
+  - term: respected
+    category: circumstance
+  - term: happy
+    category: temperament

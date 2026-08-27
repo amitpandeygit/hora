@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 37 waiting on evidence · 2 parked**
+**5 waiting on Amit · 38 waiting on evidence · 2 parked**
 
 ---
 
@@ -294,6 +294,31 @@ verification against birth data as Charts 6 and 7 got.
 
 **Closes when:** you send Chart 8's page, or we accept the exercise as covered
 by the reconstruction alone.
+
+### OI-73 — do Rahu and Ketu count as "a planet" in the Ravi yogas?
+
+§11.2.1, §11.2.2 and §11.2.3 all turn on the same phrase:
+
+> "If there is **a planet other than Moon** in the 2nd house from Sun..."
+
+One graha is excluded by name. Whether the nodes are in the set at all, the
+chapter never says, and it changes how often three of the four Ravi yogas fire.
+
+The book uses "planet" both ways elsewhere. §8.1 writes "Rahu, Ketu **and the
+seven planets**", which puts the nodes outside the word; §10.2's "**All
+planets** aspect the 7th house from them" puts them inside, and we treat it as
+all nine. §11.2's four examples use Jupiter, Mercury, Venus and Mars only, so
+they do not settle it either.
+
+**Excluded by default**, as a per-call parameter (`include_nodes`), and the
+response lists `grahas_considered` so the choice is visible in the output and
+not only in the request.
+
+The default is the conservative one — it under-reports rather than
+over-reports — but it *is* a choice, and it is not PVR's.
+
+**Closes when:** JHora's yoga output settles it, or a later chapter uses a node
+to form one of these.
 
 ### OI-72 — Exercise 17 is the only place chapter 10 compares strengths
 

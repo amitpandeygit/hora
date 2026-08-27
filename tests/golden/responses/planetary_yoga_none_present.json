@@ -1,0 +1,104 @@
+{
+  "body": {
+    "chart": "D1",
+    "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
+    "evaluated": 4,
+    "grahas_considered": [
+      {
+        "graha": 0,
+        "graha_name": "Sun"
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon"
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars"
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter"
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus"
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn"
+      }
+    ],
+    "group": null,
+    "include_nodes": false,
+    "present": [],
+    "qualifiers_available": [],
+    "qualifiers_unavailable": [
+      "combustion"
+    ],
+    "yogas": [
+      {
+        "aliases": [],
+        "definition": "If there is a planet other than Moon in the 2nd house from Sun, then this yoga is present.",
+        "group": "ravi",
+        "implies": [],
+        "key": "vesi",
+        "name": "Vesi Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 2nd from Sun is Taurus and holds no qualifying planet",
+        "section": "11.2.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If there is a planet other than Moon in the 12th house from Sun, then this yoga is present.",
+        "group": "ravi",
+        "implies": [],
+        "key": "vosi",
+        "name": "Vosi Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 12th from Sun is Pisces and holds no qualifying planet",
+        "section": "11.2.2"
+      },
+      {
+        "aliases": [],
+        "definition": "If there are planets other than Moon in the 2nd and 12th houses from Sun, then this yoga is present.",
+        "group": "ravi",
+        "implies": [
+          "vesi",
+          "vosi"
+        ],
+        "key": "ubhayachara",
+        "name": "Ubhayachara Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 2nd from Sun is Taurus and holds no qualifying planet; the 12th from Sun is Pisces and holds no qualifying planet",
+        "section": "11.2.3"
+      },
+      {
+        "aliases": [
+          "Nipuna Yoga"
+        ],
+        "definition": "Budha means Mercury, Aaditya means Sun and yoga means togetherness. If Sun and Mercury are together (in one sign), this yoga is present.",
+        "group": "ravi",
+        "implies": [],
+        "key": "budha_aaditya",
+        "name": "Budha-Aaditya Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Mercury has no placement",
+        "section": "11.2.4"
+      }
+    ]
+  },
+  "status": 200
+}

@@ -827,3 +827,29 @@ This one is easy to lose: a reader checking the two sections against each other
 would naturally normalise one into the other, and the fuller list would
 disappear. Found by a test that assumed they matched and failed. Pinned by
 `test_10_7_the_meanings_mostly_agree_between_10_5_and_10_7`.
+
+---
+
+## D-27 · §11.2.4 spells Budha-Aaditya two ways on one page
+
+**Status: closed.** Heading spelling primary; the variant recorded.
+
+The section heading reads:
+
+> **11.2.4   Budha-Aaditya Yoga (Nipuna Yoga)**
+
+and the worked reading four paragraphs below it reads:
+
+> "Then that person has a powerful **Budha-Aditya** yoga in career."
+
+One `a` dropped, on the same page. The heading also capitalises "Yoga" where
+the prose does not.
+
+**What we do:** the registry carries "Budha-Aaditya Yoga", the heading's form —
+[precedence.md](precedence.md) tie-break rule 2, since the heading and the
+Definition paragraph beneath it are what define the yoga.
+`BUDHA_AADITYA_SPELLING_VARIANTS` records "Budha-Aditya", and the timing text
+is stored with the short spelling as printed.
+
+Same treatment as [D-20](#), [D-21](#) and [D-25](#). Pinned by
+`test_11_2_4_the_name_is_spelled_two_ways_on_one_page`.

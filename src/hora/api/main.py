@@ -31,6 +31,7 @@ from hora.api.routers import (
     lagnas,
     maasas,
     panchanga,
+    planetary_yogas,
     rasi_strength,
     reference,
     relationships,
@@ -87,6 +88,7 @@ app.include_router(colords.router)
 app.include_router(rasi_strength.router)
 app.include_router(aspects.router)
 app.include_router(argalas.router)
+app.include_router(planetary_yogas.router)
 
 
 @app.get("/health", response_model=HealthOut, tags=["meta"])

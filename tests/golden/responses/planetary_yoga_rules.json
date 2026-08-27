@@ -1,0 +1,41 @@
+{
+  "body": {
+    "budha_aaditya_spelling_variants": [
+      "Budha-Aditya"
+    ],
+    "budha_aaditya_terms": {
+      "aaditya": "Sun",
+      "budha": "Mercury",
+      "nipuna": "an expert",
+      "yoga": "togetherness"
+    },
+    "combustion_is_a_qualifier_not_a_veto": "Section 11.2.4 says a yoga formed by a combust planet loses \u201csome of their power to do good\u201d, not all of it. A combust yoga is therefore reported as present with a qualifier, never suppressed.",
+    "combustion_note": "If Mercury is too close to Sun, he is combust (asta or astangata). Yogas formed by combust planets lose some of their power to do good.",
+    "frequency_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
+    "node_note": "Three of the four Ravi yogas turn on \u201ca planet other than Moon\u201d. Chapter 11 never says whether Rahu and Ketu count as \u201ca planet\u201d, so it is a per-call choice and the nodes are excluded by default. See docs/open-items.md OI-73.",
+    "preferred_charts": [
+      "D9",
+      "D10"
+    ],
+    "ravi_intro": "Ravi yogas are the solar combinations. There are several yogas based on Sun.",
+    "results_note": "The results each yoga gives are PVR's own prose and are withheld from this response under the licence gate of OI-12.",
+    "sun_excluded_note": "The Sun cannot form a yoga about what accompanies him, so he is excluded from his own houses alongside the Moon.",
+    "timing_example": {
+      "chart": "D10",
+      "periods": [
+        {
+          "graha": 0,
+          "graha_name": "Sun"
+        },
+        {
+          "graha": 3,
+          "graha_name": "Mercury"
+        }
+      ],
+      "sign": 4,
+      "sign_name": "Leo",
+      "text": "Suppose someone has Sun and Mercury together in Leo in D-10. Then that person has a powerful Budha-Aditya yoga in career. The results will be felt throughout one's life and the periods of Sun, Mercury and Leo will give those results in particular."
+    }
+  },
+  "status": 200
+}
