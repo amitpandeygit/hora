@@ -46,13 +46,21 @@ from hora.core.const import (
     CHATURASRA,
     COMBUSTION_WEAKENS_YOGA,
     EXALTATION_DEG,
+    GRAHA_NAMES,
     HAMSA_MEANS,
     HAMSA_MISNAMED_IN_ITS_DEFINITION,
+    KALPADRUMA_EXAMPLE_CHAIN,
+    KALPADRUMA_EXAMPLE_CONCLUSION,
+    KALPADRUMA_EXAMPLE_NAVAMSA_LAGNA_CLAIM,
+    KALPADRUMA_RESULT_WORD_SANSKRIT,
+    KALPADRUMA_RESULT_WORDS,
+    KALPADRUMA_RESULTS_FOOTNOTE,
     KARTARI_DEFINITION,
     KARTARI_EFFECT,
     KARTARI_HOUSES,
     KARTARI_MEANS,
     KEMADRUMA_KILLS_OTHER_YOGAS,
+    KENDRA,
     MAALAVYA_SPELLING_VARIANTS,
     MAHAPURUSHA_ELEMENT_RULERS_SENTENCE,
     MAHAPURUSHA_FOOTNOTES_UNREAD,
@@ -60,6 +68,7 @@ from hora.core.const import (
     MAHAPURUSHA_REFERENCE_RULE,
     MAHAPURUSHA_TERMS,
     MAHAPURUSHA_YOGAS,
+    MOOLATRIKONA,
     NAABHASA_CLASSIFICATION,
     NAABHASA_INTRO,
     NAABHASA_NOT_YET_DEFINED,
@@ -88,6 +97,7 @@ from hora.core.const import (
     STRENGTH_NOT_ASSESSED,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
+    TRIKONA,
     WEAKENED_YOGA_IS_NOT_APPLICABLE,
     Graha,
 )
@@ -3157,3 +3167,255 @@ def test_the_rules_endpoint_carries_footnote_31_as_printed(client):
     assert "any house or planet" in body["kartari_is_general"]
     assert body["popular_intro"] == POPULAR_YOGA_INTRO
     assert body["popular_count"] == 18
+
+
+# --------------------------------------------------------------------------
+# Chart 9 — Chatrapati Shivaji, §11.6's worked example of Kalpadruma yoga
+# --------------------------------------------------------------------------
+
+#: Chart 9's rasi longitudes, as printed under the diagram on the same page.
+CHART_9 = {
+    "Asc": "27 Le 41", "Sun": "22 Aq 19", "Moon": "27 Vi 52",
+    "Mars": "16 Ge 00", "Merc": "6 Pi 18", "Jup": "5 Aq 51",
+    "Ven": "8 Ar 30", "Sat": "16 Li 34", "Rahu": "29 Ta 22",
+    "Ketu": "29 Sc 22", "HL": "24 Aq 15", "GL": "27 Le 55",
+}
+
+#: Chart 9's birth data, as printed inside the diagram. **Not computable
+#: from this.** Unlike Charts 5 to 8 it gives a Hindu calendar date and a
+#: time measured from sunrise, with no Gregorian date and no time zone, so
+#: this chart is a transcription and not a check on our ephemeris.
+CHART_9_BIRTH = "Phalguna Bahula Tritiya, 1630 AD, 12:05 hrs after sunrise"
+CHART_9_PLACE = "73 E 53, 18 N 32"
+
+#: The chara karakas printed beside each planet.
+CHART_9_CHARA_KARAKAS = {
+    "Moon": "AK", "Sun": "AmK", "Mars": "MK", "Jup": "GK",
+    "Merc": "PK", "Ven": "PiK", "Sat": "BK", "Rahu": "DK",
+}
+
+#: The rasi diagram, read box by box. Cross-checked against the longitudes.
+CHART_9_RASI_DRAWN = {
+    "Merc": "Pi", "Ven": "Ar", "Rahu": "Ta", "Mars": "Ge",
+    "Jup": "Aq", "Sun": "Aq", "Ketu": "Sc", "Sat": "Li", "Moon": "Vi",
+    "Asc": "Le",
+}
+
+#: The navamsa diagram, read box by box. Ours has to reproduce it.
+CHART_9_NAVAMSA_DRAWN = {
+    "Ketu": "Pi", "Sun": "Ar", "Ven": "Ge", "Sat": "Aq", "Mars": "Aq",
+    "Merc": "Le", "Jup": "Sc", "Rahu": "Vi", "Moon": "Vi", "Asc": "Sg",
+}
+
+_CHART_9_GRAHA = {
+    "Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+    "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+    "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU,
+}
+
+
+def _lon9(text: str) -> float:
+    """Parse "27 Le 41" into a sidereal longitude."""
+    import re
+    match = re.fullmatch(r"(\d+) ?([A-Za-z]{2}) ?(\d+)", text)
+    assert match, text
+    return R[match.group(2)] * 30 + int(match.group(1)) + int(match.group(3)) / 60
+
+
+def _chart_9() -> YogaInput:
+    """Chart 9 as a yoga input, with longitudes so navamsa is reachable.
+
+    Paksha is Krishna: the birth data reads "Phalguna **Bahula** Tritiya",
+    and the printed longitudes agree — see the tithi test below.
+    """
+    from hora.core.ephemeris.base import PlanetPosition
+
+    lons = {int(g): _lon9(CHART_9[name]) for name, g in _CHART_9_GRAHA.items()}
+    positions = {
+        graha: PlanetPosition(
+            graha=graha, longitude=lon, latitude=0.0, distance=1.0,
+            speed_longitude=-0.1 if graha == int(Graha.SATURN) else 0.5,
+            speed_latitude=0.0, speed_distance=0.0)
+        for graha, lon in lons.items()
+    }
+    return YogaInput(
+        rasis={graha: int(lon // 30) for graha, lon in lons.items()},
+        positions=positions,
+        lagna_rasi=int(_lon9(CHART_9["Asc"]) // 30),
+        paksha=1,
+    )
+
+
+@pytest.mark.parametrize("body,sign", sorted(CHART_9_RASI_DRAWN.items()))
+def test_chart_9s_diagram_agrees_with_its_printed_longitudes(body, sign):
+    """The drawn boxes and the degrees below them are two transcriptions of
+    the same chart. They agree on all ten."""
+    assert int(_lon9(CHART_9[body]) // 30) == R[sign]
+
+
+@pytest.mark.parametrize("body,sign", sorted(CHART_9_NAVAMSA_DRAWN.items()))
+def test_our_navamsa_reproduces_chart_9s_drawn_navamsa(body, sign):
+    """Chart 9 prints its D-9 as a second diagram, so our D-9 is checked
+    against the book rather than against itself. All ten agree."""
+    from hora.charts.vargas import d9_navamsa
+
+    key = "Asc" if body == "Asc" else body
+    assert d9_navamsa(_lon9(CHART_9[key])).sign == R[sign]
+
+
+def test_chart_9s_tithi_confirms_the_krishna_paksha():
+    """"Phalguna **Bahula** Tritiya". Bahula is Krishna paksha, and the
+    printed longitudes give tithi 18 — Krishna Tritiya — independently."""
+    elongation = (_lon9(CHART_9["Moon"]) - _lon9(CHART_9["Sun"])) % 360
+    tithi = int(elongation / 12) + 1
+    assert tithi == 18
+    assert tithi - 15 == 3
+
+
+def test_chart_9_is_transcribed_not_computed():
+    """Charts 5 to 8 print a Gregorian date and are recomputed from it. This
+    one prints a Hindu calendar date and a time measured from sunrise, so
+    there is nothing to recompute it from."""
+    assert "1630 AD" in CHART_9_BIRTH
+    assert "after sunrise" in CHART_9_BIRTH
+    assert not any(ch.isdigit() for ch in CHART_9_BIRTH.split(",")[0])
+
+
+# --- the example the book works through -------------------------------------
+
+
+def test_the_kalpadruma_chain_matches_the_book_link_for_link():
+    """§11.6: "Lagna lord is Sun. He is in Aq and his dispositor is Saturn...
+    Saturn is in Li and his dispositor is Venus... In navamsa, Saturn is in
+    Aq and his dispositor is Saturn himself." " """
+    from hora.charts.planetary_yogas.popular import dispositor, lord_of_house
+    from hora.charts.vargas import d9_navamsa
+
+    data = _chart_9()
+    first = lord_of_house(data, 1)
+    second = dispositor(data, first)
+    third = dispositor(data, second)
+    navamsa_sign = d9_navamsa(data.positions[second].longitude).sign
+    fourth = int(RASI_LORD[navamsa_sign])
+
+    assert [GRAHA_NAMES[g] for g in (first, second, third, fourth)] == \
+        list(KALPADRUMA_EXAMPLE_CHAIN)
+    assert data.rasis[first] == R["Aq"]
+    assert data.rasis[second] == R["Li"]
+    assert navamsa_sign == R["Aq"]
+
+
+def test_the_three_placement_claims_the_example_makes():
+    """"Sun is in a quadrant. Saturn is exalted. Venus is in a trine." " """
+    from hora.charts.planetary_yogas.popular import houses_of, in_exaltation
+
+    data = _chart_9()
+    assert houses_of(data, int(Graha.SUN)) in KENDRA
+    assert in_exaltation(data, int(Graha.SATURN)) is True
+    assert houses_of(data, int(Graha.VENUS)) in TRIKONA
+    assert "Sun is in a quadrant" in KALPADRUMA_EXAMPLE_CONCLUSION
+
+
+def test_shivaji_has_kalpadruma_yoga():
+    """The whole point of the example, decided by the engine rather than
+    asserted: "Thus Shivaji had Kalpadruma yoga." " """
+    verdict = evaluate_one("kalpadruma", _chart_9())
+    assert verdict.present is True
+    assert set(verdict.participants) == {
+        int(Graha.SUN), int(Graha.SATURN), int(Graha.VENUS)}
+
+
+def test_kalpadruma_is_still_not_reported_as_full_even_here():
+    """§11.6's preamble binds its own worked example too. See OI-81."""
+    verdict = evaluate_one("kalpadruma", _chart_9())
+    assert STRENGTH_NOT_ASSESSED in verdict.qualifiers
+
+
+def test_the_navamsa_claims_that_close_the_example():
+    """"In navamsa also, Sun is exalted, Saturn is in moolatrikona and Venus
+    is in a lagna." The first two hold. The third does not — see D-34."""
+    from hora.charts.vargas import d9_navamsa
+
+    navamsa = {name: d9_navamsa(_lon9(text)).sign
+               for name, text in CHART_9.items() if name in _CHART_9_GRAHA}
+    lagna = d9_navamsa(_lon9(CHART_9["Asc"])).sign
+
+    sun = int(Graha.SUN)
+    assert int(EXALTATION_DEG[sun] // 30) == navamsa["Sun"]
+    assert int(MOOLATRIKONA[Graha.SATURN][0]) == navamsa["Sat"]
+
+    # "Venus is in a lagna" — she is in the 7th from it.
+    assert navamsa["Ven"] != lagna
+    assert (navamsa["Ven"] - lagna) % 12 + 1 == 7
+    assert KALPADRUMA_EXAMPLE_NAVAMSA_LAGNA_CLAIM == "Venus is in a lagna"
+
+
+def test_no_special_lagna_chart_9_draws_sits_with_venus_in_navamsa():
+    """The kindest reading of "Venus is in a lagna" would be one of the
+    special lagnas. The drawn navamsa puts HL in Taurus, AL in Libra and GL
+    with the ascendant in Sagittarius. Venus is in Gemini, alone."""
+    from hora.charts.vargas import d9_navamsa
+
+    assert d9_navamsa(_lon9(CHART_9["Ven"])).sign == R["Ge"]
+    for name, sign in (("HL", "Ta"), ("GL", "Sg")):
+        assert d9_navamsa(_lon9(CHART_9[name])).sign == R[sign]
+
+
+# --- footnote 34 ------------------------------------------------------------
+
+
+def test_footnote_34_is_the_only_sight_of_a_11_6_results_paragraph():
+    """§11.6's results were not supplied — OI-82 — but footnote 34 quotes
+    three words out of Kalpadruma's."""
+    assert KALPADRUMA_RESULT_WORDS == ("principled", "kind", "likes wars")
+    assert KALPADRUMA_RESULT_WORD_SANSKRIT == "yuddhapriyah"
+    for word in KALPADRUMA_RESULT_WORDS:
+        assert word in KALPADRUMA_RESULTS_FOOTNOTE
+    assert "not meant negatively" in KALPADRUMA_RESULTS_FOOTNOTE
+
+
+def test_the_results_entry_for_kalpadruma_still_records_the_gap():
+    """Three quoted words are not the paragraph. The entry stays marked
+    untranscribed so OI-82 does not read as closed."""
+    entry = next(e for e in _results()["entries"]
+                 if e["planetary_yoga"] == "kalpadruma")
+    assert entry["results_transcribed"] is False
+    assert entry["verbatim"] is None
+
+
+# --- what the whole registry says about this chart --------------------------
+
+
+def test_every_yoga_chart_9_actually_has():
+    """Five of the sixty-five, across four sections. Pinned so a later change
+    to any detector has to account for this chart."""
+    present = {v.key for v in evaluate(_chart_9()) if v.present}
+    assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma"}
+
+
+def test_chart_9_is_a_daama_yoga_like_ramas():
+    """Six distinct signs hold the seven planets, and no earlier Naabhasa
+    yoga applies — the same Sankhya verdict §11.5.4 reaches for Rama."""
+    verdict = evaluate_one("daama", _chart_9())
+    assert verdict.present is True
+    assert "6 distinct signs" in verdict.reason
+
+
+def test_the_rules_endpoint_carries_the_shivaji_example(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    example = body["kalpadruma_example"]
+    assert example["chart"] == "Chart 9"
+    assert example["native"] == "Chatrapati Shivaji"
+    assert example["chain"] == ["Sun", "Saturn", "Venus", "Saturn"]
+    assert "D-34" in example["navamsa_lagna_note"]
+
+
+def test_footnote_34_is_withheld_under_the_licence_gate(client):
+    """It quotes PVR's results wording, so it sits behind OI-12's gate like
+    every other piece of his prose."""
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["kalpadruma_results_footnote"] is None
+    assert body["kalpadruma_result_words"] == []
+    payload = repr(body).lower()
+    for word in ("yuddhapriyah", "principled", "likes wars"):
+        assert word not in payload

@@ -33,6 +33,23 @@
     "hamsa_means": "a swan",
     "hamsa_misnamed_in_its_definition": "Ruchaka",
     "hamsa_name_note": "Section 11.4.5's Definition calls the yoga \u201cRuchaka\u201d, which is Mars's yoga from section 11.4.1. The heading reads \u201cHamsa Yoga\u201d and is followed \u2014 see docs/book-deviations.md D-30.",
+    "kalpadruma_example": {
+      "chain": [
+        "Sun",
+        "Saturn",
+        "Venus",
+        "Saturn"
+      ],
+      "chart": "Chart 9",
+      "conclusion": "Thus we get the four planets as \u2014 Sun, Saturn, Venus and Saturn. Sun is in a quadrant. Saturn is exalted. Venus is in a trine. Thus Shivaji had Kalpadruma yoga. In navamsa also, Sun is exalted, Saturn is in moolatrikona and Venus is in a lagna.",
+      "native": "Chatrapati Shivaji",
+      "navamsa_lagna_claim": "Venus is in a lagna",
+      "navamsa_lagna_note": "Chart 9's own navamsa diagram puts Venus in Gemini and the navamsa lagna in Sagittarius, so she is in the 7th from it, not in it. Our D-9 reproduces all ten of that diagram's placements. Nothing in the yoga turns on the claim. See docs/book-deviations.md D-34.",
+      "walkthrough": "As an example, let us look at the rasi and navamsa charts of Chatrapati Shivaji, a great king of India (see Chart 9). Lagna lord is Sun. He is in Aq and his dispositor is Saturn (lord of Aq). Saturn is in Li and his dispositor is Venus. We also need Saturn's dispositor in navamsa. In navamsa, Saturn is in Aq and his dispositor is Saturn himself."
+    },
+    "kalpadruma_result_word_sanskrit": null,
+    "kalpadruma_result_words": [],
+    "kalpadruma_results_footnote": null,
     "kartari_definition": "Kartari literally means \u201cscissors\u201d. The 12th and 2nd houses from a house cast kartari on it. If the 2nd and 12th from a house have benefics, it is said to have a subha (benefic) kartari. Malefics in the same places cause paapa (malefic) kartari.",
     "kartari_effect": "Subha kartari on any house does good to the matters of that house and paapa kartari does harm.",
     "kartari_houses": [

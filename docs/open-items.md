@@ -309,8 +309,12 @@ All eighteen have entries in `data/content/yoga_results.yaml` carrying
 exhaustiveness guard still holds and the gap is visible rather than reading as
 "this yoga has no results".
 
-**Closes when:** you supply the §11.6 results text, or confirm the section
-prints none.
+Footnote 34 settles that the section *does* print them: it says "the results
+of this yoga include the words 'principled' and 'kind'" about Kalpadruma, and
+glosses a third, "likes wars" (yuddhapriyah). Three words are not a paragraph,
+so the entry stays marked untranscribed.
+
+**Closes when:** you supply the §11.6 results text.
 
 ### OI-80 — "applicable" in §11.5.4 excludes a weakened yoga, on the example's evidence
 

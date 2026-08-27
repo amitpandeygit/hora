@@ -1137,3 +1137,45 @@ POPULAR_YOGAS: tuple[dict, ...] = (
 
 #: §11.6's own count, checked against the list.
 POPULAR_YOGA_COUNT = 18
+
+
+#: Footnote 34, on the Kalpadruma results §11.6 prints and we have not been
+#: given. It is the only sight we have of that paragraph: it quotes three of
+#: its words.
+KALPADRUMA_RESULTS_FOOTNOTE = (
+    "This is not meant negatively. War and curbing bad elements are a king's "
+    "duty. The results of this yoga include the words “principled” "
+    "and “kind”. So the expression “likes wars” "
+    "(yuddhapriyah) should be taken in a positive sense. Shivaji's example "
+    "may explain it further.")
+
+#: The three words footnote 34 quotes out of that results paragraph.
+KALPADRUMA_RESULT_WORDS: tuple[str, ...] = (
+    "principled", "kind", "likes wars")
+
+KALPADRUMA_RESULT_WORD_SANSKRIT = "yuddhapriyah"
+
+#: §11.6's worked example of Kalpadruma yoga: Chart 9, Chatrapati Shivaji.
+KALPADRUMA_EXAMPLE_WALKTHROUGH = (
+    "As an example, let us look at the rasi and navamsa charts of Chatrapati "
+    "Shivaji, a great king of India (see Chart 9). Lagna lord is Sun. He is "
+    "in Aq and his dispositor is Saturn (lord of Aq). Saturn is in Li and his "
+    "dispositor is Venus. We also need Saturn's dispositor in navamsa. In "
+    "navamsa, Saturn is in Aq and his dispositor is Saturn himself.")
+
+KALPADRUMA_EXAMPLE_CONCLUSION = (
+    "Thus we get the four planets as — Sun, Saturn, Venus and Saturn. "
+    "Sun is in a quadrant. Saturn is exalted. Venus is in a trine. Thus "
+    "Shivaji had Kalpadruma yoga. In navamsa also, Sun is exalted, Saturn is "
+    "in moolatrikona and Venus is in a lagna.")
+
+#: The four links the example names, in the order it names them. The fourth
+#: repeats the second's navamsa dispositor, which is Saturn again.
+KALPADRUMA_EXAMPLE_CHAIN: tuple[str, ...] = ("Sun", "Saturn", "Venus", "Saturn")
+
+#: §11.6's closing sentence about the example says Venus "is in a lagna" in
+#: navamsa. Chart 9's own navamsa diagram puts Venus in Gemini and the navamsa
+#: lagna in Sagittarius, so Venus is in the 7th — a quadrant, not the lagna,
+#: and no special lagna the chart draws sits in Gemini either. See
+#: docs/book-deviations.md D-34.
+KALPADRUMA_EXAMPLE_NAVAMSA_LAGNA_CLAIM = "Venus is in a lagna"

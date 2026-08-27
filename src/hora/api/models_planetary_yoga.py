@@ -212,6 +212,21 @@ class NaabhasaFamilyOut(BaseModel):
     basis: str | None = None
 
 
+class KalpadrumaExampleOut(BaseModel):
+    """Section 11.6's worked example — Chart 9, Chatrapati Shivaji."""
+
+    chart: str
+    native: str
+    walkthrough: str
+    conclusion: str
+    chain: list[str] = Field(
+        description="The four planets the example arrives at, in its order. "
+                    "The fourth repeats the second's navamsa dispositor.",
+    )
+    navamsa_lagna_claim: str
+    navamsa_lagna_note: str
+
+
 class PlanetaryYogaRulesOut(BaseModel):
     ravi_intro: str
     chandra_intro: str
@@ -337,6 +352,13 @@ class PlanetaryYogaRulesOut(BaseModel):
     popular_yogas_needing_a_named_lord: dict[str, list[str]]
     popular_intro: str
     popular_count: int
+    kalpadruma_example: KalpadrumaExampleOut
+    kalpadruma_results_footnote: str | None = Field(
+        description="Footnote 34. PVR's own prose, so it is withheld under "
+                    "the licence gate of OI-12 unless releasing is allowed.",
+    )
+    kalpadruma_result_words: list[str]
+    kalpadruma_result_word_sanskrit: str | None
     kartari_means: str
     kartari_houses: list[int]
     kartari_definition: str = Field(

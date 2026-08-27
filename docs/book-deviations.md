@@ -1024,3 +1024,30 @@ is why the ordering difference shows up too.
 Pinned by `test_11_5_3_the_classification_and_the_headings_disagree_on_two_names`,
 `test_11_5_3_vihaga_is_carried_as_an_alias` and
 `test_11_5_3_the_classification_orders_two_yogas_differently`.
+
+## D-34 · §11.6's example says Venus "is in a lagna" in navamsa; Chart 9 puts her in the 7th
+
+**Status: recorded.** The chart wins; the sentence is transcribed as printed.
+
+§11.6 closes its Kalpadruma example: "In navamsa also, Sun is exalted, Saturn
+is in moolatrikona and Venus is in a lagna."
+
+The first two hold against Chart 9's own drawn navamsa — the Sun in Aries,
+Saturn in Aquarius. The third does not. The drawn navamsa puts Venus in Gemini
+and the navamsa lagna in Sagittarius, so Venus is in the **7th** from it. Nor
+is she with a special lagna: the same diagram draws HL in Taurus, AL in Libra
+and GL with the ascendant in Sagittarius, and Gemini holds Venus alone.
+
+Our D-9 reproduces all ten of Chart 9's drawn navamsa placements, so this is
+not our computation disagreeing with the book — it is the book's sentence
+disagreeing with the book's own diagram.
+
+The likeliest reading is that "lagna" is a slip for "kendra": Venus in the 7th
+*is* in a quadrant, which would make the sentence true and would parallel
+"Sun is in a quadrant" in the rasi walkthrough two lines earlier.
+
+**What we do:** nothing turns on it. The claim is not one of Kalpadruma's
+conditions — those are decided in the rasi chart and the yoga is present for
+Shivaji either way. The sentence is transcribed verbatim in
+`KALPADRUMA_EXAMPLE_CONCLUSION`, the disputed phrase is isolated in
+`KALPADRUMA_EXAMPLE_NAVAMSA_LAGNA_CLAIM`, and both readings are tested.

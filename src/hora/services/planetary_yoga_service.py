@@ -19,6 +19,7 @@ from hora.charts.planetary_yogas import (
     groups,
 )
 from hora.charts.planetary_yogas.registry import describe
+from hora.content.store import serving_unconfirmed_allowed
 from hora.core import validate
 from hora.core.const import (
     AAKRITI_BASIS,
@@ -49,6 +50,13 @@ from hora.core.const import (
     HAMSA_MEANS,
     HAMSA_MISNAMED_IN_ITS_DEFINITION,
     HOUSE_CATEGORIES,
+    KALPADRUMA_EXAMPLE_CHAIN,
+    KALPADRUMA_EXAMPLE_CONCLUSION,
+    KALPADRUMA_EXAMPLE_NAVAMSA_LAGNA_CLAIM,
+    KALPADRUMA_EXAMPLE_WALKTHROUGH,
+    KALPADRUMA_RESULT_WORD_SANSKRIT,
+    KALPADRUMA_RESULT_WORDS,
+    KALPADRUMA_RESULTS_FOOTNOTE,
     KARTARI_DEFINITION,
     KARTARI_EFFECT,
     KARTARI_HOUSES,
@@ -434,6 +442,33 @@ def rules() -> dict:
             for entry in POPULAR_YOGAS if entry.get("strength")
         },
         "popular_intro": POPULAR_YOGA_INTRO,
+        # 11.6's only worked example: Chart 9, Chatrapati Shivaji.
+        "kalpadruma_example": {
+            "chart": "Chart 9",
+            "native": "Chatrapati Shivaji",
+            "walkthrough": KALPADRUMA_EXAMPLE_WALKTHROUGH,
+            "conclusion": KALPADRUMA_EXAMPLE_CONCLUSION,
+            "chain": list(KALPADRUMA_EXAMPLE_CHAIN),
+            "navamsa_lagna_claim": KALPADRUMA_EXAMPLE_NAVAMSA_LAGNA_CLAIM,
+            "navamsa_lagna_note": (
+                "Chart 9's own navamsa diagram puts Venus in Gemini and the "
+                "navamsa lagna in Sagittarius, so she is in the 7th from it, "
+                "not in it. Our D-9 reproduces all ten of that diagram's "
+                "placements. Nothing in the yoga turns on the claim. See "
+                "docs/book-deviations.md D-34."
+            ),
+        },
+        # Footnote 34 quotes three words out of Kalpadruma's results, which
+        # is PVR's own prose and carries OI-12's gate like the rest of it.
+        "kalpadruma_results_footnote": (
+            KALPADRUMA_RESULTS_FOOTNOTE if serving_unconfirmed_allowed() else None
+        ),
+        "kalpadruma_result_words": (
+            list(KALPADRUMA_RESULT_WORDS) if serving_unconfirmed_allowed() else []
+        ),
+        "kalpadruma_result_word_sanskrit": (
+            KALPADRUMA_RESULT_WORD_SANSKRIT if serving_unconfirmed_allowed() else None
+        ),
         "popular_count": POPULAR_YOGA_COUNT,
         "kartari_means": KARTARI_MEANS,
         "kartari_houses": list(KARTARI_HOUSES),
