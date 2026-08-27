@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 41 waiting on evidence · 2 parked**
+**5 waiting on Amit · 42 waiting on evidence · 2 parked**
 
 ---
 
@@ -295,6 +295,29 @@ verification against birth data as Charts 6 and 7 got.
 **Closes when:** you send Chart 8's page, or we accept the exercise as covered
 by the reconstruction alone.
 
+### OI-77 — 27 of §11.5's 32 Naabhasa yogas are named but not defined
+
+§11.5 classifies thirty-two:
+
+| family | count | status |
+|---|---|---|
+| Aasraya | 3 | defined in §11.5.1 |
+| Dala | 2 | defined in §11.5.2 |
+| Aakriti | 20 | **named only** |
+| Sankhya | 7 | **named only** |
+
+The twenty Aakriti and seven Sankhya yogas are listed by name in §11.5's
+classification and defined in §11.5.3 and §11.5.4, which have not been
+supplied.
+
+They are **not registered**. A yoga the engine cannot detect must not appear
+among the verdicts, where `present: false` would read as a finding rather than
+a gap. They are published instead as `naabhasa_not_yet_defined` on
+`/v1/planetary-yoga/rules`, with a guard asserting the registered five and the
+pending twenty-seven come to exactly thirty-two and never overlap.
+
+**Closes when:** §11.5.3 and §11.5.4 are supplied.
+
 ### OI-74 — §11.3 guideline 2's "(respectively)" has nothing to pair with
 
 > "In such a situation, aspect of Jupiter on Moon beings wealth and comforts in
@@ -378,6 +401,17 @@ they do not settle it either.
 **Excluded by default**, as a per-call parameter (`include_nodes`), and the
 response lists `grahas_considered` so the choice is visible in the output and
 not only in the request.
+
+**§11.5.1 raises the stakes and §11.5.2 narrows the question.** The Aasraya
+yogas say "**all the planets** are exclusively in movable signs", so two extra
+grahas must agree and the flag matters more. But §11.5.2's Dala yogas say
+"natural benefics" and "natural malefics" instead, which §3.2.2 settles — and
+§11.5.2's own Sarpa example is built from Mars, **Rahu and Ketu**. So the flag
+governs the phrase "a planet" only, and the Dala detectors ignore it. A
+detector that honoured it there would fail the book's own example.
+
+Note the nodes can never make an Aasraya yoga *impossible*: they are always six
+signs apart, and six signs apart is always the same modality.
 
 The default is the conservative one — it under-reports rather than
 over-reports — but it *is* a choice, and it is not PVR's.

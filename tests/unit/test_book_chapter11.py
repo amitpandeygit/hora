@@ -21,6 +21,7 @@ from hora.charts.planetary_yogas import (
     groups,
 )
 from hora.core.const import (
+    AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
     BUDHA_AADITYA_CHART_NOTE,
     BUDHA_AADITYA_SPELLING_VARIANTS,
@@ -36,6 +37,7 @@ from hora.core.const import (
     CHANDRA_YOGA_INTRO,
     CHANDRA_YOGAS,
     COMBUSTION_WEAKENS_YOGA,
+    HAMSA_MEANS,
     HAMSA_MISNAMED_IN_ITS_DEFINITION,
     KEMADRUMA_KILLS_OTHER_YOGAS,
     MAALAVYA_SPELLING_VARIANTS,
@@ -45,12 +47,20 @@ from hora.core.const import (
     MAHAPURUSHA_REFERENCE_RULE,
     MAHAPURUSHA_TERMS,
     MAHAPURUSHA_YOGAS,
+    NAABHASA_CLASSIFICATION,
+    NAABHASA_INTRO,
+    NAABHASA_NOT_YET_DEFINED,
+    NAABHASA_TIMING_RULE,
+    NAABHASA_YOGAS,
     PANAPHARA_SPELLING_VARIANTS,
     PANCHA_BHOOTA_NAMES,
+    RASI_MODALITY,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
     RAVI_YOGAS,
+    SARPA_IS_VERY_BAD,
+    SASA_MEANS,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
     Graha,
@@ -91,7 +101,9 @@ def test_absent_yogas_are_returned_not_filtered_out():
     """"Not in the response" must never need interpreting. An absent yoga
     comes back with `present=False` and the reason it failed.
     """
-    verdicts = {v.key: v for v in evaluate(_in(SUN="Ar"))}
+    # Two planets in different modalities, so no Aasraya yoga can hold, and
+    # no lagna, so nothing counting quadrants can either.
+    verdicts = {v.key: v for v in evaluate(_in(SUN="Ar", MOON="Ta"))}
     assert not any(v.present for v in verdicts.values())
     for verdict in verdicts.values():
         assert verdict.reason, verdict.key
@@ -118,8 +130,9 @@ def test_every_group_module_is_imported():
     """The one failure this design can still have: a group module written but
     never imported, so its yogas silently never run.
 
-    Every `group` named by a registered spec must have a module of that name
-    under `charts/planetary_yogas/`, and the package must import it.
+    Checked through the detectors themselves rather than by group name, since
+    one module may host several groups — `naabhasa.py` registers both
+    `naabhasa_aasraya` and `naabhasa_dala`.
     """
     import pathlib
 
@@ -127,9 +140,13 @@ def test_every_group_module_is_imported():
 
     source = pathlib.Path(package.__file__).read_text()
     directory = pathlib.Path(package.__file__).parent
-    for group in groups():
-        assert (directory / f"{group}.py").is_file(), group
-        assert f"import {group}" in source, group
+    modules = {spec.detect.__module__.rsplit(".", 1)[-1]
+               for spec in YOGA_REGISTRY.values()}
+    modules.discard("_shared")
+    for module in modules:
+        assert (directory / f"{module}.py").is_file(), module
+        assert f"import {module}" in source, module
+    assert {spec.group for spec in YOGA_REGISTRY.values()} == set(groups())
 
 
 def test_registry_keys_are_unique_and_stable():
@@ -538,7 +555,8 @@ def test_one_endpoint_answers_a_single_yoga(client):
 def test_catalogue_lists_every_yoga_without_a_chart(client):
     body = client.get("/v1/planetary-yoga/catalogue").json()
     assert body["count"] == len(YOGA_REGISTRY)
-    assert body["groups"] == ["chandra", "mahapurusha", "ravi"]
+    assert body["groups"] == ["chandra", "mahapurusha",
+                              "naabhasa_aasraya", "naabhasa_dala", "ravi"]
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -1449,13 +1467,343 @@ def test_the_two_name_errors_are_of_different_kinds():
     assert HAMSA_MISNAMED_IN_ITS_DEFINITION != "Hamsa"
 
 
-def test_footnotes_29_and_30_have_not_been_supplied():
-    """"He is rabbit-like²⁹" in §11.4.3 and "He is swan-like³⁰" in §11.4.5.
-    The footnote text has not been given to us; the name meanings recorded
-    come from the results sentences themselves, not from the footnotes.
+def test_only_two_mahapurusha_names_are_glossed_at_all():
+    """"He is rabbit-like²⁹" in §11.4.3 and "He is swan-like³⁰" in §11.4.5
+    carry the chapter's only two name footnotes. Ruchaka, Bhadra and Maalavya
+    get none.
     """
-    assert MAHAPURUSHA_FOOTNOTES_UNREAD == (29, 30)
+    by_key = {y["key"]: y for y in MAHAPURUSHA_YOGAS}
+    glossed = {k for k, v in by_key.items() if v["name_means"]}
+    assert glossed == {"sasa", "hamsa"}
+    assert by_key["ruchaka"]["name_means"] is None
+
+
+# --------------------------------------------------------------------------
+# 11.5 Naabhasa yogas — the classification
+# --------------------------------------------------------------------------
+
+
+def test_11_5_what_a_naabhasa_yoga_is():
+    """"Naabhasa yogas are classified celestial combinations."""
+    assert NAABHASA_INTRO.startswith("Naabhasa yogas are classified")
+
+
+@pytest.mark.parametrize(
+    "group,count",
+    [("aasraya", 3), ("dala", 2), ("aakriti", 20), ("sankhya", 7)],
+)
+def test_11_5_each_family_lists_as_many_names_as_it_claims(group, count):
+    """"Aasraya Yogas (3)", "Dala Yogas (2)", "Aakriti Yogas (20)", "Sankhya
+    Yogas (7)" — each header states a count, and each is followed by that many
+    names. Checked rather than trusted.
+    """
+    entry = NAABHASA_CLASSIFICATION[group]
+    assert entry["count"] == count
+    assert len(entry["names"]) == count
+
+
+def test_11_5_the_four_families_come_to_thirty_two():
+    """3 + 2 + 20 + 7. The classical count, and it falls out of the section's
+    own four headers."""
+    total = sum(e["count"] for e in NAABHASA_CLASSIFICATION.values())
+    assert total == 32
+    names = [n for e in NAABHASA_CLASSIFICATION.values() for n in e["names"]]
+    assert len(names) == 32
+    assert len(set(names)) == 32, "no name appears in two families"
+
+
+def test_11_5_only_five_of_the_thirty_two_are_defined_so_far():
+    """§11.5.1 and §11.5.2 define five. The other twenty-seven are **named
+    only**.
+
+    They are listed rather than registered: a yoga the engine cannot detect
+    must not appear among the verdicts, where `present: false` would read as a
+    finding instead of a gap.
+    """
+    registered = {k for k, s in YOGA_REGISTRY.items()
+                  if s.group.startswith("naabhasa_")}
+    assert len(registered) == 5
+    assert len(NAABHASA_NOT_YET_DEFINED) == 27
+    assert len(registered) + len(NAABHASA_NOT_YET_DEFINED) == 32
+
+
+def test_11_5_no_undefined_yoga_leaks_into_the_registry():
+    """The guard for the gap: nothing named-only may have been registered by
+    mistake, in either direction."""
+    registered_names = {s.name.replace(" Yoga", "") for s in YOGA_REGISTRY.values()}
+    assert not (set(NAABHASA_NOT_YET_DEFINED) & registered_names)
+    defined = {y["name"].replace(" Yoga", "") for y in NAABHASA_YOGAS}
+    assert not (defined & set(NAABHASA_NOT_YET_DEFINED))
+
+
+def test_11_5_the_defined_five_are_the_first_two_families():
+    """Aasraya and Dala, whole. The gap is Aakriti and Sankhya entire, not a
+    scatter across all four — so the missing sections are §11.5.3 and
+    §11.5.4."""
+    defined = {y["name"].replace(" Yoga", "") for y in NAABHASA_YOGAS}
+    assert defined == set(NAABHASA_CLASSIFICATION["aasraya"]["names"]) | set(
+        NAABHASA_CLASSIFICATION["dala"]["names"])
+
+
+def test_11_5_naabhasa_results_are_felt_in_all_dasas():
+    """"Results of other yogas may be felt primarily during the dasas of the
+    planets and signs involved. But the results of Naabhasa yogas are felt in
+    **all dasas**."
+
+    The only place chapter 11 contrasts one family with all the others on
+    timing. §11.2.4's Budha-Aaditya is an instance of the first half — "the
+    periods of Sun, Mercury and Leo will give those results in particular" —
+    so the two sections state the rule and its exception without
+    cross-referencing.
+    """
+    assert "felt in all dasas" in NAABHASA_TIMING_RULE
+    assert "dasas of the planets and signs involved" in NAABHASA_TIMING_RULE
+    assert "periods of Sun, Mercury and Leo" in BUDHA_AADITYA_TIMING_TEXT
+
+
+def test_footnotes_29_and_30_are_now_supplied():
+    """"Sasa" means a hare or a rabbit. "Hamsa" means a swan.
+
+    Recorded as unread when §11.4 was done; supplied with §11.5. Both confirm
+    the meanings taken from the Results sentences ("rabbit-like",
+    "swan-like"), so nothing had to be revised.
+    """
+    assert SASA_MEANS == "a hare or a rabbit"
+    assert HAMSA_MEANS == "a swan"
+    assert MAHAPURUSHA_FOOTNOTES_UNREAD == ()
     by_key = {y["key"]: y for y in MAHAPURUSHA_YOGAS}
     assert by_key["sasa"]["name_means"] == "rabbit"
     assert by_key["hamsa"]["name_means"] == "swan"
-    assert by_key["ruchaka"]["name_means"] is None
+    assert by_key["sasa"]["name_means"] in SASA_MEANS
+    assert by_key["hamsa"]["name_means"] in HAMSA_MEANS
+
+
+# --------------------------------------------------------------------------
+# 11.5.1 Aasraya yogas
+# --------------------------------------------------------------------------
+
+
+def test_11_5_1_aasraya_means_dwelling_or_asylum():
+    """"Aasraya means dwelling or asylum. Aasraya yogas are based on the signs
+    occupied by planets."""
+    assert NAABHASA_CLASSIFICATION["aasraya"]["means"] == "dwelling or asylum"
+    assert "signs occupied by planets" in AASRAYA_BASIS
+
+
+@pytest.mark.parametrize(
+    "key,modality,means",
+    [("rajju", "movable", "a rope"), ("musala", "fixed", "a pestle"),
+     ("nala", "dual", None)],
+)
+def test_11_5_1_the_three_aasraya_yogas(key, modality, means):
+    """"Rajju Yoga: If all the planets are exclusively in movable signs...
+    Musala... fixed... Nala... dual."
+
+    Rajju means a rope and Musala a pestle. **Nala is left unglossed** — the
+    only one of the three the book does not name.
+    """
+    from hora.core.const import MODALITY_NAMES_EN
+
+    entry = next(y for y in NAABHASA_YOGAS if y["key"] == key)
+    assert MODALITY_NAMES_EN[entry["modality"]] == modality
+    assert entry["name_means"] == means
+    assert "exclusively" in entry["definition"]
+
+
+def test_11_5_1_the_three_partition_the_modalities():
+    """One yoga per modality, and the three modalities are all there are — so
+    a chart with every planet in one modality forms exactly one Aasraya yoga,
+    never two.
+    """
+    modalities = {y["modality"] for y in NAABHASA_YOGAS if "modality" in y}
+    assert modalities == {0, 1, 2}
+    for modality in range(3):
+        signs = [s for s in range(12) if RASI_MODALITY[s] == modality]
+        rasis = {int(g): signs[i % len(signs)]
+                 for i, g in enumerate((Graha.SUN, Graha.MOON, Graha.MARS,
+                                        Graha.MERCURY, Graha.JUPITER,
+                                        Graha.VENUS, Graha.SATURN))}
+        present = [v.key for v in evaluate(YogaInput(rasis=rasis))
+                   if v.present and v.key in ("rajju", "musala", "nala")]
+        assert len(present) == 1, modality
+
+
+def test_11_5_1_one_planet_outside_breaks_it_and_the_reason_names_it():
+    """"**exclusively**" — one planet elsewhere is enough."""
+    movable = [s for s in range(12) if RASI_MODALITY[s] == 0]
+    rasis = {int(g): movable[i % 4] for i, g in enumerate(
+        (Graha.SUN, Graha.MOON, Graha.MARS, Graha.MERCURY, Graha.JUPITER,
+         Graha.VENUS, Graha.SATURN))}
+    assert evaluate_one("rajju", YogaInput(rasis=rasis)).present
+    rasis[int(Graha.SATURN)] = R["Ta"]
+    broken = evaluate_one("rajju", YogaInput(rasis=rasis))
+    assert not broken.present
+    assert "Saturn in Taurus" in broken.reason
+
+
+def test_11_5_1_the_nodes_never_make_an_aasraya_yoga_impossible():
+    """"All the planets" — whether the nodes count is the OI-73 question
+    again, and it bites harder here, since two more grahas must agree.
+
+    But it can never make the yoga impossible: Rahu and Ketu are always six
+    signs apart, and six signs apart is always the **same modality**. So
+    admitting them makes an Aasraya yoga rarer, never unreachable.
+    """
+    for sign in range(12):
+        assert RASI_MODALITY[sign] == RASI_MODALITY[(sign + 6) % 12]
+    movable = [s for s in range(12) if RASI_MODALITY[s] == 0]
+    rasis = {int(g): movable[i % 4] for i, g in enumerate(
+        (Graha.SUN, Graha.MOON, Graha.MARS, Graha.MERCURY, Graha.JUPITER,
+         Graha.VENUS, Graha.SATURN))}
+    rasis[int(Graha.RAHU)] = R["Ar"]
+    rasis[int(Graha.KETU)] = R["Li"]
+    assert evaluate_one("rajju", YogaInput(rasis=rasis, include_nodes=True)).present
+
+
+def test_11_5_1_including_the_nodes_can_change_the_answer():
+    """The other side of the same coin: a chart where the seven agree and the
+    nodes do not."""
+    movable = [s for s in range(12) if RASI_MODALITY[s] == 0]
+    rasis = {int(g): movable[i % 4] for i, g in enumerate(
+        (Graha.SUN, Graha.MOON, Graha.MARS, Graha.MERCURY, Graha.JUPITER,
+         Graha.VENUS, Graha.SATURN))}
+    rasis[int(Graha.RAHU)] = R["Ta"]
+    rasis[int(Graha.KETU)] = R["Sc"]
+    assert evaluate_one("rajju", YogaInput(rasis=rasis)).present
+    assert not evaluate_one(
+        "rajju", YogaInput(rasis=rasis, include_nodes=True)).present
+
+
+# --------------------------------------------------------------------------
+# 11.5.2 Dala yogas
+# --------------------------------------------------------------------------
+
+
+def test_11_5_2_maalaa_the_books_own_example():
+    """"let us say lagna is in Ar, Jupiter is in Cn, Venus is in Cp and
+    Mercury is in Li. This gives Maalaa yoga."
+
+    Cancer, Capricorn and Libra are the 4th, 10th and 7th from Aries — three
+    quadrants, each with a natural benefic.
+    """
+    verdict = evaluate_one("maalaa", YogaInput(
+        rasis={int(Graha.JUPITER): R["Cn"], int(Graha.VENUS): R["Cp"],
+               int(Graha.MERCURY): R["Li"]},
+        lagna_rasi=R["Ar"], paksha=0))
+    assert verdict.present
+    assert sorted(verdict.houses.values()) == [4, 7, 10]
+
+
+def test_11_5_2_sarpa_the_books_own_example():
+    """"lagna is in Sc, Mars is in Ta, Rahu is in Le and Ketu is in Aq. This
+    gives Sarpa yoga."
+
+    Taurus, Leo and Aquarius are the 7th, 10th and 4th from Scorpio.
+    """
+    verdict = evaluate_one("sarpa", YogaInput(
+        rasis={int(Graha.MARS): R["Ta"], int(Graha.RAHU): R["Le"],
+               int(Graha.KETU): R["Aq"]},
+        lagna_rasi=R["Sc"], paksha=0))
+    assert verdict.present
+    assert sorted(verdict.houses.values()) == [4, 7, 10]
+
+
+def test_11_5_2_the_dala_yogas_ignore_the_include_nodes_flag():
+    """**The correction §11.5.2's own example forces.**
+
+    `include_nodes` exists for the unresolved phrase "a planet" (§11.2, §11.3,
+    §11.5.1). "Natural malefics" is a different phrase and §3.2.2 settles it —
+    the nodes are natural malefics.
+
+    Sarpa's example is built from Mars, **Rahu and Ketu**, so a Dala detector
+    that honoured the flag would fail the book's own example whenever the flag
+    was off. It must not, and does not.
+    """
+    rasis = {int(Graha.MARS): R["Ta"], int(Graha.RAHU): R["Le"],
+             int(Graha.KETU): R["Aq"]}
+    off = evaluate_one("sarpa", YogaInput(rasis=rasis, lagna_rasi=R["Sc"],
+                                          paksha=0))
+    on = evaluate_one("sarpa", YogaInput(rasis=rasis, lagna_rasi=R["Sc"],
+                                         paksha=0, include_nodes=True))
+    assert off.present and on.present
+    assert off.participants == on.participants
+
+
+def test_11_5_2_three_quadrants_are_required_not_two():
+    """"If **three** quadrants are occupied" — two is not enough, and the
+    reason says how many were found."""
+    verdict = evaluate_one("maalaa", YogaInput(
+        rasis={int(Graha.JUPITER): R["Cn"], int(Graha.VENUS): R["Cp"]},
+        lagna_rasi=R["Ar"], paksha=0))
+    assert not verdict.present
+    assert "2 of the four quadrants" in verdict.reason
+
+
+def test_11_5_2_a_contrary_graha_weakens_but_does_not_cancel():
+    """"If a malefic also occupies one of the quadrants, this yoga **may not
+    operate well**."
+
+    May not operate well — not "is absent". The same rule as combustion in
+    §11.2.4 and Kemadruma in §11.3.4: a qualifier, never a veto.
+    """
+    verdict = evaluate_one("maalaa", YogaInput(
+        rasis={int(Graha.JUPITER): R["Cn"], int(Graha.VENUS): R["Cp"],
+               int(Graha.MERCURY): R["Li"], int(Graha.SATURN): R["Ar"]},
+        lagna_rasi=R["Ar"], paksha=0))
+    assert verdict.present is True
+    assert any("may not operate well" in q for q in verdict.qualifiers)
+    assert any("Saturn in the 1st" in q for q in verdict.qualifiers)
+
+
+def test_11_5_2_the_two_dala_yogas_are_mirror_images():
+    """Maalaa is benefics in three quadrants, Sarpa is malefics. Each is
+    weakened by the other's nature, so the two definitions differ in exactly
+    one word each.
+    """
+    maalaa = next(y for y in NAABHASA_YOGAS if y["key"] == "maalaa")
+    sarpa = next(y for y in NAABHASA_YOGAS if y["key"] == "sarpa")
+    assert maalaa["nature"] == "benefic" and maalaa["weakened_by"] == "malefic"
+    assert sarpa["nature"] == "malefic" and sarpa["weakened_by"] == "benefic"
+    assert maalaa["definition"].replace("benefics", "malefics") == \
+        sarpa["definition"]
+
+
+def test_11_5_2_sarpa_is_graded_in_its_definition():
+    """"This is a very bad combination." The only yoga in chapter 11 the book
+    grades inside its own definition rather than leaving it to the results."""
+    assert SARPA_IS_VERY_BAD == "This is a very bad combination."
+
+
+def test_11_5_2_needs_a_lagna():
+    """Quadrants are counted from the ascendant, like Kemadruma and the five
+    Mahapurusha yogas."""
+    for key in ("maalaa", "sarpa"):
+        verdict = evaluate_one(key, YogaInput(
+            rasis={int(Graha.JUPITER): R["Cn"]}, paksha=0))
+        assert verdict.present is False
+        assert "cannot be decided" in verdict.reason
+
+
+def test_11_5_2_both_examples_leave_the_ascendant_empty():
+    """Maalaa's three quadrants are the 4th, 7th and 10th; so are Sarpa's.
+    Neither example uses the 1st, though the rule allows any three of the
+    four. Worth pinning — a detector that quietly required the ascendant would
+    still pass both examples.
+    """
+    for key, lagna, rasis in (
+        ("maalaa", R["Ar"], {int(Graha.JUPITER): R["Cn"],
+                             int(Graha.VENUS): R["Cp"],
+                             int(Graha.MERCURY): R["Li"]}),
+        ("sarpa", R["Sc"], {int(Graha.MARS): R["Ta"],
+                            int(Graha.RAHU): R["Le"],
+                            int(Graha.KETU): R["Aq"]}),
+    ):
+        verdict = evaluate_one(key, YogaInput(rasis=rasis, lagna_rasi=lagna,
+                                              paksha=0))
+        assert 1 not in verdict.houses.values()
+    with_first = evaluate_one("maalaa", YogaInput(
+        rasis={int(Graha.JUPITER): R["Ar"], int(Graha.VENUS): R["Cn"],
+               int(Graha.MERCURY): R["Li"]},
+        lagna_rasi=R["Ar"], paksha=0))
+    assert with_first.present
+    assert 1 in with_first.houses.values()

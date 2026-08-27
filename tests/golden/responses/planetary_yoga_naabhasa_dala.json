@@ -1,0 +1,104 @@
+{
+  "body": {
+    "chart": "D1",
+    "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
+    "evaluated": 2,
+    "grahas_considered": [
+      {
+        "graha": 0,
+        "graha_name": "Sun"
+      },
+      {
+        "graha": 1,
+        "graha_name": "Moon"
+      },
+      {
+        "graha": 2,
+        "graha_name": "Mars"
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury"
+      },
+      {
+        "graha": 4,
+        "graha_name": "Jupiter"
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus"
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn"
+      }
+    ],
+    "group": "naabhasa_dala",
+    "include_nodes": false,
+    "inputs_missing": [],
+    "kemadruma_present": false,
+    "lagna_rasi": 7,
+    "paksha": 0,
+    "present": [
+      "sarpa"
+    ],
+    "qualifiers_available": [],
+    "qualifiers_unavailable": [
+      "combustion"
+    ],
+    "results_killed_by_kemadruma": [],
+    "yogas": [
+      {
+        "aliases": [],
+        "definition": "If three quadrants are occupied by natural benefics, this yoga is formed.",
+        "group": "naabhasa_dala",
+        "implies": [],
+        "key": "maalaa",
+        "name": "Maalaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "0 of the four quadrants from lagna are occupied wholly by natural benefics; 3 are needed",
+        "section": "11.5.2"
+      },
+      {
+        "aliases": [],
+        "definition": "If three quadrants are occupied by natural malefics, this yoga is formed.",
+        "group": "naabhasa_dala",
+        "implies": [],
+        "key": "sarpa",
+        "name": "Sarpa Yoga",
+        "participants": [
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": 7,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "graha": 7,
+            "graha_name": "Rahu",
+            "house_from_sun": 10,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "graha": 8,
+            "graha_name": "Ketu",
+            "house_from_sun": 4,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          }
+        ],
+        "present": true,
+        "qualifiers": [
+          "Sun, Moon, Mercury, Jupiter, Venus, Saturn had no placement, so a contrary graha in a quadrant may have been missed"
+        ],
+        "reason": "natural malefics occupy 3 quadrants from lagna \u2014 the 4th, the 7th, the 10th",
+        "section": "11.5.2"
+      }
+    ]
+  },
+  "status": 200
+}

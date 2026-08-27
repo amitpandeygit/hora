@@ -194,6 +194,15 @@ class MahapurushaElementOut(BaseModel):
     graha_name: str
 
 
+class NaabhasaFamilyOut(BaseModel):
+    family: str = Field(..., examples=["aasraya"])
+    count: int
+    names: list[str]
+    section: str
+    means: str | None = None
+    basis: str | None = None
+
+
 class PlanetaryYogaRulesOut(BaseModel):
     ravi_intro: str
     chandra_intro: str
@@ -230,6 +239,28 @@ class PlanetaryYogaRulesOut(BaseModel):
         ...,
         description="Footnotes referenced in the text whose wording we do not have",
     )
+    sasa_means: str
+    hamsa_means: str
+    naabhasa_intro: str
+    naabhasa_timing_rule: str = Field(
+        ...,
+        description=(
+            "Section 11.5: other yogas are felt mainly in the dasas of the "
+            "planets and signs involved; Naabhasa results are felt in all "
+            "dasas."
+        ),
+    )
+    aasraya_basis: str
+    sarpa_is_very_bad: str
+    naabhasa_classification: list[NaabhasaFamilyOut]
+    naabhasa_not_yet_defined: list[str] = Field(
+        ...,
+        description=(
+            "Named by section 11.5's classification and defined in no section "
+            "we have read. Listed so the gap is visible."
+        ),
+    )
+    naabhasa_gap_note: str
     frequency_note: str
     preferred_charts: list[str]
     budha_aaditya_terms: dict[str, str]

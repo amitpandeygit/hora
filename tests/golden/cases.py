@@ -273,6 +273,11 @@ CASES = [
         # so two of the five hold at once and three do not.
         "rasis": {2: 0, 4: 3, 3: 2}, "lagna_rasi": 6, "group": "mahapurusha",
     }),
+    ("planetary_yoga_naabhasa_dala", "POST", "/v1/planetary-yoga/chart", {
+        # 11.5.2's Sarpa example: lagna Sc, Mars Ta, Rahu Le, Ketu Aq.
+        "rasis": {2: 1, 7: 4, 8: 10}, "lagna_rasi": 7, "paksha": 0,
+        "group": "naabhasa_dala",
+    }),
     ("planetary_yoga_guidelines", "POST", "/v1/planetary-yoga/guidelines", {
         "rasis": {0: 0, 1: 2, 4: 4, 5: 5}, "paksha": 0,
     }),

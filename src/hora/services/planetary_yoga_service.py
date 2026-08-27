@@ -21,6 +21,7 @@ from hora.charts.planetary_yogas import (
 from hora.charts.planetary_yogas.registry import describe
 from hora.core import validate
 from hora.core.const import (
+    AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
     BUDHA_AADITYA_SPELLING_VARIANTS,
     BUDHA_AADITYA_TERMS,
@@ -39,6 +40,7 @@ from hora.core.const import (
     COMBUSTION_WEAKENS_YOGA,
     ELEMENT_RULER,
     GRAHA_NAMES,
+    HAMSA_MEANS,
     HAMSA_MISNAMED_IN_ITS_DEFINITION,
     HOUSE_CATEGORIES,
     KEMADRUMA_EFFORT_NOTE,
@@ -50,6 +52,10 @@ from hora.core.const import (
     MAHAPURUSHA_INTRO,
     MAHAPURUSHA_REFERENCE_RULE,
     MAHAPURUSHA_TERMS,
+    NAABHASA_CLASSIFICATION,
+    NAABHASA_INTRO,
+    NAABHASA_NOT_YET_DEFINED,
+    NAABHASA_TIMING_RULE,
     PANAPHARA_SPELLING_VARIANTS,
     PANCHA_BHOOTA_NAMES,
     PLANET_ELEMENT_ADJECTIVES,
@@ -58,6 +64,8 @@ from hora.core.const import (
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
+    SARPA_IS_VERY_BAD,
+    SASA_MEANS,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
     UPACHAYA,
@@ -311,6 +319,30 @@ def rules() -> dict:
             "and is followed \u2014 see docs/book-deviations.md D-30."
         ),
         "footnotes_unread": list(MAHAPURUSHA_FOOTNOTES_UNREAD),
+        "sasa_means": SASA_MEANS,
+        "hamsa_means": HAMSA_MEANS,
+        "naabhasa_intro": NAABHASA_INTRO,
+        "naabhasa_timing_rule": NAABHASA_TIMING_RULE,
+        "aasraya_basis": AASRAYA_BASIS,
+        "sarpa_is_very_bad": SARPA_IS_VERY_BAD,
+        "naabhasa_classification": [
+            {"family": family, "count": entry["count"],
+             "names": list(entry["names"]), "section": entry["section"],
+             "means": entry["means"], "basis": entry["basis"]}
+            for family, entry in NAABHASA_CLASSIFICATION.items()
+        ],
+        # Twenty-seven of the thirty-two are named by §11.5 and defined
+        # nowhere we have read. Listed so the gap shows in the API rather than
+        # looking like an absence.
+        "naabhasa_not_yet_defined": list(NAABHASA_NOT_YET_DEFINED),
+        "naabhasa_gap_note": (
+            "Section 11.5 classifies 32 Naabhasa yogas and sections 11.5.1 and "
+            "11.5.2 define five of them. The other 27 — the Aakriti and "
+            "Sankhya families — are named only. They are listed here rather "
+            "than registered, so that a yoga the engine cannot detect never "
+            "appears among the verdicts where its absence would read as a "
+            "finding."
+        ),
         "kemadruma_kills_other_yogas": KEMADRUMA_KILLS_OTHER_YOGAS,
         "kemadruma_effort_note": KEMADRUMA_EFFORT_NOTE,
         "kemadruma_is_a_qualifier_not_a_veto": (

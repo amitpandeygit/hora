@@ -1,5 +1,6 @@
 {
   "body": {
+    "aasraya_basis": "Aasraya yogas are based on the signs occupied by planets. If all the planets are in movable signs or in fixed signs or in dual signs, these yogas arise.",
     "adhi_example_note": "Section 11.3.6's example places the Moon in Taurus and the benefics in Virgo and Leo, which are the 5th and 4th from Taurus. The rule asks for the 6th, 7th and 8th. The rule is followed.",
     "budha_aaditya_spelling_variants": [
       "Budha-Aditya"
@@ -13,11 +14,9 @@
     "chandra_intro": "Chandra yogas are the lunar combinations. There are several yogas based on Moon.",
     "combustion_is_a_qualifier_not_a_veto": "Section 11.2.4 says a yoga formed by a combust planet loses \u201csome of their power to do good\u201d, not all of it. A combust yoga is therefore reported as present with a qualifier, never suppressed.",
     "combustion_note": "If Mercury is too close to Sun, he is combust (asta or astangata). Yogas formed by combust planets lose some of their power to do good.",
-    "footnotes_unread": [
-      29,
-      30
-    ],
+    "footnotes_unread": [],
     "frequency_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
+    "hamsa_means": "a swan",
     "hamsa_misnamed_in_its_definition": "Ruchaka",
     "hamsa_name_note": "Section 11.4.5's Definition calls the yoga \u201cRuchaka\u201d, which is Mars's yoga from section 11.4.1. The heading reads \u201cHamsa Yoga\u201d and is followed \u2014 see docs/book-deviations.md D-30.",
     "kemadruma_effort_note": "One with this yoga has to work hard and succeed through great efforts.",
@@ -71,6 +70,108 @@
       "mahapurusha": "a great person",
       "pancha": "five"
     },
+    "naabhasa_classification": [
+      {
+        "basis": "the signs occupied by planets",
+        "count": 3,
+        "family": "aasraya",
+        "means": "dwelling or asylum",
+        "names": [
+          "Rajju",
+          "Musala",
+          "Nala"
+        ],
+        "section": "11.5.1"
+      },
+      {
+        "basis": "the natures of the planets occupying the quadrants",
+        "count": 2,
+        "family": "dala",
+        "means": null,
+        "names": [
+          "Maalaa",
+          "Sarpa"
+        ],
+        "section": "11.5.2"
+      },
+      {
+        "basis": null,
+        "count": 20,
+        "family": "aakriti",
+        "means": null,
+        "names": [
+          "Gadaa",
+          "Sakata",
+          "Sringaataka",
+          "Vihangama",
+          "Hala",
+          "Vajra",
+          "Yava",
+          "Kamala",
+          "Vaapi",
+          "Yoopa",
+          "Sara",
+          "Sakti",
+          "Danda",
+          "Naukaa",
+          "Koota",
+          "Chatra",
+          "Chaapa",
+          "Ardhachandra",
+          "Chakra",
+          "Samudra"
+        ],
+        "section": "11.5.3"
+      },
+      {
+        "basis": null,
+        "count": 7,
+        "family": "sankhya",
+        "means": null,
+        "names": [
+          "Veenaa",
+          "Daama",
+          "Paasa",
+          "Kedaara",
+          "Soola",
+          "Yuga",
+          "Gola"
+        ],
+        "section": "11.5.4"
+      }
+    ],
+    "naabhasa_gap_note": "Section 11.5 classifies 32 Naabhasa yogas and sections 11.5.1 and 11.5.2 define five of them. The other 27 \u2014 the Aakriti and Sankhya families \u2014 are named only. They are listed here rather than registered, so that a yoga the engine cannot detect never appears among the verdicts where its absence would read as a finding.",
+    "naabhasa_intro": "Naabhasa yogas are classified celestial combinations.",
+    "naabhasa_not_yet_defined": [
+      "Gadaa",
+      "Sakata",
+      "Sringaataka",
+      "Vihangama",
+      "Hala",
+      "Vajra",
+      "Yava",
+      "Kamala",
+      "Vaapi",
+      "Yoopa",
+      "Sara",
+      "Sakti",
+      "Danda",
+      "Naukaa",
+      "Koota",
+      "Chatra",
+      "Chaapa",
+      "Ardhachandra",
+      "Chakra",
+      "Samudra",
+      "Veenaa",
+      "Daama",
+      "Paasa",
+      "Kedaara",
+      "Soola",
+      "Yuga",
+      "Gola"
+    ],
+    "naabhasa_timing_rule": "Results of other yogas may be felt primarily during the dasas of the planets and signs involved. But the results of Naabhasa yogas are felt in all dasas.",
     "node_note": "Three of the four Ravi yogas turn on \u201ca planet other than Moon\u201d. Chapter 11 never says whether Rahu and Ketu count as \u201ca planet\u201d, so it is a per-call choice and the nodes are excluded by default. See docs/open-items.md OI-73.",
     "panaphara_spelling_variants": [
       "panapara"
@@ -85,6 +186,8 @@
     ],
     "ravi_intro": "Ravi yogas are the solar combinations. There are several yogas based on Sun.",
     "results_note": "The results each yoga gives are PVR's own prose and are withheld from this response under the licence gate of OI-12.",
+    "sarpa_is_very_bad": "This is a very bad combination.",
+    "sasa_means": "a hare or a rabbit",
     "sun_excluded_note": "The Sun cannot form a yoga about what accompanies him, so he is excluded from his own houses alongside the Moon.",
     "timing_example": {
       "chart": "D10",

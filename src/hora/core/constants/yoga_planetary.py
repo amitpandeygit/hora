@@ -414,6 +414,150 @@ HAMSA_MISNAMED_IN_ITS_DEFINITION = "Ruchaka"
 MAALAVYA_SPELLING_VARIANTS: tuple[str, ...] = ("Malavya",)
 
 #: Footnotes 29 and 30 hang off "rabbit-like" in §11.4.3's results and
-#: "swan-like" in §11.4.5's. Their text has not been supplied; the name
-#: meanings above come from the results sentences themselves.
-MAHAPURUSHA_FOOTNOTES_UNREAD: tuple[int, ...] = (29, 30)
+#: "swan-like" in §11.4.5's. Supplied with §11.5 and now recorded as
+#: `SASA_MEANS` and `HAMSA_MEANS`, which confirm the meanings taken from the
+#: results sentences.
+MAHAPURUSHA_FOOTNOTES_UNREAD: tuple[int, ...] = ()
+
+
+# --------------------------------------------------------------------------
+# §11.5 Naabhasa yogas
+# --------------------------------------------------------------------------
+
+NAABHASA_INTRO = "Naabhasa yogas are classified celestial combinations."
+
+#: §11.5's classification. **Thirty-two names, five defined so far.** The rest
+#: are listed here because the section lists them; a yoga named but not yet
+#: defined is registered nowhere and appears in `NAABHASA_NOT_YET_DEFINED`, so
+#: it is visibly pending rather than silently absent.
+NAABHASA_CLASSIFICATION: dict[str, dict] = {
+    "aasraya": {
+        "count": 3,
+        "names": ("Rajju", "Musala", "Nala"),
+        "section": "11.5.1",
+        "means": "dwelling or asylum",
+        "basis": "the signs occupied by planets",
+    },
+    "dala": {
+        "count": 2,
+        "names": ("Maalaa", "Sarpa"),
+        "section": "11.5.2",
+        "means": None,
+        "basis": "the natures of the planets occupying the quadrants",
+    },
+    "aakriti": {
+        "count": 20,
+        "names": (
+            "Gadaa", "Sakata", "Sringaataka", "Vihangama", "Hala", "Vajra",
+            "Yava", "Kamala", "Vaapi", "Yoopa", "Sara", "Sakti", "Danda",
+            "Naukaa", "Koota", "Chatra", "Chaapa", "Ardhachandra", "Chakra",
+            "Samudra",
+        ),
+        "section": "11.5.3",
+        "means": None,
+        "basis": None,
+    },
+    "sankhya": {
+        "count": 7,
+        "names": ("Veenaa", "Daama", "Paasa", "Kedaara", "Soola", "Yuga",
+                  "Gola"),
+        "section": "11.5.4",
+        "means": None,
+        "basis": None,
+    },
+}
+
+#: §11.5's timing rule, and the only place so far that contrasts one family of
+#: yogas with all the others. §11.2.4's Budha-Aaditya is an instance of the
+#: first half: "the periods of Sun, Mercury and Leo will give those results in
+#: particular".
+NAABHASA_TIMING_RULE = (
+    "Results of other yogas may be felt primarily during the dasas of the "
+    "planets and signs involved. But the results of Naabhasa yogas are felt in "
+    "all dasas."
+)
+
+AASRAYA_BASIS = (
+    "Aasraya yogas are based on the signs occupied by planets. If all the "
+    "planets are in movable signs or in fixed signs or in dual signs, these "
+    "yogas arise."
+)
+
+#: §11.5.1 and §11.5.2's five, with the modality or nature each turns on.
+#: `name_means` is the book's own gloss where it gives one — Nala is the only
+#: one of the three Aasraya yogas left unglossed.
+NAABHASA_YOGAS: tuple[dict, ...] = (
+    {
+        "key": "rajju", "name": "Rajju Yoga", "group": "aasraya",
+        "section": "11.5.1", "modality": 0, "name_means": "a rope",
+        "definition": (
+            "If all the planets are exclusively in movable signs, this yoga "
+            "is formed."
+        ),
+    },
+    {
+        "key": "musala", "name": "Musala Yoga", "group": "aasraya",
+        "section": "11.5.1", "modality": 1, "name_means": "a pestle",
+        "definition": (
+            "If all the planets are exclusively in fixed signs, this yoga is "
+            "formed."
+        ),
+    },
+    {
+        "key": "nala", "name": "Nala Yoga", "group": "aasraya",
+        "section": "11.5.1", "modality": 2, "name_means": None,
+        "definition": (
+            "If all the planets are exclusively in dual signs, this yoga is "
+            "formed."
+        ),
+    },
+    {
+        "key": "maalaa", "name": "Maalaa Yoga", "group": "dala",
+        "section": "11.5.2", "nature": "benefic", "name_means": "a garland",
+        "definition": (
+            "If three quadrants are occupied by natural benefics, this yoga "
+            "is formed."
+        ),
+        "weakened_by": "malefic",
+        "weakened_text": (
+            "If a malefic also occupies one of the quadrants, this yoga may "
+            "not operate well."
+        ),
+        "example": {"lagna": "Ar", "placements": {"JUPITER": "Cn",
+                                                  "VENUS": "Cp",
+                                                  "MERCURY": "Li"}},
+    },
+    {
+        "key": "sarpa", "name": "Sarpa Yoga", "group": "dala",
+        "section": "11.5.2", "nature": "malefic", "name_means": "a serpant",
+        "definition": (
+            "If three quadrants are occupied by natural malefics, this yoga "
+            "is formed."
+        ),
+        "weakened_by": "benefic",
+        "weakened_text": (
+            "If a benefic also occupies one of the quadrants, this yoga may "
+            "not operate well."
+        ),
+        "example": {"lagna": "Sc", "placements": {"MARS": "Ta", "RAHU": "Le",
+                                                  "KETU": "Aq"}},
+    },
+)
+
+#: §11.5.2 calls Sarpa "a very bad combination" — the only yoga in chapter 11
+#: the book grades that way in its own definition rather than its results.
+SARPA_IS_VERY_BAD = "This is a very bad combination."
+
+#: Named in §11.5's classification but not yet defined for us. Twenty-seven of
+#: the thirty-two. Listed so the gap is visible in the API rather than showing
+#: as an absence.
+NAABHASA_NOT_YET_DEFINED: tuple[str, ...] = tuple(
+    name
+    for group in ("aakriti", "sankhya")
+    for name in NAABHASA_CLASSIFICATION[group]["names"]
+)
+
+#: Footnotes 29 and 30, now supplied. They gloss the two Pancha Mahapurusha
+#: names that carry a marker in §11.4.
+SASA_MEANS = "a hare or a rabbit"
+HAMSA_MEANS = "a swan"

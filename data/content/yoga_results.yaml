@@ -14,7 +14,7 @@ sources:
   pvr-vaia:
     title: 'Vedic Astrology: An Integrated Approach'
     author: P.V.R. Narasimha Rao
-    section: 11.2 Ravi Yogas, 11.3 Chandra Yogas and 11.4 Pancha Mahapurusha Yogas
+    section: 11.2 to 11.5 — Ravi, Chandra, Pancha Mahapurusha and Naabhasa Yogas
     first_published: 2000
     licence_status: unconfirmed
     licence_note: The author shares the book freely for reading. That is not an explicit licence to redistribute
@@ -302,3 +302,89 @@ entries:
     category: station
   - term: a clever conversationalist and endowed with good speech
     category: aptitude
+- planetary_yoga: rajju
+  name: Rajju Yoga
+  source: pvr-vaia
+  section: 11.5.1
+  licence_status: unconfirmed
+  verbatim: One born with this yoga likes to travel. He has good looks and flourishes in foreign countries.
+    He is cruel. Rajju means a rope.
+  transcription_notes: The last sentence glosses the name rather than stating a result, like Nipuna's in
+    11.2.4. Kept because it is printed inside the same paragraph.
+  terms:
+  - term: likes to travel
+    category: temperament
+  - term: good looks
+    category: physical
+  - term: flourishes in foreign countries
+    category: circumstance
+  - term: cruel
+    category: temperament
+- planetary_yoga: musala
+  name: Musala Yoga
+  source: pvr-vaia
+  section: 11.5.1
+  licence_status: unconfirmed
+  verbatim: One born with this yoga has honor, wisdom and wealth. Kings like him. He is famous. He has many
+    children. He has a firm spirit. Musala means a pestle.
+  terms:
+  - term: honor, wisdom and wealth
+    category: circumstance
+  - term: Kings like him
+    category: station
+  - term: famous
+    category: circumstance
+  - term: many children
+    category: circumstance
+  - term: a firm spirit
+    category: temperament
+- planetary_yoga: nala
+  name: Nala Yoga
+  source: pvr-vaia
+  section: 11.5.1
+  licence_status: unconfirmed
+  verbatim: One born with this yoga has a poor physique. He accumulates money. He has good looks and helps
+    relatives. He is skillful.
+  transcription_notes: Unlike Rajju and Musala, the book gives no gloss for the name Nala.
+  terms:
+  - term: a poor physique
+    category: physical
+  - term: accumulates money
+    category: circumstance
+  - term: good looks
+    category: physical
+  - term: helps relatives
+    category: temperament
+  - term: skillful
+    category: aptitude
+- planetary_yoga: maalaa
+  name: Maalaa Yoga
+  source: pvr-vaia
+  section: 11.5.2
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is always happy. He has nice clothes, vehicles, luxuries and friendship
+    of many women. Maalaa means a garland.
+  terms:
+  - term: always happy
+    category: temperament
+  - term: nice clothes, vehicles, luxuries
+    category: circumstance
+  - term: friendship of many women
+    category: circumstance
+- planetary_yoga: sarpa
+  name: Sarpa Yoga
+  source: pvr-vaia
+  section: 11.5.2
+  licence_status: unconfirmed
+  verbatim: One born with this yoga is miserable, unhappy, cruel, poor and dependent on others for food.
+    This is a very bad combination. Sarpa means a serpant.
+  transcription_notes: '"serpant" is printed for "serpent". Transcribed as printed.'
+  terms:
+  - term: miserable
+    category: temperament
+  - term: unhappy
+    category: temperament
+  - term: cruel
+    category: temperament
+  - term: poor and dependent on others for food
+    category: circumstance

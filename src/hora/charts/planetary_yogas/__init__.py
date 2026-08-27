@@ -17,6 +17,7 @@ from __future__ import annotations
 # this design has to prevent. `test_every_group_module_is_imported` guards it.
 from hora.charts.planetary_yogas import chandra as _chandra  # noqa: F401
 from hora.charts.planetary_yogas import mahapurusha as _mahapurusha  # noqa: F401
+from hora.charts.planetary_yogas import naabhasa as _naabhasa  # noqa: F401
 from hora.charts.planetary_yogas import ravi as _ravi  # noqa: F401
 from hora.charts.planetary_yogas.registry import (
     YOGA_REGISTRY,

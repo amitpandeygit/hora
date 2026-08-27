@@ -1,9 +1,11 @@
 {
   "body": {
-    "count": 15,
+    "count": 20,
     "groups": [
       "chandra",
       "mahapurusha",
+      "naabhasa_aasraya",
+      "naabhasa_dala",
       "ravi"
     ],
     "yogas": [
@@ -108,6 +110,51 @@
         "key": "hamsa",
         "name": "Hamsa Yoga",
         "section": "11.4.5"
+      },
+      {
+        "aliases": [],
+        "definition": "If all the planets are exclusively in movable signs, this yoga is formed.",
+        "group": "naabhasa_aasraya",
+        "implies": [],
+        "key": "rajju",
+        "name": "Rajju Yoga",
+        "section": "11.5.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If all the planets are exclusively in fixed signs, this yoga is formed.",
+        "group": "naabhasa_aasraya",
+        "implies": [],
+        "key": "musala",
+        "name": "Musala Yoga",
+        "section": "11.5.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If all the planets are exclusively in dual signs, this yoga is formed.",
+        "group": "naabhasa_aasraya",
+        "implies": [],
+        "key": "nala",
+        "name": "Nala Yoga",
+        "section": "11.5.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If three quadrants are occupied by natural benefics, this yoga is formed.",
+        "group": "naabhasa_dala",
+        "implies": [],
+        "key": "maalaa",
+        "name": "Maalaa Yoga",
+        "section": "11.5.2"
+      },
+      {
+        "aliases": [],
+        "definition": "If three quadrants are occupied by natural malefics, this yoga is formed.",
+        "group": "naabhasa_dala",
+        "implies": [],
+        "key": "sarpa",
+        "name": "Sarpa Yoga",
+        "section": "11.5.2"
       },
       {
         "aliases": [],

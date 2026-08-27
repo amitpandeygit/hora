@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 15,
+    "evaluated": 20,
     "grahas_considered": [
       {
         "graha": 0,
@@ -194,6 +194,71 @@
         "qualifiers": [],
         "reason": "Jupiter has no placement",
         "section": "11.4.5"
+      },
+      {
+        "aliases": [],
+        "definition": "If all the planets are exclusively in movable signs, this yoga is formed.",
+        "group": "naabhasa_aasraya",
+        "implies": [],
+        "key": "rajju",
+        "name": "Rajju Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga needs every planet placed and Mars, Mercury, Jupiter, Venus, Saturn are missing; it cannot be decided",
+        "section": "11.5.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If all the planets are exclusively in fixed signs, this yoga is formed.",
+        "group": "naabhasa_aasraya",
+        "implies": [],
+        "key": "musala",
+        "name": "Musala Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga needs every planet placed and Mars, Mercury, Jupiter, Venus, Saturn are missing; it cannot be decided",
+        "section": "11.5.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If all the planets are exclusively in dual signs, this yoga is formed.",
+        "group": "naabhasa_aasraya",
+        "implies": [],
+        "key": "nala",
+        "name": "Nala Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga needs every planet placed and Mars, Mercury, Jupiter, Venus, Saturn are missing; it cannot be decided",
+        "section": "11.5.1"
+      },
+      {
+        "aliases": [],
+        "definition": "If three quadrants are occupied by natural benefics, this yoga is formed.",
+        "group": "naabhasa_dala",
+        "implies": [],
+        "key": "maalaa",
+        "name": "Maalaa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "no lagna was supplied, and this yoga counts quadrants from lagna; it cannot be decided",
+        "section": "11.5.2"
+      },
+      {
+        "aliases": [],
+        "definition": "If three quadrants are occupied by natural malefics, this yoga is formed.",
+        "group": "naabhasa_dala",
+        "implies": [],
+        "key": "sarpa",
+        "name": "Sarpa Yoga",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "no lagna was supplied, and this yoga counts quadrants from lagna; it cannot be decided",
+        "section": "11.5.2"
       },
       {
         "aliases": [],
