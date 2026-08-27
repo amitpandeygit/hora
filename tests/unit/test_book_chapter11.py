@@ -32,6 +32,7 @@ from hora.core.const import (
     AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
     ADHI_HOUSES_FROM_MOON,
+    AMSA_SPELLINGS_IN_11_7_2,
     BRAHMA_VARIATION,
     BUDHA_AADITYA_CHART_NOTE,
     BUDHA_AADITYA_SPELLING_VARIANTS,
@@ -97,10 +98,20 @@ from hora.core.const import (
     POPULAR_YOGAS,
     POPULAR_YOGAS_ALL,
     POPULAR_YOGAS_CONTINUED,
+    RAAJA_AMSA_COUNT_NOT_DISCUSSED,
+    RAAJA_AMSA_DIVINE_COUNTS,
+    RAAJA_AMSA_DIVINE_PERSONS,
+    RAAJA_AMSA_DIVINE_RULE,
+    RAAJA_AMSA_RESULTS,
     RAAJA_ASSOCIATION_RULE,
     RAAJA_ASSOCIATIONS,
     RAAJA_BASIC_PREMISE,
+    RAAJA_CLOSE_ORB_DEGREES,
+    RAAJA_CLOSE_ORB_IS_APPROXIMATE,
+    RAAJA_MAGNITUDE_FACTORS,
+    RAAJA_MAGNITUDE_INTRO,
     RAAJA_MEANS,
+    RAAJA_ORB_EXAMPLE,
     RAAJA_YOGA_COUNT,
     RAAJA_YOGA_INTRO,
     RAAJA_YOGAS,
@@ -118,6 +129,9 @@ from hora.core.const import (
     SANKHYA_YOGAS,
     SARPA_IS_VERY_BAD,
     SASA_MEANS,
+    SIMHAASANAAMSA_EMPERORS,
+    SIMHAASANAAMSA_FOOTNOTE_UNREAD,
+    SIMHAASANAAMSA_RULE,
     STRENGTH_NOT_ASSESSED,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
@@ -4467,3 +4481,253 @@ def test_the_dharma_karmadhipati_results_are_licence_gated(client):
     body = client.get("/v1/planetary-yoga/rules").json()
     assert body["dharma_karmadhipati_results"] is None
     assert "righteous" not in repr(body).lower()
+
+
+# --------------------------------------------------------------------------
+# 11.7.2 Magnitude of a Raaja yoga
+#
+# Not a yoga — a grading of one already present, and deliberately never
+# collapsed into a verdict: "None of the above factors influences the end
+# result completely."
+# --------------------------------------------------------------------------
+
+
+def _magnitude(lagna: str, **longitudes):
+    from hora.charts.planetary_yogas.raaja_magnitude import magnitude
+    from hora.core.ephemeris.base import PlanetPosition
+
+    positions = {
+        int(getattr(Graha, name)): PlanetPosition(
+            graha=int(getattr(Graha, name)), longitude=lon, latitude=0.0,
+            distance=1.0, speed_longitude=0.0, speed_latitude=0.0,
+            speed_distance=0.0)
+        for name, lon in longitudes.items()
+    }
+    data = YogaInput(
+        rasis={g: int(p.longitude // 30) for g, p in positions.items()},
+        positions=positions, lagna_rasi=R[lagna])
+    return magnitude(data)
+
+
+def test_11_7_2_names_three_factors():
+    assert [f["key"] for f in RAAJA_MAGNITUDE_FACTORS] == [
+        "unafflicted", "close", "unblemished"]
+    assert "functional malefics" in RAAJA_MAGNITUDE_FACTORS[0]["text"]
+    assert "within 6" in RAAJA_MAGNITUDE_FACTORS[1]["text"]
+    assert "combust, debilitated" in RAAJA_MAGNITUDE_FACTORS[2]["text"]
+    assert "strength of the two planets" in RAAJA_MAGNITUDE_INTRO
+
+
+def test_the_six_degree_orb_is_hedged_twice_in_the_book():
+    """"say, within 6° or so". Both hedges are carried, so nothing turns on
+    the boundary alone."""
+    assert RAAJA_CLOSE_ORB_DEGREES == 6.0
+    assert RAAJA_CLOSE_ORB_IS_APPROXIMATE is True
+    assert "say" in RAAJA_MAGNITUDE_FACTORS[1]["text"]
+    assert "or so" in RAAJA_MAGNITUDE_FACTORS[1]["text"]
+
+
+# --- the worked example -----------------------------------------------------
+
+
+def test_the_worked_examples_lagna_gives_dharma_karmadhipati():
+    """Capricorn lagna: the 9th is Virgo and the 10th is Libra, so the two
+    lords are Mercury and Venus — which is why the example calls their
+    conjunction Dharma-Karmadhipati in particular."""
+    assert int(RASI_LORD[(R["Cp"] + 8) % 12]) == int(Graha.MERCURY)
+    assert int(RASI_LORD[(R["Cp"] + 9) % 12]) == int(Graha.VENUS)
+    data = _raaja("Cp", MERCURY="Ta", VENUS="Ta")
+    assert evaluate_one("dharma_karmadhipati", data).present is True
+
+
+def test_the_worked_example_is_too_far_apart():
+    """"Mercury and Venus are at 2° and 26° in Ta ... the two planets are too
+    far apart for this yoga to give its full results." """
+    pairs = _magnitude("Cp", MERCURY=R["Ta"] * 30 + 2, VENUS=R["Ta"] * 30 + 26)
+    assert len(pairs) == 1
+    close = next(f for f in pairs[0].factors if f.key == "close")
+    assert pairs[0].orb_degrees == pytest.approx(24.0)
+    assert close.satisfied is False
+    assert "does not meet" in close.detail
+
+
+def test_moving_venus_to_three_degrees_makes_it_close():
+    """"If Venus is at 3° in Ta in instead of 26°, the conjunction is very
+    close and the yoga can give its full results." """
+    pairs = _magnitude("Cp", MERCURY=R["Ta"] * 30 + 2, VENUS=R["Ta"] * 30 + 3)
+    close = next(f for f in pairs[0].factors if f.key == "close")
+    assert pairs[0].orb_degrees == pytest.approx(1.0)
+    assert close.satisfied is True
+
+
+def test_the_orb_example_is_transcribed():
+    assert "too far apart" in RAAJA_ORB_EXAMPLE
+    assert "3° in Ta in instead of 26°" in RAAJA_ORB_EXAMPLE
+
+
+def test_the_worked_example_is_also_oi_91s_evidence():
+    """The book grades a *pair*, but its own example gives the two planets
+    different dasavarga counts — Mercury 2, Venus 3. No shared amsa is
+    asserted."""
+    pairs = _magnitude("Cp", MERCURY=R["Ta"] * 30 + 2, VENUS=R["Ta"] * 30 + 26)
+    amsa = pairs[0].amsa
+    assert amsa["decidable"] is True
+    assert {p["count"] for p in amsa["planets"]} == {2, 3}
+    assert amsa["shared_count"] is None
+    assert "OI-91" in amsa["note"]
+
+
+# --- what cannot be decided -------------------------------------------------
+
+
+def test_functional_malefics_are_never_silently_treated_as_absent():
+    """Factor (1) turns on a term nothing read so far defines. See OI-88."""
+    pairs = _magnitude("Cp", MERCURY=R["Ta"] * 30 + 2, VENUS=R["Ta"] * 30 + 3)
+    factor = next(f for f in pairs[0].factors if f.key == "unafflicted")
+    assert factor.satisfied is None
+    assert "OI-88" in factor.detail
+
+
+def test_no_avastha_is_called_a_blemish():
+    """"bad avasthas (states)" — the book never names which. See OI-89."""
+    pairs = _magnitude("Cp", MERCURY=R["Ta"] * 30 + 2, VENUS=R["Ta"] * 30 + 3)
+    factor = next(f for f in pairs[0].factors if f.key == "unblemished")
+    assert "OI-89" in factor.detail
+
+
+def test_a_real_blemish_still_fails_the_factor():
+    """The gap in OI-89 does not weaken the three blemishes that *are* named.
+    Capricorn lagna, Mercury debilitated in Pisces with Venus exalted there."""
+    pairs = _magnitude("Cp", MERCURY=R["Pi"] * 30 + 2, VENUS=R["Pi"] * 30 + 3,
+                       SUN=R["Le"] * 30)
+    factor = next(f for f in pairs[0].factors if f.key == "unblemished")
+    assert factor.satisfied is False
+    assert "debilitated in Pisces" in factor.detail
+
+
+def test_a_parivartana_has_no_orb():
+    """§11.7.2's closeness rule speaks only of "the conjunction or aspect"."""
+    # Aries lagna: the 4th lord Moon in Leo and the 5th lord Sun in Cancer.
+    pairs = _magnitude("Ar", MOON=R["Le"] * 30 + 10, SUN=R["Cn"] * 30 + 20)
+    pair = next(p for p in pairs if p.association == "parivartana")
+    assert pair.orb_degrees is None
+    close = next(f for f in pair.factors if f.key == "close")
+    assert close.satisfied is None
+    assert "no orb" in close.detail
+
+
+def test_an_aspect_orb_is_measured_from_the_exact_angle_and_says_so():
+    """The book exemplifies 6° only for a conjunction. See OI-90."""
+    # Aries lagna: the 7th lord Venus and the 9th lord Jupiter, opposite.
+    pairs = _magnitude("Ar", VENUS=R["Ar"] * 30 + 10, JUPITER=R["Li"] * 30 + 12)
+    pair = next(p for p in pairs if p.association == "mutual graha drishti")
+    assert pair.orb_degrees == pytest.approx(2.0)
+    close = next(f for f in pair.factors if f.key == "close")
+    assert "OI-90" in close.detail
+    assert close.satisfied is True
+
+
+# --- Parasara's dasavarga amsas ---------------------------------------------
+
+
+def test_the_amsa_grades_match_section_6_6s_table():
+    """§11.7.2 reuses §6.6's dasavarga amsas rather than defining new ones,
+    so the two must agree name for name."""
+    from hora.charts.vargas import AMSA_NAMES
+
+    table = AMSA_NAMES["dasavarga"]
+    for entry in RAAJA_AMSA_RESULTS:
+        if entry["amsa"] is not None:
+            assert table[entry["count"]] == entry["amsa"], entry["count"]
+
+
+def test_the_counts_the_book_gives_a_result_for():
+    graded = {e["count"]: e["result"] for e in RAAJA_AMSA_RESULTS
+              if e["result"]}
+    assert set(graded) == {0, 1, 2, 3, 4, 5}
+    assert graded[0] == graded[1]
+    assert "ordinary" in graded[0]
+    assert "rules his people well" in graded[2]
+    assert "tremendous assets" in graded[3]
+    assert "respected by many kings" in graded[4]
+    assert "rules the whole world" in graded[5]
+
+
+def test_counts_six_to_nine_are_for_divine_persons_only():
+    assert RAAJA_AMSA_DIVINE_COUNTS == (6, 7, 8, 9)
+    assert "only for divine persons" in RAAJA_AMSA_DIVINE_RULE
+    assert RAAJA_AMSA_DIVINE_PERSONS == (
+        "Svaayambhuva Manu", "Brahma", "Sri Rama", "Sri Krishna")
+    for entry in RAAJA_AMSA_RESULTS:
+        if entry["count"] in RAAJA_AMSA_DIVINE_COUNTS:
+            assert entry["result"] is None
+
+
+def test_section_11_7_2_stops_short_of_section_6_6s_tenth_amsa():
+    from hora.charts.vargas import AMSA_NAMES
+
+    assert RAAJA_AMSA_COUNT_NOT_DISCUSSED == 10
+    assert AMSA_NAMES["dasavarga"][10] == "Sreedhaamaamsa"
+    assert 10 not in {e["count"] for e in RAAJA_AMSA_RESULTS}
+
+
+def test_the_simhaasanaamsa_emperors_are_recorded():
+    assert SIMHAASANAAMSA_EMPERORS == (
+        "Harischandra", "Manu", "Bali", "Vaiswaanara", "Yudhisthira",
+        "Saalivaahana")
+    assert "Dharmaraja" in SIMHAASANAAMSA_RULE
+    assert SIMHAASANAAMSA_FOOTNOTE_UNREAD == "36"
+
+
+def test_the_three_spellings_that_differ_from_section_6_6():
+    """PVR-14. §6.6's table is definitional and wins; §11.7.2's spellings are
+    kept as variants so either matches."""
+    from hora.charts.vargas import AMSA_NAMES
+
+    table = set(AMSA_NAMES["dasavarga"].values())
+    for printed, canonical in AMSA_SPELLINGS_IN_11_7_2.items():
+        assert canonical in table
+        assert printed not in table
+    assert set(AMSA_SPELLINGS_IN_11_7_2) == {
+        "Uttamsaamsa", "Devalokamsa", "Brahmalokaamsa"}
+
+
+# --- the shape of the answer ------------------------------------------------
+
+
+def test_magnitude_is_empty_when_no_raaja_yoga_is_present():
+    """It grades a yoga that already exists."""
+    pairs = _magnitude("Ar", MOON=R["Ta"] * 30, SUN=R["Ge"] * 30,
+                       VENUS=R["Cn"] * 30, JUPITER=R["Le"] * 30,
+                       MARS=R["Vi"] * 30, SATURN=R["Sc"] * 30,
+                       MERCURY=R["Sg"] * 30)
+    assert pairs == []
+
+
+def test_the_endpoint_never_returns_an_overall_verdict(client):
+    body = client.post("/v1/planetary-yoga/raaja-magnitude", json={
+        "lagna_rasi": R["Cp"],
+        "longitudes": {3: R["Ta"] * 30 + 2, 5: R["Ta"] * 30 + 26}}).json()
+    assert "None of the above factors influences the end result completely" \
+        in body["final_judgment"]
+    assert "verdict" not in body
+    assert "magnitude" not in body
+    assert {row["open_item"] for row in body["not_assessed"]} == {
+        "OI-88", "OI-89"}
+    assert [g["graha_name"] for g in body["dharma_karmadhipati_pair"]] == \
+        ["Mercury", "Venus"]
+
+
+def test_the_endpoint_rejects_an_empty_chart(client):
+    response = client.post("/v1/planetary-yoga/raaja-magnitude", json={
+        "lagna_rasi": 0, "longitudes": {}})
+    assert response.status_code == 400
+
+
+def test_the_endpoint_carries_the_worked_example_and_the_unread_footnote(client):
+    body = client.post("/v1/planetary-yoga/raaja-magnitude", json={
+        "lagna_rasi": R["Cp"],
+        "longitudes": {3: R["Ta"] * 30 + 2, 5: R["Ta"] * 30 + 26}}).json()
+    assert body["orb_example"] == RAAJA_ORB_EXAMPLE
+    assert body["simhaasanaamsa_footnote_unread"] == "36"
+    assert body["amsa_spellings_in_11_7_2"]["Uttamsaamsa"] == "Uttamaamsa"

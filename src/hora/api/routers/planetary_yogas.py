@@ -11,6 +11,8 @@ from hora.api.models_planetary_yoga import (
     GuidelineIn,
     GuidelinesOut,
     PlanetaryYogaRulesOut,
+    RaajaMagnitudeIn,
+    RaajaMagnitudeOut,
     YogaCatalogueOut,
     YogaChartIn,
     YogaChartOut,
@@ -25,11 +27,6 @@ router = APIRouter(prefix="/v1/planetary-yoga", tags=["planetary yogas"])
 @router.post("/chart", response_model=YogaChartOut,
              summary="Every known yoga on one chart, present or absent")
 def chart(req: YogaChartIn) -> dict:
-    """Exhaustive by construction.
-
-    Every yoga in the registry is evaluated and returned with its verdict, so
-    a caller never has to wonder whether one was considered.
-    """
     try:
         return planetary_yoga_service.chart(
             req.rasis, chart_code=req.chart,
@@ -55,13 +52,6 @@ def one(req: YogaOneIn) -> dict:
 @router.post("/guidelines", response_model=GuidelinesOut,
              summary="Section 11.3's three General Guidelines — graded readings, not yogas")
 def guidelines(req: GuidelineIn) -> dict:
-    """Kept apart from the yogas deliberately.
-
-    Guideline 1 always yields a verdict, because its three house categories
-    partition the zodiac; guideline 3 grades by a count. Neither is a
-    combination that is present or absent, so returning them among the yogas
-    would misreport them.
-    """
     try:
         return planetary_yoga_service.guidelines(req.rasis, paksha=req.paksha)
     except (planetary_yoga_service.InputError,
@@ -84,3 +74,14 @@ def catalogue(
             summary="Chapter 11's framing, and what the engine does not decide")
 def rules() -> dict:
     return planetary_yoga_service.rules()
+
+
+@router.post("/raaja-magnitude", response_model=RaajaMagnitudeOut,
+             summary="Section 11.7.2 — how far each Raaja yoga fructifies")
+def raaja_magnitude(req: RaajaMagnitudeIn) -> dict:
+    try:
+        return planetary_yoga_service.raaja_magnitude(
+            req.longitudes, lagna_rasi=req.lagna_rasi)
+    except (planetary_yoga_service.InputError,
+            planetary_yoga_service.YogaError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc

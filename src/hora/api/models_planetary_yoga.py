@@ -487,3 +487,76 @@ class GuidelinesOut(BaseModel):
     guideline_1: GuidelineOneOut
     guideline_2: GuidelineTwoOut
     guideline_3: GuidelineThreeOut
+
+
+class RaajaMagnitudeIn(BaseModel):
+    """Section 11.7.2 grades a Raaja yoga by degrees, so it needs them."""
+
+    longitudes: dict[int, float] = Field(
+        ..., description="Graha id to sidereal longitude in degrees",
+        examples=[{3: 32.0, 5: 33.0}],
+    )
+    lagna_rasi: int = Field(
+        ..., ge=0, le=11,
+        description="Every quadrant and trine is counted from here",
+    )
+
+
+class RaajaFactorOut(BaseModel):
+    key: str
+    satisfied: bool | None = Field(
+        description="null where section 11.7.2 gives no way to decide — see "
+                    "`not_assessed`",
+    )
+    detail: str
+
+
+class RaajaPairMagnitudeOut(BaseModel):
+    quadrant_lord: int
+    quadrant_lord_name: str
+    quadrant_houses: list[int]
+    trine_lord: int
+    trine_lord_name: str
+    trine_houses: list[int]
+    association: str
+    orb_degrees: float | None = Field(
+        description="null for a parivartana, which has no orb",
+    )
+    factors: list[RaajaFactorOut]
+    amsa: dict
+
+
+class RaajaMagnitudeOut(BaseModel):
+    """No overall verdict, by design: "None of the above factors influences
+    the end result completely." """
+
+    lagna_rasi: int
+    lagna_rasi_name: str
+    intro: str
+    factors: list[dict]
+    close_orb_degrees: float
+    close_orb_is_approximate: bool
+    blemish_rule: str
+    orb_example: str = Field(
+        description="Section 11.7.2's worked example of the 6° rule.",
+    )
+    dasa_varga_rule: str
+    amsa_results: list[dict]
+    amsa_count_not_discussed: int
+    amsa_divine_counts: list[int]
+    amsa_divine_rule: str
+    amsa_divine_persons: list[str]
+    simhaasanaamsa_rule: str
+    simhaasanaamsa_emperors: list[str]
+    simhaasanaamsa_footnote_unread: str = Field(
+        description="Footnote 36 hangs off Saalivaahana and was not supplied.",
+    )
+    amsa_spellings_in_11_7_2: dict[str, str]
+    amsa_spelling_note: str
+    dharma_karmadhipati_pair: list[GrahaRefOut] | None
+    pairs: list[RaajaPairMagnitudeOut] = Field(
+        description="Empty when no Raaja yoga is present: magnitude grades a "
+                    "yoga that already exists.",
+    )
+    final_judgment: str
+    not_assessed: list[dict]

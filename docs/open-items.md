@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 50 waiting on evidence · 2 parked**
+**5 waiting on Amit · 54 waiting on evidence · 2 parked**
 
 ---
 
@@ -376,6 +376,80 @@ trimmed. Nothing calculational turns on it.
 
 **Closes when:** you supply the missing words, or confirm the book prints it
 this way.
+
+### OI-88 — "functional malefics" are used before they are defined
+
+§11.7.2's first factor: "The two planets should be free from afflictions from
+functional malefics."
+
+Nothing read so far says what a functional malefic is. It is not a natural
+malefic — §3.2.2's list is fixed and has nothing to do with a chart's lagna —
+so it must be a lagna-relative notion the book defines elsewhere. Guessing at
+it would be inventing a rule.
+
+**What we do:** the factor is returned with `satisfied: null` and a detail
+naming this item, and `/v1/planetary-yoga/raaja-magnitude` lists it under
+`not_assessed`. It is never silently treated as satisfied.
+
+**Closes when:** a section defining functional malefics is supplied.
+
+### OI-89 — §11.7.2 says "bad avasthas" without naming which
+
+The third factor: "The two planets should not be combust, debilitated or in an
+inimical house or in bad avasthas (states)."
+
+Combustion, debilitation and an inimical house are all computed. The avasthas
+are computed too — chapter 15's age, alertness and mood states are implemented
+— but §11.7.2 never says which of them count as bad. Several are plainly
+unfavourable by their own meaning (Duhkhita, "distressed"; Sushupta, "asleep";
+Mrita, "dead"), and picking a set from those meanings would be our reading, not
+the book's.
+
+**What we do:** the three named blemishes are checked and reported. No avastha
+is called a blemish, and the detail string says so. A pair with a real blemish
+still comes back `satisfied: false`, so the factor is not weakened by the gap.
+
+**Closes when:** a section names the bad avasthas, or you decide the set.
+
+### OI-90 — the 6° rule is exemplified for a conjunction only
+
+"The conjunction or aspect responsible for the Raaja Yoga should be close (say,
+within 6° or so)."
+
+The worked example measures a conjunction: Mercury at 2° Taurus and Venus at
+26° are "too far apart", and Venus at 3° is "very close". Plain separation in
+degrees, and our output reproduces both readings — 24.00° and 1.00°.
+
+For an **aspect** the book gives no example. Graha drishti is whole-sign, so
+"close" has to mean near the exact angle: an aspect on the Nth house is exact
+at (N−1)×30° of separation, and the orb is the deviation from that.
+
+**What we do:** that reading is used, and the response says so on every aspect
+pair rather than reporting a bare number. The 6° figure itself is hedged twice
+in the book — "say" and "or so" — so `close_orb_is_approximate` is served
+alongside it and no verdict turns on the boundary alone.
+
+**Closes when:** an aspect example appears, or you confirm the reading.
+
+### OI-91 — §11.7.2's amsa grade assumes both planets share a count
+
+"If the two planets are in Paarijaataamsa (count of 2)..." — every grade is
+phrased as though the pair has one count.
+
+Its own worked example does not. For Capricorn lagna with Mercury at 2° Taurus
+and Venus at 26°, the dasavarga counts are **2 and 3**: Paarijaataamsa and
+Uttamaamsa. The book does not say what to do then.
+
+**What we do:** both planets' counts, amsas and the charts that produced them
+are reported. A shared grade is given **only** when the two counts agree; when
+they differ the response says so and asserts no amsa for the pair.
+
+Two smaller gaps recorded with it: §6.6's table names a tenth amsa,
+Sreedhaamaamsa, for a count of 10, which §11.7.2 does not discuss
+(`amsa_count_not_discussed`); and §11.7.2 gives no result sentence for counts 6
+to 9 beyond saying they occur "only for divine persons".
+
+**Closes when:** you settle how a split count is graded.
 
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 

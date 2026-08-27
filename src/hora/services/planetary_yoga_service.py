@@ -31,6 +31,7 @@ from hora.core.const import (
     AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
     ADHI_HOUSES_FROM_MOON,
+    AMSA_SPELLINGS_IN_11_7_2,
     BRAHMA_VARIATION,
     BUDHA_AADITYA_SPELLING_VARIANTS,
     BUDHA_AADITYA_TERMS,
@@ -89,6 +90,7 @@ from hora.core.const import (
     NAABHASA_TIMING_RULE,
     PANAPHARA_SPELLING_VARIANTS,
     PANCHA_BHOOTA_NAMES,
+    PARASARA_DASA_VARGA_RULE,
     PARIVARTANA_FOOTNOTE,
     PARIVARTANA_SANSKRIT,
     PLANET_ELEMENT_ADJECTIVES,
@@ -99,10 +101,22 @@ from hora.core.const import (
     POPULAR_YOGA_INTRO,
     POPULAR_YOGA_TOTAL,
     POPULAR_YOGAS_ALL,
+    RAAJA_AMSA_COUNT_NOT_DISCUSSED,
+    RAAJA_AMSA_DIVINE_COUNTS,
+    RAAJA_AMSA_DIVINE_PERSONS,
+    RAAJA_AMSA_DIVINE_RULE,
+    RAAJA_AMSA_RESULTS,
     RAAJA_ASSOCIATION_RULE,
     RAAJA_ASSOCIATIONS,
     RAAJA_BASIC_PREMISE,
+    RAAJA_BLEMISH_RULE,
+    RAAJA_CLOSE_ORB_DEGREES,
+    RAAJA_CLOSE_ORB_IS_APPROXIMATE,
+    RAAJA_FINAL_JUDGMENT,
+    RAAJA_MAGNITUDE_FACTORS,
+    RAAJA_MAGNITUDE_INTRO,
     RAAJA_MEANS,
+    RAAJA_ORB_EXAMPLE,
     RAAJA_YOGA_COUNT,
     RAAJA_YOGA_INTRO,
     RASI_NAMES,
@@ -115,6 +129,9 @@ from hora.core.const import (
     SANKHYA_MEANS,
     SARPA_IS_VERY_BAD,
     SASA_MEANS,
+    SIMHAASANAAMSA_EMPERORS,
+    SIMHAASANAAMSA_FOOTNOTE_UNREAD,
+    SIMHAASANAAMSA_RULE,
     STRENGTH_NOT_ASSESSED,
     TATTVA_GLOSS_IN_3_2_8,
     TATTVA_GLOSS_IN_11_4,
@@ -613,4 +630,82 @@ def rules() -> dict:
             "The Sun cannot form a yoga about what accompanies him, so he is "
             "excluded from his own houses alongside the Moon."
         ),
+    }
+
+
+def raaja_magnitude(
+    longitudes: dict[int, float],
+    *,
+    lagna_rasi: int,
+) -> dict:
+    """§11.7.2 — how far each Raaja yoga in a chart fructifies.
+
+    Longitudes, not signs: two of the three factors and Parasara's dasavarga
+    count are degree measurements. Nothing is collapsed into a verdict —
+    "None of the above factors influences the end result completely."
+    """
+    from dataclasses import asdict
+
+    from hora.charts.planetary_yogas.raaja_magnitude import (
+        dharma_karmadhipati_pair,
+        magnitude,
+    )
+    from hora.core.ephemeris.base import PlanetPosition
+
+    validate.in_range("lagna_rasi", int(lagna_rasi), 0, 11)
+    if not longitudes:
+        raise InputError("at least one graha longitude is required")
+    positions = {}
+    for graha, longitude in longitudes.items():
+        validate.in_range("graha", int(graha), 0, 8)
+        positions[int(graha)] = PlanetPosition(
+            graha=int(graha), longitude=float(longitude) % 360.0,
+            latitude=0.0, distance=1.0, speed_longitude=0.0,
+            speed_latitude=0.0, speed_distance=0.0)
+    data = _input(
+        {g: int(p.longitude // 30) for g, p in positions.items()},
+        "D1", False, positions=positions, lagna_rasi=int(lagna_rasi))
+
+    pairs = [asdict(entry) for entry in magnitude(data)]
+    special = dharma_karmadhipati_pair(data)
+    return {
+        "lagna_rasi": int(lagna_rasi),
+        "lagna_rasi_name": RASI_NAMES[int(lagna_rasi)],
+        "intro": RAAJA_MAGNITUDE_INTRO,
+        "factors": [dict(entry) for entry in RAAJA_MAGNITUDE_FACTORS],
+        "close_orb_degrees": RAAJA_CLOSE_ORB_DEGREES,
+        "close_orb_is_approximate": RAAJA_CLOSE_ORB_IS_APPROXIMATE,
+        "blemish_rule": RAAJA_BLEMISH_RULE,
+        "orb_example": RAAJA_ORB_EXAMPLE,
+        "dasa_varga_rule": PARASARA_DASA_VARGA_RULE,
+        "amsa_results": [dict(entry) for entry in RAAJA_AMSA_RESULTS],
+        "amsa_count_not_discussed": RAAJA_AMSA_COUNT_NOT_DISCUSSED,
+        "amsa_divine_counts": list(RAAJA_AMSA_DIVINE_COUNTS),
+        "amsa_divine_rule": RAAJA_AMSA_DIVINE_RULE,
+        "amsa_divine_persons": list(RAAJA_AMSA_DIVINE_PERSONS),
+        "simhaasanaamsa_rule": SIMHAASANAAMSA_RULE,
+        "simhaasanaamsa_emperors": list(SIMHAASANAAMSA_EMPERORS),
+        "simhaasanaamsa_footnote_unread": SIMHAASANAAMSA_FOOTNOTE_UNREAD,
+        "amsa_spellings_in_11_7_2": dict(AMSA_SPELLINGS_IN_11_7_2),
+        "amsa_spelling_note": (
+            "Section 11.7.2 spells three of section 6.6's amsa names "
+            "differently. Section 6.6 is the definitional table and is "
+            "followed; the variants are recorded so a caller matching the "
+            "section 11.7.2 spelling still finds the amsa."
+        ),
+        "dharma_karmadhipati_pair": (
+            None if special is None else
+            [{"graha": g, "graha_name": GRAHA_NAMES[g]} for g in special]
+        ),
+        "pairs": pairs,
+        "final_judgment": RAAJA_FINAL_JUDGMENT,
+        "not_assessed": [
+            {"factor": "unafflicted",
+             "why": ("nothing read so far defines a functional malefic"),
+             "open_item": "OI-88"},
+            {"factor": "unblemished",
+             "why": ("section 11.7.2 says “bad avasthas (states)” without "
+                     "naming which are bad"),
+             "open_item": "OI-89"},
+        ],
     }

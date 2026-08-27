@@ -1,0 +1,193 @@
+{
+  "body": {
+    "amsa_count_not_discussed": 10,
+    "amsa_divine_counts": [
+      6,
+      7,
+      8,
+      9
+    ],
+    "amsa_divine_persons": [
+      "Svaayambhuva Manu",
+      "Brahma",
+      "Sri Rama",
+      "Sri Krishna"
+    ],
+    "amsa_divine_rule": "Two planets giving Raaja Yoga can be in Paaraavataamsa (count of 6), Devalokamsa (count of 7), Brahmalokaamsa (count of 8) and Airaavataamsa (count of 9) only for divine persons such as Svaayambhuva Manu (Manu who was born by Himself), Brahma (Creator!!) and Vishnu\u2019s incarnations such as Sri Rama and Sri Krishna.",
+    "amsa_results": [
+      {
+        "amsa": null,
+        "count": 0,
+        "result": "the yoga is ordinary and gives good results depending on the factors already outlined"
+      },
+      {
+        "amsa": null,
+        "count": 1,
+        "result": "the yoga is ordinary and gives good results depending on the factors already outlined"
+      },
+      {
+        "amsa": "Paarijaataamsa",
+        "count": 2,
+        "result": "one becomes a king who rules his people well"
+      },
+      {
+        "amsa": "Uttamaamsa",
+        "count": 3,
+        "result": "one becomes a good king with tremendous assets"
+      },
+      {
+        "amsa": "Gopuraamsa",
+        "count": 4,
+        "result": "one becomes a great king respected by many kings"
+      },
+      {
+        "amsa": "Simhaasanaamsa",
+        "count": 5,
+        "result": "one becomes a great emperor who rules the whole world"
+      },
+      {
+        "amsa": "Paaraavataamsa",
+        "count": 6,
+        "result": null
+      },
+      {
+        "amsa": "Devalokaamsa",
+        "count": 7,
+        "result": null
+      },
+      {
+        "amsa": "Brahmalokamsa",
+        "count": 8,
+        "result": null
+      },
+      {
+        "amsa": "Airaavataamsa",
+        "count": 9,
+        "result": null
+      }
+    ],
+    "amsa_spelling_note": "Section 11.7.2 spells three of section 6.6's amsa names differently. Section 6.6 is the definitional table and is followed; the variants are recorded so a caller matching the section 11.7.2 spelling still finds the amsa.",
+    "amsa_spellings_in_11_7_2": {
+      "Brahmalokaamsa": "Brahmalokamsa",
+      "Devalokamsa": "Devalokaamsa",
+      "Uttamsaamsa": "Uttamaamsa"
+    },
+    "blemish_rule": "Any blemishes here will considerably reduce the magnitude of the yoga.",
+    "close_orb_degrees": 6.0,
+    "close_orb_is_approximate": true,
+    "dasa_varga_rule": "In addition to the above factors, Sage Parasara recommended looking at the amsas occupied by the 2 planets as per Dasa Varga (ten division) scheme. Count the divisional charts \u2013 out of the ten charts of Dasa Varga scheme \u2013 in which a planet occupies an own, exaltation or moolatrikona sign. Based on the count of divisional charts with such a good placement for the planet in question, we say that it is in a particular amsa. Please see the chapter \u201cDivisional Charts\u201d for details.",
+    "dharma_karmadhipati_pair": [
+      {
+        "graha": 3,
+        "graha_name": "Mercury"
+      },
+      {
+        "graha": 5,
+        "graha_name": "Venus"
+      }
+    ],
+    "factors": [
+      {
+        "key": "unafflicted",
+        "text": "The two planets should be free from afflictions from functional malefics."
+      },
+      {
+        "key": "close",
+        "text": "The conjunction or aspect responsible for the Raaja Yoga should be close (say, within 6\u00b0 or so)."
+      },
+      {
+        "key": "unblemished",
+        "text": "The two planets should not be combust, debilitated or in an inimical house or in bad avasthas (states)."
+      }
+    ],
+    "final_judgment": "None of the above factors influences the end result completely. We should look at all the factors and make the final judgment.",
+    "intro": "We find the conjunction of the lords of a quadrant and a trine in many charts. The magnitude to which this raaja yoga fructifies depends on the strength of the two planets. The key factors that come into play are:",
+    "lagna_rasi": 9,
+    "lagna_rasi_name": "Capricorn",
+    "not_assessed": [
+      {
+        "factor": "unafflicted",
+        "open_item": "OI-88",
+        "why": "nothing read so far defines a functional malefic"
+      },
+      {
+        "factor": "unblemished",
+        "open_item": "OI-89",
+        "why": "section 11.7.2 says \u201cbad avasthas (states)\u201d without naming which are bad"
+      }
+    ],
+    "orb_example": "If Mercury and Venus are at 2\u00b0 and 26\u00b0 in Ta for a native with Cp lagna, for example, their conjunction brings a Raaja Yoga (Dharma-Karmadhipati Yoga in particular). However, the two planets are too far apart for this yoga to give its full results. They are still associated, but the association is not very strong. If Venus is at 3\u00b0 in Ta in instead of 26\u00b0, the conjunction is very close and the yoga can give its full results, if other factors are favorable.",
+    "pairs": [
+      {
+        "amsa": {
+          "decidable": true,
+          "note": "the two planets have different counts \u2014 Venus 3, Mercury 2. Section 11.7.2 speaks of \u201cthe two planets\u201d being in one amsa and does not say what to do when they differ, which its own worked example does. No shared amsa is asserted \u2014 see docs/open-items.md OI-91",
+          "planets": [
+            {
+              "amsa": "Uttamaamsa",
+              "count": 3,
+              "graha": 5,
+              "graha_name": "Venus",
+              "strong_in": [
+                "D1",
+                "D7",
+                "D12"
+              ]
+            },
+            {
+              "amsa": "Paarijaataamsa",
+              "count": 2,
+              "graha": 3,
+              "graha_name": "Mercury",
+              "strong_in": [
+                "D16",
+                "D60"
+              ]
+            }
+          ],
+          "shared_count": null
+        },
+        "association": "conjunction",
+        "factors": [
+          {
+            "detail": "section 11.7.2 asks that the two planets be free from afflictions from functional malefics. Nothing read so far defines a functional malefic, so this factor is not assessed \u2014 see docs/open-items.md OI-88",
+            "key": "unafflicted",
+            "satisfied": null
+          },
+          {
+            "detail": "Venus and Mercury are 24.00\u00b0 apart; section 11.7.2 asks for \u201cwithin 6\u00b0 or so\u201d, which this does not meet",
+            "key": "close",
+            "satisfied": false
+          },
+          {
+            "detail": "Mercury: no blemish found; combustion could not be judged: no longitude was supplied for the Sun; sign dignity is neutral; section 11.7.2 says \u201cbad avasthas (states)\u201d without naming which, so no avastha is called a blemish here \u2014 see docs/open-items.md OI-89 | Venus: no blemish found; combustion could not be judged: no longitude was supplied for the Sun; sign dignity is own; section 11.7.2 says \u201cbad avasthas (states)\u201d without naming which, so no avastha is called a blemish here \u2014 see docs/open-items.md OI-89",
+            "key": "unblemished",
+            "satisfied": null
+          }
+        ],
+        "orb_degrees": 24.0,
+        "quadrant_houses": [
+          10
+        ],
+        "quadrant_lord": 5,
+        "quadrant_lord_name": "Venus",
+        "trine_houses": [
+          9
+        ],
+        "trine_lord": 3,
+        "trine_lord_name": "Mercury"
+      }
+    ],
+    "simhaasanaamsa_emperors": [
+      "Harischandra",
+      "Manu",
+      "Bali",
+      "Vaiswaanara",
+      "Yudhisthira",
+      "Saalivaahana"
+    ],
+    "simhaasanaamsa_footnote_unread": "36",
+    "simhaasanaamsa_rule": "Parasara said that several great emperors of Indian mythology \u2013 like Harischandra, Manu, Bali, Vaiswaanara, Yudhisthira (also known as Dharmaraja) and Saalivaahana \u2013 were born with this combination."
+  },
+  "status": 200
+}

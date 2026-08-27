@@ -254,6 +254,12 @@ CASES = [
     # Chapter 11 — planetary yogas. Distinct from /v1/yoga, the nithya yoga.
     ("planetary_yoga_catalogue", "GET", "/v1/planetary-yoga/catalogue", None),
     ("planetary_yoga_rules", "GET", "/v1/planetary-yoga/rules", None),
+    # 11.7.2's own worked example: Cp lagna, Mercury 2 Ta and Venus 26 Ta,
+    # which the book calls too far apart for full results.
+    ("planetary_yoga_raaja_magnitude", "POST",
+     "/v1/planetary-yoga/raaja-magnitude", {
+         "lagna_rasi": 9, "longitudes": {3: 32.0, 5: 56.0},
+     }),
     ("planetary_yoga_ubhayachara", "POST", "/v1/planetary-yoga/chart", {
         # 11.2.3's example: Sun in Cancer, Mars in Leo, Venus in Gemini.
         # All three Ravi house-yogas hold at once.

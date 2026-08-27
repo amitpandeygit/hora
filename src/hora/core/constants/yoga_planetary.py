@@ -1507,3 +1507,115 @@ RAAJA_YOGAS: tuple[dict, ...] = (
 )
 
 RAAJA_YOGA_COUNT = len(RAAJA_YOGAS)
+
+
+# --------------------------------------------------------------------------
+# 11.7.2 Magnitude of a Raaja yoga
+#
+# Not a yoga: a grading of one that is already present.
+# --------------------------------------------------------------------------
+
+RAAJA_MAGNITUDE_INTRO = (
+    "We find the conjunction of the lords of a quadrant and a trine in many "
+    "charts. The magnitude to which this raaja yoga fructifies depends on the "
+    "strength of the two planets. The key factors that come into play are:")
+
+RAAJA_MAGNITUDE_FACTORS: tuple[dict, ...] = (
+    {"key": "unafflicted",
+     "text": ("The two planets should be free from afflictions from "
+              "functional malefics.")},
+    {"key": "close",
+     "text": ("The conjunction or aspect responsible for the Raaja Yoga "
+              "should be close (say, within 6° or so).")},
+    {"key": "unblemished",
+     "text": ("The two planets should not be combust, debilitated or in an "
+              "inimical house or in bad avasthas (states).")},
+)
+
+#: "within 6° or so" — the book's only number, and it is hedged twice.
+RAAJA_CLOSE_ORB_DEGREES = 6.0
+RAAJA_CLOSE_ORB_IS_APPROXIMATE = True
+
+RAAJA_ORB_EXAMPLE = (
+    "If Mercury and Venus are at 2° and 26° in Ta for a native with Cp lagna, "
+    "for example, their conjunction brings a Raaja Yoga (Dharma-Karmadhipati "
+    "Yoga in particular). However, the two planets are too far apart for this "
+    "yoga to give its full results. They are still associated, but the "
+    "association is not very strong. If Venus is at 3° in Ta in instead of "
+    "26°, the conjunction is very close and the yoga can give its full "
+    "results, if other factors are favorable.")
+
+RAAJA_BLEMISH_RULE = (
+    "Any blemishes here will considerably reduce the magnitude of the yoga.")
+
+PARASARA_DASA_VARGA_RULE = (
+    "In addition to the above factors, Sage Parasara recommended looking at "
+    "the amsas occupied by the 2 planets as per Dasa Varga (ten division) "
+    "scheme. Count the divisional charts – out of the ten charts of Dasa "
+    "Varga scheme – in which a planet occupies an own, exaltation or "
+    "moolatrikona sign. Based on the count of divisional charts with such a "
+    "good placement for the planet in question, we say that it is in a "
+    "particular amsa. Please see the chapter “Divisional Charts” for details.")
+
+#: What §11.7.2 says each dasavarga count amounts to, keyed by the count.
+#: Counts 0 and 1 share one sentence; 10 is not discussed at all.
+RAAJA_AMSA_RESULTS: tuple[dict, ...] = (
+    {"count": 0, "amsa": None,
+     "result": ("the yoga is ordinary and gives good results depending on the "
+                "factors already outlined")},
+    {"count": 1, "amsa": None,
+     "result": ("the yoga is ordinary and gives good results depending on the "
+                "factors already outlined")},
+    {"count": 2, "amsa": "Paarijaataamsa",
+     "result": "one becomes a king who rules his people well"},
+    {"count": 3, "amsa": "Uttamaamsa",
+     "result": "one becomes a good king with tremendous assets"},
+    {"count": 4, "amsa": "Gopuraamsa",
+     "result": "one becomes a great king respected by many kings"},
+    {"count": 5, "amsa": "Simhaasanaamsa",
+     "result": "one becomes a great emperor who rules the whole world"},
+    {"count": 6, "amsa": "Paaraavataamsa", "result": None},
+    {"count": 7, "amsa": "Devalokaamsa", "result": None},
+    {"count": 8, "amsa": "Brahmalokamsa", "result": None},
+    {"count": 9, "amsa": "Airaavataamsa", "result": None},
+)
+
+#: §6.6's table names a tenth amsa, Sreedhaamaamsa. §11.7.2 stops at nine.
+RAAJA_AMSA_COUNT_NOT_DISCUSSED = 10
+
+RAAJA_AMSA_DIVINE_COUNTS: tuple[int, ...] = (6, 7, 8, 9)
+
+RAAJA_AMSA_DIVINE_RULE = (
+    "Two planets giving Raaja Yoga can be in Paaraavataamsa (count of 6), "
+    "Devalokamsa (count of 7), Brahmalokaamsa (count of 8) and Airaavataamsa "
+    "(count of 9) only for divine persons such as Svaayambhuva Manu (Manu who "
+    "was born by Himself), Brahma (Creator!!) and Vishnu’s incarnations such "
+    "as Sri Rama and Sri Krishna.")
+
+RAAJA_AMSA_DIVINE_PERSONS: tuple[str, ...] = (
+    "Svaayambhuva Manu", "Brahma", "Sri Rama", "Sri Krishna")
+
+SIMHAASANAAMSA_RULE = (
+    "Parasara said that several great emperors of Indian mythology – like "
+    "Harischandra, Manu, Bali, Vaiswaanara, Yudhisthira (also known as "
+    "Dharmaraja) and Saalivaahana – were born with this combination.")
+
+SIMHAASANAAMSA_EMPERORS: tuple[str, ...] = (
+    "Harischandra", "Manu", "Bali", "Vaiswaanara", "Yudhisthira",
+    "Saalivaahana")
+
+#: Footnote 36 hangs off "Saalivaahana" and was not supplied.
+SIMHAASANAAMSA_FOOTNOTE_UNREAD = "36"
+
+RAAJA_FINAL_JUDGMENT = (
+    "None of the above factors influences the end result completely. We "
+    "should look at all the factors and make the final judgment.")
+
+#: §11.7.2 spells three of §6.6's amsa names differently. §6.6 is the
+#: definitional table and wins; the variants are recorded so a caller
+#: matching the §11.7.2 spelling still finds the amsa.
+AMSA_SPELLINGS_IN_11_7_2: dict[str, str] = {
+    "Uttamsaamsa": "Uttamaamsa",
+    "Devalokamsa": "Devalokaamsa",
+    "Brahmalokaamsa": "Brahmalokamsa",
+}
