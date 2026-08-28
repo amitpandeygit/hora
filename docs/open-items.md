@@ -18,7 +18,7 @@ implemented. Do not act on these, and do not re-raise them each session.
 | OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
-| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. Charts 6 **and 7** both reproduce with mean and are 39' and 12' out with true |
+| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. Charts 6, 7 **and now 10** reproduce with mean; with true they are 39', 12' and **56'** out |
 
 Listed in the order I would take them: OI-39 is the only unambiguous defect and
 the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
@@ -387,9 +387,23 @@ malefic — §3.2.2's list is fixed and has nothing to do with a chart's lagna �
 so it must be a lagna-relative notion the book defines elsewhere. Guessing at
 it would be inventing a rule.
 
+§11.7.2 does let two things slip, both in passing:
+
+- **Libra lagna: Jupiter.** "They are afflicted by a functional malefic
+  (Jupiter)" — of Chart 10, Emperor Akbar.
+- **Leo lagna: one or more of Moon, Mercury, Venus.** "functional malefics were
+  with them", of the Sun and Jupiter in Rajiv Gandhi's Leo lagna. Those three
+  are the rest of Leo; the book names none of them.
+
+Two points do not make a rule — Jupiter is a natural benefic and the 6th lord
+for Libra, which is *a* hypothesis and not the book's.
+
 **What we do:** the factor is returned with `satisfied: null` and a detail
 naming this item, and `/v1/planetary-yoga/raaja-magnitude` lists it under
-`not_assessed`. It is never silently treated as satisfied.
+`not_assessed` — now with both data points served beside it, as data.
+`FUNCTIONAL_MALEFIC_DATA_POINTS` records exactly what the book said and nothing
+more; a lagna it has not spoken about is simply absent. The factor is never
+silently treated as satisfied.
 
 **Closes when:** a section defining functional malefics is supplied.
 
@@ -429,7 +443,16 @@ pair rather than reporting a bare number. The 6° figure itself is hedged twice
 in the book — "say" and "or so" — so `close_orb_is_approximate` is served
 alongside it and no verdict turns on the boundary alone.
 
-**Closes when:** an aspect example appears, or you confirm the reading.
+**§11.7.2's two charts confirm the reading.** Both aspect orbs the book grades
+are ones it calls close, and both are small under this measure and only this
+measure: Akbar's Moon and Mercury are **1.32°** from an exact 7th-house aspect
+("they have a close aspect"), and Rajiv Gandhi's Saturn is **2.01°** from an
+exact 3rd-house aspect on Jupiter ("a very close aspect"). Measured as raw
+separation instead they would be 178.68° and 57.99°, which no one would call
+close.
+
+**Closes when:** you confirm the reading. The evidence above is why it is no
+longer a guess.
 
 ### OI-91 — §11.7.2's amsa grade assumes both planets share a count
 
@@ -755,21 +778,26 @@ in both examples anyway.
 **Closes when:** an example applies step 3 where the counts differ, or JHora's
 argala output settles it.
 
-### OI-68 — Charts 6 and 7 both need the **mean** node; our default is `true`
+### OI-68 — Charts 6, 7 and 10 all need the **mean** node; our default is `true`
 
-Two charts print their own birth data, so both can be recomputed rather than
-transcribed. Both reproduce every body to within one arcminute — **only with
-the mean node**.
+Three charts print their own birth data, so all three can be recomputed rather
+than transcribed. All three reproduce every body to within one arcminute —
+**only with the mean node**.
 
 | Chart | Rahu, mean | Rahu, true | printed |
 |---|---|---|---|
 | 6 · Narasimha Rao, 1921, 5h17m **east** | 0 Li 48 | 1 Li 26 | 0 Li 47 |
 | 7 · Reagan, 1911, 6h **west** | 21 Ar 54 | 21 Ar 42 | 21 Ar 54 |
+| 10 · Akbar, **1542**, 4h39m east | 7 Aq 57 | 7 Aq 00 | 7 Aq 56 |
 
-Thirty-nine and twelve arcminutes out under `true`. Every other body in both
-charts — ascendant, seven grahas — lands within one arcminute, which is the
-book's own display rounding. The two charts share no dates, hemispheres or
-offsets, so the agreement is not an artefact of one setup.
+Thirty-nine, twelve and **fifty-six** arcminutes out under `true`. Every other
+body in all three charts — ascendant, seven grahas — lands within one
+arcminute, which is the book's own display rounding. Chart 8 remains neutral;
+it does not separate the conventions.
+
+The three share no dates, hemispheres or offsets, and Chart 10 is four
+centuries earlier than the others and forty years before the Gregorian reform,
+so the agreement is not an artefact of one setup or one era.
 
 This is the only hard evidence in the project about which convention the book
 uses, and it points against our default. The reference chart (Chart 1, 1972)
@@ -777,9 +805,9 @@ cannot settle it: its JHora output is still the empty stub of OI-1.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
 endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by
-`test_chart_6_needs_the_mean_node` and
-`test_chart_7_confirms_oi_68_independently`, which assert the failure in both
-directions so the evidence cannot be lost.
+`test_chart_6_needs_the_mean_node`, `test_chart_7_confirms_oi_68_independently`
+and `test_chart_10_is_a_third_vote_for_the_mean_node`, which assert the failure
+in both directions so the evidence cannot be lost.
 
 **Closes when:** you decide, or a JHora run of Chart 1 settles it.
 

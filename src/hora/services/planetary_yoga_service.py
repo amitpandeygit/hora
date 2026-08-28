@@ -55,6 +55,8 @@ from hora.core.const import (
     DUSTHANA,
     DUSTHANA_LORD_IN_OWN_HOUSE,
     ELEMENT_RULER,
+    FUNCTIONAL_MALEFIC_DATA_POINTS,
+    FUNCTIONAL_MALEFIC_NOT_DEFINED,
     GRAHA_NAMES,
     HAMSA_MEANS,
     HAMSA_MISNAMED_IN_ITS_DEFINITION,
@@ -701,8 +703,19 @@ def raaja_magnitude(
         "final_judgment": RAAJA_FINAL_JUDGMENT,
         "not_assessed": [
             {"factor": "unafflicted",
-             "why": ("nothing read so far defines a functional malefic"),
-             "open_item": "OI-88"},
+             "why": FUNCTIONAL_MALEFIC_NOT_DEFINED,
+             "open_item": "OI-88",
+             "evidence": {
+                 lagna: {"named": list(entry["named"]),
+                         "candidates": list(entry["candidates"]),
+                         "example": entry["example"], "text": entry["text"]}
+                 for lagna, entry in FUNCTIONAL_MALEFIC_DATA_POINTS.items()
+             },
+             "evidence_note": (
+                 "Two data points section 11.7.2 gives in passing, recorded "
+                 "as data. They are not generalised into a rule and no lagna "
+                 "the book has not spoken about appears here."
+             )},
             {"factor": "unblemished",
              "why": ("section 11.7.2 says “bad avasthas (states)” without "
                      "naming which are bad"),

@@ -1075,3 +1075,37 @@ so the difference is not merely asserted.
 
 Note this is the second time §11.6 attaches a name to a rule that does not
 match it — see D-30, where §11.4.5's Hamsa definition calls the yoga Ruchaka.
+
+## D-36 · §11.7.2 puts Akbar's Venus in Uttamaamsa; the chart gives Paarijaataamsa
+
+**Status: recorded.** Our count stands; the difference is one D-60 division.
+
+§11.7.2, of Chart 10: "Venus and Saturn are only in Uttamaamsa and
+Paarijaataamsa." Uttamaamsa is a dasavarga count of 3, Paarijaataamsa a count
+of 2. Saturn agrees exactly. Venus does not — we count 2 for her as well.
+
+**The whole disagreement is one division of one chart out of ten.** Venus's
+shashtiamsa (D-60) leaves Taurus, her own sign, at exactly Libra 28°00'. She is
+printed at **28 Li 10** and recomputes from Chart 10's own birth data to
+**28 Li 10.3'**, ten arc-minutes past that boundary. Anywhere in Libra
+27°30'–28°00' she counts 3, and the book and the engine agree.
+
+Everything else §11.7.2 says about these two charts reproduces:
+
+| claim | book | ours |
+|---|---|---|
+| Mars in Simhaasanaamsa | count 5 | 5 |
+| Moon and Mercury "not even in Paarijaataamsa" | below 2 | 0 and 0 |
+| Saturn | Paarijaataamsa | 2 |
+| Venus and Saturn "less than a degree apart" | — | 0.70° |
+| Jupiter "22° away from them" | 22° | 22.47° and 21.77° |
+| Rajiv Gandhi's Sun and Jupiter in Simhaasanaamsa | count 5 | 5 and 5 |
+
+**Not a rule difference.** Swapping the hora to parivritti would give Venus the
+third chart, but it also lifts Mars to a count of 6 against the book's explicit
+Simhaasanaamsa. No variant we support fixes one claim without breaking another,
+and the Parashari hora is the definitional one. Checked and recorded rather
+than tuned to fit.
+
+**What we do:** nothing changes. The count is computed from §6.6's own
+amsabala, which the same section's other five claims confirm.

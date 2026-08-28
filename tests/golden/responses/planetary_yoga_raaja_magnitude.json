@@ -106,9 +106,30 @@
     "lagna_rasi_name": "Capricorn",
     "not_assessed": [
       {
+        "evidence": {
+          "Leo": {
+            "candidates": [
+              "Moon",
+              "Mercury",
+              "Venus"
+            ],
+            "example": "Rajiv Gandhi, footnote 37",
+            "named": [],
+            "text": "functional malefics were with them"
+          },
+          "Libra": {
+            "candidates": [],
+            "example": "Chart 10, Emperor Akbar",
+            "named": [
+              "Jupiter"
+            ],
+            "text": "They are afflicted by a functional malefic (Jupiter), but Jupiter is 22\u00b0 away from them."
+          }
+        },
+        "evidence_note": "Two data points section 11.7.2 gives in passing, recorded as data. They are not generalised into a rule and no lagna the book has not spoken about appears here.",
         "factor": "unafflicted",
         "open_item": "OI-88",
-        "why": "nothing read so far defines a functional malefic"
+        "why": "Section 11.7.2 asks that the two planets be free from afflictions from functional malefics, but no section read so far says what a functional malefic is. It cannot be section 3.2.2's natural malefics, which do not depend on the lagna. See docs/open-items.md OI-88."
       },
       {
         "factor": "unblemished",

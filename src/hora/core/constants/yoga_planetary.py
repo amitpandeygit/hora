@@ -1619,3 +1619,35 @@ AMSA_SPELLINGS_IN_11_7_2: dict[str, str] = {
     "Devalokamsa": "Devalokaamsa",
     "Brahmalokaamsa": "Brahmalokamsa",
 }
+
+
+#: Everything §11.7.2 lets us say about functional malefics, which it uses
+#: without ever defining — see docs/open-items.md OI-88.
+#:
+#: **Two data points, not a rule.** Nothing here is generalised: a lagna the
+#: book has not spoken about is simply absent, and the Leo entry records a
+#: constraint (one of three planets) rather than a name, because the book
+#: names none.
+FUNCTIONAL_MALEFIC_DATA_POINTS: dict[str, dict] = {
+    "Libra": {
+        "named": ("Jupiter",),
+        "candidates": (),
+        "example": "Chart 10, Emperor Akbar",
+        "text": ("They are afflicted by a functional malefic (Jupiter), but "
+                 "Jupiter is 22° away from them."),
+    },
+    "Leo": {
+        "named": (),
+        # The Sun and Jupiter are the yoga's own planets; these three are the
+        # rest of Leo, and the book says only that malefics were among them.
+        "candidates": ("Moon", "Mercury", "Venus"),
+        "example": "Rajiv Gandhi, footnote 37",
+        "text": "functional malefics were with them",
+    },
+}
+
+FUNCTIONAL_MALEFIC_NOT_DEFINED = (
+    "Section 11.7.2 asks that the two planets be free from afflictions from "
+    "functional malefics, but no section read so far says what a functional "
+    "malefic is. It cannot be section 3.2.2's natural malefics, which do not "
+    "depend on the lagna. See docs/open-items.md OI-88.")

@@ -55,6 +55,7 @@ from hora.core.const import (
     DUSTHANA,
     DUSTHANA_LORD_IN_OWN_HOUSE,
     EXALTATION_DEG,
+    FUNCTIONAL_MALEFIC_DATA_POINTS,
     GRAHA_NAMES,
     HAMSA_MEANS,
     HAMSA_MISNAMED_IN_ITS_DEFINITION,
@@ -108,6 +109,7 @@ from hora.core.const import (
     RAAJA_BASIC_PREMISE,
     RAAJA_CLOSE_ORB_DEGREES,
     RAAJA_CLOSE_ORB_IS_APPROXIMATE,
+    RAAJA_FINAL_JUDGMENT,
     RAAJA_MAGNITUDE_FACTORS,
     RAAJA_MAGNITUDE_INTRO,
     RAAJA_MEANS,
@@ -4731,3 +4733,418 @@ def test_the_endpoint_carries_the_worked_example_and_the_unread_footnote(client)
     assert body["orb_example"] == RAAJA_ORB_EXAMPLE
     assert body["simhaasanaamsa_footnote_unread"] == "36"
     assert body["amsa_spellings_in_11_7_2"]["Uttamsaamsa"] == "Uttamaamsa"
+
+
+# --------------------------------------------------------------------------
+# 11.7.2's two worked charts — Rajiv Gandhi and Emperor Akbar
+#
+# Both are argued in prose rather than tabulated, and almost every claim is a
+# number. They are checked one claim at a time.
+# --------------------------------------------------------------------------
+
+#: Chart 10, as printed under the diagram.
+CHART_10 = {
+    "Asc": "15 Li 30", "Sun": "23 Sc 46", "Moon": "8 Ge 51",
+    "Mars": "23 Cp 05", "Merc": "10 Sg 10", "Jup": "5 Li 42",
+    "Ven": "28 Li 10", "Sat": "27 Li 28", "Rahu": "7 Aq 56",
+    "Ketu": "7 Le 56", "HL": "27 Le 03", "GL": "18 Ar 18",
+}
+
+#: Printed inside the diagram. Unlike Chart 9 this one is fully specified, so
+#: it is recomputed rather than merely transcribed.
+CHART_10_BIRTH = {
+    "year": 1542, "month": 12, "day": 4, "hour": 3, "minute": 39,
+    "second": 0.0, "utc_offset_hours": 4 + 39 / 60,
+}
+CHART_10_PLACE = {"latitude": 25 + 19 / 60, "longitude": 69 + 47 / 60}
+
+#: The rasi diagram, box by box.
+CHART_10_RASI_DRAWN = {
+    "GL": "Ar", "Moon": "Ge", "Rahu": "Aq", "Mars": "Cp", "HL": "Le",
+    "Ketu": "Le", "Merc": "Sg", "Sun": "Sc", "Jup": "Li", "Asc": "Li",
+    "Sat": "Li", "Ven": "Li",
+}
+
+CHART_10_CHARA_KARAKAS = {
+    "Ven": "AK", "Sat": "AmK", "Moon": "GK", "Mars": "MK",
+    "Merc": "PK", "Jup": "DK", "Rahu": "PiK", "Sun": "BK",
+}
+
+#: Footnote 37's birth data for Rajiv Gandhi. No chart is printed for him —
+#: only the data and a string of claims about it.
+RAJIV_BIRTH = {
+    "year": 1944, "month": 8, "day": 20, "hour": 7, "minute": 11,
+    "second": 40.0, "utc_offset_hours": 5.5,
+}
+RAJIV_PLACE = {"latitude": 18 + 58 / 60, "longitude": 72 + 49 / 60}
+
+_CHART_10_GRAHA = {
+    "Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+    "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+    "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU,
+}
+
+
+def _akbar() -> YogaInput:
+    """Chart 10 from its printed longitudes, with Krishna paksha — the Sun at
+    23 Sc 46 and the Moon at 8 Ge 51 give tithi 17."""
+    from hora.core.ephemeris.base import PlanetPosition
+
+    lons = {int(g): _lon9(CHART_10[name])
+            for name, g in _CHART_10_GRAHA.items()}
+    positions = {
+        graha: PlanetPosition(graha=graha, longitude=lon, latitude=0.0,
+                              distance=1.0, speed_longitude=0.5,
+                              speed_latitude=0.0, speed_distance=0.0)
+        for graha, lon in lons.items()
+    }
+    return YogaInput(
+        rasis={graha: int(lon // 30) for graha, lon in lons.items()},
+        positions=positions,
+        lagna_rasi=int(_lon9(CHART_10["Asc"]) // 30),
+        paksha=1)
+
+
+def _dasavarga_count(graha: int, longitude: float) -> int:
+    from hora.services.varga_service import amsabala
+
+    return amsabala(longitude, graha)["groups"]["dasavarga"]["count"]
+
+
+# --- Chart 10 as a transcription --------------------------------------------
+
+
+@pytest.mark.parametrize("body,sign", sorted(CHART_10_RASI_DRAWN.items()))
+def test_chart_10s_diagram_agrees_with_its_printed_longitudes(body, sign):
+    assert int(_lon9(CHART_10[body]) // 30) == R[sign]
+
+
+@pytest.mark.parametrize("body", sorted(CHART_10))
+def test_chart_10_recomputes_from_its_own_birth_data(body):
+    """4 December 1542, 3:39 am, 4h39m east, 69 E 47, 25 N 19 — forty years
+    before the Gregorian reform, and it still reproduces on the proleptic
+    Gregorian calendar the ephemeris uses.
+
+    Every body lands inside 1.1 arc-minutes except the Moon at 1.6', which is
+    about three seconds of her motion; the birth time is printed only to the
+    minute. The Julian calendar reading of the same date misses by degrees,
+    so the calendar is not in doubt.
+    """
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    chart = compute_chart(
+        from_local(**CHART_10_BIRTH),
+        Place(name="Chart 10", **CHART_10_PLACE),
+        Settings(node_type=NodeType.MEAN))
+    expected = _lon9(CHART_10[body])
+    if body == "Asc":
+        got = chart.lagna_longitude
+    elif body in _CHART_10_GRAHA:
+        got = chart.positions[int(_CHART_10_GRAHA[body])].longitude
+    else:
+        pytest.skip(f"{body} is a special lagna, not checked here")
+    tolerance = (2.0 if body == "Moon" else 1.2) / 60
+    assert abs(got - expected) < tolerance, \
+        f"{body}: {got:.4f} vs {expected:.4f}"
+
+
+def test_the_julian_reading_of_chart_10s_date_is_not_close():
+    """1542 predates the Gregorian reform, so the calendar is a real
+    question. It is not close: read as Julian, the Sun lands in Sagittarius
+    instead of Scorpio and the ascendant is nine degrees out."""
+    import swisseph as swe
+
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_jd
+
+    ut_hours = (3 + 39 / 60) - CHART_10_BIRTH["utc_offset_hours"]
+    jd = swe.julday(1542, 12, 4, ut_hours, swe.JUL_CAL)
+    chart = compute_chart(
+        from_jd(jd, utc_offset_hours=CHART_10_BIRTH["utc_offset_hours"]),
+        Place(name="Chart 10", **CHART_10_PLACE),
+        Settings(node_type=NodeType.MEAN))
+    sun = chart.positions[int(Graha.SUN)].longitude
+    assert int(sun // 30) != int(_lon9(CHART_10["Sun"]) // 30)
+    assert abs(chart.lagna_longitude - _lon9(CHART_10["Asc"])) > 5.0
+
+
+def test_chart_10_is_a_third_vote_for_the_mean_node():
+    """Charts 6 and 7 both reproduce only with `node_type=mean`; Chart 8 was
+    neutral. This one separates them again, and by a wide margin: the mean
+    node is 1' from the printed Rahu, the true node 56'. See OI-68."""
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    printed = _lon9(CHART_10["Rahu"])
+    errors = {}
+    for node in (NodeType.MEAN, NodeType.TRUE):
+        chart = compute_chart(
+            from_local(**CHART_10_BIRTH),
+            Place(name="Chart 10", **CHART_10_PLACE),
+            Settings(node_type=node))
+        errors[node] = abs(chart.positions[int(Graha.RAHU)].longitude - printed)
+    assert errors[NodeType.MEAN] < 2 / 60
+    assert errors[NodeType.TRUE] > 30 / 60
+
+
+@pytest.mark.parametrize("body,symbol", sorted(CHART_10_CHARA_KARAKAS.items()))
+def test_chart_10_confirms_its_printed_chara_karakas(body, symbol):
+    from hora.charts.karaka import chara_karakas
+
+    positions = {_CHART_10_GRAHA[name]: _lon9(CHART_10[name])
+                 for name in CHART_10_CHARA_KARAKAS}
+    assigned = {k.graha: k.symbol for k in chara_karakas(positions)}
+    assert assigned[_CHART_10_GRAHA[body]] == symbol
+
+
+# --- what the book says about Akbar, claim by claim -------------------------
+
+
+def test_akbars_lagna_and_the_lords_the_book_names():
+    """"His chart has Libra lagna. Lagna lord Venus and 4th and 5th lord
+    Saturn are in lagna... Moon and Mercury own 10th and 9th." """
+    data = _akbar()
+    assert data.lagna_rasi == R["Li"]
+    from hora.charts.planetary_yogas.popular import houses_of, lord_of_house
+
+    assert lord_of_house(data, 1) == int(Graha.VENUS)
+    assert lord_of_house(data, 4) == int(Graha.SATURN)
+    assert lord_of_house(data, 5) == int(Graha.SATURN)
+    assert lord_of_house(data, 10) == int(Graha.MOON)
+    assert lord_of_house(data, 9) == int(Graha.MERCURY)
+    assert houses_of(data, int(Graha.VENUS)) == 1
+    assert houses_of(data, int(Graha.SATURN)) == 1
+
+
+def test_akbar_has_the_two_mahapurusha_yogas_the_book_names():
+    """"They give Mahapurusha yogas (Maalavya and Sasa)"."""
+    data = _akbar()
+    assert evaluate_one("maalavya", data).present is True
+    assert evaluate_one("sasa", data).present is True
+
+
+def test_akbar_has_the_third_mahapurusha_yoga_from_the_lord_of_gl():
+    """"lord of GL is Mars and he gives another Mahapurusha Yoga – Ruchaka
+    Yoga – and he is in Simhasanamsa." All three parts checked."""
+    gl = _lon9(CHART_10["GL"])
+    assert int(RASI_LORD[int(gl // 30)]) == int(Graha.MARS)
+    assert evaluate_one("ruchaka", _akbar()).present is True
+    assert _dasavarga_count(int(Graha.MARS), _lon9(CHART_10["Mars"])) == 5
+
+
+def test_akbar_has_both_raaja_yogas_the_book_describes():
+    """Venus with Saturn, and Moon aspecting Mercury. The engine finds both
+    on one verdict."""
+    verdict = evaluate_one("raaja_basic", _akbar())
+    assert verdict.present is True
+    assert ("Moon (lord of the 10th) and Mercury (lord of the 9th) by "
+            "mutual graha drishti") in verdict.reason
+    assert "by conjunction" in verdict.reason
+
+
+def test_akbars_two_raaja_yogas_are_both_close():
+    """"Both the Raja Yogas are very close. Venus and Saturn are less than a
+    degree apart." The Moon-Mercury aspect is not given a figure, but the
+    book calls it "a close aspect"."""
+    from hora.charts.planetary_yogas.raaja_magnitude import magnitude
+
+    pairs = {(p.quadrant_lord_name, p.trine_lord_name): p
+             for p in magnitude(_akbar())}
+    venus_saturn = pairs[("Venus", "Saturn")]
+    assert venus_saturn.orb_degrees == pytest.approx(0.70, abs=0.01)
+    assert venus_saturn.orb_degrees < 1.0
+    moon_mercury = pairs[("Moon", "Mercury")]
+    assert moon_mercury.orb_degrees == pytest.approx(1.32, abs=0.01)
+    for pair in (venus_saturn, moon_mercury):
+        close = next(f for f in pair.factors if f.key == "close")
+        assert close.satisfied is True
+
+
+def test_jupiter_is_twenty_two_degrees_from_venus_and_saturn():
+    """"They are afflicted by a functional malefic (Jupiter), but Jupiter is
+    22° away from them." """
+    jupiter = _lon9(CHART_10["Jup"])
+    assert abs(_lon9(CHART_10["Ven"]) - jupiter) == pytest.approx(22.47, abs=0.01)
+    assert abs(_lon9(CHART_10["Sat"]) - jupiter) == pytest.approx(21.77, abs=0.01)
+
+
+def test_moon_and_mercury_are_not_even_in_paarijaataamsa():
+    """"But they are not even in Paarijaataamsa" — the first named amsa is a
+    count of two, so the book is saying both count below that."""
+    assert _dasavarga_count(int(Graha.MOON), _lon9(CHART_10["Moon"])) < 2
+    assert _dasavarga_count(int(Graha.MERCURY), _lon9(CHART_10["Merc"])) < 2
+
+
+def test_venus_and_saturns_amsas_disagree_with_the_book_by_one_d60_division():
+    """"Venus and Saturn are only in Uttamaamsa and Paarijaataamsa."
+
+    Saturn agrees — count 2, Paarijaataamsa. Venus does not: we count 2 where
+    the book wants 3. The whole difference is **one D-60 division**. Venus's
+    shashtiamsa leaves Taurus, her own sign, at exactly Libra 28°00'; she is
+    printed at 28°10' and recomputes from the birth data to 28°10.3'. Ten
+    arc-minutes earlier and the two agree exactly. See D-36.
+    """
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_NAMES
+
+    venus = int(Graha.VENUS)
+    assert _dasavarga_count(int(Graha.SATURN), _lon9(CHART_10["Sat"])) == 2
+    assert _dasavarga_count(venus, _lon9(CHART_10["Ven"])) == 2
+
+    boundary = R["Li"] * 30 + 28.0
+    assert RASI_NAMES[varga(boundary - 0.01, "D60").sign] == "Taurus"
+    assert RASI_NAMES[varga(boundary + 0.01, "D60").sign] == "Gemini"
+    assert _dasavarga_count(venus, boundary - 0.01) == 3
+    assert _dasavarga_count(venus, boundary + 0.01) == 2
+    assert _lon9(CHART_10["Ven"]) > boundary
+
+
+def test_no_varga_variant_we_support_settles_the_venus_disagreement():
+    """The parivritti hora would give Venus the third chart the book wants —
+    but it also lifts Mars to a count of 6, and the book says Mars is in
+    Simhaasanaamsa, a count of 5. Nothing we support fixes one claim without
+    breaking another, so the defaults stand. See D-36."""
+    from hora.charts.dignity import sign_dignity
+    from hora.charts.vargas import VARGA_GROUPS, d2_hora, varga
+
+    good = {"own", "exalted", "moolatrikona"}
+
+    def count(graha: int, longitude: float, hora: str) -> int:
+        total = 0
+        for code in VARGA_GROUPS["dasavarga"]:
+            position = (d2_hora(longitude, hora) if code == "D2"
+                        else varga(longitude, code))
+            if sign_dignity(graha, position.longitude) in good:
+                total += 1
+        return total
+
+    venus, mars = int(Graha.VENUS), int(Graha.MARS)
+    assert count(venus, _lon9(CHART_10["Ven"]), "parivritti") == 3
+    assert count(mars, _lon9(CHART_10["Mars"]), "parivritti") == 6
+    assert count(mars, _lon9(CHART_10["Mars"]), "parashari") == 5
+
+
+def test_akbars_chart_is_evidence_toward_oi_88():
+    """"They are afflicted by a functional malefic (Jupiter)" — for a Libra
+    lagna. One data point, recorded and not generalised into a rule."""
+    assert _akbar().lagna_rasi == R["Li"]
+    libra = FUNCTIONAL_MALEFIC_DATA_POINTS["Libra"]
+    assert libra["named"] == ("Jupiter",)
+    assert "Chart 10" in libra["example"]
+
+
+# --- Rajiv Gandhi, who has birth data but no chart --------------------------
+
+
+def _rajiv():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    return compute_chart(
+        from_local(**RAJIV_BIRTH),
+        Place(name="Rajiv Gandhi", **RAJIV_PLACE),
+        Settings(node_type=NodeType.MEAN))
+
+
+def test_rajiv_gandhis_lagna_and_the_two_lords():
+    """"had lagna lord Sun and 5th lord Jupiter in lagna giving a Raaja
+    Yoga." No chart is printed — this is computed from footnote 37's birth
+    data with our own ephemeris."""
+    chart = _rajiv()
+    assert chart.lagna_rasi == R["Le"]
+    assert int(RASI_LORD[chart.lagna_rasi]) == int(Graha.SUN)
+    assert int(RASI_LORD[(chart.lagna_rasi + 4) % 12]) == int(Graha.JUPITER)
+    for graha in (Graha.SUN, Graha.JUPITER):
+        assert int(chart.positions[int(graha)].longitude // 30) == R["Le"]
+
+
+def test_rajiv_gandhi_has_the_raaja_yoga():
+    chart = _rajiv()
+    data = YogaInput(
+        rasis={g: int(p.longitude // 30) for g, p in chart.positions.items()},
+        positions=chart.positions, lagna_rasi=chart.lagna_rasi)
+    verdict = evaluate_one("raaja_basic", data)
+    assert verdict.present is True
+    assert "Sun (lord of the 1st) and Jupiter (lord of the 5th) by " \
+           "conjunction" in verdict.reason
+
+
+def test_both_of_rajivs_planets_are_in_simhaasanaamsa():
+    """"Both were in Simhaasanaamsa" — a count of five, which is the amsa the
+    book ties to "a great emperor who rules the whole world". Reproduced for
+    both planets from birth data alone."""
+    chart = _rajiv()
+    for graha in (Graha.SUN, Graha.JUPITER):
+        longitude = chart.positions[int(graha)].longitude
+        assert _dasavarga_count(int(graha), longitude) == 5
+
+
+def test_rajivs_two_planets_are_more_than_eight_degrees_apart():
+    """"However, they were more than 8° apart." Footnote 38 gives the figure
+    and was not supplied; ours is 8.38°, which fails §11.7.2's 6° test."""
+    chart = _rajiv()
+    separation = abs(chart.positions[int(Graha.SUN)].longitude
+                     - chart.positions[int(Graha.JUPITER)].longitude)
+    assert separation == pytest.approx(8.38, abs=0.02)
+    assert separation > 8.0
+    assert separation > RAAJA_CLOSE_ORB_DEGREES
+
+
+def test_saturns_aspect_on_rajivs_jupiter_is_very_close():
+    """"Saturn had a very close aspect on Jupiter." Saturn's special drishti
+    is the 3rd and the 10th, and Jupiter is the 3rd from him — 2.01° from the
+    exact angle. This and Akbar's 1.32° are the only two aspect orbs the book
+    grades, and both are ones it calls close. Evidence for OI-90's reading."""
+    from hora.charts.aspects import graha_aspects_sign, graha_drishti_houses
+
+    chart = _rajiv()
+    saturn = chart.positions[int(Graha.SATURN)].longitude
+    jupiter = chart.positions[int(Graha.JUPITER)].longitude
+    saturn_sign, jupiter_sign = int(saturn // 30), int(jupiter // 30)
+    assert 3 in graha_drishti_houses(int(Graha.SATURN))
+    assert (jupiter_sign - saturn_sign) % 12 + 1 == 3
+    assert graha_aspects_sign(int(Graha.SATURN), saturn_sign, jupiter_sign)
+    separation = (jupiter - saturn) % 360
+    assert abs(separation - 60.0) == pytest.approx(2.01, abs=0.02)
+
+
+def test_rajivs_chart_is_the_second_data_point_toward_oi_88():
+    """"functional malefics were with them" — with the Sun and Jupiter in
+    Leo. Three planets are there to be meant, and the book names none, so
+    what is recorded is the constraint, not a rule."""
+    chart = _rajiv()
+    with_them = {
+        Graha(g).name.title() for g, p in chart.positions.items()
+        if int(p.longitude // 30) == R["Le"]
+        and g not in (int(Graha.SUN), int(Graha.JUPITER))
+    }
+    assert with_them == {"Moon", "Mercury", "Venus"}
+    leo = FUNCTIONAL_MALEFIC_DATA_POINTS["Leo"]
+    assert leo["named"] == ()
+    assert set(leo["candidates"]) == with_them
+
+
+def test_the_outcome_the_book_draws_from_all_this():
+    """"In the end, he only became India's prime minister and not an
+    'emperor of the whole world'." Simhaasanaamsa alone did not carry it —
+    which is the section's whole point, and why no verdict is computed."""
+    assert "rules the whole world" in next(
+        e["result"] for e in RAAJA_AMSA_RESULTS if e["count"] == 5)
+    assert "look at all the factors" in RAAJA_FINAL_JUDGMENT
+
+
+def test_the_endpoint_carries_the_functional_malefic_evidence(client):
+    """OI-88 is not just declared unanswerable — the two things §11.7.2 does
+    let slip are served with it."""
+    body = client.post("/v1/planetary-yoga/raaja-magnitude", json={
+        "lagna_rasi": R["Cp"],
+        "longitudes": {3: R["Ta"] * 30 + 2, 5: R["Ta"] * 30 + 3}}).json()
+    row = next(r for r in body["not_assessed"] if r["open_item"] == "OI-88")
+    assert row["evidence"]["Libra"]["named"] == ["Jupiter"]
+    assert row["evidence"]["Leo"]["candidates"] == ["Moon", "Mercury", "Venus"]
+    assert "not generalised into a rule" in row["evidence_note"]
