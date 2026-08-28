@@ -127,12 +127,19 @@ from hora.core.const import (
     RAAJA_MEANS,
     RAAJA_ORB_EXAMPLE,
     RAAJA_ORB_FOOTNOTE,
+    RAAJA_SAMBANDHA_ARE_COMMON,
+    RAAJA_SAMBANDHA_COUNT,
+    RAAJA_SAMBANDHA_INTRO,
+    RAAJA_SAMBANDHA_MAGNITUDE_RULE,
+    RAAJA_SAMBANDHA_YOGAS,
     RAAJA_YOGA_COUNT,
     RAAJA_YOGA_INTRO,
     RASI_NAMES,
     RAVI_YOGA_FREQUENCY_NOTE,
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
+    SAMBANDHA_KARAKA_NAMES,
+    SAMBANDHA_MEANS,
     SANKHYA_BASIS,
     SANKHYA_EXCLUDES_NODES,
     SANKHYA_IS_A_FALLBACK,
@@ -152,7 +159,8 @@ from hora.core.const import (
     TRIMURTHI_YOGAS,
     TRIVARGA_NAMED_IN_11_7_3,
     UPACHAYA,
-    VARGOTTAMAMSA_FOOTNOTE_UNREAD,
+    VARGOTTAMAAMSA_DEFINITION,
+    VARGOTTAMAAMSA_SPELLINGS,
     VIPAREETA_DEFINITION,
     VIPAREETA_IDEAL_CASE,
     VIPAREETA_IDEAL_HOUSES,
@@ -668,7 +676,6 @@ def rules() -> dict:
             "longitudes for the karaka and varga yogas, a lagna longitude for "
             "yogas 7 and 9, and HL and GL for yogas 6 and 8."
         ),
-        "vargottamamsa_footnote_unread": VARGOTTAMAMSA_FOOTNOTE_UNREAD,
         "raaja_orb_footnote": RAAJA_ORB_FOOTNOTE,
         "worked_charts": [
             {"chart": "Chart 9", "native": "Chatrapati Shivaji",
@@ -686,6 +693,25 @@ def rules() -> dict:
                       "the old calendar is 4 December 1542 in the new, ten "
                       "days apart, and the printed date is the new one.")},
         ],
+        # 11.8 ----------------------------------------------------------------
+        "raaja_sambandha_intro": RAAJA_SAMBANDHA_INTRO,
+        "raaja_sambandha_count": RAAJA_SAMBANDHA_COUNT,
+        "sambandha_means": SAMBANDHA_MEANS,
+        "sambandha_karaka_names": dict(SAMBANDHA_KARAKA_NAMES),
+        "raaja_sambandha_numbering": {
+            entry["key"]: entry["number"] for entry in RAAJA_SAMBANDHA_YOGAS
+        },
+        "raaja_sambandha_are_common": RAAJA_SAMBANDHA_ARE_COMMON,
+        "raaja_sambandha_magnitude_rule": RAAJA_SAMBANDHA_MAGNITUDE_RULE,
+        "raaja_sambandha_note": (
+            "Section 11.8 warns about itself before listing one: \u201cthese "
+            "yogas are very common\u201d. Every verdict in the group carries "
+            "that sentence and the section\u2019s own pointer back to section "
+            "11.7.2, so a present verdict here is never read as weighing the "
+            "same as one from section 11.7."
+        ),
+        "vargottamaamsa_definition": VARGOTTAMAAMSA_DEFINITION,
+        "vargottamaamsa_spellings": list(VARGOTTAMAAMSA_SPELLINGS),
         "sun_excluded_note": (
             "The Sun cannot form a yoga about what accompanies him, so he is "
             "excluded from his own houses alongside the Moon."

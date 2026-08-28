@@ -426,8 +426,23 @@ class PlanetaryYogaRulesOut(BaseModel):
         description="What to supply so section 11.7.3's yogas can be decided "
                     "rather than reported undecidable.",
     )
-    vargottamamsa_footnote_unread: str
     raaja_orb_footnote: str
+    vargottamaamsa_definition: str = Field(
+        description="Footnote 40, supplied with section 11.8. It closes what "
+                    "section 11.7.3 (15) left undecidable.",
+    )
+    vargottamaamsa_spellings: list[str]
+    raaja_sambandha_intro: str
+    raaja_sambandha_count: int
+    sambandha_means: str
+    sambandha_karaka_names: dict[str, str]
+    raaja_sambandha_numbering: dict[str, int]
+    raaja_sambandha_are_common: str
+    raaja_sambandha_magnitude_rule: str
+    raaja_sambandha_note: str = Field(
+        description="Why a present verdict in section 11.8 weighs less than "
+                    "one in section 11.7 — the section says so itself.",
+    )
     worked_charts: list[dict]
     yogakaraka_note: str = Field(
         description="What the engine does about one planet lording both a "

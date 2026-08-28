@@ -474,24 +474,23 @@ to 9 beyond saying they occur "only for divine persons".
 
 **Closes when:** you settle how a split count is graded.
 
-### OI-92 — footnote 40 defines vargottamamsa and was not supplied
+### OI-95 — §11.8 (12) says "with benefics" and gives no number
 
-§11.7.3 (15): "If (a) Moon is strong and occupies vargottamamsa⁴⁰ and (b) four
-or more planets aspect him, then one becomes a king."
+"If the 11th lord is in the 11th house without aspects from any malefics and
+**AK is with benefics**, then one has gains from a king."
 
-The footnote marker hangs off the word, so the book defines it there. That page
-was not supplied. The obvious reading — the same sign in rasi and navamsa — is
-the common one, but "vargottama**amsa**" may mean more than D-9, and §6.6's
-amsa vocabulary in this book is a family of named counts rather than a single
-test. Guessing would be inventing a rule inside a section that already has a
-named definition.
+Plural, unquantified. This is the third such phrase in chapter 11 — §11.6's
+Vasumati says "benefics occupy upachayas" (OI-84) and §11.7.3 (17) says
+"benefics are in quadrants" (OI-94) — and the three may not want the same
+answer.
 
-**What we do:** clause (b) is computed anyway. If fewer than four planets
-aspect the Moon the yoga is a plain absence and the undecidable clause never
-arises. Only when clause (b) *holds* does the verdict report that it cannot be
-decided, and it says which clause and which footnote.
+**What we do:** one benefic with AK satisfies it, which is the plain reading of
+a planet being "with benefics" in the same sign. Every verdict, present or
+absent, reports how many are actually with him, so a caller wanting two or more
+has the number without the engine having chosen.
 
-**Closes when:** footnote 40 is supplied.
+**Closes when:** you settle whether chapter 11's unquantified plurals mean one
+or more, or all.
 
 ### OI-93 — §11.7.3 (2)'s clause (d) does not say which planets it means
 

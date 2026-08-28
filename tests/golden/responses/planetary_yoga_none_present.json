@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 115,
+    "evaluated": 130,
     "grahas_considered": [
       {
         "graha": 0,
@@ -1525,6 +1525,246 @@
         "qualifiers": [],
         "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
         "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the 10th lord is conjoined or aspected by AmK (chara amaatya kaaraka) or his dispositor, one becomes an important person in the court of a king.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_tenth_lord_amk",
+        "name": "Raaja Sambandha Yoga (11.8 #1) \u2014 10th lord reached by AmK",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the 11th lord aspects the 11th house and there are no malefic planets joining or aspecting the 10th and 11th houses, one becomes an important person in the court of a king.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_eleventh_lord_unafflicted",
+        "name": "Raaja Sambandha Yoga (11.8 #2) \u2014 an unafflicted 10th and 11th",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If AK (chara aatma kaaraka) and AmK conjoin, one is very intelligent and becomes a minister.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_ak_amk_conjoin",
+        "name": "Raaja Sambandha Yoga (11.8 #3) \u2014 AK and AmK conjoined",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: chara karakas are assigned by degrees within a sign and no longitudes were supplied",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If AmK is very strong in own sign or his exaltation sign, then also one becomes a minister.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_amk_dignified",
+        "name": "Raaja Sambandha Yoga (11.8 #4) \u2014 a dignified AmK",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: chara karakas are assigned by degrees within a sign and no longitudes were supplied",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If AmK is in a trine from lagna, one becomes a famous minister.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_amk_in_a_trine",
+        "name": "Raaja Sambandha Yoga (11.8 #5) \u2014 AmK in a trine from lagna",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If AmK is in a quadrant or a trine from AK, one is an associate liked by a king.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_amk_from_ak",
+        "name": "Raaja Sambandha Yoga (11.8 #6) \u2014 AmK in a quadrant or trine from AK",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: chara karakas are assigned by degrees within a sign and no longitudes were supplied",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If malefics occupy the 3rd and 6th houses from lagna, AL and AK, then one becomes a powerful chief of army.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_malefics_from_three",
+        "name": "Raaja Sambandha Yoga (11.8 #7) \u2014 malefics in the 3rd and 6th from lagna, AL and AK",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If AK is in an own or exaltation sign in a quadrant or a trine and the 9th lord is conjoined or aspected by AK, one becomes a minister.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_ak_dignified_and_ninth_lord",
+        "name": "Raaja Sambandha Yoga (11.8 #8) \u2014 a dignified AK reaching the 9th lord",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If AK happens to be Moon's dispositor and he occupies lagna along with a benefic, one becomes a minister at an old age.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_ak_is_moons_dispositor",
+        "name": "Raaja Sambandha Yoga (11.8 #9) \u2014 AK as Moon's dispositor in lagna",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If AK is in the 5th, 7th, 9th or 10th houses with a benefic, one will be associated with kings and earn money thus.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_ak_with_a_benefic",
+        "name": "Raaja Sambandha Yoga (11.8 #10) \u2014 AK with a benefic in the 5th, 7th, 9th or 10th",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If bhagyapada (A9 \u2013 arudha pada of the 9th house) is in lagna or AK is in 9th, one is fortunate and associates with kings.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_bhagyapada_or_ak_in_ninth",
+        "name": "Raaja Sambandha Yoga (11.8 #11) \u2014 bhagyapada in lagna, or AK in the 9th",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the 11th lord is in the 11th house without aspects from any malefics and AK is with benefics, then one has gains from a king.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_eleventh_lord_and_ak",
+        "name": "Raaja Sambandha Yoga (11.8 #12) \u2014 the 11th lord unafflicted and AK with benefics",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If lagna lord is in the 10th house and the 10th lord is in lagna, one is powerful and associated with kings.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_first_tenth_exchange",
+        "name": "Raaja Sambandha Yoga (11.8 #13) \u2014 the lagna and 10th lords exchanged",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If Moon and Venus are in the 4th house from AK, one is endowed with royal insignia.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_moon_venus_from_ak",
+        "name": "Raaja Sambandha Yoga (11.8 #14) \u2014 Moon and Venus in the 4th from AK",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: chara karakas are assigned by degrees within a sign and no longitudes were supplied",
+        "section": "11.8",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If lagna lord or AK conjoins the 5th lord in a quadrant or a trine, one becomes a king's friend.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_fifth_lord_joined",
+        "name": "Raaja Sambandha Yoga (11.8 #15) \u2014 the 5th lord joined in a quadrant or trine",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga. Section 11.7.2's factors apply \u2014 see /v1/planetary-yoga/raaja-magnitude."
+        ],
+        "reason": "this yoga cannot be decided: no lagna was supplied, and it counts houses from the ascendant",
+        "section": "11.8",
         "weakened": false
       },
       {

@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-5](#oi-5) | Upagrahas |
+| [OI-92](#oi-92) | vargottamaamsa was undefined until footnote 40 arrived |
 | [OI-6](#oi-6) | Special lagnas |
 | [OI-9](#oi-9) | Apparent vs true planetary positions |
 | [OI-11](#oi-11) | Chapter 1 calculations verified |
@@ -1591,3 +1592,20 @@ more advanced than Ketu".
 Exercise 17 arrived was one sentence — "this reads Chart 8, please send it" —
 not a clever reconstruction and an open item. Working around a gap instead of
 stopping at it put the burden back on Amit later.
+
+<a id="oi-92"></a>
+
+## OI-92 — vargottamaamsa was undefined until footnote 40 arrived
+
+§11.7.3 (15) turned on a word footnote 40 defines, and that page was missing.
+It arrived with §11.8: "A planet is in vargottamaamsa if it occupies the same
+sign in Rasi and Navamsa charts."
+
+Implemented as `vargottama()` and yoga (15) now decides. The order of its
+clauses is kept: a chart where fewer than four planets aspect the Moon is a
+plain absence, and only past that does the navamsa matter — so a sign-only
+chart is told it needs the Moon's longitude, not that the yoga is absent.
+
+The body spells it "vargottamamsa" and the footnote "vargottamaamsa"; the
+footnote is the definition, so its spelling leads and both are recorded in
+`VARGOTTAMAAMSA_SPELLINGS`.

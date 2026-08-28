@@ -1674,10 +1674,6 @@ CHART_10_BIRTH_FOOTNOTE = (
 CHART_10_OLD_CALENDAR_DATE = "November 24, 1542"
 CHART_10_TIME_IS_LMT = True
 
-#: Footnote 40 defines vargottamamsa and was not supplied. Yoga (15) turns on
-#: it, so that clause is not decided. See docs/open-items.md OI-92.
-VARGOTTAMAMSA_FOOTNOTE_UNREAD = "40"
-
 #: §11.7.3 (7) names the six shadvarga charts in words.
 SHADVARGA_NAMED_IN_11_7_3: tuple[str, ...] = (
     "Rasi", "Navamsa", "Hora", "Drekkana", "Dwadasamsa", "Trimsamsa")
@@ -1820,3 +1816,149 @@ ADVANCED_RAAJA_STRENGTH_NOT_ASSESSED = (
     "Section 11.7.3 requires this planet to be strong. Strength is not "
     "computed — chapter 15's simple-rules measure is not built — so this "
     "verdict reports the placements only. See docs/open-items.md OI-81.")
+
+
+#: Footnote 40, supplied with §11.8. It closes what §11.7.3 (15) left open.
+VARGOTTAMAAMSA_DEFINITION = (
+    "A planet is in vargottamaamsa if it occupies the same sign in Rasi and "
+    "Navamsa charts.")
+
+#: §11.7.3's body spells it "vargottamamsa"; footnote 40 spells it
+#: "vargottamaamsa". The footnote is the definition, so its spelling leads.
+VARGOTTAMAAMSA_SPELLINGS: tuple[str, ...] = (
+    "vargottamaamsa", "vargottamamsa")
+
+
+# --------------------------------------------------------------------------
+# 11.8 Raaja Sambandha Yogas
+# --------------------------------------------------------------------------
+
+SAMBANDHA_MEANS = "relation or association"
+
+RAAJA_SAMBANDHA_INTRO = (
+    "Raaja means a king. Sambandha means relation or association. Raaja "
+    "sambandha yogas are the combinations that give association with rulers. "
+    "Those who have these yogas are typically powerful ministers, "
+    "secretaries, counsellors and bureaucrats, associated with the rulers and "
+    "powerful men. However, these yogas are very common. The magnitude of "
+    "success depends on the strength of the planets involved in raja yoga.")
+
+#: The section says so itself, before listing a single one.
+RAAJA_SAMBANDHA_ARE_COMMON = "However, these yogas are very common."
+
+#: And it sends the reader back to §11.7.2 for how far one goes.
+RAAJA_SAMBANDHA_MAGNITUDE_RULE = (
+    "The magnitude of success depends on the strength of the planets involved "
+    "in raja yoga.")
+
+#: The chara karakas §11.8 names in full, with the spellings it uses.
+SAMBANDHA_KARAKA_NAMES: dict[str, str] = {
+    "AK": "chara aatma kaaraka",
+    "AmK": "chara amaatya kaaraka",
+}
+
+RAAJA_SAMBANDHA_YOGAS: tuple[dict, ...] = (
+    {"number": 1, "key": "sambandha_tenth_lord_amk",
+     "name": "Raaja Sambandha Yoga (11.8 #1) — 10th lord reached by AmK",
+     "definition": ("If the 10th lord is conjoined or aspected by AmK (chara "
+                    "amaatya kaaraka) or his dispositor, one becomes an "
+                    "important person in the court of a king."),
+     "result": "one becomes an important person in the court of a king",
+     "needs_karakas": True},
+    {"number": 2, "key": "sambandha_eleventh_lord_unafflicted",
+     "name": "Raaja Sambandha Yoga (11.8 #2) — an unafflicted 10th and 11th",
+     "definition": ("If the 11th lord aspects the 11th house and there are no "
+                    "malefic planets joining or aspecting the 10th and 11th "
+                    "houses, one becomes an important person in the court of "
+                    "a king."),
+     "result": "one becomes an important person in the court of a king"},
+    {"number": 3, "key": "sambandha_ak_amk_conjoin",
+     "name": "Raaja Sambandha Yoga (11.8 #3) — AK and AmK conjoined",
+     "definition": ("If AK (chara aatma kaaraka) and AmK conjoin, one is very "
+                    "intelligent and becomes a minister."),
+     "result": "one is very intelligent and becomes a minister",
+     "needs_karakas": True},
+    {"number": 4, "key": "sambandha_amk_dignified",
+     "name": "Raaja Sambandha Yoga (11.8 #4) — a dignified AmK",
+     "definition": ("If AmK is very strong in own sign or his exaltation "
+                    "sign, then also one becomes a minister."),
+     "result": "one becomes a minister",
+     "strength": ("AmK",), "needs_karakas": True},
+    {"number": 5, "key": "sambandha_amk_in_a_trine",
+     "name": "Raaja Sambandha Yoga (11.8 #5) — AmK in a trine from lagna",
+     "definition": ("If AmK is in a trine from lagna, one becomes a famous "
+                    "minister."),
+     "result": "one becomes a famous minister", "needs_karakas": True},
+    {"number": 6, "key": "sambandha_amk_from_ak",
+     "name": ("Raaja Sambandha Yoga (11.8 #6) — AmK in a quadrant or trine "
+              "from AK"),
+     "definition": ("If AmK is in a quadrant or a trine from AK, one is an "
+                    "associate liked by a king."),
+     "result": "one is an associate liked by a king", "needs_karakas": True},
+    {"number": 7, "key": "sambandha_malefics_from_three",
+     "name": ("Raaja Sambandha Yoga (11.8 #7) — malefics in the 3rd and 6th "
+              "from lagna, AL and AK"),
+     "definition": ("If malefics occupy the 3rd and 6th houses from lagna, AL "
+                    "and AK, then one becomes a powerful chief of army."),
+     "result": "one becomes a powerful chief of army",
+     "emphasis": ("The book italicises the “and” in “lagna, AL and AK”, so "
+                  "all three references are meant, not any one of them."),
+     "needs_karakas": True, "needs_arudha": True},
+    {"number": 8, "key": "sambandha_ak_dignified_and_ninth_lord",
+     "name": ("Raaja Sambandha Yoga (11.8 #8) — a dignified AK reaching the "
+              "9th lord"),
+     "definition": ("If AK is in an own or exaltation sign in a quadrant or a "
+                    "trine and the 9th lord is conjoined or aspected by AK, "
+                    "one becomes a minister."),
+     "result": "one becomes a minister", "needs_karakas": True},
+    {"number": 9, "key": "sambandha_ak_is_moons_dispositor",
+     "name": ("Raaja Sambandha Yoga (11.8 #9) — AK as Moon's dispositor in "
+              "lagna"),
+     "definition": ("If AK happens to be Moon's dispositor and he occupies "
+                    "lagna along with a benefic, one becomes a minister at an "
+                    "old age."),
+     "result": "one becomes a minister at an old age", "needs_karakas": True},
+    {"number": 10, "key": "sambandha_ak_with_a_benefic",
+     "name": ("Raaja Sambandha Yoga (11.8 #10) — AK with a benefic in the "
+              "5th, 7th, 9th or 10th"),
+     "definition": ("If AK is in the 5th, 7th, 9th or 10th houses with a "
+                    "benefic, one will be associated with kings and earn "
+                    "money thus."),
+     "result": "one will be associated with kings and earn money thus",
+     "needs_karakas": True},
+    {"number": 11, "key": "sambandha_bhagyapada_or_ak_in_ninth",
+     "name": ("Raaja Sambandha Yoga (11.8 #11) — bhagyapada in lagna, or AK "
+              "in the 9th"),
+     "definition": ("If bhagyapada (A9 – arudha pada of the 9th house) is in "
+                    "lagna or AK is in 9th, one is fortunate and associates "
+                    "with kings."),
+     "result": "one is fortunate and associates with kings",
+     "needs_karakas": True, "needs_arudha": True},
+    {"number": 12, "key": "sambandha_eleventh_lord_and_ak",
+     "name": ("Raaja Sambandha Yoga (11.8 #12) — the 11th lord unafflicted "
+              "and AK with benefics"),
+     "definition": ("If the 11th lord is in the 11th house without aspects "
+                    "from any malefics and AK is with benefics, then one has "
+                    "gains from a king."),
+     "result": "one has gains from a king", "needs_karakas": True},
+    {"number": 13, "key": "sambandha_first_tenth_exchange",
+     "name": ("Raaja Sambandha Yoga (11.8 #13) — the lagna and 10th lords "
+              "exchanged"),
+     "definition": ("If lagna lord is in the 10th house and the 10th lord is "
+                    "in lagna, one is powerful and associated with kings."),
+     "result": "one is powerful and associated with kings"},
+    {"number": 14, "key": "sambandha_moon_venus_from_ak",
+     "name": ("Raaja Sambandha Yoga (11.8 #14) — Moon and Venus in the 4th "
+              "from AK"),
+     "definition": ("If Moon and Venus are in the 4th house from AK, one is "
+                    "endowed with royal insignia."),
+     "result": "one is endowed with royal insignia", "needs_karakas": True},
+    {"number": 15, "key": "sambandha_fifth_lord_joined",
+     "name": ("Raaja Sambandha Yoga (11.8 #15) — the 5th lord joined in a "
+              "quadrant or trine"),
+     "definition": ("If lagna lord or AK conjoins the 5th lord in a quadrant "
+                    "or a trine, one becomes a king's friend."),
+     "result": "one becomes a king's friend", "needs_karakas": True},
+)
+
+RAAJA_SAMBANDHA_COUNT = len(RAAJA_SAMBANDHA_YOGAS)

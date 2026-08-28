@@ -319,8 +319,35 @@
     "raaja_lagna_note": "\u201cLagna can be taken as a quadrant or a trine here. It is both.\u201d So the lagna lord is counted on both sides of every pairing.",
     "raaja_means": "a king",
     "raaja_orb_footnote": "Anything greater than 5 or 6 degrees is too large for a Raaja Yoga to give its full results.",
+    "raaja_sambandha_are_common": "However, these yogas are very common.",
+    "raaja_sambandha_count": 15,
+    "raaja_sambandha_intro": "Raaja means a king. Sambandha means relation or association. Raaja sambandha yogas are the combinations that give association with rulers. Those who have these yogas are typically powerful ministers, secretaries, counsellors and bureaucrats, associated with the rulers and powerful men. However, these yogas are very common. The magnitude of success depends on the strength of the planets involved in raja yoga.",
+    "raaja_sambandha_magnitude_rule": "The magnitude of success depends on the strength of the planets involved in raja yoga.",
+    "raaja_sambandha_note": "Section 11.8 warns about itself before listing one: \u201cthese yogas are very common\u201d. Every verdict in the group carries that sentence and the section\u2019s own pointer back to section 11.7.2, so a present verdict here is never read as weighing the same as one from section 11.7.",
+    "raaja_sambandha_numbering": {
+      "sambandha_ak_amk_conjoin": 3,
+      "sambandha_ak_dignified_and_ninth_lord": 8,
+      "sambandha_ak_is_moons_dispositor": 9,
+      "sambandha_ak_with_a_benefic": 10,
+      "sambandha_amk_dignified": 4,
+      "sambandha_amk_from_ak": 6,
+      "sambandha_amk_in_a_trine": 5,
+      "sambandha_bhagyapada_or_ak_in_ninth": 11,
+      "sambandha_eleventh_lord_and_ak": 12,
+      "sambandha_eleventh_lord_unafflicted": 2,
+      "sambandha_fifth_lord_joined": 15,
+      "sambandha_first_tenth_exchange": 13,
+      "sambandha_malefics_from_three": 7,
+      "sambandha_moon_venus_from_ak": 14,
+      "sambandha_tenth_lord_amk": 1
+    },
     "ravi_intro": "Ravi yogas are the solar combinations. There are several yogas based on Sun.",
     "results_note": "The results each yoga gives are PVR's own prose and are withheld from this response under the licence gate of OI-12.",
+    "sambandha_karaka_names": {
+      "AK": "chara aatma kaaraka",
+      "AmK": "chara amaatya kaaraka"
+    },
+    "sambandha_means": "relation or association",
     "sankhya_basis": "Sankhya yogas are based on the number of distinct signs occupied by the seven planets combined. Rahu and Ketu are not included.",
     "sankhya_excludes_nodes": "Rahu and Ketu are not included.",
     "sankhya_is_a_fallback": "These yogas apply if no other Naabhasa yogas mentioned previously are applicable in a chart. These are the least important of all Naabhasa yogas.",
@@ -373,7 +400,11 @@
       "Navamsa",
       "Drekkana"
     ],
-    "vargottamamsa_footnote_unread": "40",
+    "vargottamaamsa_definition": "A planet is in vargottamaamsa if it occupies the same sign in Rasi and Navamsa charts.",
+    "vargottamaamsa_spellings": [
+      "vargottamaamsa",
+      "vargottamamsa"
+    ],
     "vasumati_reference_note": "Vasumati says only \u201cbenefics occupy upachayas\u201d, naming no reference and no count. Houses are counted from lagna, as everywhere else in section 11.6, and one benefic in an upachaya is enough; a verdict says how many benefics sit outside them so a stricter reading stays available. See docs/open-items.md OI-84.",
     "vipareeta_ideal_case": "In the ideal case, the lords of the 6th, 8th and 12th houses will all be together in one of the three houses (or the 3rd house or the 11th house), with no other planets conjoining them. But the results of this yoga may be experienced with just one or two dusthana lords occupying a dusthana.",
     "vipareeta_ideal_houses": [

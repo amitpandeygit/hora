@@ -1,6 +1,6 @@
 {
   "body": {
-    "count": 115,
+    "count": 130,
     "groups": [
       "naabhasa_aakriti",
       "chandra",
@@ -10,6 +10,7 @@
       "popular",
       "raaja",
       "raaja_advanced",
+      "raaja_sambandha",
       "ravi",
       "naabhasa_sankhya"
     ],
@@ -958,6 +959,141 @@
         "key": "raaja_benefics_in_quadrants",
         "name": "Raaja Yoga (11.7.3 #17) \u2014 benefics in quadrants, malefics in 3/6/11",
         "section": "11.7.3"
+      },
+      {
+        "aliases": [],
+        "definition": "If the 10th lord is conjoined or aspected by AmK (chara amaatya kaaraka) or his dispositor, one becomes an important person in the court of a king.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_tenth_lord_amk",
+        "name": "Raaja Sambandha Yoga (11.8 #1) \u2014 10th lord reached by AmK",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If the 11th lord aspects the 11th house and there are no malefic planets joining or aspecting the 10th and 11th houses, one becomes an important person in the court of a king.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_eleventh_lord_unafflicted",
+        "name": "Raaja Sambandha Yoga (11.8 #2) \u2014 an unafflicted 10th and 11th",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If AK (chara aatma kaaraka) and AmK conjoin, one is very intelligent and becomes a minister.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_ak_amk_conjoin",
+        "name": "Raaja Sambandha Yoga (11.8 #3) \u2014 AK and AmK conjoined",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If AmK is very strong in own sign or his exaltation sign, then also one becomes a minister.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_amk_dignified",
+        "name": "Raaja Sambandha Yoga (11.8 #4) \u2014 a dignified AmK",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If AmK is in a trine from lagna, one becomes a famous minister.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_amk_in_a_trine",
+        "name": "Raaja Sambandha Yoga (11.8 #5) \u2014 AmK in a trine from lagna",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If AmK is in a quadrant or a trine from AK, one is an associate liked by a king.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_amk_from_ak",
+        "name": "Raaja Sambandha Yoga (11.8 #6) \u2014 AmK in a quadrant or trine from AK",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If malefics occupy the 3rd and 6th houses from lagna, AL and AK, then one becomes a powerful chief of army.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_malefics_from_three",
+        "name": "Raaja Sambandha Yoga (11.8 #7) \u2014 malefics in the 3rd and 6th from lagna, AL and AK",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If AK is in an own or exaltation sign in a quadrant or a trine and the 9th lord is conjoined or aspected by AK, one becomes a minister.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_ak_dignified_and_ninth_lord",
+        "name": "Raaja Sambandha Yoga (11.8 #8) \u2014 a dignified AK reaching the 9th lord",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If AK happens to be Moon's dispositor and he occupies lagna along with a benefic, one becomes a minister at an old age.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_ak_is_moons_dispositor",
+        "name": "Raaja Sambandha Yoga (11.8 #9) \u2014 AK as Moon's dispositor in lagna",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If AK is in the 5th, 7th, 9th or 10th houses with a benefic, one will be associated with kings and earn money thus.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_ak_with_a_benefic",
+        "name": "Raaja Sambandha Yoga (11.8 #10) \u2014 AK with a benefic in the 5th, 7th, 9th or 10th",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If bhagyapada (A9 \u2013 arudha pada of the 9th house) is in lagna or AK is in 9th, one is fortunate and associates with kings.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_bhagyapada_or_ak_in_ninth",
+        "name": "Raaja Sambandha Yoga (11.8 #11) \u2014 bhagyapada in lagna, or AK in the 9th",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If the 11th lord is in the 11th house without aspects from any malefics and AK is with benefics, then one has gains from a king.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_eleventh_lord_and_ak",
+        "name": "Raaja Sambandha Yoga (11.8 #12) \u2014 the 11th lord unafflicted and AK with benefics",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If lagna lord is in the 10th house and the 10th lord is in lagna, one is powerful and associated with kings.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_first_tenth_exchange",
+        "name": "Raaja Sambandha Yoga (11.8 #13) \u2014 the lagna and 10th lords exchanged",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If Moon and Venus are in the 4th house from AK, one is endowed with royal insignia.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_moon_venus_from_ak",
+        "name": "Raaja Sambandha Yoga (11.8 #14) \u2014 Moon and Venus in the 4th from AK",
+        "section": "11.8"
+      },
+      {
+        "aliases": [],
+        "definition": "If lagna lord or AK conjoins the 5th lord in a quadrant or a trine, one becomes a king's friend.",
+        "group": "raaja_sambandha",
+        "implies": [],
+        "key": "sambandha_fifth_lord_joined",
+        "name": "Raaja Sambandha Yoga (11.8 #15) \u2014 the 5th lord joined in a quadrant or trine",
+        "section": "11.8"
       },
       {
         "aliases": [],

@@ -121,6 +121,11 @@ from hora.core.const import (
     RAAJA_MEANS,
     RAAJA_ORB_EXAMPLE,
     RAAJA_ORB_FOOTNOTE,
+    RAAJA_SAMBANDHA_ARE_COMMON,
+    RAAJA_SAMBANDHA_COUNT,
+    RAAJA_SAMBANDHA_INTRO,
+    RAAJA_SAMBANDHA_MAGNITUDE_RULE,
+    RAAJA_SAMBANDHA_YOGAS,
     RAAJA_YOGA_COUNT,
     RAAJA_YOGA_INTRO,
     RAAJA_YOGAS,
@@ -130,6 +135,8 @@ from hora.core.const import (
     RAVI_YOGA_INTRO,
     RAVI_YOGA_PREFERRED_CHARTS,
     RAVI_YOGAS,
+    SAMBANDHA_KARAKA_NAMES,
+    SAMBANDHA_MEANS,
     SANKHYA_BASIS,
     SANKHYA_EXAMPLE,
     SANKHYA_EXCLUDES_NODES,
@@ -151,7 +158,7 @@ from hora.core.const import (
     TRIMURTHI_YOGAS,
     TRIVARGA_NAMED_IN_11_7_3,
     UPACHAYA,
-    VARGOTTAMAMSA_FOOTNOTE_UNREAD,
+    VARGOTTAMAAMSA_DEFINITION,
     VIPAREETA_IDEAL_HOUSES,
     VIPAREETA_MEANS,
     WEAKENED_YOGA_IS_NOT_APPLICABLE,
@@ -660,7 +667,7 @@ def test_catalogue_lists_every_yoga_without_a_chart(client):
     assert set(body["groups"]) == {
         "ravi", "chandra", "mahapurusha", "naabhasa_aasraya",
         "naabhasa_dala", "naabhasa_aakriti", "naabhasa_sankhya", "popular",
-        "raaja", "raaja_advanced"}
+        "raaja", "raaja_advanced", "raaja_sambandha"}
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -3465,8 +3472,10 @@ def test_every_yoga_chart_9_actually_has():
     """Five of the sixty-five, across four sections. Pinned so a later change
     to any detector has to account for this chart."""
     present = {v.key for v in evaluate(_chart_9()) if v.present}
-    assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma",
-                       "raaja_basic", "raaja_malefics_from_lord_and_ak"}
+    assert present == {
+        "vesi", "sunaphaa", "adhi", "daama", "kalpadruma", "raaja_basic",
+        "raaja_malefics_from_lord_and_ak", "sambandha_tenth_lord_amk",
+        "sambandha_bhagyapada_or_ak_in_ninth", "sambandha_fifth_lord_joined"}
 
 
 def test_chart_9_is_a_daama_yoga_like_ramas():
@@ -4125,8 +4134,10 @@ def test_shivaji_has_none_of_the_thirty():
 
 def test_chart_9s_full_verdict_is_still_the_same_five():
     present = {v.key for v in evaluate(_chart_9()) if v.present}
-    assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma",
-                       "raaja_basic", "raaja_malefics_from_lord_and_ak"}
+    assert present == {
+        "vesi", "sunaphaa", "adhi", "daama", "kalpadruma", "raaja_basic",
+        "raaja_malefics_from_lord_and_ak", "sambandha_tenth_lord_amk",
+        "sambandha_bhagyapada_or_ak_in_ninth", "sambandha_fifth_lord_joined"}
 
 
 # --- what the thirty find in the two charts the book gives -------------------
@@ -5380,18 +5391,43 @@ def test_14_holds_for_akbar():
     assert "the lagna lord Venus joins him" in verdict.reason
 
 
-def test_15_cannot_be_decided_because_footnote_40_was_not_supplied():
-    """Clause (b) is computed anyway, so what is known is not lost with what
-    is not. See OI-92."""
-    assert VARGOTTAMAMSA_FOOTNOTE_UNREAD == "40"
-    data = _pl("Ar", paksha=0, MOON=_deg("Ar"), SUN=_deg("Li"),
+def test_15_is_decidable_now_that_footnote_40_is_supplied():
+    """"A planet is in vargottamaamsa if it occupies the same sign in Rasi
+    and Navamsa charts." Printed with §11.8, and it closes OI-92."""
+    assert "same sign in Rasi and Navamsa" in VARGOTTAMAAMSA_DEFINITION
+    from hora.charts.planetary_yogas.raaja_advanced import vargottama
+
+    # Aries 1.5° is in Aries navamsa too — the first navamsa of a movable
+    # sign is the sign itself.
+    data = _pl("Ar", paksha=0, MOON=_deg("Ar", 1.5), SUN=_deg("Li"),
+               MARS=_deg("Li"), JUPITER=_deg("Sg"), SATURN=_deg("Aq"),
+               VENUS=_deg("Li"))
+    assert vargottama(data, int(Graha.MOON)) is True
+    verdict = evaluate_one("raaja_vargottama_moon", data)
+    assert verdict.present is True
+    assert "vargottamaamsa" in verdict.reason
+
+
+def test_15_names_the_navamsa_sign_when_the_moon_is_not_vargottama():
+    data = _pl("Ar", paksha=0, MOON=_deg("Ar", 25), SUN=_deg("Li"),
                MARS=_deg("Li"), JUPITER=_deg("Sg"), SATURN=_deg("Aq"),
                VENUS=_deg("Li"))
     verdict = evaluate_one("raaja_vargottama_moon", data)
     assert verdict.present is False
-    assert "satisfies clause (b)" in verdict.reason
-    assert "vargottamamsa" in verdict.reason
-    assert "OI-92" in verdict.reason
+    assert "not in vargottamaamsa" in verdict.reason
+
+
+def test_15_still_needs_longitudes_for_the_moon():
+    """Vargottamaamsa is a navamsa test, so a sign-only chart cannot answer
+    it — but only once clause (b) has already passed."""
+    data = YogaInput(
+        rasis={int(Graha.MOON): R["Ar"], int(Graha.SUN): R["Li"],
+               int(Graha.MARS): R["Li"], int(Graha.JUPITER): R["Sg"],
+               int(Graha.SATURN): R["Aq"], int(Graha.VENUS): R["Li"]},
+        lagna_rasi=R["Ar"], paksha=0)
+    verdict = evaluate_one("raaja_vargottama_moon", data)
+    assert verdict.present is False
+    assert "no longitude was supplied for Moon" in verdict.reason
 
 
 def test_15_is_a_plain_absence_when_clause_b_already_fails():
@@ -5498,7 +5534,7 @@ def test_the_rules_endpoint_carries_section_11_7_3(client):
     assert body["advanced_raaja_numbering"]["raaja_pk_ak_and_lords"] == 1
     assert body["advanced_raaja_numbering"]["raaja_benefics_in_quadrants"] == 17
     assert body["shadvarga_named_in_11_7_3"][0] == "Rasi"
-    assert body["vargottamamsa_footnote_unread"] == "40"
+    assert "same sign in Rasi and Navamsa" in body["vargottamaamsa_definition"]
     assert "5 or 6 degrees" in body["raaja_orb_footnote"]
     assert "never among them" in body["arudha_effectiveness_note"]
 
@@ -5538,3 +5574,195 @@ def test_the_magnitude_endpoint_accepts_hl_gl_and_a_lagna_longitude(client):
                 if {p["quadrant_lord_name"], p["trine_lord_name"]}
                 == {"Venus", "Saturn"})
     assert pair["orb_degrees"] == pytest.approx(0.70, abs=0.01)
+
+
+# --------------------------------------------------------------------------
+# 11.8 Raaja Sambandha Yogas
+#
+# Fifteen combinations that "give association with rulers" — and a section
+# that warns about itself: "these yogas are very common."
+# --------------------------------------------------------------------------
+
+
+def _sambandha_numbers() -> dict[int, str]:
+    return {e["number"]: e["key"] for e in RAAJA_SAMBANDHA_YOGAS}
+
+
+def test_fifteen_sambandha_yogas_are_registered():
+    assert RAAJA_SAMBANDHA_COUNT == 15
+    assert [e["number"] for e in RAAJA_SAMBANDHA_YOGAS] == list(range(1, 16))
+    for entry in RAAJA_SAMBANDHA_YOGAS:
+        spec = YOGA_REGISTRY[entry["key"]]
+        assert spec.section == "11.8"
+        assert spec.group == "raaja_sambandha"
+
+
+def test_the_section_says_what_it_is_and_what_it_is_worth():
+    assert SAMBANDHA_MEANS == "relation or association"
+    assert "association with rulers" in RAAJA_SAMBANDHA_INTRO
+    assert "ministers, secretaries, counsellors and bureaucrats" in \
+        RAAJA_SAMBANDHA_INTRO
+    assert RAAJA_SAMBANDHA_ARE_COMMON == "However, these yogas are very common."
+    assert "strength of the planets" in RAAJA_SAMBANDHA_MAGNITUDE_RULE
+
+
+def test_every_sambandha_verdict_carries_the_commonness_warning():
+    """The section says it of itself before listing one, so a caller weighing
+    a present verdict here should see it — present or absent."""
+    keys = {e["key"] for e in RAAJA_SAMBANDHA_YOGAS}
+    for verdict in evaluate(_akbar()):
+        if verdict.key in keys:
+            assert any("very common" in q for q in verdict.qualifiers), verdict.key
+            assert any("11.7.2" in q for q in verdict.qualifiers), verdict.key
+
+
+def test_the_two_karakas_the_section_names_in_full():
+    assert SAMBANDHA_KARAKA_NAMES == {
+        "AK": "chara aatma kaaraka", "AmK": "chara amaatya kaaraka"}
+
+
+@pytest.mark.parametrize("number", [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15])
+def test_the_sambandha_karaka_yogas_say_so_without_longitudes(number):
+    """Thirteen of the fifteen name AK or AmK, and two of those need an
+    arudha as well. None of them guesses."""
+    verdict = evaluate_one(_sambandha_numbers()[number], _rama())
+    assert verdict.present is False
+    assert "cannot be decided" in verdict.reason
+
+
+@pytest.mark.parametrize("number", [2, 13])
+def test_the_two_sambandha_yogas_that_need_only_signs_are_answered(number):
+    verdict = evaluate_one(_sambandha_numbers()[number], _rama())
+    assert "cannot be decided" not in verdict.reason
+
+
+# --- Akbar's five, one at a time --------------------------------------------
+
+
+def test_1_accepts_amks_dispositor_as_well_as_amk():
+    """"conjoined or aspected by AmK ... or his dispositor" — two reachers.
+    Shivaji's is the dispositor, not AmK himself."""
+    verdict = evaluate_one("sambandha_tenth_lord_amk", _chart_9())
+    assert verdict.present is True
+    assert "AmK's dispositor Saturn by aspect" in verdict.reason
+
+
+def test_3_ak_and_amk_conjoin_for_akbar():
+    verdict = evaluate_one("sambandha_ak_amk_conjoin", _akbar())
+    assert verdict.present is True
+    assert "AK Venus and AmK Saturn conjoin in Libra" in verdict.reason
+
+
+def test_3_needs_two_planets():
+    """AK and AmK are different karakas but could fall on one graha only if
+    the assignment were broken; the guard says so rather than reporting a
+    self-conjunction."""
+    entry = next(e for e in RAAJA_SAMBANDHA_YOGAS if e["number"] == 3)
+    assert "AK (chara aatma kaaraka) and AmK conjoin" in entry["definition"]
+
+
+def test_4_is_a_placement_test_with_the_strength_left_open():
+    """"If AmK is **very strong** in own sign or his exaltation sign" — the
+    placement is computed, the strength is not."""
+    verdict = evaluate_one("sambandha_amk_dignified", _akbar())
+    assert verdict.present is True
+    assert "his exaltation sign, Libra" in verdict.reason
+    assert any("very strong" in q for q in verdict.qualifiers)
+
+
+def test_5_and_6_are_different_references():
+    """(5) counts the trine from lagna; (6) counts from AK. Akbar satisfies
+    both, and each verdict names which reference it used."""
+    from_lagna = evaluate_one("sambandha_amk_in_a_trine", _akbar())
+    from_ak = evaluate_one("sambandha_amk_from_ak", _akbar())
+    assert from_lagna.present is True
+    assert "a trine from lagna" in from_lagna.reason
+    assert from_ak.present is True
+    assert "from AK Venus" in from_ak.reason
+
+
+def test_15_needs_the_meeting_to_be_in_a_quadrant_or_trine():
+    """"conjoins the 5th lord **in a quadrant or a trine**" — the sign they
+    meet in, not merely the joining planet."""
+    verdict = evaluate_one("sambandha_fifth_lord_joined", _akbar())
+    assert verdict.present is True
+    assert "conjoins the 5th lord Saturn in the 1st" in verdict.reason
+
+
+def test_15_holds_for_shivaji_through_the_same_conjunction_as_his_raaja_yoga():
+    """The Sun and Jupiter in Aquarius: §11.7.1 reads them as lagna lord with
+    5th lord, and §11.8 (15) reads the same pair."""
+    verdict = evaluate_one("sambandha_fifth_lord_joined", _chart_9())
+    assert verdict.present is True
+    assert "the lagna lord Sun conjoins the 5th lord Jupiter in the 7th" \
+        in verdict.reason
+
+
+def test_akbar_has_exactly_five_of_the_fifteen():
+    keys = {e["key"] for e in RAAJA_SAMBANDHA_YOGAS}
+    present = {v.key for v in evaluate(_akbar()) if v.present and v.key in keys}
+    assert present == {
+        "sambandha_ak_amk_conjoin", "sambandha_amk_dignified",
+        "sambandha_amk_in_a_trine", "sambandha_amk_from_ak",
+        "sambandha_fifth_lord_joined"}
+
+
+# --- the readings that had to be chosen -------------------------------------
+
+
+def test_7_counts_from_all_three_references():
+    """"the 3rd and 6th houses from lagna, AL *and* AK" — the book italicises
+    the "and", so six houses are checked, not two."""
+    entry = next(e for e in RAAJA_SAMBANDHA_YOGAS if e["number"] == 7)
+    assert "all three references are meant" in entry["emphasis"]
+    verdict = evaluate_one("sambandha_malefics_from_three", _akbar())
+    assert verdict.present is False
+    assert "from lagna" in verdict.reason
+
+
+def test_11_is_satisfied_by_either_half():
+    """"If bhagyapada is in lagna **or** AK is in 9th". Shivaji has the
+    first."""
+    verdict = evaluate_one("sambandha_bhagyapada_or_ak_in_ninth", _chart_9())
+    assert verdict.present is True
+    assert "bhagyapada (A9) is in lagna" in verdict.reason
+
+
+def test_12_reports_how_many_benefics_are_with_ak():
+    """"AK is with benefics" is plural and unquantified. One is taken to
+    satisfy it and the count is reported. See OI-95."""
+    verdict = evaluate_one("sambandha_eleventh_lord_and_ak", _akbar())
+    assert any("OI-95" in q for q in verdict.qualifiers)
+
+
+def test_13_is_the_same_exchange_11_7_3_asks_for_between_4_and_10():
+    """§11.8 (13) is the 1st/10th exchange; §11.7.3 (13) is the 4th/10th one
+    with an extra clause. Different yogas, and both registered."""
+    assert "lagna lord is in the 10th house and the 10th lord is in lagna" in \
+        next(e["definition"] for e in RAAJA_SAMBANDHA_YOGAS
+             if e["number"] == 13)
+    assert "4th lord is in the 10th house and the 10th lord is in the 4th" in \
+        next(e["definition"] for e in ADVANCED_RAAJA_YOGAS if e["number"] == 13)
+
+
+def test_the_rules_endpoint_carries_section_11_8(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["raaja_sambandha_count"] == 15
+    assert body["sambandha_means"] == "relation or association"
+    assert body["sambandha_karaka_names"]["AmK"] == "chara amaatya kaaraka"
+    assert body["raaja_sambandha_numbering"]["sambandha_tenth_lord_amk"] == 1
+    assert "very common" in body["raaja_sambandha_are_common"]
+    assert "11.7.2" in body["raaja_sambandha_note"]
+    assert "same sign in Rasi and Navamsa" in body["vargottamaamsa_definition"]
+    assert body["vargottamaamsa_spellings"][0] == "vargottamaamsa"
+
+
+def test_the_chart_endpoint_answers_all_one_hundred_and_thirty(client):
+    body = client.post("/v1/planetary-yoga/chart", json={
+        "lagna_rasi": R["Li"], "paksha": 1,
+        "rasis": {int(g): int(_lon9(CHART_10[name]) // 30)
+                  for name, g in _CHART_10_GRAHA.items()}}).json()
+    assert body["evaluated"] == len(YOGA_REGISTRY) == 130
+    assert len(body["yogas"]) == 130
+    for yoga in body["yogas"]:
+        assert yoga["reason"], yoga["key"]

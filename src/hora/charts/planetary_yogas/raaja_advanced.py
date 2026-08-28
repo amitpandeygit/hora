@@ -45,7 +45,6 @@ from hora.core.const import (
     MOOLATRIKONA,
     RASI_LORD,
     RASI_NAMES,
-    VARGOTTAMAMSA_FOOTNOTE_UNREAD,
     Graha,
 )
 
@@ -166,6 +165,16 @@ def in_moolatrikona_or_exaltation(data: YogaInput, graha: int) -> bool:
     if not data.positions or graha not in data.positions:
         return True
     return float(entry[1]) <= data.positions[graha].longitude % 30 < float(entry[2])
+
+
+def vargottama(data: YogaInput, graha: int) -> bool | None:
+    """Footnote 40: "the same sign in Rasi and Navamsa charts"."""
+    rasi = data.sign_of(graha)
+    if rasi is None:
+        return None
+    if not data.positions or graha not in data.positions:
+        return None
+    return varga(data.positions[graha].longitude, "D9").sign == rasi
 
 
 def varga_lagna_sign(data: YogaInput, code: str) -> int | None:
@@ -724,28 +733,40 @@ def _detect_14(data: YogaInput) -> YogaVerdict:
 
 
 def _detect_15(data: YogaInput) -> YogaVerdict:
-    """Clause (a) needs vargottamamsa, which footnote 40 defines and which was
-    not supplied. Clause (b) is computed anyway, so the gap is visible rather
-    than swallowing the whole yoga. See OI-92."""
+    """"Moon is strong and occupies vargottamamsa", and four or more aspects.
+
+    Footnote 40, supplied with §11.8, defines vargottamaamsa as the same sign
+    in rasi and navamsa — so this yoga is decidable now. Strength is still
+    chapter 15's and is not built; the verdict says so.
+    """
     key = "raaja_vargottama_moon"
     moon_sign = data.sign_of(MOON)
     if moon_sign is None:
         return _cannot(key, "Moon has no placement")
     aspecting = [g for g in sorted(data.rasis)
                  if g != MOON and graha_aspects_sign(g, data.rasis[g], moon_sign)]
-    clause_b = len(aspecting) >= 4
     detail = (f"{len(aspecting)} planets aspect Moon"
               + (f" ({', '.join(GRAHA_NAMES[g] for g in aspecting)})"
                  if aspecting else ""))
-    if not clause_b:
+    if len(aspecting) < 4:
         return _verdict(key, False,
                         f"{detail}; section 11.7.3 asks for four or more")
-    return _cannot(
-        key,
-        f"{detail}, which satisfies clause (b), but clause (a) asks for a "
-        f"vargottamamsa Moon and footnote "
-        f"{VARGOTTAMAMSA_FOOTNOTE_UNREAD} — which defines vargottamamsa — was "
-        f"not supplied. See docs/open-items.md OI-92")
+    same = vargottama(data, MOON)
+    if same is None:
+        return _cannot(key, f"{detail}, which satisfies clause (b), but "
+                            f"vargottamaamsa is the same sign in rasi and "
+                            f"navamsa and no longitude was supplied for Moon")
+    if not same:
+        navamsa = varga_sign(data, MOON, "D9")
+        return _verdict(key, False,
+                        f"{detail}, but Moon is not in vargottamaamsa — his "
+                        f"navamsa sign is "
+                        f"{RASI_NAMES[navamsa] if navamsa is not None else 'unknown'}, "
+                        f"not {RASI_NAMES[moon_sign]}")
+    return _verdict(key, True,
+                    f"Moon is in vargottamaamsa — {RASI_NAMES[moon_sign]} in "
+                    f"both rasi and navamsa — and {detail}",
+                    participants=(MOON, *aspecting))
 
 
 def _detect_16(data: YogaInput) -> YogaVerdict:

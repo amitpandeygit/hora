@@ -23,6 +23,7 @@ from hora.charts.planetary_yogas import popular as _popular  # noqa: F401
 from hora.charts.planetary_yogas import (
     popular_continued,  # noqa: F401
     raaja_advanced,  # noqa: F401
+    raaja_sambandha,  # noqa: F401
 )
 from hora.charts.planetary_yogas import raaja as _raaja  # noqa: F401
 from hora.charts.planetary_yogas import ravi as _ravi  # noqa: F401
