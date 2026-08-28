@@ -1109,3 +1109,39 @@ than tuned to fit.
 
 **What we do:** nothing changes. The count is computed from §6.6's own
 amsabala, which the same section's other five claims confirm.
+
+## D-37 · §11.9 (12) names no planet for the 11th house, so no chart can satisfy it
+
+**Status: recorded.** Reported undecidable, never absent. Not repaired.
+
+Every one of §11.9's twelve entries has the same first shape — a planet in the
+5th, and named planets in the 11th. Entry (12) is printed:
+
+> "If Moon is in the 5th house and in the 11th house, one becomes very
+> affluent."
+
+One planet cannot hold two houses, and no second planet is named. As printed
+the combination is unsatisfiable by any chart at all.
+
+**What the other eleven imply.** The structure of the list is exact, and was
+checked against all twelve lagnas rather than assumed:
+
+| | holds across |
+|---|---|
+| the first combination places the **5th lord** in the 5th house | all 12 |
+| the planets it wants in the 11th include the **11th lord** | all 11 that name any |
+| the second combination places the **lagna lord** in lagna | all 12 |
+
+For Pisces lagna the 11th is Capricorn, whose lord is **Saturn**. So the word
+the sentence lost was almost certainly "Saturn".
+
+**Not applied.** The inference is recorded in `DHANA_PISCES_LIKELY_MISSING` and
+served on `/rules`, and the verdict names it — but the yoga stays undecidable
+even on a chart that would satisfy the repaired rule, and a test asserts that.
+Repairing a printed rule from a pattern is exactly the kind of quiet
+substitution this project does not make.
+
+Only the first half of entry (12) is defective; its second combination —
+Jupiter in lagna reached by Mars and Mercury — is ordinary and is detected.
+
+**Closes when:** you confirm the missing planet, or a later printing settles it.

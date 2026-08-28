@@ -55,6 +55,16 @@ from hora.core.const import (
     CHART_10_TIME_IS_LMT,
     CHATURASRA,
     COMBUSTION_WEAKENS_YOGA,
+    DHANA_BASIC_PRINCIPLE,
+    DHANA_EXALTED_IN_SECOND,
+    DHANA_MEANS,
+    DHANA_PISCES_LIKELY_MISSING,
+    DHANA_PISCES_PRINTED,
+    DHANA_PRINTED_ODDITY,
+    DHANA_STRUCTURE,
+    DHANA_YOGA_COUNT,
+    DHANA_YOGA_INTRO,
+    DHANA_YOGAS,
     DHARMA_KARMADHIPATI_REASON,
     DHARMA_KARMADHIPATI_RESULTS_TRUNCATED,
     DHARMA_STHANA,
@@ -667,7 +677,7 @@ def test_catalogue_lists_every_yoga_without_a_chart(client):
     assert set(body["groups"]) == {
         "ravi", "chandra", "mahapurusha", "naabhasa_aasraya",
         "naabhasa_dala", "naabhasa_aakriti", "naabhasa_sankhya", "popular",
-        "raaja", "raaja_advanced", "raaja_sambandha"}
+        "raaja", "raaja_advanced", "raaja_sambandha", "dhana"}
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -5757,12 +5767,270 @@ def test_the_rules_endpoint_carries_section_11_8(client):
     assert body["vargottamaamsa_spellings"][0] == "vargottamaamsa"
 
 
-def test_the_chart_endpoint_answers_all_one_hundred_and_thirty(client):
+def test_the_chart_endpoint_answers_every_registered_yoga(client):
     body = client.post("/v1/planetary-yoga/chart", json={
         "lagna_rasi": R["Li"], "paksha": 1,
         "rasis": {int(g): int(_lon9(CHART_10[name]) // 30)
                   for name, g in _CHART_10_GRAHA.items()}}).json()
-    assert body["evaluated"] == len(YOGA_REGISTRY) == 130
-    assert len(body["yogas"]) == 130
+    assert body["evaluated"] == len(YOGA_REGISTRY) == 155
+    assert len(body["yogas"]) == 155
     for yoga in body["yogas"]:
         assert yoga["reason"], yoga["key"]
+
+
+# --------------------------------------------------------------------------
+# 11.9 Dhana Yogas
+#
+# Twelve lagna entries, each carrying two independent combinations, plus one
+# testable rule inside the Basic Principle. Registered as twenty-five.
+# --------------------------------------------------------------------------
+
+
+def test_the_basic_principle_is_transcribed():
+    assert DHANA_MEANS == "wealth"
+    assert "abundant riches" in DHANA_YOGA_INTRO
+    assert "5th and 9th lords" in DHANA_BASIC_PRINCIPLE
+    assert "11th house is also important" in DHANA_BASIC_PRINCIPLE
+    assert "2nd house is also important" in DHANA_BASIC_PRINCIPLE
+    assert DHANA_PRINTED_ODDITY in DHANA_BASIC_PRINCIPLE
+
+
+def test_the_printed_oddity_is_kept_as_printed():
+    """"They give dasas in their dasas." Transcribed as found; nothing is
+    computed from it."""
+    assert DHANA_PRINTED_ODDITY == "They give dasas in their dasas."
+
+
+def test_twelve_entries_become_twenty_five_registered_yogas():
+    """Each entry carries two independent combinations — the second
+    introduced with "then also" — so a caller is told which one a chart has.
+    The Basic Principle's exalted-benefic rule is the twenty-fifth."""
+    assert DHANA_YOGA_COUNT == 12
+    registered = {k for k, s in YOGA_REGISTRY.items() if s.group == "dhana"}
+    assert len(registered) == 25
+    for entry in DHANA_YOGAS:
+        for half in ("first", "second"):
+            key = f"dhana_{entry['lagna'].lower()}_{half}"
+            assert YOGA_REGISTRY[key].section == "11.9"
+            assert YOGA_REGISTRY[key].definition == entry[f"{half}_definition"]
+    assert "dhana_exalted_benefic_in_second" in registered
+
+
+# --- the structure, checked rather than assumed -----------------------------
+
+
+def test_every_first_combination_places_the_fifth_lord_in_the_fifth():
+    """Not asserted from the book — derived from its own twelve entries."""
+    for entry in DHANA_YOGAS:
+        lagna = R[entry["lagna"]]
+        fifth_lord = int(RASI_LORD[(lagna + 4) % 12])
+        assert int(getattr(Graha, entry["fifth"])) == fifth_lord, entry["lagna"]
+
+
+def test_every_eleventh_house_list_names_the_eleventh_lord():
+    """True of all eleven entries that name any planet. The twelfth names
+    none, which is the defect D-37 records."""
+    named = 0
+    for entry in DHANA_YOGAS:
+        if not entry["eleventh"]:
+            assert entry["lagna"] == "Pi"
+            continue
+        named += 1
+        lagna = R[entry["lagna"]]
+        eleventh_lord = int(RASI_LORD[(lagna + 10) % 12])
+        assert eleventh_lord in {int(getattr(Graha, n))
+                                 for n in entry["eleventh"]}, entry["lagna"]
+    assert named == 11
+
+
+def test_every_second_combination_places_the_lagna_lord_in_lagna():
+    for entry in DHANA_YOGAS:
+        lagna_lord = int(RASI_LORD[R[entry["lagna"]]])
+        assert int(getattr(Graha, entry["lagna_planet"])) == lagna_lord, \
+            entry["lagna"]
+
+
+def test_the_structure_is_served_as_three_statements():
+    assert len(DHANA_STRUCTURE) == 3
+    assert "5th lord in the 5th house" in DHANA_STRUCTURE[0]
+    assert "11th lord" in DHANA_STRUCTURE[1]
+    assert "lagna lord in lagna" in DHANA_STRUCTURE[2]
+
+
+def test_five_lagna_pairs_share_a_word_identical_first_sentence():
+    """The 5th and 11th lords repeat across lagnas, so five sentences are
+    duplicated. The signs they resolve to differ, which is why both entries
+    are kept rather than merged."""
+    pairs = [(a["lagna"], b["lagna"])
+             for i, a in enumerate(DHANA_YOGAS) for b in DHANA_YOGAS[i + 1:]
+             if a["first_definition"] == b["first_definition"]]
+    assert pairs == [("Ta", "Aq"), ("Ge", "Cp"), ("Cn", "Sg"),
+                     ("Le", "Sc"), ("Vi", "Li")]
+    virgo = next(e for e in DHANA_YOGAS if e["lagna"] == "Vi")
+    libra = next(e for e in DHANA_YOGAS if e["lagna"] == "Li")
+    assert virgo["first_definition"] == libra["first_definition"]
+    # Same words, different signs: Saturn's 5th is Capricorn for Virgo lagna
+    # and Aquarius for Libra.
+    assert (R["Vi"] + 4) % 12 == R["Cp"]
+    assert (R["Li"] + 4) % 12 == R["Aq"]
+
+
+# --- a combination belongs to one lagna -------------------------------------
+
+
+def test_a_combination_for_another_lagna_names_both():
+    """Not a bare absence — a verdict that would otherwise read as a finding
+    about the chart."""
+    verdict = evaluate_one("dhana_ar_first", _akbar())
+    assert verdict.present is False
+    assert "for Aries lagna" in verdict.reason
+    assert "chart's lagna is Libra" in verdict.reason
+
+
+def test_exactly_three_dhana_verdicts_apply_to_any_one_chart():
+    """Two for the chart's lagna, plus the Basic Principle's rule, which is
+    lagna-independent. The other twenty-two say which lagna they are for."""
+    keys = {k for k, s in YOGA_REGISTRY.items() if s.group == "dhana"}
+    applicable = [v for v in evaluate(_akbar())
+                  if v.key in keys and "is for" not in v.reason]
+    assert {v.key for v in applicable} == {
+        "dhana_li_first", "dhana_li_second", "dhana_exalted_benefic_in_second"}
+
+
+def test_a_dhana_verdict_without_a_lagna_says_so():
+    data = YogaInput(rasis={int(Graha.SUN): R["Ar"]})
+    verdict = evaluate_one("dhana_ar_first", data)
+    assert verdict.present is False
+    assert "no lagna was supplied" in verdict.reason
+
+
+# --- the two halves, on charts built for them -------------------------------
+
+
+def test_the_first_combination_for_aries_lagna():
+    """Sun (the 5th lord) in the 5th, and Saturn, Moon and Jupiter in the
+    11th — Leo and Aquarius for an Aries lagna."""
+    verdict = evaluate_one("dhana_ar_first", _pl(
+        "Ar", paksha=0, SUN=_deg("Le"), SATURN=_deg("Aq"),
+        MOON=_deg("Aq", 10), JUPITER=_deg("Aq", 20)))
+    assert verdict.present is True
+    assert "the 5th lord — holds the 5th" in verdict.reason
+
+
+def test_the_first_combination_names_each_planet_out_of_place():
+    verdict = evaluate_one("dhana_ar_first", _pl(
+        "Ar", paksha=0, SUN=_deg("Le"), SATURN=_deg("Aq"), MOON=_deg("Ta")))
+    assert verdict.present is False
+    assert "Moon is not in the 11th house" in verdict.reason
+    assert "Jupiter is not in the 11th house" in verdict.reason
+
+
+def test_the_second_combination_accepts_a_join_or_an_aspect():
+    """"conjoined or aspected by Mercury and Saturn" — Taurus lagna, Venus in
+    lagna, Mercury joining and Saturn aspecting from the 7th."""
+    verdict = evaluate_one("dhana_ta_second", _pl(
+        "Ta", paksha=0, VENUS=_deg("Ta"), MERCURY=_deg("Ta", 20),
+        SATURN=_deg("Sc")))
+    assert verdict.present is True
+    assert "Mercury joins him" in verdict.reason
+    assert "Saturn aspects him" in verdict.reason
+
+
+def test_the_second_combination_needs_every_named_planet():
+    verdict = evaluate_one("dhana_ta_second", _pl(
+        "Ta", paksha=0, VENUS=_deg("Ta"), MERCURY=_deg("Ta", 20),
+        SATURN=_deg("Ge")))
+    assert verdict.present is False
+    assert "Saturn neither joins nor aspects lagna" in verdict.reason
+
+
+# --- entry (12), which no chart can satisfy ---------------------------------
+
+
+def test_the_pisces_entry_is_undecidable_not_absent():
+    """"If Moon is in the 5th house and in the 11th house" names no planet
+    for the 11th. See D-37."""
+    assert DHANA_PISCES_PRINTED == (
+        "If Moon is in the 5th house and in the 11th house, one becomes very "
+        "affluent.")
+    verdict = evaluate_one("dhana_pi_first", _pl(
+        "Pi", paksha=0, MOON=_deg("Cn"), SATURN=_deg("Cp")))
+    assert verdict.present is False
+    assert "cannot be decided" in verdict.reason
+    assert "names no planet for the 11th" in verdict.reason
+    assert "D-37" in verdict.reason
+
+
+def test_what_the_other_eleven_imply_was_dropped_is_recorded_not_applied():
+    """The 11th lord for Pisces lagna is Saturn, and every other entry names
+    its 11th lord. Recorded as an inference; the yoga stays undecidable even
+    on a chart that would satisfy the repaired rule."""
+    assert DHANA_PISCES_LIKELY_MISSING == "Saturn"
+    assert int(RASI_LORD[(R["Pi"] + 10) % 12]) == int(Graha.SATURN)
+    repaired = _pl("Pi", paksha=0, MOON=_deg("Cn"), SATURN=_deg("Cp"))
+    assert evaluate_one("dhana_pi_first", repaired).present is False
+
+
+def test_the_pisces_second_combination_still_works():
+    """Only the first half of entry (12) is defective."""
+    verdict = evaluate_one("dhana_pi_second", _pl(
+        "Pi", paksha=0, JUPITER=_deg("Pi"), MARS=_deg("Pi", 20),
+        MERCURY=_deg("Vi")))
+    assert verdict.present is True
+
+
+# --- the Basic Principle's own rule -----------------------------------------
+
+
+def test_a_benefic_exalted_in_the_second_makes_one_very_rich():
+    """"If Moon, Mercury, Jupiter or Venus is exalted in the 2nd house."
+    Aries lagna puts the 2nd in Taurus, where the Moon is exalted."""
+    assert DHANA_EXALTED_IN_SECOND == ("Moon", "Mercury", "Jupiter", "Venus")
+    verdict = evaluate_one("dhana_exalted_benefic_in_second",
+                           _pl("Ar", paksha=0, MOON=_deg("Ta", 3)))
+    assert verdict.present is True
+    assert "Moon is exalted in the 2nd house (Taurus)" in verdict.reason
+
+
+def test_only_the_four_named_planets_count():
+    """The Sun exalted in the 2nd does not do it — §11.9 names four, and the
+    Sun is not among them."""
+    verdict = evaluate_one("dhana_exalted_benefic_in_second",
+                           _pl("Pi", paksha=0, SUN=_deg("Ar", 10)))
+    assert verdict.present is False
+    assert "none of Moon, Mercury, Jupiter, Venus" in verdict.reason
+
+
+def test_every_dhana_verdict_says_strength_decides_the_magnitude():
+    """"In all these combinations, the strength of the participating planets
+    decides the magnitude of results experienced." """
+    keys = {k for k, s in YOGA_REGISTRY.items() if s.group == "dhana"}
+    for verdict in evaluate(_akbar()):
+        if verdict.key in keys and "is for" not in verdict.reason:
+            assert any("strength of the participating planets" in q
+                       for q in verdict.qualifiers), verdict.key
+
+
+def test_the_rules_endpoint_carries_section_11_9(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["dhana_means"] == "wealth"
+    assert body["dhana_count"] == 12
+    assert len(body["dhana_structure"]) == 3
+    assert body["dhana_by_lagna"]["Pi"]["number"] == 12
+    assert "D-37" in body["dhana_pisces_note"]
+    assert "Saturn" in body["dhana_pisces_note"]
+    assert body["dhana_exalted_in_second"] == [
+        "Moon", "Mercury", "Jupiter", "Venus"]
+
+
+def test_the_two_outcome_sentences_are_uniform_across_the_twelve(client):
+    """§11.9 prints the same two outcomes for every entry — "one becomes very
+    affluent" and "then also one becomes very rich"."""
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["dhana_results"]["first"] == "one becomes very affluent"
+    assert body["dhana_results"]["second"] == "then also one becomes very rich"
+    for entry in DHANA_YOGAS:
+        assert entry["first_definition"].endswith(
+            "one becomes very affluent.")
+        assert entry["second_definition"].endswith(
+            "then also one becomes very rich.")

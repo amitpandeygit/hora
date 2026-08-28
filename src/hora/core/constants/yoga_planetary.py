@@ -1962,3 +1962,188 @@ RAAJA_SAMBANDHA_YOGAS: tuple[dict, ...] = (
 )
 
 RAAJA_SAMBANDHA_COUNT = len(RAAJA_SAMBANDHA_YOGAS)
+
+
+# --------------------------------------------------------------------------
+# 11.9 Dhana Yogas
+# --------------------------------------------------------------------------
+
+DHANA_MEANS = "wealth"
+
+DHANA_YOGA_INTRO = (
+    "Dhana means wealth. Dhana yogas are combinations that give one abundant "
+    "riches.")
+
+DHANA_BASIC_PRINCIPLE = (
+    "The 5th and 9th lords and planets joining them are capable of giving "
+    "money. They give dasas in their dasas. The 11th house is also important "
+    "for material gains and it should be strong. The 2nd house is also "
+    "important. If Moon, Mercury, Jupiter or Venus is exalted in the 2nd "
+    "house, it makes the native very rich.")
+
+#: "They give dasas in their dasas" is printed exactly so. Transcribed as
+#: found; nothing is computed from it.
+DHANA_PRINTED_ODDITY = "They give dasas in their dasas."
+
+DHANA_PARASARA_NOTE = (
+    "In addition to these general principles, Parasara listed specific "
+    "combinations for various lagnas. In all these combinations, the strength "
+    "of the participating planets decides the magnitude of results "
+    "experienced.")
+
+#: The one testable rule inside the Basic Principle.
+DHANA_EXALTED_IN_SECOND: tuple[str, ...] = ("Moon", "Mercury", "Jupiter", "Venus")
+DHANA_EXALTED_IN_SECOND_RULE = (
+    "If Moon, Mercury, Jupiter or Venus is exalted in the 2nd house, it makes "
+    "the native very rich.")
+
+#: What the twelve lagna entries turn out to be, checked against all twelve
+#: rather than assumed. Every first combination puts the **5th lord** in the
+#: 5th house; every 11th-house list names the **11th lord** among its planets;
+#: every second combination puts the **lagna lord** in lagna.
+DHANA_STRUCTURE: tuple[str, ...] = (
+    "the first combination always places the 5th lord in the 5th house",
+    "the planets it wants in the 11th always include the 11th lord",
+    "the second combination always places the lagna lord in lagna",
+)
+
+DHANA_YOGAS: tuple[dict, ...] = (
+    # (12), for Pisces, is printed "If Moon is in the 5th house and in
+    # the 11th house" and names no planet for the 11th, so no chart can
+    # satisfy it. `eleventh` is empty on purpose — see D-37.
+    {"number": 1, "lagna": "Ar", "fifth": "SUN",
+     "eleventh": ('SATURN', 'MOON', 'JUPITER'),
+     "lagna_planet": "MARS", "reachers": ('MERCURY', 'VENUS', 'SATURN'),
+     "first_definition": (
+         "If Sun is in the 5th house and Saturn, Moon and Jupiter are in the "
+         "11th house, one becomes very affluent."),
+     "second_definition": (
+         "If Mars occupies lagna conjoined or aspected by Mercury, Venus and "
+         "Saturn, then also one becomes very rich."),
+     },
+    {"number": 2, "lagna": "Ta", "fifth": "MERCURY",
+     "eleventh": ('MOON', 'MARS', 'JUPITER'),
+     "lagna_planet": "VENUS", "reachers": ('MERCURY', 'SATURN'),
+     "first_definition": (
+         "If Mercury is in the 5th house and Moon, Mars and Jupiter are in "
+         "the 11th house, one becomes very affluent."),
+     "second_definition": (
+         "If Venus occupies lagna conjoined or aspected by Mercury and "
+         "Saturn, then also one becomes very rich."),
+     },
+    {"number": 3, "lagna": "Ge", "fifth": "VENUS",
+     "eleventh": ('MARS',),
+     "lagna_planet": "MERCURY", "reachers": ('JUPITER', 'SATURN'),
+     "first_definition": (
+         "If Venus is in the 5th house and Mars is in the 11th house, one "
+         "becomes very affluent."),
+     "second_definition": (
+         "If Mercury occupies lagna conjoined or aspected by Jupiter and "
+         "Saturn, then also one becomes very rich."),
+     },
+    {"number": 4, "lagna": "Cn", "fifth": "MARS",
+     "eleventh": ('VENUS',),
+     "lagna_planet": "MOON", "reachers": ('MERCURY', 'JUPITER'),
+     "first_definition": (
+         "If Mars is in the 5th house and Venus is in the 11th house, one "
+         "becomes very affluent."),
+     "second_definition": (
+         "If Moon occupies lagna conjoined or aspected by Mercury and "
+         "Jupiter, then also one becomes very rich."),
+     },
+    {"number": 5, "lagna": "Le", "fifth": "JUPITER",
+     "eleventh": ('MERCURY',),
+     "lagna_planet": "SUN", "reachers": ('MARS', 'JUPITER'),
+     "first_definition": (
+         "If Jupiter is in the 5th house and Mercury is in the 11th house, "
+         "one becomes very affluent."),
+     "second_definition": (
+         "If Sun occupies lagna conjoined or aspected by Mars and Jupiter, "
+         "then also one becomes very rich."),
+     },
+    {"number": 6, "lagna": "Vi", "fifth": "SATURN",
+     "eleventh": ('SUN', 'MOON'),
+     "lagna_planet": "MERCURY", "reachers": ('JUPITER', 'SATURN'),
+     "first_definition": (
+         "If Saturn is in the 5th house and Sun and Moon are in the 11th "
+         "house, one becomes very affluent."),
+     "second_definition": (
+         "If Mercury occupies lagna conjoined or aspected by Jupiter and "
+         "Saturn, then also one becomes very rich."),
+     },
+    {"number": 7, "lagna": "Li", "fifth": "SATURN",
+     "eleventh": ('SUN', 'MOON'),
+     "lagna_planet": "VENUS", "reachers": ('MERCURY', 'SATURN'),
+     "first_definition": (
+         "If Saturn is in the 5th house and Sun and Moon are in the 11th "
+         "house, one becomes very affluent."),
+     "second_definition": (
+         "If Venus occupies lagna conjoined or aspected by Mercury and "
+         "Saturn, then also one becomes very rich."),
+     },
+    {"number": 8, "lagna": "Sc", "fifth": "JUPITER",
+     "eleventh": ('MERCURY',),
+     "lagna_planet": "MARS", "reachers": ('MERCURY', 'VENUS', 'SATURN'),
+     "first_definition": (
+         "If Jupiter is in the 5th house and Mercury is in the 11th house, "
+         "one becomes very affluent."),
+     "second_definition": (
+         "If Mars occupies lagna conjoined or aspected by Mercury, Venus and "
+         "Saturn, then also one becomes very rich."),
+     },
+    {"number": 9, "lagna": "Sg", "fifth": "MARS",
+     "eleventh": ('VENUS',),
+     "lagna_planet": "JUPITER", "reachers": ('MARS', 'MERCURY'),
+     "first_definition": (
+         "If Mars is in the 5th house and Venus is in the 11th house, one "
+         "becomes very affluent."),
+     "second_definition": (
+         "If Jupiter occupies lagna conjoined or aspected by Mars and "
+         "Mercury, then also one becomes very rich."),
+     },
+    {"number": 10, "lagna": "Cp", "fifth": "VENUS",
+     "eleventh": ('MARS',),
+     "lagna_planet": "SATURN", "reachers": ('MARS', 'JUPITER'),
+     "first_definition": (
+         "If Venus is in the 5th house and Mars is in the 11th house, one "
+         "becomes very affluent."),
+     "second_definition": (
+         "If Saturn occupies lagna conjoined or aspected by Mars and "
+         "Jupiter, then also one becomes very rich."),
+     },
+    {"number": 11, "lagna": "Aq", "fifth": "MERCURY",
+     "eleventh": ('MOON', 'MARS', 'JUPITER'),
+     "lagna_planet": "SATURN", "reachers": ('MARS', 'JUPITER'),
+     "first_definition": (
+         "If Mercury is in the 5th house and Moon, Mars and Jupiter are in "
+         "the 11th house, one becomes very affluent."),
+     "second_definition": (
+         "If Saturn occupies lagna conjoined or aspected by Mars and "
+         "Jupiter, then also one becomes very rich."),
+     },
+    {"number": 12, "lagna": "Pi", "fifth": "MOON",
+     "eleventh": (),
+     "eleventh_is_broken": True,
+     "lagna_planet": "JUPITER", "reachers": ('MARS', 'MERCURY'),
+     "first_definition": (
+         "If Moon is in the 5th house and in the 11th house, one becomes "
+         "very affluent."),
+     "second_definition": (
+         "If Jupiter occupies lagna conjoined or aspected by Mars and "
+         "Mercury, then also one becomes very rich."),
+     },
+)
+
+DHANA_YOGA_COUNT = len(DHANA_YOGAS)
+
+DHANA_FIRST_RESULT = "one becomes very affluent"
+DHANA_SECOND_RESULT = "then also one becomes very rich"
+
+#: §11.9 (12), exactly as printed.
+DHANA_PISCES_PRINTED = (
+    "If Moon is in the 5th house and in the 11th house, one becomes very "
+    "affluent.")
+
+#: What the other eleven entries imply was dropped from it. Recorded as an
+#: inference and **not applied** — the yoga stays undecidable. See D-37.
+DHANA_PISCES_LIKELY_MISSING = "Saturn"

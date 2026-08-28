@@ -60,6 +60,95 @@
     "combustion_is_a_qualifier_not_a_veto": "Section 11.2.4 says a yoga formed by a combust planet loses \u201csome of their power to do good\u201d, not all of it. A combust yoga is therefore reported as present with a qualifier, never suppressed.",
     "combustion_note": "If Mercury is too close to Sun, he is combust (asta or astangata). Yogas formed by combust planets lose some of their power to do good.",
     "deep_exaltation_note": "Jaya and Vidyut require a planet in \u201cdeep exaltation\u201d. The book gives the exact exaltation degree but no tolerance around it, so neither yoga is ever reported present: when the planet is not in his exaltation sign the verdict is a definite absence, and when he is, the verdict names his distance from the exact degree and says the depth is undecided. See docs/open-items.md OI-83.",
+    "dhana_basic_principle": "The 5th and 9th lords and planets joining them are capable of giving money. They give dasas in their dasas. The 11th house is also important for material gains and it should be strong. The 2nd house is also important. If Moon, Mercury, Jupiter or Venus is exalted in the 2nd house, it makes the native very rich.",
+    "dhana_by_lagna": {
+      "Aq": {
+        "first": "If Mercury is in the 5th house and Moon, Mars and Jupiter are in the 11th house, one becomes very affluent.",
+        "number": 11,
+        "second": "If Saturn occupies lagna conjoined or aspected by Mars and Jupiter, then also one becomes very rich."
+      },
+      "Ar": {
+        "first": "If Sun is in the 5th house and Saturn, Moon and Jupiter are in the 11th house, one becomes very affluent.",
+        "number": 1,
+        "second": "If Mars occupies lagna conjoined or aspected by Mercury, Venus and Saturn, then also one becomes very rich."
+      },
+      "Cn": {
+        "first": "If Mars is in the 5th house and Venus is in the 11th house, one becomes very affluent.",
+        "number": 4,
+        "second": "If Moon occupies lagna conjoined or aspected by Mercury and Jupiter, then also one becomes very rich."
+      },
+      "Cp": {
+        "first": "If Venus is in the 5th house and Mars is in the 11th house, one becomes very affluent.",
+        "number": 10,
+        "second": "If Saturn occupies lagna conjoined or aspected by Mars and Jupiter, then also one becomes very rich."
+      },
+      "Ge": {
+        "first": "If Venus is in the 5th house and Mars is in the 11th house, one becomes very affluent.",
+        "number": 3,
+        "second": "If Mercury occupies lagna conjoined or aspected by Jupiter and Saturn, then also one becomes very rich."
+      },
+      "Le": {
+        "first": "If Jupiter is in the 5th house and Mercury is in the 11th house, one becomes very affluent.",
+        "number": 5,
+        "second": "If Sun occupies lagna conjoined or aspected by Mars and Jupiter, then also one becomes very rich."
+      },
+      "Li": {
+        "first": "If Saturn is in the 5th house and Sun and Moon are in the 11th house, one becomes very affluent.",
+        "number": 7,
+        "second": "If Venus occupies lagna conjoined or aspected by Mercury and Saturn, then also one becomes very rich."
+      },
+      "Pi": {
+        "first": "If Moon is in the 5th house and in the 11th house, one becomes very affluent.",
+        "number": 12,
+        "second": "If Jupiter occupies lagna conjoined or aspected by Mars and Mercury, then also one becomes very rich."
+      },
+      "Sc": {
+        "first": "If Jupiter is in the 5th house and Mercury is in the 11th house, one becomes very affluent.",
+        "number": 8,
+        "second": "If Mars occupies lagna conjoined or aspected by Mercury, Venus and Saturn, then also one becomes very rich."
+      },
+      "Sg": {
+        "first": "If Mars is in the 5th house and Venus is in the 11th house, one becomes very affluent.",
+        "number": 9,
+        "second": "If Jupiter occupies lagna conjoined or aspected by Mars and Mercury, then also one becomes very rich."
+      },
+      "Ta": {
+        "first": "If Mercury is in the 5th house and Moon, Mars and Jupiter are in the 11th house, one becomes very affluent.",
+        "number": 2,
+        "second": "If Venus occupies lagna conjoined or aspected by Mercury and Saturn, then also one becomes very rich."
+      },
+      "Vi": {
+        "first": "If Saturn is in the 5th house and Sun and Moon are in the 11th house, one becomes very affluent.",
+        "number": 6,
+        "second": "If Mercury occupies lagna conjoined or aspected by Jupiter and Saturn, then also one becomes very rich."
+      }
+    },
+    "dhana_count": 12,
+    "dhana_exalted_in_second": [
+      "Moon",
+      "Mercury",
+      "Jupiter",
+      "Venus"
+    ],
+    "dhana_exalted_in_second_rule": "If Moon, Mercury, Jupiter or Venus is exalted in the 2nd house, it makes the native very rich.",
+    "dhana_intro": "Dhana means wealth. Dhana yogas are combinations that give one abundant riches.",
+    "dhana_means": "wealth",
+    "dhana_parasara_note": "In addition to these general principles, Parasara listed specific combinations for various lagnas. In all these combinations, the strength of the participating planets decides the magnitude of results experienced.",
+    "dhana_pisces_note": "Entry (12) names no planet for the 11th house, so no chart can satisfy it and it is reported undecidable. The other eleven all name the 11th lord there, which for Pisces lagna is Saturn \u2014 recorded as an inference and not applied. See docs/book-deviations.md D-37.",
+    "dhana_pisces_printed": "If Moon is in the 5th house and in the 11th house, one becomes very affluent.",
+    "dhana_printed_oddity": "They give dasas in their dasas.",
+    "dhana_results": {
+      "first": "one becomes very affluent",
+      "second": "then also one becomes very rich"
+    },
+    "dhana_results_note": "Section 11.9 prints each combination\u2019s outcome at the end of its own sentence rather than as a separate Results paragraph. The two are uniform across all twelve entries.",
+    "dhana_structure": [
+      "the first combination always places the 5th lord in the 5th house",
+      "the planets it wants in the 11th always include the 11th lord",
+      "the second combination always places the lagna lord in lagna"
+    ],
+    "dhana_structure_note": "Section 11.9's twelve entries are not twelve unrelated rules. Checked against all twelve lagnas rather than assumed: every first combination places the 5th lord in the 5th house, the planets it wants in the 11th always include the 11th lord, and every second combination places the lagna lord in lagna. That is what ties them to the Basic Principle above.",
+    "dhana_two_combinations_note": "Each entry carries two independent combinations \u2014 the second introduced with \u201cthen also\u201d \u2014 so they are registered as twenty-four, and a caller is told which of the two a chart has. A combination belongs to one lagna; on any other the verdict names both lagnas rather than reporting a bare absence.",
     "dharma_karmadhipati_reason": "The 9th house is the most important trine and the 10th house is the most important quadrant. Raja yoga involving the lords of these two houses is excellent.",
     "dharma_karmadhipati_results": null,
     "dharma_sthana": 9,

@@ -439,6 +439,30 @@ class PlanetaryYogaRulesOut(BaseModel):
     raaja_sambandha_numbering: dict[str, int]
     raaja_sambandha_are_common: str
     raaja_sambandha_magnitude_rule: str
+    dhana_intro: str
+    dhana_means: str
+    dhana_basic_principle: str
+    dhana_printed_oddity: str = Field(
+        description="\"They give dasas in their dasas\" is printed exactly "
+                    "so. Transcribed as found; nothing is computed from it.",
+    )
+    dhana_parasara_note: str
+    dhana_exalted_in_second: list[str]
+    dhana_exalted_in_second_rule: str
+    dhana_count: int
+    dhana_structure: list[str]
+    dhana_structure_note: str = Field(
+        description="What the twelve entries have in common, checked against "
+                    "all twelve lagnas rather than assumed.",
+    )
+    dhana_by_lagna: dict[str, dict]
+    dhana_two_combinations_note: str
+    dhana_results: dict[str, str]
+    dhana_results_note: str
+    dhana_pisces_printed: str
+    dhana_pisces_note: str = Field(
+        description="Why entry (12) is undecidable rather than absent.",
+    )
     raaja_sambandha_note: str = Field(
         description="Why a present verdict in section 11.8 weighs less than "
                     "one in section 11.7 — the section says so itself.",

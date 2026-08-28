@@ -55,6 +55,20 @@ from hora.core.const import (
     CHART_10_OLD_CALENDAR_DATE,
     CHART_10_TIME_IS_LMT,
     COMBUSTION_WEAKENS_YOGA,
+    DHANA_BASIC_PRINCIPLE,
+    DHANA_EXALTED_IN_SECOND,
+    DHANA_EXALTED_IN_SECOND_RULE,
+    DHANA_FIRST_RESULT,
+    DHANA_MEANS,
+    DHANA_PARASARA_NOTE,
+    DHANA_PISCES_LIKELY_MISSING,
+    DHANA_PISCES_PRINTED,
+    DHANA_PRINTED_ODDITY,
+    DHANA_SECOND_RESULT,
+    DHANA_STRUCTURE,
+    DHANA_YOGA_COUNT,
+    DHANA_YOGA_INTRO,
+    DHANA_YOGAS,
     DHARMA_KARMADHIPATI_DEFINITION,
     DHARMA_KARMADHIPATI_REASON,
     DHARMA_KARMADHIPATI_RESULTS_TRUNCATED,
@@ -712,6 +726,56 @@ def rules() -> dict:
         ),
         "vargottamaamsa_definition": VARGOTTAMAAMSA_DEFINITION,
         "vargottamaamsa_spellings": list(VARGOTTAMAAMSA_SPELLINGS),
+        # 11.9 ----------------------------------------------------------------
+        "dhana_intro": DHANA_YOGA_INTRO,
+        "dhana_means": DHANA_MEANS,
+        "dhana_basic_principle": DHANA_BASIC_PRINCIPLE,
+        "dhana_printed_oddity": DHANA_PRINTED_ODDITY,
+        "dhana_parasara_note": DHANA_PARASARA_NOTE,
+        "dhana_exalted_in_second": list(DHANA_EXALTED_IN_SECOND),
+        "dhana_exalted_in_second_rule": DHANA_EXALTED_IN_SECOND_RULE,
+        "dhana_count": DHANA_YOGA_COUNT,
+        "dhana_structure": list(DHANA_STRUCTURE),
+        "dhana_structure_note": (
+            "Section 11.9's twelve entries are not twelve unrelated rules. "
+            "Checked against all twelve lagnas rather than assumed: every "
+            "first combination places the 5th lord in the 5th house, the "
+            "planets it wants in the 11th always include the 11th lord, and "
+            "every second combination places the lagna lord in lagna. That "
+            "is what ties them to the Basic Principle above."
+        ),
+        "dhana_by_lagna": {
+            entry["lagna"]: {
+                "number": entry["number"],
+                "first": entry["first_definition"],
+                "second": entry["second_definition"],
+            }
+            for entry in DHANA_YOGAS
+        },
+        "dhana_two_combinations_note": (
+            "Each entry carries two independent combinations \u2014 the second "
+            "introduced with \u201cthen also\u201d \u2014 so they are registered as "
+            "twenty-four, and a caller is told which of the two a chart has. "
+            "A combination belongs to one lagna; on any other the verdict "
+            "names both lagnas rather than reporting a bare absence."
+        ),
+        "dhana_results": {
+            "first": DHANA_FIRST_RESULT,
+            "second": DHANA_SECOND_RESULT,
+        },
+        "dhana_results_note": (
+            "Section 11.9 prints each combination\u2019s outcome at the end of "
+            "its own sentence rather than as a separate Results paragraph. "
+            "The two are uniform across all twelve entries."
+        ),
+        "dhana_pisces_printed": DHANA_PISCES_PRINTED,
+        "dhana_pisces_note": (
+            "Entry (12) names no planet for the 11th house, so no chart can "
+            "satisfy it and it is reported undecidable. The other eleven all "
+            f"name the 11th lord there, which for Pisces lagna is "
+            f"{DHANA_PISCES_LIKELY_MISSING} \u2014 recorded as an inference and "
+            f"not applied. See docs/book-deviations.md D-37."
+        ),
         "sun_excluded_note": (
             "The Sun cannot form a yoga about what accompanies him, so he is "
             "excluded from his own houses alongside the Moon."
