@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 54 waiting on evidence · 2 parked**
+**5 waiting on Amit · 57 waiting on evidence · 2 parked**
 
 ---
 
@@ -473,6 +473,61 @@ Sreedhaamaamsa, for a count of 10, which §11.7.2 does not discuss
 to 9 beyond saying they occur "only for divine persons".
 
 **Closes when:** you settle how a split count is graded.
+
+### OI-92 — footnote 40 defines vargottamamsa and was not supplied
+
+§11.7.3 (15): "If (a) Moon is strong and occupies vargottamamsa⁴⁰ and (b) four
+or more planets aspect him, then one becomes a king."
+
+The footnote marker hangs off the word, so the book defines it there. That page
+was not supplied. The obvious reading — the same sign in rasi and navamsa — is
+the common one, but "vargottama**amsa**" may mean more than D-9, and §6.6's
+amsa vocabulary in this book is a family of named counts rather than a single
+test. Guessing would be inventing a rule inside a section that already has a
+named definition.
+
+**What we do:** clause (b) is computed anyway. If fewer than four planets
+aspect the Moon the yoga is a plain absence and the undecidable clause never
+arises. Only when clause (b) *holds* does the verdict report that it cannot be
+decided, and it says which clause and which footnote.
+
+**Closes when:** footnote 40 is supplied.
+
+### OI-93 — §11.7.3 (2)'s clause (d) does not say which planets it means
+
+"If (a) lagna lord is in 5th, (b) 5th lord is in lagna, (c) AK and PK are in
+lagna or the 5th house, and (d) **those planets** in owns rasi or amsa or in
+exaltation or aspected by benefics..."
+
+"Those planets" could be the two named immediately before in (c) — AK and PK —
+or all four named across (a) to (c). The clauses are one sentence, so grammar
+does not settle it.
+
+**What we do:** both readings are computed on every chart. The **wider** one
+decides the verdict, because it is the stricter of the two and cannot make a
+yoga present that the narrow reading would not; a qualifier then reports what
+each reading found, so a caller preferring the narrow one has the answer
+without the engine having chosen for them.
+
+**Closes when:** you settle the scope.
+
+### OI-94 — §11.7.3 (17) does not say how many benefics and malefics
+
+"If benefics are in quadrants and malefics are in the 3rd, 6th and 11th
+houses, one becomes a king even if he is from a lowly family."
+
+Read loosely — *some* benefic in a quadrant and *some* malefic in one of those
+three — this fires on a very large share of charts, which sits badly with a
+rule promising kingship from a lowly family. Read strictly — every placed
+benefic in a quadrant and every placed malefic in the 3rd, 6th or 11th — it is
+rare, which fits.
+
+**What we do:** the strict reading, and the verdict names every planet that
+falls outside so the looser reading is reconstructable from the answer. The
+yoga also refuses to decide without a paksha, since it must sort every planet
+into benefic or malefic and §3.2.2 gives the Moon no nature without one.
+
+**Closes when:** you settle the reading, or an example fixes it.
 
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 

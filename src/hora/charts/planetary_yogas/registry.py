@@ -42,6 +42,13 @@ class YogaInput:
         detector that needs it and does not have it must say so, not guess.
     :param paksha: 0 Sukla, 1 Krishna. The Moon has no benefic nature without
         it (§3.2.2), so a rule counting benefics is unanswerable without it.
+    :param lagna_longitude: the ascendant in degrees. §11.7.3's yogas 7 and 9
+        read the lagna of a divisional chart, which the sign alone cannot
+        give. Absent, those yogas say so.
+    :param special_lagnas: HL, GL and any other special lagna, in degrees.
+        §11.7.3's yogas 6 and 8 turn on them, and they are computed from
+        birth data rather than from a graha, so they are supplied rather than
+        derived here.
     """
 
     rasis: dict[int, int]
@@ -50,6 +57,15 @@ class YogaInput:
     include_nodes: bool = False
     lagna_rasi: int | None = None
     paksha: int | None = None
+    lagna_longitude: float | None = None
+    special_lagnas: dict[str, float] | None = None
+
+    def special_lagna_sign(self, name: str) -> int | None:
+        """The sign a special lagna falls in, or None if it was not given."""
+        if not self.special_lagnas:
+            return None
+        value = self.special_lagnas.get(name)
+        return None if value is None else int(value % 360.0 // 30)
 
     def sign_of(self, graha: int) -> int | None:
         return self.rasis.get(int(graha))

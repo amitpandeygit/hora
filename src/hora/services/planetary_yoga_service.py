@@ -31,7 +31,11 @@ from hora.core.const import (
     AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
     ADHI_HOUSES_FROM_MOON,
+    ADVANCED_RAAJA_INTRO,
+    ADVANCED_RAAJA_YOGA_COUNT,
+    ADVANCED_RAAJA_YOGAS,
     AMSA_SPELLINGS_IN_11_7_2,
+    ARUDHA_EFFECTIVENESS_RULE,
     BRAHMA_VARIATION,
     BUDHA_AADITYA_SPELLING_VARIANTS,
     BUDHA_AADITYA_TERMS,
@@ -47,6 +51,9 @@ from hora.core.const import (
     CHANDRA_GUIDELINE_3,
     CHANDRA_MOON_FROM_SUN_GRADE,
     CHANDRA_YOGA_INTRO,
+    CHART_10_BIRTH_FOOTNOTE,
+    CHART_10_OLD_CALENDAR_DATE,
+    CHART_10_TIME_IS_LMT,
     COMBUSTION_WEAKENS_YOGA,
     DHARMA_KARMADHIPATI_DEFINITION,
     DHARMA_KARMADHIPATI_REASON,
@@ -119,6 +126,7 @@ from hora.core.const import (
     RAAJA_MAGNITUDE_INTRO,
     RAAJA_MEANS,
     RAAJA_ORB_EXAMPLE,
+    RAAJA_ORB_FOOTNOTE,
     RAAJA_YOGA_COUNT,
     RAAJA_YOGA_INTRO,
     RASI_NAMES,
@@ -131,6 +139,7 @@ from hora.core.const import (
     SANKHYA_MEANS,
     SARPA_IS_VERY_BAD,
     SASA_MEANS,
+    SHADVARGA_NAMED_IN_11_7_3,
     SIMHAASANAAMSA_EMPERORS,
     SIMHAASANAAMSA_FOOTNOTE_UNREAD,
     SIMHAASANAAMSA_RULE,
@@ -141,7 +150,9 @@ from hora.core.const import (
     TRIMURTHI_COMBINED_NAME,
     TRIMURTHI_NOTE,
     TRIMURTHI_YOGAS,
+    TRIVARGA_NAMED_IN_11_7_3,
     UPACHAYA,
+    VARGOTTAMAMSA_FOOTNOTE_UNREAD,
     VIPAREETA_DEFINITION,
     VIPAREETA_IDEAL_CASE,
     VIPAREETA_IDEAL_HOUSES,
@@ -187,7 +198,8 @@ def _verdict(verdict, data: YogaInput) -> dict:
 
 def _input(rasis: dict[int, int], chart_code: str, include_nodes: bool,
            positions=None, lagna_rasi: int | None = None,
-           paksha: int | None = None) -> YogaInput:
+           paksha: int | None = None, lagna_longitude: float | None = None,
+           special_lagnas: dict[str, float] | None = None) -> YogaInput:
     if chart_code not in KNOWN_CHARTS:
         raise InputError(
             f"unknown chart {chart_code!r}; expected one of "
@@ -202,6 +214,11 @@ def _input(rasis: dict[int, int], chart_code: str, include_nodes: bool,
         chart=chart_code, include_nodes=include_nodes, positions=positions,
         lagna_rasi=None if lagna_rasi is None else int(lagna_rasi),
         paksha=None if paksha is None else int(paksha),
+        lagna_longitude=(None if lagna_longitude is None
+                         else float(lagna_longitude) % 360.0),
+        special_lagnas=(None if special_lagnas is None else
+                        {str(k): float(v) % 360.0
+                         for k, v in special_lagnas.items()}),
     )
 
 
@@ -628,6 +645,47 @@ def rules() -> dict:
             "sides, so the engine reports the fact as a qualifier and draws "
             "no conclusion. See docs/open-items.md OI-85."
         ),
+        # 11.7.3 ------------------------------------------------------------
+        "advanced_raaja_intro": ADVANCED_RAAJA_INTRO,
+        "advanced_raaja_count": ADVANCED_RAAJA_YOGA_COUNT,
+        "advanced_raaja_numbering": {
+            entry["key"]: entry["number"] for entry in ADVANCED_RAAJA_YOGAS
+        },
+        "shadvarga_named_in_11_7_3": list(SHADVARGA_NAMED_IN_11_7_3),
+        "trivarga_named_in_11_7_3": list(TRIVARGA_NAMED_IN_11_7_3),
+        "arudha_effectiveness_rule": ARUDHA_EFFECTIVENESS_RULE,
+        "arudha_effectiveness_note": (
+            "Section 11.7.3 (18) is not a combination \u2014 it says how "
+            "effective the chart\u2019s Raaja yogas are. It is returned by "
+            "/v1/planetary-yoga/raaja-magnitude beside the yogas and never "
+            "among them."
+        ),
+        "advanced_raaja_input_note": (
+            "These seventeen reach past signs \u2014 into chara karakas, the "
+            "navamsa, the divisional lagnas, HL and GL. A chart that cannot "
+            "decide one of them gets a verdict whose reason begins \u201cthis "
+            "yoga cannot be decided\u201d, never a bare absence. Supply "
+            "longitudes for the karaka and varga yogas, a lagna longitude for "
+            "yogas 7 and 9, and HL and GL for yogas 6 and 8."
+        ),
+        "vargottamamsa_footnote_unread": VARGOTTAMAMSA_FOOTNOTE_UNREAD,
+        "raaja_orb_footnote": RAAJA_ORB_FOOTNOTE,
+        "worked_charts": [
+            {"chart": "Chart 9", "native": "Chatrapati Shivaji",
+             "section": "11.6", "shows": "Kalpadruma yoga",
+             "birth_footnote": None, "recomputable": False,
+             "note": ("Given as a Hindu calendar date and a time measured "
+                      "from sunrise, so it is transcribed, not recomputed.")},
+            {"chart": "Chart 10", "native": "Emperor Akbar",
+             "section": "11.7.2", "shows": "the magnitude of a Raaja yoga",
+             "birth_footnote": CHART_10_BIRTH_FOOTNOTE,
+             "recomputable": True,
+             "old_calendar_date": CHART_10_OLD_CALENDAR_DATE,
+             "time_is_lmt": CHART_10_TIME_IS_LMT,
+             "note": ("Footnote 39 settles the calendar: 24 November 1542 in "
+                      "the old calendar is 4 December 1542 in the new, ten "
+                      "days apart, and the printed date is the new one.")},
+        ],
         "sun_excluded_note": (
             "The Sun cannot form a yoga about what accompanies him, so he is "
             "excluded from his own houses alongside the Moon."
@@ -639,6 +697,8 @@ def raaja_magnitude(
     longitudes: dict[int, float],
     *,
     lagna_rasi: int,
+    lagna_longitude: float | None = None,
+    special_lagnas: dict[str, float] | None = None,
 ) -> dict:
     """§11.7.2 — how far each Raaja yoga in a chart fructifies.
 
@@ -648,6 +708,7 @@ def raaja_magnitude(
     """
     from dataclasses import asdict
 
+    from hora.charts.planetary_yogas.raaja_advanced import arudha_effectiveness
     from hora.charts.planetary_yogas.raaja_magnitude import (
         dharma_karmadhipati_pair,
         magnitude,
@@ -666,7 +727,8 @@ def raaja_magnitude(
             speed_latitude=0.0, speed_distance=0.0)
     data = _input(
         {g: int(p.longitude // 30) for g, p in positions.items()},
-        "D1", False, positions=positions, lagna_rasi=int(lagna_rasi))
+        "D1", False, positions=positions, lagna_rasi=int(lagna_rasi),
+        lagna_longitude=lagna_longitude, special_lagnas=special_lagnas)
 
     pairs = [asdict(entry) for entry in magnitude(data)]
     special = dharma_karmadhipati_pair(data)
@@ -700,6 +762,9 @@ def raaja_magnitude(
             [{"graha": g, "graha_name": GRAHA_NAMES[g]} for g in special]
         ),
         "pairs": pairs,
+        # 11.7.3 (18) — a modifier on the chart's Raaja yogas, not a yoga.
+        "arudha_effectiveness_rule": ARUDHA_EFFECTIVENESS_RULE,
+        "arudha_effectiveness": arudha_effectiveness(data),
         "final_judgment": RAAJA_FINAL_JUDGMENT,
         "not_assessed": [
             {"factor": "unafflicted",

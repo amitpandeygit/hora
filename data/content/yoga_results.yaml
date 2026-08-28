@@ -1318,3 +1318,156 @@ entries:
   verbatim: "One having this yoga experiences tremedous success, typically after an initial struggle."
   transcription_notes: "The book prints “tremedous” for “tremendous”. Transcribed as printed."
   terms: []
+- planetary_yoga: raaja_pk_ak_and_lords
+  name: "Raaja Yoga (11.7.3 #1) — PK with AK, lagna lord with 5th lord"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "the native enjoys power and prosperity"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_maharajah
+  name: "Raaja Yoga (11.7.3 #2) — the Maharajah combination"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "the native becomes a great king (Maharajah) loved by his associates"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_ninth_lord_and_ak
+  name: "Raaja Yoga (11.7.3 #3) — 9th lord and AK"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: false
+  verbatim: null
+  transcription_notes: "Section 11.7.3 states only that “Raaja Yoga is present” and gives this combination no result of its own. Not a gap in the transcription — the book prints none."
+  terms: []
+- planetary_yoga: raaja_benefics_from_lord_and_ak
+  name: "Raaja Yoga (11.7.3 #4) — benefics in the 2nd, 4th and 5th"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "one becomes a king"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_malefics_from_lord_and_ak
+  name: "Raaja Yoga (11.7.3 #5) — malefics in the 3rd and 6th"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "one becomes a king"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_lagna_hl_gl_one_planet
+  name: "Raaja Yoga (11.7.3 #6) — one planet on lagna, HL and GL"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: false
+  verbatim: null
+  transcription_notes: "Section 11.7.3 states only that “that planet gives a Raaja Yoga” and gives this combination no result of its own. Not a gap in the transcription — the book prints none."
+  terms: []
+- planetary_yoga: raaja_shadvarga_lagna_aspect
+  name: "Raaja Yoga (11.7.3 #7) — one planet aspecting lagna in all six"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: false
+  verbatim: null
+  transcription_notes: "Section 11.7.3 states only that “that planet gives a Raaja Yoga” and gives this combination no result of its own. Not a gap in the transcription — the book prints none."
+  terms: []
+- planetary_yoga: raaja_dignified_on_lagna_hl_gl
+  name: "Raaja Yoga (11.7.3 #8) — dignified planets on lagna, HL and GL"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "the native becomes a king"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_dignified_on_three_lagnas
+  name: "Raaja Yoga (11.7.3 #9) — dignified planets on lagna in D-1, D-9, D-3"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "the native becomes a king"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_debilitated_in_dusthanas
+  name: "Raaja Yoga (11.7.3 #10) — debilitated planets in the 3rd, 6th and 8th"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: false
+  verbatim: null
+  transcription_notes: "Section 11.7.3 states only that “it forms a Raaja Yoga” and gives this combination no result of its own. Not a gap in the transcription — the book prints none."
+  terms: []
+- planetary_yoga: raaja_afflicted_dusthana_lords
+  name: "Raaja Yoga (11.7.3 #11) — afflicted 6th, 8th and 12th lords"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: false
+  verbatim: null
+  transcription_notes: "Section 11.7.3 states only that “it forms a Raaja Yoga” and gives this combination no result of its own. Not a gap in the transcription — the book prints none."
+  terms: []
+- planetary_yoga: raaja_fifth_and_ninth_lords
+  name: "Raaja Yoga (11.7.3 #12) — the 5th and 9th lords"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "it makes one prosperous"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_fourth_tenth_exchange
+  name: "Raaja Yoga (11.7.3 #13) — the 4th/10th exchange, aspected"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: false
+  verbatim: null
+  transcription_notes: "Section 11.7.3 states only that “a Raaja Yoga is formed” and gives this combination no result of its own. Not a gap in the transcription — the book prints none."
+  terms: []
+- planetary_yoga: raaja_fifth_lord_joined
+  name: "Raaja Yoga (11.7.3 #14) — the 5th lord joined by the 1st or 9th"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "the native becomes a king"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_vargottama_moon
+  name: "Raaja Yoga (11.7.3 #15) — a vargottama Moon aspected by four"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "one becomes a king"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_four_dignified
+  name: "Raaja Yoga (11.7.3 #16) — four planets in moolatrikona or exaltation"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "one becomes a king even if he is from a lowly family"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []
+- planetary_yoga: raaja_benefics_in_quadrants
+  name: "Raaja Yoga (11.7.3 #17) — benefics in quadrants, malefics in 3/6/11"
+  source: pvr-vaia
+  section: '11.7.3'
+  licence_status: unconfirmed
+  results_transcribed: true
+  verbatim: "one becomes a king even if he is from a lowly family"
+  transcription_notes: "Printed inside the definition sentence rather than as a separate Results paragraph, as everywhere in section 11.7.3."
+  terms: []

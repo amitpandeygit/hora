@@ -72,6 +72,11 @@
       "Devalokamsa": "Devalokaamsa",
       "Uttamsaamsa": "Uttamaamsa"
     },
+    "arudha_effectiveness": {
+      "decidable": false,
+      "reason": "no position given for Saturn, the lord of the house"
+    },
+    "arudha_effectiveness_rule": "If arudha lagna and darapada (arudha pada of the 7th house) are not in mutual 2nd/12th or 6th/8th positions, then Raja Yogas in the chart will be more effective.",
     "blemish_rule": "Any blemishes here will considerably reduce the magnitude of the yoga.",
     "close_orb_degrees": 6.0,
     "close_orb_is_approximate": true,

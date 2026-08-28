@@ -1651,3 +1651,172 @@ FUNCTIONAL_MALEFIC_NOT_DEFINED = (
     "functional malefics, but no section read so far says what a functional "
     "malefic is. It cannot be section 3.2.2's natural malefics, which do not "
     "depend on the lagna. See docs/open-items.md OI-88.")
+
+
+# --------------------------------------------------------------------------
+# 11.7.3 More Raja Yogas — eighteen advanced combinations
+# --------------------------------------------------------------------------
+
+ADVANCED_RAAJA_INTRO = "Some advanced Raaja Yogas will be listed below."
+
+#: Footnote 38, on §11.7.2's closeness rule. Supplied after §11.7.2 was
+#: written up, where it was recorded as unread.
+RAAJA_ORB_FOOTNOTE = (
+    "Anything greater than 5 or 6 degrees is too large for a Raaja Yoga to "
+    "give its full results.")
+
+#: Footnote 39. Its second sentence settles the calendar question Chart 10
+#: raises: 24 November 1542 Julian is 4 December 1542 Gregorian.
+CHART_10_BIRTH_FOOTNOTE = (
+    "Birthdata: December 4, 1542, 3:39 am (LMT), 69 E 47, 25 N 19. This date "
+    "may be written by some as November 24, 1542 based on the old calendar.")
+
+CHART_10_OLD_CALENDAR_DATE = "November 24, 1542"
+CHART_10_TIME_IS_LMT = True
+
+#: Footnote 40 defines vargottamamsa and was not supplied. Yoga (15) turns on
+#: it, so that clause is not decided. See docs/open-items.md OI-92.
+VARGOTTAMAMSA_FOOTNOTE_UNREAD = "40"
+
+#: §11.7.3 (7) names the six shadvarga charts in words.
+SHADVARGA_NAMED_IN_11_7_3: tuple[str, ...] = (
+    "Rasi", "Navamsa", "Hora", "Drekkana", "Dwadasamsa", "Trimsamsa")
+
+#: §11.7.3 (9) names three of them.
+TRIVARGA_NAMED_IN_11_7_3: tuple[str, ...] = ("Rasi", "Navamsa", "Drekkana")
+
+ADVANCED_RAAJA_YOGAS: tuple[dict, ...] = (
+    {"number": 1, "key": "raaja_pk_ak_and_lords",
+     "name": "Raaja Yoga (11.7.3 #1) — PK with AK, lagna lord with 5th lord",
+     "definition": ("If (a) chara putra karaka (PK) and chara atmaka karaka "
+                    "(AK) are conjoined and (b) lagna and 5th lords conjoin, "
+                    "then Raaja Yoga is present and the native enjoys power "
+                    "and prosperity."),
+     "partial": ("If only one condition is satisfied, still the results may "
+                 "be felt, but not fully."),
+     "needs_karakas": True},
+    {"number": 2, "key": "raaja_maharajah",
+     "name": "Raaja Yoga (11.7.3 #2) — the Maharajah combination",
+     "definition": ("If (a) lagna lord is in 5th, (b) 5th lord is in lagna, "
+                    "(c) AK and PK are in lagna or the 5th house, and (d) "
+                    "those planets in owns rasi or amsa or in exaltation or "
+                    "aspected by benefics, then this yoga is present and the "
+                    "native becomes a great king (Maharajah) loved by his "
+                    "associates."),
+     "printed_typo": "“in owns rasi”, for “in own rasi”",
+     "needs_karakas": True, "needs_navamsa": True},
+    {"number": 3, "key": "raaja_ninth_lord_and_ak",
+     "name": "Raaja Yoga (11.7.3 #3) — 9th lord and AK",
+     "definition": ("If the 9th lord and AK are in lagna, 5th or 7th, "
+                    "aspected by benefics, then Raaja Yoga is present."),
+     "needs_karakas": True},
+    {"number": 4, "key": "raaja_benefics_from_lord_and_ak",
+     "name": "Raaja Yoga (11.7.3 #4) — benefics in the 2nd, 4th and 5th",
+     "definition": ("If the 2nd, 4th and 5th houses from lagna lord and AK "
+                    "are occupied by benefics, one becomes a king."),
+     "needs_karakas": True},
+    {"number": 5, "key": "raaja_malefics_from_lord_and_ak",
+     "name": "Raaja Yoga (11.7.3 #5) — malefics in the 3rd and 6th",
+     "definition": ("If the 3rd and 6th houses from lagna lord and AK are "
+                    "occupied or aspected by malefics, one becomes a king."),
+     "needs_karakas": True},
+    {"number": 6, "key": "raaja_lagna_hl_gl_one_planet",
+     "name": "Raaja Yoga (11.7.3 #6) — one planet on lagna, HL and GL",
+     "definition": ("If lagna, HL and GL are joined or aspected by the same "
+                    "planet, then that planet gives a Raaja Yoga. One may add "
+                    "“owned” to “joined or aspected”."),
+     "partial": ("Results of this yoga may be experienced if the conditions "
+                 "are not strictly met, but a planet has an association with "
+                 "lagna (or lagna lord), HL (or HL lord) and GL (or GL lord). "
+                 "Association here can mean ownership, conjunction or aspect. "
+                 "If lagna lord is in HL and aspects GL lord, for example, "
+                 "results of this Raaja Yoga may be experienced to some "
+                 "extent."),
+     "reason": ("Planets aspecting or joining HL and GL give wealth and power "
+                "respectively. If such a planet is associated with lagna "
+                "also, its potential to do good increases."),
+     "needs_special_lagnas": ("HL", "GL")},
+    {"number": 7, "key": "raaja_shadvarga_lagna_aspect",
+     "name": "Raaja Yoga (11.7.3 #7) — one planet aspecting lagna in all six",
+     "definition": ("If the same planet aspects lagna in the six divisional "
+                    "charts of shad vargas – Rasi, Navamsa, Hora, Drekkana, "
+                    "Dwadasamsa, Trimsamsa – then that planet gives a Raaja "
+                    "Yoga."),
+     "needs_navamsa": True, "needs_lagna_longitude": True},
+    {"number": 8, "key": "raaja_dignified_on_lagna_hl_gl",
+     "name": "Raaja Yoga (11.7.3 #8) — dignified planets on lagna, HL and GL",
+     "definition": ("If lagna, HL and GL are occupied by a planet in own or "
+                    "exaltation sign, then the native becomes a king."),
+     "note": "It can be different planets.",
+     "needs_special_lagnas": ("HL", "GL")},
+    {"number": 9, "key": "raaja_dignified_on_three_lagnas",
+     "name": "Raaja Yoga (11.7.3 #9) — dignified planets on lagna in D-1, D-9, D-3",
+     "definition": ("If lagna in Rasi, Navamsa and Drekkana charts is "
+                    "occupied by a planet in own or exaltation sign, then the "
+                    "native becomes a king."),
+     "note": "It can be different planets.",
+     "needs_navamsa": True, "needs_lagna_longitude": True},
+    {"number": 10, "key": "raaja_debilitated_in_dusthanas",
+     "name": "Raaja Yoga (11.7.3 #10) — debilitated planets in the 3rd, 6th and 8th",
+     "definition": ("If (a) the 3rd, 6th and 8th houses are occupied by one "
+                    "or two planets in debilitation and (b) lagna lord is in "
+                    "an own or exaltation sign and aspects lagna, it forms a "
+                    "Raaja Yoga.")},
+    {"number": 11, "key": "raaja_afflicted_dusthana_lords",
+     "name": "Raaja Yoga (11.7.3 #11) — afflicted 6th, 8th and 12th lords",
+     "definition": ("If (a) the 6th, 8th and 12th lords are debilitated or "
+                    "combust or in inimical signs and (b) lagna lord is in an "
+                    "own or exaltation sign and aspects lagna, it forms a "
+                    "Raaja Yoga.")},
+    {"number": 12, "key": "raaja_fifth_and_ninth_lords",
+     "name": "Raaja Yoga (11.7.3 #12) — the 5th and 9th lords",
+     "definition": ("If the 5th and 9th lords are in a conjunction or a "
+                    "mutual aspect, it makes one prosperous.")},
+    {"number": 13, "key": "raaja_fourth_tenth_exchange",
+     "name": "Raaja Yoga (11.7.3 #13) — the 4th/10th exchange, aspected",
+     "definition": ("If (a) the 4th lord is in the 10th house and the 10th "
+                    "lord is in the 4th house and (b) both of them are "
+                    "aspected by the 5th lord or the 9th lord, then a Raaja "
+                    "Yoga is formed.")},
+    {"number": 14, "key": "raaja_fifth_lord_joined",
+     "name": "Raaja Yoga (11.7.3 #14) — the 5th lord joined by the 1st or 9th",
+     "definition": ("If (a) the 5th lord is in the 1st, 4th or 10th house and "
+                    "(b) lagna lord or the 9th lord joins him, then the "
+                    "native becomes a king.")},
+    {"number": 15, "key": "raaja_vargottama_moon",
+     "name": "Raaja Yoga (11.7.3 #15) — a vargottama Moon aspected by four",
+     "definition": ("If (a) Moon is strong and occupies vargottamamsa and (b) "
+                    "four or more planets aspect him, then one becomes a "
+                    "king."),
+     "strength": ("Moon",), "needs_navamsa": True},
+    {"number": 16, "key": "raaja_four_dignified",
+     "name": "Raaja Yoga (11.7.3 #16) — four planets in moolatrikona or exaltation",
+     "definition": ("If 4 or more planets occupy moolatrikonas or exaltation "
+                    "signs, one becomes a king even if he is from a lowly "
+                    "family.")},
+    {"number": 17, "key": "raaja_benefics_in_quadrants",
+     "name": "Raaja Yoga (11.7.3 #17) — benefics in quadrants, malefics in 3/6/11",
+     "definition": ("If benefics are in quadrants and malefics are in the "
+                    "3rd, 6th and 11th houses, one becomes a king even if he "
+                    "is from a lowly family.")},
+)
+
+ADVANCED_RAAJA_YOGA_COUNT = len(ADVANCED_RAAJA_YOGAS)
+
+#: §11.7.3 (18) is not a yoga. It says how effective the chart's Raaja yogas
+#: are, so it is reported beside them and never among them.
+ARUDHA_EFFECTIVENESS_RULE = (
+    "If arudha lagna and darapada (arudha pada of the 7th house) are not in "
+    "mutual 2nd/12th or 6th/8th positions, then Raja Yogas in the chart will "
+    "be more effective.")
+
+ARUDHA_EFFECTIVENESS_BAD_PAIRS: tuple[tuple[int, int], ...] = (
+    (2, 12), (6, 8))
+
+
+#: §11.7.3 (15) asks for a strong Moon. Chapter 15's strength is not built,
+#: and §11.6's note names its own section, so this one is separate.
+ADVANCED_RAAJA_STRENGTH_NOT_ASSESSED = (
+    "Section 11.7.3 requires this planet to be strong. Strength is not "
+    "computed — chapter 15's simple-rules measure is not built — so this "
+    "verdict reports the placements only. See docs/open-items.md OI-81.")

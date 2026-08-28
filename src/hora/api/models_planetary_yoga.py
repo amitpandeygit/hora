@@ -412,6 +412,23 @@ class PlanetaryYogaRulesOut(BaseModel):
         description="Why the ideal case can name two houses that are not "
                     "dusthanas. See docs/open-items.md OI-86.",
     )
+    advanced_raaja_intro: str
+    advanced_raaja_count: int
+    advanced_raaja_numbering: dict[str, int] = Field(
+        description="Section 11.7.3 numbers its yogas (1) to (18); this maps "
+                    "each registry key back to that number.",
+    )
+    shadvarga_named_in_11_7_3: list[str]
+    trivarga_named_in_11_7_3: list[str]
+    arudha_effectiveness_rule: str
+    arudha_effectiveness_note: str
+    advanced_raaja_input_note: str = Field(
+        description="What to supply so section 11.7.3's yogas can be decided "
+                    "rather than reported undecidable.",
+    )
+    vargottamamsa_footnote_unread: str
+    raaja_orb_footnote: str
+    worked_charts: list[dict]
     yogakaraka_note: str = Field(
         description="What the engine does about one planet lording both a "
                     "quadrant and a trine. See docs/open-items.md OI-85.",
@@ -500,6 +517,19 @@ class RaajaMagnitudeIn(BaseModel):
         ..., ge=0, le=11,
         description="Every quadrant and trine is counted from here",
     )
+    lagna_longitude: float | None = Field(
+        None, description=(
+            "The ascendant in degrees. Section 11.7.3's yogas 7 and 9 read "
+            "the lagna of a divisional chart, which the sign cannot give."
+        ),
+    )
+    special_lagnas: dict[str, float] | None = Field(
+        None, examples=[{"HL": 147.05, "GL": 18.30}],
+        description=(
+            "HL, GL and any other special lagna, in degrees. Section "
+            "11.7.3's yogas 6 and 8 turn on them."
+        ),
+    )
 
 
 class RaajaFactorOut(BaseModel):
@@ -557,6 +587,11 @@ class RaajaMagnitudeOut(BaseModel):
     pairs: list[RaajaPairMagnitudeOut] = Field(
         description="Empty when no Raaja yoga is present: magnitude grades a "
                     "yoga that already exists.",
+    )
+    arudha_effectiveness_rule: str
+    arudha_effectiveness: dict = Field(
+        description="Section 11.7.3 (18). A modifier on the chart's Raaja "
+                    "yogas, so it is returned beside them, never among them.",
     )
     final_judgment: str
     not_assessed: list[dict]

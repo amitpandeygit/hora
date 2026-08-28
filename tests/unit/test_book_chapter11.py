@@ -32,7 +32,11 @@ from hora.core.const import (
     AASRAYA_BASIS,
     ADHI_EXAMPLE_CONTRADICTS_RULE,
     ADHI_HOUSES_FROM_MOON,
+    ADVANCED_RAAJA_YOGA_COUNT,
+    ADVANCED_RAAJA_YOGAS,
     AMSA_SPELLINGS_IN_11_7_2,
+    ARUDHA_EFFECTIVENESS_BAD_PAIRS,
+    ARUDHA_EFFECTIVENESS_RULE,
     BRAHMA_VARIATION,
     BUDHA_AADITYA_CHART_NOTE,
     BUDHA_AADITYA_SPELLING_VARIANTS,
@@ -47,6 +51,8 @@ from hora.core.const import (
     CHANDRA_MOON_FROM_SUN_GRADE,
     CHANDRA_YOGA_INTRO,
     CHANDRA_YOGAS,
+    CHART_10_OLD_CALENDAR_DATE,
+    CHART_10_TIME_IS_LMT,
     CHATURASRA,
     COMBUSTION_WEAKENS_YOGA,
     DHARMA_KARMADHIPATI_REASON,
@@ -114,6 +120,7 @@ from hora.core.const import (
     RAAJA_MAGNITUDE_INTRO,
     RAAJA_MEANS,
     RAAJA_ORB_EXAMPLE,
+    RAAJA_ORB_FOOTNOTE,
     RAAJA_YOGA_COUNT,
     RAAJA_YOGA_INTRO,
     RAAJA_YOGAS,
@@ -131,6 +138,7 @@ from hora.core.const import (
     SANKHYA_YOGAS,
     SARPA_IS_VERY_BAD,
     SASA_MEANS,
+    SHADVARGA_NAMED_IN_11_7_3,
     SIMHAASANAAMSA_EMPERORS,
     SIMHAASANAAMSA_FOOTNOTE_UNREAD,
     SIMHAASANAAMSA_RULE,
@@ -141,7 +149,9 @@ from hora.core.const import (
     TRIKONA,
     TRIMURTHI_NOTE,
     TRIMURTHI_YOGAS,
+    TRIVARGA_NAMED_IN_11_7_3,
     UPACHAYA,
+    VARGOTTAMAMSA_FOOTNOTE_UNREAD,
     VIPAREETA_IDEAL_HOUSES,
     VIPAREETA_MEANS,
     WEAKENED_YOGA_IS_NOT_APPLICABLE,
@@ -216,18 +226,28 @@ def test_every_group_module_is_imported():
     one module may host several groups — `naabhasa.py` registers both
     `naabhasa_aasraya` and `naabhasa_dala`.
     """
+    import ast
     import pathlib
 
     import hora.charts.planetary_yogas as package
 
     source = pathlib.Path(package.__file__).read_text()
     directory = pathlib.Path(package.__file__).parent
+    # Parsed rather than grepped: the formatter may wrap two plain imports
+    # from one module into a parenthesised block, which a substring check
+    # would read as a missing import.
+    imported = {
+        alias.name.rsplit(".", 1)[-1]
+        for node in ast.walk(ast.parse(source))
+        if isinstance(node, ast.ImportFrom)
+        for alias in node.names
+    }
     modules = {spec.detect.__module__.rsplit(".", 1)[-1]
                for spec in YOGA_REGISTRY.values()}
     modules.discard("_shared")
     for module in modules:
         assert (directory / f"{module}.py").is_file(), module
-        assert f"import {module}" in source, module
+        assert module in imported, module
     assert {spec.group for spec in YOGA_REGISTRY.values()} == set(groups())
 
 
@@ -640,7 +660,7 @@ def test_catalogue_lists_every_yoga_without_a_chart(client):
     assert set(body["groups"]) == {
         "ravi", "chandra", "mahapurusha", "naabhasa_aasraya",
         "naabhasa_dala", "naabhasa_aakriti", "naabhasa_sankhya", "popular",
-        "raaja"}
+        "raaja", "raaja_advanced"}
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -673,7 +693,11 @@ def test_the_results_prose_is_not_served(client):
     body = client.post("/v1/planetary-yoga/chart", json={
         "rasis": {0: R["Cn"], 2: R["Le"], 5: R["Ge"]}}).json()
     payload = repr(body).lower()
-    for word in ("sluggish", "truthful", "charitable", "king", "expert"):
+    # Sentinels must appear only in the results, never in a rule. "king" was
+    # one until section 11.7.3, whose combinations say "one becomes a king"
+    # in the definition itself, so it is replaced rather than kept as a false
+    # positive waiting to happen.
+    for word in ("sluggish", "truthful", "charitable", "expert", "rabbit"):
         assert word not in payload
 
 
@@ -3442,7 +3466,7 @@ def test_every_yoga_chart_9_actually_has():
     to any detector has to account for this chart."""
     present = {v.key for v in evaluate(_chart_9()) if v.present}
     assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma",
-                       "raaja_basic"}
+                       "raaja_basic", "raaja_malefics_from_lord_and_ak"}
 
 
 def test_chart_9_is_a_daama_yoga_like_ramas():
@@ -4102,7 +4126,7 @@ def test_shivaji_has_none_of_the_thirty():
 def test_chart_9s_full_verdict_is_still_the_same_five():
     present = {v.key for v in evaluate(_chart_9()) if v.present}
     assert present == {"vesi", "sunaphaa", "adhi", "daama", "kalpadruma",
-                       "raaja_basic"}
+                       "raaja_basic", "raaja_malefics_from_lord_and_ak"}
 
 
 # --- what the thirty find in the two charts the book gives -------------------
@@ -4137,7 +4161,9 @@ def test_ramas_chart_has_exactly_these_yogas_across_all_ninety_five():
     assert present == {
         "ruchaka", "sasa", "hamsa", "sarpa", "vesi", "vosi", "ubhayachara",
         "daama", "subha", "gaja_kesari", "guru_mangala", "sankha", "mridanga",
-        "lakshmi", "vasumati", "raaja_basic", "dharma_karmadhipati"}
+        "lakshmi", "vasumati", "raaja_basic", "dharma_karmadhipati",
+        "raaja_debilitated_in_dusthanas", "raaja_fifth_and_ninth_lords",
+        "raaja_four_dignified"}
 
 
 # --------------------------------------------------------------------------
@@ -4802,6 +4828,11 @@ def _akbar() -> YogaInput:
         rasis={graha: int(lon // 30) for graha, lon in lons.items()},
         positions=positions,
         lagna_rasi=int(_lon9(CHART_10["Asc"]) // 30),
+        lagna_longitude=_lon9(CHART_10["Asc"]),
+        # Chart 10 prints HL and GL, so it is the one chart that can exercise
+        # §11.7.3's yogas 6 and 8 rather than reporting them undecidable.
+        special_lagnas={"HL": _lon9(CHART_10["HL"]),
+                        "GL": _lon9(CHART_10["GL"])},
         paksha=1)
 
 
@@ -5085,8 +5116,9 @@ def test_both_of_rajivs_planets_are_in_simhaasanaamsa():
 
 
 def test_rajivs_two_planets_are_more_than_eight_degrees_apart():
-    """"However, they were more than 8° apart." Footnote 38 gives the figure
-    and was not supplied; ours is 8.38°, which fails §11.7.2's 6° test."""
+    """"However, they were more than 8° apart." Footnote 38, supplied with
+    §11.7.3, says anything over 5 or 6 degrees is too large; ours is 8.38°,
+    which fails §11.7.2's 6° test."""
     chart = _rajiv()
     separation = abs(chart.positions[int(Graha.SUN)].longitude
                      - chart.positions[int(Graha.JUPITER)].longitude)
@@ -5148,3 +5180,361 @@ def test_the_endpoint_carries_the_functional_malefic_evidence(client):
     assert row["evidence"]["Libra"]["named"] == ["Jupiter"]
     assert row["evidence"]["Leo"]["candidates"] == ["Moon", "Mercury", "Venus"]
     assert "not generalised into a rule" in row["evidence_note"]
+
+
+# --------------------------------------------------------------------------
+# 11.7.3 More Raja Yogas
+#
+# Seventeen combinations and one modifier. They reach past signs — into chara
+# karakas, the navamsa, the divisional lagnas, HL and GL — so the contract
+# that matters most here is that an input which cannot decide a yoga produces
+# "cannot be decided", never "absent".
+# --------------------------------------------------------------------------
+
+
+def _advanced_keys() -> set[str]:
+    return {e["key"] for e in ADVANCED_RAAJA_YOGAS}
+
+
+def _numbered() -> dict[int, str]:
+    return {e["number"]: e["key"] for e in ADVANCED_RAAJA_YOGAS}
+
+
+def test_seventeen_advanced_yogas_are_registered_and_the_eighteenth_is_not():
+    """(18) says how effective the chart's Raaja yogas are, not whether one
+    is present, so it is computed beside them and never among them."""
+    assert ADVANCED_RAAJA_YOGA_COUNT == 17
+    assert [e["number"] for e in ADVANCED_RAAJA_YOGAS] == list(range(1, 18))
+    for entry in ADVANCED_RAAJA_YOGAS:
+        spec = YOGA_REGISTRY[entry["key"]]
+        assert spec.section == "11.7.3"
+        assert spec.group == "raaja_advanced"
+    assert "more effective" in ARUDHA_EFFECTIVENESS_RULE
+    assert ARUDHA_EFFECTIVENESS_BAD_PAIRS == ((2, 12), (6, 8))
+
+
+def test_the_six_shadvarga_charts_the_book_names_are_the_ones_we_use():
+    """"Rasi, Navamsa, Hora, Drekkana, Dwadasamsa, Trimsamsa" — §6.6's
+    shadvarga group, named in words rather than by code."""
+    from hora.charts.planetary_yogas.raaja_advanced import (
+        SHADVARGA_CODES,
+        TRIVARGA_CODES,
+    )
+    from hora.charts.vargas import VARGA_GROUPS
+
+    assert SHADVARGA_NAMED_IN_11_7_3 == (
+        "Rasi", "Navamsa", "Hora", "Drekkana", "Dwadasamsa", "Trimsamsa")
+    assert set(SHADVARGA_CODES) == set(VARGA_GROUPS["shadvarga"])
+    assert TRIVARGA_NAMED_IN_11_7_3 == ("Rasi", "Navamsa", "Drekkana")
+    assert TRIVARGA_CODES == ("D1", "D9", "D3")
+
+
+# --- the contract: what the input cannot decide, it says ---------------------
+
+
+@pytest.mark.parametrize("number", [1, 2, 3, 4, 5])
+def test_the_karaka_yogas_say_so_without_longitudes(number):
+    """Chara karakas are assigned by degrees within a sign. A sign-only chart
+    cannot produce them, and five of the seventeen depend on them."""
+    verdict = evaluate_one(_numbered()[number], _rama())
+    assert verdict.present is False
+    assert verdict.reason.startswith("this yoga cannot be decided")
+    assert "chara karakas" in verdict.reason
+
+
+@pytest.mark.parametrize("number", [6, 8])
+def test_the_hl_and_gl_yogas_say_so_when_they_were_not_supplied(number):
+    """HL and GL come from birth data, not from a graha, so they are given
+    rather than derived — and their absence is named."""
+    verdict = evaluate_one(_numbered()[number], _chart_9())
+    assert verdict.present is False
+    assert "HL and GL" in verdict.reason
+
+
+@pytest.mark.parametrize("number", [7, 9])
+def test_the_divisional_lagna_yogas_need_a_lagna_longitude(number):
+    verdict = evaluate_one(_numbered()[number], _chart_9())
+    assert verdict.present is False
+    assert "lagna longitude" in verdict.reason
+
+
+def test_an_undecidable_yoga_is_never_reported_as_a_plain_absence():
+    """The whole contract in one assertion: across a sign-only chart, every
+    §11.7.3 verdict that could not be decided says so in its reason."""
+    keys = _advanced_keys()
+    undecided = [v for v in evaluate(_rama())
+                 if v.key in keys and "cannot be decided" in v.reason]
+    assert len(undecided) == 9
+    for verdict in undecided:
+        assert verdict.present is False
+        assert verdict.reason != ""
+
+
+def test_what_a_sign_only_chart_can_still_decide():
+    """The other half: eight of the seventeen need nothing but signs and a
+    lagna, and those are answered."""
+    keys = _advanced_keys()
+    decided = [v for v in evaluate(_rama())
+               if v.key in keys and "cannot be decided" not in v.reason]
+    assert len(decided) == 8
+
+
+# --- the seventeen, one at a time -------------------------------------------
+
+
+def test_1_needs_both_conditions_and_names_the_half_that_holds():
+    """"If only one condition is satisfied, still the results may be felt,
+    but not fully." Akbar has the second half only."""
+    verdict = evaluate_one("raaja_pk_ak_and_lords", _akbar())
+    assert verdict.present is False
+    assert "the lagna lord Venus and 5th lord Saturn conjoin" in verdict.reason
+    assert any("only one of the two conditions holds" in q
+               for q in verdict.qualifiers)
+
+
+def test_1_is_present_when_both_halves_hold():
+    data = _pl("Ar", paksha=0, SUN=_deg("Cn", 5), MOON=_deg("Cn", 12),
+               MARS=_deg("Cn", 20), MERCURY=_deg("Cn", 25),
+               JUPITER=_deg("Cn", 28), VENUS=_deg("Cn", 2),
+               SATURN=_deg("Cn", 9), RAHU=_deg("Cn", 17))
+    verdict = evaluate_one("raaja_pk_ak_and_lords", data)
+    assert verdict.present is True
+    assert "are conjoined" in verdict.reason
+
+
+def test_2_reports_both_readings_of_those_planets():
+    """Clause (d) says "those planets" without saying which. Both readings
+    are computed and the qualifier names them. See OI-93."""
+    verdict = evaluate_one("raaja_maharajah", _akbar())
+    note = next(q for q in verdict.qualifiers if "those planets" in q)
+    assert "Read as AK and PK alone" in note
+    assert "read as all four planets" in note
+    assert "OI-93" in note
+
+
+def test_5_holds_for_shivaji():
+    """The 3rd and 6th from both the lagna lord and AK carry malefics."""
+    verdict = evaluate_one("raaja_malefics_from_lord_and_ak", _chart_9())
+    assert verdict.present is True
+    assert "from the lagna lord Sun and from AK Moon" in verdict.reason
+
+
+def test_6_reads_lagna_hl_and_gl_and_reports_the_loosened_form_apart():
+    """"Results of this yoga may be experienced if the conditions are not
+    strictly met" — so the loose form is a qualifier, not presence."""
+    verdict = evaluate_one("raaja_lagna_hl_gl_one_planet", _akbar())
+    assert verdict.present is False
+    assert "lagna, HL and GL" in verdict.reason
+
+
+def test_8_and_9_allow_different_planets():
+    """[NOTE: It can be different planets.] Each of the three positions is
+    asked separately, not of one planet."""
+    for key in ("raaja_dignified_on_lagna_hl_gl",
+                "raaja_dignified_on_three_lagnas"):
+        entry = next(e for e in ADVANCED_RAAJA_YOGAS if e["key"] == key)
+        assert entry["note"] == "It can be different planets."
+    verdict = evaluate_one("raaja_dignified_on_lagna_hl_gl", _akbar())
+    assert verdict.present is False
+    assert "HL (Leo)" in verdict.reason
+
+
+def test_10_counts_debilitated_planets_across_the_three_houses():
+    """"the 3rd, 6th and 8th houses are occupied by one or two planets in
+    debilitation" — a count across them, not one per house. Rama has one."""
+    verdict = evaluate_one("raaja_debilitated_in_dusthanas", _rama())
+    assert verdict.present is True
+    assert "Rahu is debilitated" in verdict.reason
+    assert "the lagna lord Moon is dignified in lagna itself" in verdict.reason
+
+
+def test_10_fails_when_there_are_three_debilitated_planets():
+    """"one or two" is a range with a top, so three is a failure and the
+    verdict says the count."""
+    # Aries lagna puts the 3rd, 6th and 8th in Gemini, Virgo and Scorpio —
+    # the debilitation signs of Ketu, Venus and the Moon respectively.
+    data = _pl("Ar", paksha=0, KETU=_deg("Ge"), VENUS=_deg("Vi"),
+               MOON=_deg("Sc"), MARS=_deg("Ar", 5))
+    verdict = evaluate_one("raaja_debilitated_in_dusthanas", data)
+    assert verdict.present is False
+    assert "3 debilitated planets, not one or two" in verdict.reason
+
+
+def test_12_is_not_reachable_by_the_11_7_1_rule():
+    """The 5th and 9th are both trines, so §11.7.1's quadrant-and-trine
+    pairing never produces this one. A separate rule, not a special case."""
+    assert 5 in TRIKONA and 9 in TRIKONA
+    assert 5 not in KENDRA and 9 not in KENDRA
+    verdict = evaluate_one("raaja_fifth_and_ninth_lords", _rama())
+    assert verdict.present is True
+    assert "the 5th lord Mars and 9th lord Jupiter are in a mutual aspect" \
+        in verdict.reason
+
+
+def test_14_holds_for_akbar():
+    """The 5th lord Saturn in the 1st with the lagna lord Venus — the same
+    two planets §11.7.2 spends its Akbar paragraph on."""
+    verdict = evaluate_one("raaja_fifth_lord_joined", _akbar())
+    assert verdict.present is True
+    assert "the 5th lord Saturn is in the 1st" in verdict.reason
+    assert "the lagna lord Venus joins him" in verdict.reason
+
+
+def test_15_cannot_be_decided_because_footnote_40_was_not_supplied():
+    """Clause (b) is computed anyway, so what is known is not lost with what
+    is not. See OI-92."""
+    assert VARGOTTAMAMSA_FOOTNOTE_UNREAD == "40"
+    data = _pl("Ar", paksha=0, MOON=_deg("Ar"), SUN=_deg("Li"),
+               MARS=_deg("Li"), JUPITER=_deg("Sg"), SATURN=_deg("Aq"),
+               VENUS=_deg("Li"))
+    verdict = evaluate_one("raaja_vargottama_moon", data)
+    assert verdict.present is False
+    assert "satisfies clause (b)" in verdict.reason
+    assert "vargottamamsa" in verdict.reason
+    assert "OI-92" in verdict.reason
+
+
+def test_15_is_a_plain_absence_when_clause_b_already_fails():
+    """Only clause (a) is unanswerable. If fewer than four planets aspect the
+    Moon the yoga is absent outright, and the undecidable clause never
+    arises."""
+    verdict = evaluate_one("raaja_vargottama_moon", _akbar())
+    assert verdict.present is False
+    assert "asks for four or more" in verdict.reason
+    assert "cannot be decided" not in verdict.reason
+
+
+def test_16_counts_rama_at_five():
+    """"If 4 or more planets occupy moolatrikonas or exaltation signs, one
+    becomes a king even if he is from a lowly family." """
+    verdict = evaluate_one("raaja_four_dignified", _rama())
+    assert verdict.present is True
+    assert "5 planets" in verdict.reason
+
+
+def test_17_needs_every_benefic_and_every_malefic_in_place():
+    """A looser reading would fire on nearly every chart. See OI-94."""
+    verdict = evaluate_one("raaja_benefics_in_quadrants", _akbar())
+    assert verdict.present is False
+    assert "outside the quadrants" in verdict.reason
+    assert "outside the 3rd, 6th and 11th" in verdict.reason
+
+
+def test_17_cannot_be_decided_without_a_paksha():
+    """The Moon has no nature without one, and this yoga sorts every planet
+    into benefic or malefic — so it refuses rather than guessing."""
+    data = YogaInput(rasis={int(Graha.MOON): R["Ar"]}, lagna_rasi=R["Ar"])
+    verdict = evaluate_one("raaja_benefics_in_quadrants", data)
+    assert verdict.present is False
+    assert "needs a paksha" in verdict.reason
+
+
+# --- (18), which is not a yoga ----------------------------------------------
+
+
+def test_18_is_computed_beside_the_yogas_not_among_them():
+    from hora.charts.planetary_yogas.raaja_advanced import arudha_effectiveness
+
+    assert "arudha_effectiveness" not in YOGA_REGISTRY
+    result = arudha_effectiveness(_akbar())
+    assert result["decidable"] is True
+    assert result["more_effective"] is True
+
+
+def test_18_confirms_chart_10s_drawn_arudha_lagna():
+    """Chart 10 draws AL in Cancer. Our arudha engine puts it there, which
+    checks §9.2 against this chart as a side effect."""
+    from hora.charts.planetary_yogas.raaja_advanced import arudha_effectiveness
+
+    assert arudha_effectiveness(_akbar())["arudha_lagna_sign"] == R["Cn"]
+
+
+def test_18_reports_why_it_cannot_decide_rather_than_failing():
+    """Shivaji's chart needs §9.2's stronger-lord rule for Aquarius, which is
+    its own open item. The modifier says so instead of raising."""
+    from hora.charts.planetary_yogas.raaja_advanced import arudha_effectiveness
+
+    result = arudha_effectiveness(_chart_9())
+    assert result["decidable"] is False
+    assert "stronger lord" in result["reason"]
+
+
+# --- the two footnotes this section supplies --------------------------------
+
+
+def test_footnote_38_gives_the_orb_figure_11_7_2_hedged():
+    """"Anything greater than 5 or 6 degrees is too large for a Raaja Yoga to
+    give its full results." Recorded as unread when §11.7.2 was written."""
+    assert "5 or 6 degrees" in RAAJA_ORB_FOOTNOTE
+    assert RAAJA_CLOSE_ORB_DEGREES == 6.0
+    assert RAAJA_CLOSE_ORB_IS_APPROXIMATE is True
+
+
+def test_footnote_39_settles_chart_10s_calendar():
+    """"This date may be written by some as November 24, 1542 based on the
+    old calendar." Ten days apart, which is exactly the Julian-Gregorian
+    difference in 1542 — so the printed December 4 is the Gregorian date, as
+    the recompute already showed."""
+    import swisseph as swe
+
+    assert CHART_10_OLD_CALENDAR_DATE == "November 24, 1542"
+    assert CHART_10_TIME_IS_LMT is True
+    gregorian = swe.julday(1542, 12, 4, 0.0, swe.GREG_CAL)
+    julian = swe.julday(1542, 11, 24, 0.0, swe.JUL_CAL)
+    assert gregorian == pytest.approx(julian)
+
+
+def test_chart_10s_printed_zone_is_its_local_mean_time():
+    """Footnote 39 says LMT and the diagram says 4:39 East. At 69 E 47 the
+    local mean time offset is 69.783/15 hours, which is 4h39m."""
+    lmt_hours = CHART_10_PLACE["longitude"] / 15.0
+    assert lmt_hours == pytest.approx(CHART_10_BIRTH["utc_offset_hours"],
+                                      abs=0.5 / 60)
+
+
+def test_the_rules_endpoint_carries_section_11_7_3(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["advanced_raaja_count"] == 17
+    assert body["advanced_raaja_numbering"]["raaja_pk_ak_and_lords"] == 1
+    assert body["advanced_raaja_numbering"]["raaja_benefics_in_quadrants"] == 17
+    assert body["shadvarga_named_in_11_7_3"][0] == "Rasi"
+    assert body["vargottamamsa_footnote_unread"] == "40"
+    assert "5 or 6 degrees" in body["raaja_orb_footnote"]
+    assert "never among them" in body["arudha_effectiveness_note"]
+
+
+def test_the_rules_endpoint_says_what_to_supply(client):
+    """The contract, stated to the caller rather than only enforced."""
+    body = client.get("/v1/planetary-yoga/rules").json()
+    note = body["advanced_raaja_input_note"]
+    assert "cannot be decided" in note
+    for needed in ("chara karakas", "lagna longitude", "HL and GL"):
+        assert needed in note
+
+
+def test_the_rules_endpoint_distinguishes_the_two_worked_charts(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    charts = {c["chart"]: c for c in body["worked_charts"]}
+    assert charts["Chart 9"]["recomputable"] is False
+    assert charts["Chart 10"]["recomputable"] is True
+    assert charts["Chart 10"]["old_calendar_date"] == "November 24, 1542"
+    assert charts["Chart 10"]["time_is_lmt"] is True
+
+
+def test_the_magnitude_endpoint_accepts_hl_gl_and_a_lagna_longitude(client):
+    """Chart 10, whose HL and GL are printed, driven end to end."""
+    body = client.post("/v1/planetary-yoga/raaja-magnitude", json={
+        "lagna_rasi": R["Li"],
+        "lagna_longitude": _lon9(CHART_10["Asc"]),
+        "special_lagnas": {"HL": _lon9(CHART_10["HL"]),
+                           "GL": _lon9(CHART_10["GL"])},
+        "longitudes": {int(g): _lon9(CHART_10[name])
+                       for name, g in _CHART_10_GRAHA.items()},
+    }).json()
+    assert body["arudha_effectiveness"]["decidable"] is True
+    assert body["arudha_effectiveness"]["arudha_lagna_sign_name"] == "Cancer"
+    assert "more effective" in body["arudha_effectiveness_rule"]
+    pair = next(p for p in body["pairs"]
+                if {p["quadrant_lord_name"], p["trine_lord_name"]}
+                == {"Venus", "Saturn"})
+    assert pair["orb_degrees"] == pytest.approx(0.70, abs=0.01)

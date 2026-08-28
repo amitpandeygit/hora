@@ -81,7 +81,9 @@ def rules() -> dict:
 def raaja_magnitude(req: RaajaMagnitudeIn) -> dict:
     try:
         return planetary_yoga_service.raaja_magnitude(
-            req.longitudes, lagna_rasi=req.lagna_rasi)
+            req.longitudes, lagna_rasi=req.lagna_rasi,
+            lagna_longitude=req.lagna_longitude,
+            special_lagnas=req.special_lagnas)
     except (planetary_yoga_service.InputError,
             planetary_yoga_service.YogaError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

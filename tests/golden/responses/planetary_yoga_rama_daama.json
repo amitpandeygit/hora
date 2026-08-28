@@ -2,7 +2,7 @@
   "body": {
     "chart": "D1",
     "chart_note": "Because Mercury and Venus are with Sun or a sign away from him most of the time, the following yogas are very common in rasi chart. However, they are less common in divisional charts. One can apply these yogas in D-9 and D-10 in particular.",
-    "evaluated": 98,
+    "evaluated": 115,
     "grahas_considered": [
       {
         "graha": 0,
@@ -53,6 +53,9 @@
       "vasumati",
       "raaja_basic",
       "dharma_karmadhipati",
+      "raaja_debilitated_in_dusthanas",
+      "raaja_fifth_and_ninth_lords",
+      "raaja_four_dignified",
       "vesi",
       "vosi",
       "ubhayachara",
@@ -1603,6 +1606,315 @@
         "qualifiers": [],
         "reason": "no lord of the 6th, 8th or 12th occupies a dusthana, and no two of them are conjoined",
         "section": "11.7.1",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (a) chara putra karaka (PK) and chara atmaka karaka (AK) are conjoined and (b) lagna and 5th lords conjoin, then Raaja Yoga is present and the native enjoys power and prosperity.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_pk_ak_and_lords",
+        "name": "Raaja Yoga (11.7.3 #1) \u2014 PK with AK, lagna lord with 5th lord",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga cannot be decided: chara karakas are assigned by degrees within a sign and no longitudes were supplied",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (a) lagna lord is in 5th, (b) 5th lord is in lagna, (c) AK and PK are in lagna or the 5th house, and (d) those planets in owns rasi or amsa or in exaltation or aspected by benefics, then this yoga is present and the native becomes a great king (Maharajah) loved by his associates.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_maharajah",
+        "name": "Raaja Yoga (11.7.3 #2) \u2014 the Maharajah combination",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga cannot be decided: chara karakas are assigned by degrees within a sign and no longitudes were supplied",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the 9th lord and AK are in lagna, 5th or 7th, aspected by benefics, then Raaja Yoga is present.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_ninth_lord_and_ak",
+        "name": "Raaja Yoga (11.7.3 #3) \u2014 9th lord and AK",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga cannot be decided: chara karakas are assigned by degrees within a sign and no longitudes were supplied",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the 2nd, 4th and 5th houses from lagna lord and AK are occupied by benefics, one becomes a king.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_benefics_from_lord_and_ak",
+        "name": "Raaja Yoga (11.7.3 #4) \u2014 benefics in the 2nd, 4th and 5th",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga cannot be decided: chara karakas are assigned by degrees within a sign and no longitudes were supplied",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the 3rd and 6th houses from lagna lord and AK are occupied or aspected by malefics, one becomes a king.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_malefics_from_lord_and_ak",
+        "name": "Raaja Yoga (11.7.3 #5) \u2014 malefics in the 3rd and 6th",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga cannot be decided: chara karakas are assigned by degrees within a sign and no longitudes were supplied",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If lagna, HL and GL are joined or aspected by the same planet, then that planet gives a Raaja Yoga. One may add \u201cowned\u201d to \u201cjoined or aspected\u201d.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_lagna_hl_gl_one_planet",
+        "name": "Raaja Yoga (11.7.3 #6) \u2014 one planet on lagna, HL and GL",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga cannot be decided: HL and GL were not supplied; they are computed from birth data, not from a graha",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the same planet aspects lagna in the six divisional charts of shad vargas \u2013 Rasi, Navamsa, Hora, Drekkana, Dwadasamsa, Trimsamsa \u2013 then that planet gives a Raaja Yoga.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_shadvarga_lagna_aspect",
+        "name": "Raaja Yoga (11.7.3 #7) \u2014 one planet aspecting lagna in all six",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga cannot be decided: it reads the lagna of six divisional charts and no lagna longitude was supplied",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If lagna, HL and GL are occupied by a planet in own or exaltation sign, then the native becomes a king.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_dignified_on_lagna_hl_gl",
+        "name": "Raaja Yoga (11.7.3 #8) \u2014 dignified planets on lagna, HL and GL",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga cannot be decided: HL and GL were not supplied",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If lagna in Rasi, Navamsa and Drekkana charts is occupied by a planet in own or exaltation sign, then the native becomes a king.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_dignified_on_three_lagnas",
+        "name": "Raaja Yoga (11.7.3 #9) \u2014 dignified planets on lagna in D-1, D-9, D-3",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "this yoga cannot be decided: it reads the lagna of three charts and no lagna longitude was supplied",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (a) the 3rd, 6th and 8th houses are occupied by one or two planets in debilitation and (b) lagna lord is in an own or exaltation sign and aspects lagna, it forms a Raaja Yoga.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_debilitated_in_dusthanas",
+        "name": "Raaja Yoga (11.7.3 #10) \u2014 debilitated planets in the 3rd, 6th and 8th",
+        "participants": [
+          {
+            "graha": 1,
+            "graha_name": "Moon",
+            "house_from_sun": null,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "graha": 7,
+            "graha_name": "Rahu",
+            "house_from_sun": null,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          }
+        ],
+        "present": true,
+        "qualifiers": [],
+        "reason": "Rahu is debilitated in the 3rd, 6th or 8th, and the lagna lord Moon is dignified in lagna itself",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (a) the 6th, 8th and 12th lords are debilitated or combust or in inimical signs and (b) lagna lord is in an own or exaltation sign and aspects lagna, it forms a Raaja Yoga.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_afflicted_dusthana_lords",
+        "name": "Raaja Yoga (11.7.3 #11) \u2014 afflicted 6th, 8th and 12th lords",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "combustion could not be judged for Jupiter, Saturn, Mercury; the Sun's longitude or theirs was not supplied"
+        ],
+        "reason": "the 6th lord Jupiter is neither debilitated nor combust nor in an inimical sign; the 8th lord Saturn is neither debilitated nor combust nor in an inimical sign; the 12th lord Mercury is neither debilitated nor combust nor in an inimical sign",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If the 5th and 9th lords are in a conjunction or a mutual aspect, it makes one prosperous.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_fifth_and_ninth_lords",
+        "name": "Raaja Yoga (11.7.3 #12) \u2014 the 5th and 9th lords",
+        "participants": [
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": null,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": null,
+            "sign": 3,
+            "sign_name": "Cancer"
+          }
+        ],
+        "present": true,
+        "qualifiers": [],
+        "reason": "the 5th lord Mars and 9th lord Jupiter are in a mutual aspect",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (a) the 4th lord is in the 10th house and the 10th lord is in the 4th house and (b) both of them are aspected by the 5th lord or the 9th lord, then a Raaja Yoga is formed.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_fourth_tenth_exchange",
+        "name": "Raaja Yoga (11.7.3 #13) \u2014 the 4th/10th exchange, aspected",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 4th lord Venus is not in the 10th; the 10th lord Mars is not in the 4th",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (a) the 5th lord is in the 1st, 4th or 10th house and (b) lagna lord or the 9th lord joins him, then the native becomes a king.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_fifth_lord_joined",
+        "name": "Raaja Yoga (11.7.3 #14) \u2014 the 5th lord joined by the 1st or 9th",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "the 5th lord Mars is in the 7th, not the 1st, 4th or 10th",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If (a) Moon is strong and occupies vargottamamsa and (b) four or more planets aspect him, then one becomes a king.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_vargottama_moon",
+        "name": "Raaja Yoga (11.7.3 #15) \u2014 a vargottama Moon aspected by four",
+        "participants": [],
+        "present": false,
+        "qualifiers": [
+          "Section 11.7.3 requires this planet to be strong. Strength is not computed \u2014 chapter 15's simple-rules measure is not built \u2014 so this verdict reports the placements only. See docs/open-items.md OI-81.",
+          "the planet section 11.7.3 asks to be strong here is Moon"
+        ],
+        "reason": "2 planets aspect Moon (Mars, Saturn); section 11.7.3 asks for four or more",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If 4 or more planets occupy moolatrikonas or exaltation signs, one becomes a king even if he is from a lowly family.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_four_dignified",
+        "name": "Raaja Yoga (11.7.3 #16) \u2014 four planets in moolatrikona or exaltation",
+        "participants": [
+          {
+            "graha": 0,
+            "graha_name": "Sun",
+            "house_from_sun": null,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "graha": 2,
+            "graha_name": "Mars",
+            "house_from_sun": null,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "graha": 4,
+            "graha_name": "Jupiter",
+            "house_from_sun": null,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "graha": 5,
+            "graha_name": "Venus",
+            "house_from_sun": null,
+            "sign": 11,
+            "sign_name": "Pisces"
+          },
+          {
+            "graha": 6,
+            "graha_name": "Saturn",
+            "house_from_sun": null,
+            "sign": 6,
+            "sign_name": "Libra"
+          }
+        ],
+        "present": true,
+        "qualifiers": [],
+        "reason": "Sun, Mars, Jupiter, Venus, Saturn \u2014 5 planets \u2014 occupy a moolatrikona or exaltation sign",
+        "section": "11.7.3",
+        "weakened": false
+      },
+      {
+        "aliases": [],
+        "definition": "If benefics are in quadrants and malefics are in the 3rd, 6th and 11th houses, one becomes a king even if he is from a lowly family.",
+        "group": "raaja_advanced",
+        "implies": [],
+        "key": "raaja_benefics_in_quadrants",
+        "name": "Raaja Yoga (11.7.3 #17) \u2014 benefics in quadrants, malefics in 3/6/11",
+        "participants": [],
+        "present": false,
+        "qualifiers": [],
+        "reason": "Mercury, Venus are benefics outside the quadrants; Sun, Mars, Saturn, Ketu are malefics outside the 3rd, 6th and 11th",
+        "section": "11.7.3",
         "weakened": false
       },
       {

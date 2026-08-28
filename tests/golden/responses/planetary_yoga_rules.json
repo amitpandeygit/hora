@@ -21,6 +21,30 @@
       7,
       8
     ],
+    "advanced_raaja_count": 17,
+    "advanced_raaja_input_note": "These seventeen reach past signs \u2014 into chara karakas, the navamsa, the divisional lagnas, HL and GL. A chart that cannot decide one of them gets a verdict whose reason begins \u201cthis yoga cannot be decided\u201d, never a bare absence. Supply longitudes for the karaka and varga yogas, a lagna longitude for yogas 7 and 9, and HL and GL for yogas 6 and 8.",
+    "advanced_raaja_intro": "Some advanced Raaja Yogas will be listed below.",
+    "advanced_raaja_numbering": {
+      "raaja_afflicted_dusthana_lords": 11,
+      "raaja_benefics_from_lord_and_ak": 4,
+      "raaja_benefics_in_quadrants": 17,
+      "raaja_debilitated_in_dusthanas": 10,
+      "raaja_dignified_on_lagna_hl_gl": 8,
+      "raaja_dignified_on_three_lagnas": 9,
+      "raaja_fifth_and_ninth_lords": 12,
+      "raaja_fifth_lord_joined": 14,
+      "raaja_four_dignified": 16,
+      "raaja_fourth_tenth_exchange": 13,
+      "raaja_lagna_hl_gl_one_planet": 6,
+      "raaja_maharajah": 2,
+      "raaja_malefics_from_lord_and_ak": 5,
+      "raaja_ninth_lord_and_ak": 3,
+      "raaja_pk_ak_and_lords": 1,
+      "raaja_shadvarga_lagna_aspect": 7,
+      "raaja_vargottama_moon": 15
+    },
+    "arudha_effectiveness_note": "Section 11.7.3 (18) is not a combination \u2014 it says how effective the chart\u2019s Raaja yogas are. It is returned by /v1/planetary-yoga/raaja-magnitude beside the yogas and never among them.",
+    "arudha_effectiveness_rule": "If arudha lagna and darapada (arudha pada of the 7th house) are not in mutual 2nd/12th or 6th/8th positions, then Raja Yogas in the chart will be more effective.",
     "brahma_variation": "If (1) Jupiter is in a quadrant from the 9th lord, (2) Venus is in a quadrant from the 11th lord, and, (3) Mercury is in a quadrant from the 1st lord or 10th lord, then this yoga is present.",
     "brahma_variation_note": "NOTE (2) gives a second, unrelated definition of Brahma yoga. The first one \u2014 benefics in the 4th, 10th and 11th from lagna lord \u2014 is the one detected; the variation is carried here so a caller can see it was not silently dropped.",
     "budha_aaditya_spelling_variants": [
@@ -294,6 +318,7 @@
     "raaja_intro": "Raaja means a king. Raaja yogas are the combinations that give power and prosperity to a native. They make one the best in something.",
     "raaja_lagna_note": "\u201cLagna can be taken as a quadrant or a trine here. It is both.\u201d So the lagna lord is counted on both sides of every pairing.",
     "raaja_means": "a king",
+    "raaja_orb_footnote": "Anything greater than 5 or 6 degrees is too large for a Raaja Yoga to give its full results.",
     "ravi_intro": "Ravi yogas are the solar combinations. There are several yogas based on Sun.",
     "results_note": "The results each yoga gives are PVR's own prose and are withheld from this response under the licence gate of OI-12.",
     "sankhya_basis": "Sankhya yogas are based on the number of distinct signs occupied by the seven planets combined. Rahu and Ketu are not included.",
@@ -307,6 +332,14 @@
     "sankhya_unreachable_note": "Taken as stated, section 11.5.4's fallback rule makes Gola and Yuga permanently absent: one or two distinct signs always fit inside a seven-sign window, and section 11.5.3's run yogas cover all twelve windows, so one of them always applies first. Both are still defined and evaluated, and their verdicts name what superseded them. See docs/open-items.md OI-79.",
     "sarpa_is_very_bad": "This is a very bad combination.",
     "sasa_means": "a hare or a rabbit",
+    "shadvarga_named_in_11_7_3": [
+      "Rasi",
+      "Navamsa",
+      "Hora",
+      "Drekkana",
+      "Dwadasamsa",
+      "Trimsamsa"
+    ],
     "sun_excluded_note": "The Sun cannot form a yoga about what accompanies him, so he is excluded from his own houses alongside the Moon.",
     "timing_example": {
       "chart": "D10",
@@ -335,6 +368,12 @@
       "hara",
       "brahma"
     ],
+    "trivarga_named_in_11_7_3": [
+      "Rasi",
+      "Navamsa",
+      "Drekkana"
+    ],
+    "vargottamamsa_footnote_unread": "40",
     "vasumati_reference_note": "Vasumati says only \u201cbenefics occupy upachayas\u201d, naming no reference and no count. Houses are counted from lagna, as everywhere else in section 11.6, and one benefic in an upachaya is enough; a verdict says how many benefics sit outside them so a stricter reading stays available. See docs/open-items.md OI-84.",
     "vipareeta_ideal_case": "In the ideal case, the lords of the 6th, 8th and 12th houses will all be together in one of the three houses (or the 3rd house or the 11th house), with no other planets conjoining them. But the results of this yoga may be experienced with just one or two dusthana lords occupying a dusthana.",
     "vipareeta_ideal_houses": [
@@ -348,6 +387,28 @@
     "vipareeta_means": "extreme",
     "vipareeta_reason": "Because dusthanas show the obstacles one faces in life, situation of dusthana lords in dusthanas shows that obstacles will run into obstacles themselves. One experiences tremendous success in the face of obstacles.",
     "weakened_yoga_is_not_applicable": "A yoga the book says \u201cmay not operate well\u201d does not count as applicable for section 11.5.4's fallback. Lord Sri Rama's chart forces this: its only earlier Naabhasa yoga is a weakened Sarpa, and the book gives the chart as Daama.",
+    "worked_charts": [
+      {
+        "birth_footnote": null,
+        "chart": "Chart 9",
+        "native": "Chatrapati Shivaji",
+        "note": "Given as a Hindu calendar date and a time measured from sunrise, so it is transcribed, not recomputed.",
+        "recomputable": false,
+        "section": "11.6",
+        "shows": "Kalpadruma yoga"
+      },
+      {
+        "birth_footnote": "Birthdata: December 4, 1542, 3:39 am (LMT), 69 E 47, 25 N 19. This date may be written by some as November 24, 1542 based on the old calendar.",
+        "chart": "Chart 10",
+        "native": "Emperor Akbar",
+        "note": "Footnote 39 settles the calendar: 24 November 1542 in the old calendar is 4 December 1542 in the new, ten days apart, and the printed date is the new one.",
+        "old_calendar_date": "November 24, 1542",
+        "recomputable": true,
+        "section": "11.7.2",
+        "shows": "the magnitude of a Raaja yoga",
+        "time_is_lmt": true
+      }
+    ],
     "yogakaraka_note": "For six lagnas \u2014 Taurus, Cancer, Leo, Libra, Capricorn and Aquarius \u2014 one planet lords a quadrant and a trine that are different houses. Section 11.7.1 asks for an association between two planets and says nothing about one planet holding both sides, so the engine reports the fact as a qualifier and draws no conclusion. See docs/open-items.md OI-85."
   },
   "status": 200
