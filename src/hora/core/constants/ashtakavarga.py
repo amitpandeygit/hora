@@ -282,3 +282,46 @@ TABLE_19_WORKED_READING = (
 TABLES_20_TO_26_NOTE = (
     "Table 20-Table 26 give the benefic and malefic houses of Moon, Mars, "
     "Mercury, Jupiter, Venus, Saturn and lagna (respectively).")
+
+
+# --------------------------------------------------------------------------
+# §12.2's worked example and exercise
+# --------------------------------------------------------------------------
+
+EXAMPLE_37 = (
+    "Let us say Venus is in Ge. Find the rasis in which Jupiter is benefic "
+    "with respect to Venus.")
+
+EXAMPLE_37_WORKING = (
+    "To find the rasis in which Jupiter is benefic, we should look at "
+    "Jupiter's ashtakavarga (see Table 23). To find the rasis in which "
+    "Jupiter is benefic with respect to Venus, we should look at the column "
+    "of Venus. Only the 2nd, 5th, 6th, 9th, 10th and 11th houses have a 1 "
+    "(rekha – benefic point) against them. Venus is in Ge and finding these "
+    "houses with respect to Venus, we get Cn, Li, Sc, Aq, Pi and Ar. So "
+    "Jupiter is benefic with respect to Venus in these rasis.")
+
+EXAMPLE_37_HOUSES: tuple[int, ...] = (2, 5, 6, 9, 10, 11)
+EXAMPLE_37_RASIS: tuple[str, ...] = ("Cn", "Li", "Sc", "Aq", "Pi", "Ar")
+
+EXERCISE_18 = (
+    "Consider the rasi chart in Chart 6. Find the rasis in which Mercury is "
+    "benefic with respect to different planets and lagna.")
+
+EXERCISE_18_HINT = (
+    "See Table 22 for Mercury's ashtakavarga. Looking at the columns of "
+    "different planets, find the houses from the planets in which Mercury is "
+    "benefic. Count those houses from the respective planets and find the "
+    "rasis.")
+
+#: The printed answer, reference by reference.
+EXERCISE_18_ANSWER: dict[str, tuple[str, ...]] = {
+    "Sun": ("Ar", "Ta", "Li", "Sc", "Aq"),
+    "Moon": ("Ar", "Ge", "Le", "Li", "Sg", "Cp"),
+    "Mars": ("Ar", "Ge", "Cn", "Vi", "Sg", "Cp", "Aq", "Pi"),
+    "Mercury": ("Ar", "Ta", "Ge", "Le", "Li", "Sc", "Aq", "Pi"),
+    "Jupiter": ("Ge", "Cn", "Cp", "Pi"),
+    "Venus": ("Ar", "Ta", "Ge", "Cn", "Le", "Sc", "Sg", "Aq"),
+    "Saturn": ("Ar", "Ta", "Ge", "Le", "Vi", "Sc", "Aq", "Pi"),
+    "Lagna": ("Ar", "Ge", "Cn", "Vi", "Li", "Sg", "Aq"),
+}

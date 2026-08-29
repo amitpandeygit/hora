@@ -129,6 +129,34 @@ def benefic_houses(owner: str, reference: str) -> tuple[int, ...]:
                  if entry(owner, reference, house))
 
 
+def benefic_rasis(owner: str, reference: str, reference_sign: int
+                  ) -> tuple[int, ...]:
+    """The **rasis** in which `owner` is benefic with respect to `reference`.
+
+    §12.2's Example 37 in one call: take the reference's benefic houses from
+    the owner's table, count them from the sign the reference occupies, and
+    report the signs they land in.
+    """
+    validate.in_range("reference_sign", int(reference_sign), 0, 11)
+    base = int(reference_sign)
+    return tuple(sorted((base + house - 1) % 12
+                        for house in benefic_houses(owner, reference)))
+
+
+def benefic_rasis_from_chart(owner: str, reference_signs: dict[str, int]
+                             ) -> dict[str, tuple[int, ...]]:
+    """Exercise 18 in one call: every reference at once, for one owner."""
+    missing = [r for r in ASHTAKAVARGA_REFERENCES if r not in reference_signs]
+    if missing:
+        raise AshtakavargaError(
+            f"every one of the eight reference points is needed; "
+            f"{', '.join(missing)} "
+            f"{'is' if len(missing) == 1 else 'are'} missing")
+    return {reference: benefic_rasis(owner, reference,
+                                     int(reference_signs[reference]))
+            for reference in ASHTAKAVARGA_REFERENCES}
+
+
 def table_as_rows(owner: str) -> list[dict]:
     """The table in the shape the book prints it, for serving and checking."""
     rows = _table(owner)

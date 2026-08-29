@@ -8,6 +8,107 @@
     },
     "bindu_rekha_footnote": "Some astrologers (especially south Indian astrologers) use a different notation. They use \u201cbindu\u201d to describe a benefic house (1) and \u201crekha\u201d to describe malefic house (0). Let us follow Parasara.",
     "classical_totals_provenance": "Not from this book. The chapter prints the tables and gives no totals. These figures come from the wider tradition and are used only as a check on the transcription; a mismatch would be reported, never corrected.",
+    "example_37": {
+      "houses": [
+        2,
+        5,
+        6,
+        9,
+        10,
+        11
+      ],
+      "owner": "Jupiter",
+      "question": "Let us say Venus is in Ge. Find the rasis in which Jupiter is benefic with respect to Venus.",
+      "rasis": [
+        "Cn",
+        "Li",
+        "Sc",
+        "Aq",
+        "Pi",
+        "Ar"
+      ],
+      "reference": "Venus",
+      "reference_sign": "Ge",
+      "working": "To find the rasis in which Jupiter is benefic, we should look at Jupiter's ashtakavarga (see Table 23). To find the rasis in which Jupiter is benefic with respect to Venus, we should look at the column of Venus. Only the 2nd, 5th, 6th, 9th, 10th and 11th houses have a 1 (rekha \u2013 benefic point) against them. Venus is in Ge and finding these houses with respect to Venus, we get Cn, Li, Sc, Aq, Pi and Ar. So Jupiter is benefic with respect to Venus in these rasis."
+    },
+    "exercise_18": {
+      "answer": {
+        "Jupiter": [
+          "Ge",
+          "Cn",
+          "Cp",
+          "Pi"
+        ],
+        "Lagna": [
+          "Ar",
+          "Ge",
+          "Cn",
+          "Vi",
+          "Li",
+          "Sg",
+          "Aq"
+        ],
+        "Mars": [
+          "Ar",
+          "Ge",
+          "Cn",
+          "Vi",
+          "Sg",
+          "Cp",
+          "Aq",
+          "Pi"
+        ],
+        "Mercury": [
+          "Ar",
+          "Ta",
+          "Ge",
+          "Le",
+          "Li",
+          "Sc",
+          "Aq",
+          "Pi"
+        ],
+        "Moon": [
+          "Ar",
+          "Ge",
+          "Le",
+          "Li",
+          "Sg",
+          "Cp"
+        ],
+        "Saturn": [
+          "Ar",
+          "Ta",
+          "Ge",
+          "Le",
+          "Vi",
+          "Sc",
+          "Aq",
+          "Pi"
+        ],
+        "Sun": [
+          "Ar",
+          "Ta",
+          "Li",
+          "Sc",
+          "Aq"
+        ],
+        "Venus": [
+          "Ar",
+          "Ta",
+          "Ge",
+          "Cn",
+          "Le",
+          "Sc",
+          "Sg",
+          "Aq"
+        ]
+      },
+      "chart": "Chart 6",
+      "hint": "See Table 22 for Mercury's ashtakavarga. Looking at the columns of different planets, find the houses from the planets in which Mercury is benefic. Count those houses from the respective planets and find the rasis.",
+      "owner": "Mercury",
+      "question": "Consider the rasi chart in Chart 6. Find the rasis in which Mercury is benefic with respect to different planets and lagna."
+    },
     "intro": "Analyzing a chart and making correct predictions requires mixing many different principles and making fine compromises and judgments. Sage Parasara said that it is difficult for even great Maharshis. In Kali Yuga, human beings become sinful and the sins kill their intelligence. Parasara said that the intellectual pygmies of Kali Yuga cannot cope with too many complicated principles and presented ashtakavarga as a simple technique that lets them make reasonable predictions without much fuss.",
     "malefic_entry": {
       "sanskrit": "karana",

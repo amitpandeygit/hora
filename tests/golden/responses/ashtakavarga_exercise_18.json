@@ -1,0 +1,293 @@
+{
+  "body": {
+    "benefic_rasis": [
+      {
+        "houses": [
+          5,
+          6,
+          9,
+          11,
+          12
+        ],
+        "rasi_names": [
+          "Aries",
+          "Taurus",
+          "Libra",
+          "Scorpio",
+          "Aquarius"
+        ],
+        "rasis": [
+          0,
+          1,
+          6,
+          7,
+          10
+        ],
+        "reference": "Sun",
+        "reference_sign": 2,
+        "reference_sign_name": "Gemini"
+      },
+      {
+        "houses": [
+          2,
+          4,
+          6,
+          8,
+          10,
+          11
+        ],
+        "rasi_names": [
+          "Aries",
+          "Gemini",
+          "Leo",
+          "Libra",
+          "Sagittarius",
+          "Capricorn"
+        ],
+        "rasis": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          9
+        ],
+        "reference": "Moon",
+        "reference_sign": 11,
+        "reference_sign_name": "Pisces"
+      },
+      {
+        "houses": [
+          1,
+          2,
+          4,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "rasi_names": [
+          "Aries",
+          "Gemini",
+          "Cancer",
+          "Virgo",
+          "Sagittarius",
+          "Capricorn",
+          "Aquarius",
+          "Pisces"
+        ],
+        "rasis": [
+          0,
+          2,
+          3,
+          5,
+          8,
+          9,
+          10,
+          11
+        ],
+        "reference": "Mars",
+        "reference_sign": 2,
+        "reference_sign_name": "Gemini"
+      },
+      {
+        "houses": [
+          1,
+          3,
+          5,
+          6,
+          9,
+          10,
+          11,
+          12
+        ],
+        "rasi_names": [
+          "Aries",
+          "Taurus",
+          "Gemini",
+          "Leo",
+          "Libra",
+          "Scorpio",
+          "Aquarius",
+          "Pisces"
+        ],
+        "rasis": [
+          0,
+          1,
+          2,
+          4,
+          6,
+          7,
+          10,
+          11
+        ],
+        "reference": "Mercury",
+        "reference_sign": 2,
+        "reference_sign_name": "Gemini"
+      },
+      {
+        "houses": [
+          6,
+          8,
+          11,
+          12
+        ],
+        "rasi_names": [
+          "Gemini",
+          "Cancer",
+          "Capricorn",
+          "Pisces"
+        ],
+        "rasis": [
+          2,
+          3,
+          9,
+          11
+        ],
+        "reference": "Jupiter",
+        "reference_sign": 4,
+        "reference_sign_name": "Leo"
+      },
+      {
+        "houses": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          8,
+          9,
+          11
+        ],
+        "rasi_names": [
+          "Aries",
+          "Taurus",
+          "Gemini",
+          "Cancer",
+          "Leo",
+          "Scorpio",
+          "Sagittarius",
+          "Aquarius"
+        ],
+        "rasis": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7,
+          8,
+          10
+        ],
+        "reference": "Venus",
+        "reference_sign": 0,
+        "reference_sign_name": "Aries"
+      },
+      {
+        "houses": [
+          1,
+          2,
+          4,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "rasi_names": [
+          "Aries",
+          "Taurus",
+          "Gemini",
+          "Leo",
+          "Virgo",
+          "Scorpio",
+          "Aquarius",
+          "Pisces"
+        ],
+        "rasis": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          7,
+          10,
+          11
+        ],
+        "reference": "Saturn",
+        "reference_sign": 4,
+        "reference_sign_name": "Leo"
+      },
+      {
+        "houses": [
+          1,
+          2,
+          4,
+          6,
+          8,
+          10,
+          11
+        ],
+        "rasi_names": [
+          "Aries",
+          "Gemini",
+          "Cancer",
+          "Virgo",
+          "Libra",
+          "Sagittarius",
+          "Aquarius"
+        ],
+        "rasis": [
+          0,
+          2,
+          3,
+          5,
+          6,
+          8,
+          10
+        ],
+        "reference": "Lagna",
+        "reference_sign": 5,
+        "reference_sign_name": "Virgo"
+      }
+    ],
+    "owner": "Mercury",
+    "reference_signs": {
+      "Jupiter": {
+        "sign": 4,
+        "sign_name": "Leo"
+      },
+      "Lagna": {
+        "sign": 5,
+        "sign_name": "Virgo"
+      },
+      "Mars": {
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      "Mercury": {
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      "Moon": {
+        "sign": 11,
+        "sign_name": "Pisces"
+      },
+      "Saturn": {
+        "sign": 4,
+        "sign_name": "Leo"
+      },
+      "Sun": {
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      "Venus": {
+        "sign": 0,
+        "sign_name": "Aries"
+      }
+    },
+    "table": 22
+  },
+  "status": 200
+}

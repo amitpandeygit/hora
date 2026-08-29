@@ -258,6 +258,14 @@ CASES = [
     # that the response says so rather than returning a seven-table zero.
     ("ashtakavarga_rules", "GET", "/v1/ashtakavarga/rules", None),
     ("ashtakavarga_table_sun", "GET", "/v1/ashtakavarga/table?owner=Sun", None),
+    # Exercise 18: Chart 6, Mercury's benefic rasis for all eight references.
+    # The book prints the answer, so this fixture is checked against it too.
+    ("ashtakavarga_exercise_18", "POST", "/v1/ashtakavarga/benefic-rasis", {
+        "owner": "Mercury",
+        "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+                            "Jupiter": 4, "Venus": 0, "Saturn": 4,
+                            "Lagna": 5},
+    }),
     ("ashtakavarga_chart_akbar", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 7, "Moon": 2, "Mars": 9, "Mercury": 8,
                             "Jupiter": 6, "Venus": 6, "Saturn": 6,

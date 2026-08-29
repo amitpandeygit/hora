@@ -16,6 +16,7 @@ from hora.charts.ashtakavarga import (
     AshtakavargaError,
     available_tables,
     benefic_houses,
+    benefic_rasis,
     bhinnashtakavarga,
     entry,
     rekhas_per_reference,
@@ -36,6 +37,13 @@ from hora.core.const import (
     BINDU_REKHA_FOOTNOTE,
     CLASSICAL_TABLE_TOTALS,
     CLASSICAL_TABLE_TOTALS_PROVENANCE,
+    EXAMPLE_37,
+    EXAMPLE_37_HOUSES,
+    EXAMPLE_37_RASIS,
+    EXAMPLE_37_WORKING,
+    EXERCISE_18,
+    EXERCISE_18_ANSWER,
+    EXERCISE_18_HINT,
     RASI_ABBR,
     SUN_ASHTAKAVARGA_ROWS,
     TABLE_19_WORKED_READING,
@@ -511,3 +519,126 @@ def test_a_charts_sums_match_the_tables_own_sums():
         result = summed(signs)
         assert sum(result["seven_planets"]["rekhas"]) == 337
         assert sum(result["eight_references"]["rekhas"]) == 386
+
+
+# --------------------------------------------------------------------------
+# §12.2's Example 37 and Exercise 18
+#
+# Between them these two check 192 of the 768 entries against the book's own
+# answers: Example 37 pins one column of Table 23, and Exercise 18 pins all
+# eight columns of Table 22.
+# --------------------------------------------------------------------------
+
+#: Chart 6, P.V. Narasimha Rao — the chart Exercise 18 is set on. Already a
+#: fixture in the chapter 10 tests, where it is recomputed from its own birth
+#: data; the signs are repeated here rather than imported across chapters.
+CHART_6_SIGNS = {
+    "Sun": R["Ge"], "Moon": R["Pi"], "Mars": R["Ge"], "Mercury": R["Ge"],
+    "Jupiter": R["Le"], "Venus": R["Ar"], "Saturn": R["Le"],
+    "Lagna": R["Vi"],
+}
+
+
+def test_chart_6s_signs_agree_with_the_chapter_10_fixture():
+    """One chart, one set of longitudes. If chapter 10's fixture ever moves,
+    this fails rather than quietly testing a different chart."""
+    import re
+
+    from tests.unit.test_book_chapter10_argala import CHART_6
+
+    names = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Mercury": "Merc",
+             "Jupiter": "Jup", "Venus": "Ven", "Saturn": "Sat",
+             "Lagna": "Asc"}
+    for reference, key in names.items():
+        match = re.fullmatch(r"(\d+) ?([A-Za-z]{2}) ?(\d+)", CHART_6[key])
+        assert match, CHART_6[key]
+        assert R[match.group(2)] == CHART_6_SIGNS[reference], reference
+
+
+# --- Example 37 -------------------------------------------------------------
+
+
+def test_example_37_finds_the_same_houses_the_book_does():
+    """"Only the 2nd, 5th, 6th, 9th, 10th and 11th houses have a 1." That is
+    Table 23's Venus column, read out of our transcription."""
+    assert benefic_houses("Jupiter", "Venus") == EXAMPLE_37_HOUSES
+    assert EXAMPLE_37_HOUSES == (2, 5, 6, 9, 10, 11)
+
+
+def test_example_37_finds_the_same_rasis_the_book_does():
+    """"Venus is in Ge and finding these houses with respect to Venus, we get
+    Cn, Li, Sc, Aq, Pi and Ar." """
+    rasis = benefic_rasis("Jupiter", "Venus", R["Ge"])
+    assert {RASI_ABBR[sign] for sign in rasis} == set(EXAMPLE_37_RASIS)
+    assert len(rasis) == 6
+
+
+def test_example_37_is_transcribed_with_its_working():
+    assert "Venus is in Ge" in EXAMPLE_37
+    assert "rekha – benefic point" in EXAMPLE_37_WORKING
+
+
+# --- Exercise 18 ------------------------------------------------------------
+
+
+@pytest.mark.parametrize("reference", list(ASHTAKAVARGA_REFERENCES))
+def test_exercise_18_matches_the_printed_answer(reference):
+    """Chart 6, Mercury's ashtakavarga, one reference at a time. All eight
+    lines of the printed answer reproduce."""
+    sign = CHART_6_SIGNS[reference]
+    rasis = benefic_rasis("Mercury", reference, sign)
+    assert {RASI_ABBR[s] for s in rasis} == set(EXERCISE_18_ANSWER[reference])
+
+
+def test_exercise_18_validates_all_ninety_six_of_table_22():
+    """Every column of Table 22 appears in the answer, and each contributes
+    as many rasis as it has rekhas — so a mistyped 0 or 1 anywhere in the
+    table would change one of the eight lines."""
+    from hora.charts.ashtakavarga import benefic_rasis_from_chart
+
+    result = benefic_rasis_from_chart("Mercury", CHART_6_SIGNS)
+    assert set(result) == set(ASHTAKAVARGA_REFERENCES)
+    for reference, rasis in result.items():
+        assert len(rasis) == rekhas_per_reference("Mercury")[reference]
+        assert {RASI_ABBR[s] for s in rasis} == set(
+            EXERCISE_18_ANSWER[reference])
+    assert sum(len(r) for r in result.values()) == table_total("Mercury") == 54
+
+
+def test_exercise_18s_answer_is_transcribed_for_all_eight():
+    assert set(EXERCISE_18_ANSWER) == set(ASHTAKAVARGA_REFERENCES)
+    assert EXERCISE_18_ANSWER["Jupiter"] == ("Ge", "Cn", "Cp", "Pi")
+    assert "Chart 6" in EXERCISE_18
+    assert "Count those houses from the respective planets" in EXERCISE_18_HINT
+
+
+# --- the endpoint the two examples describe ---------------------------------
+
+
+def test_the_benefic_rasis_endpoint_answers_example_37(client):
+    body = client.post("/v1/ashtakavarga/benefic-rasis", json={
+        "owner": "Jupiter",
+        "reference_signs": {**CHART_6_SIGNS, "Venus": R["Ge"]}}).json()
+    venus = next(row for row in body["benefic_rasis"]
+                 if row["reference"] == "Venus")
+    assert venus["houses"] == [2, 5, 6, 9, 10, 11]
+    assert set(venus["rasi_names"]) == {
+        "Cancer", "Libra", "Scorpio", "Aquarius", "Pisces", "Aries"}
+
+
+def test_the_benefic_rasis_endpoint_answers_exercise_18(client):
+    body = client.post("/v1/ashtakavarga/benefic-rasis", json={
+        "owner": "Mercury", "reference_signs": CHART_6_SIGNS}).json()
+    assert body["table"] == 22
+    got = {row["reference"]: {RASI_ABBR[s] for s in row["rasis"]}
+           for row in body["benefic_rasis"]}
+    assert got == {ref: set(rasis)
+                   for ref, rasis in EXERCISE_18_ANSWER.items()}
+
+
+def test_the_rules_endpoint_carries_the_example_and_the_exercise(client):
+    body = client.get("/v1/ashtakavarga/rules").json()
+    assert body["example_37"]["houses"] == [2, 5, 6, 9, 10, 11]
+    assert body["example_37"]["rasis"] == ["Cn", "Li", "Sc", "Aq", "Pi", "Ar"]
+    assert body["exercise_18"]["owner"] == "Mercury"
+    assert body["exercise_18"]["answer"]["Jupiter"] == ["Ge", "Cn", "Cp", "Pi"]

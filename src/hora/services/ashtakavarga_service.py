@@ -4,6 +4,8 @@ from __future__ import annotations
 from hora.charts.ashtakavarga import (
     AshtakavargaError,
     available_tables,
+    benefic_houses,
+    benefic_rasis_from_chart,
     bhinnashtakavarga,
     describe,
     summed,
@@ -26,6 +28,13 @@ from hora.core.const import (
     ASHTAKAVARGA_TABLES_PENDING,
     BINDU_REKHA_FOOTNOTE,
     CLASSICAL_TABLE_TOTALS_PROVENANCE,
+    EXAMPLE_37,
+    EXAMPLE_37_HOUSES,
+    EXAMPLE_37_RASIS,
+    EXAMPLE_37_WORKING,
+    EXERCISE_18,
+    EXERCISE_18_ANSWER,
+    EXERCISE_18_HINT,
     RASI_NAMES,
     TABLE_19_WORKED_READING,
     TABLES_20_TO_26_NOTE,
@@ -76,6 +85,20 @@ def rules() -> dict:
             "the two can never be confused."
         ),
         "worked_reading": TABLE_19_WORKED_READING,
+        "example_37": {
+            "question": EXAMPLE_37,
+            "working": EXAMPLE_37_WORKING,
+            "owner": "Jupiter", "reference": "Venus", "reference_sign": "Ge",
+            "houses": list(EXAMPLE_37_HOUSES),
+            "rasis": list(EXAMPLE_37_RASIS),
+        },
+        "exercise_18": {
+            "question": EXERCISE_18,
+            "hint": EXERCISE_18_HINT,
+            "owner": "Mercury", "chart": "Chart 6",
+            "answer": {ref: list(rasis)
+                       for ref, rasis in EXERCISE_18_ANSWER.items()},
+        },
         "yuga_footnote": YUGA_FOOTNOTE,
         "yugas": [{"name": name, "years": years} for name, years in YUGA_YEARS],
     }
@@ -84,6 +107,35 @@ def rules() -> dict:
 def table(owner: str) -> dict:
     """One of the eight tables, in the shape the book prints it."""
     return describe(str(owner))
+
+
+def benefic_rasis(owner: str, reference_signs: dict[str, int]) -> dict:
+    """Where one planet is benefic, reference by reference — §12.2's Example
+    37 and Exercise 18.
+
+    "So ashtakavarga is essentially a system that tells us the benefic
+    positions of lagna and seven planets with respect to each other." This is
+    that sentence as an endpoint.
+    """
+    signs = {str(k): int(v) for k, v in reference_signs.items()}
+    per_reference = benefic_rasis_from_chart(str(owner), signs)
+    return {
+        "owner": str(owner),
+        "table": ASHTAKAVARGA_TABLE_NUMBERS[str(owner)],
+        "reference_signs": {k: {"sign": v, "sign_name": str(RASI_NAMES[v])}
+                            for k, v in signs.items()},
+        "benefic_rasis": [
+            {
+                "reference": reference,
+                "reference_sign": signs[reference],
+                "reference_sign_name": str(RASI_NAMES[signs[reference]]),
+                "houses": list(benefic_houses(str(owner), reference)),
+                "rasis": list(rasis),
+                "rasi_names": [str(RASI_NAMES[s]) for s in rasis],
+            }
+            for reference, rasis in per_reference.items()
+        ],
+    }
 
 
 def chart(reference_signs: dict[str, int], owner: str | None = None) -> dict:
@@ -118,4 +170,5 @@ def chart(reference_signs: dict[str, int], owner: str | None = None) -> dict:
     }
 
 
-__all__ = ["AshtakavargaError", "InputError", "chart", "rules", "table"]
+__all__ = ["AshtakavargaError", "InputError", "benefic_rasis", "chart",
+           "rules", "table"]

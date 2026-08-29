@@ -8,6 +8,8 @@ from hora.api.models_ashtakavarga import (
     AshtakavargaChartOut,
     AshtakavargaRulesOut,
     AshtakavargaTableOut,
+    BeneficRasisIn,
+    BeneficRasisOut,
 )
 from hora.services import ashtakavarga_service
 
@@ -35,6 +37,16 @@ def table(owner: str = Query(..., examples=["Sun"])) -> dict:
 def chart(req: AshtakavargaChartIn) -> dict:
     try:
         return ashtakavarga_service.chart(req.reference_signs, req.owner)
+    except (ashtakavarga_service.AshtakavargaError,
+            ashtakavarga_service.InputError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/benefic-rasis", response_model=BeneficRasisOut,
+             summary="Where one planet is benefic, reference by reference")
+def benefic_rasis(req: BeneficRasisIn) -> dict:
+    try:
+        return ashtakavarga_service.benefic_rasis(req.owner, req.reference_signs)
     except (ashtakavarga_service.AshtakavargaError,
             ashtakavarga_service.InputError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

@@ -57,6 +57,8 @@ class AshtakavargaRulesOut(BaseModel):
                     "reverse of common modern usage.",
     )
     worked_reading: str
+    example_37: dict
+    exercise_18: dict
     yuga_footnote: str
     yugas: list[dict]
 
@@ -89,3 +91,28 @@ class AshtakavargaChartOut(BaseModel):
                     "(337 against 386 when complete). Both are returned.",
     )
     tables_pending: list[str]
+
+
+class BeneficRasisIn(BaseModel):
+    """Section 12.2's Example 37 and Exercise 18: where is one planet benefic
+    with respect to each reference point?"""
+
+    owner: str = Field(..., examples=["Mercury"],
+                       description="Whose ashtakavarga to read.")
+    reference_signs: dict[str, int] = Field(
+        ...,
+        description="All eight reference points to their signs, 0 = Aries.",
+        examples=[{"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+                   "Jupiter": 4, "Venus": 0, "Saturn": 4, "Lagna": 5}],
+    )
+
+
+class BeneficRasisOut(BaseModel):
+    owner: str
+    table: int
+    reference_signs: dict[str, dict]
+    benefic_rasis: list[dict] = Field(
+        description="Per reference: the benefic houses from the owner's "
+                    "table, and the rasis they land in once counted from "
+                    "where that reference sits.",
+    )
