@@ -1,0 +1,92 @@
+{
+  "body": {
+    "all_planets_are_references": "However, lagna is not the only reference point in a chart. We have Sun and Moon. In fact, all the planets serve as reference points in a chart and they represent the sources of various energies that are present in a native. Based on the houses in which different planets are placed in transit, they can be benefic with respect to some energy sources and malefic with respect to some. If a transiting planet is benefic with respect to more energy sources, then it brings good results.",
+    "benefic_entry": {
+      "sanskrit": "sthana",
+      "term": "rekha",
+      "value": 1
+    },
+    "bindu_rekha_footnote": "Some astrologers (especially south Indian astrologers) use a different notation. They use \u201cbindu\u201d to describe a benefic house (1) and \u201crekha\u201d to describe malefic house (0). Let us follow Parasara.",
+    "intro": "Analyzing a chart and making correct predictions requires mixing many different principles and making fine compromises and judgments. Sage Parasara said that it is difficult for even great Maharshis. In Kali Yuga, human beings become sinful and the sins kill their intelligence. Parasara said that the intellectual pygmies of Kali Yuga cannot cope with too many complicated principles and presented ashtakavarga as a simple technique that lets them make reasonable predictions without much fuss.",
+    "malefic_entry": {
+      "sanskrit": "karana",
+      "term": "bindu",
+      "value": 0
+    },
+    "means": "Ashtaka means \u201cconsisting of eight\u201d and varga means \u201ca group\u201d. Ashtakavarga is the system of analyzing a chart with respect to a group of 8 reference points.",
+    "naming_warning": "PVR follows Parasara: 1 is a **rekha** and 0 is a **bindu**. Most modern software and most south Indian practice use the two words the other way round, so a figure labelled \u201cbindus in a sign\u201d elsewhere is what this API calls rekhas. Every count returned here counts 1s, and the fields are named `rekhas` so the two can never be confused.",
+    "notation": "In Table 19, an entry of 0 denotes a malefic position or a \u201ckarana\u201d or a bindu (dot). An entry of 1 denotes a benefic position or a \u201csthana\u201d or a rekha (line).",
+    "purpose": "So ashtakavarga is essentially a system that tells us the benefic positions of lagna and seven planets with respect to each other. This can be used to analyze the strength of a natal chart, but it is much more important in analyzing transits.",
+    "reference_point_note": "When we analyze the positions of planets with respect to lagna, we have the concept of good and bad placements. For example, Jupiter in the 9th from lagna will be well placed and Jupiter in the 3rd will be badly placed. Mars in the 3rd from lagna will be well placed and Mars in the 9th will be badly placed.",
+    "references": [
+      "Sun",
+      "Moon",
+      "Mars",
+      "Mercury",
+      "Jupiter",
+      "Venus",
+      "Saturn",
+      "Lagna"
+    ],
+    "table_numbers": {
+      "Jupiter": 23,
+      "Lagna": 26,
+      "Mars": 21,
+      "Mercury": 22,
+      "Moon": 20,
+      "Saturn": 25,
+      "Sun": 19,
+      "Venus": 24
+    },
+    "tables_available": [
+      "Sun"
+    ],
+    "tables_pending": [
+      "Moon",
+      "Mars",
+      "Mercury",
+      "Jupiter",
+      "Venus",
+      "Saturn",
+      "Lagna"
+    ],
+    "tables_pending_note": "Table 20-Table 26 give the benefic and malefic houses of Moon, Mars, Mercury, Jupiter, Venus, Saturn and lagna (respectively).",
+    "tables_verified": {
+      "Sun": {
+        "columns": [
+          8
+        ],
+        "rows": 12,
+        "shape_ok": true,
+        "table": 19,
+        "total": 48,
+        "values": [
+          0,
+          1
+        ]
+      }
+    },
+    "tables_verified_note": "Ninety-six hand-typed entries per table is where a silent transcription error would live, so the shape checks ship with the product. The Sun's table reaching a total of 48 \u2014 the classical figure \u2014 is an independent check on all ninety-six.",
+    "worked_reading": "To understand how to read this table, let us go to the column titled \u201cMerc\u201d in Table 19. This shows benefic houses for Sun to occupy, with respect to Mercury. The 1st and 2nd houses have 0 and the 3rd house has 1. So the first 2 houses from Mercury are malefic for Sun and the 3rd house is benefic for Sun.",
+    "yuga_footnote": "As per Vedic science, time is divided into a cycle of four Yugas that keep repeating. Those are: Krita yuga (1,728,000 years), Treta yuga (1,296,000 years), Dwapara yuga (864,000 years) and Kali yuga (432,000 years). In Krita yuga, religiousness and virtuosity of human beings is exemplary. It is the worst in Kali yuga. It gradually worsens from Krita yuga to Kali yuga. We are currently in Kali yuga. It started about 5,000 years back.",
+    "yugas": [
+      {
+        "name": "Krita",
+        "years": 1728000
+      },
+      {
+        "name": "Treta",
+        "years": 1296000
+      },
+      {
+        "name": "Dwapara",
+        "years": 864000
+      },
+      {
+        "name": "Kali",
+        "years": 432000
+      }
+    ]
+  },
+  "status": 200
+}

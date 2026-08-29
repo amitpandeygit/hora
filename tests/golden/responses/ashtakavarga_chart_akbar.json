@@ -1,0 +1,296 @@
+{
+  "body": {
+    "bhinnashtakavarga": [
+      {
+        "owner": "Sun",
+        "rekhas": [
+          5,
+          3,
+          3,
+          4,
+          7,
+          5,
+          3,
+          5,
+          2,
+          3,
+          4,
+          4
+        ],
+        "signs": [
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Venus",
+              "Saturn"
+            ],
+            "rekhas": 5,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mercury",
+              "Saturn"
+            ],
+            "rekhas": 3,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Sun",
+              "Jupiter",
+              "Saturn"
+            ],
+            "rekhas": 3,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 4,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 7,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Venus",
+              "Lagna"
+            ],
+            "rekhas": 5,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Mars",
+              "Mercury",
+              "Saturn"
+            ],
+            "rekhas": 3,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Saturn"
+            ],
+            "rekhas": 5,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Sun",
+              "Lagna"
+            ],
+            "rekhas": 2,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Mars",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 3,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Jupiter"
+            ],
+            "rekhas": 4,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Moon",
+              "Jupiter",
+              "Venus",
+              "Lagna"
+            ],
+            "rekhas": 4,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 19,
+        "total": 48
+      }
+    ],
+    "reference_signs": {
+      "Jupiter": {
+        "sign": 6,
+        "sign_name": "Libra"
+      },
+      "Lagna": {
+        "sign": 6,
+        "sign_name": "Libra"
+      },
+      "Mars": {
+        "sign": 9,
+        "sign_name": "Capricorn"
+      },
+      "Mercury": {
+        "sign": 8,
+        "sign_name": "Sagittarius"
+      },
+      "Moon": {
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      "Saturn": {
+        "sign": 6,
+        "sign_name": "Libra"
+      },
+      "Sun": {
+        "sign": 7,
+        "sign_name": "Scorpio"
+      },
+      "Venus": {
+        "sign": 6,
+        "sign_name": "Libra"
+      }
+    },
+    "sarvashtakavarga": {
+      "complete": false,
+      "missing_note": "This is not a sarvashtakavarga. Tables 20, 21, 22, 23, 24, 25, 26 have not been supplied, so Moon, Mars, Mercury, Jupiter, Venus, Saturn, Lagna contribute nothing to these totals. A sign's figure is a partial sum and must not be compared against the usual sarvashtakavarga thresholds.",
+      "owners_included": [
+        "Sun"
+      ],
+      "owners_missing": [
+        "Moon",
+        "Mars",
+        "Mercury",
+        "Jupiter",
+        "Venus",
+        "Saturn",
+        "Lagna"
+      ],
+      "rekhas": [
+        5,
+        3,
+        3,
+        4,
+        7,
+        5,
+        3,
+        5,
+        2,
+        3,
+        4,
+        4
+      ],
+      "signs": [
+        {
+          "rekhas": 5,
+          "sign": 0,
+          "sign_name": "Aries"
+        },
+        {
+          "rekhas": 3,
+          "sign": 1,
+          "sign_name": "Taurus"
+        },
+        {
+          "rekhas": 3,
+          "sign": 2,
+          "sign_name": "Gemini"
+        },
+        {
+          "rekhas": 4,
+          "sign": 3,
+          "sign_name": "Cancer"
+        },
+        {
+          "rekhas": 7,
+          "sign": 4,
+          "sign_name": "Leo"
+        },
+        {
+          "rekhas": 5,
+          "sign": 5,
+          "sign_name": "Virgo"
+        },
+        {
+          "rekhas": 3,
+          "sign": 6,
+          "sign_name": "Libra"
+        },
+        {
+          "rekhas": 5,
+          "sign": 7,
+          "sign_name": "Scorpio"
+        },
+        {
+          "rekhas": 2,
+          "sign": 8,
+          "sign_name": "Sagittarius"
+        },
+        {
+          "rekhas": 3,
+          "sign": 9,
+          "sign_name": "Capricorn"
+        },
+        {
+          "rekhas": 4,
+          "sign": 10,
+          "sign_name": "Aquarius"
+        },
+        {
+          "rekhas": 4,
+          "sign": 11,
+          "sign_name": "Pisces"
+        }
+      ],
+      "total": 48
+    },
+    "tables_pending": [
+      "Moon",
+      "Mars",
+      "Mercury",
+      "Jupiter",
+      "Venus",
+      "Saturn",
+      "Lagna"
+    ]
+  },
+  "status": 200
+}

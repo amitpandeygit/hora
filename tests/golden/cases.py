@@ -254,6 +254,15 @@ CASES = [
     # Chapter 11 — planetary yogas. Distinct from /v1/yoga, the nithya yoga.
     ("planetary_yoga_catalogue", "GET", "/v1/planetary-yoga/catalogue", None),
     ("planetary_yoga_rules", "GET", "/v1/planetary-yoga/rules", None),
+    # Chapter 12 — ashtakavarga. Only Table 19 exists; the chart case pins
+    # that the response says so rather than returning a seven-table zero.
+    ("ashtakavarga_rules", "GET", "/v1/ashtakavarga/rules", None),
+    ("ashtakavarga_table_sun", "GET", "/v1/ashtakavarga/table?owner=Sun", None),
+    ("ashtakavarga_chart_akbar", "POST", "/v1/ashtakavarga/chart", {
+        "reference_signs": {"Sun": 7, "Moon": 2, "Mars": 9, "Mercury": 8,
+                            "Jupiter": 6, "Venus": 6, "Saturn": 6,
+                            "Lagna": 6},
+    }),
     # 11.7.2's own worked example: Cp lagna, Mercury 2 Ta and Venus 26 Ta,
     # which the book calls too far apart for full results.
     ("planetary_yoga_raaja_magnitude", "POST",

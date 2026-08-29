@@ -15,6 +15,7 @@ from hora.api.models_reference import SettingsSchemaOut
 from hora.api.routers import (
     argalas,
     arudhas,
+    ashtakavarga,
     aspects,
     avasthas,
     benefics,
@@ -89,6 +90,7 @@ app.include_router(rasi_strength.router)
 app.include_router(aspects.router)
 app.include_router(argalas.router)
 app.include_router(planetary_yogas.router)
+app.include_router(ashtakavarga.router)
 
 
 @app.get("/health", response_model=HealthOut, tags=["meta"])

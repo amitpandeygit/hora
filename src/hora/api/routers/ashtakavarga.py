@@ -1,0 +1,40 @@
+"""Ashtakavarga endpoints — book chapter 12."""
+from __future__ import annotations
+
+from fastapi import APIRouter, HTTPException, Query
+
+from hora.api.models_ashtakavarga import (
+    AshtakavargaChartIn,
+    AshtakavargaChartOut,
+    AshtakavargaRulesOut,
+    AshtakavargaTableOut,
+)
+from hora.services import ashtakavarga_service
+
+router = APIRouter(prefix="/v1/ashtakavarga", tags=["ashtakavarga"])
+
+
+@router.get("/rules", response_model=AshtakavargaRulesOut,
+            summary="Chapter 12's framing, its notation, and which tables exist")
+def rules() -> dict:
+    return ashtakavarga_service.rules()
+
+
+@router.get("/table", response_model=AshtakavargaTableOut,
+            summary="One ashtakavarga table, as the book prints it")
+def table(owner: str = Query(..., examples=["Sun"])) -> dict:
+    try:
+        return ashtakavarga_service.table(owner)
+    except (ashtakavarga_service.AshtakavargaError,
+            ashtakavarga_service.InputError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/chart", response_model=AshtakavargaChartOut,
+             summary="A chart's ashtakavarga, from every table that exists")
+def chart(req: AshtakavargaChartIn) -> dict:
+    try:
+        return ashtakavarga_service.chart(req.reference_signs, req.owner)
+    except (ashtakavarga_service.AshtakavargaError,
+            ashtakavarga_service.InputError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc

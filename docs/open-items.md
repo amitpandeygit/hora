@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 59 waiting on evidence · 2 parked**
+**5 waiting on Amit · 60 waiting on evidence · 2 parked**
 
 ---
 
@@ -579,6 +579,27 @@ yoga also refuses to decide without a paksha, since it must sort every planet
 into benefic or malefic and §3.2.2 gives the Moon no nature without one.
 
 **Closes when:** you settle the reading, or an example fixes it.
+
+### OI-99 — seven of the eight ashtakavarga tables are not supplied
+
+§12.2 gives Table 19, the Sun's, and names Tables 20 to 26 for the Moon, Mars,
+Mercury, Jupiter, Venus, Saturn and lagna. Only Table 19 has been read.
+
+Until the rest arrive:
+
+- `/v1/ashtakavarga/table` answers for the Sun and **refuses** the other seven
+  by name and table number rather than returning zeros;
+- `/v1/ashtakavarga/chart` returns the Sun's bhinnashtakavarga and a
+  sarvashtakavarga flagged `complete: false`, whose note says the figures are a
+  partial sum and must not be read against the usual thresholds;
+- `STRENGTH_MEASURES`' ashtakavarga entry stays `available: False`.
+
+**What is already load-bearing.** The transcription of Table 19 reaches a total
+of 48 rekhas, the classical figure for the Sun's bhinnashtakavarga, which no
+part of our code asserts into being — it falls out of the ninety-six entries.
+The same check will apply to each new table as it arrives.
+
+**Closes when:** Tables 20 to 26 are supplied.
 
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 
