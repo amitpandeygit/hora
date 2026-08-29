@@ -1,0 +1,1684 @@
+{
+  "body": {
+    "bhinnashtakavarga": [
+      {
+        "grades": [
+          "favorable",
+          "unfavorable",
+          "favorable",
+          "unfavorable",
+          "neutral",
+          "neutral",
+          "unfavorable",
+          "unfavorable",
+          "favorable",
+          "neutral",
+          "favorable",
+          "favorable"
+        ],
+        "natal": {
+          "applicable": true,
+          "grade": "favorable",
+          "owner": "Sun",
+          "rekhas": 5,
+          "sign": 2,
+          "sign_name": "Gemini"
+        },
+        "owner": "Sun",
+        "rekhas": [
+          5,
+          3,
+          5,
+          3,
+          4,
+          4,
+          2,
+          3,
+          5,
+          4,
+          5,
+          5
+        ],
+        "signs": [
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Saturn"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mercury",
+              "Saturn"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Jupiter",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mercury",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Mercury",
+              "Venus"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 2,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Mercury",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Jupiter",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Jupiter"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 19,
+        "total": 48
+      },
+      {
+        "grades": [
+          "unfavorable",
+          "unfavorable",
+          "favorable",
+          "unfavorable",
+          "favorable",
+          "unfavorable",
+          "neutral",
+          "favorable",
+          "favorable",
+          "favorable",
+          "unfavorable",
+          "favorable"
+        ],
+        "natal": {
+          "applicable": true,
+          "grade": "favorable",
+          "owner": "Moon",
+          "rekhas": 5,
+          "sign": 11,
+          "sign_name": "Pisces"
+        },
+        "owner": "Moon",
+        "rekhas": [
+          3,
+          2,
+          5,
+          3,
+          6,
+          3,
+          4,
+          5,
+          5,
+          5,
+          3,
+          5
+        ],
+        "signs": [
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Moon",
+              "Jupiter"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 2,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Mars",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Venus"
+            ],
+            "grade": "favorable",
+            "rekhas": 6,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mercury",
+              "Jupiter"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Mars",
+              "Mercury",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Jupiter",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mercury",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mercury",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Jupiter",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Jupiter"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 20,
+        "total": 49
+      },
+      {
+        "grades": [
+          "neutral",
+          "unfavorable",
+          "neutral",
+          "unfavorable",
+          "neutral",
+          "unfavorable",
+          "unfavorable",
+          "favorable",
+          "unfavorable",
+          "unfavorable",
+          "unfavorable",
+          "neutral"
+        ],
+        "natal": {
+          "applicable": true,
+          "grade": "neutral",
+          "owner": "Mars",
+          "rekhas": 4,
+          "sign": 2,
+          "sign_name": "Gemini"
+        },
+        "owner": "Mars",
+        "rekhas": [
+          4,
+          3,
+          4,
+          3,
+          4,
+          3,
+          2,
+          5,
+          1,
+          3,
+          3,
+          4
+        ],
+        "signs": [
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Moon",
+              "Jupiter",
+              "Saturn"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Mars",
+              "Jupiter",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Mars",
+              "Jupiter",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mercury",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Mars",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mercury"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 2,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mercury",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Mars"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 1,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Jupiter"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 21,
+        "total": 39
+      },
+      {
+        "grades": [
+          "favorable",
+          "neutral",
+          "favorable",
+          "neutral",
+          "neutral",
+          "unfavorable",
+          "neutral",
+          "neutral",
+          "neutral",
+          "unfavorable",
+          "favorable",
+          "neutral"
+        ],
+        "natal": {
+          "applicable": true,
+          "grade": "favorable",
+          "owner": "Mercury",
+          "rekhas": 7,
+          "sign": 2,
+          "sign_name": "Gemini"
+        },
+        "owner": "Mercury",
+        "rekhas": [
+          7,
+          4,
+          7,
+          4,
+          4,
+          3,
+          4,
+          4,
+          4,
+          3,
+          6,
+          4
+        ],
+        "signs": [
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 7,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mercury",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 7,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Mars",
+              "Jupiter",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mercury",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Mars",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mercury",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mercury",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Jupiter"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 6,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 22,
+        "total": 54
+      },
+      {
+        "grades": [
+          "neutral",
+          "unfavorable",
+          "favorable",
+          "favorable",
+          "unfavorable",
+          "favorable",
+          "neutral",
+          "unfavorable",
+          "favorable",
+          "favorable",
+          "favorable",
+          "favorable"
+        ],
+        "natal": {
+          "applicable": true,
+          "grade": "unfavorable",
+          "owner": "Jupiter",
+          "rekhas": 3,
+          "sign": 4,
+          "sign_name": "Leo"
+        },
+        "owner": "Jupiter",
+        "rekhas": [
+          4,
+          3,
+          5,
+          6,
+          3,
+          7,
+          4,
+          3,
+          5,
+          6,
+          5,
+          5
+        ],
+        "signs": [
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Jupiter",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 6,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Sun",
+              "Jupiter",
+              "Venus"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 7,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Mercury",
+              "Jupiter",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mercury",
+              "Jupiter"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 6,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 23,
+        "total": 56
+      },
+      {
+        "grades": [
+          "favorable",
+          "favorable",
+          "neutral",
+          "unfavorable",
+          "unfavorable",
+          "unfavorable",
+          "neutral",
+          "favorable",
+          "neutral",
+          "neutral",
+          "neutral",
+          "unfavorable"
+        ],
+        "natal": {
+          "applicable": true,
+          "grade": "favorable",
+          "owner": "Venus",
+          "rekhas": 8,
+          "sign": 0,
+          "sign_name": "Aries"
+        },
+        "owner": "Venus",
+        "rekhas": [
+          8,
+          7,
+          4,
+          3,
+          3,
+          2,
+          4,
+          6,
+          4,
+          4,
+          4,
+          3
+        ],
+        "signs": [
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 8,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Jupiter",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 7,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Moon",
+              "Jupiter",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Moon",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Mars",
+              "Mercury",
+              "Venus"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Mars",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 2,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mercury",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 6,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Jupiter",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Venus"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Moon",
+              "Jupiter",
+              "Saturn"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 24,
+        "total": 52
+      },
+      {
+        "grades": [
+          "unfavorable",
+          "unfavorable",
+          "neutral",
+          "unfavorable",
+          "unfavorable",
+          "unfavorable",
+          "unfavorable",
+          "unfavorable",
+          "neutral",
+          "favorable",
+          "unfavorable",
+          "neutral"
+        ],
+        "natal": {
+          "applicable": true,
+          "grade": "unfavorable",
+          "owner": "Saturn",
+          "rekhas": 2,
+          "sign": 4,
+          "sign_name": "Leo"
+        },
+        "owner": "Saturn",
+        "rekhas": [
+          3,
+          3,
+          4,
+          3,
+          2,
+          3,
+          2,
+          3,
+          4,
+          5,
+          3,
+          4
+        ],
+        "signs": [
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Mercury"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Sun",
+              "Jupiter",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Sun",
+              "Jupiter",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 2,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Mars",
+              "Saturn"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 2,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Mars",
+              "Mercury",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Sun",
+              "Jupiter",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mercury",
+              "Jupiter",
+              "Saturn"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Mercury",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Venus"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 25,
+        "total": 39
+      },
+      {
+        "grades": [
+          "favorable",
+          "favorable",
+          "favorable",
+          "unfavorable",
+          "favorable",
+          "unfavorable",
+          "unfavorable",
+          "favorable",
+          "unfavorable",
+          "neutral",
+          "unfavorable",
+          "unfavorable"
+        ],
+        "natal": {
+          "applicable": false,
+          "owner": "Lagna",
+          "reason": "lagna is a reference point, not a planet that occupies a sign of its own, so section 12.3's natal reading does not apply to its BAV"
+        },
+        "owner": "Lagna",
+        "rekhas": [
+          5,
+          5,
+          6,
+          3,
+          6,
+          3,
+          1,
+          7,
+          3,
+          4,
+          3,
+          3
+        ],
+        "signs": [
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Venus"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Jupiter",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "favorable",
+            "rekhas": 5,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 6,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Mercury",
+              "Venus",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Jupiter",
+              "Venus",
+              "Saturn"
+            ],
+            "grade": "favorable",
+            "rekhas": 6,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mercury",
+              "Jupiter"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Saturn"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 1,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "grade": "favorable",
+            "rekhas": 7,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Moon",
+              "Jupiter",
+              "Venus"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mercury",
+              "Jupiter",
+              "Saturn"
+            ],
+            "grade": "neutral",
+            "rekhas": 4,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Moon",
+              "Jupiter",
+              "Lagna"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury"
+            ],
+            "grade": "unfavorable",
+            "rekhas": 3,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 26,
+        "total": 49
+      }
+    ],
+    "reference_signs": {
+      "Jupiter": {
+        "sign": 4,
+        "sign_name": "Leo"
+      },
+      "Lagna": {
+        "sign": 5,
+        "sign_name": "Virgo"
+      },
+      "Mars": {
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      "Mercury": {
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      "Moon": {
+        "sign": 11,
+        "sign_name": "Pisces"
+      },
+      "Saturn": {
+        "sign": 4,
+        "sign_name": "Leo"
+      },
+      "Sun": {
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      "Venus": {
+        "sign": 0,
+        "sign_name": "Aries"
+      }
+    },
+    "summed": {
+      "complete": true,
+      "eight_references": {
+        "classical_total_when_complete": 386,
+        "complete": true,
+        "owners": [
+          "Sun",
+          "Moon",
+          "Mars",
+          "Mercury",
+          "Jupiter",
+          "Venus",
+          "Saturn",
+          "Lagna"
+        ],
+        "rekhas": [
+          39,
+          30,
+          40,
+          28,
+          32,
+          28,
+          23,
+          36,
+          31,
+          34,
+          32,
+          33
+        ],
+        "total": 386
+      },
+      "missing_note": "",
+      "not_yet_named_note": "This is a sum of the tables supplied, not a sarvashtakavarga. The book has not reached that term, and the two candidate sums differ \u2014 seven planets gives 337 when complete, all eight references gives 386. Both are returned and neither is chosen. See docs/open-items.md OI-100.",
+      "owners_included": [
+        "Sun",
+        "Moon",
+        "Mars",
+        "Mercury",
+        "Jupiter",
+        "Venus",
+        "Saturn",
+        "Lagna"
+      ],
+      "owners_missing": [],
+      "seven_planets": {
+        "classical_total_when_complete": 337,
+        "complete": true,
+        "owners": [
+          "Sun",
+          "Moon",
+          "Mars",
+          "Mercury",
+          "Jupiter",
+          "Venus",
+          "Saturn"
+        ],
+        "rekhas": [
+          34,
+          25,
+          34,
+          25,
+          26,
+          25,
+          22,
+          29,
+          28,
+          30,
+          29,
+          30
+        ],
+        "total": 337
+      },
+      "signs": [
+        {
+          "eight_references": 39,
+          "seven_planets": 34,
+          "sign": 0,
+          "sign_name": "Aries"
+        },
+        {
+          "eight_references": 30,
+          "seven_planets": 25,
+          "sign": 1,
+          "sign_name": "Taurus"
+        },
+        {
+          "eight_references": 40,
+          "seven_planets": 34,
+          "sign": 2,
+          "sign_name": "Gemini"
+        },
+        {
+          "eight_references": 28,
+          "seven_planets": 25,
+          "sign": 3,
+          "sign_name": "Cancer"
+        },
+        {
+          "eight_references": 32,
+          "seven_planets": 26,
+          "sign": 4,
+          "sign_name": "Leo"
+        },
+        {
+          "eight_references": 28,
+          "seven_planets": 25,
+          "sign": 5,
+          "sign_name": "Virgo"
+        },
+        {
+          "eight_references": 23,
+          "seven_planets": 22,
+          "sign": 6,
+          "sign_name": "Libra"
+        },
+        {
+          "eight_references": 36,
+          "seven_planets": 29,
+          "sign": 7,
+          "sign_name": "Scorpio"
+        },
+        {
+          "eight_references": 31,
+          "seven_planets": 28,
+          "sign": 8,
+          "sign_name": "Sagittarius"
+        },
+        {
+          "eight_references": 34,
+          "seven_planets": 30,
+          "sign": 9,
+          "sign_name": "Capricorn"
+        },
+        {
+          "eight_references": 32,
+          "seven_planets": 29,
+          "sign": 10,
+          "sign_name": "Aquarius"
+        },
+        {
+          "eight_references": 33,
+          "seven_planets": 30,
+          "sign": 11,
+          "sign_name": "Pisces"
+        }
+      ]
+    },
+    "tables_pending": []
+  },
+  "status": 200
+}

@@ -55,6 +55,10 @@ from hora.core.const import (
     EXERCISE_18,
     EXERCISE_18_ANSWER,
     EXERCISE_18_HINT,
+    EXERCISE_19,
+    EXERCISE_19_ANSWER,
+    EXERCISE_19_CLOSING,
+    EXERCISE_19_UNEXPLAINED_MARK,
     RASI_NAMES,
     TABLE_19_WORKED_READING,
     TABLES_20_TO_26_NOTE,
@@ -140,6 +144,21 @@ def rules() -> dict:
             "bav": list(CHART_11_MERCURY_BAV),
             "best_rasis": list(EXAMPLE_38_BEST_RASIS),
             "worst_rasis": list(EXAMPLE_38_WORST_RASIS),
+        },
+        "exercise_19": {
+            "question": EXERCISE_19,
+            "closing": EXERCISE_19_CLOSING,
+            "chart": "Chart 6",
+            "answer": {owner: list(rekhas)
+                       for owner, rekhas in EXERCISE_19_ANSWER.items()},
+            "unexplained_mark": dict(EXERCISE_19_UNEXPLAINED_MARK),
+            "unexplained_mark_note": (
+                "The printed answer shows \u201c5*\u201d for the Moon in Pisces and "
+                "nothing on the page explains the asterisk. It is not the "
+                "planet\u2019s own position marked as a rule \u2014 Venus in Aries "
+                "and Mercury in Gemini carry none \u2014 and the value 5 is "
+                "right either way. Recorded, not interpreted."
+            ),
         },
         "exercise_18": {
             "question": EXERCISE_18,

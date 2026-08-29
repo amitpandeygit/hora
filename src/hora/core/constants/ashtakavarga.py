@@ -422,3 +422,33 @@ CHART_11_MERCURY_BAV: tuple[int, ...] = (7, 4, 7, 4, 4, 3, 4, 4, 4, 3, 6, 4)
 #: The rasis §12.3's Example 38 singles out.
 EXAMPLE_38_BEST_RASIS: tuple[str, ...] = ("Ar", "Ge", "Aq")
 EXAMPLE_38_WORST_RASIS: tuple[str, ...] = ("Vi", "Cp")
+
+
+EXERCISE_19 = (
+    "Find the number of rekhas in all the rasis in the BAVs of Sun, Moon, "
+    "Mars, Mercury, Jupiter, Venus and Saturn for the same rasi chart (see "
+    "Chart 6).")
+
+EXERCISE_19_CLOSING = (
+    "Using the above values, one can prepare a chart for each planet's BAV, "
+    "as shown in Chart 11.")
+
+#: The printed answer, Aries first. Seven rows of twelve — every planetary
+#: table exercised through one chart.
+EXERCISE_19_ANSWER: dict[str, tuple[int, ...]] = {
+    "Sun":     (5, 3, 5, 3, 4, 4, 2, 3, 5, 4, 5, 5),
+    "Moon":    (3, 2, 5, 3, 6, 3, 4, 5, 5, 5, 3, 5),
+    "Mars":    (4, 3, 4, 3, 4, 3, 2, 5, 1, 3, 3, 4),
+    "Mercury": (7, 4, 7, 4, 4, 3, 4, 4, 4, 3, 6, 4),
+    "Jupiter": (4, 3, 5, 6, 3, 7, 4, 3, 5, 6, 5, 5),
+    "Venus":   (8, 7, 4, 3, 3, 2, 4, 6, 4, 4, 4, 3),
+    "Saturn":  (3, 3, 4, 3, 2, 3, 2, 3, 4, 5, 3, 4),
+}
+
+#: The answer prints "5*" for the Moon in Pisces. Nothing on the page
+#: explains the asterisk. It is not the planet's own position marked
+#: generally — Venus in Aries and Mercury in Gemini carry none — and the
+#: value 5 is right either way. Recorded, not interpreted.
+EXERCISE_19_UNEXPLAINED_MARK = {
+    "owner": "Moon", "rasi": "Pi", "printed": "5*", "value": 5,
+}

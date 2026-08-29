@@ -61,6 +61,9 @@ from hora.core.const import (
     EXERCISE_18,
     EXERCISE_18_ANSWER,
     EXERCISE_18_HINT,
+    EXERCISE_19,
+    EXERCISE_19_ANSWER,
+    EXERCISE_19_UNEXPLAINED_MARK,
     RASI_ABBR,
     SUN_ASHTAKAVARGA_ROWS,
     TABLE_19_WORKED_READING,
@@ -999,3 +1002,86 @@ def test_the_tie_is_reported_rather_than_hidden():
     # Nothing else in the chart is tied.
     assert [name for name, k in result.items() if k.shared] == [
         "Mercury", "Venus"]
+
+
+# --------------------------------------------------------------------------
+# §12.3's Exercise 19 — all seven BAVs for Chart 6
+#
+# Eighty-four figures against the book's own answer. Every planetary table is
+# exercised through one chart, so this is the widest single check in the
+# chapter: a mistyped entry anywhere in the 672 planetary entries would move
+# at least one cell.
+# --------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("owner", list(EXERCISE_19_ANSWER))
+def test_exercise_19_reproduces_a_whole_row(owner):
+    result = bhinnashtakavarga(owner, CHART_6_SIGNS)
+    assert result.rekhas == EXERCISE_19_ANSWER[owner]
+
+
+def test_exercise_19_reproduces_every_one_of_the_eighty_four_cells():
+    """Stated as a count so a silently shortened answer table cannot pass."""
+    checked = 0
+    for owner, printed in EXERCISE_19_ANSWER.items():
+        assert len(printed) == 12, owner
+        result = bhinnashtakavarga(owner, CHART_6_SIGNS)
+        for sign in range(12):
+            assert result.rekhas[sign] == printed[sign], (owner, sign)
+            checked += 1
+    assert checked == 84
+
+
+def test_exercise_19s_rows_sum_to_the_tables_own_totals():
+    """A second, independent reading of the same answer: each printed row
+    must add up to the table it came from."""
+    for owner, printed in EXERCISE_19_ANSWER.items():
+        assert sum(printed) == table_total(owner), owner
+    assert sum(sum(row) for row in EXERCISE_19_ANSWER.values()) == 337
+
+
+def test_exercise_19s_columns_match_the_seven_planet_sum():
+    """A third reading, down the columns rather than across the rows: the
+    printed answer's column sums are our seven-planet total, sign by sign."""
+    columns = [sum(EXERCISE_19_ANSWER[owner][sign]
+                   for owner in EXERCISE_19_ANSWER)
+               for sign in range(12)]
+    assert columns == summed(CHART_6_SIGNS)["seven_planets"]["rekhas"]
+    assert sum(columns) == 337
+
+
+def test_exercise_19_covers_every_planetary_table():
+    """Lagna's is the only one it does not exercise, because the exercise
+    names the seven planets."""
+    assert set(EXERCISE_19_ANSWER) == set(available_tables()) - {"Lagna"}
+    assert "Lagna" not in EXERCISE_19_ANSWER
+    assert "Sun, Moon, Mars, Mercury, Jupiter, Venus and Saturn" in EXERCISE_19
+
+
+def test_exercise_19s_mercury_row_is_chart_11():
+    """The exercise and Chart 11 are the same figures, so they check each
+    other as well as checking us."""
+    assert EXERCISE_19_ANSWER["Mercury"] == CHART_11_MERCURY_BAV
+
+
+def test_the_asterisk_in_the_printed_answer_is_recorded_not_interpreted():
+    """The answer shows "5*" for the Moon in Pisces and nothing on the page
+    says why. It is not the planet's own position marked as a rule — Venus in
+    Aries and Mercury in Gemini carry no mark — and 5 is right either way."""
+    mark = EXERCISE_19_UNEXPLAINED_MARK
+    assert mark == {"owner": "Moon", "rasi": "Pi", "printed": "5*",
+                    "value": 5}
+    assert EXERCISE_19_ANSWER["Moon"][R["Pi"]] == 5
+    assert bhinnashtakavarga("Moon", CHART_6_SIGNS).rekhas[R["Pi"]] == 5
+    # If the asterisk marked the planet's own sign, these would carry one too.
+    assert CHART_6_SIGNS["Moon"] == R["Pi"]
+    assert CHART_6_SIGNS["Venus"] == R["Ar"]
+    assert CHART_6_SIGNS["Mercury"] == R["Ge"]
+
+
+def test_the_rules_endpoint_carries_exercise_19(client):
+    body = client.get("/v1/ashtakavarga/rules").json()
+    assert body["exercise_19"]["answer"]["Venus"] == [
+        8, 7, 4, 3, 3, 2, 4, 6, 4, 4, 4, 3]
+    assert body["exercise_19"]["unexplained_mark"]["printed"] == "5*"
+    assert "not interpreted" in body["exercise_19"]["unexplained_mark_note"]

@@ -186,6 +186,118 @@
       "owner": "Mercury",
       "question": "Consider the rasi chart in Chart 6. Find the rasis in which Mercury is benefic with respect to different planets and lagna."
     },
+    "exercise_19": {
+      "answer": {
+        "Jupiter": [
+          4,
+          3,
+          5,
+          6,
+          3,
+          7,
+          4,
+          3,
+          5,
+          6,
+          5,
+          5
+        ],
+        "Mars": [
+          4,
+          3,
+          4,
+          3,
+          4,
+          3,
+          2,
+          5,
+          1,
+          3,
+          3,
+          4
+        ],
+        "Mercury": [
+          7,
+          4,
+          7,
+          4,
+          4,
+          3,
+          4,
+          4,
+          4,
+          3,
+          6,
+          4
+        ],
+        "Moon": [
+          3,
+          2,
+          5,
+          3,
+          6,
+          3,
+          4,
+          5,
+          5,
+          5,
+          3,
+          5
+        ],
+        "Saturn": [
+          3,
+          3,
+          4,
+          3,
+          2,
+          3,
+          2,
+          3,
+          4,
+          5,
+          3,
+          4
+        ],
+        "Sun": [
+          5,
+          3,
+          5,
+          3,
+          4,
+          4,
+          2,
+          3,
+          5,
+          4,
+          5,
+          5
+        ],
+        "Venus": [
+          8,
+          7,
+          4,
+          3,
+          3,
+          2,
+          4,
+          6,
+          4,
+          4,
+          4,
+          3
+        ]
+      },
+      "chart": "Chart 6",
+      "closing": "Using the above values, one can prepare a chart for each planet's BAV, as shown in Chart 11.",
+      "question": "Find the number of rekhas in all the rasis in the BAVs of Sun, Moon, Mars, Mercury, Jupiter, Venus and Saturn for the same rasi chart (see Chart 6).",
+      "unexplained_mark": {
+        "owner": "Moon",
+        "printed": "5*",
+        "rasi": "Pi",
+        "value": 5
+      },
+      "unexplained_mark_note": "The printed answer shows \u201c5*\u201d for the Moon in Pisces and nothing on the page explains the asterisk. It is not the planet\u2019s own position marked as a rule \u2014 Venus in Aries and Mercury in Gemini carry none \u2014 and the value 5 is right either way. Recorded, not interpreted."
+    },
     "intro": "Analyzing a chart and making correct predictions requires mixing many different principles and making fine compromises and judgments. Sage Parasara said that it is difficult for even great Maharshis. In Kali Yuga, human beings become sinful and the sins kill their intelligence. Parasara said that the intellectual pygmies of Kali Yuga cannot cope with too many complicated principles and presented ashtakavarga as a simple technique that lets them make reasonable predictions without much fuss.",
     "malefic_entry": {
       "sanskrit": "karana",
