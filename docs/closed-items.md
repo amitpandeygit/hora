@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-5](#oi-5) | Upagrahas |
+| [OI-99](#oi-99) | the ashtakavarga tables arrived one page at a time |
 | [OI-23](#oi-23) | the `MARAKA` house label was unverified |
 | [OI-92](#oi-92) | vargottamaamsa was undefined until footnote 40 arrived |
 | [OI-6](#oi-6) | Special lagnas |
@@ -1627,3 +1628,32 @@ Not obviously wrong; neither was D-5.
 marakas (killers)." That is exactly `MARAKA = (2, 7)`. The label was
 right; it is now verified rather than assumed, and a test asserts the
 constant and the transcribed NOTE agree.
+
+<a id="oi-99"></a>
+
+## OI-99 — the ashtakavarga tables arrived one page at a time
+
+§12.2 prints eight tables of ninety-six entries each — Tables 19 to 26, one per
+planet and one for lagna. They were supplied over four screenshots, and until
+the last arrived a missing table was never treated as an empty one: asking for
+one raised with its table number, and the summed totals came back flagged
+incomplete.
+
+**All eight are now in — 768 entries.** Each reaches its own total, and the
+eight reach 386 together:
+
+| table | owner | total | | table | owner | total |
+|---|---|---|---|---|---|---|
+| 19 | Sun | 48 | | 23 | Jupiter | 56 |
+| 20 | Moon | 49 | | 24 | Venus | 52 |
+| 21 | Mars | 39 | | 25 | Saturn | 39 |
+| 22 | Mercury | 54 | | 26 | Lagna | 49 |
+
+The seven planets come to **337**, the figure the tradition records for a
+sarvashtakavarga. None of these totals is asserted anywhere in the code — each
+falls out of the entries, and the check runs per table in `verify_tables` and
+ships on `/v1/ashtakavarga/rules`, so a future edit to any cell breaks it.
+
+What remains open is not the tables but what to do with them: OI-100 asks
+whether a sarvashtakavarga includes lagna's table, since the two candidate sums
+differ by exactly Table 26's 49.

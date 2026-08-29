@@ -23,6 +23,7 @@ from hora.core.const import (
     CLASSICAL_TABLE_TOTALS,
     GRAHA_NAMES,
     JUPITER_ASHTAKAVARGA_ROWS,
+    LAGNA_ASHTAKAVARGA_ROWS,
     MARS_ASHTAKAVARGA_ROWS,
     MERCURY_ASHTAKAVARGA_ROWS,
     MOON_ASHTAKAVARGA_ROWS,
@@ -67,6 +68,7 @@ def verify_tables() -> dict[str, dict]:
     assert ASHTAKAVARGA_TABLES["Jupiter"] is JUPITER_ASHTAKAVARGA_ROWS
     assert ASHTAKAVARGA_TABLES["Venus"] is VENUS_ASHTAKAVARGA_ROWS
     assert ASHTAKAVARGA_TABLES["Saturn"] is SATURN_ASHTAKAVARGA_ROWS
+    assert ASHTAKAVARGA_TABLES["Lagna"] is LAGNA_ASHTAKAVARGA_ROWS
 
     out: dict[str, dict] = {}
     for owner, rows in ASHTAKAVARGA_TABLES.items():
@@ -277,7 +279,11 @@ def reference_name(graha: int) -> str | None:
 
 def describe(owner: str) -> dict:
     """Everything about one table, for the reference endpoint."""
+    # Validate before indexing: an unknown owner must reach the caller as a
+    # stated error, not as a KeyError from a dict lookup.
+    rows = _table(owner)
     graha = REFERENCE_GRAHA[owner]
+    assert rows
     return {
         "owner": owner,
         "owner_graha": graha,
