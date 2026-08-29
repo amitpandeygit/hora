@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 60 waiting on evidence · 2 parked**
+**5 waiting on Amit · 61 waiting on evidence · 2 parked**
 
 ---
 
@@ -579,6 +579,43 @@ yoga also refuses to decide without a paksha, since it must sort every planet
 into benefic or malefic and §3.2.2 gives the Moon no nature without one.
 
 **Closes when:** you settle the reading, or an example fixes it.
+
+### OI-103 — our sunrise is early, and it moves Chart 12's ghati lagna a whole rasi
+
+Charts 3 and 12 print HL and GL **and** their own birth data. Neither reproduces.
+
+| | printed | ours | out by |
+|---|---|---|---|
+| Chart 3 HL | 13 Li 46 | 13 Li 55 | 9' |
+| Chart 3 GL | 21 Cn 25 | 21 Cn 49 | 24' |
+| Chart 12 HL | 11 Le 38 | 12 Le 03 | 25' |
+| Chart 12 GL | 29 Le 25 | **0 Vi 27** | 62' — **a different rasi** |
+
+Not the birth time and not the formulae. HL advances 0.5°/minute from sunrise
+and GL 1.25°/minute, so each error implies a sunrise shift — and the two always
+agree to within a second:
+
+| chart | sunrise mode | implied by HL | implied by GL |
+|---|---|---|---|
+| 3 | disc_upper_limb (ours) | +18.4s | +19.1s |
+| 3 | disc_center | −62.1s | −61.5s |
+| 12 | disc_upper_limb (ours) | +49.5s | +49.3s |
+| 12 | disc_center | −43.3s | −43.6s |
+
+Two quantities, two rates, two hemispheres, one number: HL and GL are right and
+the sunrise they are measured from is not. Neither definition is the book's —
+ours is early both times, `disc_center` late
+both times, and the book sits at no fixed fraction between them: 23% for Chart 3
+(26 N), 53% for Chart 12 (43 N). A toggle cannot fix it; it looks like a
+different refraction or horizon-dip model, worsening with latitude.
+
+Nothing already verified is affected: upagrahas divide the day into eighths, so
+a 50-second shift moves them by seconds of arc. GL is the most sunrise-sensitive
+quantity in the book, which is why this surfaces only now. **Not changed.** Neither available value is right, so there is nothing to switch
+to. Pinned by the two `..._sunrise_shift` tests in `test_book_chapter12.py`.
+
+**Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
+and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 
 ### OI-101 — "sodhya pindas" are named but not defined
 

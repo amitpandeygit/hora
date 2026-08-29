@@ -1802,3 +1802,111 @@ def test_the_rules_endpoint_carries_chart_12(client):
     assert body["chart_12"]["d10_drawn"]["Asc"] == "Vi"
     assert body["chart_12"]["chara_karakas"]["Sun"] == "AK"
     assert "its **D-10**" in body["chart_12"]["note"]
+
+
+# --------------------------------------------------------------------------
+# OI-103 — the printed HL and GL do not reproduce, and both say why
+# --------------------------------------------------------------------------
+
+_SUNRISE_CASES = [
+    ("Chart 3", CHART_3, CHART_3_BIRTH_DATA, CHART_3_PLACE, 19.0),
+    ("Chart 12", CHART_12, CHART_12_BIRTH_DATA, CHART_12_PLACE, 49.0),
+]
+
+
+def _special_lagnas(birth_data, place, settings):
+    """HL and GL longitudes for one chart, under one sunrise mode."""
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.special_lagna import all_special_lagnas
+    from hora.charts.upagraha import birth_period
+    from hora.core.timeutil import from_local
+
+    spot = Place(**place)
+    chart = compute_chart(from_local(**birth_data), spot, settings)
+    period = birth_period(
+        chart.instant.jd_ut, spot.latitude, spot.longitude, spot.altitude,
+        settings)
+    lagnas = all_special_lagnas(
+        sunrise_jd=period.sunrise_jd,
+        jd_ut=chart.instant.jd_ut,
+        lagna_longitude=chart.lagna_longitude,
+        moon_longitude=chart.positions[Graha.MOON].longitude,
+        settings=settings)
+    return {v.abbreviation: v.longitude for v in lagnas.values()}
+
+
+def _implied_sunrise_shift(chart, birth_data, place, settings):
+    """Seconds our sunrise would have to move for HL, and for GL, to land on
+    the printed value. §5's rates: HL 0.5°/minute, GL 1.25°/minute."""
+    got = _special_lagnas(birth_data, place, settings)
+    return {
+        "HL": (got["HL"] - _lon3(chart["HL"])) * 60 / 30 * 60,
+        "GL": (got["GL"] - _lon3(chart["GL"])) * 60 / 75 * 60,
+    }
+
+
+@pytest.mark.parametrize(
+    "label,chart,birth_data,place,expected",
+    _SUNRISE_CASES, ids=[c[0] for c in _SUNRISE_CASES])
+def test_chart_3_and_12_hora_and_ghati_lagnas_agree_on_one_sunrise_shift(
+        label, chart, birth_data, place, expected):
+    """OI-103. HL and GL run from sunrise at different rates, so if our HL and
+    GL are both wrong by the same *sunrise* shift, the formulae are right and
+    only the sunrise instant is not. They agree within a second — in both
+    charts, in both hemispheres."""
+    from hora.core.settings import NodeType, Settings
+
+    shift = _implied_sunrise_shift(
+        chart, birth_data, place,
+        Settings(node_type=NodeType.MEAN))
+    assert abs(shift["HL"] - shift["GL"]) < 1.0, shift
+    assert abs(shift["HL"] - expected) < 1.0, shift
+    assert shift["HL"] > 0, "our sunrise is early in both charts"
+
+
+@pytest.mark.parametrize(
+    "label,chart,birth_data,place,expected",
+    _SUNRISE_CASES, ids=[c[0] for c in _SUNRISE_CASES])
+def test_neither_sunrise_definition_reproduces_the_printed_special_lagnas(
+        label, chart, birth_data, place, expected):
+    """OI-103. §5 offers two definitions; the book's sunrise is between them
+    and at no fixed fraction — 23% of the way for Chart 3 at 26 N, 53% for
+    Chart 12 at 43 N. So no toggle fixes this, and neither is switched."""
+    from hora.core.settings import NodeType, Settings, SunriseMode
+
+    early = _implied_sunrise_shift(
+        chart, birth_data, place,
+        Settings(node_type=NodeType.MEAN,
+                 sunrise_mode=SunriseMode.DISC_UPPER_LIMB))
+    late = _implied_sunrise_shift(
+        chart, birth_data, place,
+        Settings(node_type=NodeType.MEAN,
+                 sunrise_mode=SunriseMode.DISC_CENTER))
+    assert early["HL"] > 0 > late["HL"], "the book is bracketed by the two"
+    assert abs(late["HL"] - late["GL"]) < 1.0, late
+
+
+def test_our_ghati_lagna_puts_chart_12_in_a_different_rasi():
+    """OI-103's consequence, stated rather than rounded away: 62' is enough to
+    cross a sign boundary. The book prints 29 Le 25; we give 0 Vi 27. Chart
+    12's drawn D-10 does not catch this — it derives GL from the printed rasi
+    value, not a recomputed one."""
+    from hora.core.settings import NodeType, Settings
+
+    got = _special_lagnas(
+        CHART_12_BIRTH_DATA, CHART_12_PLACE, Settings(node_type=NodeType.MEAN))
+    assert RASI_ABBR[int(got["GL"] // 30)] == "Vi"
+    assert CHART_12["GL"].split()[1] == "Le"
+
+
+@pytest.mark.parametrize(
+    "label,chart,birth_data,place,expected",
+    _SUNRISE_CASES, ids=[c[0] for c in _SUNRISE_CASES])
+def test_the_hora_lagna_still_lands_in_the_printed_rasi(
+        label, chart, birth_data, place, expected):
+    """HL runs at 0.4 of GL's rate, so OI-103 never moves it across a sign in
+    either chart. Recorded so the blast radius stays bounded."""
+    from hora.core.settings import NodeType, Settings
+
+    got = _special_lagnas(birth_data, place, Settings(node_type=NodeType.MEAN))
+    assert RASI_ABBR[int(got["HL"] // 30)] == chart["HL"].split()[1]
