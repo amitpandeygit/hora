@@ -2253,3 +2253,65 @@ DARIDRA_GENERAL_PRINCIPLES = (
 #: The one clause of the general principles that runs the other way.
 DARIDRA_SAVING_FACTOR = (
     "However, conjunction or aspect of trine lords is a saving factor.")
+
+
+# --------------------------------------------------------------------------
+# 11.11 Conclusion
+#
+# Interpretive guidance, not combinations. Served, never detected.
+# --------------------------------------------------------------------------
+
+CHAPTER_11_CONCLUSION: tuple[dict, ...] = (
+    {"key": "practice",
+     "text": ("A lot of combinations and results have been given in this "
+              "chapter. Readers are advised to read more literature and "
+              "practice yogas on real charts. One should be able to find with "
+              "a quick glance the yogas present in a chart. Experience "
+              "certainly helps there. In the rest of this book, we will see "
+              "some examples of yogas.")},
+    {"key": "fit_to_today",
+     "text": ("When looking at the results ascribed to various yogas, try to "
+              "fit them in today's world. For example, one with Kamala yoga "
+              "may not really become a king, but probably become the Prime "
+              "Minister of a nation or the Governor of a state. When using "
+              "yogas in divisional charts, adapt the results to the matters "
+              "signified by the chart.")},
+    {"key": "strength_gates_results",
+     "text": ("All the great results ascribed to some yogas may not "
+              "materialize in reality, due to weaknesses in them. Unless a "
+              "yoga is very strong, all the results cannot expected. Just one "
+              "yoga cannot make or break a personality, unless it is very "
+              "powerful.")},
+    {"key": "partial_results",
+     "text": ("In the case of yogas with many conditions, partial results may "
+              "sometimes be experienced if all the conditions are not "
+              "satisfied.")},
+)
+
+#: "all the results cannot expected" — printed exactly so, for "cannot be
+#: expected". Transcribed as found.
+CONCLUSION_PRINTED_TYPO = "all the results cannot expected"
+
+#: §11.11's example of adapting a result to today. Kamala is §11.5.3's
+#: Aakriti yoga.
+KAMALA_MODERN_READING = (
+    "one with Kamala yoga may not really become a king, but probably become "
+    "the Prime Minister of a nation or the Governor of a state")
+
+#: The sentence that licenses every partial report already made in this
+#: chapter — §11.6's fullness rule, §11.7.3 (1)'s half condition, §11.7.1's
+#: weakened Dala clause, §11.2.4's combustion and §11.3.4's Kemadruma.
+PARTIAL_RESULTS_RULE = (
+    "In the case of yogas with many conditions, partial results may sometimes "
+    "be experienced if all the conditions are not satisfied.")
+
+#: "Just one yoga cannot make or break a personality, unless it is very
+#: powerful." Why a chart's verdict list is returned whole rather than
+#: reduced to a headline.
+NO_SINGLE_YOGA_DECIDES = (
+    "Just one yoga cannot make or break a personality, unless it is very "
+    "powerful.")
+
+DIVISIONAL_YOGA_RULE = (
+    "When using yogas in divisional charts, adapt the results to the matters "
+    "signified by the chart.")

@@ -59,6 +59,25 @@
     "chandra_intro": "Chandra yogas are the lunar combinations. There are several yogas based on Moon.",
     "combustion_is_a_qualifier_not_a_veto": "Section 11.2.4 says a yoga formed by a combust planet loses \u201csome of their power to do good\u201d, not all of it. A combust yoga is therefore reported as present with a qualifier, never suppressed.",
     "combustion_note": "If Mercury is too close to Sun, he is combust (asta or astangata). Yogas formed by combust planets lose some of their power to do good.",
+    "conclusion": [
+      {
+        "key": "practice",
+        "text": "A lot of combinations and results have been given in this chapter. Readers are advised to read more literature and practice yogas on real charts. One should be able to find with a quick glance the yogas present in a chart. Experience certainly helps there. In the rest of this book, we will see some examples of yogas."
+      },
+      {
+        "key": "fit_to_today",
+        "text": "When looking at the results ascribed to various yogas, try to fit them in today's world. For example, one with Kamala yoga may not really become a king, but probably become the Prime Minister of a nation or the Governor of a state. When using yogas in divisional charts, adapt the results to the matters signified by the chart."
+      },
+      {
+        "key": "strength_gates_results",
+        "text": "All the great results ascribed to some yogas may not materialize in reality, due to weaknesses in them. Unless a yoga is very strong, all the results cannot expected. Just one yoga cannot make or break a personality, unless it is very powerful."
+      },
+      {
+        "key": "partial_results",
+        "text": "In the case of yogas with many conditions, partial results may sometimes be experienced if all the conditions are not satisfied."
+      }
+    ],
+    "conclusion_printed_typo": "all the results cannot expected",
     "daridra_count": 13,
     "daridra_general_principles": "Dusthanas (6th, 8th and 12th) and their lords are detrimental to wealth. If lagna, lagna lord and trine lords are afflicted by them, one may be poor. Conjunction or aspect of marakas clinches the issue. However, conjunction or aspect of trine lords is a saving factor. In addition, the planets in the 2nd house and the strength of 2nd lord matter.",
     "daridra_intro": "One experiences poverty if the following yogas (combinations) are present in one's chart:",
@@ -156,6 +175,8 @@
     "dharma_karmadhipati_reason": "The 9th house is the most important trine and the 10th house is the most important quadrant. Raja yoga involving the lords of these two houses is excellent.",
     "dharma_karmadhipati_results": null,
     "dharma_sthana": 9,
+    "divisional_yoga_note": "Section 6.5 already maps a matter to a chart; this is the same instruction run the other way \u2014 a yoga found in D-10 is read against what D-10 signifies, not against life at large. The `chart` field on every response records which chart the verdict came from.",
+    "divisional_yoga_rule": "When using yogas in divisional charts, adapt the results to the matters signified by the chart.",
     "dusthana_lord_in_own_house": [
       "harsha",
       "sarala",
@@ -188,6 +209,7 @@
     "kalpadruma_result_word_sanskrit": null,
     "kalpadruma_result_words": [],
     "kalpadruma_results_footnote": null,
+    "kamala_modern_reading": "one with Kamala yoga may not really become a king, but probably become the Prime Minister of a nation or the Governor of a state",
     "karma_sthana": 10,
     "kartari_definition": "Kartari literally means \u201cscissors\u201d. The 12th and 2nd houses from a house cast kartari on it. If the 2nd and 12th from a house have benefics, it is said to have a subha (benefic) kartari. Malefics in the same places cause paapa (malefic) kartari.",
     "kartari_effect": "Subha kartari on any house does good to the matters of that house and paapa kartari does harm.",
@@ -339,6 +361,7 @@
     "naabhasa_intro": "Naabhasa yogas are classified celestial combinations.",
     "naabhasa_not_yet_defined": [],
     "naabhasa_timing_rule": "Results of other yogas may be felt primarily during the dasas of the planets and signs involved. But the results of Naabhasa yogas are felt in all dasas.",
+    "no_single_yoga_decides": "Just one yoga cannot make or break a personality, unless it is very powerful.",
     "node_note": "Three of the four Ravi yogas turn on \u201ca planet other than Moon\u201d. Chapter 11 never says whether Rahu and Ketu count as \u201ca planet\u201d, so it is a per-call choice and the nodes are excluded by default. See docs/open-items.md OI-73.",
     "panaphara_spelling_variants": [
       "panapara"
@@ -354,6 +377,8 @@
       "indra",
       "chapa"
     ],
+    "partial_results_note": "Section 11.11 licenses every partial this chapter already reports rather than hides: section 11.6\u2019s fullness rule, section 11.7.3 (1)\u2019s half-satisfied condition, section 11.5.2\u2019s weakened Dala clause, section 11.2.4\u2019s combustion and section 11.3.4\u2019s Kemadruma. A partial is always a qualifier on a verdict, never a present.",
+    "partial_results_rule": "In the case of yogas with many conditions, partial results may sometimes be experienced if all the conditions are not satisfied.",
     "popular_count": 48,
     "popular_count_after_the_example": 30,
     "popular_count_before_the_example": 18,
@@ -519,6 +544,7 @@
     "vipareeta_means": "extreme",
     "vipareeta_reason": "Because dusthanas show the obstacles one faces in life, situation of dusthana lords in dusthanas shows that obstacles will run into obstacles themselves. One experiences tremendous success in the face of obstacles.",
     "weakened_yoga_is_not_applicable": "A yoga the book says \u201cmay not operate well\u201d does not count as applicable for section 11.5.4's fallback. Lord Sri Rama's chart forces this: its only earlier Naabhasa yoga is a weakened Sarpa, and the book gives the chart as Daama.",
+    "whole_list_note": "\u201cJust one yoga cannot make or break a personality\u201d is why /v1/planetary-yoga/chart returns every yoga\u2019s verdict rather than a headline. Nothing is ranked or summarised for the caller.",
     "worked_charts": [
       {
         "birth_footnote": null,

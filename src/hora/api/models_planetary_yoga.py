@@ -439,6 +439,24 @@ class PlanetaryYogaRulesOut(BaseModel):
     raaja_sambandha_numbering: dict[str, int]
     raaja_sambandha_are_common: str
     raaja_sambandha_magnitude_rule: str
+    conclusion: list[dict] = Field(
+        description="Section 11.11's four paragraphs — interpretive guidance, "
+                    "served and never detected.",
+    )
+    conclusion_printed_typo: str
+    kamala_modern_reading: str
+    partial_results_rule: str
+    partial_results_note: str = Field(
+        description="Where this chapter already reports partials, which "
+                    "section 11.11 licenses.",
+    )
+    no_single_yoga_decides: str
+    whole_list_note: str = Field(
+        description="Why the chart endpoint returns every verdict rather than "
+                    "a headline.",
+    )
+    divisional_yoga_rule: str
+    divisional_yoga_note: str
     daridra_intro: str
     daridra_count: int
     daridra_general_principles: str

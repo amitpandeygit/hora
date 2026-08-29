@@ -51,10 +51,12 @@ from hora.core.const import (
     CHANDRA_GUIDELINE_3,
     CHANDRA_MOON_FROM_SUN_GRADE,
     CHANDRA_YOGA_INTRO,
+    CHAPTER_11_CONCLUSION,
     CHART_10_BIRTH_FOOTNOTE,
     CHART_10_OLD_CALENDAR_DATE,
     CHART_10_TIME_IS_LMT,
     COMBUSTION_WEAKENS_YOGA,
+    CONCLUSION_PRINTED_TYPO,
     DARIDRA_GENERAL_PRINCIPLES,
     DARIDRA_SAVING_FACTOR,
     DARIDRA_YOGA_COUNT,
@@ -77,6 +79,7 @@ from hora.core.const import (
     DHARMA_KARMADHIPATI_REASON,
     DHARMA_KARMADHIPATI_RESULTS_TRUNCATED,
     DHARMA_STHANA,
+    DIVISIONAL_YOGA_RULE,
     DUSTHANA,
     DUSTHANA_LORD_IN_OWN_HOUSE,
     ELEMENT_RULER,
@@ -93,6 +96,7 @@ from hora.core.const import (
     KALPADRUMA_RESULT_WORD_SANSKRIT,
     KALPADRUMA_RESULT_WORDS,
     KALPADRUMA_RESULTS_FOOTNOTE,
+    KAMALA_MODERN_READING,
     KARMA_STHANA,
     KARTARI_DEFINITION,
     KARTARI_EFFECT,
@@ -118,11 +122,13 @@ from hora.core.const import (
     NAABHASA_INTRO,
     NAABHASA_NOT_YET_DEFINED,
     NAABHASA_TIMING_RULE,
+    NO_SINGLE_YOGA_DECIDES,
     PANAPHARA_SPELLING_VARIANTS,
     PANCHA_BHOOTA_NAMES,
     PARASARA_DASA_VARGA_RULE,
     PARIVARTANA_FOOTNOTE,
     PARIVARTANA_SANSKRIT,
+    PARTIAL_RESULTS_RULE,
     PLANET_ELEMENT_ADJECTIVES,
     PLANET_ELEMENT_TATTVAS,
     POPULAR_YOGA_CONTINUED_COUNT,
@@ -805,6 +811,33 @@ def rules() -> dict:
             "Section 11.10 is the first place the book defines maraka, and it "
             "gives the 2nd and 7th \u2014 which is what charts/bhava.py had been "
             "carrying from general classical knowledge. That closes OI-23."
+        ),
+        # 11.11 ---------------------------------------------------------------
+        "conclusion": [dict(entry) for entry in CHAPTER_11_CONCLUSION],
+        "conclusion_printed_typo": CONCLUSION_PRINTED_TYPO,
+        "kamala_modern_reading": KAMALA_MODERN_READING,
+        "partial_results_rule": PARTIAL_RESULTS_RULE,
+        "partial_results_note": (
+            "Section 11.11 licenses every partial this chapter already "
+            "reports rather than hides: section 11.6\u2019s fullness rule, "
+            "section 11.7.3 (1)\u2019s half-satisfied condition, section "
+            "11.5.2\u2019s weakened Dala clause, section 11.2.4\u2019s combustion "
+            "and section 11.3.4\u2019s Kemadruma. A partial is always a "
+            "qualifier on a verdict, never a present."
+        ),
+        "no_single_yoga_decides": NO_SINGLE_YOGA_DECIDES,
+        "whole_list_note": (
+            "\u201cJust one yoga cannot make or break a personality\u201d is why "
+            "/v1/planetary-yoga/chart returns every yoga\u2019s verdict rather "
+            "than a headline. Nothing is ranked or summarised for the caller."
+        ),
+        "divisional_yoga_rule": DIVISIONAL_YOGA_RULE,
+        "divisional_yoga_note": (
+            "Section 6.5 already maps a matter to a chart; this is the same "
+            "instruction run the other way \u2014 a yoga found in D-10 is read "
+            "against what D-10 signifies, not against life at large. The "
+            "`chart` field on every response records which chart the verdict "
+            "came from."
         ),
         "sun_excluded_note": (
             "The Sun cannot form a yoga about what accompanies him, so he is "

@@ -51,10 +51,12 @@ from hora.core.const import (
     CHANDRA_MOON_FROM_SUN_GRADE,
     CHANDRA_YOGA_INTRO,
     CHANDRA_YOGAS,
+    CHAPTER_11_CONCLUSION,
     CHART_10_OLD_CALENDAR_DATE,
     CHART_10_TIME_IS_LMT,
     CHATURASRA,
     COMBUSTION_WEAKENS_YOGA,
+    CONCLUSION_PRINTED_TYPO,
     DARIDRA_GENERAL_PRINCIPLES,
     DARIDRA_SAVING_FACTOR,
     DARIDRA_YOGA_COUNT,
@@ -73,6 +75,7 @@ from hora.core.const import (
     DHARMA_KARMADHIPATI_REASON,
     DHARMA_KARMADHIPATI_RESULTS_TRUNCATED,
     DHARMA_STHANA,
+    DIVISIONAL_YOGA_RULE,
     DUSTHANA,
     DUSTHANA_LORD_IN_OWN_HOUSE,
     EXALTATION_DEG,
@@ -86,6 +89,7 @@ from hora.core.const import (
     KALPADRUMA_RESULT_WORD_SANSKRIT,
     KALPADRUMA_RESULT_WORDS,
     KALPADRUMA_RESULTS_FOOTNOTE,
+    KAMALA_MODERN_READING,
     KARMA_STHANA,
     KARTARI_DEFINITION,
     KARTARI_EFFECT,
@@ -112,9 +116,11 @@ from hora.core.const import (
     NAABHASA_NOT_YET_DEFINED,
     NAABHASA_TIMING_RULE,
     NAABHASA_YOGAS,
+    NO_SINGLE_YOGA_DECIDES,
     PANAPHARA_SPELLING_VARIANTS,
     PANCHA_BHOOTA_NAMES,
     PARIVARTANA_FOOTNOTE,
+    PARTIAL_RESULTS_RULE,
     POPULAR_YOGA_CONTINUED_COUNT,
     POPULAR_YOGA_COUNT,
     POPULAR_YOGA_FULLNESS_RULE,
@@ -6268,3 +6274,101 @@ def test_the_magnitude_endpoint_reports_the_saving_factor(client):
                        for name, g in _CHART_10_GRAHA.items()}}).json()
     assert body["daridra_saving_factor"]["applies"] is True
     assert "saving factor" in body["daridra_saving_factor_rule"]
+
+
+# --------------------------------------------------------------------------
+# 11.11 Conclusion
+#
+# Interpretive guidance, not combinations. Served, never detected — and one
+# sentence of it licenses how this whole chapter reports partials.
+# --------------------------------------------------------------------------
+
+
+def test_the_conclusion_is_four_paragraphs_and_no_yoga():
+    assert [e["key"] for e in CHAPTER_11_CONCLUSION] == [
+        "practice", "fit_to_today", "strength_gates_results",
+        "partial_results"]
+    for entry in CHAPTER_11_CONCLUSION:
+        assert entry["key"] not in YOGA_REGISTRY
+
+
+def test_the_printed_typo_in_the_conclusion_is_kept():
+    """"Unless a yoga is very strong, all the results cannot expected." —
+    printed exactly so, for "cannot be expected"."""
+    assert CONCLUSION_PRINTED_TYPO == "all the results cannot expected"
+    strength = next(e for e in CHAPTER_11_CONCLUSION
+                    if e["key"] == "strength_gates_results")
+    assert CONCLUSION_PRINTED_TYPO in strength["text"]
+
+
+def test_the_kamala_example_names_a_yoga_the_registry_has():
+    """§11.11 adapts a result to today using Kamala, which §11.5.3 defines.
+    The example is served beside a yoga that really exists."""
+    assert "Kamala yoga" in KAMALA_MODERN_READING
+    assert "Prime Minister" in KAMALA_MODERN_READING
+    assert YOGA_REGISTRY["kamala"].section == "11.5.3"
+
+
+def test_the_partial_results_rule_licenses_what_the_chapter_already_does():
+    """"In the case of yogas with many conditions, partial results may
+    sometimes be experienced if all the conditions are not satisfied."
+
+    Every partial this chapter reports is a qualifier on a verdict, never a
+    present. Checked on the four places it arises."""
+    assert "partial results" in PARTIAL_RESULTS_RULE
+
+    # 11.7.3 (1): one of two conditions satisfied.
+    half = evaluate_one("raaja_pk_ak_and_lords", _akbar())
+    assert half.present is False
+    assert any("only one of the two conditions holds" in q
+               for q in half.qualifiers)
+
+    # 11.6: the fullness rule, on every one of the forty-eight.
+    subha = evaluate_one("subha", _akbar())
+    assert any(STRENGTH_NOT_ASSESSED in q for q in subha.qualifiers)
+
+    # 11.5.2: a Dala yoga the book itself calls weakened.
+    sarpa = evaluate_one("sarpa", _rama())
+    assert sarpa.present is True
+    assert sarpa.weakened is True
+
+    # 11.10 (12): a printed exception that reverses the yoga.
+    exception = evaluate_one("daridra_mars_saturn_in_second", _pl(
+        "Ar", paksha=0, MARS=_deg("Ta"), SATURN=_deg("Ta", 20),
+        MERCURY=_deg("Sc")))
+    assert exception.present is False
+    assert any("great wealth" in q for q in exception.qualifiers)
+
+
+def test_no_single_yoga_decides_is_why_the_whole_list_comes_back(client):
+    """"Just one yoga cannot make or break a personality, unless it is very
+    powerful." So nothing is ranked or summarised for the caller."""
+    assert "make or break a personality" in NO_SINGLE_YOGA_DECIDES
+    body = client.post("/v1/planetary-yoga/chart", json={
+        "lagna_rasi": R["Li"], "paksha": 1,
+        "rasis": {int(g): int(_lon9(CHART_10[name]) // 30)
+                  for name, g in _CHART_10_GRAHA.items()}}).json()
+    assert len(body["yogas"]) == len(YOGA_REGISTRY)
+    assert "strongest" not in body
+    assert "summary" not in body
+    assert "headline" not in body
+
+
+def test_the_divisional_rule_is_the_other_half_of_section_6_5(client):
+    """"When using yogas in divisional charts, adapt the results to the
+    matters signified by the chart." Every response records which chart the
+    verdict came from."""
+    assert "divisional charts" in DIVISIONAL_YOGA_RULE
+    body = client.post("/v1/planetary-yoga/chart", json={
+        "chart": "D10", "rasis": {0: 3, 2: 4, 5: 2}}).json()
+    assert body["chart"] == "D10"
+
+
+def test_the_rules_endpoint_carries_the_conclusion(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert [e["key"] for e in body["conclusion"]] == [
+        "practice", "fit_to_today", "strength_gates_results",
+        "partial_results"]
+    assert body["conclusion_printed_typo"] == "all the results cannot expected"
+    assert "11.6" in body["partial_results_note"]
+    assert "returns every yoga" in body["whole_list_note"]
