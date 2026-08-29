@@ -159,6 +159,23 @@
     },
     "example_39": {
       "answer": "The answer lies in the SAV of D-10. Lagna in D-10 is Sc and it contains 35 rekhas \u2013 maximum in D-10's SAV. Arudha lagna also contains more than 30 rekhas. These factors explain his success and good name. The 3rd house in D-10 also has more than 30 rekhas \u2013 like in the rasi chart \u2013 and that increases the chance of being an excellent communicator in public life. Though D-10 is powerful with lagna and arudha lagna containing more than 30 rekhas, one may notice that the 8th house in D-10 (Ge) has 33 rekhas in D-10's SAV. This explains the struggle in Vajpayee's career.",
+      "d10_claims": [
+        {
+          "claim": "Lagna in D-10 is Sc and it contains 35 rekhas",
+          "rasi": "Sc",
+          "rekhas": 35
+        },
+        {
+          "claim": "Arudha lagna also contains more than 30 rekhas",
+          "rasi": "Vi",
+          "rekhas": 33
+        },
+        {
+          "claim": "The 3rd house in D-10 also has more than 30 rekhas",
+          "rasi": "Cp",
+          "rekhas": 31
+        }
+      ],
       "d10_sav": [
         23,
         26,
@@ -174,8 +191,7 @@
         30
       ],
       "lagna": "Sc",
-      "lagna_note": "The example never states the lagna. Every claim it makes fixes it: the rasi maximum of 38 is called the 11th house and the D-10 maximum of 35 is called the lagna, and both give Scorpio.",
-      "not_recomputed": "Example 39 cites Chart 3 for Sri A.B. Vajpayee's birth data. Chart 3 has not been supplied, so the two printed SAVs are transcribed and checked for internal consistency, but not recomputed.",
+      "lagna_note": "The example never states the lagna. Every claim it makes fixes it: the rasi maximum of 38 is called the 11th house and the D-10 maximum of 35 is called the lagna, and both give Scorpio. Chart 3 later confirmed it: Asc 14 Sc 18.",
       "question": "Let us consider the rasi chart and D-10 of India's Prime Minister Sri A.B. Vajpayee (see Chart 3 for birthdata). Readers may find SAV of rasi and D-10 and verify the following:",
       "rasi_sav": [
         29,
@@ -191,7 +207,8 @@
         28,
         24
       ],
-      "reading": "In rasi chart, the 11th house has the maximum number of rekhas (38) showing excellent gains. The 3rd house of communication has 34 rekhas. With the significator of communication Mercury and the artistic Moon in the 3rd house, he is an excellent communicator, great orator and poet. With lagna and the 10th house in the SAV of rasi chart containing only 26 and 28 rekhas \u2013 which is just average \u2013 why did he have such a successful career?"
+      "reading": "In rasi chart, the 11th house has the maximum number of rekhas (38) showing excellent gains. The 3rd house of communication has 34 rekhas. With the significator of communication Mercury and the artistic Moon in the 3rd house, he is an excellent communicator, great orator and poet. With lagna and the 10th house in the SAV of rasi chart containing only 26 and 28 rekhas \u2013 which is just average \u2013 why did he have such a successful career?",
+      "verified": "Example 39 cites Chart 3 for Sri A.B. Vajpayee's birth data. Both printed SAVs \u2014 rasi and D-10 \u2014 recompute from Chart 3's longitudes exactly, and every claim the example makes about them holds."
     },
     "exercise_18": {
       "answer": {

@@ -620,12 +620,22 @@ EXAMPLE_39_ANSWER = (
 #: lagna. Both give Scorpio.
 EXAMPLE_39_LAGNA = "Sc"
 
-#: Chart 3 holds Vajpayee's birth data and has not been supplied, so the two
-#: SAVs cannot be recomputed. See docs/open-items.md OI-102.
-EXAMPLE_39_NEEDS_CHART_3 = (
-    "Example 39 cites Chart 3 for Sri A.B. Vajpayee's birth data. Chart 3 has "
-    "not been supplied, so the two printed SAVs are transcribed and checked "
-    "for internal consistency, but not recomputed.")
+#: Chart 3 holds Vajpayee's birth data. It was supplied, and both printed SAVs
+#: recompute from it exactly — all 24 figures. OI-102 is closed; see
+#: docs/closed-items.md.
+EXAMPLE_39_VERIFIED = (
+    "Example 39 cites Chart 3 for Sri A.B. Vajpayee's birth data. Both printed "
+    "SAVs — rasi and D-10 — recompute from Chart 3's longitudes exactly, and "
+    "every claim the example makes about them holds.")
+
+#: The example's D-10 claims, each with the figure that decides it. The lagna
+#: and arudha lagna signs are derived, not printed, so they are recorded here
+#: as what the text's wording resolves to.
+EXAMPLE_39_D10_CLAIMS: tuple[tuple[str, str, int], ...] = (
+    ("Lagna in D-10 is Sc and it contains 35 rekhas", "Sc", 35),
+    ("Arudha lagna also contains more than 30 rekhas", "Vi", 33),
+    ("The 3rd house in D-10 also has more than 30 rekhas", "Cp", 31),
+)
 
 # --------------------------------------------------------------------------
 # Chart 12 — the D-10 SAV exercise chart
@@ -654,4 +664,34 @@ CHART_12_D10_DRAWN: dict[str, str] = {
 CHART_12_CHARA_KARAKAS: dict[str, str] = {
     "Sun": "AK", "Rahu": "AmK", "Sat": "BK", "Mars": "MK",
     "Merc": "PK", "Ven": "GK", "Jup": "DK", "Moon": "PiK",
+}
+
+
+# --------------------------------------------------------------------------
+# Chart 3 — Sri A.B. Vajpayee, the birth data Example 39 cites
+# --------------------------------------------------------------------------
+
+#: Chart 3's printed longitudes. Example 39 works from this chart without
+#: reprinting it, so both of its SAVs are recomputed from here.
+CHART_3: dict[str, str] = {
+    "Asc": "14 Sc 18", "Sun": "9 Sg 35", "Moon": "15 Le 28",
+    "Mars": "13 Ar 39", "Merc": "20 Sc 59", "Jup": "2 Aq 05",
+    "Ven": "17 Sg 42", "Sat": "9 Sc 41", "Rahu": "14 Ge 30",
+    "Ketu": "14 Sg 30", "HL": "13 Li 46", "GL": "21 Cn 25",
+}
+
+CHART_3_TITLE = "Rasi — A.B. Vajpayee"
+CHART_3_BIRTH = "December 25, 1926, 5:12 am (IST), 78 E 10, 26 N 14"
+
+#: The drawn rasi diagram, read box by box. It prints AL, which the printed
+#: longitudes do not — so it is an independent check on §9.2's procedure.
+CHART_3_DRAWN: dict[str, str] = {
+    "Mars": "Ar", "Rahu": "Ge", "GL": "Cn", "Moon": "Le", "HL": "Li",
+    "Merc": "Sc", "Asc": "Sc", "Sat": "Sc",
+    "Ven": "Sg", "Sun": "Sg", "Ketu": "Sg", "AL": "Cp", "Jup": "Aq",
+}
+
+CHART_3_CHARA_KARAKAS: dict[str, str] = {
+    "Merc": "AK", "Ven": "AmK", "Rahu": "BK", "Moon": "MK",
+    "Mars": "PiK", "Sat": "PK", "Sun": "GK", "Jup": "DK",
 }

@@ -55,6 +55,11 @@ from hora.core.const import (
     BAV_UNFAVOURABLE_COUNTS,
     BHINNA_MEANS,
     BINDU_REKHA_FOOTNOTE,
+    CHART_3,
+    CHART_3_BIRTH,
+    CHART_3_CHARA_KARAKAS,
+    CHART_3_DRAWN,
+    CHART_3_TITLE,
     CHART_11_MERCURY_BAV,
     CHART_12,
     CHART_12_CHARA_KARAKAS,
@@ -67,10 +72,12 @@ from hora.core.const import (
     EXAMPLE_37_WORKING,
     EXAMPLE_38_BEST_RASIS,
     EXAMPLE_38_WORST_RASIS,
+    EXAMPLE_39_ANSWER,
+    EXAMPLE_39_D10_CLAIMS,
     EXAMPLE_39_D10_SAV,
     EXAMPLE_39_LAGNA,
-    EXAMPLE_39_NEEDS_CHART_3,
     EXAMPLE_39_RASI_SAV,
+    EXAMPLE_39_VERIFIED,
     EXERCISE_18,
     EXERCISE_18_ANSWER,
     EXERCISE_18_HINT,
@@ -90,6 +97,7 @@ from hora.core.const import (
     SAV_OVERLAP_AT,
     SAV_OWNERS,
     SAV_STRENGTH_RULE,
+    SAV_STRONG_FROM,
     SAV_TOTAL,
     SODHYA_PINDA_NOT_YET_DEFINED,
     SUN_ASHTAKAVARGA_ROWS,
@@ -1442,11 +1450,240 @@ def test_the_two_average_houses_the_example_asks_about():
         assert sav_grade(EXAMPLE_39_RASI_SAV[sign]) == "average"
 
 
-def test_example_39_is_not_recomputed_and_says_why():
-    """Chart 3 was never supplied. The gap is stated rather than papered over
-    with a chart reconstructed from elsewhere. See OI-102."""
-    assert "Chart 3 has not been supplied" in EXAMPLE_39_NEEDS_CHART_3
-    assert "not recomputed" in EXAMPLE_39_NEEDS_CHART_3
+# --------------------------------------------------------------------------
+# Chart 3 — Vajpayee, the birth data Example 39 works from
+# --------------------------------------------------------------------------
+
+CHART_3_BIRTH_DATA = {
+    "year": 1926, "month": 12, "day": 25, "hour": 5, "minute": 12,
+    "second": 0.0, "utc_offset_hours": 5.5,
+}
+CHART_3_PLACE = {"latitude": 26 + 14 / 60, "longitude": 78 + 10 / 60}
+
+_CHART_3_GRAHA = {
+    "Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+    "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+    "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU,
+}
+
+
+def _lon3(text: str) -> float:
+    import re
+
+    match = re.fullmatch(r"(\d+) ?([A-Za-z]{2}) ?(\d+)", text)
+    assert match, text
+    return R[match.group(2)] * 30 + int(match.group(1)) + int(match.group(3)) / 60
+
+
+def _chart_3_references() -> dict[str, float]:
+    """The eight references §12.2's tables are indexed by."""
+    return {
+        "Sun": _lon3(CHART_3["Sun"]), "Moon": _lon3(CHART_3["Moon"]),
+        "Mars": _lon3(CHART_3["Mars"]), "Mercury": _lon3(CHART_3["Merc"]),
+        "Jupiter": _lon3(CHART_3["Jup"]), "Venus": _lon3(CHART_3["Ven"]),
+        "Saturn": _lon3(CHART_3["Sat"]), "Lagna": _lon3(CHART_3["Asc"]),
+    }
+
+
+def test_chart_3_birth_line_is_transcribed():
+    assert CHART_3_TITLE == "Rasi — A.B. Vajpayee"
+    assert CHART_3_BIRTH == (
+        "December 25, 1926, 5:12 am (IST), 78 E 10, 26 N 14")
+
+
+def test_chart_3_has_every_printed_body():
+    assert set(CHART_3) == {
+        "Asc", "Sun", "Moon", "Mars", "Merc", "Jup", "Ven", "Sat",
+        "Rahu", "Ketu", "HL", "GL"}
+
+
+def test_chart_3_lagna_is_scorpio_as_the_savs_alone_had_predicted():
+    """Example 39 never states its lagna; both printed SAV maxima imply
+    Scorpio. Chart 3, supplied afterwards, prints Asc 14 Sc 18."""
+    assert CHART_3["Asc"].split()[1] == EXAMPLE_39_LAGNA == "Sc"
+
+
+def test_chart_3_nodes_are_exactly_opposite():
+    assert abs((_lon3(CHART_3["Rahu"]) - _lon3(CHART_3["Ketu"])) % 360
+               - 180) < 1e-9
+
+
+@pytest.mark.parametrize(
+    "body,sign",
+    sorted((b, s) for b, s in CHART_3_DRAWN.items() if b != "AL"))
+def test_chart_3_drawn_boxes_agree_with_the_printed_longitudes(body, sign):
+    assert RASI_ABBR[int(_lon3(CHART_3[body]) // 30)] == sign
+
+
+def test_chart_3_drawn_arudha_lagna_is_derived_not_transcribed():
+    """The diagram prints AL in Cp; the longitudes do not. §9.2 must produce
+    it. Scorpio is co-owned, so §15.5.1's cascade runs too — it takes Ketu
+    over Mars, and the answer comes out Capricorn either way it is asked."""
+    from hora.core.const import RASI_NAMES
+    from hora.services import arudha_service
+
+    longitudes = {int(g): _lon3(CHART_3[name])
+                  for name, g in _CHART_3_GRAHA.items()}
+    pada = arudha_service.one(
+        1, int(_lon3(CHART_3["Asc"]) // 30),
+        {k: int(v // 30) for k, v in longitudes.items()},
+        graha_longitudes=longitudes)
+    assert RASI_ABBR[RASI_NAMES.index(pada["sign_name"])] == CHART_3_DRAWN["AL"]
+
+
+def test_chart_3s_printed_chara_karakas():
+    from hora.charts.karaka import chara_karakas
+
+    longitudes = {int(g): _lon3(CHART_3[name])
+                  for name, g in _CHART_3_GRAHA.items() if name != "Ketu"}
+    assigned = {k.graha: k.symbol for k in chara_karakas(longitudes)}
+    assert len(CHART_3_CHARA_KARAKAS) == 8
+    for name, symbol in CHART_3_CHARA_KARAKAS.items():
+        assert assigned[int(_CHART_3_GRAHA[name])] == symbol, name
+
+
+@pytest.mark.parametrize("body", sorted(_CHART_3_GRAHA))
+def test_chart_3_recomputes_from_its_own_birth_data(body):
+    """25 December 1926, 5:12 am IST, 78 E 10, 26 N 14. Every graha inside one
+    arcminute."""
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    chart = compute_chart(
+        from_local(**CHART_3_BIRTH_DATA),
+        Place(name="Chart 3", **CHART_3_PLACE),
+        Settings(node_type=NodeType.MEAN))
+    expected = _lon3(CHART_3[body])
+    got = chart.positions[int(_CHART_3_GRAHA[body])].longitude
+    assert abs(got - expected) < 1.0 / 60, f"{body}: {got:.4f} vs {expected:.4f}"
+
+
+def test_chart_3s_ascendant_is_five_arcminutes_out():
+    """The one body outside a minute. 5.5' of lagna is about 22 seconds of
+    birth time, and the book prints the time to the minute — so this is the
+    rounding, not a disagreement about the ascendant. Recorded rather than
+    hidden behind a loose tolerance."""
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    chart = compute_chart(
+        from_local(**CHART_3_BIRTH_DATA),
+        Place(name="Chart 3", **CHART_3_PLACE),
+        Settings(node_type=NodeType.MEAN))
+    error = abs(chart.lagna_longitude - _lon3(CHART_3["Asc"])) * 60
+    assert 5.0 < error < 6.0
+    assert int(chart.lagna_longitude // 30) == R["Sc"]
+
+
+def test_chart_3_is_a_fifth_vote_for_the_mean_node():
+    """Charts 6, 7, 10 and 12 all needed the mean node; this makes five, and
+    the first from the 1920s. Its margin is the narrowest of the five —
+    0.75' against 8.8' — so it corroborates rather than decides. See OI-68."""
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    printed = _lon3(CHART_3["Rahu"])
+    errors = {}
+    for node in (NodeType.MEAN, NodeType.TRUE):
+        chart = compute_chart(
+            from_local(**CHART_3_BIRTH_DATA),
+            Place(name="Chart 3", **CHART_3_PLACE),
+            Settings(node_type=node))
+        errors[node] = abs(
+            chart.positions[int(Graha.RAHU)].longitude - printed) * 60
+    assert errors[NodeType.MEAN] < 1.0
+    assert errors[NodeType.TRUE] > 8.0
+
+
+# --------------------------------------------------------------------------
+# Example 39, now recomputed from Chart 3
+# --------------------------------------------------------------------------
+
+def test_example_39_rasi_sav_recomputes_from_chart_3():
+    """All twelve printed figures, from Vajpayee's own longitudes."""
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    sav = sarvashtakavarga(signs_in_chart(_chart_3_references(), "D1"))
+    assert tuple(sav["rekhas"]) == EXAMPLE_39_RASI_SAV
+    assert sav["total"] == SAV_TOTAL
+
+
+def test_example_39_d10_sav_recomputes_from_chart_3():
+    """All twelve again, through the D-10 — so the varga and the ashtakavarga
+    are both under test at once."""
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    sav = sarvashtakavarga(signs_in_chart(_chart_3_references(), "D10"))
+    assert tuple(sav["rekhas"]) == EXAMPLE_39_D10_SAV
+    assert sav["total"] == SAV_TOTAL
+
+
+def test_example_39_d10_lagna_is_scorpio_and_holds_the_maximum():
+    """'Lagna in D-10 is Sc and it contains 35 rekhas – maximum in D-10's
+    SAV.' Both halves derived, neither transcribed."""
+    from hora.charts.ashtakavarga import signs_in_chart
+    from hora.charts.vargas import varga
+
+    sav = sarvashtakavarga(signs_in_chart(_chart_3_references(), "D10"))
+    lagna = varga(_lon3(CHART_3["Asc"]), "D10").sign
+    assert RASI_ABBR[lagna] == "Sc"
+    assert sav["rekhas"][lagna] == 35 == max(sav["rekhas"])
+
+
+def test_example_39_d10_arudha_lagna_has_more_than_thirty_rekhas():
+    """'Arudha lagna also contains more than 30 rekhas.' The example never
+    names the sign — §9.2 over the D-10 gives Virgo, and Virgo holds 33."""
+    from hora.charts.ashtakavarga import signs_in_chart
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_NAMES
+    from hora.services import arudha_service
+
+    d10 = {int(g): varga(_lon3(CHART_3[name]), "D10").longitude
+           for name, g in _CHART_3_GRAHA.items()}
+    pada = arudha_service.one(
+        1, varga(_lon3(CHART_3["Asc"]), "D10").sign,
+        {k: int(v // 30) for k, v in d10.items()}, graha_longitudes=d10)
+    sign = RASI_NAMES.index(pada["sign_name"])
+    sav = sarvashtakavarga(signs_in_chart(_chart_3_references(), "D10"))
+    assert RASI_ABBR[sign] == "Vi"
+    assert sav["rekhas"][sign] == 33
+    assert sav["rekhas"][sign] > SAV_STRONG_FROM
+
+
+def test_example_39_d10_third_house_has_more_than_thirty_rekhas():
+    """'The 3rd house in D-10 also has more than 30 rekhas – like in the rasi
+    chart.' 33 in the D-10 against 34 in the rasi, so 'like' holds."""
+    from hora.charts.ashtakavarga import signs_in_chart
+    from hora.charts.vargas import varga
+
+    sav = sarvashtakavarga(signs_in_chart(_chart_3_references(), "D10"))
+    third = (varga(_lon3(CHART_3["Asc"]), "D10").sign + 2) % 12
+    assert RASI_ABBR[third] == "Cp"
+    assert sav["rekhas"][third] == 31
+    assert sav["rekhas"][third] > SAV_STRONG_FROM
+    rasi_third = EXAMPLE_39_RASI_SAV[(R[EXAMPLE_39_LAGNA] + 2) % 12]
+    assert rasi_third == 34
+    assert rasi_third > SAV_STRONG_FROM
+
+
+@pytest.mark.parametrize("claim,rasi,rekhas", EXAMPLE_39_D10_CLAIMS)
+def test_example_39_d10_claims_each_name_their_deciding_figure(
+        claim, rasi, rekhas):
+    """Each D-10 claim tied to the sign and rekha count that settles it, so a
+    regression in the varga or the SAV names the sentence it breaks."""
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    sav = sarvashtakavarga(signs_in_chart(_chart_3_references(), "D10"))
+    assert sav["rekhas"][R[rasi]] == rekhas, claim
+    assert claim in EXAMPLE_39_ANSWER
+
+
+def test_example_39_records_that_it_was_verified():
+    """OI-102 closed: Chart 3 was supplied and both SAVs recompute exactly."""
+    assert "recompute from Chart 3" in EXAMPLE_39_VERIFIED
 
 
 # --------------------------------------------------------------------------
@@ -1554,7 +1791,8 @@ def test_the_rules_endpoint_carries_example_39(client):
     assert body["example_39"]["rasi_sav"] == list(EXAMPLE_39_RASI_SAV)
     assert body["example_39"]["d10_sav"] == list(EXAMPLE_39_D10_SAV)
     assert body["example_39"]["lagna"] == "Sc"
-    assert "Chart 3 has not been supplied" in body["example_39"]["not_recomputed"]
+    assert "recompute from Chart 3" in body["example_39"]["verified"]
+    assert [c["rekhas"] for c in body["example_39"]["d10_claims"]] == [35, 33, 31]
 
 
 def test_the_rules_endpoint_carries_chart_12(client):

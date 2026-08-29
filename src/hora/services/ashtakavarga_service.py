@@ -48,6 +48,11 @@ from hora.core.const import (
     BAV_UNFAVOURABLE_COUNTS,
     BHINNA_MEANS,
     BINDU_REKHA_FOOTNOTE,
+    CHART_3,
+    CHART_3_BIRTH,
+    CHART_3_CHARA_KARAKAS,
+    CHART_3_DRAWN,
+    CHART_3_TITLE,
     CHART_11_MERCURY_BAV,
     CHART_12,
     CHART_12_BIRTH,
@@ -66,11 +71,12 @@ from hora.core.const import (
     EXAMPLE_38_WORST_RASIS,
     EXAMPLE_39,
     EXAMPLE_39_ANSWER,
+    EXAMPLE_39_D10_CLAIMS,
     EXAMPLE_39_D10_SAV,
     EXAMPLE_39_LAGNA,
-    EXAMPLE_39_NEEDS_CHART_3,
     EXAMPLE_39_RASI_SAV,
     EXAMPLE_39_READING,
+    EXAMPLE_39_VERIFIED,
     EXERCISE_18,
     EXERCISE_18_ANSWER,
     EXERCISE_18_HINT,
@@ -232,9 +238,26 @@ def rules() -> dict:
                 "The example never states the lagna. Every claim it makes "
                 "fixes it: the rasi maximum of 38 is called the 11th house "
                 "and the D-10 maximum of 35 is called the lagna, and both "
-                "give Scorpio."
+                "give Scorpio. Chart 3 later confirmed it: Asc 14 Sc 18."
             ),
-            "not_recomputed": EXAMPLE_39_NEEDS_CHART_3,
+            "verified": EXAMPLE_39_VERIFIED,
+            "d10_claims": [
+                {"claim": claim, "rasi": rasi, "rekhas": rekhas}
+                for claim, rasi, rekhas in EXAMPLE_39_D10_CLAIMS
+            ],
+        },
+        "chart_3": {
+            "title": CHART_3_TITLE,
+            "birth": CHART_3_BIRTH,
+            "longitudes": dict(CHART_3),
+            "drawn": dict(CHART_3_DRAWN),
+            "chara_karakas": dict(CHART_3_CHARA_KARAKAS),
+            "note": (
+                "Example 39 works from this chart without reprinting it. Both "
+                "of its printed SAVs recompute from these longitudes exactly. "
+                "The diagram prints AL, which the longitudes do not, so it is "
+                "an independent check on section 9.2 over a Scorpio lagna."
+            ),
         },
         "chart_12": {
             "title": CHART_12_TITLE,

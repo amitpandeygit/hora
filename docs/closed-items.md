@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-5](#oi-5) | Upagrahas |
+| [OI-102](#oi-102) | Chart 3 had never been supplied |
 | [OI-100](#oi-100) | whether a sarvashtakavarga includes lagna's table |
 | [OI-99](#oi-99) | the ashtakavarga tables arrived one page at a time |
 | [OI-23](#oi-23) | the `MARAKA` house label was unverified |
@@ -1686,3 +1687,40 @@ both.
 Recording this before Table 26 arrived is what kept the question visible: the
 two sums were identical until that table landed, so nothing would have
 signalled the ambiguity at the moment it started to matter.
+
+## OI-102 — Chart 3 has never been supplied
+
+§12.5's Example 39 works Sri A.B. Vajpayee's rasi and D-10 SAVs and cites
+"Chart 3 for birthdata". Chart 3 had not been given.
+
+Before it arrived, the two printed SAVs were checked as far as they could be
+without it: both total 337, and although the example never states its lagna it
+fixes it twice over — the rasi maximum of 38 is called the 11th house and the
+D-10 maximum of 35 is called the lagna, and both give **Scorpio**.
+
+**Closed by Chart 3**, supplied 2026-08-30. It prints **Asc 14 Sc 18** — the
+deduction from the SAVs alone was right. Birth data: December 25, 1926,
+5:12 am (IST), 78 E 10, 26 N 14.
+
+Everything the example asserts now recomputes rather than being transcribed:
+
+| what | ours | printed |
+|---|---|---|
+| rasi SAV, all twelve | 29 22 27 29 28 38 29 26 23 34 28 24 | identical |
+| D-10 SAV, all twelve | 23 26 33 20 28 33 26 35 28 31 24 30 | identical |
+| D-10 lagna | Sc, 35 rekhas, the maximum | "Lagna in D-10 is Sc … 35 rekhas" |
+| D-10 arudha lagna | Vi, 33 rekhas | "more than 30 rekhas" |
+| D-10 3rd house | Cp, 31 rekhas | "more than 30 rekhas" |
+
+The D-10 run exercises the varga and the ashtakavarga together, and the arudha
+runs §9.2 over a Scorpio lagna, so §15.5.1's co-lord cascade is under test too
+— it takes Ketu over Mars, and Capricorn comes out, which is the AL the rasi
+diagram prints.
+
+Chart 3 also carries its own checks: all nine bodies recompute within one
+arcminute, the drawn boxes agree with the printed longitudes, the eight chara
+karakas derive correctly, and it became a **fifth** chart favouring the mean
+node (OI-68) — the first from the 1920s, though by the narrowest margin of the
+five.
+
+Chart 4 is still unseen. Nothing so far cites it.
