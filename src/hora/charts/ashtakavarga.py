@@ -20,7 +20,10 @@ from hora.core.const import (
     ASHTAKAVARGA_TABLE_NUMBERS,
     ASHTAKAVARGA_TABLES,
     ASHTAKAVARGA_TABLES_PENDING,
+    CLASSICAL_TABLE_TOTALS,
     GRAHA_NAMES,
+    MARS_ASHTAKAVARGA_ROWS,
+    MOON_ASHTAKAVARGA_ROWS,
     RASI_NAMES,
     SUN_ASHTAKAVARGA_ROWS,
     Graha,
@@ -45,22 +48,30 @@ def verify_tables() -> dict[str, dict]:
     Ninety-six hand-typed entries per table is exactly where a silent
     transcription error lives, so the checks are part of the product rather
     than only of the test suite: twelve rows of eight, every entry 0 or 1,
-    and — for the Sun — the classical total of 48 that his table reaches
-    independently of anything we assert about it.
+    and the total the wider tradition records for that planet, which each
+    table reaches independently of anything we assert about it.
+
+    `CLASSICAL_TABLE_TOTALS` is a check, not a source — the book prints no
+    totals. A mismatch is reported here, never corrected.
     """
-    #: The registry must hold the same object the page was transcribed into,
-    #: not a second copy that could drift from it.
+    #: The registry must hold the same objects the pages were transcribed
+    #: into, not second copies that could drift from them.
     assert ASHTAKAVARGA_TABLES["Sun"] is SUN_ASHTAKAVARGA_ROWS
+    assert ASHTAKAVARGA_TABLES["Moon"] is MOON_ASHTAKAVARGA_ROWS
+    assert ASHTAKAVARGA_TABLES["Mars"] is MARS_ASHTAKAVARGA_ROWS
 
     out: dict[str, dict] = {}
     for owner, rows in ASHTAKAVARGA_TABLES.items():
         total = sum(sum(row) for row in rows)
+        classical = CLASSICAL_TABLE_TOTALS[owner]
         out[owner] = {
             "table": ASHTAKAVARGA_TABLE_NUMBERS[owner],
             "rows": len(rows),
             "columns": sorted({len(row) for row in rows}),
             "values": sorted({v for row in rows for v in row}),
             "total": total,
+            "classical_total": classical,
+            "matches_classical_total": total == classical,
             "shape_ok": (len(rows) == 12
                          and {len(row) for row in rows} == {8}
                          and {v for row in rows for v in row} <= {0, 1}),
@@ -179,41 +190,69 @@ def bhinnashtakavarga(owner: str, reference_signs: dict[str, int]
     )
 
 
-def sarvashtakavarga(reference_signs: dict[str, int]) -> dict:
-    """The eight bhinnashtakavargas summed, sign by sign.
+def summed(reference_signs: dict[str, int]) -> dict:
+    """The supplied bhinnashtakavargas added sign by sign.
 
-    Returns what can be computed and names what cannot: until Tables 20 to 26
-    are supplied this is a partial sum, and it says so rather than passing a
-    seven-table total off as a sarvashtakavarga.
+    **Deliberately not called a sarvashtakavarga.** The book has not reached
+    that term, and the two candidate sums differ: the classical
+    sarvashtakavarga adds the **seven planets** and comes to 337, while adding
+    all eight tables including lagna comes to 386. Nothing here picks one —
+    both are returned, labelled, and the note says the book has not defined
+    it. See docs/open-items.md OI-100.
     """
     available = available_tables()
     per_owner = {owner: bhinnashtakavarga(owner, reference_signs)
                  for owner in available}
-    totals = [sum(b.rekhas[sign] for b in per_owner.values())
-              for sign in range(12)]
-    complete = not ASHTAKAVARGA_TABLES_PENDING
+    planets = [o for o in available if o != "Lagna"]
+
+    def totals(owners: list[str]) -> list[int]:
+        return [sum(per_owner[o].rekhas[sign] for o in owners)
+                for sign in range(12)]
+
+    planet_totals = totals(planets)
+    all_totals = totals(list(available))
+    missing_planets = [o for o in ASHTAKAVARGA_TABLES_PENDING if o != "Lagna"]
     return {
-        "complete": complete,
+        "complete": not ASHTAKAVARGA_TABLES_PENDING,
         "owners_included": list(available),
         "owners_missing": list(ASHTAKAVARGA_TABLES_PENDING),
+        "seven_planets": {
+            "owners": planets,
+            "complete": not missing_planets,
+            "rekhas": planet_totals,
+            "total": sum(planet_totals),
+            "classical_total_when_complete": 337,
+        },
+        "eight_references": {
+            "owners": list(available),
+            "complete": not ASHTAKAVARGA_TABLES_PENDING,
+            "rekhas": all_totals,
+            "total": sum(all_totals),
+            "classical_total_when_complete": 386,
+        },
+        "not_yet_named_note": (
+            "This is a sum of the tables supplied, not a sarvashtakavarga. "
+            "The book has not reached that term, and the two candidate sums "
+            "differ — seven planets gives 337 when complete, all eight "
+            "references gives 386. Both are returned and neither is chosen. "
+            "See docs/open-items.md OI-100."
+        ),
         "missing_note": (
-            "" if complete else
-            "This is not a sarvashtakavarga. Tables "
+            "" if not ASHTAKAVARGA_TABLES_PENDING else
+            "Tables "
             + ", ".join(str(ASHTAKAVARGA_TABLE_NUMBERS[o])
                         for o in ASHTAKAVARGA_TABLES_PENDING)
             + " have not been supplied, so "
             + ", ".join(ASHTAKAVARGA_TABLES_PENDING)
-            + " contribute nothing to these totals. A sign's figure is a "
-              "partial sum and must not be compared against the usual "
-              "sarvashtakavarga thresholds."
+            + " contribute nothing to these totals. Every figure here is a "
+              "partial sum and must not be read against any threshold."
         ),
-        "rekhas": totals,
         "signs": [
             {"sign": sign, "sign_name": str(RASI_NAMES[sign]),
-             "rekhas": totals[sign]}
+             "seven_planets": planet_totals[sign],
+             "eight_references": all_totals[sign]}
             for sign in range(12)
         ],
-        "total": sum(totals),
     }
 
 

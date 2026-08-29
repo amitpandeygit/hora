@@ -7,6 +7,7 @@
       "value": 1
     },
     "bindu_rekha_footnote": "Some astrologers (especially south Indian astrologers) use a different notation. They use \u201cbindu\u201d to describe a benefic house (1) and \u201crekha\u201d to describe malefic house (0). Let us follow Parasara.",
+    "classical_totals_provenance": "Not from this book. The chapter prints the tables and gives no totals. These figures come from the wider tradition and are used only as a check on the transcription; a mismatch would be reported, never corrected.",
     "intro": "Analyzing a chart and making correct predictions requires mixing many different principles and making fine compromises and judgments. Sage Parasara said that it is difficult for even great Maharshis. In Kali Yuga, human beings become sinful and the sins kill their intelligence. Parasara said that the intellectual pygmies of Kali Yuga cannot cope with too many complicated principles and presented ashtakavarga as a simple technique that lets them make reasonable predictions without much fuss.",
     "malefic_entry": {
       "sanskrit": "karana",
@@ -39,11 +40,11 @@
       "Venus": 24
     },
     "tables_available": [
-      "Sun"
+      "Sun",
+      "Moon",
+      "Mars"
     ],
     "tables_pending": [
-      "Moon",
-      "Mars",
       "Mercury",
       "Jupiter",
       "Venus",
@@ -52,10 +53,42 @@
     ],
     "tables_pending_note": "Table 20-Table 26 give the benefic and malefic houses of Moon, Mars, Mercury, Jupiter, Venus, Saturn and lagna (respectively).",
     "tables_verified": {
-      "Sun": {
+      "Mars": {
+        "classical_total": 39,
         "columns": [
           8
         ],
+        "matches_classical_total": true,
+        "rows": 12,
+        "shape_ok": true,
+        "table": 21,
+        "total": 39,
+        "values": [
+          0,
+          1
+        ]
+      },
+      "Moon": {
+        "classical_total": 49,
+        "columns": [
+          8
+        ],
+        "matches_classical_total": true,
+        "rows": 12,
+        "shape_ok": true,
+        "table": 20,
+        "total": 49,
+        "values": [
+          0,
+          1
+        ]
+      },
+      "Sun": {
+        "classical_total": 48,
+        "columns": [
+          8
+        ],
+        "matches_classical_total": true,
         "rows": 12,
         "shape_ok": true,
         "table": 19,

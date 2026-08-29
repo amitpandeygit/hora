@@ -6,7 +6,7 @@ from hora.charts.ashtakavarga import (
     available_tables,
     bhinnashtakavarga,
     describe,
-    sarvashtakavarga,
+    summed,
     verify_tables,
 )
 from hora.core import validate
@@ -25,6 +25,7 @@ from hora.core.const import (
     ASHTAKAVARGA_TABLE_NUMBERS,
     ASHTAKAVARGA_TABLES_PENDING,
     BINDU_REKHA_FOOTNOTE,
+    CLASSICAL_TABLE_TOTALS_PROVENANCE,
     RASI_NAMES,
     TABLE_19_WORKED_READING,
     TABLES_20_TO_26_NOTE,
@@ -47,6 +48,7 @@ def rules() -> dict:
         "table_numbers": dict(ASHTAKAVARGA_TABLE_NUMBERS),
         "tables_available": list(available_tables()),
         "tables_verified": verify_tables(),
+        "classical_totals_provenance": CLASSICAL_TABLE_TOTALS_PROVENANCE,
         "tables_verified_note": (
             "Ninety-six hand-typed entries per table is where a silent "
             "transcription error would live, so the shape checks ship with "
@@ -111,7 +113,7 @@ def chart(reference_signs: dict[str, int], owner: str | None = None) -> dict:
         "reference_signs": {k: {"sign": v, "sign_name": str(RASI_NAMES[v])}
                             for k, v in signs.items()},
         "bhinnashtakavarga": per_owner,
-        "sarvashtakavarga": sarvashtakavarga(signs),
+        "summed": summed(signs),
         "tables_pending": list(ASHTAKAVARGA_TABLES_PENDING),
     }
 

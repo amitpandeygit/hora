@@ -38,6 +38,10 @@ class AshtakavargaRulesOut(BaseModel):
     table_numbers: dict[str, int]
     tables_available: list[str]
     tables_verified: dict[str, dict]
+    classical_totals_provenance: str = Field(
+        description="Where the totals used to check the "
+                    "transcription come from — not this book.",
+    )
     tables_verified_note: str
     tables_pending: list[str] = Field(
         description="Tables the book names that have not been supplied. A "
@@ -78,8 +82,10 @@ class AshtakavargaTableOut(BaseModel):
 class AshtakavargaChartOut(BaseModel):
     reference_signs: dict[str, dict]
     bhinnashtakavarga: list[dict]
-    sarvashtakavarga: dict = Field(
-        description="Partial until all eight tables are supplied, and it says "
-                    "so rather than passing a partial sum off as a total.",
+    summed: dict = Field(
+        description="The supplied tables added sign by sign. Not called a "
+                    "sarvashtakavarga: the book has not reached that term, "
+                    "and the seven-planet and eight-reference sums differ "
+                    "(337 against 386 when complete). Both are returned.",
     )
     tables_pending: list[str]

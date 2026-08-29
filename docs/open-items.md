@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 60 waiting on evidence · 2 parked**
+**5 waiting on Amit · 61 waiting on evidence · 2 parked**
 
 ---
 
@@ -583,23 +583,43 @@ into benefic or malefic and §3.2.2 gives the Moon no nature without one.
 ### OI-99 — seven of the eight ashtakavarga tables are not supplied
 
 §12.2 gives Table 19, the Sun's, and names Tables 20 to 26 for the Moon, Mars,
-Mercury, Jupiter, Venus, Saturn and lagna. Only Table 19 has been read.
+Mercury, Jupiter, Venus, Saturn and lagna. Tables 19, 20 and 21 — Sun, Moon and
+Mars — have been read. Tables 22 to 26 have not.
 
 Until the rest arrive:
 
-- `/v1/ashtakavarga/table` answers for the Sun and **refuses** the other seven
-  by name and table number rather than returning zeros;
-- `/v1/ashtakavarga/chart` returns the Sun's bhinnashtakavarga and a
-  sarvashtakavarga flagged `complete: false`, whose note says the figures are a
-  partial sum and must not be read against the usual thresholds;
+- `/v1/ashtakavarga/table` answers for the tables that exist and **refuses**
+  the rest by name and table number rather than returning zeros;
+- `/v1/ashtakavarga/chart` returns a bhinnashtakavarga per supplied table and a
+  sum flagged `complete: false`, whose note says the figures are partial and
+  must not be read against any threshold;
 - `STRENGTH_MEASURES`' ashtakavarga entry stays `available: False`.
 
-**What is already load-bearing.** The transcription of Table 19 reaches a total
-of 48 rekhas, the classical figure for the Sun's bhinnashtakavarga, which no
-part of our code asserts into being — it falls out of the ninety-six entries.
-The same check will apply to each new table as it arrives.
+**What is already load-bearing.** Each table's total falls out of its
+ninety-six entries and is compared against the figure the wider tradition
+records — 48, 49 and 39 so far, all matching. Nothing in our code asserts those
+totals into being, and a mismatch would be reported rather than corrected.
 
 **Closes when:** Tables 20 to 26 are supplied.
+
+### OI-100 — does a sarvashtakavarga include lagna's table?
+
+Adding the bhinnashtakavargas together is the obvious next step, and the book
+has not reached the term yet. It matters which tables are added:
+
+| sum | total when all eight tables exist |
+|---|---|
+| the **seven planets** | **337** — the classical sarvashtakavarga figure |
+| all **eight references**, lagna included | **386** |
+
+The difference is exactly Table 26's own total, 49.
+
+**What we do:** the function is called `summed`, not `sarvashtakavarga`, and it
+returns **both** figures side by side with neither chosen, plus a note saying
+the book has not defined the term. Caught before Table 26 arrives — once it
+does, a single implicit choice here would silently move every total by 49.
+
+**Closes when:** a section defines sarvashtakavarga and says what it sums.
 
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 

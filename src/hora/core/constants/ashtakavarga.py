@@ -120,9 +120,60 @@ SUN_ASHTAKAVARGA_ROWS: tuple[tuple[int, ...], ...] = (
     (0,  0,  0,  1,  0,  1,  0,  1),   # 12th
 )
 
+
+MOON_ASHTAKAVARGA_ROWS: tuple[tuple[int, ...], ...] = (
+    #  Sun Moon Mars Merc  Jup  Ven  Sat  Lag        house
+    (0,  1,  0,  1,  1,  0,  0,  0),   # 1st
+    (0,  0,  1,  0,  1,  0,  0,  0),   # 2nd
+    (1,  1,  1,  1,  0,  1,  1,  1),   # 3rd
+    (0,  0,  0,  1,  1,  1,  0,  0),   # 4th
+    (0,  0,  1,  1,  0,  1,  1,  0),   # 5th
+    (1,  1,  1,  0,  0,  0,  1,  1),   # 6th
+    (1,  1,  0,  1,  1,  1,  0,  0),   # 7th
+    (1,  0,  0,  1,  1,  0,  0,  0),   # 8th
+    (0,  1,  0,  0,  0,  1,  0,  0),   # 9th
+    (1,  1,  1,  1,  1,  1,  0,  1),   # 10th
+    (1,  1,  1,  1,  1,  1,  1,  1),   # 11th
+    (0,  0,  0,  0,  0,  0,  0,  0),   # 12th
+)
+
+MARS_ASHTAKAVARGA_ROWS: tuple[tuple[int, ...], ...] = (
+    #  Sun Moon Mars Merc  Jup  Ven  Sat  Lag        house
+    (0,  0,  1,  0,  0,  0,  1,  1),   # 1st
+    (0,  0,  1,  0,  0,  0,  0,  0),   # 2nd
+    (1,  1,  0,  1,  0,  0,  0,  1),   # 3rd
+    (0,  0,  1,  0,  0,  0,  1,  0),   # 4th
+    (1,  0,  0,  1,  0,  0,  0,  0),   # 5th
+    (1,  1,  0,  1,  1,  1,  0,  1),   # 6th
+    (0,  0,  1,  0,  0,  0,  1,  0),   # 7th
+    (0,  0,  1,  0,  0,  1,  1,  0),   # 8th
+    (0,  0,  0,  0,  0,  0,  1,  0),   # 9th
+    (1,  0,  1,  0,  1,  0,  1,  1),   # 10th
+    (1,  1,  1,  1,  1,  1,  1,  1),   # 11th
+    (0,  0,  0,  0,  1,  1,  0,  0),   # 12th
+)
+
+#: The total rekhas each table carries, as the wider tradition records them.
+#:
+#: **A check, not a source.** These figures are not PVR's — the book prints
+#: the tables and no totals. They are used only to test a transcription of
+#: ninety-six hand-typed entries, and a mismatch is reported, never silently
+#: corrected. Their sum, 337, is the classical sarvashtakavarga total.
+CLASSICAL_TABLE_TOTALS: dict[str, int] = {
+    "Sun": 48, "Moon": 49, "Mars": 39, "Mercury": 54,
+    "Jupiter": 56, "Venus": 52, "Saturn": 39, "Lagna": 49,
+}
+
+CLASSICAL_TABLE_TOTALS_PROVENANCE = (
+    "Not from this book. The chapter prints the tables and gives no totals. "
+    "These figures come from the wider tradition and are used only as a check "
+    "on the transcription; a mismatch would be reported, never corrected.")
+
 #: Tables supplied so far, by owner.
 ASHTAKAVARGA_TABLES: dict[str, tuple[tuple[int, ...], ...]] = {
     "Sun": SUN_ASHTAKAVARGA_ROWS,
+    "Moon": MOON_ASHTAKAVARGA_ROWS,
+    "Mars": MARS_ASHTAKAVARGA_ROWS,
 }
 
 #: Tables 20 to 26, named by the book and not yet supplied. Listed so a
