@@ -80,6 +80,27 @@
     "blemish_rule": "Any blemishes here will considerably reduce the magnitude of the yoga.",
     "close_orb_degrees": 6.0,
     "close_orb_is_approximate": true,
+    "daridra_saving_factor": {
+      "applies": false,
+      "decidable": true,
+      "reaching_lagna": [],
+      "reaching_lagna_lord": [],
+      "trine_lords": [
+        {
+          "graha": 3,
+          "graha_name": "Mercury"
+        },
+        {
+          "graha": 5,
+          "graha_name": "Venus"
+        },
+        {
+          "graha": 6,
+          "graha_name": "Saturn"
+        }
+      ]
+    },
+    "daridra_saving_factor_rule": "However, conjunction or aspect of trine lords is a saving factor.",
     "dasa_varga_rule": "In addition to the above factors, Sage Parasara recommended looking at the amsas occupied by the 2 planets as per Dasa Varga (ten division) scheme. Count the divisional charts \u2013 out of the ten charts of Dasa Varga scheme \u2013 in which a planet occupies an own, exaltation or moolatrikona sign. Based on the count of divisional charts with such a good placement for the planet in question, we say that it is in a particular amsa. Please see the chapter \u201cDivisional Charts\u201d for details.",
     "dharma_karmadhipati_pair": [
       {

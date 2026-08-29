@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 57 waiting on evidence · 2 parked**
+**5 waiting on Amit · 59 waiting on evidence · 2 parked**
 
 ---
 
@@ -211,18 +211,6 @@ This does not refute the PyJHora evidence — it is outranked, not wrong. If
 JHora uses disc centre, rank 1 wins.
 
 **Closes when:** JHora's sunrise definition is confirmed.
-
-### OI-23 — the `MARAKA` house label is unverified
-
-`charts/bhava.py` defines `MARAKA = (2, 7)` and `classify_house` reports it in
-every chart response. **Chapter 7 does not mention maraka** — it names seven
-categories and maraka is not among them. Written from general classical
-knowledge during Phase 1.
-
-Not obviously wrong; neither was D-5.
-
-**Closes when:** a chapter defining maraka is reached and it is verified, or it
-is removed.
 
 ### OI-24 — chapter 8 gives only one chara karaka scheme
 
@@ -491,6 +479,70 @@ has the number without the engine having chosen.
 
 **Closes when:** you settle whether chapter 11's unquantified plurals mean one
 or more, or all.
+
+### OI-98 — "They are conjoined or aspected by a maraka planet" — how many of them?
+
+Eight of §11.10's thirteen end with a clause of this shape, naming two or more
+planets and then one maraka reaching "them". Three readings are possible:
+
+| reading | combination (1) reachable on |
+|---|---|
+| **strict** — one maraka reaches every named planet | **2** of 12 lagnas |
+| **middle** — each named planet is reached by some maraka | **8** of 12 |
+| **loose** — a maraka reaches at least one of them | **12** of 12 |
+
+Computed by exhausting every seat a maraka could take, for every lagna.
+
+**What we do:** the loose reading, because it is the only one that leaves a
+rule Parasara states for all charts alive on all twelve lagnas — the same
+argument that settled OI-79 and D-37. Under the strict reading combination (1)
+would be dead for ten lagnas including Aries, where the 2nd and 7th are both
+Venus and her single 7th drishti cannot reach two adjacent signs.
+
+Every verdict names which of the planets were reached and which were not, so
+the two stricter readings are reconstructable from the answer without the
+engine having chosen them.
+
+**Closes when:** you confirm the reading, or an example fixes it.
+
+### OI-96 — §11.10's maraka NOTE has a circular third sentence
+
+"The 2nd and 7th houses are maraka (killer houses). Their lords are marakas
+(killers). Any malefics occupying 2nd and 7th or associating with 2nd and 7th
+lords **also become malefics**."
+
+The third sentence says malefics become malefics, which asserts nothing. In
+context it must be "also become **marakas**" — the sentence is plainly
+extending the maraka set, and the section then uses "a maraka planet" in eight
+of its thirteen combinations.
+
+**What we do:** presence is decided on the **base** set — the 2nd and 7th
+lords, which the NOTE states without ambiguity. The extension the third
+sentence describes is computed on every chart and reported: which planets it
+would add, and, where a verdict is absent only because of the narrow set,
+that the verdict turns on this item.
+
+**Why narrow rather than wide.** These are poverty combinations. Telling
+someone they have one on a reading the book garbled is worse than telling them
+they do not.
+
+**Closes when:** you confirm the reading, or a later printing settles it.
+
+### OI-97 — §11.10 (10) uses "malefic houses" and "benefic houses", which nothing defines
+
+"Benefics are in malefic houses and malefics are in benefic houses."
+
+No section read so far defines either term. Chapter 7 names seven house
+categories and neither is among them; the dusthanas are glossed "bad/evil
+houses", not malefic. The obvious guess — dusthanas malefic, quadrants and
+trines benefic — leaves the 2nd, 3rd, 7th and 11th unassigned, so it is not
+even a complete reading.
+
+**What we do:** the combination is reported undecidable, naming the two terms
+and this item. It is the only one of §11.10's thirteen that cannot be
+answered.
+
+**Closes when:** a section defines the two terms.
 
 ### OI-93 — §11.7.3 (2)'s clause (d) does not say which planets it means
 

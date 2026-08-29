@@ -55,6 +55,11 @@ from hora.core.const import (
     CHART_10_TIME_IS_LMT,
     CHATURASRA,
     COMBUSTION_WEAKENS_YOGA,
+    DARIDRA_GENERAL_PRINCIPLES,
+    DARIDRA_SAVING_FACTOR,
+    DARIDRA_YOGA_COUNT,
+    DARIDRA_YOGA_INTRO,
+    DARIDRA_YOGAS,
     DHANA_BASIC_PRINCIPLE,
     DHANA_EXALTED_IN_SECOND,
     DHANA_MEANS,
@@ -98,6 +103,9 @@ from hora.core.const import (
     MAHAPURUSHA_REFERENCE_RULE,
     MAHAPURUSHA_TERMS,
     MAHAPURUSHA_YOGAS,
+    MARAKA_HOUSES,
+    MARAKA_NOTE,
+    MARAKA_NOTE_CIRCULAR_CLAUSE,
     MOOLATRIKONA,
     NAABHASA_CLASSIFICATION,
     NAABHASA_INTRO,
@@ -677,7 +685,8 @@ def test_catalogue_lists_every_yoga_without_a_chart(client):
     assert set(body["groups"]) == {
         "ravi", "chandra", "mahapurusha", "naabhasa_aasraya",
         "naabhasa_dala", "naabhasa_aakriti", "naabhasa_sankhya", "popular",
-        "raaja", "raaja_advanced", "raaja_sambandha", "dhana"}
+        "raaja", "raaja_advanced", "raaja_sambandha", "dhana",
+        "daridra"}
     assert {y["key"] for y in body["yogas"]} == set(YOGA_REGISTRY)
 
 
@@ -5772,8 +5781,8 @@ def test_the_chart_endpoint_answers_every_registered_yoga(client):
         "lagna_rasi": R["Li"], "paksha": 1,
         "rasis": {int(g): int(_lon9(CHART_10[name]) // 30)
                   for name, g in _CHART_10_GRAHA.items()}}).json()
-    assert body["evaluated"] == len(YOGA_REGISTRY) == 155
-    assert len(body["yogas"]) == 155
+    assert body["evaluated"] == len(YOGA_REGISTRY) == 168
+    assert len(body["yogas"]) == 168
     for yoga in body["yogas"]:
         assert yoga["reason"], yoga["key"]
 
@@ -6034,3 +6043,228 @@ def test_the_two_outcome_sentences_are_uniform_across_the_twelve(client):
             "one becomes very affluent.")
         assert entry["second_definition"].endswith(
             "then also one becomes very rich.")
+
+
+# --------------------------------------------------------------------------
+# 11.10 Daridra Yogas
+#
+# Thirteen poverty combinations, eight of them turning on "a maraka planet" —
+# which this section is the first place in the book to define.
+# --------------------------------------------------------------------------
+
+
+def _daridra_numbers() -> dict[int, str]:
+    return {e["number"]: e["key"] for e in DARIDRA_YOGAS}
+
+
+def test_thirteen_daridra_yogas_are_registered():
+    assert DARIDRA_YOGA_COUNT == 13
+    assert [e["number"] for e in DARIDRA_YOGAS] == list(range(1, 14))
+    for entry in DARIDRA_YOGAS:
+        spec = YOGA_REGISTRY[entry["key"]]
+        assert spec.section == "11.10"
+        assert spec.group == "daridra"
+    assert "One experiences poverty" in DARIDRA_YOGA_INTRO
+
+
+def test_the_note_confirms_the_maraka_label_chapter_7_never_gave():
+    """§11.10's NOTE is the first definition of maraka in the book, and it
+    matches the constant `charts/bhava.py` had been carrying on general
+    classical knowledge. That closes OI-23."""
+    from hora.charts.bhava import MARAKA
+
+    assert "The 2nd and 7th houses are maraka" in MARAKA_NOTE
+    assert "Their lords are marakas" in MARAKA_NOTE
+    assert MARAKA_HOUSES == (2, 7)
+    assert tuple(MARAKA) == MARAKA_HOUSES
+
+
+def test_the_notes_third_sentence_is_circular_and_is_kept_as_printed():
+    """"Any malefics ... also become malefics" asserts nothing. Transcribed
+    as printed; the reading it must have is recorded, not applied. See
+    OI-96."""
+    assert MARAKA_NOTE_CIRCULAR_CLAUSE.endswith("also become malefics.")
+    assert MARAKA_NOTE_CIRCULAR_CLAUSE in MARAKA_NOTE
+
+
+def test_marakas_are_taken_narrowly_and_the_wider_set_is_reported():
+    """Presence uses the 2nd and 7th lords only. What the third sentence
+    would add is computed and named on every affected verdict."""
+    from hora.charts.planetary_yogas.daridra import marakas
+
+    base, added, note = marakas(_akbar())
+    assert base == (int(Graha.MARS),)
+    assert added == (int(Graha.SUN),)
+    assert "computed, not applied" in note
+    assert "OI-96" in note
+
+
+def test_every_maraka_verdict_carries_that_note():
+    keys = {e["key"] for e in DARIDRA_YOGAS}
+    verdicts = {v.key: v for v in evaluate(_akbar()) if v.key in keys}
+    for number in (1, 2, 3, 5, 6, 8, 9):
+        verdict = verdicts[_daridra_numbers()[number]]
+        assert any("OI-96" in q for q in verdict.qualifiers), number
+
+
+# --- the thirteen -----------------------------------------------------------
+
+
+def test_1_and_2_are_the_same_shape_on_different_houses():
+    for number, house in ((1, 12), (2, 6)):
+        entry = next(e for e in DARIDRA_YOGAS if e["number"] == number)
+        assert f"Lagna lord is in {ordinal(house)}" in entry["definition"]
+        assert "conjoined or aspected by a maraka planet" in entry["definition"]
+
+
+def test_1_holds_on_a_chart_built_for_it():
+    """Aries lagna: Mars (lagna lord) in Pisces, Jupiter (12th lord) in
+    Aries, and Venus — the 2nd and 7th lord, so the only maraka — conjoining
+    Mars."""
+    verdict = evaluate_one("daridra_first_twelfth_exchange", _pl(
+        "Ar", paksha=0, MARS=_deg("Pi"), JUPITER=_deg("Ar"),
+        VENUS=_deg("Pi", 20)))
+    assert verdict.present is True
+    assert "have exchanged" in verdict.reason
+    assert "Mars is reached by Venus by conjunction" in verdict.reason
+    assert any("not reached: Jupiter" in q for q in verdict.qualifiers)
+
+
+def test_the_maraka_clause_is_read_as_at_least_one_and_why():
+    """Three readings are possible. Only the loosest leaves combination (1)
+    alive on all twelve lagnas — computed by exhausting every seat a maraka
+    could take. See OI-98."""
+    from hora.charts.aspects import graha_aspects_sign
+
+    def reachable(lagna: int, strict: bool) -> bool:
+        twelfth = (lagna + 11) % 12
+        lords = (int(RASI_LORD[lagna]), int(RASI_LORD[twelfth]))
+        marakas = {int(RASI_LORD[(lagna + h - 1) % 12]) for h in (2, 7)}
+        free = [m for m in marakas if m not in lords]
+
+        def reach(m: int, seat: int, target: int) -> bool:
+            return seat == target or graha_aspects_sign(m, seat, target)
+
+        return any(
+            (reach(m, seat, twelfth) and reach(m, seat, lagna)) if strict
+            else (reach(m, seat, twelfth) or reach(m, seat, lagna))
+            for m in free for seat in range(12))
+
+    assert sum(reachable(lg, strict=True) for lg in range(12)) == 2
+    assert sum(reachable(lg, strict=False) for lg in range(12)) == 12
+    # Aries is the sharpest case: the 2nd and 7th are both Venus, and her one
+    # drishti cannot reach two adjacent signs.
+    assert reachable(R["Ar"], strict=True) is False
+    assert reachable(R["Ar"], strict=False) is True
+
+
+def test_4_is_the_only_one_given_its_own_result():
+    """"Even a royal scion with this combination becomes poor." Everything
+    else in §11.10 shares the section's opening sentence."""
+    entry = next(e for e in DARIDRA_YOGAS if e["number"] == 4)
+    assert entry["result"] == (
+        "Even a royal scion with this combination becomes poor.")
+    with_result = [e["number"] for e in DARIDRA_YOGAS if e.get("result")]
+    assert with_result == [4]
+
+
+def test_6_excludes_the_ninth_and_tenth_lords():
+    """"Malefics occupy lagna **without** 9th and 10th lords" — if either is
+    there, the combination does not apply."""
+    verdict = evaluate_one("daridra_malefics_in_lagna", _pl(
+        "Ar", paksha=0, SATURN=_deg("Ar"), JUPITER=_deg("Ar", 20),
+        MARS=_deg("Ta")))
+    assert verdict.present is False
+    assert "a 9th or 10th lord — is in lagna" in verdict.reason
+
+
+def test_10_is_the_only_one_that_cannot_be_decided():
+    """"Benefics are in malefic houses and malefics are in benefic houses" —
+    neither term is defined anywhere the book has taken us. See OI-97."""
+    keys = {e["key"] for e in DARIDRA_YOGAS}
+    undecidable = [v.key for v in evaluate(_akbar())
+                   if v.key in keys and "cannot be decided" in v.reason]
+    assert undecidable == ["daridra_benefics_and_malefics_swapped"]
+    verdict = evaluate_one("daridra_benefics_and_malefics_swapped", _akbar())
+    assert "malefic houses" in verdict.reason
+    assert "OI-97" in verdict.reason
+
+
+def test_11_is_about_dasas_and_names_the_planets():
+    """"Planets conjoined by 6th, 8th and 12th lords give loss of wealth **in
+    their dasas**" — a per-planet finding, and the trine-lord saving factor
+    is applied inside it."""
+    entry = next(e for e in DARIDRA_YOGAS if e["number"] == 11)
+    assert entry["is_about_dasas"] is True
+    assert "in their dasas" in entry["definition"]
+    verdict = evaluate_one("daridra_planets_with_dusthana_lords", _akbar())
+    assert verdict.present is False
+    assert "trine lord" in verdict.reason
+
+
+def test_12_and_13_report_their_printed_exceptions():
+    """Both carry an exception that reverses them into wealth. When the
+    exception applies the yoga is absent, and the verdict says which."""
+    twelve = evaluate_one("daridra_mars_saturn_in_second", _pl(
+        "Ar", paksha=0, MARS=_deg("Ta"), SATURN=_deg("Ta", 20),
+        MERCURY=_deg("Sc")))
+    assert twelve.present is False
+    assert "great wealth is generated" in twelve.reason
+    assert any("great wealth" in q for q in twelve.qualifiers)
+
+    thirteen = evaluate_one("daridra_sun_in_second_aspected_by_saturn",
+                            _akbar())
+    assert thirteen.present is False
+    assert "gives wealth" in thirteen.reason
+
+
+def test_13_is_present_when_saturn_does_aspect():
+    verdict = evaluate_one("daridra_sun_in_second_aspected_by_saturn", _pl(
+        "Ar", paksha=0, SUN=_deg("Ta"), SATURN=_deg("Sc")))
+    assert verdict.present is True
+    assert "Saturn aspects him" in verdict.reason
+
+
+# --- the general principles' saving factor ----------------------------------
+
+
+def test_the_saving_factor_is_reported_beside_the_yogas_not_among_them():
+    """"However, conjunction or aspect of trine lords is a saving factor."
+    Not a combination, so it is not registered."""
+    from hora.charts.planetary_yogas.daridra import saving_factor
+
+    assert "saving factor" in DARIDRA_SAVING_FACTOR
+    assert DARIDRA_SAVING_FACTOR in DARIDRA_GENERAL_PRINCIPLES
+    assert "daridra_saving_factor" not in YOGA_REGISTRY
+    result = saving_factor(_akbar())
+    assert result["decidable"] is True
+    assert result["applies"] is True
+    assert {x["graha_name"] for x in result["reaching_lagna"]} == {
+        "Venus", "Saturn"}
+
+
+def test_akbar_has_none_of_the_thirteen():
+    """An emperor with no poverty combination, the saving factor applying,
+    and §11.10 (13)'s exception firing — the Sun in his 2nd unaspected by
+    Saturn, which the book says gives wealth."""
+    keys = {e["key"] for e in DARIDRA_YOGAS}
+    present = {v.key for v in evaluate(_akbar()) if v.present and v.key in keys}
+    assert present == set()
+
+
+def test_the_rules_endpoint_carries_section_11_10(client):
+    body = client.get("/v1/planetary-yoga/rules").json()
+    assert body["daridra_count"] == 13
+    assert body["maraka_houses"] == [2, 7]
+    assert "OI-96" in body["maraka_reading_note"]
+    assert "OI-23" in body["maraka_confirms_chapter_7_label"]
+    assert "saving factor" in body["daridra_saving_factor"]
+
+
+def test_the_magnitude_endpoint_reports_the_saving_factor(client):
+    body = client.post("/v1/planetary-yoga/raaja-magnitude", json={
+        "lagna_rasi": R["Li"],
+        "longitudes": {int(g): _lon9(CHART_10[name])
+                       for name, g in _CHART_10_GRAHA.items()}}).json()
+    assert body["daridra_saving_factor"]["applies"] is True
+    assert "saving factor" in body["daridra_saving_factor_rule"]

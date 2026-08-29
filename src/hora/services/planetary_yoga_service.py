@@ -55,6 +55,10 @@ from hora.core.const import (
     CHART_10_OLD_CALENDAR_DATE,
     CHART_10_TIME_IS_LMT,
     COMBUSTION_WEAKENS_YOGA,
+    DARIDRA_GENERAL_PRINCIPLES,
+    DARIDRA_SAVING_FACTOR,
+    DARIDRA_YOGA_COUNT,
+    DARIDRA_YOGA_INTRO,
     DHANA_BASIC_PRINCIPLE,
     DHANA_EXALTED_IN_SECOND,
     DHANA_EXALTED_IN_SECOND_RULE,
@@ -107,6 +111,9 @@ from hora.core.const import (
     MAHAPURUSHA_INTRO,
     MAHAPURUSHA_REFERENCE_RULE,
     MAHAPURUSHA_TERMS,
+    MARAKA_HOUSES,
+    MARAKA_NOTE,
+    MARAKA_NOTE_CIRCULAR_CLAUSE,
     NAABHASA_CLASSIFICATION,
     NAABHASA_INTRO,
     NAABHASA_NOT_YET_DEFINED,
@@ -776,6 +783,29 @@ def rules() -> dict:
             f"{DHANA_PISCES_LIKELY_MISSING} \u2014 recorded as an inference and "
             f"not applied. See docs/book-deviations.md D-37."
         ),
+        # 11.10 ---------------------------------------------------------------
+        "daridra_intro": DARIDRA_YOGA_INTRO,
+        "daridra_count": DARIDRA_YOGA_COUNT,
+        "daridra_general_principles": DARIDRA_GENERAL_PRINCIPLES,
+        "daridra_saving_factor": DARIDRA_SAVING_FACTOR,
+        "maraka_note": MARAKA_NOTE,
+        "maraka_houses": list(MARAKA_HOUSES),
+        "maraka_note_circular_clause": MARAKA_NOTE_CIRCULAR_CLAUSE,
+        "maraka_reading_note": (
+            "The NOTE\u2019s third sentence reads \u201cany malefics \u2026 also become "
+            "malefics\u201d, which is circular; in context it must be "
+            "\u201cmarakas\u201d. Presence is decided on the base set alone \u2014 the "
+            "2nd and 7th lords, which the NOTE states without ambiguity \u2014 "
+            "because these are poverty combinations and a false present is "
+            "worse than a false absent. Every affected verdict reports what "
+            "the wider reading would add and whether it would change the "
+            "answer. See docs/open-items.md OI-96."
+        ),
+        "maraka_confirms_chapter_7_label": (
+            "Section 11.10 is the first place the book defines maraka, and it "
+            "gives the 2nd and 7th \u2014 which is what charts/bhava.py had been "
+            "carrying from general classical knowledge. That closes OI-23."
+        ),
         "sun_excluded_note": (
             "The Sun cannot form a yoga about what accompanies him, so he is "
             "excluded from his own houses alongside the Moon."
@@ -798,6 +828,7 @@ def raaja_magnitude(
     """
     from dataclasses import asdict
 
+    from hora.charts.planetary_yogas.daridra import saving_factor
     from hora.charts.planetary_yogas.raaja_advanced import arudha_effectiveness
     from hora.charts.planetary_yogas.raaja_magnitude import (
         dharma_karmadhipati_pair,
@@ -855,6 +886,9 @@ def raaja_magnitude(
         # 11.7.3 (18) — a modifier on the chart's Raaja yogas, not a yoga.
         "arudha_effectiveness_rule": ARUDHA_EFFECTIVENESS_RULE,
         "arudha_effectiveness": arudha_effectiveness(data),
+        # 11.10's general principles: the one clause that runs the other way.
+        "daridra_saving_factor_rule": DARIDRA_SAVING_FACTOR,
+        "daridra_saving_factor": saving_factor(data),
         "final_judgment": RAAJA_FINAL_JUDGMENT,
         "not_assessed": [
             {"factor": "unafflicted",

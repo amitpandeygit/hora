@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-5](#oi-5) | Upagrahas |
+| [OI-23](#oi-23) | the `MARAKA` house label was unverified |
 | [OI-92](#oi-92) | vargottamaamsa was undefined until footnote 40 arrived |
 | [OI-6](#oi-6) | Special lagnas |
 | [OI-9](#oi-9) | Apparent vs true planetary positions |
@@ -1609,3 +1610,20 @@ chart is told it needs the Moon's longitude, not that the yoga is absent.
 The body spells it "vargottamamsa" and the footnote "vargottamaamsa"; the
 footnote is the definition, so its spelling leads and both are recorded in
 `VARGOTTAMAAMSA_SPELLINGS`.
+
+<a id="oi-23"></a>
+
+## OI-23 — the `MARAKA` house label was unverified
+
+`charts/bhava.py` defines `MARAKA = (2, 7)` and `classify_house` reports it in
+every chart response. **Chapter 7 does not mention maraka** — it names seven
+categories and maraka is not among them. Written from general classical
+knowledge during Phase 1.
+
+Not obviously wrong; neither was D-5.
+
+**Closed by §11.10's NOTE**, the first place the book defines maraka:
+"The 2nd and 7th houses are maraka (killer houses). Their lords are
+marakas (killers)." That is exactly `MARAKA = (2, 7)`. The label was
+right; it is now verified rather than assumed, and a test asserts the
+constant and the transcribed NOTE agree.

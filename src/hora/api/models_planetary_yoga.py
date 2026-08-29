@@ -439,6 +439,21 @@ class PlanetaryYogaRulesOut(BaseModel):
     raaja_sambandha_numbering: dict[str, int]
     raaja_sambandha_are_common: str
     raaja_sambandha_magnitude_rule: str
+    daridra_intro: str
+    daridra_count: int
+    daridra_general_principles: str
+    daridra_saving_factor: str
+    maraka_note: str = Field(
+        description="Section 11.10's NOTE — the first place the book defines "
+                    "maraka. It confirms the 2nd and 7th, closing OI-23.",
+    )
+    maraka_houses: list[int]
+    maraka_note_circular_clause: str
+    maraka_reading_note: str = Field(
+        description="Why presence uses only the 2nd and 7th lords. See "
+                    "docs/open-items.md OI-96.",
+    )
+    maraka_confirms_chapter_7_label: str
     dhana_intro: str
     dhana_means: str
     dhana_basic_principle: str
@@ -631,6 +646,12 @@ class RaajaMagnitudeOut(BaseModel):
     arudha_effectiveness: dict = Field(
         description="Section 11.7.3 (18). A modifier on the chart's Raaja "
                     "yogas, so it is returned beside them, never among them.",
+    )
+    daridra_saving_factor_rule: str
+    daridra_saving_factor: dict = Field(
+        description="Section 11.10's general principles name one clause that "
+                    "runs the other way — trine lords reaching lagna or the "
+                    "lagna lord. Reported beside the yogas, never among them.",
     )
     final_judgment: str
     not_assessed: list[dict]

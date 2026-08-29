@@ -2147,3 +2147,109 @@ DHANA_PISCES_PRINTED = (
 #: What the other eleven entries imply was dropped from it. Recorded as an
 #: inference and **not applied** — the yoga stays undecidable. See D-37.
 DHANA_PISCES_LIKELY_MISSING = "Saturn"
+
+
+# --------------------------------------------------------------------------
+# 11.10 Daridra Yogas
+# --------------------------------------------------------------------------
+
+DARIDRA_YOGA_INTRO = (
+    "One experiences poverty if the following yogas (combinations) are "
+    "present in one's chart:")
+
+#: The NOTE after combination (1). It is the first place the book defines
+#: maraka, and it confirms `charts/bhava.py`'s MARAKA = (2, 7) — see OI-23.
+MARAKA_NOTE = (
+    "The 2nd and 7th houses are maraka (killer houses). Their lords are "
+    "marakas (killers). Any malefics occupying 2nd and 7th or associating "
+    "with 2nd and 7th lords also become malefics.")
+
+MARAKA_HOUSES: tuple[int, ...] = (2, 7)
+
+#: The NOTE's third sentence reads "also become **malefics**", which is
+#: circular — malefics becoming malefics says nothing. In context it must be
+#: "also become marakas". Transcribed as printed and not silently corrected;
+#: the extension it describes is computed but kept out of the base set. See
+#: docs/open-items.md OI-96.
+MARAKA_NOTE_CIRCULAR_CLAUSE = (
+    "Any malefics occupying 2nd and 7th or associating with 2nd and 7th lords "
+    "also become malefics.")
+
+DARIDRA_YOGAS: tuple[dict, ...] = (
+    {"number": 1, "key": "daridra_first_twelfth_exchange",
+     "name": "Daridra Yoga (11.10 #1) — the lagna and 12th lords exchanged",
+     "definition": ("Lagna lord is in 12th and 12th lord is in lagna. They "
+                    "are conjoined or aspected by a maraka planet.")},
+    {"number": 2, "key": "daridra_first_sixth_exchange",
+     "name": "Daridra Yoga (11.10 #2) — the lagna and 6th lords exchanged",
+     "definition": ("Lagna lord is in 6th and 6th lord is in lagna. They are "
+                    "conjoined or aspected by a maraka planet.")},
+    {"number": 3, "key": "daridra_ketu_and_eighth",
+     "name": "Daridra Yoga (11.10 #3) — Ketu on lagna or Moon, lagna lord in the 8th",
+     "definition": ("Lagna or Moon is with Ketu. Lagna lord is in 8th. A "
+                    "maraka planet conjoins or aspects lagna lord.")},
+    {"number": 4, "key": "daridra_lord_with_malefic_in_dusthana",
+     "name": "Daridra Yoga (11.10 #4) — lagna lord with a malefic in a dusthana",
+     "definition": ("Lagna lord is with a malefic in a dusthana (6th, 8th or "
+                    "12th) and 2nd lord is debilitated or in an enemy's "
+                    "sign. Even a royal scion with this combination becomes "
+                    "poor."),
+     "result": "Even a royal scion with this combination becomes poor."},
+    {"number": 5, "key": "daridra_fifth_and_ninth_lords_fallen",
+     "name": "Daridra Yoga (11.10 #5) — the 5th lord in the 6th, the 9th in the 12th",
+     "definition": ("The 5th lord is in 6th and 9th lord is in 12th, with "
+                    "aspects from marakas.")},
+    {"number": 6, "key": "daridra_malefics_in_lagna",
+     "name": "Daridra Yoga (11.10 #6) — malefics in lagna without the 9th and 10th lords",
+     "definition": ("Malefics occupy lagna without 9th and 10th lords, "
+                    "aspected or conjoined by marakas.")},
+    {"number": 7, "key": "daridra_dispositors_in_dusthanas",
+     "name": "Daridra Yoga (11.10 #7) — the dusthana lords' dispositors in dusthanas",
+     "definition": ("Lords of the signs occupied by 6th, 8th and 12th lords "
+                    "are in 6th, 8th and 12th houses, conjoined or aspected "
+                    "by malefics.")},
+    {"number": 8, "key": "daridra_moons_navamsa_dispositor",
+     "name": "Daridra Yoga (11.10 #8) — the Moon's navamsa dispositor with a maraka",
+     "definition": ("Lord of the sign occupied by Moon in navamsa is with a "
+                    "maraka or occupies a maraka house (2nd and 7th)."),
+     "needs_navamsa": True},
+    {"number": 9, "key": "daridra_both_lagna_lords",
+     "name": "Daridra Yoga (11.10 #9) — the rasi and navamsa lagna lords reached by marakas",
+     "definition": ("Lords of lagna in rasi and navamsa are conjoined or "
+                    "aspected by marakas."),
+     "needs_navamsa": True},
+    {"number": 10, "key": "daridra_benefics_and_malefics_swapped",
+     "name": "Daridra Yoga (11.10 #10) — benefics in malefic houses and the reverse",
+     "definition": ("Benefics are in malefic houses and malefics are in "
+                    "benefic houses."),
+     "undefined_terms": ("malefic houses", "benefic houses")},
+    {"number": 11, "key": "daridra_planets_with_dusthana_lords",
+     "name": "Daridra Yoga (11.10 #11) — planets conjoined by the 6th, 8th and 12th lords",
+     "definition": ("Planets conjoined by 6th, 8th and 12th lords give loss "
+                    "of wealth in their dasas, if they are not conjoined or "
+                    "aspected by the lords of trines."),
+     "is_about_dasas": True},
+    {"number": 12, "key": "daridra_mars_saturn_in_second",
+     "name": "Daridra Yoga (11.10 #12) — Mars and Saturn in the 2nd, unaspected by Mercury",
+     "definition": ("Mars and Saturn are in 2nd and Mercury doesn't aspect "
+                    "them."),
+     "exception": ("If Mercury aspects Mars and Saturn in 2nd, great wealth "
+                   "is generated.")},
+    {"number": 13, "key": "daridra_sun_in_second_aspected_by_saturn",
+     "name": "Daridra Yoga (11.10 #13) — the Sun in the 2nd aspected by Saturn",
+     "definition": "Sun in 2nd is aspected by Saturn.",
+     "exception": ("If Saturn doesn't aspect, Sun in 2nd gives wealth.")},
+)
+
+DARIDRA_YOGA_COUNT = len(DARIDRA_YOGAS)
+
+DARIDRA_GENERAL_PRINCIPLES = (
+    "Dusthanas (6th, 8th and 12th) and their lords are detrimental to wealth. "
+    "If lagna, lagna lord and trine lords are afflicted by them, one may be "
+    "poor. Conjunction or aspect of marakas clinches the issue. However, "
+    "conjunction or aspect of trine lords is a saving factor. In addition, "
+    "the planets in the 2nd house and the strength of 2nd lord matter.")
+
+#: The one clause of the general principles that runs the other way.
+DARIDRA_SAVING_FACTOR = (
+    "However, conjunction or aspect of trine lords is a saving factor.")

@@ -59,6 +59,10 @@
     "chandra_intro": "Chandra yogas are the lunar combinations. There are several yogas based on Moon.",
     "combustion_is_a_qualifier_not_a_veto": "Section 11.2.4 says a yoga formed by a combust planet loses \u201csome of their power to do good\u201d, not all of it. A combust yoga is therefore reported as present with a qualifier, never suppressed.",
     "combustion_note": "If Mercury is too close to Sun, he is combust (asta or astangata). Yogas formed by combust planets lose some of their power to do good.",
+    "daridra_count": 13,
+    "daridra_general_principles": "Dusthanas (6th, 8th and 12th) and their lords are detrimental to wealth. If lagna, lagna lord and trine lords are afflicted by them, one may be poor. Conjunction or aspect of marakas clinches the issue. However, conjunction or aspect of trine lords is a saving factor. In addition, the planets in the 2nd house and the strength of 2nd lord matter.",
+    "daridra_intro": "One experiences poverty if the following yogas (combinations) are present in one's chart:",
+    "daridra_saving_factor": "However, conjunction or aspect of trine lords is a saving factor.",
     "deep_exaltation_note": "Jaya and Vidyut require a planet in \u201cdeep exaltation\u201d. The book gives the exact exaltation degree but no tolerance around it, so neither yoga is ever reported present: when the planet is not in his exaltation sign the verdict is a definite absence, and when he is, the verdict names his distance from the exact degree and says the depth is undecided. See docs/open-items.md OI-83.",
     "dhana_basic_principle": "The 5th and 9th lords and planets joining them are capable of giving money. They give dasas in their dasas. The 11th house is also important for material gains and it should be strong. The 2nd house is also important. If Moon, Mercury, Jupiter or Venus is exalted in the 2nd house, it makes the native very rich.",
     "dhana_by_lagna": {
@@ -252,6 +256,14 @@
       "mahapurusha": "a great person",
       "pancha": "five"
     },
+    "maraka_confirms_chapter_7_label": "Section 11.10 is the first place the book defines maraka, and it gives the 2nd and 7th \u2014 which is what charts/bhava.py had been carrying from general classical knowledge. That closes OI-23.",
+    "maraka_houses": [
+      2,
+      7
+    ],
+    "maraka_note": "The 2nd and 7th houses are maraka (killer houses). Their lords are marakas (killers). Any malefics occupying 2nd and 7th or associating with 2nd and 7th lords also become malefics.",
+    "maraka_note_circular_clause": "Any malefics occupying 2nd and 7th or associating with 2nd and 7th lords also become malefics.",
+    "maraka_reading_note": "The NOTE\u2019s third sentence reads \u201cany malefics \u2026 also become malefics\u201d, which is circular; in context it must be \u201cmarakas\u201d. Presence is decided on the base set alone \u2014 the 2nd and 7th lords, which the NOTE states without ambiguity \u2014 because these are poverty combinations and a false present is worse than a false absent. Every affected verdict reports what the wider reading would add and whether it would change the answer. See docs/open-items.md OI-96.",
     "mutual_drishti_is_both_ways_note": "Association (2) reads \u201caspect **each other** with graha drishti\u201d. Graha drishti is not symmetric \u2014 Saturn\u2019s 3rd and 10th, Mars\u2019s 4th and 8th and Jupiter\u2019s 5th and 9th are one-sided \u2014 so one planet aspecting the other is not an association here.",
     "naabhasa_classification": [
       {
