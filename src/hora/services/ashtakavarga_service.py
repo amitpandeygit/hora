@@ -49,6 +49,11 @@ from hora.core.const import (
     BHINNA_MEANS,
     BINDU_REKHA_FOOTNOTE,
     CHART_11_MERCURY_BAV,
+    CHART_12,
+    CHART_12_BIRTH,
+    CHART_12_CHARA_KARAKAS,
+    CHART_12_D10_DRAWN,
+    CHART_12_TITLE,
     CLASSICAL_TABLE_TOTALS_PROVENANCE,
     EXAMPLE_37,
     EXAMPLE_37_HOUSES,
@@ -59,6 +64,13 @@ from hora.core.const import (
     EXAMPLE_38_READING,
     EXAMPLE_38_WORKING,
     EXAMPLE_38_WORST_RASIS,
+    EXAMPLE_39,
+    EXAMPLE_39_ANSWER,
+    EXAMPLE_39_D10_SAV,
+    EXAMPLE_39_LAGNA,
+    EXAMPLE_39_NEEDS_CHART_3,
+    EXAMPLE_39_RASI_SAV,
+    EXAMPLE_39_READING,
     EXERCISE_18,
     EXERCISE_18_ANSWER,
     EXERCISE_18_HINT,
@@ -209,6 +221,33 @@ def rules() -> dict:
         "sav_muhurta_rule": SAV_MUHURTA_RULE,
         "sav_muhurta_positions": list(SAV_MUHURTA_POSITIONS),
         "muhurta_footnote": MUHURTA_FOOTNOTE,
+        "example_39": {
+            "question": EXAMPLE_39,
+            "reading": EXAMPLE_39_READING,
+            "answer": EXAMPLE_39_ANSWER,
+            "rasi_sav": list(EXAMPLE_39_RASI_SAV),
+            "d10_sav": list(EXAMPLE_39_D10_SAV),
+            "lagna": EXAMPLE_39_LAGNA,
+            "lagna_note": (
+                "The example never states the lagna. Every claim it makes "
+                "fixes it: the rasi maximum of 38 is called the 11th house "
+                "and the D-10 maximum of 35 is called the lagna, and both "
+                "give Scorpio."
+            ),
+            "not_recomputed": EXAMPLE_39_NEEDS_CHART_3,
+        },
+        "chart_12": {
+            "title": CHART_12_TITLE,
+            "birth": CHART_12_BIRTH,
+            "longitudes": dict(CHART_12),
+            "d10_drawn": dict(CHART_12_D10_DRAWN),
+            "chara_karakas": dict(CHART_12_CHARA_KARAKAS),
+            "note": (
+                "Chart 12's diagram is its **D-10**, not its rasi chart, so "
+                "the drawn placements check the varga as well as the "
+                "transcription. Our D-10 reproduces all twelve."
+            ),
+        },
         "exercise_20": {
             "question": EXERCISE_20,
             "closing": EXERCISE_20_CLOSING,

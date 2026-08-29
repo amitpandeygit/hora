@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 60 waiting on evidence · 2 parked**
+**5 waiting on Amit · 61 waiting on evidence · 2 parked**
 
 ---
 
@@ -18,7 +18,7 @@ implemented. Do not act on these, and do not re-raise them each session.
 | OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
-| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. Charts 6, 7 **and now 10** reproduce with mean; with true they are 39', 12' and **56'** out |
+| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. Charts 6, 7, 10 **and 12** reproduce with mean; with true they are 39', 12', 56' and **77'** out |
 
 Listed in the order I would take them: OI-39 is the only unambiguous defect and
 the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
@@ -580,6 +580,27 @@ into benefic or malefic and §3.2.2 gives the Moon no nature without one.
 
 **Closes when:** you settle the reading, or an example fixes it.
 
+### OI-102 — Chart 3 has never been supplied
+
+§12.5's Example 39 works Sri A.B. Vajpayee's rasi and D-10 SAVs and cites
+"Chart 3 for birthdata". Chart 3 has not been given. Chapter 9 supplied Charts
+1 and 2, chapter 10 Charts 5 to 8, chapter 11 Charts 9 and 10, chapter 12
+Charts 11 and 12 — 3 and 4 have never appeared.
+
+**What we do:** the two printed SAVs are transcribed and checked as far as they
+can be without the chart, which turns out to be quite far. Both total 337. And
+although the example never states the lagna, it fixes it twice over — the rasi
+maximum of 38 is called the 11th house and the D-10 maximum of 35 is called the
+lagna, and both give **Scorpio**. Read from Scorpio, every figure the example
+quotes is right: rasi 11th 38, 3rd 34, lagna 26, 10th 28; D-10 lagna 35, 3rd 31,
+8th 33. Its two "just average" and two "more than 30" judgements also match
+§12.4's bands.
+
+What cannot be done is recomputing the SAVs, which needs his planetary
+positions.
+
+**Closes when:** Chart 3 is supplied, or you confirm it is not needed.
+
 ### OI-101 — "sodhya pindas" are named but not defined
 
 §12.5 names them beside ashtakavarga as a second family of principles:
@@ -901,10 +922,10 @@ in both examples anyway.
 **Closes when:** an example applies step 3 where the counts differ, or JHora's
 argala output settles it.
 
-### OI-68 — Charts 6, 7 and 10 all need the **mean** node; our default is `true`
+### OI-68 — Charts 6, 7, 10 and 12 all need the **mean** node; our default is `true`
 
-Three charts print their own birth data, so all three can be recomputed rather
-than transcribed. All three reproduce every body to within one arcminute —
+Four charts print their own birth data, so all four can be recomputed rather
+than transcribed. All four reproduce every body to within one arcminute —
 **only with the mean node**.
 
 | Chart | Rahu, mean | Rahu, true | printed |
@@ -912,15 +933,16 @@ than transcribed. All three reproduce every body to within one arcminute —
 | 6 · Narasimha Rao, 1921, 5h17m **east** | 0 Li 48 | 1 Li 26 | 0 Li 47 |
 | 7 · Reagan, 1911, 6h **west** | 21 Ar 54 | 21 Ar 42 | 21 Ar 54 |
 | 10 · Akbar, **1542**, 4h39m east | 7 Aq 57 | 7 Aq 00 | 7 Aq 56 |
+| 12 · SAV exercise, 1958, 4h **west** | 2 Li 04 | 0 Li 46 | 2 Li 03 |
 
-Thirty-nine, twelve and **fifty-six** arcminutes out under `true`. Every other
-body in all three charts — ascendant, seven grahas — lands within one
-arcminute, which is the book's own display rounding. Chart 8 remains neutral;
-it does not separate the conventions.
+Thirty-nine, twelve, fifty-six and **seventy-seven** arcminutes out under
+`true`. Every other body in all four charts — ascendant, seven grahas — lands
+within one arcminute, which is the book's own display rounding. Chart 8 remains
+neutral; it does not separate the conventions.
 
-The three share no dates, hemispheres or offsets, and Chart 10 is four
-centuries earlier than the others and forty years before the Gregorian reform,
-so the agreement is not an artefact of one setup or one era.
+The four share no dates, hemispheres or offsets, they span 1542 to 1958 and
+both hemispheres, and Chart 10 is forty years before the Gregorian reform, so
+the agreement is not an artefact of one setup or one era.
 
 This is the only hard evidence in the project about which convention the book
 uses, and it points against our default. The reference chart (Chart 1, 1972)
@@ -928,9 +950,10 @@ cannot settle it: its JHora output is still the empty stub of OI-1.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
 endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by
-`test_chart_6_needs_the_mean_node`, `test_chart_7_confirms_oi_68_independently`
-and `test_chart_10_is_a_third_vote_for_the_mean_node`, which assert the failure
-in both directions so the evidence cannot be lost.
+`test_chart_6_needs_the_mean_node`, `test_chart_7_confirms_oi_68_independently`,
+`test_chart_10_is_a_third_vote_for_the_mean_node` and
+`test_chart_12_is_a_fourth_vote_for_the_mean_node`, which assert the failure in
+both directions so the evidence cannot be lost.
 
 **Closes when:** you decide, or a JHora run of Chart 1 settles it.
 

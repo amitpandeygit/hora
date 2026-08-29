@@ -54,6 +54,49 @@
     },
     "bhinna_means": "separate",
     "bindu_rekha_footnote": "Some astrologers (especially south Indian astrologers) use a different notation. They use \u201cbindu\u201d to describe a benefic house (1) and \u201crekha\u201d to describe malefic house (0). Let us follow Parasara.",
+    "chart_12": {
+      "birth": "August 16, 1958, 7:05 am (4:00 West), 83 W 53, 43 N 36",
+      "chara_karakas": {
+        "Jup": "DK",
+        "Mars": "MK",
+        "Merc": "PK",
+        "Moon": "PiK",
+        "Rahu": "AmK",
+        "Sat": "BK",
+        "Sun": "AK",
+        "Ven": "GK"
+      },
+      "d10_drawn": {
+        "Asc": "Vi",
+        "GL": "Ta",
+        "HL": "Sc",
+        "Jup": "Sc",
+        "Ketu": "Ar",
+        "Mars": "Sc",
+        "Merc": "Sg",
+        "Moon": "Cp",
+        "Rahu": "Li",
+        "Sat": "Pi",
+        "Sun": "Sg",
+        "Ven": "Ta"
+      },
+      "longitudes": {
+        "Asc": "3 Le 29",
+        "GL": "29 Le 25",
+        "HL": "11 Le 38",
+        "Jup": "3 Li 06",
+        "Ketu": "2 Ar 03",
+        "Mars": "22 Ar 05",
+        "Merc": "12 Le 23",
+        "Moon": "17 Le 39",
+        "Rahu": "2 Li 03",
+        "Sat": "25 Sc 51",
+        "Sun": "29 Cn 47",
+        "Ven": "7 Cn 13"
+      },
+      "note": "Chart 12's diagram is its **D-10**, not its rasi chart, so the drawn placements check the varga as well as the transcription. Our D-10 reproduces all twelve.",
+      "title": "D-10 SAV Exercise"
+    },
     "classical_totals_provenance": "Not from this book. The chapter prints the tables and gives no totals. These figures come from the wider tradition and are used only as a check on the transcription; a mismatch would be reported, never corrected.",
     "divisional_example": {
       "chart": "D12",
@@ -113,6 +156,42 @@
         "Vi",
         "Cp"
       ]
+    },
+    "example_39": {
+      "answer": "The answer lies in the SAV of D-10. Lagna in D-10 is Sc and it contains 35 rekhas \u2013 maximum in D-10's SAV. Arudha lagna also contains more than 30 rekhas. These factors explain his success and good name. The 3rd house in D-10 also has more than 30 rekhas \u2013 like in the rasi chart \u2013 and that increases the chance of being an excellent communicator in public life. Though D-10 is powerful with lagna and arudha lagna containing more than 30 rekhas, one may notice that the 8th house in D-10 (Ge) has 33 rekhas in D-10's SAV. This explains the struggle in Vajpayee's career.",
+      "d10_sav": [
+        23,
+        26,
+        33,
+        20,
+        28,
+        33,
+        26,
+        35,
+        28,
+        31,
+        24,
+        30
+      ],
+      "lagna": "Sc",
+      "lagna_note": "The example never states the lagna. Every claim it makes fixes it: the rasi maximum of 38 is called the 11th house and the D-10 maximum of 35 is called the lagna, and both give Scorpio.",
+      "not_recomputed": "Example 39 cites Chart 3 for Sri A.B. Vajpayee's birth data. Chart 3 has not been supplied, so the two printed SAVs are transcribed and checked for internal consistency, but not recomputed.",
+      "question": "Let us consider the rasi chart and D-10 of India's Prime Minister Sri A.B. Vajpayee (see Chart 3 for birthdata). Readers may find SAV of rasi and D-10 and verify the following:",
+      "rasi_sav": [
+        29,
+        22,
+        27,
+        29,
+        28,
+        38,
+        29,
+        26,
+        23,
+        34,
+        28,
+        24
+      ],
+      "reading": "In rasi chart, the 11th house has the maximum number of rekhas (38) showing excellent gains. The 3rd house of communication has 34 rekhas. With the significator of communication Mercury and the artistic Moon in the 3rd house, he is an excellent communicator, great orator and poet. With lagna and the 10th house in the SAV of rasi chart containing only 26 and 28 rekhas \u2013 which is just average \u2013 why did he have such a successful career?"
     },
     "exercise_18": {
       "answer": {

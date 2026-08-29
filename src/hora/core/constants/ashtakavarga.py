@@ -578,3 +578,80 @@ MUHURTA_DEFINITION = (
 SODHYA_PINDA_NOT_YET_DEFINED = (
     "Section 12.5 names sodhya pindas beside ashtakavarga as a second family "
     "of principles. No section read so far defines them.")
+
+
+# --------------------------------------------------------------------------
+# §12.5's Example 39 — Vajpayee's rasi and D-10 SAVs
+# --------------------------------------------------------------------------
+
+EXAMPLE_39 = (
+    "Let us consider the rasi chart and D-10 of India's Prime Minister Sri "
+    "A.B. Vajpayee (see Chart 3 for birthdata). Readers may find SAV of rasi "
+    "and D-10 and verify the following:")
+
+#: The printed answers, Aries first.
+EXAMPLE_39_RASI_SAV: tuple[int, ...] = (
+    29, 22, 27, 29, 28, 38, 29, 26, 23, 34, 28, 24)
+EXAMPLE_39_D10_SAV: tuple[int, ...] = (
+    23, 26, 33, 20, 28, 33, 26, 35, 28, 31, 24, 30)
+
+EXAMPLE_39_READING = (
+    "In rasi chart, the 11th house has the maximum number of rekhas (38) "
+    "showing excellent gains. The 3rd house of communication has 34 rekhas. "
+    "With the significator of communication Mercury and the artistic Moon in "
+    "the 3rd house, he is an excellent communicator, great orator and poet. "
+    "With lagna and the 10th house in the SAV of rasi chart containing only "
+    "26 and 28 rekhas – which is just average – why did he have such a "
+    "successful career?")
+
+EXAMPLE_39_ANSWER = (
+    "The answer lies in the SAV of D-10. Lagna in D-10 is Sc and it contains "
+    "35 rekhas – maximum in D-10's SAV. Arudha lagna also contains more than "
+    "30 rekhas. These factors explain his success and good name. The 3rd "
+    "house in D-10 also has more than 30 rekhas – like in the rasi chart – "
+    "and that increases the chance of being an excellent communicator in "
+    "public life. Though D-10 is powerful with lagna and arudha lagna "
+    "containing more than 30 rekhas, one may notice that the 8th house in "
+    "D-10 (Ge) has 33 rekhas in D-10's SAV. This explains the struggle in "
+    "Vajpayee's career.")
+
+#: The example never states the lagna, but every claim it makes fixes it:
+#: the rasi maximum 38 is said to be the 11th, and the D-10 maximum 35 the
+#: lagna. Both give Scorpio.
+EXAMPLE_39_LAGNA = "Sc"
+
+#: Chart 3 holds Vajpayee's birth data and has not been supplied, so the two
+#: SAVs cannot be recomputed. See docs/open-items.md OI-102.
+EXAMPLE_39_NEEDS_CHART_3 = (
+    "Example 39 cites Chart 3 for Sri A.B. Vajpayee's birth data. Chart 3 has "
+    "not been supplied, so the two printed SAVs are transcribed and checked "
+    "for internal consistency, but not recomputed.")
+
+# --------------------------------------------------------------------------
+# Chart 12 — the D-10 SAV exercise chart
+# --------------------------------------------------------------------------
+
+#: Chart 12's printed rasi longitudes. Its drawn diagram is the **D-10**, not
+#: the rasi chart, which is what makes it a check on the varga as well as on
+#: the transcription.
+CHART_12: dict[str, str] = {
+    "Asc": "3 Le 29", "Sun": "29 Cn 47", "Moon": "17 Le 39",
+    "Mars": "22 Ar 05", "Merc": "12 Le 23", "Jup": "3 Li 06",
+    "Ven": "7 Cn 13", "Sat": "25 Sc 51", "Rahu": "2 Li 03",
+    "Ketu": "2 Ar 03", "HL": "11 Le 38", "GL": "29 Le 25",
+}
+
+CHART_12_TITLE = "D-10 SAV Exercise"
+CHART_12_BIRTH = "August 16, 1958, 7:05 am (4:00 West), 83 W 53, 43 N 36"
+
+#: The drawn D-10, read box by box.
+CHART_12_D10_DRAWN: dict[str, str] = {
+    "Sat": "Pi", "Ketu": "Ar", "Ven": "Ta", "GL": "Ta", "Moon": "Cp",
+    "Merc": "Sg", "Sun": "Sg", "Jup": "Sc", "Mars": "Sc", "HL": "Sc",
+    "Rahu": "Li", "Asc": "Vi",
+}
+
+CHART_12_CHARA_KARAKAS: dict[str, str] = {
+    "Sun": "AK", "Rahu": "AmK", "Sat": "BK", "Mars": "MK",
+    "Merc": "PK", "Ven": "GK", "Jup": "DK", "Moon": "PiK",
+}
