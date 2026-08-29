@@ -55,6 +55,12 @@
     "bhinna_means": "separate",
     "bindu_rekha_footnote": "Some astrologers (especially south Indian astrologers) use a different notation. They use \u201cbindu\u201d to describe a benefic house (1) and \u201crekha\u201d to describe malefic house (0). Let us follow Parasara.",
     "classical_totals_provenance": "Not from this book. The chapter prints the tables and gives no totals. These figures come from the wider tradition and are used only as a check on the transcription; a mismatch would be reported, never corrected.",
+    "divisional_example": {
+      "chart": "D12",
+      "matter": "matters related to father",
+      "why": "Parasara says that D-12 shows matters related to father, so any principles based on ashtakavarga and sodhya pindas that let us predict matters related to father must use D-12."
+    },
+    "divisional_note": "The eight tables are chart-independent, so /v1/ashtakavarga/divisional takes longitudes and a varga code and does exactly what /chart does on the resolved signs. Nothing in the tables is re-derived per chart.",
     "example_37": {
       "houses": [
         2,
@@ -317,6 +323,7 @@
       "closing": "Using the above values, one can prepare a chart for SAV, as shown in Chart 11.",
       "question": "Find the number of rekhas in all the rasis in SAV for the same rasi chart (see Chart 6)."
     },
+    "in_divisional_charts": "If we can judge the benefic positions of various planets with respect to 8 references in rasi chart, there is no reason why we should not do it in all the divisional charts. In fact, this becomes invaluable when we interpret transits in rasi chart with respect to the natal positions in divisional charts and transits in divisional charts with respect to the natal positions in rasi chart.",
     "intro": "Analyzing a chart and making correct predictions requires mixing many different principles and making fine compromises and judgments. Sage Parasara said that it is difficult for even great Maharshis. In Kali Yuga, human beings become sinful and the sins kill their intelligence. Parasara said that the intellectual pygmies of Kali Yuga cannot cope with too many complicated principles and presented ashtakavarga as a simple technique that lets them make reasonable predictions without much fuss.",
     "malefic_entry": {
       "sanskrit": "karana",
@@ -324,8 +331,10 @@
       "value": 0
     },
     "means": "Ashtaka means \u201cconsisting of eight\u201d and varga means \u201ca group\u201d. Ashtakavarga is the system of analyzing a chart with respect to a group of 8 reference points.",
-    "muhurta_footnote_unread": "43",
+    "muhurta_definition": "Muhurta is an auspicious pre-set time at which one begins important activities.",
+    "muhurta_footnote": "43",
     "naming_warning": "PVR follows Parasara: 1 is a **rekha** and 0 is a **bindu**. Most modern software and most south Indian practice use the two words the other way round, so a figure labelled \u201cbindus in a sign\u201d elsewhere is what this API calls rekhas. Every count returned here counts 1s, and the fields are named `rekhas` so the two can never be confused.",
+    "not_only_rasi": "There is a misconception that ashtakavarga is applicable only to rasi charts. Parasara does not say it. Parasara lists the divisional charts in which different areas of life are seen, at the very beginning of BPHS. So all the analysis in the rest of his classic applies to all the divisional charts, unless Parasara explicitly mentions rasi chart. For example, Parasara says that D-12 shows matters related to father. So any principles based on ashtakavarga and sodhya pindas that let us predict matters related to father must use D-12. This is a logical deduction and Parasara does not have to mention it explicitly each time.",
     "notation": "In Table 19, an entry of 0 denotes a malefic position or a \u201ckarana\u201d or a bindu (dot). An entry of 1 denotes a benefic position or a \u201csthana\u201d or a rekha (line).",
     "purpose": "So ashtakavarga is essentially a system that tells us the benefic positions of lagna and seven planets with respect to each other. This can be used to analyze the strength of a natal chart, but it is much more important in analyzing transits.",
     "reference_point_note": "When we analyze the positions of planets with respect to lagna, we have the concept of good and bad placements. For example, Jupiter in the 9th from lagna will be well placed and Jupiter in the 3rd will be badly placed. Mars in the 3rd from lagna will be well placed and Mars in the 9th will be badly placed.",
@@ -375,6 +384,7 @@
     "sav_strength_rule": "A rasi with 30 or more rekhas becomes strong. Matters signified by the house falling in such a rasi flourish and planets transiting in such a rasi bring good results. A rasi with 25-30 rekhas is average. A rasi with less than 25 rekhas becomes weak. Matters signified by the house falling in such a rasi suffer and planets transiting in such a rasi bring bad results.",
     "sav_total": 337,
     "sav_worked_example": "Let us continue with the rasi chart in Chart 6. From the answer to Exercise 19, we see that the BAVs of Sun, Moon, Mars, Mercury, Jupiter, Venus and Saturn have 5, 3, 4, 7, 4, 8 and 3 rekhas in Ar (respectively). Adding them all, we get 34. So SAV has 34 rekhas in Ar and we write 34 in Ar.",
+    "sodhya_pinda_not_yet_defined": "Section 12.5 names sodhya pindas beside ashtakavarga as a second family of principles. No section read so far defines them.",
     "table_numbers": {
       "Jupiter": 23,
       "Lagna": 26,
@@ -385,6 +395,7 @@
       "Sun": 19,
       "Venus": 24
     },
+    "tables_are_the_same": "Ashtakavarga of divisional charts is prepared in the same manner as that of rasi chart. The benefic houses for each planet with respect to the 8 references are the same. We can apply the same rules and find the BAVs of all planets. In fact, we can find SAV of a divisional chart too.",
     "tables_available": [
       "Sun",
       "Moon",

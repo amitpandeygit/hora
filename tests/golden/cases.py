@@ -274,6 +274,16 @@ CASES = [
     }),
     # 12.4's muhurta rule: Chart 6's natal SAV read at a muhurta chart's
     # lagna, Moon and Sun — one of each grade, including the 30 boundary.
+    # 12.5: the same eight tables on a divisional chart. D-12, which the
+    # section names for matters related to father.
+    ("ashtakavarga_divisional_d12", "POST", "/v1/ashtakavarga/divisional", {
+        "reference_longitudes": {
+            "Sun": 73.26666666666667, "Moon": 340.55,
+            "Mars": 73.55, "Mercury": 87.66666666666667,
+            "Jupiter": 140.1, "Venus": 27.666666666666668,
+            "Saturn": 146.43333333333334, "Lagna": 174.31666666666666},
+        "chart": "D12",
+    }),
     ("ashtakavarga_muhurta", "POST", "/v1/ashtakavarga/muhurta", {
         "natal_reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2,
                                   "Mercury": 2, "Jupiter": 4, "Venus": 0,

@@ -97,7 +97,20 @@ class AshtakavargaRulesOut(BaseModel):
     )
     sav_muhurta_rule: str
     sav_muhurta_positions: list[str]
-    muhurta_footnote_unread: str
+    muhurta_footnote: str
+    muhurta_definition: str
+    not_only_rasi: str
+    in_divisional_charts: str
+    tables_are_the_same: str = Field(
+        description="Section 12.5: the eight tables do not change from chart "
+                    "to chart.",
+    )
+    divisional_example: dict
+    divisional_note: str
+    sodhya_pinda_not_yet_defined: str = Field(
+        description="A second family of principles section 12.5 names and "
+                    "nothing read so far defines. See OI-101.",
+    )
     yuga_footnote: str
     yugas: list[dict]
 
@@ -134,6 +147,16 @@ class AshtakavargaChartOut(BaseModel):
                     "(337 against 386 when complete). Both are returned.",
     )
     tables_pending: list[str]
+    chart: str = Field(
+        "D1", description="Which chart the signs came from.",
+    )
+    chart_note: str | None = Field(
+        None, description="Set when the signs were resolved from longitudes "
+                          "into a divisional chart — see section 12.5.",
+    )
+    reference_longitudes: dict[str, float] | None = Field(
+        None, description="Echoed back when the request supplied them.",
+    )
 
 
 class BeneficRasisIn(BaseModel):
@@ -182,4 +205,20 @@ class MuhurtaOut(BaseModel):
     positions: list[dict]
     all_favorable: bool
     natal_sav: list[int]
-    footnote_unread: str
+    footnote: str
+    muhurta_definition: str
+
+
+class DivisionalIn(BaseModel):
+    """Section 12.5: the same eight tables applied to a divisional chart."""
+
+    reference_longitudes: dict[str, float] = Field(
+        ...,
+        description="All eight reference points to sidereal longitudes.",
+        examples=[{"Sun": 73.27, "Moon": 340.55, "Mars": 73.55,
+                   "Mercury": 87.67, "Jupiter": 140.10, "Venus": 27.67,
+                   "Saturn": 146.43, "Lagna": 174.32}],
+    )
+    chart: str = Field("D1", examples=["D12"],
+                       description="A varga code; D1 is the rasi chart.")
+    owner: str | None = Field(None, examples=["Mercury"])

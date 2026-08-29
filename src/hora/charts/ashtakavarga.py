@@ -29,7 +29,8 @@ from hora.core.const import (
     MARS_ASHTAKAVARGA_ROWS,
     MERCURY_ASHTAKAVARGA_ROWS,
     MOON_ASHTAKAVARGA_ROWS,
-    MUHURTA_FOOTNOTE_UNREAD,
+    MUHURTA_DEFINITION,
+    MUHURTA_FOOTNOTE,
     RASI_NAMES,
     SATURN_ASHTAKAVARGA_ROWS,
     SAV_AVERAGE_FROM,
@@ -136,6 +137,35 @@ def benefic_houses(owner: str, reference: str) -> tuple[int, ...]:
     """
     return tuple(house for house in range(1, 13)
                  if entry(owner, reference, house))
+
+
+def signs_in_chart(reference_longitudes: dict[str, float],
+                   chart: str = "D1") -> dict[str, int]:
+    """The eight reference points' signs in any divisional chart.
+
+    §12.5: "Ashtakavarga of divisional charts is prepared in the same manner
+    as that of rasi chart. The benefic houses for each planet with respect to
+    the 8 references are the same." So nothing about the tables changes — only
+    which signs the eight references occupy.
+
+    :param reference_longitudes: all eight names to sidereal longitudes.
+    :param chart: a varga code, "D1" for the rasi chart.
+    """
+    from hora.charts.vargas import varga
+
+    missing = [r for r in ASHTAKAVARGA_REFERENCES
+               if r not in reference_longitudes]
+    if missing:
+        raise AshtakavargaError(
+            f"every one of the eight reference points is needed; "
+            f"{', '.join(missing)} "
+            f"{'is' if len(missing) == 1 else 'are'} missing")
+    code = str(chart).upper()
+    try:
+        return {name: varga(float(reference_longitudes[name]), code).sign
+                for name in ASHTAKAVARGA_REFERENCES}
+    except ValueError as exc:
+        raise AshtakavargaError(str(exc)) from exc
 
 
 def benefic_rasis(owner: str, reference: str, reference_sign: int
@@ -441,7 +471,8 @@ def muhurta_strength(natal_reference_signs: dict[str, int],
         "positions": rows,
         "all_favorable": all(row["favorable"] for row in rows),
         "natal_sav": sav["rekhas"],
-        "footnote_unread": MUHURTA_FOOTNOTE_UNREAD,
+        "footnote": MUHURTA_FOOTNOTE,
+        "muhurta_definition": MUHURTA_DEFINITION,
     }
 
 

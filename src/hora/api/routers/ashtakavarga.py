@@ -10,6 +10,7 @@ from hora.api.models_ashtakavarga import (
     AshtakavargaTableOut,
     BeneficRasisIn,
     BeneficRasisOut,
+    DivisionalIn,
     MuhurtaIn,
     MuhurtaOut,
 )
@@ -60,6 +61,17 @@ def muhurta(req: MuhurtaIn) -> dict:
     try:
         return ashtakavarga_service.muhurta(
             req.natal_reference_signs, req.muhurta_signs)
+    except (ashtakavarga_service.AshtakavargaError,
+            ashtakavarga_service.InputError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/divisional", response_model=AshtakavargaChartOut,
+             summary="Section 12.5 — the same tables on any divisional chart")
+def divisional(req: DivisionalIn) -> dict:
+    try:
+        return ashtakavarga_service.divisional(
+            req.reference_longitudes, req.chart, req.owner)
     except (ashtakavarga_service.AshtakavargaError,
             ashtakavarga_service.InputError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

@@ -40,6 +40,9 @@ from hora.core.const import (
     ASHTAKAVARGA_TABLES,
     ASHTAKAVARGA_TABLES_PENDING,
     AV_ABBREVIATIONS,
+    AV_DIVISIONAL_EXAMPLE,
+    AV_NOT_ONLY_RASI,
+    AV_TABLES_ARE_THE_SAME,
     BAV_APPLIES_TO_TRANSITS,
     BAV_COUNT_IS_CALLED_REKHAS,
     BAV_COUNT_RANGE,
@@ -68,7 +71,8 @@ from hora.core.const import (
     EXERCISE_19_ANSWER,
     EXERCISE_19_UNEXPLAINED_MARK,
     EXERCISE_20_ANSWER,
-    MUHURTA_FOOTNOTE_UNREAD,
+    MUHURTA_DEFINITION,
+    MUHURTA_FOOTNOTE,
     RASI_ABBR,
     SAMUDAAYA_MEANS,
     SARVA_MEANS,
@@ -80,6 +84,7 @@ from hora.core.const import (
     SAV_OWNERS,
     SAV_STRENGTH_RULE,
     SAV_TOTAL,
+    SODHYA_PINDA_NOT_YET_DEFINED,
     SUN_ASHTAKAVARGA_ROWS,
     TABLE_19_WORKED_READING,
     YUGA_YEARS,
@@ -564,6 +569,14 @@ def test_a_charts_sums_match_the_tables_own_sums():
 #: Chart 6, P.V. Narasimha Rao — the chart Exercise 18 is set on. Already a
 #: fixture in the chapter 10 tests, where it is recomputed from its own birth
 #: data; the signs are repeated here rather than imported across chapters.
+#: Chart 6's printed longitudes, for the divisional work in §12.5.
+CHART_6_LONGITUDES = {
+    "Sun": 2 * 30 + 13 + 16 / 60, "Moon": 11 * 30 + 10 + 33 / 60,
+    "Mars": 2 * 30 + 13 + 33 / 60, "Mercury": 2 * 30 + 27 + 40 / 60,
+    "Jupiter": 4 * 30 + 20 + 6 / 60, "Venus": 0 * 30 + 27 + 40 / 60,
+    "Saturn": 4 * 30 + 26 + 26 / 60, "Lagna": 5 * 30 + 24 + 19 / 60,
+}
+
 CHART_6_SIGNS = {
     "Sun": R["Ge"], "Moon": R["Pi"], "Mars": R["Ge"], "Mercury": R["Ge"],
     "Jupiter": R["Le"], "Venus": R["Ar"], "Saturn": R["Le"],
@@ -1224,8 +1237,11 @@ def test_the_muhurta_rule_needs_all_three_positions():
     assert "Sun" in str(exc.value)
 
 
-def test_footnote_43_is_recorded_as_unread():
-    assert MUHURTA_FOOTNOTE_UNREAD == "43"
+def test_footnote_43_is_supplied_with_12_5():
+    """"Muhurta is an auspicious pre-set time at which one begins important
+    activities." Recorded as unread when §12.4 was written."""
+    assert MUHURTA_FOOTNOTE == "43"
+    assert "auspicious pre-set time" in MUHURTA_DEFINITION
     assert "muhurtas" in SAV_MUHURTA_RULE
 
 
@@ -1250,7 +1266,8 @@ def test_the_muhurta_endpoint(client):
                           "Sun": R["Cp"]}}).json()
     assert body["all_favorable"] is False
     assert body["natal_sav"] == list(EXERCISE_20_ANSWER)
-    assert body["footnote_unread"] == "43"
+    assert body["footnote"] == "43"
+    assert "auspicious pre-set time" in body["muhurta_definition"]
 
 
 def test_the_rules_endpoint_carries_12_4(client):
@@ -1261,3 +1278,99 @@ def test_the_rules_endpoint_carries_12_4(client):
     assert body["sav_grade_bands"]["average"] == "25 to 29"
     assert "D-40" in body["sav_overlap_note"]
     assert body["exercise_20"]["answer"] == list(EXERCISE_20_ANSWER)
+
+
+# --------------------------------------------------------------------------
+# 12.5 Divisional Charts
+# --------------------------------------------------------------------------
+
+
+def test_12_5_says_the_tables_do_not_change_from_chart_to_chart():
+    """"The benefic houses for each planet with respect to the 8 references
+    are the same." So only the signs the references occupy change."""
+    assert "misconception" in AV_NOT_ONLY_RASI
+    assert "benefic houses for each planet" in AV_TABLES_ARE_THE_SAME
+    assert "SAV of a divisional chart too" in AV_TABLES_ARE_THE_SAME
+    assert AV_DIVISIONAL_EXAMPLE["chart"] == "D12"
+
+
+def test_the_same_tables_really_are_used_for_every_chart():
+    """Asserted against the code, not only quoted: `signs_in_chart` changes
+    the signs and nothing else, so every chart reads the same eight tables."""
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    longitudes = CHART_6_LONGITUDES
+    for code in ("D1", "D9", "D12", "D30"):
+        signs = signs_in_chart(longitudes, code)
+        assert set(signs) == set(ASHTAKAVARGA_REFERENCES)
+        for owner in available_tables():
+            # The table is the same object whatever the chart.
+            assert benefic_houses(owner, "Sun") == benefic_houses(owner, "Sun")
+            assert bhinnashtakavarga(owner, signs).total == table_total(owner)
+
+
+def test_a_divisional_sav_still_totals_337():
+    """The invariant survives the change of chart: rekhas only move between
+    signs."""
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    for code in ("D1", "D9", "D12", "D30", "D60"):
+        signs = signs_in_chart(CHART_6_LONGITUDES, code)
+        assert sarvashtakavarga(signs)["total"] == 337, code
+
+
+def test_the_rasi_chart_reached_through_longitudes_is_exercise_20():
+    """The longitude path and the sign path agree — D-1 from Chart 6's
+    longitudes reproduces the printed SAV."""
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    signs = signs_in_chart(CHART_6_LONGITUDES, "D1")
+    assert signs == CHART_6_SIGNS
+    assert tuple(sarvashtakavarga(signs)["rekhas"]) == EXERCISE_20_ANSWER
+
+
+def test_a_divisional_chart_gives_a_different_sav():
+    """Which is the point of §12.5 — D-12 is not D-1, and the book uses D-12
+    for matters related to father."""
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    rasi = sarvashtakavarga(signs_in_chart(CHART_6_LONGITUDES, "D1"))
+    d12 = sarvashtakavarga(signs_in_chart(CHART_6_LONGITUDES, "D12"))
+    assert d12["rekhas"] != rasi["rekhas"]
+    assert d12["total"] == rasi["total"] == 337
+
+
+def test_an_unknown_varga_code_is_refused():
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    with pytest.raises(AshtakavargaError):
+        signs_in_chart(CHART_6_LONGITUDES, "D0")
+
+
+def test_the_divisional_endpoint_records_which_chart_it_used(client):
+    body = client.post("/v1/ashtakavarga/divisional", json={
+        "reference_longitudes": CHART_6_LONGITUDES, "chart": "D12"}).json()
+    assert body["chart"] == "D12"
+    assert body["sarvashtakavarga"]["total"] == 337
+    assert "do not change from chart to chart" in body["chart_note"]
+
+
+def test_the_chart_endpoint_labels_itself_as_the_rasi_chart(client):
+    body = client.post("/v1/ashtakavarga/chart", json={
+        "reference_signs": CHART_6_SIGNS}).json()
+    assert body["chart"] == "D1"
+
+
+def test_sodhya_pindas_are_named_but_not_defined():
+    """§12.5 names them beside ashtakavarga; nothing read so far says what
+    they are. See OI-101."""
+    assert "sodhya pindas" in AV_NOT_ONLY_RASI
+    assert "No section read so far defines them" in SODHYA_PINDA_NOT_YET_DEFINED
+
+
+def test_the_rules_endpoint_carries_12_5(client):
+    body = client.get("/v1/ashtakavarga/rules").json()
+    assert "misconception" in body["not_only_rasi"]
+    assert body["divisional_example"]["chart"] == "D12"
+    assert "sodhya pindas" in body["sodhya_pinda_not_yet_defined"]
+    assert "auspicious pre-set time" in body["muhurta_definition"]

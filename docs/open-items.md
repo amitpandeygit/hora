@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 59 waiting on evidence · 2 parked**
+**5 waiting on Amit · 60 waiting on evidence · 2 parked**
 
 ---
 
@@ -579,6 +579,23 @@ yoga also refuses to decide without a paksha, since it must sort every planet
 into benefic or malefic and §3.2.2 gives the Moon no nature without one.
 
 **Closes when:** you settle the reading, or an example fixes it.
+
+### OI-101 — "sodhya pindas" are named but not defined
+
+§12.5 names them beside ashtakavarga as a second family of principles:
+
+> "any principles based on ashtakavarga **and sodhya pindas** that let us
+> predict matters related to father must use D-12"
+
+No section read so far says what a sodhya pinda is. Ashtakavarga itself is
+fully implemented; this is a distinct construction the chapter has not reached.
+
+**What we do:** nothing is computed for them. The phrase is transcribed and
+`/v1/ashtakavarga/rules` carries a note saying it is named but undefined, so a
+caller looking for it finds a stated gap rather than an absence.
+
+**Closes when:** a later section of chapter 12 defines them, or you confirm
+they are out of scope.
 
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 

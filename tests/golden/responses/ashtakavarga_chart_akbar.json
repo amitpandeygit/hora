@@ -1497,6 +1497,9 @@
         "total": 49
       }
     ],
+    "chart": "D1",
+    "chart_note": null,
+    "reference_longitudes": null,
     "reference_signs": {
       "Jupiter": {
         "sign": 6,

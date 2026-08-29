@@ -513,8 +513,8 @@ SAV_MUHURTA_RULE = (
 #: The three positions in the muhurta chart §12.4 says to check.
 SAV_MUHURTA_POSITIONS: tuple[str, ...] = ("Lagna", "Moon", "Sun")
 
-#: Footnote 43 hangs off "muhurtas" and was not supplied.
-MUHURTA_FOOTNOTE_UNREAD = "43"
+#: Footnote 43, supplied with §12.5.
+MUHURTA_FOOTNOTE = "43"
 
 EXERCISE_20 = (
     "Find the number of rekhas in all the rasis in SAV for the same rasi "
@@ -527,3 +527,54 @@ EXERCISE_20_ANSWER: tuple[int, ...] = (
 EXERCISE_20_CLOSING = (
     "Using the above values, one can prepare a chart for SAV, as shown in "
     "Chart 11.")
+
+
+# --------------------------------------------------------------------------
+# 12.5 Divisional Charts
+# --------------------------------------------------------------------------
+
+AV_NOT_ONLY_RASI = (
+    "There is a misconception that ashtakavarga is applicable only to rasi "
+    "charts. Parasara does not say it. Parasara lists the divisional charts "
+    "in which different areas of life are seen, at the very beginning of "
+    "BPHS. So all the analysis in the rest of his classic applies to all the "
+    "divisional charts, unless Parasara explicitly mentions rasi chart. For "
+    "example, Parasara says that D-12 shows matters related to father. So any "
+    "principles based on ashtakavarga and sodhya pindas that let us predict "
+    "matters related to father must use D-12. This is a logical deduction and "
+    "Parasara does not have to mention it explicitly each time.")
+
+AV_IN_DIVISIONAL_CHARTS = (
+    "If we can judge the benefic positions of various planets with respect to "
+    "8 references in rasi chart, there is no reason why we should not do it "
+    "in all the divisional charts. In fact, this becomes invaluable when we "
+    "interpret transits in rasi chart with respect to the natal positions in "
+    "divisional charts and transits in divisional charts with respect to the "
+    "natal positions in rasi chart.")
+
+#: The sentence that says the eight tables do not change from chart to chart.
+AV_TABLES_ARE_THE_SAME = (
+    "Ashtakavarga of divisional charts is prepared in the same manner as that "
+    "of rasi chart. The benefic houses for each planet with respect to the 8 "
+    "references are the same. We can apply the same rules and find the BAVs "
+    "of all planets. In fact, we can find SAV of a divisional chart too.")
+
+#: §12.5's worked illustration of the deduction.
+AV_DIVISIONAL_EXAMPLE = {
+    "chart": "D12",
+    "matter": "matters related to father",
+    "why": ("Parasara says that D-12 shows matters related to father, so any "
+            "principles based on ashtakavarga and sodhya pindas that let us "
+            "predict matters related to father must use D-12."),
+}
+
+#: Footnote 43, supplied with §12.5.
+MUHURTA_DEFINITION = (
+    "Muhurta is an auspicious pre-set time at which one begins important "
+    "activities.")
+
+#: §12.5 names "sodhya pindas" alongside ashtakavarga. Nothing read so far
+#: defines them. See docs/open-items.md OI-101.
+SODHYA_PINDA_NOT_YET_DEFINED = (
+    "Section 12.5 names sodhya pindas beside ashtakavarga as a second family "
+    "of principles. No section read so far defines them.")

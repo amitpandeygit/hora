@@ -12,6 +12,7 @@ from hora.charts.ashtakavarga import (
     muhurta_strength,
     natal_grade,
     sarvashtakavarga,
+    signs_in_chart,
     summed,
     verify_tables,
 )
@@ -31,6 +32,10 @@ from hora.core.const import (
     ASHTAKAVARGA_TABLE_NUMBERS,
     ASHTAKAVARGA_TABLES_PENDING,
     AV_ABBREVIATIONS,
+    AV_DIVISIONAL_EXAMPLE,
+    AV_IN_DIVISIONAL_CHARTS,
+    AV_NOT_ONLY_RASI,
+    AV_TABLES_ARE_THE_SAME,
     BAV_APPLIES_TO_TRANSITS,
     BAV_COUNT_IS_CALLED_REKHAS,
     BAV_COUNT_RANGE,
@@ -64,7 +69,8 @@ from hora.core.const import (
     EXERCISE_20,
     EXERCISE_20_ANSWER,
     EXERCISE_20_CLOSING,
-    MUHURTA_FOOTNOTE_UNREAD,
+    MUHURTA_DEFINITION,
+    MUHURTA_FOOTNOTE,
     RASI_NAMES,
     SAMUDAAYA_MEANS,
     SARVA_MEANS,
@@ -80,6 +86,7 @@ from hora.core.const import (
     SAV_STRONG_FROM,
     SAV_TOTAL,
     SAV_WORKED_EXAMPLE,
+    SODHYA_PINDA_NOT_YET_DEFINED,
     TABLE_19_WORKED_READING,
     TABLES_20_TO_26_NOTE,
     YUGA_FOOTNOTE,
@@ -165,6 +172,18 @@ def rules() -> dict:
             "best_rasis": list(EXAMPLE_38_BEST_RASIS),
             "worst_rasis": list(EXAMPLE_38_WORST_RASIS),
         },
+        "not_only_rasi": AV_NOT_ONLY_RASI,
+        "in_divisional_charts": AV_IN_DIVISIONAL_CHARTS,
+        "tables_are_the_same": AV_TABLES_ARE_THE_SAME,
+        "divisional_example": dict(AV_DIVISIONAL_EXAMPLE),
+        "divisional_note": (
+            "The eight tables are chart-independent, so "
+            "/v1/ashtakavarga/divisional takes longitudes and a varga code "
+            "and does exactly what /chart does on the resolved signs. "
+            "Nothing in the tables is re-derived per chart."
+        ),
+        "muhurta_definition": MUHURTA_DEFINITION,
+        "sodhya_pinda_not_yet_defined": SODHYA_PINDA_NOT_YET_DEFINED,
         "sav_definition": SAV_DEFINITION,
         "samudaaya_means": SAMUDAAYA_MEANS,
         "sarva_means": SARVA_MEANS,
@@ -189,7 +208,7 @@ def rules() -> dict:
         ),
         "sav_muhurta_rule": SAV_MUHURTA_RULE,
         "sav_muhurta_positions": list(SAV_MUHURTA_POSITIONS),
-        "muhurta_footnote_unread": MUHURTA_FOOTNOTE_UNREAD,
+        "muhurta_footnote": MUHURTA_FOOTNOTE,
         "exercise_20": {
             "question": EXERCISE_20,
             "closing": EXERCISE_20_CLOSING,
@@ -266,6 +285,29 @@ def benefic_rasis(owner: str, reference_signs: dict[str, int]) -> dict:
     }
 
 
+def divisional(reference_longitudes: dict[str, float], chart_code: str = "D1",
+               owner: str | None = None) -> dict:
+    """§12.5: the same eight tables applied to any divisional chart.
+
+    "The benefic houses for each planet with respect to the 8 references are
+    the same." Only the signs the references occupy change, so this resolves
+    the longitudes into the named chart and then does exactly what
+    /chart does.
+    """
+    signs = signs_in_chart(
+        {str(k): float(v) for k, v in reference_longitudes.items()},
+        str(chart_code))
+    result = chart(signs, owner)
+    result["chart"] = str(chart_code).upper()
+    result["chart_note"] = (
+        "Section 12.5: the eight tables do not change from chart to chart. "
+        "Only the signs the eight references occupy do."
+    )
+    result["reference_longitudes"] = {
+        k: float(v) for k, v in reference_longitudes.items()}
+    return result
+
+
 def chart(reference_signs: dict[str, int], owner: str | None = None) -> dict:
     """A chart's ashtakavarga.
 
@@ -299,8 +341,9 @@ def chart(reference_signs: dict[str, int], owner: str | None = None) -> dict:
         "sarvashtakavarga": sarvashtakavarga(signs),
         "summed": summed(signs),
         "tables_pending": list(ASHTAKAVARGA_TABLES_PENDING),
+        "chart": "D1",
     }
 
 
 __all__ = ["AshtakavargaError", "InputError", "benefic_rasis", "chart",
-           "muhurta", "rules", "table"]
+           "divisional", "muhurta", "rules", "table"]
