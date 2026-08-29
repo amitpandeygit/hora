@@ -451,6 +451,326 @@
         ],
         "table": 21,
         "total": 39
+      },
+      {
+        "owner": "Mercury",
+        "rekhas": [
+          5,
+          5,
+          2,
+          5,
+          6,
+          5,
+          6,
+          6,
+          2,
+          5,
+          3,
+          4
+        ],
+        "signs": [
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Saturn"
+            ],
+            "rekhas": 5,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 5,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Venus",
+              "Saturn"
+            ],
+            "rekhas": 2,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 5,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 6,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Jupiter"
+            ],
+            "rekhas": 5,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 6,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 6,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Mercury",
+              "Venus"
+            ],
+            "rekhas": 2,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 5,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Mars",
+              "Mercury",
+              "Venus"
+            ],
+            "rekhas": 3,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Jupiter",
+              "Lagna"
+            ],
+            "rekhas": 4,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 22,
+        "total": 54
+      },
+      {
+        "owner": "Jupiter",
+        "rekhas": [
+          5,
+          3,
+          3,
+          6,
+          6,
+          3,
+          5,
+          5,
+          5,
+          5,
+          6,
+          4
+        ],
+        "signs": [
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Lagna"
+            ],
+            "rekhas": 5,
+            "sign": 0,
+            "sign_name": "Aries"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mercury",
+              "Jupiter"
+            ],
+            "rekhas": 3,
+            "sign": 1,
+            "sign_name": "Taurus"
+          },
+          {
+            "from": [
+              "Sun",
+              "Venus",
+              "Lagna"
+            ],
+            "rekhas": 3,
+            "sign": 2,
+            "sign_name": "Gemini"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Jupiter",
+              "Venus",
+              "Lagna"
+            ],
+            "rekhas": 6,
+            "sign": 3,
+            "sign_name": "Cancer"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Venus",
+              "Lagna"
+            ],
+            "rekhas": 6,
+            "sign": 4,
+            "sign_name": "Leo"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mercury",
+              "Saturn"
+            ],
+            "rekhas": 3,
+            "sign": 5,
+            "sign_name": "Virgo"
+          },
+          {
+            "from": [
+              "Moon",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Lagna"
+            ],
+            "rekhas": 5,
+            "sign": 6,
+            "sign_name": "Libra"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Jupiter",
+              "Venus",
+              "Lagna"
+            ],
+            "rekhas": 5,
+            "sign": 7,
+            "sign_name": "Scorpio"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mercury",
+              "Jupiter",
+              "Saturn"
+            ],
+            "rekhas": 5,
+            "sign": 8,
+            "sign_name": "Sagittarius"
+          },
+          {
+            "from": [
+              "Sun",
+              "Mars",
+              "Mercury",
+              "Jupiter",
+              "Lagna"
+            ],
+            "rekhas": 5,
+            "sign": 9,
+            "sign_name": "Capricorn"
+          },
+          {
+            "from": [
+              "Sun",
+              "Moon",
+              "Mars",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 6,
+            "sign": 10,
+            "sign_name": "Aquarius"
+          },
+          {
+            "from": [
+              "Mercury",
+              "Venus",
+              "Saturn",
+              "Lagna"
+            ],
+            "rekhas": 4,
+            "sign": 11,
+            "sign_name": "Pisces"
+          }
+        ],
+        "table": 23,
+        "total": 56
       }
     ],
     "reference_signs": {
@@ -495,34 +815,36 @@
         "owners": [
           "Sun",
           "Moon",
-          "Mars"
+          "Mars",
+          "Mercury",
+          "Jupiter"
         ],
         "rekhas": [
+          25,
+          17,
+          14,
+          23,
+          32,
+          18,
+          21,
+          21,
           15,
-          9,
-          9,
-          12,
+          19,
           20,
-          10,
-          10,
-          10,
-          8,
-          9,
-          11,
-          13
+          21
         ],
-        "total": 136
+        "total": 246
       },
-      "missing_note": "Tables 22, 23, 24, 25, 26 have not been supplied, so Mercury, Jupiter, Venus, Saturn, Lagna contribute nothing to these totals. Every figure here is a partial sum and must not be read against any threshold.",
+      "missing_note": "Tables 24, 25, 26 have not been supplied, so Venus, Saturn, Lagna contribute nothing to these totals. Every figure here is a partial sum and must not be read against any threshold.",
       "not_yet_named_note": "This is a sum of the tables supplied, not a sarvashtakavarga. The book has not reached that term, and the two candidate sums differ \u2014 seven planets gives 337 when complete, all eight references gives 386. Both are returned and neither is chosen. See docs/open-items.md OI-100.",
       "owners_included": [
         "Sun",
         "Moon",
-        "Mars"
+        "Mars",
+        "Mercury",
+        "Jupiter"
       ],
       "owners_missing": [
-        "Mercury",
-        "Jupiter",
         "Venus",
         "Saturn",
         "Lagna"
@@ -533,102 +855,102 @@
         "owners": [
           "Sun",
           "Moon",
-          "Mars"
+          "Mars",
+          "Mercury",
+          "Jupiter"
         ],
         "rekhas": [
+          25,
+          17,
+          14,
+          23,
+          32,
+          18,
+          21,
+          21,
           15,
-          9,
-          9,
-          12,
+          19,
           20,
-          10,
-          10,
-          10,
-          8,
-          9,
-          11,
-          13
+          21
         ],
-        "total": 136
+        "total": 246
       },
       "signs": [
         {
-          "eight_references": 15,
-          "seven_planets": 15,
+          "eight_references": 25,
+          "seven_planets": 25,
           "sign": 0,
           "sign_name": "Aries"
         },
         {
-          "eight_references": 9,
-          "seven_planets": 9,
+          "eight_references": 17,
+          "seven_planets": 17,
           "sign": 1,
           "sign_name": "Taurus"
         },
         {
-          "eight_references": 9,
-          "seven_planets": 9,
+          "eight_references": 14,
+          "seven_planets": 14,
           "sign": 2,
           "sign_name": "Gemini"
         },
         {
-          "eight_references": 12,
-          "seven_planets": 12,
+          "eight_references": 23,
+          "seven_planets": 23,
           "sign": 3,
           "sign_name": "Cancer"
         },
         {
-          "eight_references": 20,
-          "seven_planets": 20,
+          "eight_references": 32,
+          "seven_planets": 32,
           "sign": 4,
           "sign_name": "Leo"
         },
         {
-          "eight_references": 10,
-          "seven_planets": 10,
+          "eight_references": 18,
+          "seven_planets": 18,
           "sign": 5,
           "sign_name": "Virgo"
         },
         {
-          "eight_references": 10,
-          "seven_planets": 10,
+          "eight_references": 21,
+          "seven_planets": 21,
           "sign": 6,
           "sign_name": "Libra"
         },
         {
-          "eight_references": 10,
-          "seven_planets": 10,
+          "eight_references": 21,
+          "seven_planets": 21,
           "sign": 7,
           "sign_name": "Scorpio"
         },
         {
-          "eight_references": 8,
-          "seven_planets": 8,
+          "eight_references": 15,
+          "seven_planets": 15,
           "sign": 8,
           "sign_name": "Sagittarius"
         },
         {
-          "eight_references": 9,
-          "seven_planets": 9,
+          "eight_references": 19,
+          "seven_planets": 19,
           "sign": 9,
           "sign_name": "Capricorn"
         },
         {
-          "eight_references": 11,
-          "seven_planets": 11,
+          "eight_references": 20,
+          "seven_planets": 20,
           "sign": 10,
           "sign_name": "Aquarius"
         },
         {
-          "eight_references": 13,
-          "seven_planets": 13,
+          "eight_references": 21,
+          "seven_planets": 21,
           "sign": 11,
           "sign_name": "Pisces"
         }
       ]
     },
     "tables_pending": [
-      "Mercury",
-      "Jupiter",
       "Venus",
       "Saturn",
       "Lagna"

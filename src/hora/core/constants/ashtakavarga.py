@@ -153,6 +153,39 @@ MARS_ASHTAKAVARGA_ROWS: tuple[tuple[int, ...], ...] = (
     (0,  0,  0,  0,  1,  1,  0,  0),   # 12th
 )
 
+
+MERCURY_ASHTAKAVARGA_ROWS: tuple[tuple[int, ...], ...] = (
+    #  Sun Moon Mars Merc  Jup  Ven  Sat  Lag        house
+    (0,  0,  1,  1,  0,  1,  1,  1),   # 1st
+    (0,  1,  1,  0,  0,  1,  1,  1),   # 2nd
+    (0,  0,  0,  1,  0,  1,  0,  0),   # 3rd
+    (0,  1,  1,  0,  0,  1,  1,  1),   # 4th
+    (1,  0,  0,  1,  0,  1,  0,  0),   # 5th
+    (1,  1,  0,  1,  1,  0,  0,  1),   # 6th
+    (0,  0,  1,  0,  0,  0,  1,  0),   # 7th
+    (0,  1,  1,  0,  1,  1,  1,  1),   # 8th
+    (1,  0,  1,  1,  0,  1,  1,  0),   # 9th
+    (0,  1,  1,  1,  0,  0,  1,  1),   # 10th
+    (1,  1,  1,  1,  1,  1,  1,  1),   # 11th
+    (1,  0,  0,  1,  1,  0,  0,  0),   # 12th
+)
+
+JUPITER_ASHTAKAVARGA_ROWS: tuple[tuple[int, ...], ...] = (
+    #  Sun Moon Mars Merc  Jup  Ven  Sat  Lag        house
+    (1,  0,  1,  1,  1,  0,  0,  1),   # 1st
+    (1,  1,  1,  1,  1,  1,  0,  1),   # 2nd
+    (1,  0,  0,  0,  1,  0,  1,  0),   # 3rd
+    (1,  0,  1,  1,  1,  0,  0,  1),   # 4th
+    (0,  1,  0,  1,  0,  1,  1,  1),   # 5th
+    (0,  0,  0,  1,  0,  1,  1,  1),   # 6th
+    (1,  1,  1,  0,  1,  0,  0,  1),   # 7th
+    (1,  0,  1,  0,  1,  0,  0,  0),   # 8th
+    (1,  1,  0,  1,  0,  1,  0,  1),   # 9th
+    (1,  0,  1,  1,  1,  1,  0,  1),   # 10th
+    (1,  1,  1,  1,  1,  1,  0,  1),   # 11th
+    (0,  0,  0,  0,  0,  0,  1,  0),   # 12th
+)
+
 #: The total rekhas each table carries, as the wider tradition records them.
 #:
 #: **A check, not a source.** These figures are not PVR's — the book prints
@@ -174,6 +207,8 @@ ASHTAKAVARGA_TABLES: dict[str, tuple[tuple[int, ...], ...]] = {
     "Sun": SUN_ASHTAKAVARGA_ROWS,
     "Moon": MOON_ASHTAKAVARGA_ROWS,
     "Mars": MARS_ASHTAKAVARGA_ROWS,
+    "Mercury": MERCURY_ASHTAKAVARGA_ROWS,
+    "Jupiter": JUPITER_ASHTAKAVARGA_ROWS,
 }
 
 #: Tables 20 to 26, named by the book and not yet supplied. Listed so a

@@ -583,8 +583,8 @@ into benefic or malefic and §3.2.2 gives the Moon no nature without one.
 ### OI-99 — seven of the eight ashtakavarga tables are not supplied
 
 §12.2 gives Table 19, the Sun's, and names Tables 20 to 26 for the Moon, Mars,
-Mercury, Jupiter, Venus, Saturn and lagna. Tables 19, 20 and 21 — Sun, Moon and
-Mars — have been read. Tables 22 to 26 have not.
+Mercury, Jupiter, Venus, Saturn and lagna. Tables 19 to 23 — Sun, Moon,
+Mars, Mercury and Jupiter — have been read. Tables 24, 25 and 26 have not.
 
 Until the rest arrive:
 
@@ -597,7 +597,7 @@ Until the rest arrive:
 
 **What is already load-bearing.** Each table's total falls out of its
 ninety-six entries and is compared against the figure the wider tradition
-records — 48, 49 and 39 so far, all matching. Nothing in our code asserts those
+records — 48, 49, 39, 54 and 56 so far, all matching. Nothing in our code asserts those
 totals into being, and a mismatch would be reported rather than corrected.
 
 **Closes when:** Tables 20 to 26 are supplied.
