@@ -74,6 +74,7 @@ class AshtakavargaRulesOut(BaseModel):
     )
     worked_reading: str
     example_37: dict
+    example_38: dict
     exercise_18: dict
     yuga_footnote: str
     yugas: list[dict]

@@ -78,6 +78,36 @@
       "reference_sign": "Ge",
       "working": "To find the rasis in which Jupiter is benefic, we should look at Jupiter's ashtakavarga (see Table 23). To find the rasis in which Jupiter is benefic with respect to Venus, we should look at the column of Venus. Only the 2nd, 5th, 6th, 9th, 10th and 11th houses have a 1 (rekha \u2013 benefic point) against them. Venus is in Ge and finding these houses with respect to Venus, we get Cn, Li, Sc, Aq, Pi and Ar. So Jupiter is benefic with respect to Venus in these rasis."
     },
+    "example_38": {
+      "bav": [
+        7,
+        4,
+        7,
+        4,
+        4,
+        3,
+        4,
+        4,
+        4,
+        3,
+        6,
+        4
+      ],
+      "best_rasis": [
+        "Ar",
+        "Ge",
+        "Aq"
+      ],
+      "chart": "Chart 11",
+      "natal": "Here Mercury is in Ge in the natal chart and Ge has 7 rekhas in Mercury's AV. That means that Mercury is a very favorable planet. Being the lagna lord and being in a quadrant from lagna in own sign (i.e. Bhadra yoga) makes him even stronger. Because of this, Mercury is extremely favorable in this chart.",
+      "owner": "Mercury",
+      "reading": "In Ar and Ge, we have 7 rekhas. So Mercury is benefic in those rasis with respect to 7 references out of 8. In Aq, we have 6 rekhas. So these three rasis are particularly favorable for Mercury. In Vi and Cp, we have 3 rekhas and that is the lowest. So Mercury is particularly unfavorable in Vi and Cp.",
+      "working": "Let us go further with Exercise 18 now. After finding the rasis in which Mercury is benefic with respect to various references, let us count the references with respect to which Mercury is benefic in each rasi. From the answer to Exercise 18, we see that Mercury is benefic in Ar with respect to Sun, Moon, Mars, Mercury, Venus, Saturn and lagna. In other words, Mercury is benefic in Ar with respect to 7 references. So we write 7 in Ar. We see that Mercury is benefic in Ta with respect to Sun, Mercury, Venus and Saturn. In other words, Mercury is benefic in Ta with respect to 4 references. So we write 4 in Ta. We find the count of references for each rasi and prepare a chart. This is called Mercury's BAV or simply Mercury's AV. Readers may complete the calculations and verify with Chart 11.",
+      "worst_rasis": [
+        "Vi",
+        "Cp"
+      ]
+    },
     "exercise_18": {
       "answer": {
         "Jupiter": [

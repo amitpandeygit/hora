@@ -49,12 +49,15 @@ from hora.core.const import (
     BAV_UNFAVOURABLE_COUNTS,
     BHINNA_MEANS,
     BINDU_REKHA_FOOTNOTE,
+    CHART_11_MERCURY_BAV,
     CLASSICAL_TABLE_TOTALS,
     CLASSICAL_TABLE_TOTALS_PROVENANCE,
     EXAMPLE_37,
     EXAMPLE_37_HOUSES,
     EXAMPLE_37_RASIS,
     EXAMPLE_37_WORKING,
+    EXAMPLE_38_BEST_RASIS,
+    EXAMPLE_38_WORST_RASIS,
     EXERCISE_18,
     EXERCISE_18_ANSWER,
     EXERCISE_18_HINT,
@@ -804,3 +807,195 @@ def test_the_books_spelling_of_favorable_is_kept(client):
     assert "favourable" not in BAV_GRADING
     body = client.get("/v1/ashtakavarga/rules").json()
     assert body["bav_grade_names"] == ["favorable", "neutral", "unfavorable"]
+
+
+# --------------------------------------------------------------------------
+# §12.3's Example 38 and Chart 11
+#
+# Chart 11 draws Mercury's BAV for Chart 6. It is the first time the book
+# prints a computed ashtakavarga rather than a definition table, so all
+# twelve figures are a check on the machinery end to end.
+# --------------------------------------------------------------------------
+
+
+def test_chart_11_reproduces_sign_for_sign():
+    """Twelve figures, each the count of references from which Mercury is
+    benefic in that rasi. Every one matches."""
+    result = bhinnashtakavarga("Mercury", CHART_6_SIGNS)
+    assert result.rekhas == CHART_11_MERCURY_BAV
+    assert sum(CHART_11_MERCURY_BAV) == 54 == table_total("Mercury")
+
+
+def test_example_38s_two_worked_signs():
+    """"Mercury is benefic in Ar with respect to Sun, Moon, Mars, Mercury,
+    Venus, Saturn and lagna ... So we write 7 in Ar ... benefic in Ta with
+    respect to Sun, Mercury, Venus and Saturn ... So we write 4 in Ta."
+
+    The named references are checked, not only the counts."""
+    result = bhinnashtakavarga("Mercury", CHART_6_SIGNS)
+    assert set(result.contributors[R["Ar"]]) == {
+        "Sun", "Moon", "Mars", "Mercury", "Venus", "Saturn", "Lagna"}
+    assert result.rekhas[R["Ar"]] == 7
+    assert set(result.contributors[R["Ta"]]) == {
+        "Sun", "Mercury", "Venus", "Saturn"}
+    assert result.rekhas[R["Ta"]] == 4
+
+
+def test_example_38s_best_and_worst_rasis():
+    """"In Ar and Ge, we have 7 rekhas ... In Aq, we have 6 ... So these
+    three rasis are particularly favorable ... In Vi and Cp, we have 3 rekhas
+    and that is the lowest." The claim that 3 is the lowest is checked, not
+    assumed."""
+    result = bhinnashtakavarga("Mercury", CHART_6_SIGNS)
+    best = {name for name in RASI_ABBR if result.rekhas[R[name]] >= 6}
+    assert best == set(EXAMPLE_38_BEST_RASIS) == {"Ar", "Ge", "Aq"}
+    worst = {name for name in RASI_ABBR
+             if result.rekhas[R[name]] == min(result.rekhas)}
+    assert worst == set(EXAMPLE_38_WORST_RASIS) == {"Vi", "Cp"}
+    assert min(result.rekhas) == 3
+
+
+def test_example_38s_natal_reading_of_mercury():
+    """"Mercury is in Ge in the natal chart and Ge has 7 rekhas in Mercury's
+    AV. That means that Mercury is a very favorable planet." """
+    natal = natal_grade("Mercury", CHART_6_SIGNS)
+    assert natal["sign_name"] == "Gemini"
+    assert natal["rekhas"] == 7
+    assert natal["grade"] == "favorable"
+
+
+def test_example_38s_bhadra_claim():
+    """"Being the lagna lord and being in a quadrant from lagna in own sign
+    (i.e. Bhadra yoga) makes him even stronger." All three parts, and the
+    yoga itself from the chapter 11 registry."""
+    from hora.charts.planetary_yogas import YogaInput, evaluate_one
+    from hora.core.const import RASI_LORD, Graha
+
+    lagna = CHART_6_SIGNS["Lagna"]
+    assert int(RASI_LORD[lagna]) == int(Graha.MERCURY)
+    house = (CHART_6_SIGNS["Mercury"] - lagna) % 12 + 1
+    assert house == 10
+    verdict = evaluate_one("bhadra", YogaInput(
+        rasis={int(Graha.MERCURY): CHART_6_SIGNS["Mercury"]},
+        lagna_rasi=lagna))
+    assert verdict.present is True
+    assert "his own sign, and the 10th from lagna" in verdict.reason
+
+
+def test_the_rules_endpoint_carries_example_38(client):
+    body = client.get("/v1/ashtakavarga/rules").json()
+    assert body["example_38"]["bav"] == list(CHART_11_MERCURY_BAV)
+    assert body["example_38"]["best_rasis"] == ["Ar", "Ge", "Aq"]
+    assert body["example_38"]["worst_rasis"] == ["Vi", "Cp"]
+    assert "Bhadra yoga" in body["example_38"]["natal"]
+
+
+# --------------------------------------------------------------------------
+# What Chart 11 disagrees with Chart 6 about — D-38 and D-39
+# --------------------------------------------------------------------------
+
+#: Chart 11's printed longitudes. The same native as Chart 6, six minutes
+#: later. Transcribed for the comparison, not used as a fixture: Chart 6 is
+#: the one whose birth data we recompute.
+CHART_11 = {
+    "Asc": "25 Vi 45", "Sun": "13 Ge 17", "Moon": "10 Pi 36",
+    "Mars": "13 Ge 33", "Merc": "27 Ge 40", "Jup": "20 Le 06",
+    "Ven": "27 Ar 40", "Sat": "26 Le 26", "Rahu": "0 Li 47",
+    "Ketu": "0 Ar 47", "HL": "27 Cp 11", "GL": "3 Cp 29",
+}
+CHART_11_TIME = "1:08 pm (IST)"
+CHART_11_CHARA_KARAKAS = {
+    "Rahu": "AK", "Ven": "AmK", "Merc": "BK", "Sat": "MK",
+    "Jup": "PiK", "Mars": "PK", "Sun": "GK", "Moon": "DK",
+}
+
+
+def _lon11(text: str) -> float:
+    import re
+
+    match = re.fullmatch(r"(\d+) ?([A-Za-z]{2}) ?(\d+)", text)
+    assert match, text
+    return R[match.group(2)] * 30 + int(match.group(1)) + int(match.group(3)) / 60
+
+
+def test_chart_11s_planets_sit_in_the_same_signs_as_chart_6s():
+    """Which is why Example 38 works from either printing: the BAV depends
+    only on signs, and no planet changes sign in six minutes."""
+    from tests.unit.test_book_chapter10_argala import CHART_6
+
+    for body in ("Sun", "Moon", "Mars", "Merc", "Jup", "Ven", "Sat",
+                 "Rahu", "Ketu", "Asc"):
+        assert int(_lon11(CHART_11[body]) // 30) == int(
+            _lon11(CHART_6[body]) // 30), body
+
+
+def test_chart_11_is_six_minutes_later_than_chart_6():
+    """D-38. 12:49 at 5h17m east against 1:08 pm IST."""
+    chart_6_ut = 12 + 49 / 60 - (5 + 17 / 60)
+    chart_11_ut = 13 + 8 / 60 - 5.5
+    assert round((chart_11_ut - chart_6_ut) * 60) == 6
+    assert "IST" in CHART_11_TIME
+
+
+def test_what_the_six_minutes_moves_and_what_it_does_not():
+    """The planets barely move; the ascendant and the special lagnas do —
+    and GL changes sign, which §11.7.3's yogas 6 and 8 read."""
+    from tests.unit.test_book_chapter10_argala import CHART_6
+
+    for body in ("Sun", "Moon", "Mars", "Merc", "Jup", "Ven", "Sat"):
+        drift = abs(_lon11(CHART_11[body]) - _lon11(CHART_6[body])) * 60
+        assert drift == pytest.approx(round(drift)), body
+        assert round(drift) <= 3, body
+    ascendant_drift = abs(_lon11(CHART_11["Asc"]) - _lon11(CHART_6["Asc"])) * 60
+    assert ascendant_drift == pytest.approx(86.0)   # 1°26'
+
+    assert int(_lon11(CHART_11["GL"]) // 30) != int(_lon11(CHART_6["GL"]) // 30)
+
+
+def test_the_two_charts_print_different_chara_karakas_for_mercury_and_venus():
+    """D-39. Both are at 27°40' of their signs — an exact tie at the printed
+    precision — and the two charts break it opposite ways."""
+    from tests.unit.test_book_chapter10_argala import CHART_6_CHARA_KARAKAS
+
+    assert _lon11(CHART_11["Merc"]) % 30 == pytest.approx(
+        _lon11(CHART_11["Ven"]) % 30)
+    assert CHART_6_CHARA_KARAKAS["Merc"] == "AmK"
+    assert CHART_6_CHARA_KARAKAS["Ven"] == "BK"
+    assert CHART_11_CHARA_KARAKAS["Merc"] == "BK"
+    assert CHART_11_CHARA_KARAKAS["Ven"] == "AmK"
+    # Everything else agrees.
+    others = {k for k in CHART_11_CHARA_KARAKAS} - {"Merc", "Ven"}
+    for body in others:
+        assert CHART_11_CHARA_KARAKAS[body] == CHART_6_CHARA_KARAKAS[body]
+
+
+def test_the_tie_is_reported_rather_than_hidden():
+    """§8.2's tie-break needs seconds, which the book does not print. Both
+    grahas come back flagged so a caller knows the order between them is not
+    settled by the data.
+
+    This also pins the float defect D-39 exposed: the two advancements are
+    equal to 3.6e-15 degrees, and an equality test missed the tie entirely.
+    """
+    from hora.charts.karaka import chara_karakas
+    from hora.core.const import Graha
+
+    longitudes = {
+        int(Graha.SUN): _lon11(CHART_11["Sun"]),
+        int(Graha.MOON): _lon11(CHART_11["Moon"]),
+        int(Graha.MARS): _lon11(CHART_11["Mars"]),
+        int(Graha.MERCURY): _lon11(CHART_11["Merc"]),
+        int(Graha.JUPITER): _lon11(CHART_11["Jup"]),
+        int(Graha.VENUS): _lon11(CHART_11["Ven"]),
+        int(Graha.SATURN): _lon11(CHART_11["Sat"]),
+        int(Graha.RAHU): _lon11(CHART_11["Rahu"]),
+    }
+    result = {k.graha_name: k for k in chara_karakas(longitudes)}
+    assert result["Mercury"].shared is True
+    assert result["Venus"].shared is True
+    assert result["Mercury"].advancement != result["Venus"].advancement
+    assert abs(result["Mercury"].advancement
+               - result["Venus"].advancement) < 1e-12
+    # Nothing else in the chart is tied.
+    assert [name for name, k in result.items() if k.shared] == [
+        "Mercury", "Venus"]

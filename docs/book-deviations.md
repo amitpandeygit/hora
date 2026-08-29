@@ -1145,3 +1145,79 @@ Only the first half of entry (12) is defective; its second combination —
 Jupiter in lagna reached by Mars and Mercury — is ordinary and is detected.
 
 **Closes when:** you confirm the missing planet, or a later printing settles it.
+
+## D-38 · Charts 6 and 11 are the same native at two different times
+
+**Status: recorded.** Nothing in chapter 12 turns on it; anything degree-based
+does.
+
+P.V. Narasimha Rao's chart is printed twice, and the two printings disagree
+about the time:
+
+| | Chart 6 (§10.6) | Chart 11 (§12.3) |
+|---|---|---|
+| time | 12:49, 5h17m east | 1:08 pm (IST) |
+| UT | 07:32 | 07:38 |
+
+Six minutes apart. The seven planets and the nodes are unaffected — the largest
+difference is the Moon's 3 arcminutes — so **every sign is the same and
+Mercury's ashtakavarga is identical either way**, which is why Example 38 works
+from either chart.
+
+What does move:
+
+| | Chart 6 | Chart 11 | difference |
+|---|---|---|---|
+| Ascendant | 24 Vi 19 | 25 Vi 45 | 1°26' |
+| HL | 24 Cp 11 | 27 Cp 11 | 3°00' |
+| GL | 25 Sg 59 | 3 Cp 29 | 7°30' — **a different sign** |
+
+The ascendant moves about 1° in 4 minutes and GL five times as fast, so all
+three are consistent with the six-minute gap rather than with a typo.
+
+**Why it matters.** §11.7.3's yogas 6 and 8 read HL and GL, and GL changes sign
+between the two printings — so a Raaja yoga verdict for this native depends on
+which chart is used. Chapter 10's fixture uses Chart 6's time and reproduces
+every body from it, so nothing changes today.
+
+**What we do:** Chart 6 stays the fixture, since it is the one whose birth data
+we recompute and verify against. Chart 11 is transcribed only for its BAV
+figures, which are time-independent.
+
+**Closes when:** you say which time is intended, or a later chapter uses one.
+
+## D-39 · Charts 6 and 11 print different chara karakas for the same two planets
+
+**Status: recorded.** Neither is followed over the other; the tie is reported.
+
+Mercury is at **27 Ge 40** and Venus at **27 Ar 40** — the same degrees and the
+same minutes, in different signs. §8.2 orders the chara karakas by advancement
+within the sign, so this is an exact tie at the precision the book prints.
+
+The two charts break it opposite ways:
+
+| | Chart 6 | Chart 11 |
+|---|---|---|
+| Mercury | AmK | BK |
+| Venus | BK | AmK |
+
+§8.2's own tie-break is "If two planets have the same degrees, we should
+compare minutes. If minutes are same, we should compare the seconds." The
+printed data stops one level short of that: no seconds are given. PVR's own
+software had them, so each chart is internally consistent — but the tie cannot
+be resolved from the page.
+
+**What we do:** the ordering uses a deterministic tie-break so a result is
+never arbitrary between runs, and both grahas come back with
+`shares_karakatwa: true`, which says the order between them is not settled by
+the data. Chart 6's printed karakas remain the fixture, since that is the chart
+we recompute.
+
+**A defect this exposed.** The tie was not being detected at all. Two grahas at
+the same degrees and minutes in *different* signs reach that advancement by
+different arithmetic — `(60 + 27 + 40/60) % 30` against `(27 + 40/60)` — and
+the two differ in the last bit of a float, by 3.6e-15 degrees. The equality
+test missed it. Ties are compared with a tolerance now; 1e-9 degrees is 3.6
+microarcseconds, far below anything the ephemeris resolves.
+
+**Closes when:** you say which reading is intended, or seconds are supplied.

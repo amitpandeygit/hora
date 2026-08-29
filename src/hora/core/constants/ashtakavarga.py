@@ -381,3 +381,44 @@ AV_ABBREVIATIONS: dict[str, str] = {
     "AV": "ashtakavarga",
     "BAV": "Bhinna Ashtakavarga",
 }
+
+
+# --------------------------------------------------------------------------
+# §12.3's Example 38 and Chart 11
+# --------------------------------------------------------------------------
+
+EXAMPLE_38_WORKING = (
+    "Let us go further with Exercise 18 now. After finding the rasis in which "
+    "Mercury is benefic with respect to various references, let us count the "
+    "references with respect to which Mercury is benefic in each rasi. From "
+    "the answer to Exercise 18, we see that Mercury is benefic in Ar with "
+    "respect to Sun, Moon, Mars, Mercury, Venus, Saturn and lagna. In other "
+    "words, Mercury is benefic in Ar with respect to 7 references. So we "
+    "write 7 in Ar. We see that Mercury is benefic in Ta with respect to Sun, "
+    "Mercury, Venus and Saturn. In other words, Mercury is benefic in Ta with "
+    "respect to 4 references. So we write 4 in Ta. We find the count of "
+    "references for each rasi and prepare a chart. This is called Mercury's "
+    "BAV or simply Mercury's AV. Readers may complete the calculations and "
+    "verify with Chart 11.")
+
+EXAMPLE_38_READING = (
+    "In Ar and Ge, we have 7 rekhas. So Mercury is benefic in those rasis "
+    "with respect to 7 references out of 8. In Aq, we have 6 rekhas. So these "
+    "three rasis are particularly favorable for Mercury. In Vi and Cp, we "
+    "have 3 rekhas and that is the lowest. So Mercury is particularly "
+    "unfavorable in Vi and Cp.")
+
+EXAMPLE_38_NATAL = (
+    "Here Mercury is in Ge in the natal chart and Ge has 7 rekhas in "
+    "Mercury's AV. That means that Mercury is a very favorable planet. Being "
+    "the lagna lord and being in a quadrant from lagna in own sign (i.e. "
+    "Bhadra yoga) makes him even stronger. Because of this, Mercury is "
+    "extremely favorable in this chart.")
+
+#: Chart 11: Mercury's BAV drawn as a chart, read sign by sign from the
+#: south-Indian diagram. Aries first.
+CHART_11_MERCURY_BAV: tuple[int, ...] = (7, 4, 7, 4, 4, 3, 4, 4, 4, 3, 6, 4)
+
+#: The rasis §12.3's Example 38 singles out.
+EXAMPLE_38_BEST_RASIS: tuple[str, ...] = ("Ar", "Ge", "Aq")
+EXAMPLE_38_WORST_RASIS: tuple[str, ...] = ("Vi", "Cp")

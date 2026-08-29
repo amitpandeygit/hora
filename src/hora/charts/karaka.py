@@ -48,6 +48,13 @@ class CharaKaraka:
     shared: bool = False
 
 
+#: How close two advancements must be to count as the same. Not an
+#: astrological threshold — it exists because the same degrees and minutes in
+#: two different signs are reached by different float arithmetic. 1e-9 degrees
+#: is 3.6 microarcseconds, orders below anything the ephemeris resolves.
+TIE_TOLERANCE_DEGREES = 1e-9
+
+
 def advancement(longitude: float, graha: int) -> float:
     """Degrees travelled within the occupied rasi.
 
@@ -105,7 +112,17 @@ def chara_karakas(longitudes: dict[int, float]) -> list[CharaKaraka]:
     # tie-break so that an exact tie does not depend on set iteration order.
     scored.sort(key=lambda pair: (-pair[0], pair[1]))
 
-    tied = {adv for adv, _ in scored if sum(1 for a, _ in scored if a == adv) > 1}
+    # Compared with a tolerance rather than exactly. Two grahas at the same
+    # degrees and minutes in *different* signs reach that advancement by
+    # different arithmetic — 27 Ge 40 is (60 + 27 + 40/60) % 30 and 27 Ar 40
+    # is (27 + 40/60) — and the two differ in the last bit of a float. Chart
+    # 6's Mercury and Venus are exactly that case, and an equality test
+    # missed the tie by 3.6e-15 degrees. The tolerance is far below any
+    # distinction the ephemeris can make: 1e-9 degrees is 3.6 microarcseconds.
+    tied = {
+        adv for adv, _ in scored
+        if sum(1 for a, _ in scored if abs(a - adv) <= TIE_TOLERANCE_DEGREES) > 1
+    }
 
     out = []
     for index, (adv, graha) in enumerate(scored):
