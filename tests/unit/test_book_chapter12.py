@@ -187,16 +187,15 @@ def test_the_column_view_is_derived_not_transcribed_twice():
 def test_which_tables_have_been_supplied():
     """Moves as each table arrives; the point is that the two lists always
     partition the eight."""
-    assert available_tables() == ("Sun", "Moon", "Mars", "Mercury", "Jupiter")
-    assert set(ASHTAKAVARGA_TABLES) == {
-        "Sun", "Moon", "Mars", "Mercury", "Jupiter"}
-    assert ASHTAKAVARGA_TABLES_PENDING == ("Venus", "Saturn", "Lagna")
+    assert available_tables() == ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn")
+    assert set(ASHTAKAVARGA_TABLES) == {"Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"}
+    assert ASHTAKAVARGA_TABLES_PENDING == ("Lagna",)
     assert (set(available_tables()) | set(ASHTAKAVARGA_TABLES_PENDING)
             == set(ASHTAKAVARGA_TABLE_NUMBERS))
     assert not set(available_tables()) & set(ASHTAKAVARGA_TABLES_PENDING)
 
 
-@pytest.mark.parametrize("owner", ["Venus", "Saturn", "Lagna"])
+@pytest.mark.parametrize("owner", ["Lagna"])
 def test_a_pending_table_raises_rather_than_returning_zeros(owner):
     with pytest.raises(AshtakavargaError) as exc:
         benefic_houses(owner, "Sun")
@@ -252,17 +251,21 @@ def test_the_sum_is_not_called_a_sarvashtakavarga():
     Both are returned and neither is chosen. See OI-100."""
     result = summed(AKBAR_SIGNS)
     assert result["complete"] is False
-    assert result["owners_included"] == [
-        "Sun", "Moon", "Mars", "Mercury", "Jupiter"]
-    assert len(result["owners_missing"]) == 3
+    assert result["owners_included"] == ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+    assert result["owners_missing"] == ["Lagna"]
     assert result["seven_planets"]["classical_total_when_complete"] == 337
     assert result["eight_references"]["classical_total_when_complete"] == 386
     assert "not a sarvashtakavarga" in result["not_yet_named_note"]
     assert "OI-100" in result["not_yet_named_note"]
     assert "must not be read against any threshold" in result["missing_note"]
     # Lagna's table is still pending, so the two sums coincide for now.
-    assert result["seven_planets"]["total"] == 48 + 49 + 39 + 54 + 56
-    assert result["eight_references"]["total"] == 48 + 49 + 39 + 54 + 56
+    # Every planetary table is in, so the seven-planet sum is complete and
+    # reaches the classical 337. Lagna's is not, so the eight-reference sum
+    # is still the same figure and still flagged incomplete.
+    assert result["seven_planets"]["complete"] is True
+    assert result["seven_planets"]["total"] == 337
+    assert result["eight_references"]["complete"] is False
+    assert result["eight_references"]["total"] == 337
 
 
 def test_the_two_candidate_sums_differ_by_exactly_lagnas_table():
@@ -282,9 +285,8 @@ def test_the_two_candidate_sums_differ_by_exactly_lagnas_table():
 def test_the_rules_endpoint_carries_the_notation_and_the_naming_warning(client):
     body = client.get("/v1/ashtakavarga/rules").json()
     assert body["references"] == list(ASHTAKAVARGA_REFERENCES)
-    assert body["tables_available"] == [
-        "Sun", "Moon", "Mars", "Mercury", "Jupiter"]
-    assert len(body["tables_pending"]) == 3
+    assert body["tables_available"] == ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+    assert body["tables_pending"] == ["Lagna"]
     assert body["benefic_entry"] == {
         "value": 1, "term": "rekha", "sanskrit": "sthana"}
     assert body["malefic_entry"] == {
@@ -302,20 +304,19 @@ def test_the_table_endpoint_serves_table_19_in_printed_shape(client):
 
 
 def test_the_table_endpoint_refuses_a_pending_table(client):
-    response = client.get("/v1/ashtakavarga/table", params={"owner": "Venus"})
+    response = client.get("/v1/ashtakavarga/table", params={"owner": "Lagna"})
     assert response.status_code == 400
-    assert "Table 24" in response.json()["error"]["message"]
+    assert "Table 26" in response.json()["error"]["message"]
 
 
 def test_the_chart_endpoint_returns_what_exists_and_names_what_does_not(client):
     body = client.post("/v1/ashtakavarga/chart", json={
         "reference_signs": AKBAR_SIGNS}).json()
-    assert [b["owner"] for b in body["bhinnashtakavarga"]] == [
-        "Sun", "Moon", "Mars", "Mercury", "Jupiter"]
+    assert [b["owner"] for b in body["bhinnashtakavarga"]] == ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
     assert [b["total"] for b in body["bhinnashtakavarga"]] == [
-        48, 49, 39, 54, 56]
+        48, 49, 39, 54, 56, 52, 39]
     assert body["summed"]["complete"] is False
-    assert len(body["tables_pending"]) == 3
+    assert body["tables_pending"] == ["Lagna"]
 
 
 def test_the_chart_endpoint_rejects_an_incomplete_reference_set(client):
@@ -349,7 +350,8 @@ def test_the_shape_checks_ship_with_the_product(client):
 
 @pytest.mark.parametrize("owner,table,total", [
     ("Sun", 19, 48), ("Moon", 20, 49), ("Mars", 21, 39),
-    ("Mercury", 22, 54), ("Jupiter", 23, 56)])
+    ("Mercury", 22, 54), ("Jupiter", 23, 56), ("Venus", 24, 52),
+    ("Saturn", 25, 39)])
 def test_each_supplied_table_reaches_its_own_total(owner, table, total):
     """The strongest check available on ninety-six hand-typed entries: the
     total falls out of the table rather than being asserted into it, and it
@@ -380,8 +382,7 @@ def test_the_moons_twelfth_house_is_malefic_from_every_reference():
     assert all_zero == ["Moon"]
 
 
-@pytest.mark.parametrize(
-    "owner", ["Sun", "Moon", "Mars", "Mercury", "Jupiter"])
+@pytest.mark.parametrize("owner", ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"])
 def test_every_supplied_table_keeps_the_sum_invariant_on_a_real_chart(owner):
     """Whatever the chart, each of a table's rekhas lands in exactly one
     sign. The invariant that catches an off-by-one in the house count."""
@@ -416,8 +417,8 @@ def test_table_23s_per_reference_totals():
 
 
 def test_the_eleventh_row_is_nearly_but_not_quite_all_ones():
-    """The 11th house is benefic from every reference in three of the five
-    tables so far. Two break it, each in exactly one cell — the Sun under
+    """The 11th house is benefic from every reference in five of the seven
+    planetary tables. Two break it, each in exactly one cell — the Sun under
     Venus and Jupiter under Saturn. Stated by exhaustion rather than by
     eyeballing the pages, which got this wrong twice."""
     exceptions = {
@@ -428,4 +429,46 @@ def test_the_eleventh_row_is_nearly_but_not_quite_all_ones():
     assert {o: refs for o, refs in exceptions.items() if refs} == {
         "Sun": ["Venus"], "Jupiter": ["Saturn"]}
     assert [o for o, refs in exceptions.items() if not refs] == [
-        "Moon", "Mars", "Mercury"]
+        "Moon", "Mars", "Mercury", "Venus", "Saturn"]
+
+
+def test_table_24s_per_reference_totals():
+    assert rekhas_per_reference("Venus") == {
+        "Sun": 3, "Moon": 9, "Mars": 6, "Mercury": 5,
+        "Jupiter": 5, "Venus": 9, "Saturn": 7, "Lagna": 8}
+
+
+def test_table_25s_per_reference_totals():
+    assert rekhas_per_reference("Saturn") == {
+        "Sun": 7, "Moon": 3, "Mars": 6, "Mercury": 6,
+        "Jupiter": 4, "Venus": 3, "Saturn": 4, "Lagna": 6}
+
+
+def test_all_seven_planetary_tables_sum_to_the_classical_337():
+    """The end-to-end check on 672 hand-typed entries. Seven tables, each
+    reaching its own total independently, and the seven totals reaching the
+    figure the tradition records for a sarvashtakavarga — none of which any
+    part of this codebase asserts into being."""
+    planets = [o for o in available_tables() if o != "Lagna"]
+    assert len(planets) == 7
+    assert sum(table_total(owner) for owner in planets) == 337
+
+
+def test_a_chart_reaches_337_across_the_seven_planets():
+    """The same total, arrived at through the twelve signs of a real chart
+    rather than through the tables directly."""
+    total = sum(bhinnashtakavarga(owner, AKBAR_SIGNS).total
+                for owner in available_tables() if owner != "Lagna")
+    assert total == 337
+    result = summed(AKBAR_SIGNS)
+    assert result["seven_planets"]["complete"] is True
+    assert result["seven_planets"]["total"] == 337
+    assert sum(result["seven_planets"]["rekhas"]) == 337
+
+
+def test_only_lagnas_table_is_still_missing():
+    assert ASHTAKAVARGA_TABLES_PENDING == ("Lagna",)
+    assert ASHTAKAVARGA_TABLE_NUMBERS["Lagna"] == 26
+    result = summed(AKBAR_SIGNS)
+    assert result["complete"] is False
+    assert result["eight_references"]["complete"] is False

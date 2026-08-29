@@ -583,21 +583,24 @@ into benefic or malefic and §3.2.2 gives the Moon no nature without one.
 ### OI-99 — seven of the eight ashtakavarga tables are not supplied
 
 §12.2 gives Table 19, the Sun's, and names Tables 20 to 26 for the Moon, Mars,
-Mercury, Jupiter, Venus, Saturn and lagna. Tables 19 to 23 — Sun, Moon,
-Mars, Mercury and Jupiter — have been read. Tables 24, 25 and 26 have not.
+Mercury, Jupiter, Venus, Saturn and lagna. All seven planetary tables — 19 to 25 — have
+been read. Only Table 26, lagna's, has not.
 
 Until the rest arrive:
 
 - `/v1/ashtakavarga/table` answers for the tables that exist and **refuses**
   the rest by name and table number rather than returning zeros;
-- `/v1/ashtakavarga/chart` returns a bhinnashtakavarga per supplied table and a
-  sum flagged `complete: false`, whose note says the figures are partial and
-  must not be read against any threshold;
-- `STRENGTH_MEASURES`' ashtakavarga entry stays `available: False`.
+- `/v1/ashtakavarga/chart` returns a bhinnashtakavarga per supplied table. The
+  seven-planet sum is now complete and reaches 337; the eight-reference sum
+  stays flagged incomplete until Table 26 arrives;
+- `STRENGTH_MEASURES`' ashtakavarga entry stays `available: False`,
+  since the chapter's use of these tables has not been read yet.
 
 **What is already load-bearing.** Each table's total falls out of its
 ninety-six entries and is compared against the figure the wider tradition
-records — 48, 49, 39, 54 and 56 so far, all matching. Nothing in our code asserts those
+records — 48, 49, 39, 54, 56, 52 and 39, all matching. The seven together come
+to **337**, the classical sarvashtakavarga figure, which is an end-to-end check
+on 672 hand-typed entries that nothing in the code asserts into being. Nothing in our code asserts those
 totals into being, and a mismatch would be reported rather than corrected.
 
 **Closes when:** Tables 20 to 26 are supplied.

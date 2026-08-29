@@ -27,7 +27,9 @@ from hora.core.const import (
     MERCURY_ASHTAKAVARGA_ROWS,
     MOON_ASHTAKAVARGA_ROWS,
     RASI_NAMES,
+    SATURN_ASHTAKAVARGA_ROWS,
     SUN_ASHTAKAVARGA_ROWS,
+    VENUS_ASHTAKAVARGA_ROWS,
     Graha,
 )
 
@@ -63,6 +65,8 @@ def verify_tables() -> dict[str, dict]:
     assert ASHTAKAVARGA_TABLES["Mars"] is MARS_ASHTAKAVARGA_ROWS
     assert ASHTAKAVARGA_TABLES["Mercury"] is MERCURY_ASHTAKAVARGA_ROWS
     assert ASHTAKAVARGA_TABLES["Jupiter"] is JUPITER_ASHTAKAVARGA_ROWS
+    assert ASHTAKAVARGA_TABLES["Venus"] is VENUS_ASHTAKAVARGA_ROWS
+    assert ASHTAKAVARGA_TABLES["Saturn"] is SATURN_ASHTAKAVARGA_ROWS
 
     out: dict[str, dict] = {}
     for owner, rows in ASHTAKAVARGA_TABLES.items():

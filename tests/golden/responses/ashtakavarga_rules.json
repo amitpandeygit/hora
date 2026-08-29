@@ -44,11 +44,11 @@
       "Moon",
       "Mars",
       "Mercury",
-      "Jupiter"
+      "Jupiter",
+      "Venus",
+      "Saturn"
     ],
     "tables_pending": [
-      "Venus",
-      "Saturn",
       "Lagna"
     ],
     "tables_pending_note": "Table 20-Table 26 give the benefic and malefic houses of Moon, Mars, Mercury, Jupiter, Venus, Saturn and lagna (respectively).",
@@ -113,6 +113,21 @@
           1
         ]
       },
+      "Saturn": {
+        "classical_total": 39,
+        "columns": [
+          8
+        ],
+        "matches_classical_total": true,
+        "rows": 12,
+        "shape_ok": true,
+        "table": 25,
+        "total": 39,
+        "values": [
+          0,
+          1
+        ]
+      },
       "Sun": {
         "classical_total": 48,
         "columns": [
@@ -123,6 +138,21 @@
         "shape_ok": true,
         "table": 19,
         "total": 48,
+        "values": [
+          0,
+          1
+        ]
+      },
+      "Venus": {
+        "classical_total": 52,
+        "columns": [
+          8
+        ],
+        "matches_classical_total": true,
+        "rows": 12,
+        "shape_ok": true,
+        "table": 24,
+        "total": 52,
         "values": [
           0,
           1
