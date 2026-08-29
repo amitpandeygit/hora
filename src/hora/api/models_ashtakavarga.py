@@ -52,6 +52,22 @@ class AshtakavargaRulesOut(BaseModel):
     benefic_entry: AshtakavargaEntryOut
     malefic_entry: AshtakavargaEntryOut
     bindu_rekha_footnote: str
+    bav_definition: str
+    bhinna_means: str
+    abbreviations: dict[str, str]
+    bav_grading: str
+    bav_count_range: list[int]
+    bav_count_is_called_rekhas: str
+    bav_grades: dict[str, str] = Field(
+        description="Section 12.3's grade for each possible count, 0 to 8.",
+    )
+    bav_grade_counts: dict[str, list[int]]
+    bav_grade_names: list[str] = Field(
+        description="The book's own spelling of the three "
+                    "grades, kept rather than anglicised.",
+    )
+    bav_applies_to_transits: str
+    bav_naming_agrees_with_footnote_42: str
     naming_warning: str = Field(
         description="Footnote 42's trap: PVR's bindu and rekha are the "
                     "reverse of common modern usage.",

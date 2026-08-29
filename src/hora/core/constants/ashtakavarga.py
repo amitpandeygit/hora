@@ -325,3 +325,59 @@ EXERCISE_18_ANSWER: dict[str, tuple[str, ...]] = {
     "Saturn": ("Ar", "Ta", "Ge", "Le", "Vi", "Sc", "Aq", "Pi"),
     "Lagna": ("Ar", "Ge", "Cn", "Vi", "Li", "Sg", "Aq"),
 }
+
+
+# --------------------------------------------------------------------------
+# 12.3 Bhinna Ashtakavarga
+# --------------------------------------------------------------------------
+
+BHINNA_MEANS = "separate"
+
+BAV_DEFINITION = (
+    "In this book, we will denote ashtakavarga with AV. We prepare what is "
+    "known as “Bhinna Ashtakavarga” for each planet. It is denoted with BAV. "
+    "Bhinna means “separate”. When preparing the BAV of a planet, we count "
+    "the number of references from which the planet is benefic in each rasi "
+    "and put that count in that rasi. For each planet, we prepare a different "
+    "BAV. Sometimes we may simply use the word “ashtakavarga” (AV) to "
+    "represent a BAV.")
+
+BAV_GRADING = (
+    "The count in each rasi is between 0 to 8. It is called the number of "
+    "rekhas (benefic points) in that rasi. If a planet is in a sign with a "
+    "count of 5, 6, 7 or 8, it means that the planet is benefic in that rasi "
+    "with respect to more references. So the planet is favorable. If a planet "
+    "is in a sign with a count of 3, 2, 1 or 0, it means that the planet is "
+    "malefic in that rasi with respect to more references. So the planet is "
+    "unfavorable. If the count is 4, the planet is neutral. We can use this "
+    "analysis in natal charts and also transit charts.")
+
+#: §12.3 names the count "rekhas", which is footnote 42's benefic term. The
+#: two passages agree, so nothing here rests on our reading of the footnote
+#: alone.
+BAV_COUNT_IS_CALLED_REKHAS = (
+    "It is called the number of rekhas (benefic points) in that rasi.")
+
+BAV_COUNT_RANGE: tuple[int, int] = (0, 8)
+
+#: The grade for each possible count, exactly as §12.3 partitions them.
+BAV_FAVOURABLE_COUNTS: tuple[int, ...] = (5, 6, 7, 8)
+BAV_NEUTRAL_COUNTS: tuple[int, ...] = (4,)
+BAV_UNFAVOURABLE_COUNTS: tuple[int, ...] = (0, 1, 2, 3)
+
+BAV_GRADES: dict[int, str] = {
+    **{count: "unfavorable" for count in BAV_UNFAVOURABLE_COUNTS},
+    **{count: "neutral" for count in BAV_NEUTRAL_COUNTS},
+    **{count: "favorable" for count in BAV_FAVOURABLE_COUNTS},
+}
+
+#: The book's own spelling. Kept rather than anglicised to "favourable".
+BAV_GRADE_NAMES: tuple[str, ...] = ("favorable", "neutral", "unfavorable")
+
+BAV_APPLIES_TO_TRANSITS = (
+    "We can use this analysis in natal charts and also transit charts.")
+
+AV_ABBREVIATIONS: dict[str, str] = {
+    "AV": "ashtakavarga",
+    "BAV": "Bhinna Ashtakavarga",
+}

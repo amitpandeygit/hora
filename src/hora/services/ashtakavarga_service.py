@@ -8,6 +8,8 @@ from hora.charts.ashtakavarga import (
     benefic_rasis_from_chart,
     bhinnashtakavarga,
     describe,
+    grade,
+    natal_grade,
     summed,
     verify_tables,
 )
@@ -26,6 +28,18 @@ from hora.core.const import (
     ASHTAKAVARGA_REFERENCES,
     ASHTAKAVARGA_TABLE_NUMBERS,
     ASHTAKAVARGA_TABLES_PENDING,
+    AV_ABBREVIATIONS,
+    BAV_APPLIES_TO_TRANSITS,
+    BAV_COUNT_IS_CALLED_REKHAS,
+    BAV_COUNT_RANGE,
+    BAV_DEFINITION,
+    BAV_FAVOURABLE_COUNTS,
+    BAV_GRADE_NAMES,
+    BAV_GRADES,
+    BAV_GRADING,
+    BAV_NEUTRAL_COUNTS,
+    BAV_UNFAVOURABLE_COUNTS,
+    BHINNA_MEANS,
     BINDU_REKHA_FOOTNOTE,
     CLASSICAL_TABLE_TOTALS_PROVENANCE,
     EXAMPLE_37,
@@ -76,6 +90,26 @@ def rules() -> dict:
             "sanskrit": ASHTAKAVARGA_MALEFIC_SANSKRIT,
         },
         "bindu_rekha_footnote": BINDU_REKHA_FOOTNOTE,
+        "bav_definition": BAV_DEFINITION,
+        "bhinna_means": BHINNA_MEANS,
+        "abbreviations": dict(AV_ABBREVIATIONS),
+        "bav_grading": BAV_GRADING,
+        "bav_count_range": list(BAV_COUNT_RANGE),
+        "bav_count_is_called_rekhas": BAV_COUNT_IS_CALLED_REKHAS,
+        "bav_grades": {str(count): name for count, name in BAV_GRADES.items()},
+        "bav_grade_counts": {
+            "favorable": list(BAV_FAVOURABLE_COUNTS),
+            "neutral": list(BAV_NEUTRAL_COUNTS),
+            "unfavorable": list(BAV_UNFAVOURABLE_COUNTS),
+        },
+        "bav_grade_names": list(BAV_GRADE_NAMES),
+        "bav_applies_to_transits": BAV_APPLIES_TO_TRANSITS,
+        "bav_naming_agrees_with_footnote_42": (
+            "Section 12.3 calls the count \u201cthe number of rekhas (benefic "
+            "points)\u201d, which is footnote 42\u2019s benefic term. The two "
+            "passages agree, so the field name `rekhas` does not rest on our "
+            "reading of the footnote alone."
+        ),
         "naming_warning": (
             "PVR follows Parasara: 1 is a **rekha** and 0 is a **bindu**. "
             "Most modern software and most south Indian practice use the two "
@@ -151,10 +185,13 @@ def chart(reference_signs: dict[str, int], owner: str | None = None) -> dict:
             "owner": name,
             "table": ASHTAKAVARGA_TABLE_NUMBERS[name],
             "rekhas": list(result.rekhas),
+            "grades": list(result.grades),
             "total": result.total,
+            "natal": natal_grade(name, signs),
             "signs": [
                 {"sign": sign, "sign_name": str(RASI_NAMES[sign]),
                  "rekhas": result.rekhas[sign],
+                 "grade": grade(result.rekhas[sign]),
                  "from": list(result.contributors[sign])}
                 for sign in range(12)
             ],

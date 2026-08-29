@@ -20,6 +20,8 @@ from hora.core.const import (
     ASHTAKAVARGA_TABLE_NUMBERS,
     ASHTAKAVARGA_TABLES,
     ASHTAKAVARGA_TABLES_PENDING,
+    BAV_COUNT_RANGE,
+    BAV_GRADES,
     CLASSICAL_TABLE_TOTALS,
     GRAHA_NAMES,
     JUPITER_ASHTAKAVARGA_ROWS,
@@ -179,17 +181,40 @@ def table_total(owner: str) -> int:
     return sum(rekhas_per_reference(owner).values())
 
 
+def grade(rekhas: int) -> str:
+    """§12.3's reading of a count: 5-8 favorable, 4 neutral, 3-0 unfavorable.
+
+    "If a planet is in a sign with a count of 5, 6, 7 or 8 ... the planet is
+    favorable ... If the count is 4, the planet is neutral."
+
+    The book's own spelling of "favorable" is kept.
+    """
+    validate.in_range("rekhas", int(rekhas), *BAV_COUNT_RANGE)
+    return BAV_GRADES[int(rekhas)]
+
+
 @dataclass(frozen=True, slots=True)
 class Bhinnashtakavarga:
-    """One planet's ashtakavarga over the twelve signs."""
+    """One planet's BAV over the twelve signs.
+
+    "When preparing the BAV of a planet, we count the number of references
+    from which the planet is benefic in each rasi and put that count in that
+    rasi."
+    """
 
     owner: str
     table: int
-    #: Rekhas per sign, indexed 0 = Aries.
+    #: Rekhas per sign, indexed 0 = Aries. §12.3 calls this count the rekhas.
     rekhas: tuple[int, ...]
     #: Which references contributed to each sign.
     contributors: tuple[tuple[str, ...], ...]
     total: int
+
+    @property
+    def grades(self) -> tuple[str, ...]:
+        """§12.3's grade per sign — usable for a transit as well as a natal
+        placement, which is what the section says at the end."""
+        return tuple(grade(count) for count in self.rekhas)
 
 
 def bhinnashtakavarga(owner: str, reference_signs: dict[str, int]
@@ -226,6 +251,34 @@ def bhinnashtakavarga(owner: str, reference_signs: dict[str, int]
         contributors=tuple(tuple(names) for names in who),
         total=sum(counts),
     )
+
+
+def natal_grade(owner: str, reference_signs: dict[str, int]) -> dict:
+    """§12.3 applied to where the planet actually sits.
+
+    The grade is defined for every sign — that is what makes it usable for
+    transits, which §12.3 says at the end — but the natal reading is the
+    grade of the sign the planet occupies. Lagna has no such reading of its
+    own: it is a reference point, not a body that sits anywhere else.
+    """
+    result = bhinnashtakavarga(owner, reference_signs)
+    if owner == "Lagna":
+        return {
+            "owner": owner,
+            "applicable": False,
+            "reason": ("lagna is a reference point, not a planet that "
+                       "occupies a sign of its own, so section 12.3's natal "
+                       "reading does not apply to its BAV"),
+        }
+    sign = int(reference_signs[owner])
+    return {
+        "owner": owner,
+        "applicable": True,
+        "sign": sign,
+        "sign_name": str(RASI_NAMES[sign]),
+        "rekhas": result.rekhas[sign],
+        "grade": grade(result.rekhas[sign]),
+    }
 
 
 def summed(reference_signs: dict[str, int]) -> dict:

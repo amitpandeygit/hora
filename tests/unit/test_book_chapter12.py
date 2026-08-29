@@ -19,6 +19,8 @@ from hora.charts.ashtakavarga import (
     benefic_rasis,
     bhinnashtakavarga,
     entry,
+    grade,
+    natal_grade,
     rekhas_per_reference,
     summed,
     table_total,
@@ -34,6 +36,18 @@ from hora.core.const import (
     ASHTAKAVARGA_TABLE_NUMBERS,
     ASHTAKAVARGA_TABLES,
     ASHTAKAVARGA_TABLES_PENDING,
+    AV_ABBREVIATIONS,
+    BAV_APPLIES_TO_TRANSITS,
+    BAV_COUNT_IS_CALLED_REKHAS,
+    BAV_COUNT_RANGE,
+    BAV_DEFINITION,
+    BAV_FAVOURABLE_COUNTS,
+    BAV_GRADE_NAMES,
+    BAV_GRADES,
+    BAV_GRADING,
+    BAV_NEUTRAL_COUNTS,
+    BAV_UNFAVOURABLE_COUNTS,
+    BHINNA_MEANS,
     BINDU_REKHA_FOOTNOTE,
     CLASSICAL_TABLE_TOTALS,
     CLASSICAL_TABLE_TOTALS_PROVENANCE,
@@ -642,3 +656,151 @@ def test_the_rules_endpoint_carries_the_example_and_the_exercise(client):
     assert body["example_37"]["rasis"] == ["Cn", "Li", "Sc", "Aq", "Pi", "Ar"]
     assert body["exercise_18"]["owner"] == "Mercury"
     assert body["exercise_18"]["answer"]["Jupiter"] == ["Ge", "Cn", "Cp", "Pi"]
+
+
+# --------------------------------------------------------------------------
+# 12.3 Bhinna Ashtakavarga
+#
+# The section names what §12.2's tables were building towards, and adds one
+# testable rule: how a count of 0 to 8 is read.
+# --------------------------------------------------------------------------
+
+
+def test_12_3_names_what_the_tables_were_building():
+    """"When preparing the BAV of a planet, we count the number of references
+    from which the planet is benefic in each rasi and put that count in that
+    rasi." That is what `bhinnashtakavarga` already did."""
+    assert BHINNA_MEANS == "separate"
+    assert AV_ABBREVIATIONS == {
+        "AV": "ashtakavarga", "BAV": "Bhinna Ashtakavarga"}
+    assert "count the number of references" in BAV_DEFINITION
+    result = bhinnashtakavarga("Mercury", CHART_6_SIGNS)
+    for sign in range(12):
+        assert result.rekhas[sign] == len(result.contributors[sign])
+
+
+def test_12_3_confirms_footnote_42s_naming_independently():
+    """"It is called the number of rekhas (benefic points) in that rasi."
+
+    The count of 1s is called rekhas here too, so the field name does not
+    rest on our reading of footnote 42 alone."""
+    assert "number of rekhas (benefic points)" in BAV_COUNT_IS_CALLED_REKHAS
+    assert BAV_COUNT_IS_CALLED_REKHAS in BAV_GRADING
+    assert ASHTAKAVARGA_BENEFIC_TERM == "rekha"
+
+
+def test_the_count_is_between_0_and_8():
+    """"The count in each rasi is between 0 to 8." Eight references, so a
+    sign can be marked by all of them or none."""
+    assert BAV_COUNT_RANGE == (0, 8)
+    assert len(ASHTAKAVARGA_REFERENCES) == 8
+    for owner in available_tables():
+        result = bhinnashtakavarga(owner, CHART_6_SIGNS)
+        assert all(0 <= count <= 8 for count in result.rekhas)
+
+
+@pytest.mark.parametrize("count,expected", [
+    (0, "unfavorable"), (1, "unfavorable"), (2, "unfavorable"),
+    (3, "unfavorable"), (4, "neutral"),
+    (5, "favorable"), (6, "favorable"), (7, "favorable"), (8, "favorable")])
+def test_the_grading_is_exactly_what_12_3_says(count, expected):
+    """"5, 6, 7 or 8 ... favorable ... 3, 2, 1 or 0 ... unfavorable ... If
+    the count is 4, the planet is neutral." The book's spelling of
+    "favorable" is kept."""
+    assert grade(count) == expected
+
+
+def test_the_grading_partitions_every_possible_count():
+    """Nine counts, three grades, no gap and no overlap — so no count can
+    ever come back ungraded."""
+    assert sorted(BAV_GRADES) == list(range(9))
+    buckets = [set(BAV_FAVOURABLE_COUNTS), set(BAV_NEUTRAL_COUNTS),
+               set(BAV_UNFAVOURABLE_COUNTS)]
+    assert set.union(*buckets) == set(range(9))
+    for i, first in enumerate(buckets):
+        for second in buckets[i + 1:]:
+            assert not first & second
+
+
+def test_a_count_outside_the_range_is_refused():
+    """Nine references would be a bug upstream, not a grade to invent."""
+    from hora.core.validate import InputError
+
+    for bad in (-1, 9):
+        with pytest.raises(InputError):
+            grade(bad)
+
+
+def test_the_natal_reading_is_the_grade_of_the_sign_the_planet_occupies():
+    """"If a planet is in a sign with a count of..." — so the natal reading
+    reads the planet's own sign. Chart 6, all seven planets."""
+    expected = {
+        "Sun": ("Gemini", 5, "favorable"),
+        "Moon": ("Pisces", 5, "favorable"),
+        "Mars": ("Gemini", 4, "neutral"),
+        "Mercury": ("Gemini", 7, "favorable"),
+        "Jupiter": ("Leo", 3, "unfavorable"),
+        "Venus": ("Aries", 8, "favorable"),
+        "Saturn": ("Leo", 2, "unfavorable"),
+    }
+    for owner, (sign_name, rekhas, expected_grade) in expected.items():
+        result = natal_grade(owner, CHART_6_SIGNS)
+        assert result["applicable"] is True
+        assert result["sign_name"] == sign_name, owner
+        assert result["rekhas"] == rekhas, owner
+        assert result["grade"] == expected_grade, owner
+
+
+def test_lagna_has_no_natal_reading_of_its_own():
+    """Lagna is a reference point, not a body that occupies a sign of its
+    own, so §12.3's "if a planet is in a sign" does not apply to its BAV."""
+    result = natal_grade("Lagna", CHART_6_SIGNS)
+    assert result["applicable"] is False
+    assert "reference point" in result["reason"]
+
+
+def test_every_sign_is_graded_which_is_what_makes_it_usable_for_transits():
+    """"We can use this analysis in natal charts and also transit charts."
+    The grade is defined for all twelve signs, not only the occupied one."""
+    assert "transit charts" in BAV_APPLIES_TO_TRANSITS
+    result = bhinnashtakavarga("Saturn", CHART_6_SIGNS)
+    assert len(result.grades) == 12
+    assert set(result.grades) <= set(BAV_GRADE_NAMES)
+    for sign in range(12):
+        assert result.grades[sign] == grade(result.rekhas[sign])
+
+
+def test_the_chart_endpoint_carries_the_grades_and_the_natal_reading(client):
+    body = client.post("/v1/ashtakavarga/chart", json={
+        "reference_signs": CHART_6_SIGNS}).json()
+    jupiter = next(row for row in body["bhinnashtakavarga"]
+                   if row["owner"] == "Jupiter")
+    assert jupiter["natal"]["sign_name"] == "Leo"
+    assert jupiter["natal"]["rekhas"] == 3
+    assert jupiter["natal"]["grade"] == "unfavorable"
+    assert len(jupiter["grades"]) == 12
+    leo = next(row for row in jupiter["signs"] if row["sign_name"] == "Leo")
+    assert leo["grade"] == "unfavorable"
+    lagna = next(row for row in body["bhinnashtakavarga"]
+                 if row["owner"] == "Lagna")
+    assert lagna["natal"]["applicable"] is False
+
+
+def test_the_rules_endpoint_carries_12_3(client):
+    body = client.get("/v1/ashtakavarga/rules").json()
+    assert body["bhinna_means"] == "separate"
+    assert body["abbreviations"]["BAV"] == "Bhinna Ashtakavarga"
+    assert body["bav_count_range"] == [0, 8]
+    assert body["bav_grades"]["4"] == "neutral"
+    assert body["bav_grades"]["8"] == "favorable"
+    assert body["bav_grade_counts"]["unfavorable"] == [0, 1, 2, 3]
+    assert "footnote 42" in body["bav_naming_agrees_with_footnote_42"]
+
+
+def test_the_books_spelling_of_favorable_is_kept(client):
+    """"favorable" and "unfavorable", not the British forms. Kept because
+    these are the book's words, and a caller matching on them should match."""
+    assert BAV_GRADE_NAMES == ("favorable", "neutral", "unfavorable")
+    assert "favourable" not in BAV_GRADING
+    body = client.get("/v1/ashtakavarga/rules").json()
+    assert body["bav_grade_names"] == ["favorable", "neutral", "unfavorable"]

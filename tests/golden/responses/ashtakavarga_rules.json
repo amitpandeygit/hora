@@ -1,11 +1,58 @@
 {
   "body": {
+    "abbreviations": {
+      "AV": "ashtakavarga",
+      "BAV": "Bhinna Ashtakavarga"
+    },
     "all_planets_are_references": "However, lagna is not the only reference point in a chart. We have Sun and Moon. In fact, all the planets serve as reference points in a chart and they represent the sources of various energies that are present in a native. Based on the houses in which different planets are placed in transit, they can be benefic with respect to some energy sources and malefic with respect to some. If a transiting planet is benefic with respect to more energy sources, then it brings good results.",
+    "bav_applies_to_transits": "We can use this analysis in natal charts and also transit charts.",
+    "bav_count_is_called_rekhas": "It is called the number of rekhas (benefic points) in that rasi.",
+    "bav_count_range": [
+      0,
+      8
+    ],
+    "bav_definition": "In this book, we will denote ashtakavarga with AV. We prepare what is known as \u201cBhinna Ashtakavarga\u201d for each planet. It is denoted with BAV. Bhinna means \u201cseparate\u201d. When preparing the BAV of a planet, we count the number of references from which the planet is benefic in each rasi and put that count in that rasi. For each planet, we prepare a different BAV. Sometimes we may simply use the word \u201cashtakavarga\u201d (AV) to represent a BAV.",
+    "bav_grade_counts": {
+      "favorable": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "neutral": [
+        4
+      ],
+      "unfavorable": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "bav_grade_names": [
+      "favorable",
+      "neutral",
+      "unfavorable"
+    ],
+    "bav_grades": {
+      "0": "unfavorable",
+      "1": "unfavorable",
+      "2": "unfavorable",
+      "3": "unfavorable",
+      "4": "neutral",
+      "5": "favorable",
+      "6": "favorable",
+      "7": "favorable",
+      "8": "favorable"
+    },
+    "bav_grading": "The count in each rasi is between 0 to 8. It is called the number of rekhas (benefic points) in that rasi. If a planet is in a sign with a count of 5, 6, 7 or 8, it means that the planet is benefic in that rasi with respect to more references. So the planet is favorable. If a planet is in a sign with a count of 3, 2, 1 or 0, it means that the planet is malefic in that rasi with respect to more references. So the planet is unfavorable. If the count is 4, the planet is neutral. We can use this analysis in natal charts and also transit charts.",
+    "bav_naming_agrees_with_footnote_42": "Section 12.3 calls the count \u201cthe number of rekhas (benefic points)\u201d, which is footnote 42\u2019s benefic term. The two passages agree, so the field name `rekhas` does not rest on our reading of the footnote alone.",
     "benefic_entry": {
       "sanskrit": "sthana",
       "term": "rekha",
       "value": 1
     },
+    "bhinna_means": "separate",
     "bindu_rekha_footnote": "Some astrologers (especially south Indian astrologers) use a different notation. They use \u201cbindu\u201d to describe a benefic house (1) and \u201crekha\u201d to describe malefic house (0). Let us follow Parasara.",
     "classical_totals_provenance": "Not from this book. The chapter prints the tables and gives no totals. These figures come from the wider tradition and are used only as a check on the transcription; a mismatch would be reported, never corrected.",
     "example_37": {
