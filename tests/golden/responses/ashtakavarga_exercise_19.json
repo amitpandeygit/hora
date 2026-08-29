@@ -1531,11 +1531,117 @@
         "sign_name": "Aries"
       }
     },
+    "sarvashtakavarga": {
+      "excludes": [
+        "Lagna"
+      ],
+      "excludes_note": "Section 12.4 defines the SAV as the sum of seven planets' ashtakavargas. Lagna has a table of its own \u2014 Table 26 \u2014 but it is not part of the SAV.",
+      "expected_total": 337,
+      "owners": [
+        "Sun",
+        "Moon",
+        "Mars",
+        "Mercury",
+        "Jupiter",
+        "Venus",
+        "Saturn"
+      ],
+      "rekhas": [
+        34,
+        25,
+        34,
+        25,
+        26,
+        25,
+        22,
+        29,
+        28,
+        30,
+        29,
+        30
+      ],
+      "signs": [
+        {
+          "grade": "strong",
+          "rekhas": 34,
+          "sign": 0,
+          "sign_name": "Aries"
+        },
+        {
+          "grade": "average",
+          "rekhas": 25,
+          "sign": 1,
+          "sign_name": "Taurus"
+        },
+        {
+          "grade": "strong",
+          "rekhas": 34,
+          "sign": 2,
+          "sign_name": "Gemini"
+        },
+        {
+          "grade": "average",
+          "rekhas": 25,
+          "sign": 3,
+          "sign_name": "Cancer"
+        },
+        {
+          "grade": "average",
+          "rekhas": 26,
+          "sign": 4,
+          "sign_name": "Leo"
+        },
+        {
+          "grade": "average",
+          "rekhas": 25,
+          "sign": 5,
+          "sign_name": "Virgo"
+        },
+        {
+          "grade": "weak",
+          "rekhas": 22,
+          "sign": 6,
+          "sign_name": "Libra"
+        },
+        {
+          "grade": "average",
+          "rekhas": 29,
+          "sign": 7,
+          "sign_name": "Scorpio"
+        },
+        {
+          "grade": "average",
+          "rekhas": 28,
+          "sign": 8,
+          "sign_name": "Sagittarius"
+        },
+        {
+          "grade": "strong",
+          "rekhas": 30,
+          "sign": 9,
+          "sign_name": "Capricorn"
+        },
+        {
+          "grade": "average",
+          "rekhas": 29,
+          "sign": 10,
+          "sign_name": "Aquarius"
+        },
+        {
+          "grade": "strong",
+          "rekhas": 30,
+          "sign": 11,
+          "sign_name": "Pisces"
+        }
+      ],
+      "total": 337
+    },
     "summed": {
       "complete": true,
       "eight_references": {
         "classical_total_when_complete": 386,
         "complete": true,
+        "is_the_sav": false,
         "owners": [
           "Sun",
           "Moon",
@@ -1563,7 +1669,6 @@
         "total": 386
       },
       "missing_note": "",
-      "not_yet_named_note": "This is a sum of the tables supplied, not a sarvashtakavarga. The book has not reached that term, and the two candidate sums differ \u2014 seven planets gives 337 when complete, all eight references gives 386. Both are returned and neither is chosen. See docs/open-items.md OI-100.",
       "owners_included": [
         "Sun",
         "Moon",
@@ -1575,9 +1680,11 @@
         "Lagna"
       ],
       "owners_missing": [],
+      "settled_note": "Section 12.4 settles this: the SAV is the seven-planet sum. The eight-reference figure is reported beside it only because the difference is exactly lagna's own table, Table 26.",
       "seven_planets": {
         "classical_total_when_complete": 337,
         "complete": true,
+        "is_the_sav": true,
         "owners": [
           "Sun",
           "Moon",

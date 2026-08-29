@@ -77,6 +77,27 @@ class AshtakavargaRulesOut(BaseModel):
     example_38: dict
     exercise_18: dict
     exercise_19: dict
+    exercise_20: dict
+    sav_definition: str
+    samudaaya_means: str
+    sarva_means: str
+    sav_is_seven_planets: str = Field(
+        description="The sentence that settles what the SAV sums.",
+    )
+    sav_owners: list[str]
+    sav_excludes: list[str]
+    sav_total: int
+    sav_worked_example: str
+    sav_strength_rule: str
+    sav_grade_bands: dict[str, str]
+    sav_grade_names: list[str]
+    sav_overlap_note: str = Field(
+        description="Why 30 is read as strong. See docs/book-deviations.md "
+                    "D-40.",
+    )
+    sav_muhurta_rule: str
+    sav_muhurta_positions: list[str]
+    muhurta_footnote_unread: str
     yuga_footnote: str
     yugas: list[dict]
 
@@ -102,6 +123,10 @@ class AshtakavargaTableOut(BaseModel):
 class AshtakavargaChartOut(BaseModel):
     reference_signs: dict[str, dict]
     bhinnashtakavarga: list[dict]
+    sarvashtakavarga: dict = Field(
+        description="Section 12.4's SAV: the seven planets' BAVs summed sign "
+                    "by sign, with lagna's table excluded.",
+    )
     summed: dict = Field(
         description="The supplied tables added sign by sign. Not called a "
                     "sarvashtakavarga: the book has not reached that term, "
@@ -134,3 +159,27 @@ class BeneficRasisOut(BaseModel):
                     "table, and the rasis they land in once counted from "
                     "where that reference sits.",
     )
+
+
+class MuhurtaIn(BaseModel):
+    """Section 12.4's muhurta rule. The SAV is the natal chart's; the signs
+    looked up in it are the muhurta chart's."""
+
+    natal_reference_signs: dict[str, int] = Field(
+        ..., description="The natal chart's eight reference points.",
+        examples=[{"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+                   "Jupiter": 4, "Venus": 0, "Saturn": 4, "Lagna": 5}],
+    )
+    muhurta_signs: dict[str, int] = Field(
+        ..., description="The muhurta chart's Lagna, Moon and Sun signs.",
+        examples=[{"Lagna": 0, "Moon": 6, "Sun": 9}],
+    )
+
+
+class MuhurtaOut(BaseModel):
+    rule: str
+    favorable_from: int
+    positions: list[dict]
+    all_favorable: bool
+    natal_sav: list[int]
+    footnote_unread: str

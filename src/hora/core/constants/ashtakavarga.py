@@ -452,3 +452,78 @@ EXERCISE_19_ANSWER: dict[str, tuple[int, ...]] = {
 EXERCISE_19_UNEXPLAINED_MARK = {
     "owner": "Moon", "rasi": "Pi", "printed": "5*", "value": 5,
 }
+
+
+# --------------------------------------------------------------------------
+# 12.4 Samudaaya Ashtakavarga
+# --------------------------------------------------------------------------
+
+SAMUDAAYA_MEANS = "group"
+SARVA_MEANS = "all"
+
+SAV_DEFINITION = (
+    "Samudaaya means “group”. Samudaaya Ashtakavarga is nothing but the sum "
+    "of the ashtakavargas of seven planets. In each rasi, we add the number "
+    "of rekhas in the BAVs of Sun, Moon, Mars, Mercury, Jupiter, Venus and "
+    "Saturn. The sum denotes the number of rekhas in that rasi in Samudaaya "
+    "Ashtakavarga. It will be denoted with SAV. It is also called “Sarva "
+    "Ashtakavarga” (sarva = all).")
+
+#: The sentence that settles it: seven planets, and lagna is not among them.
+SAV_IS_SEVEN_PLANETS = (
+    "Samudaaya Ashtakavarga is nothing but the sum of the ashtakavargas of "
+    "seven planets.")
+
+SAV_OWNERS: tuple[str, ...] = (
+    "Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn")
+
+SAV_TOTAL = 337
+
+SAV_WORKED_EXAMPLE = (
+    "Let us continue with the rasi chart in Chart 6. From the answer to "
+    "Exercise 19, we see that the BAVs of Sun, Moon, Mars, Mercury, Jupiter, "
+    "Venus and Saturn have 5, 3, 4, 7, 4, 8 and 3 rekhas in Ar "
+    "(respectively). Adding them all, we get 34. So SAV has 34 rekhas in Ar "
+    "and we write 34 in Ar.")
+
+SAV_STRENGTH_RULE = (
+    "A rasi with 30 or more rekhas becomes strong. Matters signified by the "
+    "house falling in such a rasi flourish and planets transiting in such a "
+    "rasi bring good results. A rasi with 25-30 rekhas is average. A rasi "
+    "with less than 25 rekhas becomes weak. Matters signified by the house "
+    "falling in such a rasi suffer and planets transiting in such a rasi "
+    "bring bad results.")
+
+#: §12.4's two ranges overlap at 30 — "30 or more becomes strong" and
+#: "25-30 rekhas is average". Thirty is read as strong: that clause is
+#: unambiguous and stated first, and the muhurta rule below repeats "30 or
+#: more ... are favorable". See docs/book-deviations.md D-40.
+SAV_STRONG_FROM = 30
+SAV_AVERAGE_FROM = 25
+SAV_OVERLAP_AT = 30
+
+SAV_GRADE_NAMES: tuple[str, ...] = ("strong", "average", "weak")
+
+SAV_MUHURTA_RULE = (
+    "When choosing muhurtas for auspicious activities like a wedding or "
+    "housewarming, one should look at the strengths, as per SAV of the natal "
+    "chart, of the rasis containing lagna, Moon and Sun in the muhurta "
+    "chart. Rasis containing 30 or more rekhas in SAV are favorable.")
+
+#: The three positions in the muhurta chart §12.4 says to check.
+SAV_MUHURTA_POSITIONS: tuple[str, ...] = ("Lagna", "Moon", "Sun")
+
+#: Footnote 43 hangs off "muhurtas" and was not supplied.
+MUHURTA_FOOTNOTE_UNREAD = "43"
+
+EXERCISE_20 = (
+    "Find the number of rekhas in all the rasis in SAV for the same rasi "
+    "chart (see Chart 6).")
+
+#: The printed answer, Aries first.
+EXERCISE_20_ANSWER: tuple[int, ...] = (
+    34, 25, 34, 25, 26, 25, 22, 29, 28, 30, 29, 30)
+
+EXERCISE_20_CLOSING = (
+    "Using the above values, one can prepare a chart for SAV, as shown in "
+    "Chart 11.")

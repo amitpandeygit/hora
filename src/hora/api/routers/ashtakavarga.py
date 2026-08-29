@@ -10,6 +10,8 @@ from hora.api.models_ashtakavarga import (
     AshtakavargaTableOut,
     BeneficRasisIn,
     BeneficRasisOut,
+    MuhurtaIn,
+    MuhurtaOut,
 )
 from hora.services import ashtakavarga_service
 
@@ -47,6 +49,17 @@ def chart(req: AshtakavargaChartIn) -> dict:
 def benefic_rasis(req: BeneficRasisIn) -> dict:
     try:
         return ashtakavarga_service.benefic_rasis(req.owner, req.reference_signs)
+    except (ashtakavarga_service.AshtakavargaError,
+            ashtakavarga_service.InputError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/muhurta", response_model=MuhurtaOut,
+             summary="Section 12.4's muhurta rule, read against a natal SAV")
+def muhurta(req: MuhurtaIn) -> dict:
+    try:
+        return ashtakavarga_service.muhurta(
+            req.natal_reference_signs, req.muhurta_signs)
     except (ashtakavarga_service.AshtakavargaError,
             ashtakavarga_service.InputError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

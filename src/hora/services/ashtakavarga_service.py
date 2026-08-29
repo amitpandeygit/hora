@@ -9,7 +9,9 @@ from hora.charts.ashtakavarga import (
     bhinnashtakavarga,
     describe,
     grade,
+    muhurta_strength,
     natal_grade,
+    sarvashtakavarga,
     summed,
     verify_tables,
 )
@@ -59,7 +61,25 @@ from hora.core.const import (
     EXERCISE_19_ANSWER,
     EXERCISE_19_CLOSING,
     EXERCISE_19_UNEXPLAINED_MARK,
+    EXERCISE_20,
+    EXERCISE_20_ANSWER,
+    EXERCISE_20_CLOSING,
+    MUHURTA_FOOTNOTE_UNREAD,
     RASI_NAMES,
+    SAMUDAAYA_MEANS,
+    SARVA_MEANS,
+    SAV_AVERAGE_FROM,
+    SAV_DEFINITION,
+    SAV_GRADE_NAMES,
+    SAV_IS_SEVEN_PLANETS,
+    SAV_MUHURTA_POSITIONS,
+    SAV_MUHURTA_RULE,
+    SAV_OVERLAP_AT,
+    SAV_OWNERS,
+    SAV_STRENGTH_RULE,
+    SAV_STRONG_FROM,
+    SAV_TOTAL,
+    SAV_WORKED_EXAMPLE,
     TABLE_19_WORKED_READING,
     TABLES_20_TO_26_NOTE,
     YUGA_FOOTNOTE,
@@ -145,6 +165,37 @@ def rules() -> dict:
             "best_rasis": list(EXAMPLE_38_BEST_RASIS),
             "worst_rasis": list(EXAMPLE_38_WORST_RASIS),
         },
+        "sav_definition": SAV_DEFINITION,
+        "samudaaya_means": SAMUDAAYA_MEANS,
+        "sarva_means": SARVA_MEANS,
+        "sav_is_seven_planets": SAV_IS_SEVEN_PLANETS,
+        "sav_owners": list(SAV_OWNERS),
+        "sav_excludes": ["Lagna"],
+        "sav_total": SAV_TOTAL,
+        "sav_worked_example": SAV_WORKED_EXAMPLE,
+        "sav_strength_rule": SAV_STRENGTH_RULE,
+        "sav_grade_bands": {
+            "strong": f"{SAV_STRONG_FROM} or more",
+            "average": f"{SAV_AVERAGE_FROM} to {SAV_STRONG_FROM - 1}",
+            "weak": f"less than {SAV_AVERAGE_FROM}",
+        },
+        "sav_grade_names": list(SAV_GRADE_NAMES),
+        "sav_overlap_note": (
+            f"The printed ranges overlap at {SAV_OVERLAP_AT}: \u201c30 or more "
+            f"rekhas becomes strong\u201d and \u201c25-30 rekhas is average\u201d. "
+            f"Thirty is read as strong \u2014 that clause is unambiguous and "
+            f"stated first, and the muhurta rule repeats \u201c30 or more \u2026 "
+            f"are favorable\u201d. See docs/book-deviations.md D-40."
+        ),
+        "sav_muhurta_rule": SAV_MUHURTA_RULE,
+        "sav_muhurta_positions": list(SAV_MUHURTA_POSITIONS),
+        "muhurta_footnote_unread": MUHURTA_FOOTNOTE_UNREAD,
+        "exercise_20": {
+            "question": EXERCISE_20,
+            "closing": EXERCISE_20_CLOSING,
+            "chart": "Chart 6",
+            "answer": list(EXERCISE_20_ANSWER),
+        },
         "exercise_19": {
             "question": EXERCISE_19,
             "closing": EXERCISE_19_CLOSING,
@@ -175,6 +226,15 @@ def rules() -> dict:
 def table(owner: str) -> dict:
     """One of the eight tables, in the shape the book prints it."""
     return describe(str(owner))
+
+
+def muhurta(natal_reference_signs: dict[str, int],
+            muhurta_signs: dict[str, int]) -> dict:
+    """§12.4's muhurta rule: the natal SAV read at the muhurta chart's lagna,
+    Moon and Sun."""
+    return muhurta_strength(
+        {str(k): int(v) for k, v in natal_reference_signs.items()},
+        {str(k): int(v) for k, v in muhurta_signs.items()})
 
 
 def benefic_rasis(owner: str, reference_signs: dict[str, int]) -> dict:
@@ -236,10 +296,11 @@ def chart(reference_signs: dict[str, int], owner: str | None = None) -> dict:
         "reference_signs": {k: {"sign": v, "sign_name": str(RASI_NAMES[v])}
                             for k, v in signs.items()},
         "bhinnashtakavarga": per_owner,
+        "sarvashtakavarga": sarvashtakavarga(signs),
         "summed": summed(signs),
         "tables_pending": list(ASHTAKAVARGA_TABLES_PENDING),
     }
 
 
 __all__ = ["AshtakavargaError", "InputError", "benefic_rasis", "chart",
-           "rules", "table"]
+           "muhurta", "rules", "table"]

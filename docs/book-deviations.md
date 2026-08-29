@@ -1221,3 +1221,29 @@ test missed it. Ties are compared with a tolerance now; 1e-9 degrees is 3.6
 microarcseconds, far below anything the ephemeris resolves.
 
 **Closes when:** you say which reading is intended, or seconds are supplied.
+
+## D-40 · §12.4's SAV strength ranges overlap at 30
+
+**Status: recorded.** Thirty is read as strong, on the section's own evidence.
+
+> "A rasi with 30 or more rekhas becomes strong... A rasi with 25-30 rekhas is
+> average. A rasi with less than 25 rekhas becomes weak."
+
+Thirty falls in both "30 or more" and "25-30".
+
+**Resolved from the section itself, not by preference.** The first clause is
+unambiguous — "30 or more" names a bound and 30 meets it — and it is stated
+first. The second is written as a loose range, the sort of phrasing that
+usually means "the twenties". And the muhurta paragraph three sentences later
+repeats the bound in the same direction: "Rasis containing **30 or more**
+rekhas in SAV are favorable." A rasi cannot be favorable for a muhurta and
+merely average at the same figure, so 30 is strong.
+
+**What we do:** strong is 30 and above, average 25 to 29, weak below 25. The
+overlap and this reasoning are served on `/v1/ashtakavarga/rules` as
+`sav_overlap_note`, so the choice is visible to a caller rather than buried.
+
+Chart 6 makes the boundary live: its Capricorn and Pisces both sit at exactly
+30, and both are graded strong.
+
+**Closes when:** you confirm, or a later passage settles it differently.

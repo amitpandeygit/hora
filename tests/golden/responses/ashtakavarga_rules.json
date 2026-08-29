@@ -298,6 +298,25 @@
       },
       "unexplained_mark_note": "The printed answer shows \u201c5*\u201d for the Moon in Pisces and nothing on the page explains the asterisk. It is not the planet\u2019s own position marked as a rule \u2014 Venus in Aries and Mercury in Gemini carry none \u2014 and the value 5 is right either way. Recorded, not interpreted."
     },
+    "exercise_20": {
+      "answer": [
+        34,
+        25,
+        34,
+        25,
+        26,
+        25,
+        22,
+        29,
+        28,
+        30,
+        29,
+        30
+      ],
+      "chart": "Chart 6",
+      "closing": "Using the above values, one can prepare a chart for SAV, as shown in Chart 11.",
+      "question": "Find the number of rekhas in all the rasis in SAV for the same rasi chart (see Chart 6)."
+    },
     "intro": "Analyzing a chart and making correct predictions requires mixing many different principles and making fine compromises and judgments. Sage Parasara said that it is difficult for even great Maharshis. In Kali Yuga, human beings become sinful and the sins kill their intelligence. Parasara said that the intellectual pygmies of Kali Yuga cannot cope with too many complicated principles and presented ashtakavarga as a simple technique that lets them make reasonable predictions without much fuss.",
     "malefic_entry": {
       "sanskrit": "karana",
@@ -305,6 +324,7 @@
       "value": 0
     },
     "means": "Ashtaka means \u201cconsisting of eight\u201d and varga means \u201ca group\u201d. Ashtakavarga is the system of analyzing a chart with respect to a group of 8 reference points.",
+    "muhurta_footnote_unread": "43",
     "naming_warning": "PVR follows Parasara: 1 is a **rekha** and 0 is a **bindu**. Most modern software and most south Indian practice use the two words the other way round, so a figure labelled \u201cbindus in a sign\u201d elsewhere is what this API calls rekhas. Every count returned here counts 1s, and the fields are named `rekhas` so the two can never be confused.",
     "notation": "In Table 19, an entry of 0 denotes a malefic position or a \u201ckarana\u201d or a bindu (dot). An entry of 1 denotes a benefic position or a \u201csthana\u201d or a rekha (line).",
     "purpose": "So ashtakavarga is essentially a system that tells us the benefic positions of lagna and seven planets with respect to each other. This can be used to analyze the strength of a natal chart, but it is much more important in analyzing transits.",
@@ -319,6 +339,42 @@
       "Saturn",
       "Lagna"
     ],
+    "samudaaya_means": "group",
+    "sarva_means": "all",
+    "sav_definition": "Samudaaya means \u201cgroup\u201d. Samudaaya Ashtakavarga is nothing but the sum of the ashtakavargas of seven planets. In each rasi, we add the number of rekhas in the BAVs of Sun, Moon, Mars, Mercury, Jupiter, Venus and Saturn. The sum denotes the number of rekhas in that rasi in Samudaaya Ashtakavarga. It will be denoted with SAV. It is also called \u201cSarva Ashtakavarga\u201d (sarva = all).",
+    "sav_excludes": [
+      "Lagna"
+    ],
+    "sav_grade_bands": {
+      "average": "25 to 29",
+      "strong": "30 or more",
+      "weak": "less than 25"
+    },
+    "sav_grade_names": [
+      "strong",
+      "average",
+      "weak"
+    ],
+    "sav_is_seven_planets": "Samudaaya Ashtakavarga is nothing but the sum of the ashtakavargas of seven planets.",
+    "sav_muhurta_positions": [
+      "Lagna",
+      "Moon",
+      "Sun"
+    ],
+    "sav_muhurta_rule": "When choosing muhurtas for auspicious activities like a wedding or housewarming, one should look at the strengths, as per SAV of the natal chart, of the rasis containing lagna, Moon and Sun in the muhurta chart. Rasis containing 30 or more rekhas in SAV are favorable.",
+    "sav_overlap_note": "The printed ranges overlap at 30: \u201c30 or more rekhas becomes strong\u201d and \u201c25-30 rekhas is average\u201d. Thirty is read as strong \u2014 that clause is unambiguous and stated first, and the muhurta rule repeats \u201c30 or more \u2026 are favorable\u201d. See docs/book-deviations.md D-40.",
+    "sav_owners": [
+      "Sun",
+      "Moon",
+      "Mars",
+      "Mercury",
+      "Jupiter",
+      "Venus",
+      "Saturn"
+    ],
+    "sav_strength_rule": "A rasi with 30 or more rekhas becomes strong. Matters signified by the house falling in such a rasi flourish and planets transiting in such a rasi bring good results. A rasi with 25-30 rekhas is average. A rasi with less than 25 rekhas becomes weak. Matters signified by the house falling in such a rasi suffer and planets transiting in such a rasi bring bad results.",
+    "sav_total": 337,
+    "sav_worked_example": "Let us continue with the rasi chart in Chart 6. From the answer to Exercise 19, we see that the BAVs of Sun, Moon, Mars, Mercury, Jupiter, Venus and Saturn have 5, 3, 4, 7, 4, 8 and 3 rekhas in Ar (respectively). Adding them all, we get 34. So SAV has 34 rekhas in Ar and we write 34 in Ar.",
     "table_numbers": {
       "Jupiter": 23,
       "Lagna": 26,

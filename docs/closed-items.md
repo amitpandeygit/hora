@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-5](#oi-5) | Upagrahas |
+| [OI-100](#oi-100) | whether a sarvashtakavarga includes lagna's table |
 | [OI-99](#oi-99) | the ashtakavarga tables arrived one page at a time |
 | [OI-23](#oi-23) | the `MARAKA` house label was unverified |
 | [OI-92](#oi-92) | vargottamaamsa was undefined until footnote 40 arrived |
@@ -1657,3 +1658,31 @@ ships on `/v1/ashtakavarga/rules`, so a future edit to any cell breaks it.
 What remains open is not the tables but what to do with them: OI-100 asks
 whether a sarvashtakavarga includes lagna's table, since the two candidate sums
 differ by exactly Table 26's 49.
+
+<a id="oi-100"></a>
+
+## OI-100 — whether a sarvashtakavarga includes lagna's table
+
+Recorded while Table 26 was still outstanding, because the answer moved every
+total by 49 and a silent choice made then would have been invisible later:
+
+| sum | total |
+|---|---|
+| the seven planets | 337 |
+| all eight references, lagna included | 386 |
+
+**Closed by §12.4**, which names it outright: "Samudaaya Ashtakavarga is
+nothing but the sum of the ashtakavargas of **seven planets**. In each rasi, we
+add the number of rekhas in the BAVs of Sun, Moon, Mars, Mercury, Jupiter,
+Venus and Saturn." Lagna has a table of its own — Table 26 — and it is not
+among them.
+
+`sarvashtakavarga` implements exactly that and Exercise 20's printed answer
+reproduces sign for sign, totalling 337. The eight-reference figure is still
+reported beside it, now labelled `is_the_sav: false`, because the difference is
+exactly Table 26 and a caller comparing against other software may need to see
+both.
+
+Recording this before Table 26 arrived is what kept the question visible: the
+two sums were identical until that table landed, so nothing would have
+signalled the ambiguity at the moment it started to matter.

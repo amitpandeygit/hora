@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 60 waiting on evidence · 2 parked**
+**5 waiting on Amit · 59 waiting on evidence · 2 parked**
 
 ---
 
@@ -579,27 +579,6 @@ yoga also refuses to decide without a paksha, since it must sort every planet
 into benefic or malefic and §3.2.2 gives the Moon no nature without one.
 
 **Closes when:** you settle the reading, or an example fixes it.
-
-### OI-100 — does a sarvashtakavarga include lagna's table?
-
-Adding the bhinnashtakavargas together is the obvious next step, and the book
-has not reached the term yet. It matters which tables are added — and now that
-all eight exist, both figures are live:
-
-| sum | total |
-|---|---|
-| the **seven planets** | **337** — the classical sarvashtakavarga figure |
-| all **eight references**, lagna included | **386** |
-
-The difference is exactly Table 26's own total, 49.
-
-**What we do:** the function is called `summed`, not `sarvashtakavarga`, and it
-returns **both** figures side by side with neither chosen, plus a note saying
-the book has not defined the term. Recorded before Table 26 arrived — a single
-implicit choice made then would have silently moved every total by 49 when it
-landed.
-
-**Closes when:** a section defines sarvashtakavarga and says what it sums.
 
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 

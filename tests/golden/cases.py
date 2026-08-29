@@ -272,6 +272,14 @@ CASES = [
                             "Jupiter": 4, "Venus": 0, "Saturn": 4,
                             "Lagna": 5},
     }),
+    # 12.4's muhurta rule: Chart 6's natal SAV read at a muhurta chart's
+    # lagna, Moon and Sun — one of each grade, including the 30 boundary.
+    ("ashtakavarga_muhurta", "POST", "/v1/ashtakavarga/muhurta", {
+        "natal_reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2,
+                                  "Mercury": 2, "Jupiter": 4, "Venus": 0,
+                                  "Saturn": 4, "Lagna": 5},
+        "muhurta_signs": {"Lagna": 0, "Moon": 6, "Sun": 9},
+    }),
     ("ashtakavarga_chart_akbar", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 7, "Moon": 2, "Mars": 9, "Mercury": 8,
                             "Jupiter": 6, "Venus": 6, "Saturn": 6,

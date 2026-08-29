@@ -20,8 +20,11 @@ from hora.charts.ashtakavarga import (
     bhinnashtakavarga,
     entry,
     grade,
+    muhurta_strength,
     natal_grade,
     rekhas_per_reference,
+    sarvashtakavarga,
+    sav_grade,
     summed,
     table_total,
 )
@@ -64,7 +67,19 @@ from hora.core.const import (
     EXERCISE_19,
     EXERCISE_19_ANSWER,
     EXERCISE_19_UNEXPLAINED_MARK,
+    EXERCISE_20_ANSWER,
+    MUHURTA_FOOTNOTE_UNREAD,
     RASI_ABBR,
+    SAMUDAAYA_MEANS,
+    SARVA_MEANS,
+    SAV_DEFINITION,
+    SAV_IS_SEVEN_PLANETS,
+    SAV_MUHURTA_POSITIONS,
+    SAV_MUHURTA_RULE,
+    SAV_OVERLAP_AT,
+    SAV_OWNERS,
+    SAV_STRENGTH_RULE,
+    SAV_TOTAL,
     SUN_ASHTAKAVARGA_ROWS,
     TABLE_19_WORKED_READING,
     YUGA_YEARS,
@@ -274,10 +289,11 @@ def test_a_sign_names_which_references_gave_it_rekhas():
         assert set(result.contributors[sign]) <= set(ASHTAKAVARGA_REFERENCES)
 
 
-def test_the_sum_is_not_called_a_sarvashtakavarga():
-    """The book has not reached the term, and the two candidate sums differ:
-    seven planets comes to 337 when complete, all eight references to 386.
-    Both are returned and neither is chosen. See OI-100."""
+def test_both_candidate_sums_are_still_reported_after_12_4_settled_it():
+    """§12.4 named the seven-planet sum as the SAV, so `summed` now says
+    which is which rather than declining to choose. Both figures stay
+    available because the difference is exactly lagna's Table 26, and a
+    caller comparing against other software may need to see it."""
     result = summed(AKBAR_SIGNS)
     assert result["complete"] is True
     assert result["owners_included"] == [
@@ -286,8 +302,6 @@ def test_the_sum_is_not_called_a_sarvashtakavarga():
     assert result["owners_missing"] == []
     assert result["seven_planets"]["classical_total_when_complete"] == 337
     assert result["eight_references"]["classical_total_when_complete"] == 386
-    assert "not a sarvashtakavarga" in result["not_yet_named_note"]
-    assert "OI-100" in result["not_yet_named_note"]
     assert result["missing_note"] == ""   # nothing is missing now
     # Lagna's table is still pending, so the two sums coincide for now.
     # Every planetary table is in, so the seven-planet sum is complete and
@@ -519,16 +533,14 @@ def test_table_26s_per_reference_totals():
         "Jupiter": 9, "Venus": 7, "Saturn": 6, "Lagna": 4}
 
 
-def test_the_two_candidate_sums_are_both_live_now():
-    """Table 26 landing is exactly the moment OI-100 was recorded against:
-    the seven-planet sum stays 337 and the eight-reference sum moves to 386.
-    Both are returned; neither is called a sarvashtakavarga."""
+def test_the_two_candidate_sums_differ_by_lagnas_table():
+    """337 against 386, and the gap is exactly Table 26's own 49 — which is
+    what made OI-100 worth recording before Table 26 arrived."""
     result = summed(AKBAR_SIGNS)
     assert result["seven_planets"]["total"] == 337
     assert result["eight_references"]["total"] == 386
     assert (result["eight_references"]["total"]
             - result["seven_planets"]["total"]) == table_total("Lagna") == 49
-    assert "not a sarvashtakavarga" in result["not_yet_named_note"]
 
 
 def test_a_charts_sums_match_the_tables_own_sums():
@@ -1085,3 +1097,167 @@ def test_the_rules_endpoint_carries_exercise_19(client):
         8, 7, 4, 3, 3, 2, 4, 6, 4, 4, 4, 3]
     assert body["exercise_19"]["unexplained_mark"]["printed"] == "5*"
     assert "not interpreted" in body["exercise_19"]["unexplained_mark_note"]
+
+
+# --------------------------------------------------------------------------
+# 12.4 Samudaaya Ashtakavarga — and the section that closes OI-100
+# --------------------------------------------------------------------------
+
+
+def test_12_4_settles_what_the_sav_sums():
+    """"Samudaaya Ashtakavarga is nothing but the sum of the ashtakavargas of
+    seven planets." Lagna has a table — Table 26 — but is not among them.
+    This is what OI-100 was open about."""
+    assert "seven planets" in SAV_IS_SEVEN_PLANETS
+    assert SAV_OWNERS == ("Sun", "Moon", "Mars", "Mercury", "Jupiter",
+                          "Venus", "Saturn")
+    assert "Lagna" not in SAV_OWNERS
+    assert len(SAV_OWNERS) == 7
+    assert set(SAV_OWNERS) | {"Lagna"} == set(ASHTAKAVARGA_TABLE_NUMBERS)
+    result = sarvashtakavarga(CHART_6_SIGNS)
+    assert result["owners"] == list(SAV_OWNERS)
+    assert result["excludes"] == ["Lagna"]
+
+
+def test_the_sav_totals_337_and_that_is_why_the_distinction_mattered():
+    """337 is the seven-planet total; adding lagna's Table 26 would give 386.
+    The difference is exactly 49, which is why the two sums were kept apart
+    until this section named one."""
+    assert SAV_TOTAL == 337
+    assert sarvashtakavarga(CHART_6_SIGNS)["total"] == 337
+    assert sum(table_total(o) for o in SAV_OWNERS) == 337
+    assert table_total("Lagna") == 49
+    assert 337 + 49 == 386
+
+
+def test_samudaaya_and_sarva_both_name_it():
+    """"It will be denoted with SAV. It is also called "Sarva Ashtakavarga"
+    (sarva = all)." """
+    assert SAMUDAAYA_MEANS == "group"
+    assert SARVA_MEANS == "all"
+    assert "Sarva Ashtakavarga" in SAV_DEFINITION
+
+
+# --- Exercise 20 ------------------------------------------------------------
+
+
+def test_exercise_20_reproduces_sign_for_sign():
+    result = sarvashtakavarga(CHART_6_SIGNS)
+    assert tuple(result["rekhas"]) == EXERCISE_20_ANSWER
+    assert sum(EXERCISE_20_ANSWER) == 337
+
+
+def test_the_worked_aries_figure():
+    """"the BAVs of Sun, Moon, Mars, Mercury, Jupiter, Venus and Saturn have
+    5, 3, 4, 7, 4, 8 and 3 rekhas in Ar ... Adding them all, we get 34."
+
+    The seven addends are checked, not only the sum."""
+    addends = [bhinnashtakavarga(owner, CHART_6_SIGNS).rekhas[R["Ar"]]
+               for owner in SAV_OWNERS]
+    assert addends == [5, 3, 4, 7, 4, 8, 3]
+    assert sum(addends) == 34 == EXERCISE_20_ANSWER[R["Ar"]]
+
+
+def test_exercise_20_is_exercise_19s_columns():
+    """The two answers are the same figures read across and down, so they
+    check each other as well as checking us."""
+    columns = tuple(sum(EXERCISE_19_ANSWER[owner][sign] for owner in SAV_OWNERS)
+                    for sign in range(12))
+    assert columns == EXERCISE_20_ANSWER
+
+
+# --- the strength bands -----------------------------------------------------
+
+
+@pytest.mark.parametrize("rekhas,expected", [
+    (0, "weak"), (24, "weak"), (25, "average"), (29, "average"),
+    (30, "strong"), (31, "strong"), (56, "strong")])
+def test_the_sav_strength_bands(rekhas, expected):
+    assert sav_grade(rekhas) == expected
+
+
+def test_thirty_is_read_as_strong_and_why():
+    """§12.4's ranges overlap: "30 or more ... strong" and "25-30 ...
+    average". Thirty is taken as strong — that clause is unambiguous and
+    stated first, and the muhurta rule repeats "30 or more ... are
+    favorable". See D-40."""
+    assert SAV_OVERLAP_AT == 30
+    assert "30 or more rekhas becomes strong" in SAV_STRENGTH_RULE
+    assert "25-30 rekhas is average" in SAV_STRENGTH_RULE
+    assert "30 or more rekhas in SAV are favorable" in SAV_MUHURTA_RULE
+    assert sav_grade(30) == "strong"
+
+
+def test_chart_6s_sav_grades():
+    """Four strong rasis, one weak. Pinned so a change to any of the seven
+    tables shows up here as well as in the counts."""
+    result = sarvashtakavarga(CHART_6_SIGNS)
+    grades = {RASI_ABBR[row["sign"]]: row["grade"] for row in result["signs"]}
+    assert {name for name, g in grades.items() if g == "strong"} == {
+        "Ar", "Ge", "Cp", "Pi"}
+    assert {name for name, g in grades.items() if g == "weak"} == {"Li"}
+
+
+# --- the muhurta rule -------------------------------------------------------
+
+
+def test_the_muhurta_rule_reads_the_natal_sav_at_the_muhurta_signs():
+    """"one should look at the strengths, as per SAV of the natal chart, of
+    the rasis containing lagna, Moon and Sun in the muhurta chart." """
+    assert SAV_MUHURTA_POSITIONS == ("Lagna", "Moon", "Sun")
+    result = muhurta_strength(
+        CHART_6_SIGNS, {"Lagna": R["Ar"], "Moon": R["Li"], "Sun": R["Cp"]})
+    rows = {row["position"]: row for row in result["positions"]}
+    assert rows["Lagna"]["natal_sav_rekhas"] == 34
+    assert rows["Lagna"]["favorable"] is True
+    assert rows["Moon"]["natal_sav_rekhas"] == 22
+    assert rows["Moon"]["favorable"] is False
+    assert rows["Sun"]["natal_sav_rekhas"] == 30
+    assert rows["Sun"]["favorable"] is True   # the boundary case
+    assert result["all_favorable"] is False
+    assert result["favorable_from"] == 30
+
+
+def test_the_muhurta_rule_needs_all_three_positions():
+    with pytest.raises(AshtakavargaError) as exc:
+        muhurta_strength(CHART_6_SIGNS, {"Lagna": 0, "Moon": 1})
+    assert "Sun" in str(exc.value)
+
+
+def test_footnote_43_is_recorded_as_unread():
+    assert MUHURTA_FOOTNOTE_UNREAD == "43"
+    assert "muhurtas" in SAV_MUHURTA_RULE
+
+
+# --- the API ----------------------------------------------------------------
+
+
+def test_the_chart_endpoint_carries_the_sav(client):
+    body = client.post("/v1/ashtakavarga/chart", json={
+        "reference_signs": CHART_6_SIGNS}).json()
+    sav = body["sarvashtakavarga"]
+    assert sav["rekhas"] == list(EXERCISE_20_ANSWER)
+    assert sav["total"] == 337
+    assert sav["excludes"] == ["Lagna"]
+    assert body["summed"]["seven_planets"]["is_the_sav"] is True
+    assert body["summed"]["eight_references"]["is_the_sav"] is False
+
+
+def test_the_muhurta_endpoint(client):
+    body = client.post("/v1/ashtakavarga/muhurta", json={
+        "natal_reference_signs": CHART_6_SIGNS,
+        "muhurta_signs": {"Lagna": R["Ar"], "Moon": R["Li"],
+                          "Sun": R["Cp"]}}).json()
+    assert body["all_favorable"] is False
+    assert body["natal_sav"] == list(EXERCISE_20_ANSWER)
+    assert body["footnote_unread"] == "43"
+
+
+def test_the_rules_endpoint_carries_12_4(client):
+    body = client.get("/v1/ashtakavarga/rules").json()
+    assert body["sav_owners"] == list(SAV_OWNERS)
+    assert body["sav_excludes"] == ["Lagna"]
+    assert body["sav_total"] == 337
+    assert body["sav_grade_bands"]["average"] == "25 to 29"
+    assert "D-40" in body["sav_overlap_note"]
+    assert body["exercise_20"]["answer"] == list(EXERCISE_20_ANSWER)

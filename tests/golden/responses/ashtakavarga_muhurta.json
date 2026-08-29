@@ -1,0 +1,49 @@
+{
+  "body": {
+    "all_favorable": false,
+    "favorable_from": 30,
+    "footnote_unread": "43",
+    "natal_sav": [
+      34,
+      25,
+      34,
+      25,
+      26,
+      25,
+      22,
+      29,
+      28,
+      30,
+      29,
+      30
+    ],
+    "positions": [
+      {
+        "favorable": true,
+        "grade": "strong",
+        "natal_sav_rekhas": 34,
+        "position": "Lagna",
+        "sign": 0,
+        "sign_name": "Aries"
+      },
+      {
+        "favorable": false,
+        "grade": "weak",
+        "natal_sav_rekhas": 22,
+        "position": "Moon",
+        "sign": 6,
+        "sign_name": "Libra"
+      },
+      {
+        "favorable": true,
+        "grade": "strong",
+        "natal_sav_rekhas": 30,
+        "position": "Sun",
+        "sign": 9,
+        "sign_name": "Capricorn"
+      }
+    ],
+    "rule": "When choosing muhurtas for auspicious activities like a wedding or housewarming, one should look at the strengths, as per SAV of the natal chart, of the rasis containing lagna, Moon and Sun in the muhurta chart. Rasis containing 30 or more rekhas in SAV are favorable."
+  },
+  "status": 200
+}

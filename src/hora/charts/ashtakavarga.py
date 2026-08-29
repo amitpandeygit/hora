@@ -29,8 +29,15 @@ from hora.core.const import (
     MARS_ASHTAKAVARGA_ROWS,
     MERCURY_ASHTAKAVARGA_ROWS,
     MOON_ASHTAKAVARGA_ROWS,
+    MUHURTA_FOOTNOTE_UNREAD,
     RASI_NAMES,
     SATURN_ASHTAKAVARGA_ROWS,
+    SAV_AVERAGE_FROM,
+    SAV_MUHURTA_POSITIONS,
+    SAV_MUHURTA_RULE,
+    SAV_OWNERS,
+    SAV_STRONG_FROM,
+    SAV_TOTAL,
     SUN_ASHTAKAVARGA_ROWS,
     VENUS_ASHTAKAVARGA_ROWS,
     Graha,
@@ -281,15 +288,68 @@ def natal_grade(owner: str, reference_signs: dict[str, int]) -> dict:
     }
 
 
-def summed(reference_signs: dict[str, int]) -> dict:
-    """The supplied bhinnashtakavargas added sign by sign.
+def sav_grade(rekhas: int) -> str:
+    """§12.4's reading of an SAV count.
 
-    **Deliberately not called a sarvashtakavarga.** The book has not reached
-    that term, and the two candidate sums differ: the classical
-    sarvashtakavarga adds the **seven planets** and comes to 337, while adding
-    all eight tables including lagna comes to 386. Nothing here picks one —
-    both are returned, labelled, and the note says the book has not defined
-    it. See docs/open-items.md OI-100.
+    "A rasi with 30 or more rekhas becomes strong ... A rasi with 25-30
+    rekhas is average. A rasi with less than 25 rekhas becomes weak."
+
+    The printed ranges overlap at 30. It is read as **strong**: that clause
+    is unambiguous and stated first, and the muhurta rule repeats "30 or more
+    ... are favorable". See docs/book-deviations.md D-40.
+    """
+    count = int(rekhas)
+    if count >= SAV_STRONG_FROM:
+        return "strong"
+    if count >= SAV_AVERAGE_FROM:
+        return "average"
+    return "weak"
+
+
+def sarvashtakavarga(reference_signs: dict[str, int]) -> dict:
+    """§12.4's SAV: the seven planets' BAVs added sign by sign.
+
+    "Samudaaya Ashtakavarga is nothing but the sum of the ashtakavargas of
+    seven planets." Lagna's table is **not** among them — which is what
+    OI-100 was open about until this section settled it.
+    """
+    missing = [o for o in SAV_OWNERS if o not in ASHTAKAVARGA_TABLES]
+    if missing:
+        raise AshtakavargaError(
+            f"the SAV needs all seven planetary tables; "
+            f"{', '.join(missing)} "
+            f"{'is' if len(missing) == 1 else 'are'} not supplied")
+    per_owner = {owner: bhinnashtakavarga(owner, reference_signs)
+                 for owner in SAV_OWNERS}
+    totals = [sum(per_owner[o].rekhas[sign] for o in SAV_OWNERS)
+              for sign in range(12)]
+    return {
+        "owners": list(SAV_OWNERS),
+        "excludes": ["Lagna"],
+        "excludes_note": (
+            "Section 12.4 defines the SAV as the sum of seven planets' "
+            "ashtakavargas. Lagna has a table of its own — Table 26 — but it "
+            "is not part of the SAV."
+        ),
+        "rekhas": totals,
+        "total": sum(totals),
+        "expected_total": SAV_TOTAL,
+        "signs": [
+            {"sign": sign, "sign_name": str(RASI_NAMES[sign]),
+             "rekhas": totals[sign], "grade": sav_grade(totals[sign])}
+            for sign in range(12)
+        ],
+    }
+
+
+def summed(reference_signs: dict[str, int]) -> dict:
+    """Both candidate sums, kept for the record.
+
+    §12.4 settled which one is the SAV — the seven planets — so
+    `sarvashtakavarga` is the function to use. This one still reports the
+    eight-reference sum beside it, because the difference is exactly lagna's
+    own table and a caller comparing against other software may need to see
+    both.
     """
     available = available_tables()
     per_owner = {owner: bhinnashtakavarga(owner, reference_signs)
@@ -302,17 +362,18 @@ def summed(reference_signs: dict[str, int]) -> dict:
 
     planet_totals = totals(planets)
     all_totals = totals(list(available))
-    missing_planets = [o for o in ASHTAKAVARGA_TABLES_PENDING if o != "Lagna"]
     return {
         "complete": not ASHTAKAVARGA_TABLES_PENDING,
         "owners_included": list(available),
         "owners_missing": list(ASHTAKAVARGA_TABLES_PENDING),
         "seven_planets": {
             "owners": planets,
-            "complete": not missing_planets,
+            "complete": not [o for o in ASHTAKAVARGA_TABLES_PENDING
+                             if o != "Lagna"],
             "rekhas": planet_totals,
             "total": sum(planet_totals),
-            "classical_total_when_complete": 337,
+            "classical_total_when_complete": SAV_TOTAL,
+            "is_the_sav": True,
         },
         "eight_references": {
             "owners": list(available),
@@ -320,23 +381,19 @@ def summed(reference_signs: dict[str, int]) -> dict:
             "rekhas": all_totals,
             "total": sum(all_totals),
             "classical_total_when_complete": 386,
+            "is_the_sav": False,
         },
-        "not_yet_named_note": (
-            "This is a sum of the tables supplied, not a sarvashtakavarga. "
-            "The book has not reached that term, and the two candidate sums "
-            "differ — seven planets gives 337 when complete, all eight "
-            "references gives 386. Both are returned and neither is chosen. "
-            "See docs/open-items.md OI-100."
+        "settled_note": (
+            "Section 12.4 settles this: the SAV is the seven-planet sum. The "
+            "eight-reference figure is reported beside it only because the "
+            "difference is exactly lagna's own table, Table 26."
         ),
         "missing_note": (
             "" if not ASHTAKAVARGA_TABLES_PENDING else
             "Tables "
             + ", ".join(str(ASHTAKAVARGA_TABLE_NUMBERS[o])
                         for o in ASHTAKAVARGA_TABLES_PENDING)
-            + " have not been supplied, so "
-            + ", ".join(ASHTAKAVARGA_TABLES_PENDING)
-            + " contribute nothing to these totals. Every figure here is a "
-              "partial sum and must not be read against any threshold."
+            + " have not been supplied, so these are partial sums."
         ),
         "signs": [
             {"sign": sign, "sign_name": str(RASI_NAMES[sign]),
@@ -344,6 +401,47 @@ def summed(reference_signs: dict[str, int]) -> dict:
              "eight_references": all_totals[sign]}
             for sign in range(12)
         ],
+    }
+
+
+def muhurta_strength(natal_reference_signs: dict[str, int],
+                     muhurta_signs: dict[str, int]) -> dict:
+    """§12.4's muhurta rule.
+
+    "One should look at the strengths, as per SAV of the natal chart, of the
+    rasis containing lagna, Moon and Sun in the muhurta chart. Rasis
+    containing 30 or more rekhas in SAV are favorable."
+
+    The SAV is the **natal** chart's; the signs looked up in it are the
+    muhurta chart's.
+    """
+    sav = sarvashtakavarga(natal_reference_signs)
+    missing = [p for p in SAV_MUHURTA_POSITIONS if p not in muhurta_signs]
+    if missing:
+        raise AshtakavargaError(
+            f"the muhurta chart's {', '.join(missing)} "
+            f"{'is' if len(missing) == 1 else 'are'} needed; section 12.4 "
+            f"reads lagna, Moon and Sun")
+    rows = []
+    for position in SAV_MUHURTA_POSITIONS:
+        sign = int(muhurta_signs[position])
+        validate.in_range(f"muhurta {position}", sign, 0, 11)
+        rekhas = sav["rekhas"][sign]
+        rows.append({
+            "position": position,
+            "sign": sign,
+            "sign_name": str(RASI_NAMES[sign]),
+            "natal_sav_rekhas": rekhas,
+            "grade": sav_grade(rekhas),
+            "favorable": rekhas >= SAV_STRONG_FROM,
+        })
+    return {
+        "rule": SAV_MUHURTA_RULE,
+        "favorable_from": SAV_STRONG_FROM,
+        "positions": rows,
+        "all_favorable": all(row["favorable"] for row in rows),
+        "natal_sav": sav["rekhas"],
+        "footnote_unread": MUHURTA_FOOTNOTE_UNREAD,
     }
 
 
