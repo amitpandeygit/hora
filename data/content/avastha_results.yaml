@@ -536,7 +536,11 @@ entries:
   licence_status: unconfirmed
   verbatim: 'A scholar in a king''s court, wealthy, honorable, charitable; [if exalted] skilled at wars,
     successful, upholds dharma; [in trines] unlearned; [in 12th] devoid of happiness from wife and children.'
-  transcription_notes: '"[in trines]" is read as the 1st, 5th and 9th houses.'
+  transcription_notes: '"[in trines]" is read as the 1st, 5th and 9th houses. The
+    printed line contradicts itself: the unconditional clause says "a scholar in a
+    king''s court" and the trines clause says "unlearned", so Mars in the 1st, 5th
+    or 9th gets both at once. Both are reported, as printed; the book does not say
+    which wins.'
   results:
   - text: A scholar in a king's court, wealthy, honorable, charitable
   - text: skilled at wars, successful, upholds dharma
