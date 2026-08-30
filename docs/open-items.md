@@ -623,22 +623,19 @@ and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 §14.1 says an ethical astrologer "may caution a client gently before critical
 periods and **suggest some remedial measures** to ward off an impending
 danger", and gives none. No section read so far supplies any — no remedies
-chapter, no gemstone or mantra table, no propitiation keyed to affliction. The
-book states exactly one propitiation rule, §7.3.6's, aimed elsewhere:
-
-> "Propitiation of the deities corresponding to the strongest planet in the
-> 12th house in navamsa from Karakamsa lagna can take one's soul towards
-> moksha."
-
-That is liberation of the soul, not lengthening of life, and it says nothing
-about an empty house — which is the case in the first real chart we ran it on.
+chapter, no gemstone or mantra table, no propitiation keyed to affliction.
+The one propitiation rule in the book is §7.3.6's: propitiate "the deities
+corresponding to the strongest planet in the 12th house in navamsa from
+Karakamsa lagna". That is aimed at moksha, not at lengthening life, and it says
+nothing about an empty house — which is the case in the first real chart we ran
+it on.
 
 **What we do:** nothing computes a remedy. §7.3.6 is implemented as printed.
 Longevity remedies would have to come from outside the book, and precedence.md
-says a silence may be filled only by an explicit decision, not by default.
+says a silence may be filled only by an explicit decision.
 
 **Closes when:** a later chapter gives remedies, or you decide to source them
-from BPHS or elsewhere and that decision is recorded.
+elsewhere and that decision is recorded.
 
 ### OI-111 — which of §15.5.2's rules take one co-lord and which take both
 
