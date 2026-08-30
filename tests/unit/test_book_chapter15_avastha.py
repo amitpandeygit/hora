@@ -840,3 +840,96 @@ def test_example_49_shows_every_intermediate_the_book_prints():
     assert values(jup) == [225, 286, 10, 10, 100, 101, 5, 10, 1]
     ven = avastha_by_activity(Graha.VENUS, lon(7 + 55 / 60, "Ar"), **EX49)
     assert values(ven) == [18, 79, 7, 7, 49, 50, 2, 5, 2]
+
+
+# --------------------------------------------------------------------------
+# Exercise 24 — nothing is given but the birth data.
+# --------------------------------------------------------------------------
+
+#: 8:30 am (LMT), 8 November 1927, 67 E 03, 24 N 52. The exercise supplies no
+#: longitudes, so C, A, M, G and L all come out of our own ephemeris.
+EX24_PLACE = {"latitude": 24 + 52 / 60, "longitude": 67 + 3 / 60}
+EX24_BIRTH = {
+    "year": 1927, "month": 11, "day": 8, "hour": 8, "minute": 30,
+    "second": 0.0,
+    # LMT, not a zone: the meridian's own offset, 67.05 degrees / 15.
+    "utc_offset_hours": (67 + 3 / 60) / 15.0,
+}
+
+
+def _exercise_24_chart():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    return compute_chart(
+        from_local(**EX24_BIRTH),
+        Place(name="Exercise 24", **EX24_PLACE),
+        Settings(node_type=NodeType.MEAN))
+
+
+def _exercise_24_ghati():
+    """The last sunrise at or before birth, then the ghati running."""
+    from hora.core.ephemeris.swiss import SwissEphemeris
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    inst = from_local(**EX24_BIRTH)
+    eph = SwissEphemeris(Settings(node_type=NodeType.MEAN))
+    sunrise = eph.sunrise(inst.jd_ut - 1.5, EX24_PLACE["latitude"],
+                          EX24_PLACE["longitude"])
+    while True:
+        nxt = eph.sunrise(sunrise + 0.5, EX24_PLACE["latitude"],
+                          EX24_PLACE["longitude"])
+        if nxt is None or nxt > inst.jd_ut:
+            break
+        sunrise = nxt
+    return ghati_at_birth((inst.jd_ut - sunrise) * 24.0)
+
+
+@pytest.mark.parametrize(
+    "graha,index,name,strength",
+    [
+        (Graha.SUN, 7, "Sabhaa", "cheshta"),
+        (Graha.MARS, 12, "Nidraa", "drishti"),
+        (Graha.JUPITER, 8, "Aagama", "cheshta"),
+    ],
+)
+def test_exercise_24(graha, index, name, strength):
+    """Unlike Example 49 this exercise prints no longitudes at all.
+
+    Every term is ours: C and A from the ephemeris, M from the Moon, L from
+    the lagna, G from our own sunrise. Three answers land exactly, so a wrong
+    nakshatra, navamsa, ascendant or sunrise would show up here.
+    """
+    chart = _exercise_24_chart()
+    got = avastha_by_activity(
+        graha, chart.positions[int(graha)].longitude,
+        chart.positions[int(Graha.MOON)].longitude,
+        lagna_rasi=int(chart.lagna_longitude // 30),
+        ghati=_exercise_24_ghati(), name_sound="L")
+    assert (got.index, got.name, got.strength) == (index, name, strength)
+
+
+def test_exercise_24_terms_are_all_derived():
+    chart = _exercise_24_chart()
+    got = avastha_by_activity(
+        Graha.SUN, chart.positions[int(Graha.SUN)].longitude,
+        chart.positions[int(Graha.MOON)].longitude,
+        lagna_rasi=int(chart.lagna_longitude // 30),
+        ghati=_exercise_24_ghati(), name_sound="L")
+    assert got.terms == {"C": 16, "P": 1, "A": 7, "M": 1, "G": 6, "L": 8}
+    assert sound_number("L") == 5
+
+
+def test_exercise_24_pins_our_sunrise_to_within_five_minutes():
+    """G = 6 is what makes all three answers come out, and G comes from sunrise.
+
+    The 6th ghati runs from 120 to 144 minutes after sunrise, and birth is at
+    8:30, so sunrise has to fall in (06:06, 06:30]. Ours lands at 06:11, which
+    is 4.7 minutes from the early edge. A sunrise five minutes earlier would
+    push every one of the three answers on by one avastha, so this exercise is
+    independent evidence on OI-19 and OI-103 — it says our sunrise is not too
+    early here, with only minutes to spare.
+    """
+    assert _exercise_24_ghati() == 6

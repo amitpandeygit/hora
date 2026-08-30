@@ -17,7 +17,6 @@ from hora.charts.book import (
     chart,
     describe,
     divisional,
-    example_chart,
     graha_signs,
     is_recomputable,
     lagna,
@@ -26,6 +25,8 @@ from hora.charts.book import (
     numbers,
     recomputable,
     signs,
+    unnumbered_chart,
+    unnumbered_labels,
 )
 from hora.core.const import (
     BOOK_CHARTS,
@@ -364,14 +365,14 @@ def test_example_49_chart_is_registered_and_marked_partial():
     It prints only the three longitudes its own computation needs, so the
     record must say what is missing rather than read as a whole chart.
     """
-    record = example_chart(49)
+    record = unnumbered_chart("Example 49")
     assert record["birth"].startswith("April 4, 1970, 5:50 pm (IST)")
     assert set(record["longitudes"]) == {"Merc", "Jup", "Ven"}
     assert record["stated"]["moon_constellation"] == 25
     assert record["stated"]["lagna_rasi"] == "Vi"
     assert "cannot be drawn" in record["note"]
     with pytest.raises(BookChartError, match="does not supply a chart"):
-        example_chart(48)
+        unnumbered_chart("Example 48")
 
 
 def test_example_49_register_agrees_with_the_chapter_15_fixture():
@@ -382,7 +383,36 @@ def test_example_49_register_agrees_with_the_chapter_15_fixture():
     """
     from tests.unit.test_book_chapter15_avastha import lon
 
-    registered = example_chart(49)["longitudes"]
+    registered = unnumbered_chart("Example 49")["longitudes"]
     assert longitude(registered["Merc"]) == pytest.approx(lon(3 + 8 / 60, "Ar"))
     assert longitude(registered["Jup"]) == pytest.approx(lon(9 + 46 / 60, "Li"))
     assert longitude(registered["Ven"]) == pytest.approx(lon(7 + 55 / 60, "Ar"))
+
+
+def test_exercise_24_is_registered_as_a_chart_with_no_positions():
+    """The book prints birth data and nothing else for this native.
+
+    Registering it with an empty `longitudes` is the point: the record exists
+    so the birth data is not re-keyed by hand, and its emptiness says the
+    answers rest on our ephemeris rather than on the book's numbers.
+    """
+    record = unnumbered_chart("Exercise 24")
+    assert record["longitudes"] == {}
+    assert record["birth"].endswith("8:30 am (LMT), 67 E 03, 24 N 52")
+    assert "check on the ephemeris" in record["note"]
+
+
+def test_a_label_is_needed_because_example_and_exercise_numbers_collide():
+    """Example 24 and Exercise 24 would be different natives under one key."""
+    labels = unnumbered_labels()
+    assert "Exercise 24" in labels
+    assert "Example 24" not in labels          # a different, unseen native
+    assert all(l.split()[0] in {"Example", "Exercise"} for l in labels)
+
+
+def test_exercise_24_register_agrees_with_the_chapter_15_fixture():
+    from tests.unit.test_book_chapter15_avastha import EX24_BIRTH, EX24_PLACE
+
+    record = unnumbered_chart("Exercise 24")
+    assert record["birth_data"] == EX24_BIRTH
+    assert record["place"] == EX24_PLACE

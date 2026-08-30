@@ -483,12 +483,13 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
 }
 
 
-#: Charts the book supplies inside an example without giving them a "Chart N".
-#: Keyed by example number. They are partial by nature — an example prints only
-#: the longitudes its own computation needs — so the record says what is
-#: missing rather than implying a whole chart.
-EXAMPLE_CHARTS: dict[int, dict[str, Any]] = {
-    49: {
+#: Charts the book supplies inside a worked example or an exercise without
+#: giving them a "Chart N". Keyed by the label the book itself uses, because
+#: Example 24 and Exercise 24 are different natives and a bare number would
+#: not say which. They are partial by nature — the text prints only what its
+#: own computation needs — so each record says what is missing.
+UNNUMBERED_CHARTS: dict[str, dict[str, Any]] = {
+    "Example 49": {
         "title": "Section 15.4.4's worked example",
         "birth": "April 4, 1970, 5:50 pm (IST), Machilipatnam, 81 E 12, 16 N 15",
         "birth_data": {
@@ -513,6 +514,28 @@ EXAMPLE_CHARTS: dict[int, dict[str, Any]] = {
             "the lagna as its rasi, with no longitude for either, so the "
             "chart cannot be drawn. Sunrise is stated as 6:00 am rather than "
             "computed; the book uses it to reach G = 30."
+        ),
+    },
+    "Exercise 24": {
+        "title": "Section 15.4.4's exercise",
+        "birth": "November 8, 1927, 8:30 am (LMT), 67 E 03, 24 N 52",
+        "birth_data": {
+            "year": 1927, "month": 11, "day": 8, "hour": 8, "minute": 30,
+            "second": 0.0,
+            # LMT, not a zone: the meridian's own offset, 67.05 / 15.
+            "utc_offset_hours": (67 + 3 / 60) / 15.0,
+        },
+        "place": {"latitude": 24 + 52 / 60, "longitude": 67 + 3 / 60},
+        "longitudes": {},
+        "stated": {"name_initial": "L"},
+        "first_seen": "chapter 15, Exercise 24",
+        "note": (
+            "The exercise prints no positions at all, only the birth data and "
+            "the name's first sound. Everything the answer needs is computed: "
+            "the nakshatras and navamsas of Sun, Mars and Jupiter, the Moon's "
+            "nakshatra, the lagna, and the ghati from our own sunrise. The "
+            "book gives the three answers but never its own longitudes, so "
+            "this chart is a check on the ephemeris, not a transcription."
         ),
     },
 }

@@ -14,8 +14,8 @@ from hora.core import validate
 from hora.core.const import (
     BOOK_CHARTS,
     CHARTS_NOT_SUPPLIED,
-    EXAMPLE_CHARTS,
     RASI_ABBR,
+    UNNUMBERED_CHARTS,
     Graha,
 )
 
@@ -51,18 +51,21 @@ def numbers() -> tuple[int, ...]:
     return tuple(sorted(BOOK_CHARTS))
 
 
-def example_numbers() -> tuple[int, ...]:
-    """Every example that supplies its own chart without a "Chart N"."""
-    return tuple(sorted(EXAMPLE_CHARTS))
+def unnumbered_labels() -> tuple[str, ...]:
+    """Every example or exercise that supplies a chart without a "Chart N"."""
+    return tuple(sorted(UNNUMBERED_CHARTS))
 
 
-def example_chart(number: int) -> dict[str, Any]:
-    """One example's chart. Partial by nature — see the record's note."""
-    if number in EXAMPLE_CHARTS:
-        return EXAMPLE_CHARTS[number]
+def unnumbered_chart(label: str) -> dict[str, Any]:
+    """One of those charts, by the book's own label ("Exercise 24").
+
+    Partial by nature — see the record's note for what the text withheld.
+    """
+    if label in UNNUMBERED_CHARTS:
+        return UNNUMBERED_CHARTS[label]
     raise BookChartError(
-        f"Example {number} does not supply a chart. The examples that do are "
-        f"{', '.join(str(n) for n in example_numbers())}")
+        f"{label!r} does not supply a chart of its own. Those that do are "
+        f"{', '.join(unnumbered_labels())}")
 
 
 def chart(number: int) -> dict[str, Any]:

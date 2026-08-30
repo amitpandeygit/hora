@@ -349,7 +349,7 @@ from hora.core.constants.baadhaka import (
 from hora.core.constants.book_charts import (
     BOOK_CHARTS,
     CHARTS_NOT_SUPPLIED,
-    EXAMPLE_CHARTS,
+    UNNUMBERED_CHARTS,
 )
 from hora.core.constants.family import (
     CHILDREN_RULE,
@@ -1477,7 +1477,6 @@ __all__ = [
     "EXAMPLE_48_BRANCHES",
     "EXAMPLE_48_EIGHTH_LORD",
     "EXAMPLE_48_REFERENCE",
-    "EXAMPLE_CHARTS",
     "EXERCISE_18",
     "EXERCISE_18_ANSWER",
     "EXERCISE_18_HINT",
@@ -2081,6 +2080,7 @@ __all__ = [
     "TROPICAL_YEAR_DAYS",
     "TWENTY_EIGHT_NAKSHATRA_CHARTS",
     "TWO_RASI_OWNERS_NEED_JUDGEMENT",
+    "UNNUMBERED_CHARTS",
     "UPACHAYA",
     "UPACHAYA_EXAMPLE",
     "UPACHAYA_RULE",
