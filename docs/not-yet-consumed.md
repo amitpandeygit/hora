@@ -488,9 +488,10 @@ Vimshottari; `constants/nakshatra.py` carries `VIMSHOTTARI_ORDER` and
 behaviour-affecting refactor and is **not** being done unilaterally — raised as
 a decision, not a change.
 
-### Provenance declarations (4)
+### Provenance declarations (5)
 
-`VERBATIM_FIELDS` · `VERBATIM_CONSTANTS` · `AVASTHA_VERBATIM_FIELDS` · `AVASTHA_VERBATIM_CONSTANTS`
+`VERBATIM_FIELDS` · `VERBATIM_CONSTANTS` · `AVASTHA_VERBATIM_FIELDS` ·
+`AVASTHA_VERBATIM_CONSTANTS` · `DASHA_VERBATIM_CONSTANTS`
 
 Not data — a declaration of *which* chapter-8 and chapter-15 strings are the author's words
 and which are our summary. No calculation reads them; they exist so that
@@ -634,6 +635,28 @@ Section 15.4.1's caution is already served verbatim by
 withheld under OI-12. That is inconsistent, and it is why the caution above is
 parked here rather than wired the same way: widening the practice before the
 inconsistency is settled would be the wrong order.
+
+---
+
+### Part 2 — the dasa systems map (3)
+
+`PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` · `DEFERRED_TO_TAJAKA`
+
+Part 2 opens by classifying dasa systems two ways and naming the nine it will
+teach. That is a roadmap rather than a calculation, so nothing computes from
+it — but it is the coverage line for the whole part, and
+`tests/unit/test_book_part2_dasa_map.py` holds it against what is built.
+
+| Symbol | What will consume it |
+|---|---|
+| `PART_2_DASA_SYSTEMS` | Nothing computes from it. It exists so that two of nine systems built is a visible number rather than an impression |
+| `DASA_USES_ARE_NOT_IN_THE_CLASSICS` | The part's own explanation for why no classic settles which dasa to use when; context for a reading, not an input |
+| `DEFERRED_TO_TAJAKA` | Records that Sudarsana Chakra dasa is named here and taught elsewhere, so its absence from Part 2 is deliberate |
+
+**Two of the nine are built** — Vimsottari and Ashtottari, both nakshatra
+dasas. The remaining seven are six rasi dasas (Narayana, Lagna Kendradi Rasi,
+Sudasa, Drigdasa, Niryaana Shoola, Shoola) and one nakshatra dasa
+(Kalachakra). `dasha/rasi/` does not exist.
 
 ---
 
