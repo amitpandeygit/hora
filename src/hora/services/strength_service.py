@@ -194,7 +194,7 @@ def activity_results(
     entry = entries[0]
     placement = Placement(
         house=house, rasi=rasi,
-        joined_by=frozenset(joined_by or ()),
+        joined_by=None if joined_by is None else frozenset(joined_by),
         associated_with_malefics=associated_with_malefics,
         associated_with_benefics=associated_with_benefics,
         moon_phase=moon_phase, dignity=dignity,

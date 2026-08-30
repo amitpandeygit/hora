@@ -163,14 +163,23 @@ def test_a_rasi_condition_fires_only_in_those_rasis(store):
 
 
 def test_a_compound_condition_needs_both_parts(store):
-    """"[in 5th with Rahu]" needs the house and the conjunction."""
+    """"[in 5th with Rahu]" needs the house and the conjunction.
+
+    Supplying only the house cannot decide it. An earlier version of this test
+    asserted False there, which contradicted its own first line: a caller who
+    never said who Mars sits with has not said Rahu is absent.
+    """
     entry = store.get("avastha", 4, qualifier=2)[0]
     fall = "faces a severe fall"
     both = {r.text: r.applies for r in resolve(
         entry, Placement(house=5, joined_by=frozenset({7})))}
     assert both[fall] is True
     house_only = {r.text: r.applies for r in resolve(entry, Placement(house=5))}
-    assert house_only[fall] is False
+    assert house_only[fall] is None
+    # Saying the graha is alone is different from saying nothing.
+    alone = {r.text: r.applies for r in resolve(
+        entry, Placement(house=5, joined_by=frozenset()))}
+    assert alone[fall] is False
 
 
 def test_moon_phase_conditions_are_exclusive(store):
@@ -189,12 +198,17 @@ def test_a_missing_input_is_undetermined_not_false(store):
 
 
 def test_an_aspect_condition_stays_undetermined_without_aspect_data(store):
-    """We do not compute aspects — OI-18."""
+    """This resolver is handed a placement, never a chart.
+
+    It therefore cannot derive association with malefics or benefics however
+    good the aspect engine is, and must say so. The reason used to blame OI-18
+    and claim aspects are not computed; both had stopped being true.
+    """
     entry = store.get("avastha", 2, qualifier=3)[0]
     got = {r.text: (r.applies, r.reason) for r in resolve(entry, Placement(house=4))}
     applies, reason = got["poor"]
     assert applies is None
-    assert "OI-18" in reason
+    assert "the caller must supply it" in reason
 
 
 def test_the_else_branch_fires_only_when_no_sibling_does(store):
@@ -319,3 +333,40 @@ def test_the_tenth_avastha_is_stored_under_both_spellings(store):
     assert SAYANAADI_AVASTHAS[10]["name"] == "Nriyalipsaa"
     assert "Nrityalipsaa" in SAYANAADI_AVASTHAS[10]["aliases"]
     assert store.get("avastha", 10, qualifier=0)[0].subject_name == "Nrityalipsaa"
+
+
+def test_silence_about_conjunctions_is_not_a_claim_that_the_graha_is_alone(store):
+    """Moon in Nidraa is the book's own complementary pair.
+
+    "[if with Jupiter] eminent; [without Jupiter] loses wealth on females,
+    troubles." Both branches are written as conditions, so "[without Jupiter]"
+    is a claim about the chart, not the absence of a claim. A caller who says
+    nothing about conjunctions has asserted neither branch, and must get two
+    undetermined answers rather than the unflattering one.
+    """
+    entry = store.get("avastha", 12, qualifier=1)[0]
+    eminent, loses = "eminent", "loses wealth on females, troubles"
+
+    silent = {r.text: r.applies for r in resolve(entry, Placement())}
+    assert silent[eminent] is None and silent[loses] is None
+
+    with_jupiter = {r.text: r.applies for r in resolve(
+        entry, Placement(joined_by=frozenset({4})))}
+    assert with_jupiter[eminent] is True and with_jupiter[loses] is False
+
+    alone = {r.text: r.applies for r in resolve(
+        entry, Placement(joined_by=frozenset()))}
+    assert alone[eminent] is False and alone[loses] is True
+
+
+def test_the_service_keeps_unsupplied_and_alone_apart(store):
+    """The distinction must survive the service layer, which once flattened
+    an unsupplied ``joined_by`` to an empty set before the resolver saw it."""
+    from hora.services import strength_service
+
+    silent = strength_service.activity_results(12, 1)["results"]
+    assert all(r["applies"] is None for r in silent)
+    assert all("needs to know which grahas" in r["reason"] for r in silent)
+
+    alone = strength_service.activity_results(12, 1, joined_by=[])["results"]
+    assert [r["applies"] for r in alone] == [False, True]

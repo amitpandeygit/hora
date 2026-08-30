@@ -31,10 +31,14 @@ class Placement:
 
     house: int | None = None
     rasi: int | None = None
-    #: Grahas sharing the rasi.
-    joined_by: frozenset[int] = frozenset()
+    #: Grahas sharing the rasi. None means the caller did not say; an empty
+    #: set means the caller said the graha is alone. The book writes the
+    #: negative case as its own condition — Moon in Nidraa is "[if with
+    #: Jupiter] ... [without Jupiter] ..." — so "not stated" cannot be read
+    #: as "without".
+    joined_by: frozenset[int] | None = None
     #: Whether the graha is conjoined or aspected by malefics / benefics.
-    #: None means unknown — this engine does not compute aspects (OI-18).
+    #: None means the caller did not say.
     associated_with_malefics: bool | None = None
     associated_with_benefics: bool | None = None
     #: "waxing" or "waning", for the Moon.
@@ -86,10 +90,19 @@ def _test(condition: Condition, placement: Placement) -> tuple[bool | None, str]
                 f"rasi {placement.rasi}, wants {list(condition.rasis)}",
             ))
     if condition.joined_by:
-        checks.append((
-            all(g in placement.joined_by for g in condition.joined_by),
-            f"joined by {sorted(placement.joined_by)}, wants {list(condition.joined_by)}",
-        ))
+        if placement.joined_by is None:
+            checks.append((None, (
+                f"needs to know which grahas share the rasi "
+                f"(wants {list(condition.joined_by)})"
+            )))
+        else:
+            checks.append((
+                all(g in placement.joined_by for g in condition.joined_by),
+                (
+                    f"joined by {sorted(placement.joined_by)}, "
+                    f"wants {list(condition.joined_by)}"
+                ),
+            ))
     if condition.associated_with:
         known = (
             placement.associated_with_malefics
@@ -99,19 +112,27 @@ def _test(condition: Condition, placement: Placement) -> tuple[bool | None, str]
         if known is None:
             missing = (
                 f"needs to know about association with "
-                f"{condition.associated_with} "
-                f"(aspects are not computed — see OI-18)"
+                f"{condition.associated_with}; this resolver is given a "
+                f"placement, not a chart, so the caller must supply it"
             )
             checks.append((None, missing))
         else:
             checks.append((known, f"associated with {condition.associated_with}: {known}"))
     if condition.not_joined_by:
-        absent = [g for g in condition.not_joined_by if g not in placement.joined_by]
-        detail = (
-            f"joined by {sorted(placement.joined_by)}, wants none of "
-            f"{list(condition.not_joined_by)}"
-        )
-        checks.append((len(absent) == len(condition.not_joined_by), detail))
+        if placement.joined_by is None:
+            checks.append((None, (
+                f"needs to know which grahas share the rasi "
+                f"(wants none of {list(condition.not_joined_by)})"
+            )))
+        else:
+            absent = [
+                g for g in condition.not_joined_by if g not in placement.joined_by
+            ]
+            detail = (
+                f"joined by {sorted(placement.joined_by)}, wants none of "
+                f"{list(condition.not_joined_by)}"
+            )
+            checks.append((len(absent) == len(condition.not_joined_by), detail))
     if condition.rasi_lord:
         if placement.rasi_lord is None:
             detail = (
