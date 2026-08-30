@@ -710,8 +710,8 @@ EXERCISE_21 = (
 EXERCISE_21_HINT = (
     "Look at the number of rekhas in lagna and the 10th house.")
 
-#: Our computed answer, Aries first. The exercise prints none — the book asks
-#: the reader to work it. Sums to 337 like every other SAV.
+#: The printed answer, Aries first. We computed it before the answer was
+#: supplied and it matched digit for digit.
 EXERCISE_21_ANSWER: tuple[int, ...] = (
     24, 25, 31, 28, 27, 39, 33, 29, 26, 22, 28, 25)
 
@@ -721,20 +721,45 @@ EXERCISE_21_LAGNA_REKHAS = 39
 EXERCISE_21_TENTH = "Ge"
 EXERCISE_21_TENTH_REKHAS = 31
 
-#: The verdict the hint's two figures force, in §12.4's own bands.
 EXERCISE_21_VERDICT = (
-    "No. Lagna in the D-10 holds 39 rekhas — the maximum in the chart and the "
-    "highest D-10 lagna in the book, above the 35 that Example 39 gives as the "
-    "reason for a Prime Minister's 'success and good name'. The 10th house "
-    "holds 31, also strong by section 12.4's bands. An unsuccessful career in "
-    "a menial job contradicts both figures.")
+    "Lagna is in Vi in Chart 12. Vi it has 39 rekhas. That's a lot more than "
+    "30! The 10th house (Ge) also has more than 30 rekhas. So this D-10 is "
+    "very powerful and it possibly cannot belong to an unsuccessful waiter at "
+    "a small restaurant. This has to be someone pretty successful.")
 
-#: Where the reading can and cannot go. Section 12.5 fixes the chart to use;
-#: it does not give a rule for reading a *field* of work out of an SAV.
 EXERCISE_21_GUESS = (
-    "A distinguished and successful career. Naming the field needs more than "
-    "an SAV: the exercise says 'guess', and section 12.5 gives no rule that "
-    "turns rekhas into a profession. What the chart does supply is that both "
-    "houses the hint names — Virgo lagna and Gemini 10th — are owned by "
-    "Mercury, so Mercury's significations are where a fuller reading would "
-    "start.")
+    "Apart from the 1st and 10th houses, the 2nd house is strong in D-10's "
+    "SAV, with 33 rekhas. This shows the importance of speech and voice in "
+    "her career. Ghati lagna is in Taurus and its lord Venus occupies it. "
+    "This makes ghati lagna and 9th house very powerful. This shows a "
+    "fortunate (9th) and famous (GL) entertainer (Venus). Saturn's 11th house "
+    "argala on GL suggests popular mass support as a catalyst in her success. "
+    "Rahu's unobstructed 2nd house argala on lagna shows unconventional "
+    "behavior in public life.")
+
+EXERCISE_21_FINAL_ANSWER = (
+    "The chart belongs to Madonna, a pop diva of USA.")
+
+#: Every checkable step of the guess, as ``(claim, what decides it)``. The
+#: identification itself is not derivable and is not claimed to be — the
+#: chain stops at "famous entertainer", and the name is the book's knowledge.
+EXERCISE_21_GUESS_STEPS: tuple[tuple[str, str], ...] = (
+    ("the 2nd house is strong in D-10's SAV, with 33 rekhas",
+     "2nd from Vi is Li, which holds 33"),
+    ("Ghati lagna is in Taurus",
+     "GL's D-10 sign, as Chart 12's diagram draws it"),
+    ("its lord Venus occupies it",
+     "Venus owns Taurus and sits in it in the D-10"),
+    ("This makes ghati lagna and 9th house very powerful",
+     "9th from the Vi lagna is Ta, so GL sits in the 9th house"),
+    ("Saturn's 11th house argala on GL",
+     "11th from Ta is Pi, where Saturn is"),
+    ("Rahu's unobstructed 2nd house argala on lagna",
+     "2nd from Vi is Li, where Rahu is; the 12th, Le, is empty"),
+)
+
+#: Footnote 47 hangs off the last sentence of the guess and has not been
+#: supplied. Nothing in the reading depends on it.
+EXERCISE_21_FOOTNOTE_47_UNSEEN = (
+    "Footnote 47 is cited after 'unconventional behavior in public life' and "
+    "has not been supplied.")

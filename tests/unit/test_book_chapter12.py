@@ -87,7 +87,10 @@ from hora.core.const import (
     EXERCISE_20_ANSWER,
     EXERCISE_21,
     EXERCISE_21_ANSWER,
+    EXERCISE_21_FINAL_ANSWER,
+    EXERCISE_21_FOOTNOTE_47_UNSEEN,
     EXERCISE_21_GUESS,
+    EXERCISE_21_GUESS_STEPS,
     EXERCISE_21_HINT,
     EXERCISE_21_LAGNA,
     EXERCISE_21_LAGNA_REKHAS,
@@ -1914,11 +1917,38 @@ def test_our_ghati_lagna_puts_chart_12_in_a_different_rasi():
 def test_the_hora_lagna_still_lands_in_the_printed_rasi(
         label, chart, birth_data, place, expected):
     """HL runs at 0.4 of GL's rate, so OI-103 never moves it across a sign in
-    either chart. Recorded so the blast radius stays bounded."""
+    the **rasi** chart. It does move it in a divisional chart — see the D-10
+    test below. Recorded so the blast radius is stated, not assumed."""
     from hora.core.settings import NodeType, Settings
 
     got = _special_lagnas(birth_data, place, Settings(node_type=NodeType.MEAN))
     assert RASI_ABBR[int(got["HL"] // 30)] == chart["HL"].split()[1]
+
+
+def test_oi_103_reaches_further_in_a_divisional_chart():
+    """A varga multiplies the error. Chart 12's GL is a whole rasi out in the
+    rasi chart yet lands in the same D-10 sign; its HL agrees in the rasi chart
+    yet lands one sign out in the D-10. So the blast radius is not monotone,
+    and neither direction may be assumed from the other."""
+    from hora.charts.vargas import varga
+    from hora.core.settings import NodeType, Settings
+
+    got = _special_lagnas(
+        CHART_12_BIRTH_DATA, CHART_12_PLACE, Settings(node_type=NodeType.MEAN))
+    printed_gl = _lon12(CHART_12["GL"])
+    printed_hl = _lon12(CHART_12["HL"])
+
+    # GL: different rasi, same D-10 sign — which is why Exercise 21's reading
+    # survives OI-103 intact.
+    assert int(got["GL"] // 30) != int(printed_gl // 30)
+    assert varga(got["GL"], "D10").sign == varga(printed_gl, "D10").sign
+    assert RASI_ABBR[varga(got["GL"], "D10").sign] == CHART_12_D10_DRAWN["GL"]
+
+    # HL: same rasi, different D-10 sign — so the drawn D-10's HL box would
+    # not reproduce from a recomputed HL.
+    assert int(got["HL"] // 30) == int(printed_hl // 30)
+    assert varga(got["HL"], "D10").sign != varga(printed_hl, "D10").sign
+    assert RASI_ABBR[varga(printed_hl, "D10").sign] == CHART_12_D10_DRAWN["HL"]
 
 
 # --------------------------------------------------------------------------
@@ -1999,26 +2029,99 @@ def test_exercise_21_lagna_beats_the_prime_ministers():
     assert EXERCISE_21_LAGNA_REKHAS > EXAMPLE_39_D10_SAV[R["Sc"]] == 35
 
 
-def test_exercise_21_verdict_is_no_and_says_which_figures_decide_it():
-    assert "No." in EXERCISE_21_VERDICT
+def test_exercise_21_verdict_is_transcribed_from_the_printed_answer():
     assert "39 rekhas" in EXERCISE_21_VERDICT
-    assert "31" in EXERCISE_21_VERDICT
+    assert "cannot belong to an unsuccessful waiter" in EXERCISE_21_VERDICT
 
 
-def test_exercise_21_guess_stops_where_the_book_stops():
-    """§12.5 fixes which chart to read a career from; it gives no rule for
-    reading a *field* of work out of rekhas. The guess says so rather than
-    inventing one."""
-    assert "no rule that" in EXERCISE_21_GUESS
-    assert "Mercury" in EXERCISE_21_GUESS
+def test_exercise_21_second_house_is_the_thirty_three_the_guess_names():
+    """'the 2nd house is strong in D-10's SAV, with 33 rekhas'."""
+    from hora.charts.ashtakavarga import sav_grade, signs_in_chart
+    from hora.charts.vargas import varga
+
+    sav = sarvashtakavarga(signs_in_chart(_chart_12_references(), "D10"))
+    second = (varga(_lon12(CHART_12["Asc"]), "D10").sign + 1) % 12
+    assert RASI_ABBR[second] == "Li"
+    assert sav["rekhas"][second] == 33
+    assert sav_grade(sav["rekhas"][second]) == "strong"
 
 
-def test_exercise_21_both_hint_houses_are_owned_by_mercury():
-    """The one thing the chart does supply about the field."""
+def test_exercise_21_ghati_lagna_is_in_taurus_with_its_own_lord():
+    """'Ghati lagna is in Taurus and its lord Venus occupies it.'"""
     from hora.core.const import RASI_LORD
 
-    assert RASI_LORD[R[EXERCISE_21_LAGNA]] == Graha.MERCURY
-    assert RASI_LORD[R[EXERCISE_21_TENTH]] == Graha.MERCURY
+    assert CHART_12_D10_DRAWN["GL"] == "Ta"
+    assert RASI_LORD[R["Ta"]] == Graha.VENUS
+    assert CHART_12_D10_DRAWN["Ven"] == CHART_12_D10_DRAWN["GL"]
+
+
+def test_exercise_21_ghati_lagna_sits_in_the_ninth_house():
+    """'This makes ghati lagna and 9th house very powerful' — the two are the
+    same sign, which is what ties the sentence together."""
+    from hora.charts.vargas import varga
+
+    lagna = varga(_lon12(CHART_12["Asc"]), "D10").sign
+    assert (lagna + 8) % 12 == R[CHART_12_D10_DRAWN["GL"]] == R["Ta"]
+
+
+def _d10_argalas(target: str):
+    from hora.charts.argala import argalas_on_sign, ketu_sign_of, occupants_from
+
+    graha = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    rasis = {int(g): R[CHART_12_D10_DRAWN[name]] for name, g in graha.items()}
+    return argalas_on_sign(
+        R[target], occupants_from(rasis), ketu_sign=ketu_sign_of(rasis),
+        malefic=frozenset({int(Graha.SUN), int(Graha.MARS), int(Graha.SATURN),
+                           int(Graha.RAHU), int(Graha.KETU)}))
+
+
+def test_exercise_21_saturn_gives_an_eleventh_house_argala_on_ghati_lagna():
+    """'Saturn's 11th house argala on GL'. Chapter 10's module, run over
+    chapter 12's chart — the two chapters have to agree."""
+    rows = [a for a in _d10_argalas("Ta")
+            if a.kind == "argala" and a.house == 11]
+    assert len(rows) == 1
+    assert rows[0].grahas == (int(Graha.SATURN),)
+    assert RASI_ABBR[rows[0].sign] == "Pi"
+
+
+def test_exercise_21_rahus_second_house_argala_on_lagna_is_unobstructed():
+    """'Rahu's unobstructed 2nd house argala on lagna'. The 2nd is obstructed
+    from the 12th, and the 12th from Vi is Le, which is empty — so the book's
+    word 'unobstructed' is itself derived, not taken on trust."""
+    rows = _d10_argalas("Vi")
+    second = [a for a in rows if a.kind == "argala" and a.house == 2]
+    assert len(second) == 1
+    assert second[0].grahas == (int(Graha.RAHU),)
+    assert RASI_ABBR[second[0].sign] == "Li"
+
+    obstruction = [a for a in rows
+                   if a.kind == "virodhargala" and a.house == 12]
+    assert len(obstruction) == 1
+    assert RASI_ABBR[obstruction[0].sign] == "Le"
+    assert obstruction[0].grahas == (), "an occupied 12th would obstruct it"
+
+
+@pytest.mark.parametrize("claim,why", EXERCISE_21_GUESS_STEPS)
+def test_exercise_21_every_guess_step_is_a_sentence_from_the_book(claim, why):
+    """Each checkable step of the guess is quoted from the printed answer and
+    carries the fact that decides it."""
+    assert claim in EXERCISE_21_GUESS
+    assert why
+
+
+def test_exercise_21_final_answer_is_recorded_as_not_derivable():
+    """The chain stops at 'famous entertainer'. Madonna is the book's
+    knowledge, not a calculation, and nothing in our code claims otherwise."""
+    assert "Madonna" in EXERCISE_21_FINAL_ANSWER
+    assert "Madonna" not in EXERCISE_21_GUESS
+    assert not any("Madonna" in claim for claim, _ in EXERCISE_21_GUESS_STEPS)
+
+
+def test_exercise_21_footnote_47_is_recorded_as_unseen():
+    assert "not been supplied" in EXERCISE_21_FOOTNOTE_47_UNSEEN
 
 
 def test_the_rules_endpoint_carries_exercise_21(client):
@@ -2027,4 +2130,6 @@ def test_the_rules_endpoint_carries_exercise_21(client):
     assert body["makes_sense"] is False
     assert body["hint_figures"]["lagna"]["rekhas"] == 39
     assert body["hint_figures"]["tenth"]["rekhas"] == 31
-    assert "book prints no answer" in body["answer_is_ours"]
+    assert len(body["guess_steps"]) == 6
+    assert "Madonna" in body["final_answer"]
+    assert "not claimed to" in body["final_answer_note"]

@@ -478,9 +478,38 @@
         28,
         25
       ],
-      "answer_is_ours": "The book prints no answer to Exercise 21. This is our computation, and it sums to 337 like every other SAV.",
+      "answer_provenance": "We computed this before the book's answer was supplied, and it matched all twelve figures.",
       "chart": "Chart 12",
-      "guess": "A distinguished and successful career. Naming the field needs more than an SAV: the exercise says 'guess', and section 12.5 gives no rule that turns rekhas into a profession. What the chart does supply is that both houses the hint names \u2014 Virgo lagna and Gemini 10th \u2014 are owned by Mercury, so Mercury's significations are where a fuller reading would start.",
+      "final_answer": "The chart belongs to Madonna, a pop diva of USA.",
+      "final_answer_note": "Every step of the guess reproduces from Chart 12's D-10. The identification does not and is not claimed to: the derivable chain stops at a famous, fortunate entertainer with speech central to her career, and the name is the book's own knowledge, not a calculation.",
+      "footnote_47": "Footnote 47 is cited after 'unconventional behavior in public life' and has not been supplied.",
+      "guess": "Apart from the 1st and 10th houses, the 2nd house is strong in D-10's SAV, with 33 rekhas. This shows the importance of speech and voice in her career. Ghati lagna is in Taurus and its lord Venus occupies it. This makes ghati lagna and 9th house very powerful. This shows a fortunate (9th) and famous (GL) entertainer (Venus). Saturn's 11th house argala on GL suggests popular mass support as a catalyst in her success. Rahu's unobstructed 2nd house argala on lagna shows unconventional behavior in public life.",
+      "guess_steps": [
+        {
+          "claim": "the 2nd house is strong in D-10's SAV, with 33 rekhas",
+          "decided_by": "2nd from Vi is Li, which holds 33"
+        },
+        {
+          "claim": "Ghati lagna is in Taurus",
+          "decided_by": "GL's D-10 sign, as Chart 12's diagram draws it"
+        },
+        {
+          "claim": "its lord Venus occupies it",
+          "decided_by": "Venus owns Taurus and sits in it in the D-10"
+        },
+        {
+          "claim": "This makes ghati lagna and 9th house very powerful",
+          "decided_by": "9th from the Vi lagna is Ta, so GL sits in the 9th house"
+        },
+        {
+          "claim": "Saturn's 11th house argala on GL",
+          "decided_by": "11th from Ta is Pi, where Saturn is"
+        },
+        {
+          "claim": "Rahu's unobstructed 2nd house argala on lagna",
+          "decided_by": "2nd from Vi is Li, where Rahu is; the 12th, Le, is empty"
+        }
+      ],
       "hint": "Look at the number of rekhas in lagna and the 10th house.",
       "hint_figures": {
         "lagna": {
@@ -495,7 +524,7 @@
       "makes_sense": false,
       "question": "Consider the D-10 chart of a lady, shown in Chart 12. Compute the SAV of this D-10. Suppose we are told that she has an unsuccessful career as a waiter in a small restaurant. Based on D-10's SAV, does it make sense? If not, guess her career.",
       "varga": "D10",
-      "verdict": "No. Lagna in the D-10 holds 39 rekhas \u2014 the maximum in the chart and the highest D-10 lagna in the book, above the 35 that Example 39 gives as the reason for a Prime Minister's 'success and good name'. The 10th house holds 31, also strong by section 12.4's bands. An unsuccessful career in a menial job contradicts both figures."
+      "verdict": "Lagna is in Vi in Chart 12. Vi it has 39 rekhas. That's a lot more than 30! The 10th house (Ge) also has more than 30 rekhas. So this D-10 is very powerful and it possibly cannot belong to an unsuccessful waiter at a small restaurant. This has to be someone pretty successful."
     },
     "in_divisional_charts": "If we can judge the benefic positions of various planets with respect to 8 references in rasi chart, there is no reason why we should not do it in all the divisional charts. In fact, this becomes invaluable when we interpret transits in rasi chart with respect to the natal positions in divisional charts and transits in divisional charts with respect to the natal positions in rasi chart.",
     "intro": "Analyzing a chart and making correct predictions requires mixing many different principles and making fine compromises and judgments. Sage Parasara said that it is difficult for even great Maharshis. In Kali Yuga, human beings become sinful and the sins kill their intelligence. Parasara said that the intellectual pygmies of Kali Yuga cannot cope with too many complicated principles and presented ashtakavarga as a simple technique that lets them make reasonable predictions without much fuss.",

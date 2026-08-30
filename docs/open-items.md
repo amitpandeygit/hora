@@ -603,18 +603,19 @@ agree to within a second:
 | 12 | disc_center | −43.3s | −43.6s |
 
 Two quantities, two rates, two hemispheres, one number: HL and GL are right and
-the sunrise they are measured from is not. Neither definition is the book's —
-ours is early both times, `disc_center` late
-both times, and the book sits at no fixed fraction between them: 23% for Chart 3
-(26 N), 53% for Chart 12 (43 N). A toggle cannot fix it; it looks like a
-different refraction or horizon-dip model, worsening with latitude.
+the sunrise is not. Neither §5 definition is the book's — ours early both times,
+`disc_center` late both times, at no fixed fraction between (23% at 26 N, 53% at
+43 N). A toggle cannot fix it; it looks like a refraction or horizon-dip model
+that diverges with latitude.
 
-Nothing already verified is affected: upagrahas divide the day into eighths, so
-a 50-second shift moves them by seconds of arc. GL is the most sunrise-sensitive
-quantity in the book, which is why this surfaces only now. **Not changed.** Neither available value is right, so there is nothing to switch
-to. Pinned by the two `..._sunrise_shift` tests in `test_book_chapter12.py`.
+Reach: upagrahas divide the day into eighths, so a 50-second shift moves them by
+seconds of arc. In a **divisional** chart it is not monotone — Chart 12's GL is
+a rasi out yet lands in the same D-10 sign (so Exercise 21's reading survives),
+while its HL agrees in the rasi chart yet is one sign out in the D-10. Neither
+direction may be assumed from the other.
 
-**Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
+**Not changed** — neither available value is right, so there is nothing to
+switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 
 ### OI-101 — "sodhya pindas" are named but not defined

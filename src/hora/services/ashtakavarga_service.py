@@ -89,7 +89,10 @@ from hora.core.const import (
     EXERCISE_20_CLOSING,
     EXERCISE_21,
     EXERCISE_21_ANSWER,
+    EXERCISE_21_FINAL_ANSWER,
+    EXERCISE_21_FOOTNOTE_47_UNSEEN,
     EXERCISE_21_GUESS,
+    EXERCISE_21_GUESS_STEPS,
     EXERCISE_21_HINT,
     EXERCISE_21_LAGNA,
     EXERCISE_21_LAGNA_REKHAS,
@@ -286,9 +289,9 @@ def rules() -> dict:
             "chart": "Chart 12",
             "varga": "D10",
             "answer": list(EXERCISE_21_ANSWER),
-            "answer_is_ours": (
-                "The book prints no answer to Exercise 21. This is our "
-                "computation, and it sums to 337 like every other SAV."
+            "answer_provenance": (
+                "We computed this before the book's answer was supplied, and "
+                "it matched all twelve figures."
             ),
             "hint_figures": {
                 "lagna": {"rasi": EXERCISE_21_LAGNA,
@@ -299,6 +302,19 @@ def rules() -> dict:
             "makes_sense": False,
             "verdict": EXERCISE_21_VERDICT,
             "guess": EXERCISE_21_GUESS,
+            "guess_steps": [
+                {"claim": claim, "decided_by": why}
+                for claim, why in EXERCISE_21_GUESS_STEPS
+            ],
+            "final_answer": EXERCISE_21_FINAL_ANSWER,
+            "final_answer_note": (
+                "Every step of the guess reproduces from Chart 12's D-10. The "
+                "identification does not and is not claimed to: the derivable "
+                "chain stops at a famous, fortunate entertainer with speech "
+                "central to her career, and the name is the book's own "
+                "knowledge, not a calculation."
+            ),
+            "footnote_47": EXERCISE_21_FOOTNOTE_47_UNSEEN,
         },
         "exercise_20": {
             "question": EXERCISE_20,
