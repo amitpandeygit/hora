@@ -1282,3 +1282,71 @@ five pairs, and none of 42's five hypotheticals has the empty rasi level with
 the occupied one. So the book never demonstrates it.
 
 **Closes when:** you confirm the reading, or a later passage settles it.
+
+## D-42 · Table 28 gives Virgo 6; Exercise 22's own answers require 5
+
+**Status: NEEDS YOU.** The table is used as printed. The conflict is recorded.
+
+Table 28's rasimana multipliers are `7 10 8 4 10 6 7 8 9 5 11 12`. Exercise 22
+prints seven rasi pindas for Chart 7, and with Virgo at **6** every one of them
+comes out too high by exactly the SoAV's Virgo rekhas:
+
+| planet | ours (Virgo 6) | printed | excess | Virgo in SoAV |
+|---|---|---|---|---|
+| Sun | 155 | 152 | 3 | 3 |
+| Moon | 86 | 85 | 1 | 1 |
+| Mars | 55 | 52 | 3 | 3 |
+| Mercury | 99 | 95 | 4 | 4 |
+| Jupiter | 69 | 68 | 1 | 1 |
+| Venus | 154 | 154 | 0 | 0 |
+| Saturn | 166 | 162 | 4 | 4 |
+
+With Virgo at **5**, all seven land exactly. That is seven independent
+equations in one unknown fitting without residue, against one digit in one
+table cell. Venus is the control: its SoAV holds zero in Virgo and it is the
+one row that already agreed.
+
+Nothing else in the chapter arbitrates. Example 43's SoAV also holds zero in
+Virgo, so both multipliers give its printed 77 — a test asserts that, so the
+example cannot be mistaken for corroboration of either value.
+
+The rest of Exercise 22 is untouched by this: all 84 BAV figures, the SAV, all
+84 SoAV figures and all seven **graha** pindas reproduce exactly. The
+disagreement is confined to Table 28, which is what makes the single-cell
+diagnosis safe.
+
+**What we do:** `TABLE_28_RASIMANA` holds the printed 6, so
+`/v1/sodhana/pinda` returns 155 for Chart 7's Sun where the book prints 152.
+The conflict is served on that endpoint and on `/v1/sodhana/rules` as
+`table_28_virgo_conflict`, so no caller meets the difference unwarned.
+
+**Closes when:** you decide whether the table or the answers are authoritative.
+
+## D-43 · §12.7.2 says "occupied by a planet", but the lagna occupies too
+
+**Status: resolved by Exercise 22, recorded for the record.**
+
+§12.7.2's rules (2), (3) and (4) turn on whether a rasi is "occupied by a
+planet (or planets)". Chart 7's Scorpio holds the **lagna and nothing else**,
+and Scorpio is half of Mars's co-owned pair, so the Ar/Sc pair is decided by
+whether the lagna counts.
+
+Three of the seven printed SoAVs — Sun, Moon and Saturn — come out wrong if it
+does not:
+
+| planet | Ar/Sc before | lagna ignored | lagna counted | printed |
+|---|---|---|---|---|
+| Sun | (2, 1) | (2, 0) by rule (3a) | (2, 1) by rule (2) | (2, 1) |
+| Moon | (3, 1) | (3, 0) by rule (3a) | (3, 1) by rule (2) | (3, 1) |
+| Saturn | (2, 3) | (2, 2) by rule (3b) | (2, 3) by rule (2) | (2, 3) |
+
+Two go through rule (3a) and one through (3b), so this is not one branch
+misbehaving. The other four planets are unaffected and agree either way.
+
+**What we do:** nothing changes in the code — `occupied_signs` is the caller's
+to state, by OI-104 — but the finding is served as `lagna_occupies` so a caller
+knows which set to pass. Our own fixtures pass the lagna's rasi.
+
+This settles only the lagna. Rahu and Ketu remain open under OI-104: Chart 7
+puts them in Aries and Libra, both of which already hold planets, so the
+exercise cannot distinguish them.

@@ -621,15 +621,18 @@ and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 ### OI-104 — §12.7.2 does not say whether Rahu and Ketu occupy a rasi
 
 Rules (2), (3) and (4) all turn on whether a rasi is "occupied by a planet (or
-planets)". The section never says which bodies count.
+planets)". The section never says which bodies count. **Exercise 22 settles the
+lagna** — its printed SoAVs need the lagna's rasi treated as occupied, which is
+D-43. The nodes are still open.
 
-Neither example settles it. Example 42's hypotheticals name only Mars, Jupiter
-and Saturn as occupants; Example 41 stops at rule (1) on all five pairs, before
-occupancy is consulted — a test proves that by trying every occupancy of up to
-three signs and getting the same answer each time. It matters: the nodes are
-always somewhere and always opposite, so counting them makes two signs occupied
-in every chart, and a co-owned pair holding one shifts from rule (3) or (4) to
-rule (2) or (3) — a different rule, often a different answer.
+Exercise 22 cannot decide them: Chart 7 puts Rahu in Aries and Libra's Ketu in
+rasis that already hold planets, so counting them changes nothing there — a test
+asserts that. Examples 41 and 42 are silent too; 42's hypotheticals name only
+Mars, Jupiter and Saturn, and 41 stops at rule (1) before occupancy is
+consulted. It matters: the nodes are always somewhere and always opposite, so
+counting them makes two signs occupied in every chart, and a co-owned pair
+holding one shifts from rule (3) or (4) to rule (2) or (3) — a different rule,
+often a different answer.
 
 **What we do:** `/v1/sodhana/ekaadhipatya` requires `occupied_signs` with no
 default, and `ekaadhipatya_sodhana` takes the same argument — so no layer of

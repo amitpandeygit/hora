@@ -28,6 +28,7 @@
       2,
       0
     ],
+    "lagna_occupies": null,
     "occupancy_undefined": "Section 12.7.2 says 'occupied by a planet (or planets)' without saying whether Rahu and Ketu count. Example 42's occupants are Mars, Jupiter and Saturn only, so it does not settle the question. Our API makes the caller state which rasis are occupied rather than choosing for them.",
     "occupied_signs": [],
     "owner": "Mercury",
@@ -193,6 +194,7 @@
         "text": "If they have different values, replace the higher value with the lower value."
       }
     ],
+    "table_28_virgo_conflict": null,
     "tie_hit_in_this_chart": [],
     "tie_is_uncovered": "Rule (3) splits on whether the empty rasi's value is lower or higher than the occupied one's. It does not say what to do when they are equal, and equal values survive Trikona Sodhana routinely.",
     "tie_reading": "We read equal as (3a) and write zero. The book zeroes ties everywhere else it faces one: rule (4a) here zeroes two empty rasis holding the same value, and section 12.7.1's rule (2) zeroes three trines holding the same value. Reading equal as (3b) instead would leave the value standing, which is the only place in either reduction where a tie survives.",

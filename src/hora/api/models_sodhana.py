@@ -45,6 +45,7 @@ class SodhanaRulesOut(BaseModel):
     example_41: dict
     example_42: dict
     example_43: dict
+    exercise_22: dict
 
 
 class EkaadhipatyaIn(BaseModel):
@@ -82,6 +83,8 @@ class EkaadhipatyaOut(BaseModel):
     pairs: list[dict]
     untouched: dict
     occupancy_undefined: str
+    lagna_occupies: str | None = None
+    table_28_virgo_conflict: str | None = None
     tie_is_uncovered: str
     tie_reading: str
     tie_hit_in_this_chart: list[list[int]]
@@ -112,3 +115,5 @@ class SodhyaPindaOut(BaseModel):
     tie_hit_in_this_chart: list[list[int]]
     tie_reading: str | None = None
     occupancy_undefined: str
+    lagna_occupies: str | None = None
+    table_28_virgo_conflict: str | None = None

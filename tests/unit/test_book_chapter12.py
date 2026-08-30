@@ -66,6 +66,7 @@ from hora.core.const import (
     CHART_12_D10_DRAWN,
     CLASSICAL_TABLE_TOTALS,
     CLASSICAL_TABLE_TOTALS_PROVENANCE,
+    EKAADHIPATYA_LAGNA_OCCUPIES,
     EKAADHIPATYA_RULES_ALL_EXERCISED,
     EKAADHIPATYA_TIE_IS_UNCOVERED,
     EKAADHIPATYA_UNPAIRED,
@@ -112,8 +113,14 @@ from hora.core.const import (
     EXERCISE_21_TENTH,
     EXERCISE_21_TENTH_REKHAS,
     EXERCISE_21_VERDICT,
+    EXERCISE_22_BAV,
+    EXERCISE_22_PINDAS,
+    EXERCISE_22_RASI_PINDAS_AS_TABLE_28_PRINTS,
+    EXERCISE_22_SAV,
+    EXERCISE_22_SOAV,
     FOOTNOTE_45_NOT_IMPLEMENTED,
     FOOTNOTE_45_ROOMS,
+    FOOTNOTE_47,
     GRAHA_PINDA_EXCLUDES_LAGNA,
     MUHURTA_DEFINITION,
     MUHURTA_FOOTNOTE,
@@ -144,6 +151,7 @@ from hora.core.const import (
     TABLE_27_OWNER,
     TABLE_27_TOTALS,
     TABLE_28_RASIMANA,
+    TABLE_28_VIRGO_CONFLICT,
     TABLE_29_GRAHAMANA,
     TRIKONA_SODHANA_DISPUTED_CASE,
     TRIKONA_SODHANA_FOOTNOTE_44,
@@ -2853,3 +2861,176 @@ def test_the_sodhana_rules_endpoint_carries_12_7_3(client):
     assert body["sodhya_pinda"]["footnote_45_rooms"]["Mercury"] == (
         "the study room")
     assert "D-41" in body["sodhya_pinda"]["inherits"]
+
+
+# --------------------------------------------------------------------------
+# Exercise 22 — the whole chapter, end to end over Chart 7
+# --------------------------------------------------------------------------
+
+CHART_7_REFERENCE_SIGNS = {
+    "Sun": R["Cp"], "Moon": R["Ar"], "Mars": R["Sg"], "Mercury": R["Sg"],
+    "Jupiter": R["Li"], "Venus": R["Aq"], "Saturn": R["Ar"],
+    "Lagna": R["Sc"],
+}
+CHART_7_GRAHA_SIGNS = {
+    name: sign for name, sign in CHART_7_REFERENCE_SIGNS.items()
+    if name != "Lagna"
+}
+#: Every rasi holding a planet, plus the lagna's — see D-43.
+CHART_7_OCCUPIED = sorted(set(CHART_7_REFERENCE_SIGNS.values()))
+#: The same without the lagna, which is the reading §12.7.2's wording implies.
+CHART_7_OCCUPIED_PLANETS_ONLY = sorted(set(CHART_7_GRAHA_SIGNS.values()))
+
+
+@pytest.mark.parametrize("owner", sorted(EXERCISE_22_BAV))
+def test_exercise_22s_printed_bavs_reproduce(owner):
+    """Seven BAVs, twelve figures each — 84 in all."""
+    from hora.charts.ashtakavarga import bhinnashtakavarga
+
+    result = bhinnashtakavarga(owner, CHART_7_REFERENCE_SIGNS)
+    assert result.rekhas == EXERCISE_22_BAV[owner]
+    assert result.total == CLASSICAL_TABLE_TOTALS[owner]
+
+
+def test_exercise_22s_total_row_is_the_sav():
+    """The exercise labels the total row SAV, so it must be both the column
+    sums of its own seven BAVs and our sarvashtakavarga."""
+    columns = tuple(sum(EXERCISE_22_BAV[o][i] for o in EXERCISE_22_BAV)
+                    for i in range(12))
+    assert columns == EXERCISE_22_SAV
+    assert sum(EXERCISE_22_SAV) == SAV_TOTAL
+    assert tuple(sarvashtakavarga(CHART_7_REFERENCE_SIGNS)["rekhas"]) \
+        == EXERCISE_22_SAV
+
+
+@pytest.mark.parametrize("owner", sorted(EXERCISE_22_SOAV))
+def test_exercise_22s_printed_soavs_reproduce(owner):
+    """Both reductions, in §12.7.3's order, with the lagna counted as
+    occupying its rasi — see D-43."""
+    from hora.charts.ashtakavarga import (
+        bhinnashtakavarga,
+        ekaadhipatya_sodhana,
+        trikona_sodhana,
+    )
+
+    bav = bhinnashtakavarga(owner, CHART_7_REFERENCE_SIGNS).rekhas
+    soav = ekaadhipatya_sodhana(
+        owner, trikona_sodhana(owner, bav).after, CHART_7_OCCUPIED).after
+    assert soav == EXERCISE_22_SOAV[owner]
+
+
+def test_the_printed_soavs_need_the_lagna_to_occupy_its_rasi():
+    """D-43. §12.7.2 says "occupied by a **planet**", but three of the seven
+    SoAVs come out wrong if the lagna's rasi is treated as empty. Chart 7's
+    Scorpio holds the lagna alone and pairs with Aries, so Ar/Sc decides it —
+    twice through rule (3a) and once through (3b), so it is not one branch
+    misbehaving."""
+    from hora.charts.ashtakavarga import (
+        bhinnashtakavarga,
+        ekaadhipatya_sodhana,
+        trikona_sodhana,
+    )
+
+    wrong = []
+    for owner in EXERCISE_22_SOAV:
+        bav = bhinnashtakavarga(owner, CHART_7_REFERENCE_SIGNS).rekhas
+        after = trikona_sodhana(owner, bav).after
+        without = ekaadhipatya_sodhana(
+            owner, after, CHART_7_OCCUPIED_PLANETS_ONLY)
+        if without.after != EXERCISE_22_SOAV[owner]:
+            pair = next(p for p in without.pairs
+                        if p.signs == (R["Ar"], R["Sc"]))
+            wrong.append((owner, pair.rule))
+    assert sorted(o for o, _ in wrong) == ["Moon", "Saturn", "Sun"]
+    assert {rule for _, rule in wrong} == {"3a", "3b"}
+    assert "counts as occupied" in EKAADHIPATYA_LAGNA_OCCUPIES
+
+
+def test_the_nodes_cannot_be_settled_by_exercise_22():
+    """OI-104's other half stays open. Chart 7 puts Rahu in Aries and Ketu in
+    Libra, both of which already hold planets, so counting them changes
+    nothing and the exercise is silent on them."""
+    from hora.charts.ashtakavarga import (
+        bhinnashtakavarga,
+        ekaadhipatya_sodhana,
+        trikona_sodhana,
+    )
+
+    with_nodes = sorted(set(CHART_7_OCCUPIED) | {R["Ar"], R["Li"]})
+    assert with_nodes == CHART_7_OCCUPIED, "the nodes add no new rasi here"
+    for owner in EXERCISE_22_SOAV:
+        bav = bhinnashtakavarga(owner, CHART_7_REFERENCE_SIGNS).rekhas
+        after = trikona_sodhana(owner, bav).after
+        assert ekaadhipatya_sodhana(owner, after, with_nodes).after \
+            == EXERCISE_22_SOAV[owner]
+
+
+@pytest.mark.parametrize("owner", sorted(EXERCISE_22_PINDAS))
+def test_exercise_22s_printed_graha_pindas_reproduce(owner):
+    """All seven, exactly. The graha half of the calculation is sound, which
+    is what isolates D-42 to Table 28."""
+    from hora.charts.ashtakavarga import sodhya_pinda
+
+    result = sodhya_pinda(
+        owner, EXERCISE_22_SOAV[owner], CHART_7_GRAHA_SIGNS)
+    assert result.graha_pinda == EXERCISE_22_PINDAS[owner][1]
+
+
+@pytest.mark.parametrize("owner", sorted(EXERCISE_22_PINDAS))
+def test_exercise_22s_rasi_pindas_need_virgo_to_be_five(owner):
+    """D-42. With Table 28 as printed every rasi pinda comes out exactly one
+    Virgo-rekha too high; with Virgo at 5 all seven land. Seven equations in
+    one unknown, fitting without residue."""
+    from hora.charts.ashtakavarga import sodhya_pinda
+
+    soav = EXERCISE_22_SOAV[owner]
+    printed = EXERCISE_22_PINDAS[owner][0]
+
+    as_printed = sodhya_pinda(owner, soav, CHART_7_GRAHA_SIGNS).rasi_pinda
+    assert as_printed == EXERCISE_22_RASI_PINDAS_AS_TABLE_28_PRINTS[owner]
+    assert as_printed - printed == soav[R["Vi"]]
+
+    corrected = tuple(5 if i == R["Vi"] else m
+                      for i, m in enumerate(TABLE_28_RASIMANA))
+    assert sum(v * m for v, m in zip(soav, corrected, strict=True)) == printed
+
+
+def test_table_28s_virgo_conflict_is_recorded_not_silently_fixed():
+    """We use the table as printed. The conflict is registered, surfaced on
+    the endpoint, and waiting on a decision — see D-42."""
+    assert TABLE_28_RASIMANA[R["Vi"]] == 6
+    assert "Table 28 gives Virgo a multiplier of 6" in TABLE_28_VIRGO_CONFLICT
+    assert "seven independent equations" in TABLE_28_VIRGO_CONFLICT
+
+
+def test_example_43_cannot_arbitrate_the_virgo_conflict():
+    """Its SoAV holds zero in Virgo, so both multipliers give 77."""
+    assert EXAMPLE_43_SOAV[R["Vi"]] == 0
+    for multiplier in (5, 6):
+        table = tuple(multiplier if i == R["Vi"] else m
+                      for i, m in enumerate(TABLE_28_RASIMANA))
+        assert sum(v * m for v, m in zip(EXAMPLE_43_SOAV, table, strict=True)) \
+            == EXAMPLE_43_RASI_PINDA
+
+
+def test_exercise_22s_sodhya_pindas_are_the_sum_of_the_two_halves():
+    """Whatever D-42 turns out to be, the printed totals are internally
+    consistent — a check on the transcription, not on us."""
+    for owner, (rasi, graha, sodhya) in EXERCISE_22_PINDAS.items():
+        assert rasi + graha == sodhya, owner
+
+
+def test_footnote_47_arrived_and_is_transcribed():
+    """Cited back in Exercise 21 and printed under Exercise 22."""
+    assert "argalas on GL show decisive influences on one's fame" in FOOTNOTE_47
+    assert "nature" in FOOTNOTE_47
+
+
+def test_the_sodhana_rules_endpoint_carries_exercise_22(client):
+    body = client.get("/v1/sodhana/rules").json()["exercise_22"]
+    assert body["sav"] == list(EXERCISE_22_SAV)
+    assert body["bav"]["Mercury"] == list(EXERCISE_22_BAV["Mercury"])
+    assert body["soav"]["Saturn"] == list(EXERCISE_22_SOAV["Saturn"])
+    assert body["pindas"]["Sun"] == {"rasi": 152, "graha": 81, "sodhya": 233}
+    assert "D-42" in body["what_reproduces"]
+    assert "fame" in body["footnote_47"]

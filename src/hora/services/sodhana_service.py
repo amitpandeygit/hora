@@ -9,6 +9,7 @@ from hora.charts.ashtakavarga import (
     trikona_sodhana,
 )
 from hora.core.const import (
+    EKAADHIPATYA_LAGNA_OCCUPIES,
     EKAADHIPATYA_OCCUPANCY_UNDEFINED,
     EKAADHIPATYA_RULES_ALL_EXERCISED,
     EKAADHIPATYA_SODHANA_MEANS,
@@ -34,8 +35,16 @@ from hora.core.const import (
     EXAMPLE_43_RASI_PRODUCTS,
     EXAMPLE_43_SOAV,
     EXAMPLE_43_SODHYA_PINDA,
+    EXERCISE_22,
+    EXERCISE_22_BAV,
+    EXERCISE_22_PINDAS,
+    EXERCISE_22_PREAMBLE,
+    EXERCISE_22_RASI_PINDAS_AS_TABLE_28_PRINTS,
+    EXERCISE_22_SAV,
+    EXERCISE_22_SOAV,
     FOOTNOTE_45_NOT_IMPLEMENTED,
     FOOTNOTE_45_ROOMS,
+    FOOTNOTE_47,
     GRAHA_NAMES,
     GRAHA_PINDA_EXCLUDES_LAGNA,
     GRAHA_PINDA_RULE,
@@ -48,6 +57,7 @@ from hora.core.const import (
     SODHYA_PINDA_RULE,
     SODHYA_PINDAS_INTRO,
     TABLE_28_RASIMANA,
+    TABLE_28_VIRGO_CONFLICT,
     TABLE_29_GRAHAMANA,
     TRIKONA_SODHANA_DISPUTED_CASE,
     TRIKONA_SODHANA_FOOTNOTE_44,
@@ -207,6 +217,8 @@ def pinda(owner: str, reference_signs: dict[str, int],
         "tie_hit_in_this_chart": ties,
         "tie_reading": EKAADHIPATYA_TIE_READING if ties else None,
         "occupancy_undefined": EKAADHIPATYA_OCCUPANCY_UNDEFINED,
+        "lagna_occupies": EKAADHIPATYA_LAGNA_OCCUPIES,
+        "table_28_virgo_conflict": TABLE_28_VIRGO_CONFLICT,
     }
 
 
@@ -230,9 +242,31 @@ def rules() -> dict:
                 "OI-104's undefined occupancy. Neither reaches Example 43, "
                 "whose pairs all stop at rule (1)."
             ),
+            "table_28_virgo_conflict": TABLE_28_VIRGO_CONFLICT,
             "footnote_45": SODHYA_PINDA_FOOTNOTE_45,
             "footnote_45_rooms": dict(FOOTNOTE_45_ROOMS),
             "footnote_45_not_implemented": FOOTNOTE_45_NOT_IMPLEMENTED,
+        },
+        "exercise_22": {
+            "question": EXERCISE_22,
+            "preamble": EXERCISE_22_PREAMBLE,
+            "chart": "Chart 7",
+            "bav": {k: list(v) for k, v in EXERCISE_22_BAV.items()},
+            "sav": list(EXERCISE_22_SAV),
+            "soav": {k: list(v) for k, v in EXERCISE_22_SOAV.items()},
+            "pindas": {
+                planet: {"rasi": rasi, "graha": graha, "sodhya": sodhya}
+                for planet, (rasi, graha, sodhya) in EXERCISE_22_PINDAS.items()
+            },
+            "what_reproduces": (
+                "All 84 BAV figures, the SAV, all 84 SoAV figures and all "
+                "seven graha pindas. The seven rasi pindas do not, and D-42 "
+                "says why: they need Virgo's multiplier to be 5, not the 6 "
+                "Table 28 prints."
+            ),
+            "rasi_pindas_as_table_28_prints":
+                dict(EXERCISE_22_RASI_PINDAS_AS_TABLE_28_PRINTS),
+            "footnote_47": FOOTNOTE_47,
         },
         "example_43": {
             "question": EXAMPLE_43,
@@ -265,6 +299,7 @@ def rules() -> dict:
                 "pairs says so by omission."
             ),
             "occupancy_undefined": EKAADHIPATYA_OCCUPANCY_UNDEFINED,
+            "lagna_occupies": EKAADHIPATYA_LAGNA_OCCUPIES,
             "tie_is_uncovered": EKAADHIPATYA_TIE_IS_UNCOVERED,
             "tie_reading": EKAADHIPATYA_TIE_READING,
             "rules_all_exercised": list(EKAADHIPATYA_RULES_ALL_EXERCISED),

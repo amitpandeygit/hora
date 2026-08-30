@@ -303,6 +303,16 @@ CASES = [
                         "Jupiter": 4, "Venus": 0, "Saturn": 4},
         "occupied_signs": [],
     }),
+    # Exercise 22: Chart 7's Sun, the row D-42's Virgo conflict shows up in.
+    ("sodhana_exercise_22_sun", "POST", "/v1/sodhana/pinda", {
+        "owner": "Sun",
+        "reference_signs": {"Sun": 9, "Moon": 0, "Mars": 8, "Mercury": 8,
+                            "Jupiter": 6, "Venus": 10, "Saturn": 0,
+                            "Lagna": 7},
+        "graha_signs": {"Sun": 9, "Moon": 0, "Mars": 8, "Mercury": 8,
+                        "Jupiter": 6, "Venus": 10, "Saturn": 0},
+        "occupied_signs": [0, 6, 7, 8, 9, 10],
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

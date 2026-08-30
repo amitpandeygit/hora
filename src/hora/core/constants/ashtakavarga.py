@@ -1128,3 +1128,81 @@ EXAMPLE_43_GRAHA_PRODUCTS: tuple[tuple[str, str, int, int, int], ...] = (
     ("Sun", "Ge", 3, 5, 15), ("Mars", "Ge", 3, 8, 24),
     ("Mercury", "Ge", 3, 5, 15), ("Venus", "Ar", 3, 7, 21),
 )
+
+
+# -- Exercise 22 — the whole chapter over Chart 7 ---------------------------
+
+EXERCISE_22 = "Find BAV, SoAV and sodhya pinda of all planets in Chart 7."
+
+EXERCISE_22_PREAMBLE = (
+    "Readers should carefully go through the examples given in this chapter "
+    "and understand the calculations. This exercise covers most of the "
+    "calculations defined in this chapter and it will be a good idea to "
+    "attempt this exercise and verify the calculations.")
+
+#: The printed BAVs, Aries first. Each sums to its classical total.
+EXERCISE_22_BAV: dict[str, tuple[int, ...]] = {
+    #          Ar Ta Ge Cn Le Vi Li Sc Sg Cp Aq Pi
+    "Sun":     (4, 2, 3, 4, 6, 5, 5, 3, 2, 6, 6, 2),
+    "Moon":    (6, 3, 5, 3, 5, 5, 6, 3, 3, 4, 4, 2),
+    "Mars":    (3, 2, 3, 4, 2, 5, 4, 3, 3, 4, 3, 3),
+    "Mercury": (4, 6, 4, 3, 4, 7, 4, 5, 6, 3, 5, 3),
+    "Jupiter": (4, 4, 3, 5, 6, 5, 6, 4, 6, 4, 3, 6),
+    "Venus":   (3, 5, 5, 4, 6, 2, 3, 6, 5, 2, 7, 4),
+    "Saturn":  (3, 2, 2, 3, 5, 6, 3, 4, 1, 3, 6, 1),
+}
+
+#: The printed total row, which the exercise labels SAV.
+EXERCISE_22_SAV: tuple[int, ...] = (
+    27, 24, 25, 26, 34, 35, 31, 28, 26, 26, 34, 21)
+
+#: The printed SoAVs — after Trikona and then Ekaadhipatya Sodhana.
+EXERCISE_22_SOAV: dict[str, tuple[int, ...]] = {
+    "Sun":     (2, 0, 0, 2, 4, 3, 2, 1, 0, 4, 3, 0),
+    "Moon":    (3, 0, 1, 1, 2, 1, 2, 1, 0, 1, 0, 0),
+    "Mars":    (1, 0, 0, 1, 0, 3, 1, 0, 1, 2, 0, 0),
+    "Mercury": (0, 3, 0, 0, 0, 4, 0, 2, 2, 0, 1, 0),
+    "Jupiter": (0, 0, 0, 1, 2, 1, 3, 0, 2, 0, 0, 0),
+    "Venus":   (0, 3, 2, 0, 3, 0, 0, 2, 2, 0, 4, 0),
+    "Saturn":  (2, 0, 0, 2, 4, 4, 1, 3, 0, 1, 4, 0),
+}
+
+#: The printed pindas: ``(rasi, graha, sodhya)``.
+EXERCISE_22_PINDAS: dict[str, tuple[int, int, int]] = {
+    "Sun": (152, 81, 233), "Moon": (85, 55, 140), "Mars": (52, 43, 95),
+    "Mercury": (95, 33, 128), "Jupiter": (68, 56, 124),
+    "Venus": (154, 54, 208), "Saturn": (162, 63, 225),
+}
+
+#: **Exercise 22 answers half of OI-104.** The printed SoAVs only reproduce if
+#: the lagna's rasi counts as occupied, though §12.7.2 says "occupied by a
+#: **planet** (or planets)". Scorpio holds Chart 7's lagna and nothing else,
+#: and it is one of Mars's pair, so the Ar/Sc pair decides it — three times.
+EKAADHIPATYA_LAGNA_OCCUPIES = (
+    "Exercise 22 settles it for lagna: its printed SoAVs for the Sun, Moon "
+    "and Saturn reproduce only when the lagna's rasi counts as occupied. "
+    "Chart 7's Scorpio holds the lagna alone, and it pairs with Aries, so the "
+    "Ar/Sc pair decides all three — twice through rule (3a) and once through "
+    "(3b), so it is not an artefact of one branch. Rahu and Ketu are still "
+    "undecided: they sit in Aries and Libra, which already hold planets.")
+
+#: **Book defect.** Table 28 prints 6 for Virgo; Exercise 22's own seven rasi
+#: pindas each require 5. See docs/book-deviations.md D-42.
+TABLE_28_VIRGO_CONFLICT = (
+    "Table 28 gives Virgo a multiplier of 6. Every one of Exercise 22's seven "
+    "printed rasi pindas comes out exactly one Virgo-rekha too high with 6, "
+    "and exactly right with 5 — seven independent equations in one unknown, "
+    "fitting without residue. Example 43 cannot arbitrate: its SoAV holds "
+    "zero in Virgo. We use the table as printed and record the conflict.")
+
+#: What the seven rasi pindas would be with the table as printed, for
+#: comparison against the printed answers.
+EXERCISE_22_RASI_PINDAS_AS_TABLE_28_PRINTS: dict[str, int] = {
+    "Sun": 155, "Moon": 86, "Mars": 55, "Mercury": 99,
+    "Jupiter": 69, "Venus": 154, "Saturn": 166,
+}
+
+#: Footnote 47, cited back in Exercise 21 and printed here.
+FOOTNOTE_47 = (
+    "Argalas on lagna show decisive influences on one's nature and argalas on "
+    "GL show decisive influences on one's fame.")
