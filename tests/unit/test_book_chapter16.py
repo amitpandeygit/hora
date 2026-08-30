@@ -418,3 +418,93 @@ def test_an_out_of_range_start_star_is_refused():
             "utc_offset_hours": -4.0,
             "place": {"latitude": 42.5, "longitude": -71.2}, "start_star": 28}
     assert TestClient(app).post("/v1/dasha", json=body).status_code == 422
+
+
+# --------------------------------------------------------------------------
+# §16.4.2 Dasa from Lagna, and §16.5.1 General Principles
+# --------------------------------------------------------------------------
+
+
+def test_dasa_can_be_reckoned_from_the_lagna_instead_of_the_moon():
+    """§16.4.2: "Some authorities have also recommended Vimsottari dasa from
+    the longitude of lagna instead of Moon."
+
+    Everything downstream is unchanged; only which longitude seeds the cycle.
+    """
+    from fastapi.testclient import TestClient
+
+    from hora.api.main import app
+
+    client = TestClient(app)
+    body = {"year": 2000, "month": 4, "day": 28, "hour": 5, "minute": 50,
+            "utc_offset_hours": -4.0,
+            "place": {"latitude": 42.5, "longitude": -71.2}, "levels": 1}
+
+    moon = client.post("/v1/dasha", json=body).json()
+    lagna = client.post("/v1/dasha", json=body | {"reckon_from": "lagna"}).json()
+
+    assert moon["reckon_from"] == "moon"
+    assert moon["seed_longitude"] == pytest.approx(moon["moon_longitude"])
+    assert lagna["reckon_from"] == "lagna"
+    assert lagna["seed_longitude"] != pytest.approx(moon["moon_longitude"])
+
+    # The seed decides the lord, and the balance is still that lord's share.
+    for got in (moon, lagna):
+        lord = got["periods"][0]["lord_name"]
+        length = dict(zip((GRAHA_NAMES[g] for g in V.order), V.years))[lord]
+        assert 0 < got["balance_at_birth"]["years"] <= length
+
+
+def test_only_moon_and_lagna_may_seed_the_cycle():
+    """The section names one alternative, so the parameter admits one."""
+    from fastapi.testclient import TestClient
+
+    from hora.api.main import app
+
+    body = {"year": 2000, "month": 4, "day": 28, "hour": 5, "minute": 50,
+            "utc_offset_hours": -4.0,
+            "place": {"latitude": 42.5, "longitude": -71.2},
+            "reckon_from": "sun"}
+    assert TestClient(app).post("/v1/dasha", json=body).status_code == 422
+
+
+def test_the_lagna_caveat_is_kept_with_the_rule():
+    """"this will give better results only when lagna is considerably more
+    powerful than Moon" — a judgement the section leaves to the reader, and
+    one we must not silently make for them."""
+    from hora.core.const import DASA_FROM_LAGNA
+
+    assert "considerably more powerful than Moon" in DASA_FROM_LAGNA
+
+
+def test_the_nine_reading_examples_are_recorded_as_examples():
+    """§16.5.1 calls them "just a few examples", so they are a register of
+    what a reading looks like, not a lookup table to predict from."""
+    from hora.core.const import VIMSOTTARI_READING_EXAMPLES as EXAMPLES
+
+    assert len(EXAMPLES) == 9
+    assert [e["n"] for e in EXAMPLES] == list(range(1, 10))
+    assert {e["divisional"] for e in EXAMPLES} == {
+        "rasi", "D-4", "D-7", "D-9", "D-10", "D-30"}
+    # The section hedges two of the nine differently; that is kept.
+    assert [e["n"] for e in EXAMPLES if e["certainty"] == "may"] == [8, 9]
+
+
+def test_every_reading_example_names_a_chart_and_a_placement():
+    """A reading with no chart, or no placement to look for, would be advice
+    rather than a method."""
+    from hora.core.const import VIMSOTTARI_READING_EXAMPLES as EXAMPLES
+
+    for example in EXAMPLES:
+        assert example["divisional"]
+        assert example["reads"]
+        assert example["gives"]
+
+
+def test_the_dasa_lord_becomes_a_temporary_lagna_for_antardasas():
+    """The section's closing rule, which is a technique rather than an
+    illustration and is the one part of 16.5.1 that generalises."""
+    from hora.core.const import DASA_LORD_AS_TEMPORARY_LAGNA
+
+    assert "temporary lagna" in DASA_LORD_AS_TEMPORARY_LAGNA
+    assert "antardasas" in DASA_LORD_AS_TEMPORARY_LAGNA

@@ -59,6 +59,8 @@ DASHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "DASA_USES_ARE_NOT_IN_THE_CLASSICS",
     "DEFERRED_TO_TAJAKA",
     "VARIATIONS_ARE_OFTEN_IGNORED",
+    "DASA_FROM_LAGNA",
+    "DASA_LORD_AS_TEMPORARY_LAGNA",
 )
 
 
@@ -77,4 +79,49 @@ VARIATIONS_ARE_OFTEN_IGNORED = (
     "Many contemporary Vedic astrologers ignore these variations and always "
     "reckon dasas from the lord of the constellation occupied by Moon. "
     "However, this may not result in the best predictions always."
+)
+
+
+#: §16.4.2's alternative seed, and its own caveat.
+DASA_FROM_LAGNA = (
+    "Some authorities have also recommended Vimsottari dasa from the longitude "
+    "of lagna instead of Moon. In practice, this will give better results only "
+    "when lagna is considerably more powerful than Moon."
+)
+
+#: §16.5.1's nine illustrations of reading a dasa. The section calls them
+#: "just a few examples", so this is a register of what a reading looks like,
+#: not a lookup table — `divisional` is the chart each one reads, and `reads`
+#: is the placement it looks for.
+VIMSOTTARI_READING_EXAMPLES: tuple[dict, ...] = (
+    {"n": 1, "divisional": "D-7", "reads": "the 5th lord",
+     "gives": "a child", "certainty": "can"},
+    {"n": 2, "divisional": "rasi", "reads": "the 8th lord",
+     "gives": "some troubles and frustration", "certainty": "can"},
+    {"n": 3, "divisional": "D-10", "reads": "a planet exalted in GL",
+     "gives": "power and authority in career", "certainty": "can"},
+    {"n": 4, "divisional": "D-9", "reads": "an exalted planet in the 12th from AK",
+     "gives": "serious thoughts related to spiritual liberation",
+     "certainty": "can"},
+    {"n": 5, "divisional": "D-9", "reads": "the 7th lord",
+     "gives": "marriage", "certainty": "can"},
+    {"n": 6, "divisional": "D-4", "reads": "a planet with Rahu in the 9th",
+     "gives": "foreign residence", "certainty": "can"},
+    {"n": 7, "divisional": "rasi",
+     "reads": "an exalted planet aspecting HL from the 11th from AL",
+     "gives": "a lot of wealth", "certainty": "can"},
+    {"n": 8, "divisional": "D-30",
+     "reads": "a planet joined by Moon and Saturn in the 8th house",
+     "gives": "serious psychological problems and suicidal tendencies",
+     "certainty": "may"},
+    {"n": 9, "divisional": "D-10",
+     "reads": "a well-disposed planet aspecting A3",
+     "gives": "writing some books", "certainty": "may"},
+)
+
+#: The section's closing technique, which is a rule rather than an example.
+DASA_LORD_AS_TEMPORARY_LAGNA = (
+    "Each planet gives the results indicated by it in its dasas and "
+    "antardasas. When analyzing antardasas, we can take the dasa lord as a "
+    "temporary lagna and analyze the charts."
 )

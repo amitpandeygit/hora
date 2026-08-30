@@ -29,6 +29,7 @@ def dasha_tree(
     levels: int,
     cycles: int,
     start_star: int = 1,
+    reckon_from: str = "moon",
     as_of: str | None,
     tz_name: str | None,
     utc_offset_hours: float | None,
@@ -38,15 +39,23 @@ def dasha_tree(
     if spec is None:
         raise UnknownDashaSystem(f"unknown dasha system {system!r}")
 
+    if reckon_from not in ("moon", "lagna"):
+        raise UnknownDashaSystem(
+            f"reckon_from must be 'moon' or 'lagna', got {reckon_from!r}")
+
     chart = compute_chart(instant, place, settings)
     moon = chart.positions[Graha.MOON].longitude
+    # §16.4.2: "Some authorities have also recommended Vimsottari dasa from the
+    # longitude of lagna instead of Moon." Everything downstream is identical;
+    # only which longitude seeds the cycle changes.
+    seed = moon if reckon_from == "moon" else chart.lagna_longitude
     off = chart.instant.utc_offset_hours
 
     periods = compute_nakshatra_dasha(
-        spec, moon, chart.instant.jd_ut, settings.dasha_year_length,
+        spec, seed, chart.instant.jd_ut, settings.dasha_year_length,
         levels=levels, cycles=cycles, start_star=start_star,
     )
-    lord, balance_years = balance_at_birth(spec, moon, start_star)
+    lord, balance_years = balance_at_birth(spec, seed, start_star)
 
     as_of_jd = chart.instant.jd_ut
     if as_of:
@@ -66,6 +75,8 @@ def dasha_tree(
         "moon_longitude": round(moon, 8),
         "balance_at_birth": {"lord": lord, "years": round(balance_years, 8)},
         "year_length": settings.dasha_year_length.value,
+        "reckon_from": reckon_from,
+        "seed_longitude": round(seed, 8),
         "start_star": start_star,
         "start_star_name": next(
             (v["name"] for v in VIMSOTTARI_VARIATIONS if v["star"] == start_star),

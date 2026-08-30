@@ -108,6 +108,7 @@
         "start_jd": 2476238.592350933
       }
     ],
+    "reckon_from": "moon",
     "running": [
       {
         "level": 1,
@@ -115,6 +116,7 @@
         "lord_name": "Venus"
       }
     ],
+    "seed_longitude": 94.0596796,
     "settings": {
       "apparent_positions": false,
       "ayanamsa": "lahiri",

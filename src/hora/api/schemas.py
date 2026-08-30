@@ -59,6 +59,14 @@ class DashaRequest(ChartRequest):
     system: str = Field("vimshottari", description="Dasha system key")
     levels: int = Field(2, ge=1, le=6, description="1=mahadasha, 2=+antardasha, ...")
     cycles: int = Field(1, ge=1, le=3)
+    reckon_from: str = Field(
+        "moon", pattern="^(moon|lagna)$",
+        description=(
+            "Which longitude seeds the cycle. Section 16.4.2 allows lagna: "
+            "'this will give better results only when lagna is considerably "
+            "more powerful than Moon' — a judgement the caller makes, not us."
+        ),
+    )
     start_star: int = Field(
         1, ge=1, le=27,
         description=(

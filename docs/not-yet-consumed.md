@@ -638,10 +638,11 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map (4)
+### Part 2 — the dasa systems map and chapter 16's prose (7)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
-`DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED`
+`DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
+`DASA_LORD_AS_TEMPORARY_LAGNA` · `VIMSOTTARI_READING_EXAMPLES`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -654,6 +655,9 @@ it — but it is the coverage line for the whole part, and
 | `DASA_USES_ARE_NOT_IN_THE_CLASSICS` | The part's own explanation for why no classic settles which dasa to use when; context for a reading, not an input |
 | `DEFERRED_TO_TAJAKA` | Records that Sudarsana Chakra dasa is named here and taught elsewhere, so its absence from Part 2 is deliberate |
 | `VARIATIONS_ARE_OFTEN_IGNORED` | §16.4.1's reason for having the kshema/utpanna/adhana variations at all. The variations themselves are consumed — `/v1/dasha` takes `start_star` — but the caution is prose |
+| `DASA_FROM_LAGNA` | §16.4.2's caveat, that lagna reckoning helps only when lagna is much stronger than Moon. The reckoning is consumed — `/v1/dasha` takes `reckon_from` — but comparing the two strengths is a judgement the section leaves to the reader |
+| `DASA_LORD_AS_TEMPORARY_LAGNA` | §16.5.1's closing technique. Needs an interpretation layer that re-reads the charts from a moving lagna; nothing computes from it yet |
+| `VIMSOTTARI_READING_EXAMPLES` | §16.5.1's nine illustrations. The section calls them "just a few examples", so they are deliberately not a lookup table — they will feed a reading layer, not a predictor |
 
 **Two of the nine are built** — Vimsottari and Ashtottari, both nakshatra
 dasas. The remaining seven are six rasi dasas (Narayana, Lagna Kendradi Rasi,
