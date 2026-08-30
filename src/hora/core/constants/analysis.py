@@ -357,3 +357,80 @@ EXAMPLE_44_FOOTNOTE_48_UNSEEN = (
     "Footnote 48 is cited after 'there are parivraaja yogas here' and has not "
     "been supplied. Parivraaja yoga is not defined in any section read so far."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 45 — §13.4.2 worked over Chart 14
+# --------------------------------------------------------------------------
+
+EXAMPLE_45 = (
+    "Let us consider the D-3 chart of Late Rajiv Gandhi (see Chart 14). Based "
+    "on his D-3, let us try to say something about his younger Sanjay Gandhi. "
+    "Lagna in D-3 is in Sg, an odd sign. So we count houses normally. The 3rd "
+    "house is Aq. Saturn is its lord and we should take Li as lagna in Rajiv "
+    "Gandhi's D-3 to analyze Sanjay Gandhi's fortune."
+)
+
+EXAMPLE_45_READING = (
+    "Lagna has exalted Saturn in it. This shows Sasa yoga. This shows someone "
+    "with many loyal followers. The 10th house has 5th lord Rahu. If the 5th "
+    "lord is in 10th, it can show power. Because it is Rahu, it can show "
+    "forceful nature in career. However, the 10th lord Moon is in a fiery "
+    "sign in the 3rd house with Jupiter and Venus, two rank benefics. The 3rd "
+    "house shows one's parakrama (boldness and initiative). This shows a very "
+    "positive and pro-active attitude. It shows a doer."
+)
+
+EXAMPLE_45_PARALLELS_TEXT = (
+    "It may be interesting to note the similarities between Rajiv Gandhi's "
+    "D-3 and Sanjay Gandhi's rasi chart (shown in Chart 14). In both, Saturn "
+    "is on the lagna axis. In the former, Saturn is in lagna and Saturn owns "
+    "lagna in the latter. In the former, Moon owns 10th and joins Jupiter and "
+    "Venus. In the latter, Jupiter and Venus are in 10th, aspected by Moon. "
+    "In the former, 5th lord Rahu is in 10th. In the latter, Rahu is in 5th "
+    "and aspects 10th. In the former, Sun is in own sign in 11th, aspected by "
+    "Mercury, Saturn and Ketu. In the latter, Sun, Mercury and Ketu are in "
+    "11th and Saturn aspects them. In both, Mars is in the 12th house."
+)
+
+EXAMPLE_45_CLOSING = (
+    "Usually, we have such links between the charts of related people."
+)
+
+#: §13.4.2's method applied: the D-3 lagna, the 3rd house, its lord, and the
+#: rasi that lord sits in — which becomes the younger sibling's lagna.
+EXAMPLE_45_SIBLING_STEPS: tuple[tuple[str, str], ...] = (
+    ("Lagna in D-3 is in Sg, an odd sign", "so houses count forward"),
+    ("The 3rd house is Aq", "the 3rd forward from Sagittarius"),
+    ("Saturn is its lord", "Aquarius's primary lord"),
+    ("we should take Li as lagna", "Saturn sits in Libra in that D-3"),
+)
+
+#: **Finding.** Aquarius is co-owned, and Example 45 uses *both* its lords in
+#: different sentences — Saturn to fix Sanjay's lagna, Rahu as "5th lord" in
+#: the yoga reading. §15.5.1's cascade also gives Saturn here (rule 3,
+#: exalted in Libra), so the example does not discriminate between "primary
+#: lord" and "stronger co-lord".
+EXAMPLE_45_USES_BOTH_CO_LORDS = (
+    "Rajiv's D-3 3rd house is Aquarius, which Saturn and Rahu co-own. "
+    "Example 45 takes Saturn to fix Sanjay's lagna and then calls Rahu the "
+    "'5th lord' in the same reading. Both are lords and the example uses each "
+    "where it needs it. Section 15.5.1's cascade also picks Saturn here — "
+    "rule 3, exalted in Libra — so nothing in the example separates 'primary "
+    "lord' from 'stronger co-lord'."
+)
+
+#: The eight parallels Example 45 draws between Rajiv's D-3 and Sanjay's rasi
+#: chart, as ``(what, in Rajiv's D-3, in Sanjay's rasi)``.
+EXAMPLE_45_PARALLELS: tuple[tuple[str, str, str], ...] = (
+    ("Saturn on the lagna axis", "Saturn is in lagna", "Saturn owns lagna"),
+    ("Moon, Jupiter and Venus",
+     "Moon owns the 10th and joins Jupiter and Venus",
+     "Jupiter and Venus are in the 10th, aspected by Moon"),
+    ("Rahu and the 10th", "5th lord Rahu is in the 10th",
+     "Rahu is in the 5th and aspects the 10th"),
+    ("Sun, Mercury, Saturn and Ketu",
+     "Sun is in own sign in the 11th, aspected by Mercury, Saturn and Ketu",
+     "Sun, Mercury and Ketu are in the 11th and Saturn aspects them"),
+    ("Mars", "Mars is in the 12th house", "Mars is in the 12th house"),
+)

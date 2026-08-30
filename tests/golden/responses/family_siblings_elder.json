@@ -17,11 +17,15 @@
         "house_sign": 5,
         "house_sign_name": "Virgo",
         "index": 1,
-        "lagna": 5,
-        "lagna_name": "Virgo",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Mercury",
+        "lords": [
+          "Mercury"
+        ],
         "relation": "elder sibling",
-        "why": "in D3 the 11th house shows elder sibling number 1; counting backward from Cancer that is Virgo, whose lord Mercury sits in the rasi read as their lagna; no graha positions were given, so A11 was not computed"
+        "why": "in D3 the 11th house shows elder sibling number 1; counting backward from Cancer that is Virgo, whose lord is Mercury; section 13.4.2 reads the rasi containing Mercury as their lagna, and no graha positions were given, so neither that nor A11 could be found"
       },
       {
         "arudha": "A9",
@@ -33,11 +37,16 @@
         "house_sign": 7,
         "house_sign_name": "Scorpio",
         "index": 2,
-        "lagna": 7,
-        "lagna_name": "Scorpio",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Mars",
+        "lords": [
+          "Mars",
+          "Ketu"
+        ],
         "relation": "elder sibling",
-        "why": "in D3 the 9th house shows elder sibling number 2; counting backward from Cancer that is Scorpio, whose lord Mars sits in the rasi read as their lagna; no graha positions were given, so A9 was not computed"
+        "why": "in D3 the 9th house shows elder sibling number 2; counting backward from Cancer that is Scorpio, whose lord is Mars (co-owned: Mars is the primary lord, Ketu the co-lord, and Example 45 uses both of Aquarius's in different sentences); section 13.4.2 reads the rasi containing Mars as their lagna, and no graha positions were given, so neither that nor A9 could be found"
       },
       {
         "arudha": "A7",
@@ -49,11 +58,15 @@
         "house_sign": 9,
         "house_sign_name": "Capricorn",
         "index": 3,
-        "lagna": 9,
-        "lagna_name": "Capricorn",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Saturn",
+        "lords": [
+          "Saturn"
+        ],
         "relation": "elder sibling",
-        "why": "in D3 the 7th house shows elder sibling number 3; counting backward from Cancer that is Capricorn, whose lord Saturn sits in the rasi read as their lagna; no graha positions were given, so A7 was not computed"
+        "why": "in D3 the 7th house shows elder sibling number 3; counting backward from Cancer that is Capricorn, whose lord is Saturn; section 13.4.2 reads the rasi containing Saturn as their lagna, and no graha positions were given, so neither that nor A7 could be found"
       },
       {
         "arudha": "A5",
@@ -65,11 +78,15 @@
         "house_sign": 11,
         "house_sign_name": "Pisces",
         "index": 4,
-        "lagna": 11,
-        "lagna_name": "Pisces",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Jupiter",
+        "lords": [
+          "Jupiter"
+        ],
         "relation": "elder sibling",
-        "why": "in D3 the 5th house shows elder sibling number 4; counting backward from Cancer that is Pisces, whose lord Jupiter sits in the rasi read as their lagna; no graha positions were given, so A5 was not computed"
+        "why": "in D3 the 5th house shows elder sibling number 4; counting backward from Cancer that is Pisces, whose lord is Jupiter; section 13.4.2 reads the rasi containing Jupiter as their lagna, and no graha positions were given, so neither that nor A5 could be found"
       },
       {
         "arudha": "A3",
@@ -81,11 +98,15 @@
         "house_sign": 1,
         "house_sign_name": "Taurus",
         "index": 5,
-        "lagna": 1,
-        "lagna_name": "Taurus",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Venus",
+        "lords": [
+          "Venus"
+        ],
         "relation": "elder sibling",
-        "why": "in D3 the 3th house shows elder sibling number 5; counting backward from Cancer that is Taurus, whose lord Venus sits in the rasi read as their lagna; no graha positions were given, so A3 was not computed"
+        "why": "in D3 the 3th house shows elder sibling number 5; counting backward from Cancer that is Taurus, whose lord is Venus; section 13.4.2 reads the rasi containing Venus as their lagna, and no graha positions were given, so neither that nor A3 could be found"
       },
       {
         "arudha": "A1",
@@ -97,11 +118,15 @@
         "house_sign": 3,
         "house_sign_name": "Cancer",
         "index": 6,
-        "lagna": 3,
-        "lagna_name": "Cancer",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Moon",
+        "lords": [
+          "Moon"
+        ],
         "relation": "elder sibling",
-        "why": "in D3 the 1th house shows elder sibling number 6; counting backward from Cancer that is Cancer, whose lord Moon sits in the rasi read as their lagna; no graha positions were given, so A1 was not computed"
+        "why": "in D3 the 1th house shows elder sibling number 6; counting backward from Cancer that is Cancer, whose lord is Moon; section 13.4.2 reads the rasi containing Moon as their lagna, and no graha positions were given, so neither that nor A1 could be found"
       }
     ]
   },

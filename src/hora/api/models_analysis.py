@@ -33,3 +33,4 @@ class AnalysisRulesOut(BaseModel):
     closing_points_at: list[dict]
     tapaswi_yoga: dict
     example_44: dict
+    example_45: dict

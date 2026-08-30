@@ -957,12 +957,25 @@ def test_the_direction_rule_does_not_reach_d12():
     assert "does not apply it to D-12" in DIRECTION_SCOPE
 
 
-def test_a_relatives_lagna_is_the_rasi_holding_that_houses_lord():
-    """§13.4.2's uniform method, checked against RASI_LORD directly."""
+def test_a_relatives_lagna_is_where_the_lord_sits_not_the_houses_own_sign():
+    """§13.4.2: "consider the rasi containing the lord of that house as
+    lagna". Example 45 is the case that forces it — Rajiv's D-3 3rd house is
+    Aquarius, its lord Saturn sits in Libra, and the book takes **Libra**.
+    Without positions the lord's rasi is unknowable, so it is None and the
+    reason says so rather than substituting the house's own sign."""
     result = child(1, R["Ge"])
     assert result.house_sign == R["Li"]
     assert result.lord == int(RASI_LORD[R["Li"]])
-    assert result.lagna == result.house_sign
+    assert result.lagna is None
+    assert "no graha positions were given" in result.why
+
+    positions = {int(g): s for g, s in (
+        (Graha.SUN, 3), (Graha.MOON, 6), (Graha.MARS, 1),
+        (Graha.MERCURY, 7), (Graha.JUPITER, 9), (Graha.VENUS, 10),
+        (Graha.SATURN, 2), (Graha.RAHU, 5), (Graha.KETU, 11))}
+    located = child(1, R["Ge"], positions)
+    assert located.lagna == positions[int(Graha.VENUS)] == R["Aq"]
+    assert located.lagna != located.house_sign
 
 
 def test_the_arudha_is_offered_beside_the_lord_when_positions_are_given():
@@ -1177,3 +1190,126 @@ def test_the_analysis_rules_endpoint_carries_example_44(client):
     assert body["example_44"]["d20_bav"] == {"Mercury": 6, "Sun": 5}
     assert set(body["tapaswi_yoga"]["planets"]) == {"Saturn", "Ketu", "Venus"}
     assert "single-mindedly" in body["tapaswi_yoga"]["footnote_49"]
+
+
+# --------------------------------------------------------------------------
+# Example 45 — §13.4.2 worked over Chart 14
+# --------------------------------------------------------------------------
+
+from hora.core.const import (
+    EXAMPLE_45_PARALLELS,
+    EXAMPLE_45_SIBLING_STEPS,
+    EXAMPLE_45_USES_BOTH_CO_LORDS,
+)
+
+
+def _rajiv_d3() -> tuple[int, dict[int, int]]:
+    from hora.charts.book import longitudes as book_longitudes
+    from hora.charts.vargas import varga
+
+    parsed = book_longitudes(14)
+    signs = {int(graha): varga(parsed[name], "D3").sign
+             for name, graha in GRAHA_OF_13.items()}
+    return varga(parsed["Asc"], "D3").sign, signs
+
+
+def test_example_45_reproduces_13_4_2s_sibling_method_exactly():
+    """The 3rd house is Aq, Saturn is its lord, and Li becomes the lagna to
+    analyze Sanjay Gandhi's fortune from."""
+    lag, signs = _rajiv_d3()
+    assert RASI_ABBR[lag] == "Sg"
+    assert counts_forward(lag), "Sagittarius is an odd sign"
+
+    result = sibling(1, lag, elder=False, graha_signs=signs)
+    assert result.house == 3
+    assert RASI_ABBR[result.house_sign] == "Aq"
+    assert result.lord == int(Graha.SATURN)
+    assert RASI_ABBR[result.lagna] == "Li"
+    assert len(EXAMPLE_45_SIBLING_STEPS) == 4
+
+
+def test_example_45_uses_both_lords_of_the_co_owned_third_house():
+    """Aquarius is co-owned. Saturn fixes Sanjay's lagna; Rahu is called the
+    5th lord two sentences later. Both are offered."""
+    lag, signs = _rajiv_d3()
+    result = sibling(1, lag, elder=False, graha_signs=signs)
+    assert set(result.lords) == {int(Graha.SATURN), int(Graha.RAHU)}
+    assert result.lagna_candidates == {
+        int(Graha.SATURN): R["Li"], int(Graha.RAHU): R["Cn"]}
+    assert "uses each where it needs it" in EXAMPLE_45_USES_BOTH_CO_LORDS
+
+
+def test_section_15_5_1_agrees_with_example_45s_choice_of_saturn():
+    """So the example cannot tell "primary lord" from "stronger co-lord" —
+    both give Saturn, exalted in Libra by rule 3."""
+    from hora.charts.book import longitudes as book_longitudes
+    from hora.charts.colord import stronger
+    from hora.charts.vargas import varga
+
+    parsed = book_longitudes(14)
+    lons = {int(graha): varga(parsed[name], "D3").longitude
+            for name, graha in GRAHA_OF_13.items()}
+    verdict = stronger(R["Aq"], lons, advancement_known=True)
+    assert verdict.winner == Graha.SATURN
+    assert verdict.decided_by == "3"
+
+
+def test_example_45s_reading_of_sanjays_lagna():
+    """Saturn exalted in the lagna, 5th lord Rahu in the 10th, 10th lord Moon
+    in a fiery 3rd with Jupiter and Venus. All from Rajiv's D-3, read from
+    Libra."""
+    from hora.core.const import RASI_MODALITY
+
+    _, signs = _rajiv_d3()
+    lag = R["Li"]
+    assert signs[int(Graha.SATURN)] == lag, "exalted Saturn in the lagna"
+    assert signs[int(Graha.RAHU)] == (lag + 9) % 12 == R["Cn"], "10th"
+    assert int(RASI_LORD[(lag + 9) % 12]) == int(Graha.MOON), "10th lord"
+    third = (lag + 2) % 12
+    assert signs[int(Graha.MOON)] == third == R["Sg"]
+    assert signs[int(Graha.JUPITER)] == signs[int(Graha.VENUS)] == third
+    del RASI_MODALITY
+
+
+def test_example_45s_sun_and_mars_placements():
+    """Sun is in own sign in 11th" and "In both, Mars is in the 12th house."""
+    _, signs = _rajiv_d3()
+    lag = R["Li"]
+    assert signs[int(Graha.SUN)] == (lag + 10) % 12 == R["Le"]
+    assert int(RASI_LORD[R["Le"]]) == int(Graha.SUN), "own sign"
+    assert signs[int(Graha.MARS)] == (lag + 11) % 12 == R["Vi"]
+
+
+@pytest.mark.parametrize("what,former,latter", EXAMPLE_45_PARALLELS)
+def test_each_parallel_between_the_two_charts_is_recorded(
+        what, former, latter):
+    assert what and former and latter
+
+
+def test_mars_in_the_twelfth_holds_in_both_charts():
+    """The one parallel that is identical rather than mirrored, and the only
+    one checkable in Sanjay's chart — which prints boxes but no longitudes."""
+    from hora.charts.book import chart as book_chart
+
+    _, signs = _rajiv_d3()
+    assert signs[int(Graha.MARS)] == (R["Li"] + 11) % 12
+
+    sanjay = book_chart(14)["related"]["His younger brother"]["drawn"]
+    assert sanjay["Asc"] == "Cp"
+    assert sanjay["Mars"] == RASI_ABBR[(R["Cp"] + 11) % 12] == "Sg"
+
+
+def test_sanjays_lagna_lord_is_saturn_as_the_parallel_says():
+    """Saturn owns lagna in the latter — Capricorn's lord."""
+    from hora.charts.book import chart as book_chart
+
+    sanjay = book_chart(14)["related"]["His younger brother"]["drawn"]
+    assert int(RASI_LORD[R[sanjay["Asc"]]]) == int(Graha.SATURN)
+
+
+def test_the_analysis_rules_endpoint_carries_example_45(client):
+    body = client.get("/v1/analysis/rules").json()["example_45"]
+    assert body["chart"] == 14
+    assert len(body["sibling_steps"]) == 4
+    assert len(body["parallels"]) == 5
+    assert "Saturn sits in Libra" in body["verified"]

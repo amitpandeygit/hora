@@ -134,4 +134,7 @@ def describe(number: int) -> dict[str, Any]:
         "retrograde": list(record.get("retrograde", ())),
         "first_seen": record.get("first_seen"),
         "note": record.get("note"),
+        "related": {
+            name: dict(body) for name, body in record.get("related", {}).items()
+        },
     }

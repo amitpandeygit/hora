@@ -27,6 +27,13 @@ from hora.core.const import (
     EXAMPLE_44_NATIVE,
     EXAMPLE_44_RASI,
     EXAMPLE_44_TAPASWI,
+    EXAMPLE_45,
+    EXAMPLE_45_CLOSING,
+    EXAMPLE_45_PARALLELS,
+    EXAMPLE_45_PARALLELS_TEXT,
+    EXAMPLE_45_READING,
+    EXAMPLE_45_SIBLING_STEPS,
+    EXAMPLE_45_USES_BOTH_CO_LORDS,
     FOOTNOTE_49,
     HOUSE_VERSUS_ARUDHA_RULE,
     INFLUENCE_KINDS,
@@ -123,6 +130,26 @@ def rules() -> dict:
             "planets": dict(TAPASWI_PLANETS),
             "strengtheners": TAPASWI_STRENGTHENERS,
             "footnote_49": FOOTNOTE_49,
+        },
+        "example_45": {
+            "question": EXAMPLE_45,
+            "chart": 14,
+            "reading": EXAMPLE_45_READING,
+            "sibling_steps": [{"claim": claim, "decided_by": why}
+                              for claim, why in EXAMPLE_45_SIBLING_STEPS],
+            "uses_both_co_lords": EXAMPLE_45_USES_BOTH_CO_LORDS,
+            "parallels_text": EXAMPLE_45_PARALLELS_TEXT,
+            "parallels": [
+                {"what": what, "rajiv_d3": former, "sanjay_rasi": latter}
+                for what, former, latter in EXAMPLE_45_PARALLELS
+            ],
+            "closing": EXAMPLE_45_CLOSING,
+            "verified": (
+                "Section 13.4.2's sibling method reproduces the book's answer "
+                "exactly: the 3rd from a Sagittarius D-3 lagna is Aquarius, "
+                "its lord Saturn sits in Libra, and Libra is the lagna to "
+                "read Sanjay's fortune from."
+            ),
         },
         "example_44": {
             "question": EXAMPLE_44,

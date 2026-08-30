@@ -242,6 +242,60 @@
       "tapaswi": "Here Saturn and Ketu are together in Virgo and exalted Venus aspects them from Pisces. This gives Tapaswi yoga. Tapaswi yoga is particularly powerful when formed with a planet in the 8th house (hard-work, research, discovery and occult knowledge). Here Venus is in the 8th house. AK is also involved in Tapaswi yoga.",
       "verified": "Every checkable claim reproduces from Chart 13, including both arudha lagnas, all thirteen boxes of the printed D-20 and the two D-20 ashtakavarga figures. The identification is the book's own knowledge, not a calculation."
     },
+    "example_45": {
+      "chart": 14,
+      "closing": "Usually, we have such links between the charts of related people.",
+      "parallels": [
+        {
+          "rajiv_d3": "Saturn is in lagna",
+          "sanjay_rasi": "Saturn owns lagna",
+          "what": "Saturn on the lagna axis"
+        },
+        {
+          "rajiv_d3": "Moon owns the 10th and joins Jupiter and Venus",
+          "sanjay_rasi": "Jupiter and Venus are in the 10th, aspected by Moon",
+          "what": "Moon, Jupiter and Venus"
+        },
+        {
+          "rajiv_d3": "5th lord Rahu is in the 10th",
+          "sanjay_rasi": "Rahu is in the 5th and aspects the 10th",
+          "what": "Rahu and the 10th"
+        },
+        {
+          "rajiv_d3": "Sun is in own sign in the 11th, aspected by Mercury, Saturn and Ketu",
+          "sanjay_rasi": "Sun, Mercury and Ketu are in the 11th and Saturn aspects them",
+          "what": "Sun, Mercury, Saturn and Ketu"
+        },
+        {
+          "rajiv_d3": "Mars is in the 12th house",
+          "sanjay_rasi": "Mars is in the 12th house",
+          "what": "Mars"
+        }
+      ],
+      "parallels_text": "It may be interesting to note the similarities between Rajiv Gandhi's D-3 and Sanjay Gandhi's rasi chart (shown in Chart 14). In both, Saturn is on the lagna axis. In the former, Saturn is in lagna and Saturn owns lagna in the latter. In the former, Moon owns 10th and joins Jupiter and Venus. In the latter, Jupiter and Venus are in 10th, aspected by Moon. In the former, 5th lord Rahu is in 10th. In the latter, Rahu is in 5th and aspects 10th. In the former, Sun is in own sign in 11th, aspected by Mercury, Saturn and Ketu. In the latter, Sun, Mercury and Ketu are in 11th and Saturn aspects them. In both, Mars is in the 12th house.",
+      "question": "Let us consider the D-3 chart of Late Rajiv Gandhi (see Chart 14). Based on his D-3, let us try to say something about his younger Sanjay Gandhi. Lagna in D-3 is in Sg, an odd sign. So we count houses normally. The 3rd house is Aq. Saturn is its lord and we should take Li as lagna in Rajiv Gandhi's D-3 to analyze Sanjay Gandhi's fortune.",
+      "reading": "Lagna has exalted Saturn in it. This shows Sasa yoga. This shows someone with many loyal followers. The 10th house has 5th lord Rahu. If the 5th lord is in 10th, it can show power. Because it is Rahu, it can show forceful nature in career. However, the 10th lord Moon is in a fiery sign in the 3rd house with Jupiter and Venus, two rank benefics. The 3rd house shows one's parakrama (boldness and initiative). This shows a very positive and pro-active attitude. It shows a doer.",
+      "sibling_steps": [
+        {
+          "claim": "Lagna in D-3 is in Sg, an odd sign",
+          "decided_by": "so houses count forward"
+        },
+        {
+          "claim": "The 3rd house is Aq",
+          "decided_by": "the 3rd forward from Sagittarius"
+        },
+        {
+          "claim": "Saturn is its lord",
+          "decided_by": "Aquarius's primary lord"
+        },
+        {
+          "claim": "we should take Li as lagna",
+          "decided_by": "Saturn sits in Libra in that D-3"
+        }
+      ],
+      "uses_both_co_lords": "Rajiv's D-3 3rd house is Aquarius, which Saturn and Rahu co-own. Example 45 takes Saturn to fix Sanjay's lagna and then calls Rahu the '5th lord' in the same reading. Both are lords and the example uses each where it needs it. Section 15.5.1's cascade also picks Saturn here \u2014 rule 3, exalted in Libra \u2014 so nothing in the example separates 'primary lord' from 'stronger co-lord'.",
+      "verified": "Section 13.4.2's sibling method reproduces the book's answer exactly: the 3rd from a Sagittarius D-3 lagna is Aquarius, its lord Saturn sits in Libra, and Libra is the lagna to read Sanjay's fortune from."
+    },
     "factors": [
       {
         "name": "Divisional Chart",

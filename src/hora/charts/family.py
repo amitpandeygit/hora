@@ -15,7 +15,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from hora.charts.arudha import arudha_pada
+from hora.charts.arudha import ArudhaError, arudha_pada
+from hora.charts.baadhaka import CO_LORDS
 from hora.core import validate
 from hora.core.const import (
     FAMILY_CHAIN_DEPTH,
@@ -59,13 +60,24 @@ class Relative:
     direction: str
     #: The rasi that house falls in.
     house_sign: int
-    #: The rasi holding that house's lord: their lagna.
-    lagna: int
+    #: The rasi **holding that house's lord** — the relative's own lagna.
+    #: §13.4.2: "consider the rasi containing the lord of that house as
+    #: lagna". That needs the lord's position, so it is None when the caller
+    #: gave no graha_signs, and `why` says so rather than substituting the
+    #: house's own sign.
+    lagna: int | None
+    #: The house's primary lord, which is the one Example 45 reads.
     lord: int
     #: The arudha pada of the same house, when graha positions allow it.
     arudha: str
     arudha_sign: int | None
     why: str
+    #: Every lord of the house — two when it is Scorpio or Aquarius.
+    lords: tuple[int, ...] = ()
+    #: Each lord to the rasi holding it, when positions were given. For a
+    #: co-owned house both are offered, because Example 45 uses both of
+    #: Aquarius's in different sentences.
+    lagna_candidates: dict[int, int] | None = None
 
 
 def counts_forward(lagna: int) -> bool:
@@ -126,24 +138,60 @@ def _relative(relation: str, index: int, chart: str, house: int, lagna: int,
     direction = (
         "forward" if not directional or counts_forward(lagna) else "backward")
 
+    all_lords = CO_LORDS.get(sign, (lord,))
     arudha_sign: int | None = None
+    their_lagna: int | None = None
+    candidates: dict[int, int] | None = None
+    arudha_note = ""
     if graha_signs is not None:
-        arudha_sign = arudha_pada(
-            house, lagna, graha_signs, stronger_lord).sign
+        missing = [g for g in all_lords if g not in graha_signs]
+        if missing:
+            raise FamilyError(
+                f"{', '.join(GRAHA_NAMES[g] for g in missing)} "
+                f"{'owns' if len(missing) == 1 else 'own'} the {house}th "
+                f"house but "
+                f"{'is' if len(missing) == 1 else 'are'} not in the positions "
+                f"given, so the rasi containing "
+                f"{'him' if len(missing) == 1 else 'them'} — which section "
+                f"13.4.2 reads as {relation}'s lagna — cannot be found")
+        candidates = {int(g): int(graha_signs[g]) for g in all_lords}
+        their_lagna = candidates[lord]
+        try:
+            arudha_sign = arudha_pada(
+                house, lagna, graha_signs, stronger_lord).sign
+        except ArudhaError as exc:
+            arudha_note = (
+                f"; A{house} could not be computed: {exc}")
 
     why = (
         f"in {chart} the {house}th house shows {relation}"
         f"{'' if index == 0 else f' number {index}'}; counting {direction} "
-        f"from {RASI_NAMES[lagna]} that is {RASI_NAMES[sign]}, whose lord "
-        f"{GRAHA_NAMES[lord]} sits in the rasi read as their lagna"
+        f"from {RASI_NAMES[lagna]} that is {RASI_NAMES[sign]}, whose lord is "
+        f"{GRAHA_NAMES[lord]}"
     )
-    if arudha_sign is None:
-        why += (f"; no graha positions were given, so A{house} "
-                "was not computed")
+    if len(all_lords) > 1:
+        other = next(g for g in all_lords if g != lord)
+        why += (
+            f" (co-owned: {GRAHA_NAMES[lord]} is the primary lord, "
+            f"{GRAHA_NAMES[other]} the co-lord, and Example 45 uses both of "
+            f"Aquarius's in different sentences)"
+        )
+    if their_lagna is None:
+        why += (
+            f"; section 13.4.2 reads the rasi containing {GRAHA_NAMES[lord]} "
+            f"as their lagna, and no graha positions were given, so neither "
+            f"that nor A{house} could be found"
+        )
+    else:
+        why += (
+            f", who sits in {RASI_NAMES[their_lagna]} — read as "
+            f"{relation}'s lagna"
+        ) + arudha_note
     return Relative(
         relation=relation, index=index, chart=chart, house=house,
-        direction=direction, house_sign=sign, lagna=sign, lord=lord,
+        direction=direction, house_sign=sign, lagna=their_lagna, lord=lord,
         arudha=f"A{house}", arudha_sign=arudha_sign, why=why,
+        lords=tuple(int(g) for g in all_lords), lagna_candidates=candidates,
     )
 
 

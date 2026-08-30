@@ -84,6 +84,13 @@
         "number": 13,
         "recomputable": true,
         "title": "Rasi \u2014 Swami Chandrasekhara Saraswathi"
+      },
+      {
+        "birth": "August 20, 1944, 7:11 am (IST), 72 E 49, 18 N 58",
+        "first_seen": "chapter 13, Example 45",
+        "number": 14,
+        "recomputable": true,
+        "title": "Rasi and D-3 \u2014 Rajiv Gandhi"
       }
     ],
     "not_supplied": [
@@ -98,7 +105,8 @@
       8,
       10,
       12,
-      13
+      13,
+      14
     ]
   },
   "status": 200

@@ -9,11 +9,15 @@
     "house_sign": 11,
     "house_sign_name": "Pisces",
     "index": null,
-    "lagna": 11,
-    "lagna_name": "Pisces",
+    "lagna": null,
+    "lagna_candidates": null,
+    "lagna_name": null,
     "lord": "Jupiter",
+    "lords": [
+      "Jupiter"
+    ],
     "relation": "father",
-    "why": "in D12 the 9th house shows father; counting forward from Cancer that is Pisces, whose lord Jupiter sits in the rasi read as their lagna; no graha positions were given, so A9 was not computed"
+    "why": "in D12 the 9th house shows father; counting forward from Cancer that is Pisces, whose lord is Jupiter; section 13.4.2 reads the rasi containing Jupiter as their lagna, and no graha positions were given, so neither that nor A9 could be found"
   },
   "status": 200
 }

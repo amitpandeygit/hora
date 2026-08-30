@@ -39,8 +39,14 @@ def _relative(result) -> dict:
         "house_sign": result.house_sign,
         "house_sign_name": str(RASI_NAMES[result.house_sign]),
         "lagna": result.lagna,
-        "lagna_name": str(RASI_NAMES[result.lagna]),
+        "lagna_name": (None if result.lagna is None
+                       else str(RASI_NAMES[result.lagna])),
         "lord": str(GRAHA_NAMES[result.lord]),
+        "lords": [str(GRAHA_NAMES[g]) for g in result.lords],
+        "lagna_candidates": (
+            None if result.lagna_candidates is None else
+            {str(GRAHA_NAMES[g]): str(RASI_NAMES[s])
+             for g, s in result.lagna_candidates.items()}),
         "arudha": result.arudha,
         "arudha_sign": result.arudha_sign,
         "arudha_sign_name": (None if result.arudha_sign is None

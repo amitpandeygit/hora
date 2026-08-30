@@ -43,7 +43,7 @@ def client():
 
 
 def test_the_register_holds_every_chart_supplied_so_far():
-    assert numbers() == (1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13)
+    assert numbers() == (1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)
     assert CHARTS_NOT_SUPPLIED == (4,)
     assert 4 not in numbers()
 
@@ -104,8 +104,8 @@ def test_a_recomputable_chart_has_a_place_and_the_others_say_why(number):
         assert record.get("note"), f"Chart {number} must say why not"
 
 
-def test_the_recomputable_charts_are_the_seven_with_full_birth_lines():
-    assert recomputable() == (3, 6, 7, 8, 10, 12, 13)
+def test_the_recomputable_charts_are_the_ones_with_full_birth_lines():
+    assert recomputable() == (3, 6, 7, 8, 10, 12, 13, 14)
 
 
 # --------------------------------------------------------------------------
@@ -247,7 +247,7 @@ def test_the_index_endpoint_lists_every_chart(client):
     body = client.get("/v1/book-charts").json()
     assert len(body["charts"]) == len(numbers())
     assert body["not_supplied"] == [4]
-    assert body["recomputable"] == [3, 6, 7, 8, 10, 12, 13]
+    assert body["recomputable"] == [3, 6, 7, 8, 10, 12, 13, 14]
 
 
 def test_the_chart_endpoint_derives_signs_and_lagna(client):
@@ -272,3 +272,61 @@ def test_describe_never_omits_a_key():
             "number", "title", "birth", "place", "recomputable", "longitudes",
             "signs", "lagna", "drawn", "divisional", "chara_karakas",
             "retrograde", "first_seen", "note"}
+
+
+# --------------------------------------------------------------------------
+# Chart 14 — Rajiv Gandhi's rasi and D-3, with Sanjay Gandhi's rasi beside it
+# --------------------------------------------------------------------------
+
+def test_chart_14_is_transcribed_with_its_related_chart():
+    record = chart(14)
+    assert record["title"] == "Rasi and D-3 — Rajiv Gandhi"
+    assert lagna(14) == R["Le"]
+    assert set(record["related"]) == {"His younger brother"}
+    assert record["related"]["His younger brother"]["title"] == (
+        "Rasi — Sanjay Gandhi")
+
+
+def test_chart_14_needs_footnote_37s_seconds_to_reproduce():
+    """The chart prints 7:11 am; chapter 11's footnote 37 gives 7:11:40. Only
+    the seconds put the ascendant inside an arcminute — 0.8' against 8.6'."""
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(14)
+    printed = longitudes(14)
+    errors = {}
+    for label, second in (("printed", 0.0), ("footnote 37", 40.0)):
+        data = dict(record["birth_data"], second=second)
+        computed = compute_chart(
+            from_local(**data), Place(name="Chart 14", **record["place"]),
+            Settings(node_type=NodeType.MEAN))
+        errors[label] = abs(computed.lagna_longitude - printed["Asc"]) * 60
+        if label == "footnote 37":
+            for name, graha in GRAHA_OF.items():
+                gap = abs(computed.positions[int(graha)].longitude
+                          - printed[name]) * 60
+                assert gap < 1.0, f"{name}: {gap:.2f}'"
+    assert errors["footnote 37"] < 1.0 < errors["printed"]
+    assert "footnote 37" in record["note"]
+
+
+def test_chart_14s_drawn_d3_reproduces_from_our_varga():
+    """Twelve boxes, AL aside — the D-3 is printed beside the rasi chart."""
+    from hora.charts.vargas import varga
+
+    printed = divisional(14, "D3")
+    parsed = longitudes(14)
+    for body, rasi in printed.items():
+        if body == "AL":
+            continue
+        assert RASI_ABBR[varga(parsed[body], "D3").sign] == rasi, body
+
+
+def test_sanjay_gandhis_chart_is_drawn_only_and_says_so():
+    """No longitudes and no birth line are printed for it."""
+    related = chart(14)["related"]["His younger brother"]
+    assert "longitudes" not in related
+    assert "cannot be recomputed" in related["note"]
+    assert len(related["drawn"]) == 13

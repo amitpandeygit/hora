@@ -13,11 +13,15 @@
         "house_sign": 6,
         "house_sign_name": "Libra",
         "index": 1,
-        "lagna": 6,
-        "lagna_name": "Libra",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Venus",
+        "lords": [
+          "Venus"
+        ],
         "relation": "child",
-        "why": "in D7 the 5th house shows child number 1; counting forward from Gemini that is Libra, whose lord Venus sits in the rasi read as their lagna; no graha positions were given, so A5 was not computed"
+        "why": "in D7 the 5th house shows child number 1; counting forward from Gemini that is Libra, whose lord is Venus; section 13.4.2 reads the rasi containing Venus as their lagna, and no graha positions were given, so neither that nor A5 could be found"
       },
       {
         "arudha": "A7",
@@ -29,11 +33,15 @@
         "house_sign": 8,
         "house_sign_name": "Sagittarius",
         "index": 2,
-        "lagna": 8,
-        "lagna_name": "Sagittarius",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Jupiter",
+        "lords": [
+          "Jupiter"
+        ],
         "relation": "child",
-        "why": "in D7 the 7th house shows child number 2; counting forward from Gemini that is Sagittarius, whose lord Jupiter sits in the rasi read as their lagna; no graha positions were given, so A7 was not computed"
+        "why": "in D7 the 7th house shows child number 2; counting forward from Gemini that is Sagittarius, whose lord is Jupiter; section 13.4.2 reads the rasi containing Jupiter as their lagna, and no graha positions were given, so neither that nor A7 could be found"
       },
       {
         "arudha": "A9",
@@ -45,11 +53,16 @@
         "house_sign": 10,
         "house_sign_name": "Aquarius",
         "index": 3,
-        "lagna": 10,
-        "lagna_name": "Aquarius",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Saturn",
+        "lords": [
+          "Saturn",
+          "Rahu"
+        ],
         "relation": "child",
-        "why": "in D7 the 9th house shows child number 3; counting forward from Gemini that is Aquarius, whose lord Saturn sits in the rasi read as their lagna; no graha positions were given, so A9 was not computed"
+        "why": "in D7 the 9th house shows child number 3; counting forward from Gemini that is Aquarius, whose lord is Saturn (co-owned: Saturn is the primary lord, Rahu the co-lord, and Example 45 uses both of Aquarius's in different sentences); section 13.4.2 reads the rasi containing Saturn as their lagna, and no graha positions were given, so neither that nor A9 could be found"
       },
       {
         "arudha": "A11",
@@ -61,11 +74,15 @@
         "house_sign": 0,
         "house_sign_name": "Aries",
         "index": 4,
-        "lagna": 0,
-        "lagna_name": "Aries",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Mars",
+        "lords": [
+          "Mars"
+        ],
         "relation": "child",
-        "why": "in D7 the 11th house shows child number 4; counting forward from Gemini that is Aries, whose lord Mars sits in the rasi read as their lagna; no graha positions were given, so A11 was not computed"
+        "why": "in D7 the 11th house shows child number 4; counting forward from Gemini that is Aries, whose lord is Mars; section 13.4.2 reads the rasi containing Mars as their lagna, and no graha positions were given, so neither that nor A11 could be found"
       },
       {
         "arudha": "A1",
@@ -77,11 +94,15 @@
         "house_sign": 2,
         "house_sign_name": "Gemini",
         "index": 5,
-        "lagna": 2,
-        "lagna_name": "Gemini",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Mercury",
+        "lords": [
+          "Mercury"
+        ],
         "relation": "child",
-        "why": "in D7 the 1th house shows child number 5; counting forward from Gemini that is Gemini, whose lord Mercury sits in the rasi read as their lagna; no graha positions were given, so A1 was not computed"
+        "why": "in D7 the 1th house shows child number 5; counting forward from Gemini that is Gemini, whose lord is Mercury; section 13.4.2 reads the rasi containing Mercury as their lagna, and no graha positions were given, so neither that nor A1 could be found"
       },
       {
         "arudha": "A3",
@@ -93,11 +114,15 @@
         "house_sign": 4,
         "house_sign_name": "Leo",
         "index": 6,
-        "lagna": 4,
-        "lagna_name": "Leo",
+        "lagna": null,
+        "lagna_candidates": null,
+        "lagna_name": null,
         "lord": "Sun",
+        "lords": [
+          "Sun"
+        ],
         "relation": "child",
-        "why": "in D7 the 3th house shows child number 6; counting forward from Gemini that is Leo, whose lord Sun sits in the rasi read as their lagna; no graha positions were given, so A3 was not computed"
+        "why": "in D7 the 3th house shows child number 6; counting forward from Gemini that is Leo, whose lord is Sun; section 13.4.2 reads the rasi containing Sun as their lagna, and no graha positions were given, so neither that nor A3 could be found"
       }
     ],
     "depth_limit": 6,

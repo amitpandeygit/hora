@@ -307,4 +307,56 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "the varga as well as on the reading."
         ),
     },
+    14: {
+        "title": "Rasi and D-3 — Rajiv Gandhi",
+        "birth": "August 20, 1944, 7:11 am (IST), 72 E 49, 18 N 58",
+        "birth_data": {
+            "year": 1944, "month": 8, "day": 20, "hour": 7, "minute": 11,
+            "second": 40.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 18 + 58 / 60, "longitude": 72 + 49 / 60},
+        "longitudes": {
+            "Asc": "14 Le 44", "Sun": "3 Le 49", "Moon": "17 Le 09",
+            "Mars": "1 Vi 12", "Merc": "28 Le 34", "Jup": "12 Le 12",
+            "Ven": "18 Le 40", "Sat": "14 Ge 13", "Rahu": "2 Cn 48",
+            "Ketu": "2 Cp 48", "HL": "29 Le 06", "GL": "7 Li 04",
+        },
+        "divisional": {
+            "D3": {
+                "Merc": "Ar", "HL": "Ar", "Rahu": "Cn", "Sun": "Le",
+                "Mars": "Vi", "AL": "Vi", "Sat": "Li", "GL": "Li",
+                "Moon": "Sg", "Asc": "Sg", "Ven": "Sg", "Jup": "Sg",
+                "Ketu": "Cp",
+            },
+        },
+        "chara_karakas": {
+            "Merc": "AK", "Rahu": "AmK", "Ven": "BK", "Mars": "DK",
+            "Sun": "GK", "Moon": "MK", "Sat": "PiK", "Jup": "PK",
+        },
+        "related": {
+            "His younger brother": {
+                "title": "Rasi — Sanjay Gandhi",
+                "drawn": {
+                    "Rahu": "Ta", "GL": "Ge", "Sat": "Cn", "Moon": "Le",
+                    "Ven": "Li", "Jup": "Li", "AL": "Li", "Merc": "Sc",
+                    "Sun": "Sc", "Ketu": "Sc", "Mars": "Sg", "Asc": "Cp",
+                    "HL": "Aq",
+                },
+                "retrograde": ("Sat",),
+                "note": (
+                    "Printed as boxes only — no longitudes and no birth "
+                    "line — so it is a transcription and cannot be "
+                    "recomputed. Example 45 draws parallels between it and "
+                    "Rajiv's D-3."
+                ),
+            },
+        },
+        "first_seen": "chapter 13, Example 45",
+        "note": (
+            "The printed time is 7:11 am, but chapter 11's footnote 37 gives "
+            "7:11:40 and only the seconds reproduce the ascendant: 0.8' "
+            "against 8.6' at 7:11:00. Its D-3 is printed beside the rasi "
+            "chart, and Sanjay Gandhi's rasi chart beside both."
+        ),
+    },
 }

@@ -1,0 +1,97 @@
+{
+  "body": {
+    "birth": "August 20, 1944, 7:11 am (IST), 72 E 49, 18 N 58",
+    "chara_karakas": {
+      "Jup": "PK",
+      "Mars": "DK",
+      "Merc": "AK",
+      "Moon": "MK",
+      "Rahu": "AmK",
+      "Sat": "PiK",
+      "Sun": "GK",
+      "Ven": "BK"
+    },
+    "divisional": {
+      "D3": {
+        "AL": "Vi",
+        "Asc": "Sg",
+        "GL": "Li",
+        "HL": "Ar",
+        "Jup": "Sg",
+        "Ketu": "Cp",
+        "Mars": "Vi",
+        "Merc": "Ar",
+        "Moon": "Sg",
+        "Rahu": "Cn",
+        "Sat": "Li",
+        "Sun": "Le",
+        "Ven": "Sg"
+      }
+    },
+    "drawn": null,
+    "first_seen": "chapter 13, Example 45",
+    "lagna": "Le",
+    "longitudes": {
+      "Asc": "14 Le 44",
+      "GL": "7 Li 04",
+      "HL": "29 Le 06",
+      "Jup": "12 Le 12",
+      "Ketu": "2 Cp 48",
+      "Mars": "1 Vi 12",
+      "Merc": "28 Le 34",
+      "Moon": "17 Le 09",
+      "Rahu": "2 Cn 48",
+      "Sat": "14 Ge 13",
+      "Sun": "3 Le 49",
+      "Ven": "18 Le 40"
+    },
+    "note": "The printed time is 7:11 am, but chapter 11's footnote 37 gives 7:11:40 and only the seconds reproduce the ascendant: 0.8' against 8.6' at 7:11:00. Its D-3 is printed beside the rasi chart, and Sanjay Gandhi's rasi chart beside both.",
+    "number": 14,
+    "place": {
+      "latitude": 18.966666666666665,
+      "longitude": 72.81666666666666
+    },
+    "recomputable": true,
+    "related": {
+      "His younger brother": {
+        "drawn": {
+          "AL": "Li",
+          "Asc": "Cp",
+          "GL": "Ge",
+          "HL": "Aq",
+          "Jup": "Li",
+          "Ketu": "Sc",
+          "Mars": "Sg",
+          "Merc": "Sc",
+          "Moon": "Le",
+          "Rahu": "Ta",
+          "Sat": "Cn",
+          "Sun": "Sc",
+          "Ven": "Li"
+        },
+        "note": "Printed as boxes only \u2014 no longitudes and no birth line \u2014 so it is a transcription and cannot be recomputed. Example 45 draws parallels between it and Rajiv's D-3.",
+        "retrograde": [
+          "Sat"
+        ],
+        "title": "Rasi \u2014 Sanjay Gandhi"
+      }
+    },
+    "retrograde": [],
+    "signs": {
+      "Asc": "Le",
+      "GL": "Li",
+      "HL": "Le",
+      "Jup": "Le",
+      "Ketu": "Cp",
+      "Mars": "Vi",
+      "Merc": "Le",
+      "Moon": "Le",
+      "Rahu": "Cn",
+      "Sat": "Ge",
+      "Sun": "Le",
+      "Ven": "Le"
+    },
+    "title": "Rasi and D-3 \u2014 Rajiv Gandhi"
+  },
+  "status": 200
+}

@@ -9,11 +9,15 @@
     "house_sign": 0,
     "house_sign_name": "Aries",
     "index": null,
-    "lagna": 0,
-    "lagna_name": "Aries",
+    "lagna": null,
+    "lagna_candidates": null,
+    "lagna_name": null,
     "lord": "Mars",
+    "lords": [
+      "Mars"
+    ],
     "relation": "paternal uncle",
-    "why": "in D12 the 11th house shows paternal uncle; counting forward from Gemini that is Aries, whose lord Mars sits in the rasi read as their lagna; no graha positions were given, so A11 was not computed"
+    "why": "in D12 the 11th house shows paternal uncle; counting forward from Gemini that is Aries, whose lord is Mars; section 13.4.2 reads the rasi containing Mars as their lagna, and no graha positions were given, so neither that nor A11 could be found"
   },
   "status": 200
 }
