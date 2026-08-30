@@ -31,3 +31,5 @@ class AnalysisRulesOut(BaseModel):
     standard_results_not_implemented: str
     closing: str
     closing_points_at: list[dict]
+    tapaswi_yoga: dict
+    example_44: dict

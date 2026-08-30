@@ -18,12 +18,25 @@ from hora.core.const import (
     BASIC_GUIDELINES,
     D24_MATTERS,
     DIVISIONAL_CHART_FOR,
+    EXAMPLE_44,
+    EXAMPLE_44_CLAIMS,
+    EXAMPLE_44_D20,
+    EXAMPLE_44_D20_BAV,
+    EXAMPLE_44_D20_CONTINUED,
+    EXAMPLE_44_FOOTNOTE_48_UNSEEN,
+    EXAMPLE_44_NATIVE,
+    EXAMPLE_44_RASI,
+    EXAMPLE_44_TAPASWI,
+    FOOTNOTE_49,
     HOUSE_VERSUS_ARUDHA_RULE,
     INFLUENCE_KINDS,
     INFLUENCES_RULE,
     REFERENCE_RULE,
     STANDARD_RESULTS_NOT_IMPLEMENTED,
     STANDARD_RESULTS_RULE,
+    TAPASWI_PLANETS,
+    TAPASWI_STRENGTHENERS,
+    TAPASWI_YOGA_RULE,
     THIRD_HOUSE_VERSUS_A3,
 )
 from hora.core.validate import InputError
@@ -105,6 +118,33 @@ def rules() -> dict:
         "closing": ANALYSIS_CLOSING,
         "closing_points_at": [{"what": what, "where": where}
                               for what, where in ANALYSIS_CLOSING_POINTS_AT],
+        "tapaswi_yoga": {
+            "rule": TAPASWI_YOGA_RULE,
+            "planets": dict(TAPASWI_PLANETS),
+            "strengtheners": TAPASWI_STRENGTHENERS,
+            "footnote_49": FOOTNOTE_49,
+        },
+        "example_44": {
+            "question": EXAMPLE_44,
+            "chart": 13,
+            "rasi": EXAMPLE_44_RASI,
+            "tapaswi": EXAMPLE_44_TAPASWI,
+            "d20": EXAMPLE_44_D20,
+            "d20_continued": EXAMPLE_44_D20_CONTINUED,
+            "native": EXAMPLE_44_NATIVE,
+            "claims": [
+                {"claim": claim, "chart": which, "decided_by": why}
+                for claim, which, why in EXAMPLE_44_CLAIMS
+            ],
+            "d20_bav": dict(EXAMPLE_44_D20_BAV),
+            "footnote_48": EXAMPLE_44_FOOTNOTE_48_UNSEEN,
+            "verified": (
+                "Every checkable claim reproduces from Chart 13, including "
+                "both arudha lagnas, all thirteen boxes of the printed D-20 "
+                "and the two D-20 ashtakavarga figures. The identification is "
+                "the book's own knowledge, not a calculation."
+            ),
+        },
     }
 
 

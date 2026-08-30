@@ -140,6 +140,108 @@
         "note": "D-10 chart is the correct chart"
       }
     ],
+    "example_44": {
+      "chart": 13,
+      "claims": [
+        {
+          "chart": "rasi",
+          "claim": "Lagna in Leo",
+          "decided_by": "Asc 23 Le 10"
+        },
+        {
+          "chart": "rasi",
+          "claim": "Lagna lord Sun is in the 10th house",
+          "decided_by": "10th from Leo is Taurus, where the Sun is"
+        },
+        {
+          "chart": "rasi",
+          "claim": "with 5th lord Jupiter",
+          "decided_by": "5th from Leo is Sagittarius, whose lord Jupiter is also in Taurus"
+        },
+        {
+          "chart": "rasi",
+          "claim": "this yoga takes place in the 7th from AL",
+          "decided_by": "AL is in Scorpio and the 7th from it is Taurus"
+        },
+        {
+          "chart": "rasi",
+          "claim": "debilitated Moon occupies AL",
+          "decided_by": "the Moon debilitates in Scorpio, which is where AL falls"
+        },
+        {
+          "chart": "rasi",
+          "claim": "in a Martian sign",
+          "decided_by": "Scorpio is owned by Mars"
+        },
+        {
+          "chart": "rasi",
+          "claim": "Saturn is with Ketu here",
+          "decided_by": "both are in Virgo"
+        },
+        {
+          "chart": "rasi",
+          "claim": "exalted Venus aspects them from Pisces",
+          "decided_by": "Venus exalts in Pisces, and Pisces is the 7th from Virgo"
+        },
+        {
+          "chart": "rasi",
+          "claim": "Here Venus is in the 8th house",
+          "decided_by": "8th from Leo is Pisces"
+        },
+        {
+          "chart": "D20",
+          "claim": "Lagna is in Pisces and lord Jupiter is in the 9th house",
+          "decided_by": "9th from Pisces is Scorpio, where Jupiter falls in the D-20"
+        },
+        {
+          "chart": "D20",
+          "claim": "GL in D-20 is in Sc and Jupiter occupies it",
+          "decided_by": "both fall in Scorpio in the D-20"
+        },
+        {
+          "chart": "D20",
+          "claim": "5th lord Moon and 9th lord Mars join in Vi",
+          "decided_by": "5th from Pisces is Cancer and 9th is Scorpio; both lords fall in Virgo"
+        },
+        {
+          "chart": "D20",
+          "claim": "and aspect lagna in Pi",
+          "decided_by": "Virgo is the 7th from Pisces"
+        },
+        {
+          "chart": "D20",
+          "claim": "Venus ... is in the 8th house in own rasi",
+          "decided_by": "8th from Pisces is Libra, which Venus owns and occupies"
+        },
+        {
+          "chart": "D20",
+          "claim": "The 2nd house has Sun and Mercury in it",
+          "decided_by": "2nd from Pisces is Aries, where both fall"
+        },
+        {
+          "chart": "D20",
+          "claim": "he has 6 rekhas in his D-20 BAV",
+          "decided_by": "Mercury's own BAV holds 6 in Aries, where he sits"
+        },
+        {
+          "chart": "D20",
+          "claim": "he has 5 rekhas in D-20 BAV",
+          "decided_by": "the Sun's own BAV holds 5 in Aries, where he sits"
+        }
+      ],
+      "d20": "Let us consider his D-20 now (see Chart 13). D-20 shows religious and spiritual activities. Lagna is in Pisces and lord Jupiter is in the 9th house. This shows religiousness and also being guided by a brilliant guru/parampara. GL in D-20 is in Sc and Jupiter occupies it. It shows a powerful position in religion.",
+      "d20_bav": {
+        "Mercury": 6,
+        "Sun": 5
+      },
+      "d20_continued": "If the 5th and 9th lords conjoin and aspect lagna, we learnt that it forms a rajayoga. Here 5th lord Moon and 9th lord Mars join in Vi and aspect lagna in Pi. This shows a powerful rajayoga giving a powerful and prosperous position related to religious matters. Venus, the planet of passion, is in the 8th house in own rasi. That shows sincere efforts and hard-work in religious matters. The 2nd house has Sun and Mercury in it. The 2nd house shows speech among other things. Mercury is the planet of speech and he has 6 rekhas in his D-20 BAV. Sun is a charismatic planet and he has 5 rekhas in D-20 BAV. They together give Budha-Aaditya yoga in the house of speech. The native is likely to be an excellent orator of religious matters.",
+      "footnote_48": "Footnote 48 is cited after 'there are parivraaja yogas here' and has not been supplied. Parivraaja yoga is not defined in any section read so far.",
+      "native": "This chart belongs to Swami Chandrasekhara Saraswathi, who was the chief pontiff of Kanchi Kama Koti Peetham. He was a great scholar and a keen student of many subjects. He was a true tapaswi and made a Herculean contribution in restoring the place of Vedic knowledge in Indian society. He was a brilliant orator. He commanded the respect of presidents, prime ministers, chief ministers and millions of Indians.",
+      "question": "Let us consider the rasi chart given in Chart 13 and start making some observations.",
+      "rasi": "Lagna in Leo can show someone royal and authoritative. Lagna lord Sun is in the 10th house with 5th lord Jupiter. This forms a raaja yoga. With Jupiter in Uttamaamsa, this yoga is powerful. Moreover, this yoga takes place in the 7th from AL. That makes it more powerful. However, we note that debilitated Moon occupies AL in a Martian sign and Saturn aspects him. Debilitated Moon in AL shows that the mind is turned away from the material world. Saturn is the significator of hard-work, service and austerity and he also signifies renunciation. His aspect on Moon can give renunciation. Moreover, Saturn is with Ketu here. Overall, there are parivraaja yogas here. So this native is likely to have renounced the world.",
+      "tapaswi": "Here Saturn and Ketu are together in Virgo and exalted Venus aspects them from Pisces. This gives Tapaswi yoga. Tapaswi yoga is particularly powerful when formed with a planet in the 8th house (hard-work, research, discovery and occult knowledge). Here Venus is in the 8th house. AK is also involved in Tapaswi yoga.",
+      "verified": "Every checkable claim reproduces from Chart 13, including both arudha lagnas, all thirteen boxes of the printed D-20 and the two D-20 ashtakavarga figures. The identification is the book's own knowledge, not a calculation."
+    },
     "factors": [
       {
         "name": "Divisional Chart",
@@ -186,6 +288,16 @@
     "reference_rule": "We should choose the correct reference for counting houses. In the above example of D-24, academic reputation is related more to the perceived self (AL) than the true self (lagna). So it is seen from the 5th from arudha lagna (AL). Intelligence and scholarship, on the other hand, are related to the true self and they are seen from the 5th from lagna. When the relevant karakas are stronger, we can use them as references instead of lagna.",
     "standard_results": "There are many standard results given in literature for various planets and house lords in various houses. These results should be mastered.",
     "standard_results_not_implemented": "Factor 6 points at the standard results in the classical literature, which section 13.1 sources to Dr. B.V. Raman's 'How to Judge a Horoscope'. The book does not reproduce them, so nothing here computes them.",
+    "tapaswi_yoga": {
+      "footnote_49": "Tapaswi is a person who performs tapas. He forgets everything and pursues something single-mindedly. Tapaswis usually dedicate themselves to research and uncover the secrets of the world. A tapaswi can be into yoga, mantra, tantra, astrology or even physics or chemistry.",
+      "planets": {
+        "Ketu": "selflessness, evolution and rising above the shackles of the material world",
+        "Saturn": "hard-work",
+        "Venus": "passion"
+      },
+      "rule": "Saturn is the planet of hard-work. Ketu is the planet of selflessness, evolution and rising above the shackles of the material world. Venus is the planet of passion. If two of these planets are together and the third planet aspects them, it gives Tapaswi yoga. If AK (chara atma karaka \u2013 soul) also aspects or conjoins the planets involved in Tapaswi yoga, this tapas will be more fruitful and will be a continuation of the efforts of the past lives (AK is one's link with the past lives).",
+      "strengtheners": "Tapaswi yoga is particularly powerful when formed with a planet in the 8th house (hard-work, research, discovery and occult knowledge). AK being involved makes the tapas a continuation of past lives."
+    },
     "third_house_versus_a3": "The 3rd house shows one's writing skills; A3 shows one's books."
   },
   "status": 200

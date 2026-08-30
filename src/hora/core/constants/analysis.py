@@ -219,3 +219,141 @@ ANALYSIS_CLOSING_POINTS_AT: tuple[tuple[str, str], ...] = (
     ("ashtakavarga strength of houses", "chapter 12, at /v1/ashtakavarga"),
     ("yogas", "chapter 11's 168 yogas, at /v1/yogas"),
 )
+
+
+# --------------------------------------------------------------------------
+# Example 44 — §13.4.1 and §13.4.2 worked over Chart 13
+# --------------------------------------------------------------------------
+
+EXAMPLE_44 = (
+    "Let us consider the rasi chart given in Chart 13 and start making some "
+    "observations."
+)
+
+EXAMPLE_44_RASI = (
+    "Lagna in Leo can show someone royal and authoritative. Lagna lord Sun is "
+    "in the 10th house with 5th lord Jupiter. This forms a raaja yoga. With "
+    "Jupiter in Uttamaamsa, this yoga is powerful. Moreover, this yoga takes "
+    "place in the 7th from AL. That makes it more powerful. However, we note "
+    "that debilitated Moon occupies AL in a Martian sign and Saturn aspects "
+    "him. Debilitated Moon in AL shows that the mind is turned away from the "
+    "material world. Saturn is the significator of hard-work, service and "
+    "austerity and he also signifies renunciation. His aspect on Moon can "
+    "give renunciation. Moreover, Saturn is with Ketu here. Overall, there "
+    "are parivraaja yogas here. So this native is likely to have renounced "
+    "the world."
+)
+
+TAPASWI_YOGA_RULE = (
+    "Saturn is the planet of hard-work. Ketu is the planet of selflessness, "
+    "evolution and rising above the shackles of the material world. Venus is "
+    "the planet of passion. If two of these planets are together and the "
+    "third planet aspects them, it gives Tapaswi yoga. If AK (chara atma "
+    "karaka – soul) also aspects or conjoins the planets involved in Tapaswi "
+    "yoga, this tapas will be more fruitful and will be a continuation of the "
+    "efforts of the past lives (AK is one's link with the past lives)."
+)
+
+#: Tapaswi yoga's three planets and what each stands for.
+TAPASWI_PLANETS: dict[str, str] = {
+    "Saturn": "hard-work",
+    "Ketu": "selflessness, evolution and rising above the shackles of the "
+            "material world",
+    "Venus": "passion",
+}
+
+TAPASWI_STRENGTHENERS = (
+    "Tapaswi yoga is particularly powerful when formed with a planet in the "
+    "8th house (hard-work, research, discovery and occult knowledge). AK "
+    "being involved makes the tapas a continuation of past lives."
+)
+
+FOOTNOTE_49 = (
+    "Tapaswi is a person who performs tapas. He forgets everything and "
+    "pursues something single-mindedly. Tapaswis usually dedicate themselves "
+    "to research and uncover the secrets of the world. A tapaswi can be into "
+    "yoga, mantra, tantra, astrology or even physics or chemistry."
+)
+
+EXAMPLE_44_TAPASWI = (
+    "Here Saturn and Ketu are together in Virgo and exalted Venus aspects "
+    "them from Pisces. This gives Tapaswi yoga. Tapaswi yoga is particularly "
+    "powerful when formed with a planet in the 8th house (hard-work, "
+    "research, discovery and occult knowledge). Here Venus is in the 8th "
+    "house. AK is also involved in Tapaswi yoga."
+)
+
+EXAMPLE_44_D20 = (
+    "Let us consider his D-20 now (see Chart 13). D-20 shows religious and "
+    "spiritual activities. Lagna is in Pisces and lord Jupiter is in the 9th "
+    "house. This shows religiousness and also being guided by a brilliant "
+    "guru/parampara. GL in D-20 is in Sc and Jupiter occupies it. It shows a "
+    "powerful position in religion."
+)
+
+EXAMPLE_44_D20_CONTINUED = (
+    "If the 5th and 9th lords conjoin and aspect lagna, we learnt that it "
+    "forms a rajayoga. Here 5th lord Moon and 9th lord Mars join in Vi and "
+    "aspect lagna in Pi. This shows a powerful rajayoga giving a powerful and "
+    "prosperous position related to religious matters. Venus, the planet of "
+    "passion, is in the 8th house in own rasi. That shows sincere efforts and "
+    "hard-work in religious matters. The 2nd house has Sun and Mercury in it. "
+    "The 2nd house shows speech among other things. Mercury is the planet of "
+    "speech and he has 6 rekhas in his D-20 BAV. Sun is a charismatic planet "
+    "and he has 5 rekhas in D-20 BAV. They together give Budha-Aaditya yoga "
+    "in the house of speech. The native is likely to be an excellent orator "
+    "of religious matters."
+)
+
+EXAMPLE_44_NATIVE = (
+    "This chart belongs to Swami Chandrasekhara Saraswathi, who was the chief "
+    "pontiff of Kanchi Kama Koti Peetham. He was a great scholar and a keen "
+    "student of many subjects. He was a true tapaswi and made a Herculean "
+    "contribution in restoring the place of Vedic knowledge in Indian "
+    "society. He was a brilliant orator. He commanded the respect of "
+    "presidents, prime ministers, chief ministers and millions of Indians."
+)
+
+#: Every checkable claim Example 44 makes, as ``(claim, chart, what settles
+#: it)``. Each is verified against Chart 13 rather than transcribed.
+EXAMPLE_44_CLAIMS: tuple[tuple[str, str, str], ...] = (
+    ("Lagna in Leo", "rasi", "Asc 23 Le 10"),
+    ("Lagna lord Sun is in the 10th house", "rasi",
+     "10th from Leo is Taurus, where the Sun is"),
+    ("with 5th lord Jupiter", "rasi",
+     "5th from Leo is Sagittarius, whose lord Jupiter is also in Taurus"),
+    ("this yoga takes place in the 7th from AL", "rasi",
+     "AL is in Scorpio and the 7th from it is Taurus"),
+    ("debilitated Moon occupies AL", "rasi",
+     "the Moon debilitates in Scorpio, which is where AL falls"),
+    ("in a Martian sign", "rasi", "Scorpio is owned by Mars"),
+    ("Saturn is with Ketu here", "rasi", "both are in Virgo"),
+    ("exalted Venus aspects them from Pisces", "rasi",
+     "Venus exalts in Pisces, and Pisces is the 7th from Virgo"),
+    ("Here Venus is in the 8th house", "rasi",
+     "8th from Leo is Pisces"),
+    ("Lagna is in Pisces and lord Jupiter is in the 9th house", "D20",
+     "9th from Pisces is Scorpio, where Jupiter falls in the D-20"),
+    ("GL in D-20 is in Sc and Jupiter occupies it", "D20",
+     "both fall in Scorpio in the D-20"),
+    ("5th lord Moon and 9th lord Mars join in Vi", "D20",
+     "5th from Pisces is Cancer and 9th is Scorpio; both lords fall in Virgo"),
+    ("and aspect lagna in Pi", "D20", "Virgo is the 7th from Pisces"),
+    ("Venus ... is in the 8th house in own rasi", "D20",
+     "8th from Pisces is Libra, which Venus owns and occupies"),
+    ("The 2nd house has Sun and Mercury in it", "D20",
+     "2nd from Pisces is Aries, where both fall"),
+    ("he has 6 rekhas in his D-20 BAV", "D20",
+     "Mercury's own BAV holds 6 in Aries, where he sits"),
+    ("he has 5 rekhas in D-20 BAV", "D20",
+     "the Sun's own BAV holds 5 in Aries, where he sits"),
+)
+
+#: The two figures Example 44 quotes from D-20 ashtakavarga.
+EXAMPLE_44_D20_BAV: dict[str, int] = {"Mercury": 6, "Sun": 5}
+
+#: Footnote 48 is cited after "parivraaja yogas" and has not been supplied.
+EXAMPLE_44_FOOTNOTE_48_UNSEEN = (
+    "Footnote 48 is cited after 'there are parivraaja yogas here' and has not "
+    "been supplied. Parivraaja yoga is not defined in any section read so far."
+)

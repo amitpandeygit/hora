@@ -1017,3 +1017,163 @@ def test_the_family_endpoints(client):
                           json={"relation": "cousin", "lagna": 0})
     assert refused.status_code == 400
     assert "fixes a house only for" in refused.json()["error"]["message"]
+
+
+# --------------------------------------------------------------------------
+# Example 44 — §13.4 worked over Chart 13
+# --------------------------------------------------------------------------
+
+from hora.charts.book import divisional, longitudes
+from hora.charts.book import lagna as book_lagna
+from hora.core.const import (
+    EXAMPLE_44_CLAIMS,
+    EXAMPLE_44_D20_BAV,
+    EXAMPLE_44_FOOTNOTE_48_UNSEEN,
+    EXAMPLE_44_NATIVE,
+    EXAMPLE_44_RASI,
+    TAPASWI_PLANETS,
+    TAPASWI_YOGA_RULE,
+)
+
+_C13 = longitudes(13)
+_C13_SIGNS = {name: int(value // 30) for name, value in _C13.items()}
+
+
+def _d20_references() -> dict[str, float]:
+    return {"Sun": _C13["Sun"], "Moon": _C13["Moon"], "Mars": _C13["Mars"],
+            "Mercury": _C13["Merc"], "Jupiter": _C13["Jup"],
+            "Venus": _C13["Ven"], "Saturn": _C13["Sat"],
+            "Lagna": _C13["Asc"]}
+
+
+def test_example_44s_raaja_yoga_is_lagna_lord_and_fifth_lord_in_the_tenth():
+    """Lagna lord Sun is in the 10th house with 5th lord Jupiter."""
+    lag = book_lagna(13)
+    assert RASI_ABBR[lag] == "Le"
+    tenth = (lag + 9) % 12
+    assert _C13_SIGNS["Sun"] == tenth == R["Ta"]
+    assert int(RASI_LORD[(lag + 4) % 12]) == int(Graha.JUPITER)
+    assert _C13_SIGNS["Jup"] == tenth
+
+
+def test_the_yoga_falls_in_the_seventh_from_the_arudha_lagna():
+    """"this yoga takes place in the 7th from AL. That makes it more
+    powerful." AL is in Scorpio, so the 7th is Taurus."""
+    al = R[describe_13()["drawn"]["AL"]]
+    assert RASI_ABBR[al] == "Sc"
+    assert (al + 6) % 12 == _C13_SIGNS["Sun"] == _C13_SIGNS["Jup"]
+
+
+def describe_13():
+    from hora.charts.book import describe
+
+    return describe(13)
+
+
+def test_the_debilitated_moon_sits_on_the_arudha_lagna_in_a_martian_sign():
+    """The Moon debilitates in Scorpio, AL falls in Scorpio, and Mars owns
+    it — three separate claims that all land on the same rasi."""
+    al = R[describe_13()["drawn"]["AL"]]
+    assert _C13_SIGNS["Moon"] == al == R["Sc"]
+    assert int(RASI_LORD[al]) == int(Graha.MARS)
+    assert "debilitated Moon occupies AL in a Martian sign" in EXAMPLE_44_RASI
+
+
+def test_saturn_aspects_the_moon_and_sits_with_ketu():
+    """Saturn's third aspect reaches Scorpio from Virgo, where Ketu is too."""
+    from hora.charts.aspects import graha_aspects_sign
+
+    assert _C13_SIGNS["Sat"] == _C13_SIGNS["Ketu"] == R["Vi"]
+    assert graha_aspects_sign(
+        int(Graha.SATURN), _C13_SIGNS["Sat"], _C13_SIGNS["Moon"])
+
+
+def test_tapaswi_yogas_three_planets_and_the_form_it_takes_here():
+    """"If two of these planets are together and the third planet aspects
+    them, it gives Tapaswi yoga." Saturn and Ketu in Virgo, Venus aspecting
+    from Pisces — and Venus is exalted there."""
+    from hora.charts.aspects import rasi_drishti
+
+    assert set(TAPASWI_PLANETS) == {"Saturn", "Ketu", "Venus"}
+    assert "Venus is the planet of passion" in TAPASWI_YOGA_RULE
+    assert _C13_SIGNS["Sat"] == _C13_SIGNS["Ketu"]
+    assert _C13_SIGNS["Ven"] == R["Pi"]
+    assert (_C13_SIGNS["Ven"] + 6) % 12 == _C13_SIGNS["Sat"]
+    del rasi_drishti
+
+
+def test_the_tapaswi_yoga_involves_the_atma_karaka_and_the_eighth_house():
+    """"AK is also involved in Tapaswi yoga" and "Here Venus is in the 8th
+    house" — both strengtheners the rule names."""
+    from hora.charts.karaka import chara_karakas
+
+    karakas = {k.graha: k.symbol for k in chara_karakas({
+        int(g): _C13[n] for n, g in GRAHA_OF_13.items() if n != "Ketu"})}
+    assert karakas[int(Graha.SATURN)] == "AK"
+    eighth = (book_lagna(13) + 7) % 12
+    assert _C13_SIGNS["Ven"] == eighth == R["Pi"]
+
+
+GRAHA_OF_13 = {
+    "Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+    "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+    "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU,
+}
+
+
+def test_example_44s_d20_rajayoga_of_the_fifth_and_ninth_lords():
+    """5th lord Moon and 9th lord Mars join in Vi and aspect lagna in Pi."""
+    d20 = divisional(13, "D20")
+    lag = R[d20["Asc"]]
+    assert RASI_ABBR[lag] == "Pi"
+    assert int(RASI_LORD[(lag + 4) % 12]) == int(Graha.MOON)
+    assert d20["Moon"] == d20["Mars"] == "Vi"
+    assert (R["Vi"] + 6) % 12 == lag, "Virgo is the 7th from Pisces"
+
+
+def test_example_44s_other_d20_placements():
+    d20 = divisional(13, "D20")
+    lag = R[d20["Asc"]]
+    assert d20["Jup"] == RASI_ABBR[(lag + 8) % 12] == "Sc", "9th house"
+    assert d20["GL"] == d20["Jup"], "GL in Sc and Jupiter occupies it"
+    assert d20["Ven"] == RASI_ABBR[(lag + 7) % 12] == "Li", "8th, own rasi"
+    assert int(RASI_LORD[R["Li"]]) == int(Graha.VENUS)
+    assert d20["Sun"] == d20["Merc"] == RASI_ABBR[(lag + 1) % 12] == "Ar"
+
+
+@pytest.mark.parametrize("owner,rekhas", sorted(EXAMPLE_44_D20_BAV.items()))
+def test_example_44s_two_d20_ashtakavarga_figures(owner, rekhas):
+    """"Mercury ... has 6 rekhas in his D-20 BAV. Sun ... has 5 rekhas in
+    D-20 BAV." Each is that planet's own BAV, read where it sits."""
+    from hora.charts.ashtakavarga import bhinnashtakavarga, signs_in_chart
+
+    d20 = signs_in_chart(_d20_references(), "D20")
+    assert bhinnashtakavarga(owner, d20).rekhas[d20[owner]] == rekhas
+
+
+def test_every_checkable_claim_of_example_44_is_recorded_with_its_reason():
+    assert len(EXAMPLE_44_CLAIMS) == 17
+    for claim, which, why in EXAMPLE_44_CLAIMS:
+        assert which in ("rasi", "D20")
+        assert why
+    assert {which for _, which, _ in EXAMPLE_44_CLAIMS} == {"rasi", "D20"}
+
+
+def test_the_identification_is_the_books_knowledge_not_a_calculation():
+    assert "Swami Chandrasekhara Saraswathi" in EXAMPLE_44_NATIVE
+    assert not any("Saraswathi" in claim for claim, _, _ in EXAMPLE_44_CLAIMS)
+
+
+def test_footnote_48_is_recorded_as_unseen():
+    """Cited after "there are parivraaja yogas here"."""
+    assert "has not been supplied" in EXAMPLE_44_FOOTNOTE_48_UNSEEN
+    assert "Parivraaja yoga is not defined" in EXAMPLE_44_FOOTNOTE_48_UNSEEN
+
+
+def test_the_analysis_rules_endpoint_carries_example_44(client):
+    body = client.get("/v1/analysis/rules").json()
+    assert body["example_44"]["chart"] == 13
+    assert len(body["example_44"]["claims"]) == 17
+    assert body["example_44"]["d20_bav"] == {"Mercury": 6, "Sun": 5}
+    assert set(body["tapaswi_yoga"]["planets"]) == {"Saturn", "Ketu", "Venus"}
+    assert "single-mindedly" in body["tapaswi_yoga"]["footnote_49"]

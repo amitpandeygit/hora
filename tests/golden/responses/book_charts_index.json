@@ -1,0 +1,105 @@
+{
+  "body": {
+    "charts": [
+      {
+        "birth": "April 9, 2000, 1:35 pm (5:00 West), 71 W 12, 42 N 30",
+        "first_seen": "chapter 9",
+        "number": 1,
+        "recomputable": false,
+        "title": "The reference chart"
+      },
+      {
+        "birth": "April 9, 2000, 5:55 pm (5:00 West), 71 W 12, 42 N 30",
+        "first_seen": "chapter 9",
+        "number": 2,
+        "recomputable": false,
+        "title": "The D-16 exercise chart"
+      },
+      {
+        "birth": "December 25, 1926, 5:12 am (IST), 78 E 10, 26 N 14",
+        "first_seen": "chapter 12, Example 39",
+        "number": 3,
+        "recomputable": true,
+        "title": "Rasi \u2014 A.B. Vajpayee"
+      },
+      {
+        "birth": null,
+        "first_seen": "chapter 10",
+        "number": 5,
+        "recomputable": false,
+        "title": "The aspects exercise chart"
+      },
+      {
+        "birth": "June 28, 1921, 12:49 pm (5:17 East), 79 E 09, 18 N 26",
+        "first_seen": "chapter 10",
+        "number": 6,
+        "recomputable": true,
+        "title": "Rasi \u2014 P.V. Narasimha Rao"
+      },
+      {
+        "birth": "February 6, 1911, 2:04 am (6:00 West), 89 W 47, 41 N 38",
+        "first_seen": "chapter 10",
+        "number": 7,
+        "recomputable": true,
+        "title": "Rasi \u2014 Ronald Reagan"
+      },
+      {
+        "birth": "December 2, 1946, 6:45 am (1:00 East), 15 E 39, 38 N 06",
+        "first_seen": "chapter 10",
+        "number": 8,
+        "recomputable": true,
+        "title": "The argala exercise chart"
+      },
+      {
+        "birth": "Phalguna Bahula Tritiya, 1630 AD, 12:05 hrs after sunrise",
+        "first_seen": "chapter 11",
+        "number": 9,
+        "recomputable": false,
+        "title": "Rasi \u2014 Chatrapati Shivaji"
+      },
+      {
+        "birth": "December 4, 1542, 3:39 am (4:39 East), 69 E 47, 25 N 19",
+        "first_seen": "chapter 11",
+        "number": 10,
+        "recomputable": true,
+        "title": "Rasi \u2014 Akbar"
+      },
+      {
+        "birth": "June 28, 1921, 1:08 pm (IST), 79 E 09, 18 N 26",
+        "first_seen": "chapter 12",
+        "number": 11,
+        "recomputable": false,
+        "title": "Rasi \u2014 the SAV chart"
+      },
+      {
+        "birth": "August 16, 1958, 7:05 am (4:00 West), 83 W 53, 43 N 36",
+        "first_seen": "chapter 12, Exercise 21",
+        "number": 12,
+        "recomputable": true,
+        "title": "D-10 SAV Exercise"
+      },
+      {
+        "birth": "May 20, 1894, 1:22 pm (IST), 79 E 32, 11 N 57",
+        "first_seen": "chapter 13, Example 44",
+        "number": 13,
+        "recomputable": true,
+        "title": "Rasi \u2014 Swami Chandrasekhara Saraswathi"
+      }
+    ],
+    "not_supplied": [
+      4
+    ],
+    "not_supplied_note": "Chart 4 has never appeared in any section read so far, and nothing has cited it.",
+    "note": "A chart with birth data is recomputed from its own birth line and so checks the ephemeris. One without is a transcription only, and its record says why.",
+    "recomputable": [
+      3,
+      6,
+      7,
+      8,
+      10,
+      12,
+      13
+    ]
+  },
+  "status": 200
+}

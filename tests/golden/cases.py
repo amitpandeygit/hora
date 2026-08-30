@@ -354,6 +354,10 @@ CASES = [
         "relation": "paternal uncle", "chart": "D12", "house": 11,
         "lagna": 2,
     }),
+    # The register of the book's own charts.
+    ("book_charts_index", "GET", "/v1/book-charts", None),
+    ("book_chart_13", "GET", "/v1/book-charts/13", None),
+    ("book_chart_6", "GET", "/v1/book-charts/6", None),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

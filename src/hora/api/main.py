@@ -21,6 +21,7 @@ from hora.api.routers import (
     avasthas,
     baadhakas,
     benefics,
+    book_charts,
     chakras,
     charts,
     colords,
@@ -101,6 +102,7 @@ app.include_router(functional.router)
 app.include_router(baadhakas.router)
 app.include_router(analysis.router)
 app.include_router(family.router)
+app.include_router(book_charts.router)
 
 
 @app.get("/health", response_model=HealthOut, tags=["meta"])

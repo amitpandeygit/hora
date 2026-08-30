@@ -1,0 +1,89 @@
+{
+  "body": {
+    "birth": "May 20, 1894, 1:22 pm (IST), 79 E 32, 11 N 57",
+    "chara_karakas": {
+      "Jup": "BK",
+      "Mars": "MK",
+      "Merc": "DK",
+      "Moon": "PK",
+      "Rahu": "PiK",
+      "Sat": "AK",
+      "Sun": "GK",
+      "Ven": "AmK"
+    },
+    "divisional": {
+      "D20": {
+        "AL": "Cn",
+        "Asc": "Pi",
+        "GL": "Sc",
+        "HL": "Sc",
+        "Jup": "Sc",
+        "Ketu": "Ge",
+        "Mars": "Vi",
+        "Merc": "Ar",
+        "Moon": "Vi",
+        "Rahu": "Ge",
+        "Sat": "Cp",
+        "Sun": "Ar",
+        "Ven": "Li"
+      }
+    },
+    "drawn": {
+      "AL": "Sc",
+      "Asc": "Le",
+      "GL": "Sg",
+      "HL": "Sg",
+      "Jup": "Ta",
+      "Ketu": "Vi",
+      "Mars": "Aq",
+      "Merc": "Ta",
+      "Moon": "Sc",
+      "Rahu": "Pi",
+      "Sat": "Vi",
+      "Sun": "Ta",
+      "Ven": "Pi"
+    },
+    "first_seen": "chapter 13, Example 44",
+    "lagna": "Le",
+    "longitudes": {
+      "Asc": "23 Le 10",
+      "GL": "4 Sg 55",
+      "HL": "23 Sg 54",
+      "Jup": "17 Ta 58",
+      "Ketu": "15 Vi 25",
+      "Mars": "14 Aq 49",
+      "Merc": "6 Ta 28",
+      "Moon": "14 Sc 01",
+      "Rahu": "15 Pi 25",
+      "Sat": "26 Vi 50",
+      "Sun": "6 Ta 52",
+      "Ven": "22 Pi 11"
+    },
+    "note": "The chief pontiff of Kanchi Kama Koti Peetham. Its D-20 is printed beside the rasi chart, which makes Example 44 a check on the varga as well as on the reading.",
+    "number": 13,
+    "place": {
+      "latitude": 11.95,
+      "longitude": 79.53333333333333
+    },
+    "recomputable": true,
+    "retrograde": [
+      "Sat"
+    ],
+    "signs": {
+      "Asc": "Le",
+      "GL": "Sg",
+      "HL": "Sg",
+      "Jup": "Ta",
+      "Ketu": "Vi",
+      "Mars": "Aq",
+      "Merc": "Ta",
+      "Moon": "Sc",
+      "Rahu": "Pi",
+      "Sat": "Vi",
+      "Sun": "Ta",
+      "Ven": "Pi"
+    },
+    "title": "Rasi \u2014 Swami Chandrasekhara Saraswathi"
+  },
+  "status": 200
+}

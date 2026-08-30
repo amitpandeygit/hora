@@ -1,0 +1,57 @@
+{
+  "body": {
+    "birth": "June 28, 1921, 12:49 pm (5:17 East), 79 E 09, 18 N 26",
+    "chara_karakas": {
+      "Jup": "PiK",
+      "Mars": "PK",
+      "Merc": "AmK",
+      "Moon": "DK",
+      "Rahu": "AK",
+      "Sat": "MK",
+      "Sun": "GK",
+      "Ven": "BK"
+    },
+    "divisional": {},
+    "drawn": null,
+    "first_seen": "chapter 10",
+    "lagna": "Vi",
+    "longitudes": {
+      "Asc": "24 Vi 19",
+      "GL": "25 Sg 59",
+      "HL": "24 Cp 11",
+      "Jup": "20 Le 06",
+      "Ketu": "0 Ar 47",
+      "Mars": "13 Ge 33",
+      "Merc": "27 Ge 40",
+      "Moon": "10 Pi 33",
+      "Rahu": "0 Li 47",
+      "Sat": "26 Le 26",
+      "Sun": "13 Ge 16",
+      "Ven": "27 Ar 40"
+    },
+    "note": "The offset is 5h17m east, not modern IST. Chart 11 is the same native at a different printed time \u2014 see D-38.",
+    "number": 6,
+    "place": {
+      "latitude": 18.433333333333334,
+      "longitude": 79.15
+    },
+    "recomputable": true,
+    "retrograde": [],
+    "signs": {
+      "Asc": "Vi",
+      "GL": "Sg",
+      "HL": "Cp",
+      "Jup": "Le",
+      "Ketu": "Ar",
+      "Mars": "Ge",
+      "Merc": "Ge",
+      "Moon": "Pi",
+      "Rahu": "Li",
+      "Sat": "Le",
+      "Sun": "Ge",
+      "Ven": "Ar"
+    },
+    "title": "Rasi \u2014 P.V. Narasimha Rao"
+  },
+  "status": 200
+}
