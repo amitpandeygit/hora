@@ -78,6 +78,10 @@ from hora.core.const import (
     EXAMPLE_39_LAGNA,
     EXAMPLE_39_RASI_SAV,
     EXAMPLE_39_VERIFIED,
+    EXAMPLE_40_ANSWER,
+    EXAMPLE_40_CHART,
+    EXAMPLE_40_OWNER,
+    EXAMPLE_40_WORKED,
     EXERCISE_18,
     EXERCISE_18_ANSWER,
     EXERCISE_18_HINT,
@@ -115,12 +119,18 @@ from hora.core.const import (
     SAV_STRENGTH_RULE,
     SAV_STRONG_FROM,
     SAV_TOTAL,
+    SOAV_IS_A_REDUCED_BAV,
+    SOAV_MEANS,
     SODHYA_PINDA_NOT_YET_DEFINED,
+    SODHYA_PINDAS_INTRO,
     SUN_ASHTAKAVARGA_ROWS,
     TABLE_19_WORKED_READING,
     TABLE_27_MERCURY_PAV,
     TABLE_27_OWNER,
     TABLE_27_TOTALS,
+    TRIKONA_SODHANA_DISPUTED_CASE,
+    TRIKONA_SODHANA_FOOTNOTE_44,
+    TRINE_SET_NAMES,
     YUGA_YEARS,
     Graha,
 )
@@ -1396,11 +1406,13 @@ def test_the_chart_endpoint_labels_itself_as_the_rasi_chart(client):
     assert body["chart"] == "D1"
 
 
-def test_sodhya_pindas_are_named_but_not_defined():
-    """§12.5 names them beside ashtakavarga; nothing read so far says what
-    they are. See OI-101."""
+def test_sodhya_pindas_have_their_inputs_defined_but_not_the_pinda():
+    """§12.5 names them beside ashtakavarga. §12.7 then gives the pipeline —
+    BAV, reductions, SoAV, pindas — and §12.7.1 supplies the first reduction.
+    The step that makes a pinda is still missing. See OI-101."""
     assert "sodhya pindas" in AV_NOT_ONLY_RASI
-    assert "No section read so far defines them" in SODHYA_PINDA_NOT_YET_DEFINED
+    assert "Trikona Sodhana" in SODHYA_PINDA_NOT_YET_DEFINED
+    assert "still not defined" in SODHYA_PINDA_NOT_YET_DEFINED
 
 
 def test_the_rules_endpoint_carries_12_5(client):
@@ -2296,3 +2308,163 @@ def test_the_rules_endpoint_carries_section_12_6(client):
     assert body["table_27"]["totals"] == list(TABLE_27_TOTALS)
     assert body["table_27"]["exercise"] == 18
     assert len(body["representations"]) == 3
+
+
+# --------------------------------------------------------------------------
+# §12.7 — Sodhya Pindas, and §12.7.1's Trikona Sodhana
+# --------------------------------------------------------------------------
+
+def test_a_soav_is_a_reduced_bav_and_the_pindas_come_from_it():
+    assert SOAV_MEANS == "Sodhita Ashtakavarga"
+    assert "reductions on the values in BAV" in SODHYA_PINDAS_INTRO
+    assert "not from the BAV" in SOAV_IS_A_REDUCED_BAV
+
+
+def test_the_four_trine_sets_are_the_element_groups():
+    """§12.7.1 names two — 'Ar, Le and Sg', 'Ta, Vi and Cp' — and Example 40
+    calls them fiery and watery. They are §2.2.5's elements, so we read them
+    off RASI_ELEMENT rather than typing the sets again."""
+    from hora.charts.ashtakavarga import mutual_trines
+
+    sets = [[RASI_ABBR[s] for s in group] for group in mutual_trines()]
+    assert sets[0] == ["Ar", "Le", "Sg"]
+    assert sets[1] == ["Ta", "Vi", "Cp"]
+    assert sets[2] == ["Ge", "Li", "Aq"]
+    assert sets[3] == ["Cn", "Sc", "Pi"]
+    assert sorted(s for group in sets for s in group) == sorted(RASI_ABBR)
+
+
+def test_example_40_reproduces_from_mercurys_bav_in_chart_11():
+    """The printed answer, all twelve figures."""
+    from hora.charts.ashtakavarga import trikona_sodhana
+
+    result = trikona_sodhana(EXAMPLE_40_OWNER, CHART_11_MERCURY_BAV)
+    assert result.after == EXAMPLE_40_ANSWER
+    assert result.before == CHART_11_MERCURY_BAV
+
+
+@pytest.mark.parametrize("element,names,before,after,rule", EXAMPLE_40_WORKED)
+def test_example_40s_two_worked_trines_step_for_step(
+        element, names, before, after, rule):
+    """The example works the fiery and watery sets longhand and names the rule
+    each time. Both the arithmetic and the rule it cites are checked."""
+    from hora.charts.ashtakavarga import trikona_sodhana
+
+    result = trikona_sodhana(EXAMPLE_40_OWNER, CHART_11_MERCURY_BAV)
+    trine = next(t for t in result.trines
+                 if [RASI_ABBR[s] for s in t.signs] == list(names))
+    assert TRINE_SET_NAMES[trine.element] == element
+    assert trine.before == before
+    assert trine.after == after
+    assert trine.rule == rule
+
+
+def test_the_two_trines_the_example_leaves_to_the_reader():
+    """'Readers may carry out the reduction for the remaining two sets.'"""
+    from hora.charts.ashtakavarga import trikona_sodhana
+
+    result = trikona_sodhana(EXAMPLE_40_OWNER, CHART_11_MERCURY_BAV)
+    by_element = {t.element: t for t in result.trines}
+    assert by_element["earth"].before == (4, 3, 3)
+    assert by_element["earth"].after == (1, 0, 0)
+    assert by_element["air"].before == (7, 4, 6)
+    assert by_element["air"].after == (3, 0, 2)
+
+
+def test_rules_one_and_two_fall_out_of_rule_three():
+    """Footnote 44: '(1) and (2) are special cases cases of (3)'. Proved over
+    all 729 possible triples rather than asserted — subtracting the lowest
+    changes nothing when the lowest is zero, and zeroes all three when they
+    are equal."""
+    from itertools import product
+
+    for triple in product(range(9), repeat=3):
+        reduced = tuple(v - min(triple) for v in triple)
+        if 0 in triple:
+            assert reduced == triple, triple          # rule (1)
+        if len(set(triple)) == 1:
+            assert reduced == (0, 0, 0), triple       # rule (2)
+
+
+def test_footnote_44s_dispute_is_confined_to_two_zero_triples():
+    """The authors PVR rejects would zero the third rasi when two are zero.
+    That differs from Parasara on exactly 24 of the 729 triples, and every
+    one of them has exactly two zeros — so the dispute's whole reach is
+    known, not guessed."""
+    from itertools import product
+
+    differing = [
+        t for t in product(range(9), repeat=3)
+        if (tuple(v - min(t) for v in t)
+            != ((0, 0, 0) if t.count(0) == 2 else tuple(v - min(t) for v in t)))
+    ]
+    assert len(differing) == 24
+    assert all(t.count(0) == 2 for t in differing)
+    assert TRIKONA_SODHANA_DISPUTED_CASE == (
+        "two rasis at zero and the third above zero")
+    assert "Let us follow Parasara" in TRIKONA_SODHANA_FOOTNOTE_44
+
+
+def test_trikona_sodhana_never_raises_a_value_or_leaves_a_trine_untouched():
+    """A reduction can only lower values, and every trine set must come out
+    with at least one zero — that is what subtracting the lowest guarantees."""
+    from hora.charts.ashtakavarga import bhinnashtakavarga, trikona_sodhana
+
+    for owner in ASHTAKAVARGA_REFERENCES:
+        rekhas = bhinnashtakavarga(owner, CHART_6_SIGNS).rekhas
+        result = trikona_sodhana(owner, rekhas)
+        assert all(a <= b for a, b in zip(result.after, rekhas, strict=True))
+        for trine in result.trines:
+            assert min(trine.after) == 0, (owner, trine.signs)
+
+
+def test_trikona_sodhana_rejects_a_wrong_length_or_impossible_bav():
+    from hora.charts.ashtakavarga import AshtakavargaError, trikona_sodhana
+    from hora.core.validate import InputError
+
+    with pytest.raises(AshtakavargaError, match="twelve rekhas"):
+        trikona_sodhana("Mercury", [1, 2, 3])
+    with pytest.raises(InputError):
+        trikona_sodhana("Mercury", [9] + [0] * 11)
+
+
+def test_the_trikona_endpoint_reproduces_example_40(client):
+    body = client.post("/v1/sodhana/trikona", json={
+        "owner": "Mercury",
+        "rekhas": list(CHART_11_MERCURY_BAV),
+    }).json()
+    assert body["after"] == list(EXAMPLE_40_ANSWER)
+    assert [t["element_name"] for t in body["trines"]] == [
+        "fiery trines", "earthy trines", "airy trines", "watery trines"]
+    assert [t["rule"] for t in body["trines"]] == [3, 3, 3, 2]
+    assert "special cases" in body["only_rule_three_is_implemented"]
+
+
+def test_the_trikona_endpoint_can_compute_the_bav_first(client):
+    """Given a chart instead of a BAV, it does both steps."""
+    body = client.post("/v1/sodhana/trikona", json={
+        "owner": "Mercury",
+        "reference_signs": CHART_6_SIGNS,
+    }).json()
+    assert body["before"] == list(CHART_11_MERCURY_BAV)
+    assert body["after"] == list(EXAMPLE_40_ANSWER)
+
+
+def test_the_trikona_endpoint_refuses_both_or_neither_input(client):
+    for payload in (
+        {"owner": "Mercury"},
+        {"owner": "Mercury", "rekhas": list(CHART_11_MERCURY_BAV),
+         "reference_signs": CHART_6_SIGNS},
+    ):
+        assert client.post("/v1/sodhana/trikona", json=payload).status_code == 422
+
+
+def test_the_sodhana_rules_endpoint_carries_section_12_7(client):
+    body = client.get("/v1/sodhana/rules").json()
+    assert body["soav_means"] == "Sodhita Ashtakavarga"
+    assert body["example_40"]["answer"] == list(EXAMPLE_40_ANSWER)
+    assert body["example_40"]["chart"] == EXAMPLE_40_CHART == "Chart 11"
+    assert len(body["example_40"]["worked"]) == 2
+    assert len(body["trikona_sodhana"]["rules"]) == 3
+    assert "24 of the 729" in body["trikona_sodhana"]["disputed_case_note"]
+    assert "still not defined" in body["pinda_not_yet_defined"]

@@ -282,6 +282,12 @@ CASES = [
         "rasi": 1,
         "references": ["Venus", "Jupiter"],
     }),
+    # Section 12.7: the trinal reduction, and Example 40's own answer.
+    ("sodhana_rules", "GET", "/v1/sodhana/rules", None),
+    ("sodhana_example_40", "POST", "/v1/sodhana/trikona", {
+        "owner": "Mercury",
+        "rekhas": [7, 4, 7, 4, 4, 3, 4, 4, 4, 3, 6, 4],
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

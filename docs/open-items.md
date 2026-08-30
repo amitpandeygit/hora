@@ -618,22 +618,27 @@ direction may be assumed from the other.
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 
-### OI-101 — "sodhya pindas" are named but not defined
+### OI-101 — a sodhya pinda is still not defined, though its inputs now are
 
-§12.5 names them beside ashtakavarga as a second family of principles:
+§12.5 named them beside ashtakavarga; §12.7 has now started defining them:
 
-> "any principles based on ashtakavarga **and sodhya pindas** that let us
-> predict matters related to father must use D-12"
+> "By applying some reductions on the values in BAV, we get 'Sodhita
+> Ashtakavarga' (SoAV). Using it, we find Sodhya Pindas of different planets."
 
-No section read so far says what a sodhya pinda is. Ashtakavarga itself is
-fully implemented; this is a distinct construction the chapter has not reached.
+So the pipeline is BAV → reductions → SoAV → pinda. **§12.7.1 supplies the
+first reduction only** — Trikona Sodhana, implemented and verified against
+Example 40. What is still missing is any further reduction (the section is
+numbered 12.7.1, so at least one more is expected) and the step that turns a
+SoAV into a pinda, which is the number the phrase actually names.
 
-**What we do:** nothing is computed for them. The phrase is transcribed and
-`/v1/ashtakavarga/rules` carries a note saying it is named but undefined, so a
-caller looking for it finds a stated gap rather than an absence.
+§12.7 also says the pindas are used in the "Transit Analysis" part, which is
+outside chapter 12 — so the *use* may be far away even once the definition
+lands.
 
-**Closes when:** a later section of chapter 12 defines them, or you confirm
-they are out of scope.
+**What we do:** `/v1/sodhana/trikona` computes the first reduction. Nothing
+computes a pinda, and the endpoint does not pretend a reduced BAV is one.
+
+**Closes when:** a later section defines the pinda itself.
 
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 

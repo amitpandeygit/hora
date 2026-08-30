@@ -577,7 +577,11 @@ MUHURTA_DEFINITION = (
 #: defines them. See docs/open-items.md OI-101.
 SODHYA_PINDA_NOT_YET_DEFINED = (
     "Section 12.5 names sodhya pindas beside ashtakavarga as a second family "
-    "of principles. No section read so far defines them.")
+    "of principles. Section 12.7 gives the pipeline — BAV, then reductions, "
+    "then a Sodhita Ashtakavarga, then the pindas — and section 12.7.1 "
+    "supplies the first reduction, Trikona Sodhana, at /v1/sodhana/trikona. "
+    "The step that turns a SoAV into a pinda is still not defined, so nothing "
+    "computes one. See docs/open-items.md OI-101.")
 
 
 # --------------------------------------------------------------------------
@@ -847,3 +851,85 @@ PRASTAARA_TRANSIT_EXAMPLE = (
 #: an ashtakavarga reference; the other two are ways of *choosing* which
 #: reference to ask about, and they resolve to a graha before PAV sees them.
 PRASTAARA_TRANSIT_REFERENCES = ("Venus", "DK", "7th lord in navamsa")
+
+
+# --------------------------------------------------------------------------
+# §12.7 — Sodhya Pindas
+# --------------------------------------------------------------------------
+
+SODHYA_PINDAS_INTRO = (
+    "We discussed the computation of BAV before. By applying some reductions "
+    "on the values in BAV, we get “Sodhita Ashtakavarga” (SoAV). Using "
+    "it, we find Sodhya Pindas of different planets. These pindas are very "
+    "important in predicting key events and we will talk about them again in "
+    "the part “Transit Analysis”.")
+
+SOAV_MEANS = "Sodhita Ashtakavarga"
+SOAV_IS_A_REDUCED_BAV = (
+    "A SoAV is a BAV with reductions applied. The pindas are computed from "
+    "the SoAV, not from the BAV.")
+
+# -- §12.7.1 Trikona Sodhana ------------------------------------------------
+
+TRIKONA_SODHANA_MEANS = "Trinal Reduction"
+
+TRIKONA_SODHANA_RULE = (
+    "Consider the BAV of a planet. Look at different sets of mutual trines "
+    "separately (e.g. First set: Ar, Le and Sg, Second set: Ta, Vi and Cp) "
+    "and apply the following rules on each set:")
+
+#: The three rules as printed. Footnote 44 says (1) and (2) are special cases
+#: of (3), and `trikona_sodhana` implements only (3) for exactly that reason —
+#: `test_rules_one_and_two_fall_out_of_rule_three` proves it over all 729
+#: possible triples.
+TRIKONA_SODHANA_RULES: tuple[str, ...] = (
+    "If atleast one rasi has zero, no reduction is necessary.",
+    "If the three rasis have the same value, make them all zero.",
+    "Take the lowest value out of the three. Subtract it from all the values.",
+)
+
+#: Footnote 44 — PVR rejecting a rival reading of rule (1). See
+#: docs/precedence.md PVR-15.
+TRIKONA_SODHANA_FOOTNOTE_44 = (
+    "Some authors suggest that this applies only if there is zero in exactly "
+    "one rasi. If two rasis have a zero, they suggest making the third one "
+    "also zero. But this is inconsistent with the spirit of the other rules. "
+    "The idea is to subtract the lowest value from others. In that sense, (1) "
+    "and (2) are special cases cases of (3). The change suggested by these "
+    "authors is inconsistent with this. Let us follow Parasara.")
+
+#: The rejected reading differs from Parasara's on exactly the triples with
+#: two zeros and a non-zero third — 24 of the 729 possible, enumerated by
+#: `test_footnote_44s_dispute_is_confined_to_two_zero_triples`.
+TRIKONA_SODHANA_DISPUTED_CASE = (
+    "two rasis at zero and the third above zero")
+
+#: What Example 40 calls each trine set. §2.2.5's element names are nouns
+#: ("fire"); the example uses the adjective ("fiery trines").
+TRINE_SET_NAMES: dict[str, str] = {
+    "fire": "fiery", "earth": "earthy", "air": "airy", "water": "watery",
+}
+
+EXAMPLE_40 = (
+    "As an example, let us take Mercury's BAV given in Chart 11. Let us takes "
+    "fiery trines. Ar, Le and Sg have 7, 4 and 4 rekhas. Rules (1) and (2) "
+    "don't apply and we go to (3). The lowest value is 4. Subtracting it from "
+    "the three values, we write 3, 0 and 0 in Ar, Le and Sg respectively. Let "
+    "us take the watery trines now. Cn, Sc and Pi have 4 rekhas each. Rule "
+    "(2) applies and we write zero in all the three rasis. Readers may carry "
+    "out the reduction for the remaining two sets of trines and verify that "
+    "we get the following table after Trikona Sodhana:")
+
+EXAMPLE_40_OWNER = "Mercury"
+EXAMPLE_40_CHART = "Chart 11"
+
+#: The printed answer, Aries first.
+EXAMPLE_40_ANSWER: tuple[int, ...] = (3, 1, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0)
+
+#: The two trine sets the example works longhand, and which rule it names.
+#: The other two it leaves to the reader; our tests do all four.
+EXAMPLE_40_WORKED: tuple[tuple[str, tuple[str, ...], tuple[int, ...],
+                              tuple[int, ...], int], ...] = (
+    ("fiery", ("Ar", "Le", "Sg"), (7, 4, 4), (3, 0, 0), 3),
+    ("watery", ("Cn", "Sc", "Pi"), (4, 4, 4), (0, 0, 0), 2),
+)

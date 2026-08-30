@@ -24,6 +24,7 @@ from hora.core.const import (
     BAV_COUNT_RANGE,
     BAV_GRADES,
     CLASSICAL_TABLE_TOTALS,
+    ELEMENT_NAMES,
     GRAHA_NAMES,
     JUPITER_ASHTAKAVARGA_ROWS,
     LAGNA_ASHTAKAVARGA_ROWS,
@@ -32,6 +33,7 @@ from hora.core.const import (
     MOON_ASHTAKAVARGA_ROWS,
     MUHURTA_DEFINITION,
     MUHURTA_FOOTNOTE,
+    RASI_ELEMENT,
     RASI_NAMES,
     SATURN_ASHTAKAVARGA_ROWS,
     SAV_AVERAGE_FROM,
@@ -618,3 +620,94 @@ def is_benefic_from(owner: str, reference_signs: dict[str, int], rasi: int,
         "benefic_from": sorted(benefic),
         "rekhas": len(benefic),
     }
+
+
+# --------------------------------------------------------------------------
+# §12.7.1 — Trikona Sodhana
+# --------------------------------------------------------------------------
+
+def mutual_trines() -> tuple[tuple[int, ...], ...]:
+    """The four sets of mutual trines, derived from §2.2.5's elements.
+
+    §12.7.1 names two of them — "Ar, Le and Sg", "Ta, Vi and Cp" — and
+    Example 40 calls them the fiery and watery trines. They are the element
+    groups, so they are read off `RASI_ELEMENT` rather than typed again.
+    """
+    return tuple(
+        tuple(sign for sign in range(12) if RASI_ELEMENT[sign] == element)
+        for element in range(4)
+    )
+
+
+@dataclass(frozen=True)
+class TrinalReduction:
+    """One trine set's reduction, with the rule that decided it."""
+
+    #: The three signs, ascending.
+    signs: tuple[int, ...]
+    #: Their element's name, from §2.2.5.
+    element: str
+    #: What they held before.
+    before: tuple[int, ...]
+    #: What they hold after.
+    after: tuple[int, ...]
+    #: 1, 2 or 3 — which of §12.7.1's three rules describes what happened.
+    #: Only rule 3 is implemented; 1 and 2 are the cases where it does the
+    #: thing they describe. See `TRIKONA_SODHANA_FOOTNOTE_44`.
+    rule: int
+    #: The lowest of the three, which is what rule 3 subtracts.
+    lowest: int
+
+
+@dataclass(frozen=True)
+class TrikonaSodhana:
+    """§12.7.1's reduction over all four trine sets."""
+
+    owner: str
+    before: tuple[int, ...]
+    after: tuple[int, ...]
+    trines: tuple[TrinalReduction, ...]
+
+
+def trikona_sodhana(owner: str, rekhas: Sequence[int]) -> TrikonaSodhana:
+    """Reduce a BAV by §12.7.1, one set of mutual trines at a time.
+
+    Only rule (3) — subtract the lowest — is implemented. Footnote 44 says
+    why: "(1) and (2) are special cases cases of (3)", and PVR follows
+    Parasara over the authors who would change rule (1). Rules (1) and (2)
+    are still *reported*, because which one applies is what the example
+    narrates, but they are recognised rather than separately applied.
+
+    :param rekhas: twelve counts, Aries first — a BAV's `rekhas`.
+    """
+    if len(rekhas) != 12:
+        raise AshtakavargaError(
+            f"a BAV has twelve rekhas, one per rasi; got {len(rekhas)}")
+    for sign, value in enumerate(rekhas):
+        validate.in_range(f"{RASI_NAMES[sign]} rekhas", int(value), 0, 8)
+
+    out = [int(v) for v in rekhas]
+    reductions: list[TrinalReduction] = []
+    for signs in mutual_trines():
+        before = tuple(out[sign] for sign in signs)
+        lowest = min(before)
+        after = tuple(value - lowest for value in before)
+        for sign, value in zip(signs, after, strict=True):
+            out[sign] = value
+        if lowest == 0:
+            rule = 1          # "at least one rasi has zero" — nothing moves
+        elif len(set(before)) == 1:
+            rule = 2          # "the three rasis have the same value"
+        else:
+            rule = 3
+        reductions.append(TrinalReduction(
+            signs=signs,
+            element=ELEMENT_NAMES[RASI_ELEMENT[signs[0]]],
+            before=before, after=after, rule=rule, lowest=lowest,
+        ))
+    return TrikonaSodhana(
+        owner=owner,
+        before=tuple(int(v) for v in rekhas),
+        after=tuple(out),
+        trines=tuple(reductions),
+    )

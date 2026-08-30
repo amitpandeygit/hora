@@ -36,6 +36,7 @@ from hora.api.routers import (
     rasi_strength,
     reference,
     relationships,
+    sodhana,
     strength,
     tithis,
     util,
@@ -91,6 +92,7 @@ app.include_router(aspects.router)
 app.include_router(argalas.router)
 app.include_router(planetary_yogas.router)
 app.include_router(ashtakavarga.router)
+app.include_router(sodhana.router)
 
 
 @app.get("/health", response_model=HealthOut, tags=["meta"])

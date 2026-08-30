@@ -740,7 +740,7 @@
     "sav_strength_rule": "A rasi with 30 or more rekhas becomes strong. Matters signified by the house falling in such a rasi flourish and planets transiting in such a rasi bring good results. A rasi with 25-30 rekhas is average. A rasi with less than 25 rekhas becomes weak. Matters signified by the house falling in such a rasi suffer and planets transiting in such a rasi bring bad results.",
     "sav_total": 337,
     "sav_worked_example": "Let us continue with the rasi chart in Chart 6. From the answer to Exercise 19, we see that the BAVs of Sun, Moon, Mars, Mercury, Jupiter, Venus and Saturn have 5, 3, 4, 7, 4, 8 and 3 rekhas in Ar (respectively). Adding them all, we get 34. So SAV has 34 rekhas in Ar and we write 34 in Ar.",
-    "sodhya_pinda_not_yet_defined": "Section 12.5 names sodhya pindas beside ashtakavarga as a second family of principles. No section read so far defines them.",
+    "sodhya_pinda_not_yet_defined": "Section 12.5 names sodhya pindas beside ashtakavarga as a second family of principles. Section 12.7 gives the pipeline \u2014 BAV, then reductions, then a Sodhita Ashtakavarga, then the pindas \u2014 and section 12.7.1 supplies the first reduction, Trikona Sodhana, at /v1/sodhana/trikona. The step that turns a SoAV into a pinda is still not defined, so nothing computes one. See docs/open-items.md OI-101.",
     "table_numbers": {
       "Jupiter": 23,
       "Lagna": 26,
