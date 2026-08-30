@@ -269,15 +269,56 @@ def test_a_missing_rasi_lord_is_named_rather_than_crashing():
 # The five measures, and what feeding this into arudhas actually gives
 # --------------------------------------------------------------------------
 
-def test_only_avastha_is_available_of_the_five_measures():
+def test_three_of_the_five_measures_are_available():
+    """§15.2 names five ways of measuring strength. Three are built.
+
+    The flags were written when only avasthas existed and went stale as
+    chapters 12 and 15.5 landed — a real chart run surfaced it. Each flag is
+    checked against the code that would provide it, so the next drift shows.
+    """
     by_key = {m["key"]: m for m in STRENGTH_MEASURES}
     assert set(by_key) == {
         "shadbala", "ashtakavarga", "avastha", "vimsopaka", "simple_rules"
     }
-    assert by_key["avastha"]["available"] is True
-    for key in ("shadbala", "ashtakavarga", "vimsopaka", "simple_rules"):
+    for key in ("avastha", "ashtakavarga", "simple_rules"):
+        assert by_key[key]["available"] is True, key
+    for key in ("shadbala", "vimsopaka"):
         assert by_key[key]["available"] is False, key
     assert "beyond" in by_key["shadbala"]["why_not"]
+
+
+def test_each_available_flag_matches_code_that_actually_exists():
+    """The flags are a promise to a caller, so they are checked against the
+    functions that keep it rather than trusted."""
+    from hora.charts.ashtakavarga import bhinnashtakavarga
+    from hora.charts.colord import stronger as stronger_co_lord
+    from hora.charts.rasi_strength import stronger as stronger_rasi
+    from hora.services import strength_service
+
+    by_key = {m["key"]: m for m in STRENGTH_MEASURES}
+
+    assert by_key["ashtakavarga"]["available"] is True
+    assert callable(bhinnashtakavarga)
+
+    assert by_key["simple_rules"]["available"] is True
+    assert callable(stronger_co_lord) and callable(stronger_rasi)
+
+    assert by_key["avastha"]["available"] is True
+    for family in ("avasthas", "activity"):
+        assert callable(getattr(strength_service, family)), family
+
+
+def test_all_four_avastha_families_are_implemented_not_three():
+    """The note used to say only age, alertness and mood were built. The
+    activity family — sayanadi — is there too."""
+    from hora.services import strength_service
+
+    by_key = {m["key"]: m for m in STRENGTH_MEASURES}
+    assert "All four families" in by_key["avastha"]["note"]
+    result = strength_service.activity(
+        graha=0, graha_longitude=22.83, moon_longitude=24.10,
+        lagna_rasi=3, ghati=17)
+    assert result["name"]
 
 
 def test_simple_rules_is_the_measure_section_9_2_actually_wants():

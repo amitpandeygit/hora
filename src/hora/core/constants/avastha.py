@@ -183,9 +183,15 @@ STRENGTH_MEASURES: tuple[dict, ...] = (
             "planet may be strong in one divisional chart and weak in another, "
             "and gives its results more effectively in the area of the first"
         ),
-        "available": False,
-        "why_not": "not yet implemented",
-        "note": None,
+        "available": True,
+        "why_not": None,
+        "note": (
+            "Chapter 12 supplies the measure: a planet's rekhas in its own "
+            "BAV, in whichever divisional chart is being read, and section "
+            "12.4's bands for a rasi's SAV. Example 44 already reads it that "
+            "way — 'Mercury ... has 6 rekhas in his D-20 BAV'. What chapter "
+            "15 has not given us is a scored bala derived from those counts"
+        ),
     },
     {
         "key": "avastha",
@@ -195,8 +201,9 @@ STRENGTH_MEASURES: tuple[dict, ...] = (
         "available": True,
         "why_not": None,
         "note": (
-            "States related to activity are a fourth family the chapter names; "
-            "only age, alertness and mood are implemented here"
+            "All four families the chapter names are implemented: age "
+            "(baaladi), alertness (jagradadi), mood (deeptadi) and activity "
+            "(sayanadi)"
         ),
     },
     {
@@ -209,7 +216,12 @@ STRENGTH_MEASURES: tuple[dict, ...] = (
         "used_for": "judging a planet's overall effectiveness in a life",
         "available": False,
         "why_not": "not yet implemented",
-        "note": None,
+        "note": (
+            "The varga groupings it is computed over — shadvarga, "
+            "sapthavarga, dasavarga, shodasavarga — already exist in "
+            "charts/vargas.py, so what is missing is the weighting, not the "
+            "charts"
+        ),
     },
     {
         "key": "simple_rules",
@@ -219,15 +231,15 @@ STRENGTH_MEASURES: tuple[dict, ...] = (
             "trivial determinations such as which planet initiates dasas and "
             "antardasas"
         ),
-        "available": False,
-        "why_not": (
-            "the chapter says these are 'very simple rules that are different "
-            "from shadbala, ashtakavarga bala, avastha bala, Vimsopaka bala', "
-            "but the rules themselves are not in the material transcribed so far"
-        ),
+        "available": True,
+        "why_not": None,
         "note": (
-            "These, not shadbala, are the rules §9.2 needs for choosing the "
-            "stronger of Mars and Ketu as lord of Scorpio"
+            "Section 15.5.1's cascade for the stronger co-lord and section "
+            "15.5.2's for the stronger rasi are both implemented, in "
+            "charts/colord.py and charts/rasi_strength.py. These, not "
+            "shadbala, are the rules section 9.2 needs for choosing the "
+            "stronger of Mars and Ketu as lord of Scorpio, and the rules a "
+            "rasi dasa needs to pick between lagna and the 7th"
         ),
     },
 )

@@ -12,19 +12,19 @@
         "why_not": "the book states that explaining the computation of shadbalas is beyond its scope, and refers the reader to Brihat Parasara Hora Sastram or 'Graha and Bhava Balas' by Dr. B.V. Raman"
       },
       {
-        "available": false,
+        "available": true,
         "key": "ashtakavarga",
         "name": "Ashtakavarga bala",
-        "note": null,
+        "note": "Chapter 12 supplies the measure: a planet's rekhas in its own BAV, in whichever divisional chart is being read, and section 12.4's bands for a rasi's SAV. Example 44 already reads it that way \u2014 'Mercury ... has 6 rekhas in his D-20 BAV'. What chapter 15 has not given us is a scored bala derived from those counts",
         "shows": "how other planets support or oppose a planet \u2014 its ability to give its own results in harmony with other planetary forces, not its ability to lead a group",
         "used_for": "judging whether a planet can deliver in a given area of life; a planet may be strong in one divisional chart and weak in another, and gives its results more effectively in the area of the first",
-        "why_not": "not yet implemented"
+        "why_not": null
       },
       {
         "available": true,
         "key": "avastha",
         "name": "Avastha bala",
-        "note": "States related to activity are a fourth family the chapter names; only age, alertness and mood are implemented here",
+        "note": "All four families the chapter names are implemented: age (baaladi), alertness (jagradadi), mood (deeptadi) and activity (sayanadi)",
         "shows": "the state a planet is in \u2014 its age, alertness, mood and activity",
         "used_for": "judging whether a planet is in a fit state to give good results",
         "why_not": null
@@ -33,19 +33,19 @@
         "available": false,
         "key": "vimsopaka",
         "name": "Vimsopaka bala",
-        "note": null,
+        "note": "The varga groupings it is computed over \u2014 shadvarga, sapthavarga, dasavarga, shodasavarga \u2014 already exist in charts/vargas.py, so what is missing is the weighting, not the charts",
         "shows": "the overall strength of a planet and its ability to play an important role in one's life, rather than in a specific area",
         "used_for": "judging a planet's overall effectiveness in a life",
         "why_not": "not yet implemented"
       },
       {
-        "available": false,
+        "available": true,
         "key": "simple_rules",
         "name": "Simple comparison rules",
-        "note": "These, not shadbala, are the rules \u00a79.2 needs for choosing the stronger of Mars and Ketu as lord of Scorpio",
+        "note": "Section 15.5.1's cascade for the stronger co-lord and section 15.5.2's for the stronger rasi are both implemented, in charts/colord.py and charts/rasi_strength.py. These, not shadbala, are the rules section 9.2 needs for choosing the stronger of Mars and Ketu as lord of Scorpio, and the rules a rasi dasa needs to pick between lagna and the 7th",
         "shows": "which of two planets or rasis is stronger, by short rules",
         "used_for": "trivial determinations such as which planet initiates dasas and antardasas",
-        "why_not": "the chapter says these are 'very simple rules that are different from shadbala, ashtakavarga bala, avastha bala, Vimsopaka bala', but the rules themselves are not in the material transcribed so far"
+        "why_not": null
       }
     ]
   },
