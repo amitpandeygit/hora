@@ -340,6 +340,20 @@ CASES = [
         "graha_signs": {"0": 3, "1": 6, "2": 1, "3": 7, "4": 9, "5": 10,
                         "6": 2, "7": 5, "8": 11},
     }),
+    # Section 13.4.2: the two worked D-7 lagnas, forward and backward.
+    ("family_rules", "GET", "/v1/family/rules", None),
+    ("family_children_gemini", "POST", "/v1/family/children", {"lagna": 2}),
+    ("family_children_cancer", "POST", "/v1/family/children", {"lagna": 3}),
+    ("family_siblings_elder", "POST", "/v1/family/siblings", {
+        "lagna": 3, "elder": True,
+    }),
+    ("family_father", "POST", "/v1/family/parent", {
+        "relation": "father", "lagna": 3,
+    }),
+    ("family_relative_uncle", "POST", "/v1/family/relative", {
+        "relation": "paternal uncle", "chart": "D12", "house": 11,
+        "lagna": 2,
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

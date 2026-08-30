@@ -1,0 +1,19 @@
+{
+  "body": {
+    "arudha": "A9",
+    "arudha_sign": null,
+    "arudha_sign_name": null,
+    "chart": "D12",
+    "direction": "forward",
+    "house": 9,
+    "house_sign": 11,
+    "house_sign_name": "Pisces",
+    "index": null,
+    "lagna": 11,
+    "lagna_name": "Pisces",
+    "lord": "Jupiter",
+    "relation": "father",
+    "why": "in D12 the 9th house shows father; counting forward from Cancer that is Pisces, whose lord Jupiter sits in the rasi read as their lagna; no graha positions were given, so A9 was not computed"
+  },
+  "status": 200
+}

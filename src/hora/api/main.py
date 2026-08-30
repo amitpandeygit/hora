@@ -26,6 +26,7 @@ from hora.api.routers import (
     colords,
     dashas,
     ephemeris,
+    family,
     functional,
     graha_arudhas,
     horas,
@@ -99,6 +100,7 @@ app.include_router(sodhana.router)
 app.include_router(functional.router)
 app.include_router(baadhakas.router)
 app.include_router(analysis.router)
+app.include_router(family.router)
 
 
 @app.get("/health", response_model=HealthOut, tags=["meta"])

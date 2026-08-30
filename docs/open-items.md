@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 62 waiting on evidence · 2 parked**
+**5 waiting on Amit · 63 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,26 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-106 — §13.4.2's note does not say which sign follows the sixth child
+
+The sibling and child chains step two houses at a time, so from an odd lagna
+they only ever reach odd signs and from an even lagna only even ones. Six signs
+in, the next step lands back on the first — and §13.4.2's closing note says so:
+
+> "After covering all the odd or even signs, we move from odd to even signs or
+> even to odd signs, instead of coming back to where we started."
+
+It does not say **which** sign of the other parity comes next, and both worked
+examples stop at the second child. The candidates differ by a whole rasi, so a
+guess would place a seventh child's lagna wrongly, not approximately.
+
+**What we do:** chains are answered six deep and the seventh is refused, naming
+the note as the reason. A test confirms the chain returns to its own first sign
+at the seventh, so the boundary is derived rather than picked.
+
+**Closes when:** a later section or a worked example places a seventh sibling
+or child.
 
 ### OI-105 — Table 30 has no branch for Mercury's association
 

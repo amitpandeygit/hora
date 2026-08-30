@@ -804,3 +804,216 @@ def test_the_influences_endpoint_composes_the_five_kinds(client):
     assert "baadhaka" in kinds and "rasi drishti" in kinds
     assert set(body["frame"]) == {"quadrants", "trines", "upachayas",
                                   "dusthanas"}
+
+
+# --------------------------------------------------------------------------
+# §13.4.2 — Family Members
+# --------------------------------------------------------------------------
+
+from hora.charts.family import (
+    CHART_FOR,
+    HOUSE_FOR,
+    FamilyError,
+    child,
+    child_house,
+    counts_forward,
+    named,
+    relative,
+    sibling,
+    sibling_house,
+)
+from hora.core.const import (
+    DIRECTION_EXAMPLES,
+    DIRECTION_SCOPE,
+    FAMILY_CHAIN_DEPTH,
+    FAMILY_CHARTS,
+    FAMILY_NOTE,
+    FAMILY_NOTE_IS_UNDERSPECIFIED,
+    NAMED_RELATIVES,
+    NESTED_HOUSE_CLAIMS,
+    RASI_LORD,
+)
+
+
+def test_the_four_charts_and_who_is_read_from_each():
+    assert dict(FAMILY_CHARTS)["D12"] == (
+        "parents", "grandparents", "uncles", "aunts")
+    assert dict(FAMILY_CHARTS)["D7"] == (
+        "children", "children-in-law", "grandchildren")
+    assert dict(FAMILY_CHARTS)["D3"] == (
+        "brothers", "sisters", "brothers-in-law", "sisters-in-law")
+    assert dict(FAMILY_CHARTS)["D9"] == ("spouse", "spouse's family members")
+    assert CHART_FOR["grandchildren"] == "D7"
+    assert len(CHART_FOR) == sum(len(r) for _, r in FAMILY_CHARTS)
+
+
+@pytest.mark.parametrize("inner,step,result", NESTED_HOUSE_CLAIMS)
+def test_13_4_2s_nested_house_arithmetic(inner, step, result):
+    """"Being the 3rd from the 3rd house, the 5th house shows …", and the
+    other two claims like it. Each is checked rather than believed."""
+    assert ((inner + step - 2) % 12) + 1 == result
+
+
+def test_the_sibling_chains_run_outward_in_both_directions():
+    """Younger 3rd, 5th, 7th …; elder 11th, 9th, 7th …"""
+    assert [sibling_house(n, elder=False) for n in range(1, 6)] == [
+        3, 5, 7, 9, 11]
+    assert [sibling_house(n, elder=True) for n in range(1, 6)] == [
+        11, 9, 7, 5, 3]
+
+
+def test_the_child_chain_runs_from_the_fifth():
+    """"the 5th lord shows the first child, the 7th lord shows the second
+    child, the 9th house shows the third child and so on"."""
+    assert [child_house(n) for n in range(1, 5)] == [5, 7, 9, 11]
+
+
+def test_the_two_sibling_chains_meet_at_the_seventh_house():
+    """Both reach the 7th at their third step, which is the section's own
+    arithmetic and not a coincidence of our indexing."""
+    assert sibling_house(3, elder=False) == sibling_house(3, elder=True) == 7
+
+
+def test_an_odd_lagna_counts_forward_and_an_even_one_backward():
+    """Aries is the 1st sign and therefore odd, so index 0 counts forward."""
+    assert counts_forward(R["Ar"]) is True
+    assert counts_forward(R["Ge"]) is True
+    assert counts_forward(R["Ta"]) is False
+    assert counts_forward(R["Cn"]) is False
+    assert [s for s in range(12) if counts_forward(s)] == [0, 2, 4, 6, 8, 10]
+
+
+@pytest.mark.parametrize(
+    "lagna,direction,kids", DIRECTION_EXAMPLES, ids=[e[0] for e in
+                                                     DIRECTION_EXAMPLES])
+def test_13_4_2s_two_worked_d7_examples(lagna, direction, kids):
+    """"If lagna in D-7 is in Ge, Venus (lord of Li) shows first child …"
+    and the Cancer case that reverses it."""
+    for n, (sign, lord) in enumerate(kids, start=1):
+        result = child(n, R[lagna])
+        assert result.direction == direction
+        assert RASI_ABBR[result.house_sign] == sign
+        assert str(GRAHA_NAMES[result.lord]) == lord
+
+
+def test_the_same_house_gives_opposite_signs_from_the_two_examples():
+    """Gemini and Cancer are adjacent, yet their first children land in Libra
+    and Pisces — which is the whole point of the direction rule."""
+    assert RASI_ABBR[child(1, R["Ge"]).house_sign] == "Li"
+    assert RASI_ABBR[child(1, R["Cn"]).house_sign] == "Pi"
+
+
+def test_a_chain_stays_inside_one_parity_class():
+    """Stepping two houses at a time from an odd sign only ever reaches odd
+    signs, which is why a chain runs exactly six deep."""
+    for lagna in range(12):
+        signs = [child(n, lagna).house_sign
+                 for n in range(1, FAMILY_CHAIN_DEPTH + 1)]
+        assert len(set(signs)) == FAMILY_CHAIN_DEPTH
+        assert {s % 2 for s in signs} == {lagna % 2}
+
+
+def test_the_chain_would_return_to_its_first_sign_at_the_seventh():
+    """Which is exactly what §13.4.2's note is about."""
+    for lagna in (R["Ge"], R["Cn"]):
+        forward = counts_forward(lagna)
+        step = 2 if forward else -2
+        first = child(1, lagna).house_sign
+        seventh = (first + step * 6) % 12
+        assert seventh == first
+
+
+def test_the_seventh_sibling_or_child_is_refused_with_the_note():
+    """The note says to move to the other parity but not which sign, and no
+    example reaches a seventh. So it is refused, not guessed. See OI-106."""
+    for call in (lambda: child(7, 0),
+                 lambda: sibling(7, 0, elder=False),
+                 lambda: sibling(7, 0, elder=True)):
+        with pytest.raises(FamilyError, match="other parity"):
+            call()
+    assert "instead of coming back to where we started" in FAMILY_NOTE
+    assert "not say which sign" in FAMILY_NOTE_IS_UNDERSPECIFIED
+
+
+@pytest.mark.parametrize("relation,chart,house", NAMED_RELATIVES)
+def test_father_and_mother_are_the_two_houses_13_4_2_fixes(
+        relation, chart, house):
+    """"the 9th lord or the arudha pada of 9th house in D-12 shows father.
+    The 4th lord or the arudha pada of 4th house in D-12 shows mother"."""
+    result = named(relation, R["Ge"])
+    assert result.chart == chart == "D12"
+    assert result.house == house
+    assert result.arudha == f"A{house}"
+    assert HOUSE_FOR[relation] == (chart, house)
+
+
+def test_the_direction_rule_does_not_reach_d12():
+    """It is stated for siblings and children in D-3 and D-7. Father and
+    mother count forward from an even lagna too."""
+    for lagna in (R["Ge"], R["Cn"]):
+        assert named("father", lagna).direction == "forward"
+        assert named("mother", lagna).direction == "forward"
+    assert RASI_ABBR[named("father", R["Cn"]).house_sign] == "Pi"
+    assert "does not apply it to D-12" in DIRECTION_SCOPE
+
+
+def test_a_relatives_lagna_is_the_rasi_holding_that_houses_lord():
+    """§13.4.2's uniform method, checked against RASI_LORD directly."""
+    result = child(1, R["Ge"])
+    assert result.house_sign == R["Li"]
+    assert result.lord == int(RASI_LORD[R["Li"]])
+    assert result.lagna == result.house_sign
+
+
+def test_the_arudha_is_offered_beside_the_lord_when_positions_are_given():
+    """13.4.2 says the arudha pada may be considered too."""
+    positions = {int(g): s for g, s in (
+        (Graha.SUN, 3), (Graha.MOON, 6), (Graha.MARS, 1),
+        (Graha.MERCURY, 7), (Graha.JUPITER, 9), (Graha.VENUS, 10),
+        (Graha.SATURN, 2), (Graha.RAHU, 5), (Graha.KETU, 11))}
+    without = child(1, R["Ge"])
+    assert without.arudha_sign is None
+    assert "no graha positions were given" in without.why
+
+    with_them = child(1, R["Ge"], positions)
+    assert with_them.arudha == "A5"
+    assert with_them.arudha_sign is not None
+
+
+def test_a_relation_13_4_2_does_not_fix_a_house_for_is_refused():
+    """It gives the chart for uncles and grandparents but not the house."""
+    with pytest.raises(FamilyError, match="fixes a house only for"):
+        named("uncle", 0)
+
+
+def test_any_relation_can_be_read_once_the_caller_chooses_the_house():
+    """The escape hatch, since §13.4.2 leaves most houses to the reader."""
+    result = relative("paternal uncle", "D12", 11, R["Ge"])
+    assert result.chart == "D12"
+    assert result.house == 11
+    assert result.direction == "forward"
+
+    with pytest.raises(FamilyError, match="is not one of them"):
+        relative("someone", "D16", 3, 0)
+
+
+def test_the_family_endpoints(client):
+    body = client.get("/v1/family/rules").json()
+    assert len(body["charts"]) == 4
+    assert body["chain_depth"] == 6
+    assert len(body["direction_examples"]) == 2
+    assert len(body["named_relatives"]) == 2
+
+    kids = client.post("/v1/family/children", json={"lagna": R["Ge"]}).json()
+    assert [c["house_sign_name"] for c in kids["children"]][:2] == [
+        "Libra", "Sagittarius"]
+
+    elders = client.post("/v1/family/siblings",
+                         json={"lagna": R["Cn"], "elder": True}).json()
+    assert elders["siblings"][0]["house"] == 11
+    assert elders["siblings"][0]["direction"] == "backward"
+
+    refused = client.post("/v1/family/parent",
+                          json={"relation": "cousin", "lagna": 0})
+    assert refused.status_code == 400
+    assert "fixes a house only for" in refused.json()["error"]["message"]

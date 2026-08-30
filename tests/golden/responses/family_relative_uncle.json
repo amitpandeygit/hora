@@ -1,0 +1,19 @@
+{
+  "body": {
+    "arudha": "A11",
+    "arudha_sign": null,
+    "arudha_sign_name": null,
+    "chart": "D12",
+    "direction": "forward",
+    "house": 11,
+    "house_sign": 0,
+    "house_sign_name": "Aries",
+    "index": null,
+    "lagna": 0,
+    "lagna_name": "Aries",
+    "lord": "Mars",
+    "relation": "paternal uncle",
+    "why": "in D12 the 11th house shows paternal uncle; counting forward from Gemini that is Aries, whose lord Mars sits in the rasi read as their lagna; no graha positions were given, so A11 was not computed"
+  },
+  "status": 200
+}
