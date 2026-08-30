@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 71 waiting on evidence · 2 parked**
+**5 waiting on Amit · 72 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,25 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-115 — §16.2 uses savana years; our default is sidereal
+
+**NEEDS YOU. Every Vimsottari date in chapter 16 turns on it.** §16.2's
+controversy box settles its own question: "Savana years will be used with
+nakshatra dasas in all the calculations given in this book." Savana is 360 days;
+our default is sidereal, 365.2564.
+
+| source | rank | says |
+|---|---|---|
+| JHora | 1 | sidereal — tier-2; PyJHora defaults to `TRUE_SIDEREAL_YEAR`, balance matched at 17y 11m 18d (parity 3) |
+| The book | 2 | savana, for every nakshatra dasa it computes |
+
+Precedence keeps JHora's default, but they diverge fast: Chart 12's mahadasa
+starts drift 71 days by the 2nd, 192 by the 5th, 560 by the 9th. So chapter 16's
+examples will not reproduce under it — a settings choice that reads as a defect.
+Both modes exist, so nothing changes until you say.
+
+**Closes when:** a JHora run settles parity 3, or you prefer the book's examples.
 
 ### OI-114 — §15.4.2 does not say whether "enemy" is natural or compound
 
