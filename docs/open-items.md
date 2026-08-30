@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 69 waiting on evidence · 2 parked**
+**5 waiting on Amit · 70 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,26 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-113 — chapter 11 reads "aspected" as graha drishti, undocumented
+
+Nineteen of chapter 11's definitions turn on a planet being "conjoined or
+aspected", and the book never says which drishti it means. Chapter 8 defines
+two, and where the book means one it says so — §14.2's marakas are "using graha
+drishti" — so an unqualified "aspected" is genuinely open.
+
+Every chapter 11 detector uses **graha drishti only**; `rasi_drishti` appears
+nowhere in the package. That was never a recorded decision, and it shows in a
+live chart: rule 11.10 #11 fires Daridra Yoga on a Ketu conjoined by the 12th
+lord, "if not conjoined or aspected by the lords of trines". The 9th lord
+Jupiter reaches that Ketu by **rasi** drishti but not by graha drishti, so the
+saving clause misses and the yoga stands. Under the other reading it is absent.
+
+**What we do:** unchanged, since flipping it would move an unknown number of
+the 168 detections at once. It is now named rather than implicit.
+
+**Closes when:** a worked example turns on the difference, or you decide the
+reading.
 
 ### OI-112 — remedial measures are named twice and defined once, for moksha
 

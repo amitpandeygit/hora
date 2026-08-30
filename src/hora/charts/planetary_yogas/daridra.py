@@ -118,7 +118,14 @@ def marakas(data: YogaInput) -> tuple[tuple[int, ...], tuple[int, ...], str]:
 
 def reached_by(data: YogaInput, reachers: tuple[int, ...],
                target: int) -> list[tuple[int, str]]:
-    """"conjoined or aspected by" — every reacher that gets there."""
+    """"conjoined or aspected by" — every reacher that gets there.
+
+    **Aspect here means graha drishti only.** The book does not say which
+    drishti its unqualified "aspected" means, and nineteen of chapter 11's
+    definitions use that wording. Every detector in this package reads it the
+    same way, which is at least consistent, but it is a choice and not a
+    quotation — see docs/open-items.md OI-113.
+    """
     target_sign = data.sign_of(target)
     if target_sign is None:
         return []
