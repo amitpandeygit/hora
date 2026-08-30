@@ -321,6 +321,15 @@ CASES = [
     ("functional_planet_waning_moon", "POST", "/v1/functional/planet", {
         "planet": "Moon", "lagna": 6, "waxing": False,
     }),
+    # Section 13.3: Table 31, and the worked D-10 with a Gemini lagna.
+    ("baadhaka_rules", "GET", "/v1/baadhakas/rules", None),
+    ("baadhaka_gemini_lagna", "POST", "/v1/baadhakas/sign", {"sign": 2}),
+    ("baadhaka_chart_gemini", "POST", "/v1/baadhakas/chart", {
+        "lagna_sign": 2,
+    }),
+    ("baadhaka_check_by_occupancy", "POST", "/v1/baadhakas/check", {
+        "graha": 2, "sign": 2, "graha_signs": {"2": 8},
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

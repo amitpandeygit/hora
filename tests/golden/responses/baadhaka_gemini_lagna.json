@@ -1,0 +1,16 @@
+{
+  "body": {
+    "house": 7,
+    "lords": [
+      "Jupiter"
+    ],
+    "modality": "dual",
+    "occupants": [],
+    "sign": 2,
+    "sign_name": "Gemini",
+    "sthaana": 8,
+    "sthaana_name": "Sagittarius",
+    "why": "Gemini is dual, so the 7th from it \u2014 Sagittarius \u2014 is its baadhaka sthaana, and Jupiter is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+  },
+  "status": 200
+}

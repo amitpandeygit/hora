@@ -353,3 +353,201 @@ def test_the_rules_endpoint_carries_13_2(client):
     assert body["moon_omitted_from"] == ["Ar", "Li", "Cp"]
     assert "72 of the" in body["table_is_the_authority"]
     assert "Rahu and Ketu own no rasi" in body["planets_note"]
+
+
+# --------------------------------------------------------------------------
+# §13.3 — Baadhakas, and Table 31
+# --------------------------------------------------------------------------
+
+from hora.charts.baadhaka import (
+    CO_LORDS,
+    BaadhakaError,
+    baadhaka_of,
+    baadhaka_sthaana,
+    baadhakas,
+    is_baadhaka,
+    table_31,
+)
+from hora.core.const import (
+    BAADHAKA_EXAMPLE_STEPS,
+    BAADHAKA_HOUSE_BY_MODALITY,
+    BAADHAKA_INCLUDES_OCCUPANTS,
+    BAADHAKA_SCOPE,
+    BAADHAKA_TAKES_BOTH_CO_LORDS,
+    GRAHA_NAMES,
+    MODALITY_NAMES_EN,
+    RASI_MODALITY,
+    TABLE_31_BAADHAKAS,
+    Graha,
+)
+
+
+def test_the_rule_is_eleventh_ninth_seventh_by_modality():
+    """"For a house falling in a movable/fixed/dual rasi, the 11th/9th/7th
+    house (respectively) from there becomes baadhaka sthaana"."""
+    assert BAADHAKA_HOUSE_BY_MODALITY == (11, 9, 7)
+    assert MODALITY_NAMES_EN == ["movable", "fixed", "dual"]
+
+
+def test_table_31_derives_from_the_rule_above_it():
+    """All twenty-four entries — twelve sthaanas and fourteen lords."""
+    assert table_31() == TABLE_31_BAADHAKAS
+    assert len(TABLE_31_BAADHAKAS) == 12
+    assert sum(len(lords) for _, lords in TABLE_31_BAADHAKAS.values()) == 14
+
+
+@pytest.mark.parametrize("abbr", sorted(TABLE_31_BAADHAKAS))
+def test_each_baadhaka_sthaana_is_the_right_house_from_its_rasi(abbr):
+    sign = R[abbr]
+    house = BAADHAKA_HOUSE_BY_MODALITY[RASI_MODALITY[sign]]
+    assert (sign + house - 1) % 12 == baadhaka_sthaana(sign)
+    assert RASI_ABBR[baadhaka_sthaana(sign)] == TABLE_31_BAADHAKAS[abbr][0]
+
+
+def test_a_baadhaka_sthaana_is_never_the_sign_itself():
+    """11th, 9th and 7th are all distinct from the 1st, so nothing troubles
+    itself."""
+    for sign in range(12):
+        assert baadhaka_sthaana(sign) != sign
+
+
+def test_the_modalities_map_to_three_disjoint_groups_of_four():
+    groups: dict[int, list[str]] = {}
+    for sign in range(12):
+        groups.setdefault(RASI_MODALITY[sign], []).append(RASI_ABBR[sign])
+    assert groups[0] == ["Ar", "Cn", "Li", "Cp"]
+    assert groups[1] == ["Ta", "Le", "Sc", "Aq"]
+    assert groups[2] == ["Ge", "Vi", "Sg", "Pi"]
+
+
+def test_table_31_names_both_co_lords_where_the_sthaana_is_co_owned():
+    """Aries' sthaana is Aquarius and Capricorn's is Scorpio. Table 31 gives
+    "Saturn & Rahu" and "Mars & Ketu" — both, not the stronger one. §9.2's
+    arudha needs exactly one of the same pair, which is the opposite."""
+    assert TABLE_31_BAADHAKAS["Ar"] == ("Aq", ("Saturn", "Rahu"))
+    assert TABLE_31_BAADHAKAS["Cp"] == ("Sc", ("Mars", "Ketu"))
+    assert set(CO_LORDS) == {R["Sc"], R["Aq"]}
+    assert "both co-lords" in BAADHAKA_TAKES_BOTH_CO_LORDS
+
+    two_lord_rasis = {abbr for abbr, (_, lords) in TABLE_31_BAADHAKAS.items()
+                      if len(lords) == 2}
+    assert two_lord_rasis == {"Ar", "Cp"}
+
+
+def test_the_co_lords_are_reused_from_section_15_5_1_not_retyped():
+    from hora.charts.colord import CO_LORDS as SOURCE
+
+    assert {int(k): tuple(int(g) for g in v) for k, v in SOURCE.items()} \
+        == CO_LORDS
+
+
+@pytest.mark.parametrize(
+    "reads,rasi,sthaana,lords,trouble", BAADHAKA_EXAMPLE_STEPS,
+    ids=[s[0] for s in BAADHAKA_EXAMPLE_STEPS])
+def test_13_3s_worked_example(reads, rasi, sthaana, lords, trouble):
+    """A D-10 with lagna in Gemini. Both halves derived, neither transcribed."""
+    result = baadhaka_of(R[rasi])
+    assert RASI_ABBR[result.sthaana] == sthaana
+    assert tuple(str(GRAHA_NAMES[g]) for g in result.lords) == lords
+    assert trouble
+
+
+def test_13_3s_example_reads_the_ninth_house_not_only_lagna():
+    """"Aq is the 9th house" — from a Gemini lagna. The example makes the
+    point that a baadhaka is taken from any house, not just lagna."""
+    assert (R["Ge"] + 9 - 1) % 12 == R["Aq"]
+    assert "every house and arudha pada" in BAADHAKA_SCOPE
+
+
+def test_a_baadhaka_troubles_by_occupancy_as_well_as_lordship():
+    """"the periods of Jupiter **and planets in Sg**" — occupants count."""
+    d10 = {int(Graha.SUN): R["Sg"], int(Graha.MARS): R["Sg"],
+           int(Graha.VENUS): R["Li"], int(Graha.JUPITER): R["Ta"]}
+    result = baadhaka_of(R["Ge"], d10)
+    assert result.lords == (int(Graha.JUPITER),)
+    assert result.occupants == tuple(sorted(
+        (int(Graha.SUN), int(Graha.MARS))))
+
+    mars = is_baadhaka(int(Graha.MARS), R["Ge"], d10)
+    assert mars["is_baadhaka"] is True
+    assert mars["by_occupancy"] is True and mars["by_lordship"] is False
+    jupiter = is_baadhaka(int(Graha.JUPITER), R["Ge"], d10)
+    assert jupiter["by_lordship"] is True and jupiter["by_occupancy"] is False
+    assert "through whoever occupies it" in BAADHAKA_INCLUDES_OCCUPANTS
+
+
+def test_without_positions_the_answer_says_what_it_could_not_decide():
+    """Never a bare false: occupancy is unknown, and the reason says so."""
+    verdict = is_baadhaka(int(Graha.MARS), R["Ge"])
+    assert verdict["is_baadhaka"] is False
+    assert verdict["occupancy_known"] is False
+    assert "cannot be decided without graha positions" in verdict["why"]
+
+    result = baadhaka_of(R["Ge"])
+    assert result.occupants == ()
+    assert "no positions were given" in result.why
+
+
+def test_with_positions_and_an_empty_sthaana_the_answer_says_that_too():
+    d10 = {int(Graha.VENUS): R["Li"]}
+    result = baadhaka_of(R["Ge"], d10)
+    assert result.occupants == ()
+    assert "nothing occupies the sthaana" in result.why
+
+
+def test_every_sign_has_a_baadhaka_and_a_reason():
+    for sign in range(12):
+        result = baadhaka_of(sign)
+        assert result.lords
+        assert result.modality in MODALITY_NAMES_EN
+        assert result.why
+        assert baadhakas(sign) == result.lords
+
+
+def test_an_out_of_range_sign_or_graha_position_is_refused():
+    from hora.core.validate import InputError
+
+    with pytest.raises(InputError):
+        baadhaka_sthaana(12)
+    with pytest.raises(InputError):
+        baadhaka_of(0, {int(Graha.SUN): 12})
+    assert issubclass(BaadhakaError, InputError)
+
+
+def test_the_baadhakas_endpoint_serves_table_31(client):
+    body = client.get("/v1/baadhakas/rules").json()
+    assert body["derived_matches_printed"] is True
+    assert body["house_by_modality"] == {
+        "movable": 11, "fixed": 9, "dual": 7}
+    assert body["table_31"]["Ar"] == {
+        "sthaana": "Aq", "baadhakas": ["Saturn", "Rahu"]}
+    assert len(body["example_steps"]) == 2
+
+
+def test_the_sign_endpoint_answers_for_an_arudha_not_only_a_house(client):
+    """§13.4.1 asks "if a planet is a baadhaka from A3" — the endpoint takes
+    whatever rasi the arudha falls in, with no notion of lagna."""
+    body = client.post("/v1/baadhakas/sign", json={"sign": R["Aq"]}).json()
+    assert body["sthaana_name"] == "Libra"
+    assert body["lords"] == ["Venus"]
+    assert body["modality"] == "fixed"
+
+
+def test_the_chart_endpoint_gives_all_twelve_houses(client):
+    body = client.post("/v1/baadhakas/chart",
+                       json={"lagna_sign": R["Ge"]}).json()
+    assert len(body["houses"]) == 12
+    first = body["houses"][0]
+    ninth = body["houses"][8]
+    assert first["sign_name"] == "Gemini" and first["lords"] == ["Jupiter"]
+    assert ninth["sign_name"] == "Aquarius" and ninth["lords"] == ["Venus"]
+
+
+def test_the_check_endpoint_reports_how_not_just_whether(client):
+    body = client.post("/v1/baadhakas/check", json={
+        "graha": int(Graha.MARS), "sign": R["Ge"],
+        "graha_signs": {str(int(Graha.MARS)): R["Sg"]},
+    }).json()
+    assert body["is_baadhaka"] is True
+    assert body["by_occupancy"] is True
+    assert body["by_lordship"] is False

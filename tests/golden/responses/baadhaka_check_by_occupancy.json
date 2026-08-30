@@ -1,0 +1,16 @@
+{
+  "body": {
+    "by_lordship": false,
+    "by_occupancy": true,
+    "graha": 2,
+    "graha_name": "Mars",
+    "is_baadhaka": true,
+    "occupancy_known": true,
+    "sign": 2,
+    "sign_name": "Gemini",
+    "sthaana": 8,
+    "sthaana_name": "Sagittarius",
+    "why": "Mars is a baadhaka for Gemini by occupancy: the baadhaka sthaana is Sagittarius"
+  },
+  "status": 200
+}

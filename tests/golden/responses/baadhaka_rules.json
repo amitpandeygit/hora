@@ -1,0 +1,129 @@
+{
+  "body": {
+    "baadhaka_means": "troublemaker",
+    "co_lords": "Aries' baadhaka sthaana is Aquarius and Capricorn's is Scorpio, the two co-owned rasis. Table 31 lists both co-lords for each \u2014 Saturn and Rahu, Mars and Ketu \u2014 rather than the stronger one. Section 15.5.1's cascade is not involved, which is the opposite of what section 9.2's arudha needs from the same two rasis.",
+    "derived_matches_printed": true,
+    "example": "For example, suppose lagna in someone's D-10 is in Ge. Then Jupiter is baadhaka for lagna. The periods of Jupiter and planets in Sg can create some obstructions and troubles in career. Let us take another house. Aq is the 9th house and the 9th house in D-10 shows the guidance one gets in one's career. It can show manager and elders giving guidance. Baadhaka sthana for Aq is Li. So the periods of Venus and occupants of Li can create some troubles related to the guidance one gets. There may be some troubles related to manager. Thus we can consider baadhaka from every house and arudha pada in every divisional chart.",
+    "example_steps": [
+      {
+        "baadhakas": [
+          "Jupiter"
+        ],
+        "rasi": "Ge",
+        "reads": "lagna",
+        "sthaana": "Sg",
+        "trouble": "obstructions and troubles in career"
+      },
+      {
+        "baadhakas": [
+          "Venus"
+        ],
+        "rasi": "Aq",
+        "reads": "the 9th house",
+        "sthaana": "Li",
+        "trouble": "troubles related to the guidance one gets, and to the manager"
+      }
+    ],
+    "house_by_modality": {
+      "dual": 7,
+      "fixed": 9,
+      "movable": 11
+    },
+    "includes_occupants": "A baadhaka sthaana troubles through its lord and through whoever occupies it. Both halves of section 13.3's example say so \u2014 'the periods of Jupiter and planets in Sg', and 'the periods of Venus and occupants of Li'.",
+    "rasis": [
+      "Ar",
+      "Ta",
+      "Ge",
+      "Cn",
+      "Le",
+      "Vi",
+      "Li",
+      "Sc",
+      "Sg",
+      "Cp",
+      "Aq",
+      "Pi"
+    ],
+    "rule": "For a house falling in a movable/fixed/dual rasi, the 11th/9th/7th house (respectively) from there becomes baadhaka sthaana (troubling spot). Its lord is called a \u201cbaadhaka\u201d (troublemaker) for the original house. The list of baadhaka sthaanas and baadhakas corresponding to each rasi is given in Table 31.",
+    "scope": "Thus we can consider baadhaka from every house and arudha pada in every divisional chart.",
+    "sthaana_means": "troubling spot",
+    "table_31": {
+      "Aq": {
+        "baadhakas": [
+          "Venus"
+        ],
+        "sthaana": "Li"
+      },
+      "Ar": {
+        "baadhakas": [
+          "Saturn",
+          "Rahu"
+        ],
+        "sthaana": "Aq"
+      },
+      "Cn": {
+        "baadhakas": [
+          "Venus"
+        ],
+        "sthaana": "Ta"
+      },
+      "Cp": {
+        "baadhakas": [
+          "Mars",
+          "Ketu"
+        ],
+        "sthaana": "Sc"
+      },
+      "Ge": {
+        "baadhakas": [
+          "Jupiter"
+        ],
+        "sthaana": "Sg"
+      },
+      "Le": {
+        "baadhakas": [
+          "Mars"
+        ],
+        "sthaana": "Ar"
+      },
+      "Li": {
+        "baadhakas": [
+          "Sun"
+        ],
+        "sthaana": "Le"
+      },
+      "Pi": {
+        "baadhakas": [
+          "Mercury"
+        ],
+        "sthaana": "Vi"
+      },
+      "Sc": {
+        "baadhakas": [
+          "Moon"
+        ],
+        "sthaana": "Cn"
+      },
+      "Sg": {
+        "baadhakas": [
+          "Mercury"
+        ],
+        "sthaana": "Ge"
+      },
+      "Ta": {
+        "baadhakas": [
+          "Saturn"
+        ],
+        "sthaana": "Cp"
+      },
+      "Vi": {
+        "baadhakas": [
+          "Jupiter"
+        ],
+        "sthaana": "Pi"
+      }
+    },
+    "table_31_is_derived": "All twenty-four entries of Table 31 are derived from the rule above it and compared against the printed table, so each checks the other."
+  },
+  "status": 200
+}

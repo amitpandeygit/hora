@@ -18,6 +18,7 @@ from hora.api.routers import (
     ashtakavarga,
     aspects,
     avasthas,
+    baadhakas,
     benefics,
     chakras,
     charts,
@@ -95,6 +96,7 @@ app.include_router(planetary_yogas.router)
 app.include_router(ashtakavarga.router)
 app.include_router(sodhana.router)
 app.include_router(functional.router)
+app.include_router(baadhakas.router)
 
 
 @app.get("/health", response_model=HealthOut, tags=["meta"])

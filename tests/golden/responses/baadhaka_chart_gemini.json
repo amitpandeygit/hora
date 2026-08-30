@@ -1,0 +1,168 @@
+{
+  "body": {
+    "houses": [
+      {
+        "house": 7,
+        "lords": [
+          "Jupiter"
+        ],
+        "modality": "dual",
+        "occupants": [],
+        "sign": 2,
+        "sign_name": "Gemini",
+        "sthaana": 8,
+        "sthaana_name": "Sagittarius",
+        "why": "Gemini is dual, so the 7th from it \u2014 Sagittarius \u2014 is its baadhaka sthaana, and Jupiter is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      },
+      {
+        "house": 11,
+        "lords": [
+          "Venus"
+        ],
+        "modality": "movable",
+        "occupants": [],
+        "sign": 3,
+        "sign_name": "Cancer",
+        "sthaana": 1,
+        "sthaana_name": "Taurus",
+        "why": "Cancer is movable, so the 11th from it \u2014 Taurus \u2014 is its baadhaka sthaana, and Venus is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      },
+      {
+        "house": 9,
+        "lords": [
+          "Mars"
+        ],
+        "modality": "fixed",
+        "occupants": [],
+        "sign": 4,
+        "sign_name": "Leo",
+        "sthaana": 0,
+        "sthaana_name": "Aries",
+        "why": "Leo is fixed, so the 9th from it \u2014 Aries \u2014 is its baadhaka sthaana, and Mars is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      },
+      {
+        "house": 7,
+        "lords": [
+          "Jupiter"
+        ],
+        "modality": "dual",
+        "occupants": [],
+        "sign": 5,
+        "sign_name": "Virgo",
+        "sthaana": 11,
+        "sthaana_name": "Pisces",
+        "why": "Virgo is dual, so the 7th from it \u2014 Pisces \u2014 is its baadhaka sthaana, and Jupiter is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      },
+      {
+        "house": 11,
+        "lords": [
+          "Sun"
+        ],
+        "modality": "movable",
+        "occupants": [],
+        "sign": 6,
+        "sign_name": "Libra",
+        "sthaana": 4,
+        "sthaana_name": "Leo",
+        "why": "Libra is movable, so the 11th from it \u2014 Leo \u2014 is its baadhaka sthaana, and Sun is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      },
+      {
+        "house": 9,
+        "lords": [
+          "Moon"
+        ],
+        "modality": "fixed",
+        "occupants": [],
+        "sign": 7,
+        "sign_name": "Scorpio",
+        "sthaana": 3,
+        "sthaana_name": "Cancer",
+        "why": "Scorpio is fixed, so the 9th from it \u2014 Cancer \u2014 is its baadhaka sthaana, and Moon is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      },
+      {
+        "house": 7,
+        "lords": [
+          "Mercury"
+        ],
+        "modality": "dual",
+        "occupants": [],
+        "sign": 8,
+        "sign_name": "Sagittarius",
+        "sthaana": 2,
+        "sthaana_name": "Gemini",
+        "why": "Sagittarius is dual, so the 7th from it \u2014 Gemini \u2014 is its baadhaka sthaana, and Mercury is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      },
+      {
+        "house": 11,
+        "lords": [
+          "Mars",
+          "Ketu"
+        ],
+        "modality": "movable",
+        "occupants": [],
+        "sign": 9,
+        "sign_name": "Capricorn",
+        "sthaana": 7,
+        "sthaana_name": "Scorpio",
+        "why": "Capricorn is movable, so the 11th from it \u2014 Scorpio \u2014 is its baadhaka sthaana, and Mars and Ketu are its co-lords; no positions were given, so this covers the lords only and not the sthaana's occupants"
+      },
+      {
+        "house": 9,
+        "lords": [
+          "Venus"
+        ],
+        "modality": "fixed",
+        "occupants": [],
+        "sign": 10,
+        "sign_name": "Aquarius",
+        "sthaana": 6,
+        "sthaana_name": "Libra",
+        "why": "Aquarius is fixed, so the 9th from it \u2014 Libra \u2014 is its baadhaka sthaana, and Venus is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      },
+      {
+        "house": 7,
+        "lords": [
+          "Mercury"
+        ],
+        "modality": "dual",
+        "occupants": [],
+        "sign": 11,
+        "sign_name": "Pisces",
+        "sthaana": 5,
+        "sthaana_name": "Virgo",
+        "why": "Pisces is dual, so the 7th from it \u2014 Virgo \u2014 is its baadhaka sthaana, and Mercury is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      },
+      {
+        "house": 11,
+        "lords": [
+          "Saturn",
+          "Rahu"
+        ],
+        "modality": "movable",
+        "occupants": [],
+        "sign": 0,
+        "sign_name": "Aries",
+        "sthaana": 10,
+        "sthaana_name": "Aquarius",
+        "why": "Aries is movable, so the 11th from it \u2014 Aquarius \u2014 is its baadhaka sthaana, and Saturn and Rahu are its co-lords; no positions were given, so this covers the lords only and not the sthaana's occupants"
+      },
+      {
+        "house": 9,
+        "lords": [
+          "Saturn"
+        ],
+        "modality": "fixed",
+        "occupants": [],
+        "sign": 1,
+        "sign_name": "Taurus",
+        "sthaana": 9,
+        "sthaana_name": "Capricorn",
+        "why": "Taurus is fixed, so the 9th from it \u2014 Capricorn \u2014 is its baadhaka sthaana, and Saturn is its lord; no positions were given, so this covers the lord only and not the sthaana's occupants"
+      }
+    ],
+    "lagna": 2,
+    "lagna_name": "Gemini",
+    "scope": "Thus we can consider baadhaka from every house and arudha pada in every divisional chart."
+  },
+  "status": 200
+}
