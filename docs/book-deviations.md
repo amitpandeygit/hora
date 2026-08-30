@@ -1470,46 +1470,63 @@ separate fixture gives Rahu a co-tenant so rule (2) genuinely decides.
 **Closes when:** nothing. The section's own cascade is unambiguous; only its
 illustration is loose.
 
-## D-48 · Exercise 25's answer does not follow from Chart 12
+## D-48 · Exercises 25 and 26 name Chart 12 but describe a different chart
 
-**Status: BOOK DEFECT — our answer for Aquarius differs from the book's.**
+**Status: BOOK DEFECT — the chart reference is wrong, not the reasoning.**
 
-Exercise 25 asks for the primary lords of Aq and Sc in Chart 12. Four of the
-answer's premises contradict the chart it names. Chart 12 recomputes from its
-own birth line — 16 August 1958, 7:05 am (4:00 West), 83 W 53, 43 N 36 — with
-every graha inside an arcminute, so the chart is not in doubt.
+Revised after Exercise 26. The first reading of this entry blamed scattered
+premise errors in Exercise 25. Exercise 26 makes the cause plain: both
+exercises reason about one internally consistent chart, and it is not Chart 12.
 
-| the answer says | Chart 12 has |
+Chart 12 is Madonna's — 16 August 1958, 7:05 am (4:00 West), 83 W 53, 43 N 36 —
+identified by the book's own Exercise 21, whose printed answer we reproduce. It
+recomputes from that birth line with every graha inside an arcminute. It holds:
+
+| | Ar | Ta | Ge | Cn | Le | Vi | Li | Sc | Sg | Cp | Aq | Pi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Chart 12 | 2 | 0 | 0 | 2 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 |
+| Exercise 26 says | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 2 | 2 | 1 | 0 | 1 |
+
+Twelve occupancy claims. Every one that asserts an occupied rasi fails; the
+three that hold — Ge, Vi and Aq — hold only because both charts leave those
+empty, a coincidence of zeros. Exercise 25 adds four more failures: Rahu alone,
+Saturn's dispositor being Jupiter, Saturn in a dual rasi, and Mars in Scorpio.
+
+**The chart both exercises do describe** is fully determined by their own
+statements, and no chart in the register matches it:
+
+| rasi | grahas |
 |---|---|
-| "Rahu is alone" | Rahu 2 Li 03 shares Libra with Jupiter 3 Li 06 |
-| Saturn's "dispositor (Jupiter again)" | Saturn 25 Sc 51; Scorpio's lord is Mars |
-| "Saturn is in a dual rasi" | Scorpio is fixed |
-| "Mars is in Sc" | Mars 22 Ar 05, in Aries |
+| Aries | Ketu |
+| Taurus | Venus |
+| Libra | Rahu |
+| Scorpio | Mars, Jupiter |
+| Sagittarius | Sun, Mercury |
+| Capricorn | Moon |
+| Pisces | Saturn |
 
-Everything the answer says about Rahu's dispositor being Venus, Rahu being in a
-movable rasi, Saturn being alone and Ketu being in Aries does hold. What fails
-is confined to Saturn's rasi and Mars's rasi. The answer is consistent with a
-chart in which Saturn sits in Sagittarius and Mars in Scorpio — which would
-make Saturn's dispositor Jupiter, put Saturn in a dual rasi, and let the basic
-rule settle Scorpio. Chart 12 puts Saturn in Scorpio and Mars in Aries.
+It satisfies all twelve of Exercise 26's occupancy claims, all four of its
+rule-2 readings — "Ar is aspected by Jupiter & lord Mars", "Li is aspected only
+by lord Venus", "Le is not aspected by any of Jupiter, Mercury and lord Sun",
+"Aq is aspected by co-lord Rahu" — and every premise of Exercise 25, including
+Saturn alone in a dual rasi ruled by Jupiter, which fixes him in Pisces rather
+than Sagittarius.
 
-**On Chart 12 as printed:**
+**On that chart `charts/rasi_strength.stronger` returns all six of the book's
+answers, each by the book's own deciding rule.** The engine is not in question;
+only which chart the exercises meant.
 
-| | book | ours |
-|---|---|---|
-| Aquarius | Saturn, by rule (4) | **Rahu, by rule (1)** — Rahu with Jupiter, Saturn alone |
-| Scorpio | Ketu, by the basic rule | Ketu, by rule (2) — Mars count 1, Ketu count 2 |
+**On Chart 12 as printed** we answer Li, Sc, Ge, Cn, Le, Vi — one of six
+agreeing with the book, and that one by coincidence of occupancy. For Exercise
+25 we answer Rahu for Aquarius where the book answers Saturn, and Ketu for
+Scorpio by rule (2) where the book uses the basic rule.
 
-Scorpio agrees on the planet but not the route: the basic rule cannot apply,
-because neither Mars nor Ketu is in Scorpio. Aquarius disagrees outright, and
-it disagrees at rule (1), the first rule the cascade tries.
+**What we do:** the engine runs against whatever chart it is given. Both
+answers are fixtured — the reconstruction to show the engine reproduces the
+book, and Chart 12 to record what the printed exercise actually asks for.
 
-**What we do:** `charts/colord.stronger` runs the cascade against the chart as
-printed and returns Rahu for Aq and Ketu for Sc. The book's answers are not
-served.
-
-**Closes when:** the chart or the answer is corrected in a later printing, or
-you decide the exercise means a chart we do not hold.
+**Closes when:** the chart number is corrected in a later printing, or the
+chart the exercises describe turns up numbered elsewhere in the book.
 
 ## D-49 · §15.5.2's rule (2) illustration contradicts its own cascade
 

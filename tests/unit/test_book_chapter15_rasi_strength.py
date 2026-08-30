@@ -14,7 +14,9 @@ from hora.charts.rasi_strength import (
     PURPOSE_ADAPTATIONS,
     RasiStrengthError,
     advancement,
+    co_lords_of,
     lord_of,
+    occupants,
     rule_2_count,
     stronger,
 )
@@ -391,3 +393,67 @@ def test_rule_4s_note_holds_for_every_two_rasi_owner():
     assert len(pairs) == 5                       # every graha but the luminaries
     for first, second in pairs:
         assert RASI_IS_ODD[first] != RASI_IS_ODD[second]
+
+
+# --------------------------------------------------------------------------
+# Exercise 26 — six pairs. The exercise names Chart 12; see D-48.
+# --------------------------------------------------------------------------
+
+#: The chart Exercises 25 and 26 actually describe, determined entirely by
+#: their own statements. It is not Chart 12 and matches nothing in the
+#: register. Degrees are arbitrary within each rasi except where a rule needs
+#: them; every claim either exercise makes is about rasis, not degrees.
+EX26_CHART = {
+    int(Graha.KETU): lon(10, "Ar"), int(Graha.VENUS): lon(10, "Ta"),
+    int(Graha.RAHU): lon(10, "Li"), int(Graha.MARS): lon(10, "Sc"),
+    int(Graha.JUPITER): lon(12, "Sc"), int(Graha.SUN): lon(10, "Sg"),
+    int(Graha.MERCURY): lon(12, "Sg"), int(Graha.MOON): lon(10, "Cp"),
+    int(Graha.SATURN): lon(10, "Pi"),
+}
+
+EX26_PAIRS = [
+    ("Ar", "Li", "Ar", "2"), ("Ta", "Sc", "Sc", "1"), ("Ge", "Sg", "Sg", "1"),
+    ("Cn", "Cp", "Cp", "1"), ("Le", "Aq", "Aq", "2"), ("Vi", "Pi", "Pi", "1"),
+]
+
+
+@pytest.mark.parametrize("first,second,winner,rule", EX26_PAIRS)
+def test_exercise_26_on_the_chart_it_describes(first, second, winner, rule):
+    """All six answers, each by the book's own deciding rule."""
+    verdict = stronger(ABBR.index(first), ABBR.index(second), EX26_CHART)
+    assert verdict.winner == ABBR.index(winner)
+    assert verdict.decided_by == rule
+
+
+def test_exercise_26s_own_occupancy_claims_hold_on_that_chart():
+    """Twelve counts, stated across the six answers. None holds on Chart 12."""
+    from hora.charts.book import graha_longitudes
+
+    claimed = {"Ar": 1, "Ta": 1, "Ge": 0, "Cn": 0, "Le": 0, "Vi": 0,
+               "Li": 1, "Sc": 2, "Sg": 2, "Cp": 1, "Aq": 0, "Pi": 1}
+    for abbr, count in claimed.items():
+        assert len(occupants(ABBR.index(abbr), EX26_CHART)) == count
+
+    # On Chart 12 every claim of an occupied rasi fails. Three claims of an
+    # empty rasi hold, but only because both charts leave Ge, Vi and Aq empty —
+    # a coincidence of zeros, not agreement.
+    chart_12 = {int(g): l for g, l in graha_longitudes(12).items()}
+    agree = {a for a, c in claimed.items()
+             if len(occupants(ABBR.index(a), chart_12)) == c}
+    assert agree == {"Ge", "Vi", "Aq"}
+    assert all(claimed[a] == 0 for a in agree)
+    assert not any(claimed[a] for a in agree), (
+        "if an occupied-rasi claim ever holds on Chart 12, D-48 needs revisiting")
+
+
+def test_exercise_26s_rule_2_readings_hold_on_that_chart():
+    """The four aspect readings the answers quote, by name."""
+    def why(abbr):
+        return rule_2_count(ABBR.index(abbr), co_lords_of(ABBR.index(abbr)),
+                            EX26_CHART)[1]
+
+    assert why("Ar") == ["Jupiter (Jupiter) aspects from Scorpio",
+                         "lord (Mars) aspects from Scorpio"]
+    assert why("Li") == ["lord (Venus) aspects from Taurus"]
+    assert why("Le") == []
+    assert why("Aq") == ["co-lord (Rahu) aspects from Libra"]
