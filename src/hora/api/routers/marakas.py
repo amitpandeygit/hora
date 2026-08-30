@@ -4,6 +4,7 @@ from __future__ import annotations
 from fastapi import APIRouter, HTTPException, Query
 
 from hora.api.models_maraka import (
+    LongevityIn,
     MaheswaraIn,
     MarakaIn,
     MarakaRulesOut,
@@ -52,5 +53,19 @@ def trishoola(rudra_sign: int = Query(..., ge=0, le=11, examples=[7])) -> dict:
 def maheswara(req: MaheswaraIn) -> dict:
     try:
         return maraka_service.maheswara_for(req.ak_sign, req.graha_signs)
+    except (maraka_service.MarakaError, maraka_service.InputError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.get("/longevity-rules", summary="Section 14.4's rules and its tables")
+def longevity_rules() -> dict:
+    return maraka_service.section_14_4()
+
+
+@router.post("/longevity", summary="Section 14.4's method of three pairs")
+def longevity(req: LongevityIn) -> dict:
+    try:
+        return maraka_service.longevity(
+            req.lagna, req.graha_signs, req.hl_sign)
     except (maraka_service.MarakaError, maraka_service.InputError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

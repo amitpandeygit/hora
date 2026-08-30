@@ -21,13 +21,18 @@ from hora.core.const import (
     EXALTATION_RASI,
     GRAHA_NAMES,
     HOUSES_OF_LIFE,
+    LONGEVITY_RANGES,
     MAHESWARA_NODE_SUBSTITUTES,
     MARAKA_DERIVATION,
     MARAKA_HOUSES,
+    MODALITY_NAMES_EN,
     RASI_ABBR,
     RASI_LORD,
+    RASI_MODALITY,
     RASI_NAMES,
     TABLE_32_EIGHTH,
+    TABLE_33_LONGEVITY,
+    TABLE_34_PARAMAAYUSH,
     Graha,
 )
 
@@ -382,4 +387,151 @@ def maheswara(ak_sign: int, graha_signs: dict[int, int] | None = None
         "steps": steps,
         "untested_exceptions": untested,
         "needs_strength_comparison": False,
+    }
+
+
+# --------------------------------------------------------------------------
+# §14.4 — The Method of Three Pairs
+# --------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class Pair:
+    """One of §14.4's three pairs, and the category it yields."""
+
+    name: str
+    #: What the two members are, named.
+    members: tuple[str, str]
+    #: The rasi each occupies.
+    signs: tuple[int, int]
+    #: Their modalities.
+    modalities: tuple[str, str]
+    #: "short", "middle" or "long", from Table 33.
+    category: str
+    why: str
+
+
+def _modality(sign: int) -> str:
+    return MODALITY_NAMES_EN[RASI_MODALITY[validate.in_range(
+        "sign", sign, 0, 11)]]
+
+
+def pair_category(first: int, second: int) -> str:
+    """Table 33's category for two rasis. Exhaustive — all six pairs appear."""
+    key = frozenset({_modality(first), _modality(second)})
+    if key not in TABLE_33_LONGEVITY:  # pragma: no cover - unreachable
+        raise MarakaError(f"Table 33 has no entry for {sorted(key)}")
+    return TABLE_33_LONGEVITY[key]
+
+
+def _pair(name: str, members: tuple[str, str], signs: tuple[int, int]) -> Pair:
+    modalities = (_modality(signs[0]), _modality(signs[1]))
+    category = pair_category(*signs)
+    return Pair(
+        name=name, members=members, signs=signs, modalities=modalities,
+        category=category,
+        why=(
+            f"{members[0]} is in {RASI_NAMES[signs[0]]} ({modalities[0]}) and "
+            f"{members[1]} in {RASI_NAMES[signs[1]]} ({modalities[1]}); "
+            f"Table 33 gives {category} life"
+        ),
+    )
+
+
+def three_pairs(lagna: int, graha_signs: dict[int, int],
+                hl_sign: int) -> dict:
+    """§14.4's method, end to end.
+
+    :param lagna: the lagna's rasi.
+    :param graha_signs: graha id -> rasi. The lagna lord, the 8th lord by
+        Table 32, the Moon and Saturn must all be present.
+    :param hl_sign: Horalagna's rasi.
+    """
+    index = validate.in_range("lagna", lagna, 0, 11)
+    validate.in_range("hl_sign", hl_sign, 0, 11)
+    positions = {int(g): int(s) for g, s in graha_signs.items()}
+    for graha, place in positions.items():
+        validate.in_range(f"graha {graha} sign", place, 0, 11)
+
+    lagna_lord = int(RASI_LORD[index])
+    eighth_sign = rudra_eighth(index)
+    eighth_lords = _lords_of(eighth_sign)
+    eighth_lord = eighth_lords[0]
+
+    needed = {
+        "the lagna lord": lagna_lord,
+        "the 8th lord": eighth_lord,
+        "the Moon": int(Graha.MOON),
+        "Saturn": int(Graha.SATURN),
+    }
+    missing = [name for name, g in needed.items() if g not in positions]
+    if missing:
+        raise MarakaError(
+            f"the method of three pairs needs {', '.join(missing)}; supply "
+            f"their rasis in graha_signs")
+
+    pairs = (
+        _pair("lagna lord and 8th lord",
+              (str(GRAHA_NAMES[lagna_lord]), str(GRAHA_NAMES[eighth_lord])),
+              (positions[lagna_lord], positions[eighth_lord])),
+        _pair("Moon and Saturn", ("Moon", "Saturn"),
+              (positions[int(Graha.MOON)], positions[int(Graha.SATURN)])),
+        _pair("lagna and Horalagna", ("lagna", "HL"), (index, hl_sign)),
+    )
+
+    categories = [p.category for p in pairs]
+    counts = {c: categories.count(c) for c in set(categories)}
+    paramaayush: int | None = None
+    paramaayush_note: str | None = None
+
+    if len(counts) == 1:
+        category = categories[0]
+        reason = "all three pairs agree"
+        paramaayush_note = (
+            "Section 14.4 gives Table 34 for the case where two pairs agree "
+            "and one differs. With all three agreeing there is no odd pair, "
+            "so no paramaayush is stated.")
+    elif len(counts) == 2:
+        category = max(counts, key=lambda c: counts[c])
+        odd = next(c for c in counts if counts[c] == 1)
+        paramaayush = TABLE_34_PARAMAAYUSH[odd][category]
+        reason = (
+            f"two pairs give {category} life and one gives {odd}; the two "
+            f"dominate, and Table 34 puts the paramaayush at "
+            f"{paramaayush} years")
+    else:
+        moon = positions[int(Graha.MOON)]
+        moon_on_axis = moon in (index, (index + 6) % 12)
+        preferred = pairs[1] if moon_on_axis else pairs[2]
+        category = preferred.category
+        reason = (
+            f"all three pairs differ, so section 14.4 prefers "
+            f"{'the Moon and Saturn, because the Moon is in ' + ('lagna' if moon == index else 'the 7th house') if moon_on_axis else 'lagna and Horalagna'}"
+        )
+        paramaayush_note = (
+            "Table 34 needs a majority and an odd pair. With three different "
+            "results section 14.4 names a preferred pair and stops at a "
+            "category, so no paramaayush is stated.")
+
+    low, high = LONGEVITY_RANGES[category]
+    return {
+        "lagna": index,
+        "lagna_rasi": str(RASI_NAMES[index]),
+        "eighth_house": {
+            "rasi": str(RASI_NAMES[eighth_sign]),
+            "by": "Table 32",
+            "lords": [str(GRAHA_NAMES[g]) for g in eighth_lords],
+            "lord_used": str(GRAHA_NAMES[eighth_lord]),
+        },
+        "pairs": [
+            {"name": p.name, "members": list(p.members),
+             "rasis": [str(RASI_NAMES[s]) for s in p.signs],
+             "modalities": list(p.modalities), "category": p.category,
+             "why": p.why}
+            for p in pairs
+        ],
+        "category": category,
+        "range_years": [low, high],
+        "reason": reason,
+        "paramaayush_years": paramaayush,
+        "paramaayush_note": paramaayush_note,
     }

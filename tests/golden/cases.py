@@ -377,6 +377,13 @@ CASES = [
     ("maheswara_ketu_exception", "POST", "/v1/marakas/maheswara", {
         "ak_sign": 1, "graha_signs": {"8": 8},
     }),
+    ("longevity_rules", "GET", "/v1/marakas/longevity-rules", None),
+    ("longevity_three_pairs", "POST", "/v1/marakas/longevity", {
+        "lagna": 4,
+        "graha_signs": {"0": 4, "1": 0, "2": 3, "3": 5, "4": 8, "5": 1,
+                        "6": 9},
+        "hl_sign": 2,
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

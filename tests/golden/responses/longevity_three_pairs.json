@@ -1,0 +1,79 @@
+{
+  "body": {
+    "category": "long",
+    "eighth_house": {
+      "by": "Table 32",
+      "lord_used": "Moon",
+      "lords": [
+        "Moon"
+      ],
+      "rasi": "Cancer"
+    },
+    "framing": "Many human beings are curious about how long they will live. An ethical astrologer will not scare a client by predicting death, but he may caution a client gently before critical periods and suggest some remedial measures to ward off an impending danger. An estimation of longevity is also helpful in matchmaking. After all, if one person will live for 81 years and the other only for 36 years, it is not advisable to approve a match between those two people. In matchmaking, it is desirable that the bridegroom and the bride have comparable longevity.",
+    "lagna": 4,
+    "lagna_rasi": "Leo",
+    "pairs": [
+      {
+        "category": "middle",
+        "members": [
+          "Sun",
+          "Moon"
+        ],
+        "modalities": [
+          "fixed",
+          "movable"
+        ],
+        "name": "lagna lord and 8th lord",
+        "rasis": [
+          "Leo",
+          "Aries"
+        ],
+        "why": "Sun is in Leo (fixed) and Moon in Aries (movable); Table 33 gives middle life"
+      },
+      {
+        "category": "long",
+        "members": [
+          "Moon",
+          "Saturn"
+        ],
+        "modalities": [
+          "movable",
+          "movable"
+        ],
+        "name": "Moon and Saturn",
+        "rasis": [
+          "Aries",
+          "Capricorn"
+        ],
+        "why": "Moon is in Aries (movable) and Saturn in Capricorn (movable); Table 33 gives long life"
+      },
+      {
+        "category": "long",
+        "members": [
+          "lagna",
+          "HL"
+        ],
+        "modalities": [
+          "fixed",
+          "dual"
+        ],
+        "name": "lagna and Horalagna",
+        "rasis": [
+          "Leo",
+          "Gemini"
+        ],
+        "why": "lagna is in Leo (fixed) and HL in Gemini (dual); Table 33 gives long life"
+      }
+    ],
+    "paramaayush_note": null,
+    "paramaayush_scope": "Section 14.4 introduces Table 34 for the case where two pairs agree and the third differs, and the table's own shape needs both a majority and an odd one out. It gives no paramaayush when all three pairs agree, nor when all three differ \u2014 in the latter it names a preferred pair and stops at a category.",
+    "paramaayush_years": 108,
+    "range_text": "Long life means 72-108 years. Middle life means 36-72 years. Short life means 0-36 years.",
+    "range_years": [
+      72,
+      108
+    ],
+    "reason": "two pairs give long life and one gives middle; the two dominate, and Table 34 puts the paramaayush at 108 years"
+  },
+  "status": 200
+}

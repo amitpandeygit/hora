@@ -552,3 +552,219 @@ def test_the_14_3_endpoints(client):
     }).json()
     assert mahes["maheswara_name"] == "Venus"
     assert mahes["house_used"] == 6
+
+
+# --------------------------------------------------------------------------
+# §14.4 — The Method of Three Pairs
+# --------------------------------------------------------------------------
+
+from fractions import Fraction
+from itertools import combinations_with_replacement
+
+from hora.charts.maraka import pair_category, three_pairs
+from hora.core.const import (
+    LONGEVITY_RANGES,
+    PARAMAAYUSH_CAN_EXCEED_THE_RANGE,
+    PARAMAAYUSH_ONLY_FOR_THE_SPLIT_CASE,
+    TABLE_33_LONGEVITY,
+    TABLE_33_PRINTED,
+    TABLE_34_FACTORS,
+    TABLE_34_PARAMAAYUSH,
+    TABLE_34_STRUCTURE,
+    THREE_PAIRS,
+    THREE_PAIRS_TIEBREAK_RULE,
+)
+
+_MODALITIES = ("movable", "fixed", "dual")
+#: One rasi of each modality, for building cases by hand.
+_OF = {"movable": "Ar", "fixed": "Ta", "dual": "Ge"}
+
+
+def test_the_three_pairs_are_transcribed_in_order():
+    names = [name for name, _ in THREE_PAIRS]
+    assert names == ["lagna lord and 8th lord", "Moon and Saturn",
+                     "lagna and Horalagna (HL)"]
+    assert "Table 32" in THREE_PAIRS[0][1]
+
+
+def test_table_33_covers_every_possible_pair_of_modalities():
+    """Six rows for six unordered pairs, so nothing can fall through."""
+    possible = {frozenset(p) for p in
+                combinations_with_replacement(_MODALITIES, 2)}
+    assert len(possible) == 6
+    assert set(TABLE_33_LONGEVITY) == possible
+    assert len(TABLE_33_PRINTED) == 3, "printed as three rows of two"
+
+
+@pytest.mark.parametrize("first,second,expected", [
+    ("fixed", "dual", "long"), ("movable", "movable", "long"),
+    ("movable", "fixed", "middle"), ("dual", "dual", "middle"),
+    ("movable", "dual", "short"), ("fixed", "fixed", "short"),
+])
+def test_each_row_of_table_33(first, second, expected):
+    assert pair_category(R[_OF[first]], R[_OF[second]]) == expected
+    assert pair_category(R[_OF[second]], R[_OF[first]]) == expected, \
+        "the pair is unordered"
+
+
+def test_the_three_ranges_tile_zero_to_one_hundred_and_eight():
+    assert LONGEVITY_RANGES == {
+        "short": (0, 36), "middle": (36, 72), "long": (72, 108)}
+    tops = [span[1] for span in LONGEVITY_RANGES.values()]
+    assert sorted(tops) == [36, 72, 108]
+
+
+def test_table_34_is_one_factor_triple_against_the_three_range_tops():
+    """Not nine independent numbers. Every cell is the majority category's
+    own upper bound times a factor fixed by the odd pair alone — 8/9, 1,
+    10/9 — and all nine products are exact integers."""
+    for odd, (num, den) in TABLE_34_FACTORS.items():
+        for majority, (_low, high) in LONGEVITY_RANGES.items():
+            product = Fraction(high * num, den)
+            assert product.denominator == 1, (odd, majority)
+            assert int(product) == TABLE_34_PARAMAAYUSH[odd][majority]
+    assert "8/9" in TABLE_34_STRUCTURE
+
+
+def test_table_34_is_complete_and_monotone():
+    assert set(TABLE_34_PARAMAAYUSH) == {"short", "middle", "long"}
+    for row in TABLE_34_PARAMAAYUSH.values():
+        assert set(row) == {"short", "middle", "long"}
+        assert row["short"] < row["middle"] < row["long"]
+    for majority in ("short", "middle", "long"):
+        column = [TABLE_34_PARAMAAYUSH[odd][majority]
+                  for odd in ("short", "middle", "long")]
+        assert column == sorted(column)
+
+
+def test_the_paramaayush_can_exceed_its_own_categorys_range():
+    """Long life is 72-108, yet long over long gives 120. Reported side by
+    side rather than reconciled."""
+    assert TABLE_34_PARAMAAYUSH["long"]["long"] == 120
+    assert LONGEVITY_RANGES["long"][1] == 108
+    assert "not a reading of the same range" in PARAMAAYUSH_CAN_EXCEED_THE_RANGE
+
+
+def _chart(lagna: str, lagna_lord_sign: str, eighth_lord_sign: str,
+           moon_sign: str, saturn_sign: str, hl_sign: str) -> dict:
+    from hora.charts.maraka import rudra_eighth
+    from hora.core.const import RASI_LORD
+
+    lagna_i = R[lagna]
+    lord = int(RASI_LORD[lagna_i])
+    eighth_lord = int(RASI_LORD[rudra_eighth(lagna_i)])
+    signs = {int(g): R["Ar"] for g in
+             (Graha.SUN, Graha.MOON, Graha.MARS, Graha.MERCURY,
+              Graha.JUPITER, Graha.VENUS, Graha.SATURN)}
+    signs[lord] = R[lagna_lord_sign]
+    signs[eighth_lord] = R[eighth_lord_sign]
+    signs[int(Graha.MOON)] = R[moon_sign]
+    signs[int(Graha.SATURN)] = R[saturn_sign]
+    return three_pairs(lagna_i, signs, R[hl_sign])
+
+
+def test_the_first_pair_uses_table_32s_eighth_not_the_ordinary_one():
+    """§14.4 says so in its own parenthesis, and it names the same table
+    Rudra uses."""
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+
+    body = _chart("Le", "Le", "Ar", "Ar", "Ar", "Ar")
+    assert body["eighth_house"]["by"] == "Table 32"
+    assert body["eighth_house"]["rasi"] == "Cancer"
+    assert RASI_ABBR[rudra_eighth(R["Le"])] == "Cn"
+    assert RASI_ABBR[ordinary_eighth(R["Le"])] == "Pi"
+
+
+def test_all_three_pairs_agreeing_gives_that_category_and_no_paramaayush():
+    """§14.4 gives Table 34 for the split case only, and the table's shape
+    needs an odd pair. With none, no paramaayush is stated."""
+    body = _chart("Ar", "Ar", "Cn", "Cn", "Li", "Cp")
+    assert {p["category"] for p in body["pairs"]} == {"long"}
+    assert body["category"] == "long"
+    assert body["paramaayush_years"] is None
+    assert "no odd pair" in body["paramaayush_note"]
+    assert "gives no paramaayush when all three pairs agree" \
+        in PARAMAAYUSH_ONLY_FOR_THE_SPLIT_CASE
+
+
+def test_two_against_one_takes_the_majority_and_reads_table_34():
+    body = _chart("Le", "Le", "Ar", "Ar", "Cn", "Ge")
+    categories = [p["category"] for p in body["pairs"]]
+    assert sorted(categories) == ["long", "long", "middle"]
+    assert body["category"] == "long"
+    assert body["paramaayush_years"] == TABLE_34_PARAMAAYUSH["middle"]["long"]
+    assert body["paramaayush_years"] == 108
+
+
+def test_three_different_results_prefer_the_lagna_and_horalagna_pair():
+    """"we should give preference to the third pair of lagna and horalagna"."""
+    body = _chart("Ta", "Ar", "Ar", "Ar", "Ta", "Ta")
+    categories = [p["category"] for p in body["pairs"]]
+    assert sorted(categories) == ["long", "middle", "short"]
+    assert body["category"] == body["pairs"][2]["category"]
+    assert "lagna and Horalagna" in body["reason"]
+    assert body["paramaayush_years"] is None
+
+
+def test_a_moon_on_the_lagna_axis_flips_the_preference_to_the_second_pair():
+    """"However, if Moon is in lagna or the 7th house, then the second pair of
+    Moon and Saturn should be given preference"."""
+    assert "Moon is in lagna or the 7th house" in THREE_PAIRS_TIEBREAK_RULE
+    for moon, where in (("Ar", "lagna"), ("Li", "the 7th house")):
+        body = _chart("Ar", "Ta", "Ge", moon, "Cn", "Ge")
+        if len({p["category"] for p in body["pairs"]}) != 3:
+            continue
+        assert body["category"] == body["pairs"][1]["category"]
+        assert where in body["reason"]
+
+
+def test_the_method_refuses_a_chart_missing_a_planet_it_needs():
+    """Never guesses a position it was not given."""
+    with pytest.raises(MarakaError, match="needs"):
+        three_pairs(R["Le"], {int(Graha.MOON): R["Ar"]}, R["Ge"])
+
+
+@pytest.mark.parametrize("lagna", range(12))
+def test_every_lagna_yields_three_pairs_and_one_category(lagna):
+    signs = {int(g): (lagna + i) % 12 for i, g in enumerate(
+        (Graha.SUN, Graha.MOON, Graha.MARS, Graha.MERCURY,
+         Graha.JUPITER, Graha.VENUS, Graha.SATURN))}
+    body = three_pairs(lagna, signs, (lagna + 3) % 12)
+    assert len(body["pairs"]) == 3
+    assert body["category"] in LONGEVITY_RANGES
+    assert body["reason"]
+    if body["paramaayush_years"] is None:
+        assert body["paramaayush_note"]
+    else:
+        assert body["paramaayush_note"] is None
+
+
+def test_a_co_owned_eighth_house_reports_both_lords():
+    """Table 32 sends Aries to Scorpio and Virgo to Aquarius, both co-owned.
+    §14.4 does not address co-lordship, so both are named and the primary is
+    the one used."""
+    body = _chart("Ar", "Ar", "Ar", "Ar", "Ar", "Ar")
+    assert body["eighth_house"]["rasi"] == "Scorpio"
+    assert body["eighth_house"]["lords"] == ["Mars", "Ketu"]
+    assert body["eighth_house"]["lord_used"] == "Mars"
+
+
+def test_the_longevity_endpoints(client):
+    body = client.get("/v1/marakas/longevity-rules").json()
+    assert len(body["table_33"]) == 3
+    assert body["table_34"]["long"]["long"] == 120
+    assert body["table_34_factors"] == {
+        "short": [8, 9], "middle": [1, 1], "long": [10, 9]}
+    assert "Table 32" in body["eighth_uses_table_32"]
+    assert "predicting death" in body["framing"]
+
+    result = client.post("/v1/marakas/longevity", json={
+        "lagna": R["Le"],
+        "graha_signs": {"0": R["Le"], "1": R["Ar"], "2": R["Cn"],
+                        "3": R["Vi"], "4": R["Sg"], "5": R["Ta"],
+                        "6": R["Cp"]},
+        "hl_sign": R["Ge"],
+    }).json()
+    assert result["category"] == "long"
+    assert result["paramaayush_years"] == 108
+    assert "predicting death" in result["framing"]

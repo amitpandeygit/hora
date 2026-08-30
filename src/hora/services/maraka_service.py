@@ -17,6 +17,7 @@ from hora.charts.maraka import (
     maraka_sthanas,
     marakas,
     rudra_candidates,
+    three_pairs,
     trishoola_rasis,
 )
 from hora.core.const import (
@@ -30,6 +31,8 @@ from hora.core.const import (
     GOOD_LONGEVITY_RULE,
     GRAHA_NAMES,
     HOUSES_OF_LIFE_RULE,
+    LONGEVITY_RANGE_TEXT,
+    LONGEVITY_RANGES,
     MAHESWARA_EXAMPLES,
     MAHESWARA_EXCEPTIONS,
     MAHESWARA_NODE_SUBSTITUTES,
@@ -46,6 +49,8 @@ from hora.core.const import (
     MARAKA_STRONGER_NOT_A_RULE,
     MARAKA_STRONGER_REMARK,
     MARAKA_USE,
+    PARAMAAYUSH_CAN_EXCEED_THE_RANGE,
+    PARAMAAYUSH_ONLY_FOR_THE_SPLIT_CASE,
     RASI_NAMES,
     RUDRA_AFFLICTION_MALEFICS,
     RUDRA_AFFLICTION_RULE,
@@ -56,6 +61,14 @@ from hora.core.const import (
     SIXTH_IS_THE_ANTIZODIACAL_EIGHTH,
     TABLE_32_CONSTRUCTION,
     TABLE_32_EIGHTH,
+    TABLE_33_PRINTED,
+    TABLE_34_FACTORS,
+    TABLE_34_PARAMAAYUSH,
+    TABLE_34_STRUCTURE,
+    THREE_PAIRS,
+    THREE_PAIRS_COMBINATION_RULE,
+    THREE_PAIRS_INTRO,
+    THREE_PAIRS_TIEBREAK_RULE,
     TRISHOOLA_RULE,
 )
 from hora.core.validate import InputError
@@ -188,6 +201,63 @@ def section_14_3() -> dict:
     }
 
 
-__all__ = ["InputError", "MarakaError", "additional_marakas", "for_lagna",
-           "maheswara_for", "maraka_grahas", "maraka_sthanas", "rudra",
-           "rules", "section_14_3", "trishoola"]
+def longevity(lagna: int, graha_signs: dict[int, int],
+              hl_sign: int) -> dict:
+    """Section 14.4's method of three pairs."""
+    body = three_pairs(lagna, graha_signs, hl_sign)
+    body["framing"] = FRAMING
+    body["range_text"] = LONGEVITY_RANGE_TEXT
+    body["paramaayush_scope"] = PARAMAAYUSH_ONLY_FOR_THE_SPLIT_CASE
+    return body
+
+
+def section_14_4() -> dict:
+    """Section 14.4's rules, Table 33 and Table 34."""
+    return {
+        "intro": THREE_PAIRS_INTRO,
+        "pairs": [{"pair": name, "note": note} for name, note in THREE_PAIRS],
+        "table_33": [
+            {"combination_1": first, "combination_2": second,
+             "result": result}
+            for first, second, result in TABLE_33_PRINTED
+        ],
+        "table_33_is_exhaustive": (
+            "Table 33's six rows cover every unordered pair of the three "
+            "modalities, so no combination can fall through."
+        ),
+        "ranges": {name: list(span)
+                   for name, span in LONGEVITY_RANGES.items()},
+        "range_text": LONGEVITY_RANGE_TEXT,
+        "combination_rule": THREE_PAIRS_COMBINATION_RULE,
+        "tiebreak_rule": THREE_PAIRS_TIEBREAK_RULE,
+        "table_34": {third: dict(row)
+                     for third, row in TABLE_34_PARAMAAYUSH.items()},
+        "table_34_structure": TABLE_34_STRUCTURE,
+        "table_34_factors": {k: list(v)
+                             for k, v in TABLE_34_FACTORS.items()},
+        "paramaayush_scope": PARAMAAYUSH_ONLY_FOR_THE_SPLIT_CASE,
+        "paramaayush_can_exceed_the_range": PARAMAAYUSH_CAN_EXCEED_THE_RANGE,
+        "eighth_uses_table_32": (
+            "The first pair's 8th house comes from Table 32, as section 14.4 "
+            "says in its own parenthesis — the same table Rudra uses, and not "
+            "the ordinary 8th."
+        ),
+        "framing": FRAMING,
+    }
+
+
+__all__ = [
+    "InputError",
+    "MarakaError",
+    "additional_marakas",
+    "for_lagna",
+    "longevity",
+    "maheswara_for",
+    "maraka_grahas",
+    "maraka_sthanas",
+    "rudra",
+    "rules",
+    "section_14_3",
+    "section_14_4",
+    "trishoola",
+]

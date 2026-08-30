@@ -45,3 +45,13 @@ class MaheswaraIn(BaseModel):
 
     ak_sign: int = Field(..., ge=0, le=11, examples=[2])
     graha_signs: dict[int, int] | None = Field(None, examples=[None])
+
+
+class LongevityIn(BaseModel):
+    """Section 14.4. The lagna lord, the 8th lord by Table 32, the Moon and
+    Saturn must all appear in `graha_signs`."""
+
+    lagna: int = Field(..., ge=0, le=11, examples=[4])
+    graha_signs: dict[int, int] = Field(..., examples=[{
+        "0": 4, "1": 0, "2": 3, "3": 5, "4": 8, "5": 1, "6": 9}])
+    hl_sign: int = Field(..., ge=0, le=11, examples=[2])

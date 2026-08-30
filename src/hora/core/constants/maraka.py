@@ -342,3 +342,118 @@ SIXTH_IS_THE_ANTIZODIACAL_EIGHTH = (
     "taking the 8th lord in the anti-zodiacal order'. Counting six forward "
     "and eight backward land on the same rasi from any starting point."
 )
+
+
+# --------------------------------------------------------------------------
+# §14.4 — The Method of Three Pairs
+# --------------------------------------------------------------------------
+
+THREE_PAIRS_INTRO = (
+    "This method allows us to determine the approximate range of one's "
+    "longevity. In this method, we look at 3 pairs of planets/mathematical "
+    "points. In each pair, we look at the two planets and see if they occupy "
+    "a movable or fixed or dual rasi. Using Table 33, we look at the "
+    "longevity category corresponding to the combination."
+)
+
+#: The three pairs, in §14.4's order. The first uses Table 32's 8th house,
+#: not the ordinary one — the section says so in its own parenthesis.
+THREE_PAIRS: tuple[tuple[str, str], ...] = (
+    (
+        "lagna lord and 8th lord",
+        "find the 8th house and its lord using Table 32",
+    ),
+    ("Moon and Saturn", "the rasis the two planets occupy"),
+    ("lagna and Horalagna (HL)", "the rasis the two points fall in"),
+)
+
+#: Table 33. Each key is the unordered pair of modalities; the value is the
+#: longevity category. All six possible pairs appear, so the table is
+#: exhaustive and no combination can fall through.
+TABLE_33_LONGEVITY: dict[frozenset[str], str] = {
+    frozenset({"fixed", "dual"}): "long",
+    frozenset({"movable"}): "long",
+    frozenset({"movable", "fixed"}): "middle",
+    frozenset({"dual"}): "middle",
+    frozenset({"movable", "dual"}): "short",
+    frozenset({"fixed"}): "short",
+}
+
+#: Table 33 as the book prints it — two combination columns per result.
+TABLE_33_PRINTED: tuple[tuple[str, str, str], ...] = (
+    ("Fixed + Dual", "Movable + Movable", "Long life"),
+    ("Movable + Fixed", "Dual + Dual", "Middle life"),
+    ("Movable + Dual", "Fixed + Fixed", "Short life"),
+)
+
+#: The years each category spans.
+LONGEVITY_RANGES: dict[str, tuple[int, int]] = {
+    "short": (0, 36),
+    "middle": (36, 72),
+    "long": (72, 108),
+}
+
+LONGEVITY_RANGE_TEXT = (
+    "Long life means 72-108 years. Middle life means 36-72 years. Short life "
+    "means 0-36 years."
+)
+
+THREE_PAIRS_COMBINATION_RULE = (
+    "If all the three pairs result in the same longevity category, that will "
+    "be the combined classification. If two pairs give one result and the "
+    "third pair gives a different result, then the result given by two pairs "
+    "dominates. Parasara gave further hints regarding this case and suggested "
+    "finding the maximum longevity (paramaayush) of a person using Table 34."
+)
+
+THREE_PAIRS_TIEBREAK_RULE = (
+    "If all the three pairs give three different results (i.e. one giving "
+    "short life, one giving middle life and one giving long life), then we "
+    "should give preference to the third pair of lagna and horalagna. "
+    "However, if Moon is in lagna or the 7th house, then the second pair of "
+    "Moon and Saturn should be given preference."
+)
+
+#: Table 34, the paramaayush reckoner. Outer key is the odd pair's category,
+#: inner key is the category the other two agree on.
+TABLE_34_PARAMAAYUSH: dict[str, dict[str, int]] = {
+    "short": {"short": 32, "middle": 64, "long": 96},
+    "middle": {"short": 36, "middle": 72, "long": 108},
+    "long": {"short": 40, "middle": 80, "long": 120},
+}
+
+#: **Finding.** Table 34 is not nine independent numbers. Every cell is the
+#: majority category's own upper bound scaled by a factor that depends only
+#: on the odd pair: 8/9 for short, 1 for middle, 10/9 for long. All nine come
+#: out as exact integers, which is checked by test rather than asserted.
+TABLE_34_STRUCTURE = (
+    "Every cell of Table 34 is the majority category's upper bound — 36, 72 "
+    "or 108 — multiplied by a factor fixed by the odd pair alone: 8/9 for a "
+    "short third pair, 1 for middle, 10/9 for long. All nine products are "
+    "exact integers. So the table encodes one factor triple against the three "
+    "range tops, not nine separate figures."
+)
+
+TABLE_34_FACTORS: dict[str, tuple[int, int]] = {
+    "short": (8, 9), "middle": (1, 1), "long": (10, 9),
+}
+
+#: **Gap.** Table 34 is introduced for the two-against-one case only, and its
+#: shape needs a majority and an odd one out. §14.4 gives no paramaayush for
+#: three matching pairs or for three different ones. See docs/open-items.md
+#: OI-110.
+PARAMAAYUSH_ONLY_FOR_THE_SPLIT_CASE = (
+    "Section 14.4 introduces Table 34 for the case where two pairs agree and "
+    "the third differs, and the table's own shape needs both a majority and "
+    "an odd one out. It gives no paramaayush when all three pairs agree, nor "
+    "when all three differ — in the latter it names a preferred pair and "
+    "stops at a category."
+)
+
+#: Long life tops out at 108 years, yet Table 34's long-over-long cell is 120.
+PARAMAAYUSH_CAN_EXCEED_THE_RANGE = (
+    "Long life is defined as 72-108 years, but Table 34's long-over-long cell "
+    "gives 120. The paramaayush is a maximum longevity and not a reading of "
+    "the same range, so the two are reported side by side rather than "
+    "reconciled."
+)

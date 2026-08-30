@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 66 waiting on evidence · 2 parked**
+**5 waiting on Amit · 67 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,26 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-110 — §14.4 gives no paramaayush outside the two-against-one case
+
+Table 34 is introduced for one case only — two pairs agreeing and the third
+differing — and its shape needs both a majority and an odd one out. So two of
+the three outcomes get a category and no number: all three agreeing leaves no
+odd pair to index the row, and all three differing leaves no majority for the
+column, where §14.4 names a preferred pair and stops.
+
+Two smaller silences. Table 32's 8th can land in Scorpio or Aquarius (from Aries
+and Virgo), and §14.4 says nothing about co-lordship. And its long-life range
+tops out at 108 while Table 34's long-over-long cell gives 120.
+
+**What we do:** the category is always returned; the paramaayush only where
+§14.4 defines it, with a note naming the case. Both lords of a co-owned 8th are
+reported, the primary being the one used. Range and paramaayush are served side
+by side rather than reconciled.
+
+**Closes when:** a worked example gives a paramaayush for an unsplit chart, or
+a later section extends Table 34.
 
 ### OI-109 — §14.3's Rudra cascade and Shiva's motion are both incomplete
 

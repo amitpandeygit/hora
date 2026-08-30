@@ -1,0 +1,91 @@
+{
+  "body": {
+    "combination_rule": "If all the three pairs result in the same longevity category, that will be the combined classification. If two pairs give one result and the third pair gives a different result, then the result given by two pairs dominates. Parasara gave further hints regarding this case and suggested finding the maximum longevity (paramaayush) of a person using Table 34.",
+    "eighth_uses_table_32": "The first pair's 8th house comes from Table 32, as section 14.4 says in its own parenthesis \u2014 the same table Rudra uses, and not the ordinary 8th.",
+    "framing": "Many human beings are curious about how long they will live. An ethical astrologer will not scare a client by predicting death, but he may caution a client gently before critical periods and suggest some remedial measures to ward off an impending danger. An estimation of longevity is also helpful in matchmaking. After all, if one person will live for 81 years and the other only for 36 years, it is not advisable to approve a match between those two people. In matchmaking, it is desirable that the bridegroom and the bride have comparable longevity.",
+    "intro": "This method allows us to determine the approximate range of one's longevity. In this method, we look at 3 pairs of planets/mathematical points. In each pair, we look at the two planets and see if they occupy a movable or fixed or dual rasi. Using Table 33, we look at the longevity category corresponding to the combination.",
+    "pairs": [
+      {
+        "note": "find the 8th house and its lord using Table 32",
+        "pair": "lagna lord and 8th lord"
+      },
+      {
+        "note": "the rasis the two planets occupy",
+        "pair": "Moon and Saturn"
+      },
+      {
+        "note": "the rasis the two points fall in",
+        "pair": "lagna and Horalagna (HL)"
+      }
+    ],
+    "paramaayush_can_exceed_the_range": "Long life is defined as 72-108 years, but Table 34's long-over-long cell gives 120. The paramaayush is a maximum longevity and not a reading of the same range, so the two are reported side by side rather than reconciled.",
+    "paramaayush_scope": "Section 14.4 introduces Table 34 for the case where two pairs agree and the third differs, and the table's own shape needs both a majority and an odd one out. It gives no paramaayush when all three pairs agree, nor when all three differ \u2014 in the latter it names a preferred pair and stops at a category.",
+    "range_text": "Long life means 72-108 years. Middle life means 36-72 years. Short life means 0-36 years.",
+    "ranges": {
+      "long": [
+        72,
+        108
+      ],
+      "middle": [
+        36,
+        72
+      ],
+      "short": [
+        0,
+        36
+      ]
+    },
+    "table_33": [
+      {
+        "combination_1": "Fixed + Dual",
+        "combination_2": "Movable + Movable",
+        "result": "Long life"
+      },
+      {
+        "combination_1": "Movable + Fixed",
+        "combination_2": "Dual + Dual",
+        "result": "Middle life"
+      },
+      {
+        "combination_1": "Movable + Dual",
+        "combination_2": "Fixed + Fixed",
+        "result": "Short life"
+      }
+    ],
+    "table_33_is_exhaustive": "Table 33's six rows cover every unordered pair of the three modalities, so no combination can fall through.",
+    "table_34": {
+      "long": {
+        "long": 120,
+        "middle": 80,
+        "short": 40
+      },
+      "middle": {
+        "long": 108,
+        "middle": 72,
+        "short": 36
+      },
+      "short": {
+        "long": 96,
+        "middle": 64,
+        "short": 32
+      }
+    },
+    "table_34_factors": {
+      "long": [
+        10,
+        9
+      ],
+      "middle": [
+        1,
+        1
+      ],
+      "short": [
+        8,
+        9
+      ]
+    },
+    "table_34_structure": "Every cell of Table 34 is the majority category's upper bound \u2014 36, 72 or 108 \u2014 multiplied by a factor fixed by the odd pair alone: 8/9 for a short third pair, 1 for middle, 10/9 for long. All nine products are exact integers. So the table encodes one factor triple against the three range tops, not nine separate figures.",
+    "tiebreak_rule": "If all the three pairs give three different results (i.e. one giving short life, one giving middle life and one giving long life), then we should give preference to the third pair of lagna and horalagna. However, if Moon is in lagna or the 7th house, then the second pair of Moon and Saturn should be given preference."
+  },
+  "status": 200
+}
