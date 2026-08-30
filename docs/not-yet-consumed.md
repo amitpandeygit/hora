@@ -617,6 +617,26 @@ Everything else chapter 10 added is consumed by `services/aspect_service.py`.
 
 ---
 
+### Chapter 15 — §15.4.4's "Importance of Sayanaadi Avasthas" (2)
+
+`SAYANAADI_ARE_MOST_IMPORTANT` · `SAYANAADI_CAUTION`
+
+The eight special results themselves are consumed by
+`charts/avastha.special_results`. These two are the passages around them.
+
+| Symbol | What will consume it |
+|---|---|
+| `SAYANAADI_ARE_MOST_IMPORTANT` | The section's ranking of this family over the other three; a note for a reading, not a calculation |
+| `SAYANAADI_CAUTION` | The closing warning, which qualifies every avastha result. Whether it may be served verbatim is the OI-12 licence question — see the note below |
+
+Section 15.4.1's caution is already served verbatim by
+`services/strength_service` while the author's result lines beside it are
+withheld under OI-12. That is inconsistent, and it is why the caution above is
+parked here rather than wired the same way: widening the practice before the
+inconsistency is settled would be the wrong order.
+
+---
+
 ## How to use this register
 
 When a chapter is reported complete, its "not yet consumed" entries are listed

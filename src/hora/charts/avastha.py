@@ -35,6 +35,7 @@ from hora.core.const import (
     RASI_LORD,
     RASI_NAMES,
     SAYANAADI_AVASTHAS,
+    SAYANAADI_SPECIAL_RESULTS,
     SOUND_NUMBERS,
     Graha,
 )
@@ -623,3 +624,122 @@ def avastha_by_activity(
         strength_remainder=strength_remainder, sound_number=sound,
         steps=tuple(steps),
     )
+
+
+@dataclass(frozen=True)
+class SpecialResult:
+    """One of Parasara's special results, decided or explicitly not."""
+
+    rule: int
+    verbatim: str
+    effect: str
+    auspicious: bool
+    applies: bool | None
+    reason: str
+
+
+def special_results(
+    avastha_index: int,
+    nature: str | None = None,
+    house: int | None = None,
+    dignity: str | None = None,
+    graha: int | None = None,
+    associated_with_malefics: bool | None = None,
+) -> list[SpecialResult]:
+    """§15.4.4's eight special results for one graha, all eight every time.
+
+    Every rule comes back with ``applies`` True, False, or **None** where an
+    input it needs was not supplied. None is never collapsed to False, for the
+    same reason section 15.4.4's own conditions are not: "we cannot tell" and
+    "it does not apply" are different answers.
+
+    :param avastha_index: Table 36's index, 1 to 12.
+    :param nature: "benefic" or "malefic", from :mod:`hora.charts.benefic`.
+        The Moon has none apart from its phase, so it must be resolved first.
+    :param house: the house the graha occupies, 1 to 12.
+    :param dignity: only rule 7 uses it, and only to admit a graha that is not
+        a benefic but sits in its own or exaltation rasi.
+    :param graha: only rule 8 uses it, to recognise the Moon.
+    :param associated_with_malefics: only rule 2 uses it. This function is
+        given a placement, not a chart, so the caller must supply it.
+    :raises AvasthaError: on an out-of-range avastha index or house.
+    """
+    index = validate.in_range("avastha_index", avastha_index, 1, 12)
+    if house is not None:
+        validate.in_range("house", house, 1, 12)
+
+    out: list[SpecialResult] = []
+    for rule in SAYANAADI_SPECIAL_RESULTS:
+        applies, reason = _special_rule(
+            rule, index, nature, house, dignity, graha, associated_with_malefics)
+        out.append(SpecialResult(
+            rule=int(rule["rule"]), verbatim=str(rule["verbatim"]),
+            effect=str(rule["effect"]), auspicious=bool(rule["auspicious"]),
+            applies=applies, reason=reason))
+    return out
+
+
+def _special_rule(
+    rule: dict,
+    index: int,
+    nature: str | None,
+    house: int | None,
+    dignity: str | None,
+    graha: int | None,
+    associated_with_malefics: bool | None,
+) -> tuple[bool | None, str]:
+    """One rule against one placement. The avastha is checked first: a rule
+    that does not fire in this avastha is decided without any other input."""
+    if index not in rule["avasthas"]:
+        wanted = ", ".join(SAYANAADI_AVASTHAS[a]["name"] for a in rule["avasthas"])
+        return False, f"{SAYANAADI_AVASTHAS[index]['name']}, not {wanted}"
+
+    checks: list[tuple[bool | None, str]] = []
+
+    actor = rule["actor"]
+    if actor == "Moon":
+        if graha is None:
+            checks.append((None, "needs to know which graha this is"))
+        else:
+            checks.append((int(graha) == int(Graha.MOON),
+                           f"graha is {GRAHA_NAMES[graha]}, wants Moon"))
+    elif actor.startswith("benefic or"):
+        # Rule 7 admits either route, so one satisfied route decides it.
+        by_nature = None if nature is None else nature == "benefic"
+        by_dignity = (
+            None if dignity is None else dignity in ("own", "exalted"))
+        if by_nature or by_dignity:
+            checks.append((True, f"nature {nature}, dignity {dignity}"))
+        elif by_nature is None or by_dignity is None:
+            checks.append((None, (
+                f"needs a benefic nature or an own/exaltation dignity "
+                f"(nature {nature}, dignity {dignity})")))
+        else:
+            checks.append((False, f"nature {nature}, dignity {dignity}"))
+    elif nature is None:
+        checks.append((None, f"needs the graha's nature (wants {actor})"))
+    else:
+        checks.append((nature == actor, f"nature is {nature}, wants {actor}"))
+
+    if rule["houses"]:
+        wanted = ", ".join(str(h) for h in rule["houses"])
+        if house is None:
+            checks.append((None, f"needs the house (wants {wanted})"))
+        else:
+            checks.append((house in rule["houses"], f"house {house}, wants {wanted}"))
+
+    if rule.get("unless_associated_with"):
+        if associated_with_malefics is None:
+            checks.append((None, (
+                "needs to know about conjunction or aspect by another "
+                "malefic; this function is given a placement, not a chart")))
+        else:
+            checks.append((not associated_with_malefics,
+                           f"associated with malefics: {associated_with_malefics}"))
+
+    detail = "; ".join(text for _v, text in checks)
+    if any(value is False for value, _t in checks):
+        return False, detail
+    if any(value is None for value, _t in checks):
+        return None, detail
+    return True, detail

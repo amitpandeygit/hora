@@ -21,6 +21,7 @@ from hora.charts.avastha import (
     avasthas_by_mood,
     ghati_at_birth,
     sound_number,
+    special_results,
 )
 from hora.charts.strength import AGE_RANK, StrengthError, compare, stronger
 from hora.core.const import (
@@ -933,3 +934,100 @@ def test_exercise_24_pins_our_sunrise_to_within_five_minutes():
     early here, with only minutes to spare.
     """
     assert _exercise_24_ghati() == 6
+
+
+# --------------------------------------------------------------------------
+# "Importance of Sayanaadi Avasthas" — Parasara's eight special results.
+# --------------------------------------------------------------------------
+
+
+def test_all_eight_special_results_come_back_every_time():
+    """Exhaustive by construction, like the yoga registries."""
+    got = special_results(1, nature="benefic", house=3)
+    assert [r.rule for r in got] == [1, 2, 3, 4, 5, 6, 7, 8]
+    assert all(r.reason for r in got)
+
+
+def test_a_rule_that_cannot_fire_in_this_avastha_needs_no_other_input():
+    """Rule 5 wants Sayana or Nidraa. In Bhojana it is decided at once, with
+    no nature, no house and no aspects."""
+    only = next(r for r in special_results(9) if r.rule == 5)
+    assert only.applies is False
+    assert only.reason == "Bhojana, not Sayana, Nidraa"
+
+
+def test_rules_3_and_6_both_fire_on_a_malefic_in_bhojana_in_the_tenth():
+    """The section states a general rule and then a sharper one that sits
+    inside it. Both are reported; the book does not say the second replaces
+    the first, and "destroyed" and "all kinds of miseries" do not contradict.
+    """
+    got = {r.rule: r for r in special_results(9, nature="malefic", house=10)}
+    assert got[3].applies is True
+    assert got[6].applies is True
+    assert got[3].effect == "the house containing it is destroyed"
+    assert got[6].effect == "all kinds of miseries may be expected"
+
+
+def test_the_same_two_avasthas_are_auspicious_in_the_fifth_and_fatal_in_the_eighth():
+    """Rules 4 and 5 share their avasthas and their actor and differ only by
+    house, so a wrong house flips the reading from auspicious to death."""
+    for avastha in (1, 12):
+        fifth = {r.rule: r for r in special_results(avastha, nature="malefic", house=5)}
+        eighth = {r.rule: r for r in special_results(avastha, nature="malefic", house=8)}
+        assert fifth[4].applies is True and fifth[4].auspicious is True
+        assert fifth[5].applies is False
+        assert eighth[5].applies is True and eighth[5].auspicious is False
+        assert eighth[4].applies is False
+
+
+def test_rule_2_cannot_be_decided_without_the_aspects_it_names():
+    """"without the conjunction or aspect of another malefic" is part of the
+    rule, not a footnote, so it cannot be dropped when unknown."""
+    open_case = next(r for r in special_results(12, nature="malefic", house=7) if r.rule == 2)
+    assert open_case.applies is None
+    assert "placement, not a chart" in open_case.reason
+
+    clean = next(r for r in special_results(
+        12, nature="malefic", house=7, associated_with_malefics=False) if r.rule == 2)
+    assert clean.applies is True
+
+    spoiled = next(r for r in special_results(
+        12, nature="malefic", house=7, associated_with_malefics=True) if r.rule == 2)
+    assert spoiled.applies is False
+
+
+def test_rule_7_admits_two_routes_and_one_satisfied_route_is_enough():
+    """"a benefic OR a planet in own or exaltation rasi" — a malefic in its
+    own rasi still qualifies, and an unknown second route cannot undo a
+    satisfied first one."""
+    by_nature = next(r for r in special_results(4, nature="benefic", house=1) if r.rule == 7)
+    assert by_nature.applies is True
+
+    by_dignity = next(r for r in special_results(
+        4, nature="malefic", house=1, dignity="exalted") if r.rule == 7)
+    assert by_dignity.applies is True
+
+    neither = next(r for r in special_results(
+        4, nature="malefic", house=1, dignity="neutral") if r.rule == 7)
+    assert neither.applies is False
+
+    unknown = next(r for r in special_results(4, house=1) if r.rule == 7)
+    assert unknown.applies is None
+
+
+def test_rule_8_names_the_moon_whose_nature_the_book_makes_conditional():
+    """Rule 8 is an emphasis of rule 7, but rule 7 wants a benefic or an
+    own/exaltation dignity, and by section 3.2.2 the Moon has no nature apart
+    from its phase. A waning Moon is a malefic and fails rule 7 while rule 8
+    still names it. The record carries that; the book does not resolve it.
+    """
+    from hora.core.const import SAYANAADI_SPECIAL_RESULTS
+
+    rule_8 = SAYANAADI_SPECIAL_RESULTS[7]
+    assert rule_8["actor"] == "Moon"
+    assert "3.2.2" in rule_8["note"]
+
+    got = {r.rule: r for r in special_results(
+        11, nature="malefic", house=10, graha=int(Graha.MOON), dignity="neutral")}
+    assert got[8].applies is True        # rule 8 fires on the Moon regardless
+    assert got[7].applies is False       # rule 7 does not, for a waning Moon

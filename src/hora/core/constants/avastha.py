@@ -255,12 +255,15 @@ AVASTHA_VERBATIM_FIELDS: tuple[tuple[str, str], ...] = (
     ("AGE_AVASTHAS", "name"),
     ("AGE_AVASTHAS", "meaning"),
     ("AGE_AVASTHAS", "results"),
+    ("SAYANAADI_SPECIAL_RESULTS", "verbatim"),
 )
 
 #: Whole constants that are a transcribed sentence or passage.
 AVASTHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "ACTIVITY_IS_MOST_IMPORTANT",
     "AGE_AVASTHA_CAUTION",
+    "SAYANAADI_ARE_MOST_IMPORTANT",
+    "SAYANAADI_CAUTION",
     "GHATI_NOTE",
     "NAVAMSA_INDEX_NOTE",
     "SAYANAADI_FORMULA",
@@ -384,3 +387,149 @@ ACTIVITY_STRENGTH: dict[int, dict] = {
     2: {"name": "cheshta", "results": "full"},
     0: {"name": "vicheshta", "results": "very little"},
 }
+
+# --------------------------------------------------------------------------
+# §15.4.4 — "Importance of Sayanaadi Avasthas"
+#
+# Eight special results the section attributes to Parasara, on top of the
+# per-graha results. Each turns on the graha's nature, its sayanaadi avastha
+# and often the house it occupies. `verbatim` is the sentence as printed;
+# everything beside it is our reading of it.
+# --------------------------------------------------------------------------
+
+#: §15.4.4's ranking of this family against the other three avastha families.
+SAYANAADI_ARE_MOST_IMPORTANT = (
+    "Sayanaadi (Sayana etc) avasthas are the most important of all avasthas."
+)
+
+#: Parasara's special results. `actor` is who the rule is about, `avasthas`
+#: the Table 36 indices it fires in, `houses` the houses it is confined to
+#: (empty means any house), and `needs` the inputs without which it cannot be
+#: decided. Numbered in the order the section states them.
+SAYANAADI_SPECIAL_RESULTS: tuple[dict, ...] = (
+    {
+        "rule": 1,
+        "verbatim": (
+            "If a benefic is in Sayana avastha, the house benefits from his "
+            "presence."
+        ),
+        "actor": "benefic",
+        "avasthas": (1,),
+        "houses": (),
+        "effect": "the house benefits from his presence",
+        "auspicious": True,
+        "needs": ("nature",),
+    },
+    {
+        "rule": 2,
+        "verbatim": (
+            "If a malefic is in Nidraa avastha in the 7th house without the "
+            "conjunction or aspect of another malefic, it is auspicious."
+        ),
+        "actor": "malefic",
+        "avasthas": (12,),
+        "houses": (7,),
+        "unless_associated_with": "malefics",
+        "effect": "auspicious",
+        "auspicious": True,
+        "needs": ("nature", "house", "association with malefics"),
+    },
+    {
+        "rule": 3,
+        "verbatim": (
+            "If a malefic is in Bhojana avastha, the house containing it is "
+            "destroyed."
+        ),
+        "actor": "malefic",
+        "avasthas": (9,),
+        "houses": (),
+        "effect": "the house containing it is destroyed",
+        "auspicious": False,
+        "needs": ("nature",),
+    },
+    {
+        "rule": 4,
+        "verbatim": (
+            "If a malefic is in the 5th house in Sayana or Nidraa avastha, it "
+            "is auspicious."
+        ),
+        "actor": "malefic",
+        "avasthas": (1, 12),
+        "houses": (5,),
+        "effect": "auspicious",
+        "auspicious": True,
+        "needs": ("nature", "house"),
+    },
+    {
+        "rule": 5,
+        "verbatim": (
+            "If a malefic is in the 8th house in Sayana or Nidraa avastha, it "
+            "brings death by royal wrath."
+        ),
+        "actor": "malefic",
+        "avasthas": (1, 12),
+        "houses": (8,),
+        "effect": "death by royal wrath",
+        "auspicious": False,
+        "needs": ("nature", "house"),
+    },
+    {
+        "rule": 6,
+        "verbatim": (
+            "If a malefic occupies the 10th house in Bhojana or Sayana "
+            "avastha, all kinds of miseries may be expected."
+        ),
+        "actor": "malefic",
+        "avasthas": (1, 9),
+        "houses": (10,),
+        "effect": "all kinds of miseries may be expected",
+        "auspicious": False,
+        "needs": ("nature", "house"),
+    },
+    {
+        "rule": 7,
+        "verbatim": (
+            "If a benefic or a planet in own or exaltation rasi occupies in "
+            "the 1st, 5th, 7th or 10th house in Prakasana, Nrityalipsaa or "
+            "Kautuka avasthas, it brings Raja Yoga."
+        ),
+        "actor": "benefic or a planet in own or exaltation rasi",
+        "avasthas": (4, 10, 11),
+        "houses": (1, 5, 7, 10),
+        "effect": "Raja Yoga",
+        "auspicious": True,
+        "needs": ("nature or dignity", "house"),
+    },
+    {
+        "rule": 8,
+        "verbatim": (
+            "Parasara specifically mentioned Moon in the 10th house in "
+            "Kautuka or Prakaasana avasthas."
+        ),
+        "actor": "Moon",
+        "avasthas": (4, 11),
+        "houses": (10,),
+        "effect": "Raja Yoga",
+        "auspicious": True,
+        "needs": ("house",),
+        "note": (
+            "An emphasis of rule 7, not a rule beside it — but rule 7 wants a "
+            "benefic or a graha in its own or exaltation rasi, and by section "
+            "3.2.2 the Moon has no nature apart from its phase. A waning Moon "
+            "is a malefic and fails rule 7's own precondition, yet this "
+            "sentence names the Moon without qualifying the phase. The book "
+            "does not resolve it; see docs/open-items.md."
+        ),
+    },
+)
+
+#: The section's closing warning, which qualifies everything above it.
+SAYANAADI_CAUTION = (
+    "However, one should not be carried away with avasthas and one should "
+    "remember that they are only the \"states\" of the planet. The state of a "
+    "planet related to age, alertness, mood and activity will have a role in "
+    "the results given by it, but the houses influenced by it in various "
+    "divisional charts are more important in deciding the results. We should "
+    "avoid the temptation to make predictions based on thumbrules and "
+    "look-up tables."
+)
