@@ -24,6 +24,7 @@ from hora.api.routers import (
     colords,
     dashas,
     ephemeris,
+    functional,
     graha_arudhas,
     horas,
     houses,
@@ -93,6 +94,7 @@ app.include_router(argalas.router)
 app.include_router(planetary_yogas.router)
 app.include_router(ashtakavarga.router)
 app.include_router(sodhana.router)
+app.include_router(functional.router)
 
 
 @app.get("/health", response_model=HealthOut, tags=["meta"])

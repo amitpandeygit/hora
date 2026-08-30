@@ -1,0 +1,365 @@
+{
+  "body": {
+    "chapter_intro": "In the previous chapters, we have learnt various parameters and tools available in Vedic astrology. When it comes to putting them all together and interpreting charts, there is no substitute for experience. One should also refer to classics and \u201cHow to Judge a Horoscope\u201d (Vols I & II) by Dr. B.V. Raman, to become familiar with the standard results attributed to different planets being in different houses and the lords of different houses being in various houses. In this chapter, we will cover some topics not covered yet and go through a couple of examples of interpreting charts. We will see many more examples in the rest of this book.",
+    "divergences": [
+      {
+        "from_rules": "functionally neutral",
+        "from_table": "functional benefic",
+        "houses": [
+          4
+        ],
+        "lagna": "Ta",
+        "planet": "Sun"
+      },
+      {
+        "from_rules": "functionally neutral",
+        "from_table": "functional malefic",
+        "houses": [
+          1,
+          6
+        ],
+        "lagna": "Ta",
+        "planet": "Venus"
+      },
+      {
+        "from_rules": "functional benefic",
+        "from_table": "functionally neutral",
+        "houses": [
+          8,
+          9
+        ],
+        "lagna": "Ge",
+        "planet": "Saturn"
+      },
+      {
+        "from_rules": "functionally neutral",
+        "from_table": "functional benefic",
+        "houses": [
+          6,
+          9
+        ],
+        "lagna": "Cn",
+        "planet": "Jupiter"
+      },
+      {
+        "from_rules": "functionally neutral",
+        "from_table": "functional benefic",
+        "houses": [
+          1,
+          10
+        ],
+        "lagna": "Vi",
+        "planet": "Mercury"
+      },
+      {
+        "from_rules": "functionally neutral",
+        "from_table": "functional malefic",
+        "houses": [
+          2,
+          7
+        ],
+        "lagna": "Li",
+        "planet": "Mars"
+      },
+      {
+        "from_rules": "functional malefic",
+        "from_table": "functionally neutral",
+        "houses": [
+          7,
+          10
+        ],
+        "lagna": "Sg",
+        "planet": "Mercury"
+      },
+      {
+        "from_rules": "functionally neutral",
+        "from_table": "functional benefic",
+        "houses": [
+          6,
+          9
+        ],
+        "lagna": "Cp",
+        "planet": "Mercury"
+      },
+      {
+        "from_rules": "functional benefic",
+        "from_table": "functionally neutral",
+        "houses": [
+          5,
+          8
+        ],
+        "lagna": "Aq",
+        "planet": "Mercury"
+      }
+    ],
+    "further_reading": "\u201cHow to Judge a Horoscope\u201d (Vols I & II) by Dr. B.V. Raman",
+    "houses_owned_example": {
+      "Aries": {
+        "Jupiter": [
+          9,
+          12
+        ],
+        "Mars": [
+          1,
+          8
+        ],
+        "Mercury": [
+          3,
+          6
+        ],
+        "Moon": [
+          4
+        ],
+        "Saturn": [
+          10,
+          11
+        ],
+        "Sun": [
+          5
+        ],
+        "Venus": [
+          2,
+          7
+        ]
+      }
+    },
+    "intro": "We learnt that Jupiter, Venus, waxing Moon and well-associated Mercury are natural benefics. We learnt that Sun, Mars, Saturn, Rahu, Ketu, waning Moon and ill-associated Mercury are natural malefics. In addition, we have the concept of functional benefics and functional malefics.",
+    "moon_movable_wording": "Section 13.2 says Moon is not listed for movable rasis, but Cancer is movable and Table 30 does list him there, as a functional benefic. The condition that actually holds is owning a quadrant other than the 1st, which for Cancer's Moon is true of Aries, Libra and Capricorn only. Cancer being the exception is what proves the 1st is treated as a trine and not as a quadrant.",
+    "moon_not_listed_for_movable": "Moon is not listed for movable rasis, because his functional nature depends on whether he is waxing or waning. Waxing Moon is a natural benefic and he becomes a functional malefic with quadrant ownership. Waning Moon, on the other hand, is a natural malefic and quadrant ownership makes him functionally neutral.",
+    "moon_omitted_from": [
+      "Ar",
+      "Li",
+      "Cp"
+    ],
+    "natural_versus_functional": "We should consider the inherent nature and the functional nature of planets. Whether a planet is a natural benefic or a natural malefic is analogous to whether a person is inherently good or bad. Whether a planet is a functional benefic or a functional malefic is analogous to whether a person does good or bad to one. Just as a nice person may harm one and a bad person may do good, natural benefics can become functional malefics and natural malefics can become functional benefics.",
+    "placement": "A functional benefic is a favorable planet in a chart. Placement of a functional benefic in quadrants (sustenance) and trines (prosperity) brings good results. Placement of a functional malefic in these houses is not good, unless it is very strong. A functional malefic placed in the 3rd house and dusthanas (6th, 8th and 12th houses) brings good results, by spoiling the significations of the bad houses.",
+    "planets": [
+      "Sun",
+      "Moon",
+      "Mars",
+      "Mercury",
+      "Jupiter",
+      "Venus",
+      "Saturn"
+    ],
+    "planets_note": "Rahu and Ketu own no rasi, and every rule in section 13.2 turns on lordship, so they have no functional nature.",
+    "rules": [
+      "The lords of trines from lagna are functional benefics.",
+      "The lords of 3rd, 6th and 11th are functional malefics.",
+      "The lord of a quadrant is a functional malefic if he is a natural benefic and functionally neutral if he is a natural malefic.",
+      "The lords of 2nd, 8th and 12th are functionally neutral. Of these, the 8th house is more malefic than the other two.",
+      "Planet owning a quadrant and a trine becomes a yogakaraka (excellent planet)."
+    ],
+    "table_30": {
+      "Aq": {
+        "benefics": [
+          "Venus",
+          "Saturn"
+        ],
+        "malefics": [
+          "Moon",
+          "Mars",
+          "Jupiter"
+        ],
+        "neutrals": [
+          "Sun",
+          "Mercury"
+        ],
+        "yogakaraka": "Venus"
+      },
+      "Ar": {
+        "benefics": [
+          "Sun",
+          "Mars",
+          "Jupiter"
+        ],
+        "malefics": [
+          "Mercury",
+          "Venus",
+          "Saturn"
+        ],
+        "neutrals": [],
+        "yogakaraka": null
+      },
+      "Cn": {
+        "benefics": [
+          "Moon",
+          "Mars",
+          "Jupiter"
+        ],
+        "malefics": [
+          "Mercury",
+          "Venus"
+        ],
+        "neutrals": [
+          "Sun",
+          "Saturn"
+        ],
+        "yogakaraka": "Mars"
+      },
+      "Cp": {
+        "benefics": [
+          "Venus",
+          "Mercury",
+          "Saturn"
+        ],
+        "malefics": [
+          "Mars",
+          "Jupiter"
+        ],
+        "neutrals": [
+          "Sun"
+        ],
+        "yogakaraka": "Venus"
+      },
+      "Ge": {
+        "benefics": [
+          "Venus"
+        ],
+        "malefics": [
+          "Sun",
+          "Mars",
+          "Jupiter"
+        ],
+        "neutrals": [
+          "Moon",
+          "Mercury",
+          "Saturn"
+        ],
+        "yogakaraka": null
+      },
+      "Le": {
+        "benefics": [
+          "Sun",
+          "Mars",
+          "Jupiter"
+        ],
+        "malefics": [
+          "Mercury",
+          "Venus",
+          "Saturn"
+        ],
+        "neutrals": [
+          "Moon"
+        ],
+        "yogakaraka": "Mars"
+      },
+      "Li": {
+        "benefics": [
+          "Mercury",
+          "Venus",
+          "Saturn"
+        ],
+        "malefics": [
+          "Sun",
+          "Mars",
+          "Jupiter"
+        ],
+        "neutrals": [],
+        "yogakaraka": "Saturn"
+      },
+      "Pi": {
+        "benefics": [
+          "Moon",
+          "Mars"
+        ],
+        "malefics": [
+          "Sun",
+          "Mercury",
+          "Venus",
+          "Saturn"
+        ],
+        "neutrals": [
+          "Jupiter"
+        ],
+        "yogakaraka": null
+      },
+      "Sc": {
+        "benefics": [
+          "Moon",
+          "Jupiter"
+        ],
+        "malefics": [
+          "Mercury",
+          "Venus",
+          "Saturn"
+        ],
+        "neutrals": [
+          "Sun",
+          "Mars"
+        ],
+        "yogakaraka": null
+      },
+      "Sg": {
+        "benefics": [
+          "Sun",
+          "Mars"
+        ],
+        "malefics": [
+          "Venus",
+          "Saturn"
+        ],
+        "neutrals": [
+          "Moon",
+          "Mercury",
+          "Jupiter"
+        ],
+        "yogakaraka": null
+      },
+      "Ta": {
+        "benefics": [
+          "Sun",
+          "Mercury",
+          "Saturn"
+        ],
+        "malefics": [
+          "Moon",
+          "Jupiter",
+          "Venus"
+        ],
+        "neutrals": [
+          "Mars"
+        ],
+        "yogakaraka": "Saturn"
+      },
+      "Vi": {
+        "benefics": [
+          "Mercury",
+          "Venus"
+        ],
+        "malefics": [
+          "Moon",
+          "Mars",
+          "Jupiter"
+        ],
+        "neutrals": [
+          "Sun",
+          "Saturn"
+        ],
+        "yogakaraka": null
+      }
+    },
+    "table_is_the_authority": "Table 30 is what section 13.2 gives for use, so it is what we serve. The five stated rules are applied separately and agree on 72 of the table's 81 cells; the nine that differ are listed under `divergences`, and eight of them are planets owning two rasis \u2014 exactly what \"judiciously combine\" warns about.",
+    "two_rasi_owners": "In the case of planets owning two rasis, we need to judiciously combine the two indications.",
+    "yogada": "If a planet aspects or conjoins or owns HL and lagna, it becomes a yogada (giver of yoga) in money matters. If a planet aspects or conjoins or owns GL and lagna, it becomes a yogada in the matters of power and authority. Irrespective of their functional nature, planets that become yogada bring goodluck. Similarly, planets involved in important yogas also bring good luck.",
+    "yogada_kinds": {
+      "GL": "the matters of power and authority",
+      "HL": "money matters"
+    },
+    "yogada_links": [
+      "aspects",
+      "conjoins",
+      "owns"
+    ],
+    "yogakaraka_rule": "A yogakaraka owns a quadrant and a trine. The 1st counts as neither here: letting it serve as the trine would name ten yogakarakas where Table 30 names six.",
+    "yogakarakas": {
+      "Aquarius": "Venus",
+      "Cancer": "Mars",
+      "Capricorn": "Venus",
+      "Leo": "Mars",
+      "Libra": "Saturn",
+      "Taurus": "Saturn"
+    }
+  },
+  "status": 200
+}

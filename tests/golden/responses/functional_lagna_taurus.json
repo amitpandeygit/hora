@@ -1,0 +1,95 @@
+{
+  "body": {
+    "lagna": 1,
+    "lagna_name": "Taurus",
+    "moon_needs_phase": false,
+    "placement": "A functional benefic is a favorable planet in a chart. Placement of a functional benefic in quadrants (sustenance) and trines (prosperity) brings good results. Placement of a functional malefic in these houses is not good, unless it is very strong. A functional malefic placed in the 3rd house and dusthanas (6th, 8th and 12th houses) brings good results, by spoiling the significations of the bad houses.",
+    "planets": [
+      {
+        "depends_on_phase": null,
+        "from_rules": "functionally neutral",
+        "houses": [
+          4
+        ],
+        "nature": "functional benefic",
+        "planet": "Sun",
+        "why": "Table 30 lists Sun as a functional benefic for Taurus lagna, owning house 4",
+        "yogakaraka": false
+      },
+      {
+        "depends_on_phase": null,
+        "from_rules": "functional malefic",
+        "houses": [
+          3
+        ],
+        "nature": "functional malefic",
+        "planet": "Moon",
+        "why": "Table 30 lists Moon as a functional malefic for Taurus lagna, owning house 3",
+        "yogakaraka": false
+      },
+      {
+        "depends_on_phase": null,
+        "from_rules": "functionally neutral",
+        "houses": [
+          7,
+          12
+        ],
+        "nature": "functionally neutral",
+        "planet": "Mars",
+        "why": "Table 30 lists Mars as a functionally neutral for Taurus lagna, owning houses 7, 12",
+        "yogakaraka": false
+      },
+      {
+        "depends_on_phase": null,
+        "from_rules": "functional benefic",
+        "houses": [
+          2,
+          5
+        ],
+        "nature": "functional benefic",
+        "planet": "Mercury",
+        "why": "Table 30 lists Mercury as a functional benefic for Taurus lagna, owning houses 2, 5",
+        "yogakaraka": false
+      },
+      {
+        "depends_on_phase": null,
+        "from_rules": "functional malefic",
+        "houses": [
+          8,
+          11
+        ],
+        "nature": "functional malefic",
+        "planet": "Jupiter",
+        "why": "Table 30 lists Jupiter as a functional malefic for Taurus lagna, owning houses 8, 11",
+        "yogakaraka": false
+      },
+      {
+        "depends_on_phase": null,
+        "from_rules": "functionally neutral",
+        "houses": [
+          1,
+          6
+        ],
+        "nature": "functional malefic",
+        "planet": "Venus",
+        "why": "Table 30 lists Venus as a functional malefic for Taurus lagna, owning houses 1, 6",
+        "yogakaraka": false
+      },
+      {
+        "depends_on_phase": null,
+        "from_rules": "functional benefic",
+        "houses": [
+          9,
+          10
+        ],
+        "nature": "functional benefic",
+        "planet": "Saturn",
+        "why": "Table 30 lists Saturn as a functional benefic for Taurus lagna, owning houses 9, 10 \u2014 a quadrant and a trine, so a yogakaraka",
+        "yogakaraka": true
+      }
+    ],
+    "table_is_the_authority": "Table 30 is what section 13.2 gives for use, so it is what we serve. The five stated rules are applied separately and agree on 72 of the table's 81 cells; the nine that differ are listed under `divergences`, and eight of them are planets owning two rasis \u2014 exactly what \"judiciously combine\" warns about.",
+    "yogakaraka": "Saturn"
+  },
+  "status": 200
+}

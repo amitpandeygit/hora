@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 61 waiting on evidence · 2 parked**
+**5 waiting on Amit · 62 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,26 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-105 — Table 30 has no branch for Mercury's association
+
+§13.2 calls Mercury's natural nature conditional — "**well-associated**" benefic,
+"**ill-associated**" malefic — and its quadrant rule turns on exactly that: "a
+functional malefic if he is a natural benefic and functionally neutral if he is
+a natural malefic". So Mercury owning a quadrant should have two answers, as the
+Moon's does. Table 30 gives one row per lagna and splits only the Moon.
+
+Read back, the table assumes Mercury is a **natural benefic**: for Gemini he owns
+the 1st and 4th, and its "neutral" only follows if the 4th made him malefic. It
+matters where Mercury owns a quadrant — Ge (4th), Vi (10th), Sg (7th), Pi
+(4th). Ill-associated he would be neutral there rather than malefic, moving the
+combined verdict.
+
+**What we do:** `NATURAL_BENEFIC_FOR_13_2` names the assumption in one place;
+nothing branches on association, because Table 30 does not.
+
+**Closes when:** a later section states how association feeds functional nature,
+or a worked example reads an ill-associated Mercury.
 
 ### OI-104 — §12.7.2 does not say whether Rahu and Ketu occupy a rasi
 

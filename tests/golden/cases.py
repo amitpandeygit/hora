@@ -313,6 +313,14 @@ CASES = [
                         "Jupiter": 6, "Venus": 10, "Saturn": 0},
         "occupied_signs": [0, 6, 7, 8, 9, 10],
     }),
+    # Chapter 13 section 13.2: Table 30, and two rows that exercise the
+    # Moon's phase branch and a yogakaraka.
+    ("functional_rules", "GET", "/v1/functional/rules", None),
+    ("functional_lagna_taurus", "GET", "/v1/functional/lagna?sign=1", None),
+    ("functional_lagna_aries", "GET", "/v1/functional/lagna?sign=0", None),
+    ("functional_planet_waning_moon", "POST", "/v1/functional/planet", {
+        "planet": "Moon", "lagna": 6, "waxing": False,
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

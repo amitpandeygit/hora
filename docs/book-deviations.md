@@ -1383,3 +1383,66 @@ whole-sign from its reference. `whole_sign_stand_typo` on
 slip is visible rather than silently corrected.
 
 **Nothing needs deciding.** The correction is forced by the sentence itself.
+
+## D-45 · §13.2's 1st house is a trine for nature and neither for yogakaraka
+
+**Status: resolved from Table 30, which forces both readings.**
+
+The 1st is a quadrant *and* a trine, and §13.2's rules treat those differently.
+Table 30 settles which applies, twice, in opposite directions.
+
+**For a planet's own nature, the 1st is a trine.** Cancer's Moon owns only the
+1st and Table 30 lists him a functional benefic. Read as a quadrant he would be
+phase-dependent — waxing benefic, waning malefic — and would have been left out
+like Aries, Libra and Capricorn, whose Moons own the 4th, 10th and 7th.
+
+**For the yogakaraka rule, the 1st is neither.** Table 30 names six
+yogakarakas. Letting the 1st serve as the trine would name ten, adding
+Gemini's and Virgo's Mercury and Sagittarius's and Pisces's Jupiter — each of
+which owns the lagna and one other quadrant. So the quadrant must be the 4th,
+7th or 10th and the trine the 5th or 9th.
+
+Related: §13.2 says "Moon is not listed for movable rasis", but Cancer is
+movable and its Moon *is* listed. The condition that actually holds is owning a
+quadrant **other than the 1st**, which for Cancer's Moon is true of Aries,
+Libra and Capricorn exactly. The wording is loose; the table is not, and Cancer
+being the exception is what proves the first reading above.
+
+**What we do:** both readings, each pinned by the test that forces it.
+`/v1/functional/rules` carries `yogakaraka_rule` and `moon_movable_wording`.
+
+**Nothing needs deciding.** Table 30 determines both.
+
+## D-46 · Taurus's Sun: the rule says neutral, Table 30 says benefic
+
+**Status: NEEDS YOU — but low stakes; the table is used.**
+
+§13.2's rule: "The lord of a quadrant is a functional malefic if he is a
+natural benefic and **functionally neutral if he is a natural malefic**."
+
+Sun owns only Leo, which is the 4th from Taurus — one house, a quadrant, and
+the Sun is a natural malefic. The rule gives **functionally neutral**. Table 30
+lists him among Taurus's **functional benefics**.
+
+No combining is involved, so this is not the "judiciously combine" licence
+§13.2 grants for two-rasi owners. It is the only one of the nine
+rule-versus-table divergences that is not a two-rasi owner.
+
+The rule holds everywhere else it can be tested. Sun is the only planet besides
+the Moon that owns a single rasi, and the Moon is omitted wherever he owns a
+quadrant, so Taurus, Scorpio and Aquarius are the only three trials:
+
+| lagna | Sun's house | rule | Table 30 |
+|---|---|---|---|
+| Taurus | 4th | neutral | **benefic** |
+| Scorpio | 10th | neutral | neutral |
+| Aquarius | 7th | neutral | neutral |
+
+Two of three follow the rule, so this is one cell rather than a pattern — but
+with only three trials that is weak evidence either way.
+
+**What we do:** Table 30 is served, so callers get *benefic* for Taurus's Sun.
+The divergence is listed on `/v1/functional/rules`.
+
+**Closes when:** a worked example in a later chapter reads Taurus's Sun, or you
+decide the rule should override the table.

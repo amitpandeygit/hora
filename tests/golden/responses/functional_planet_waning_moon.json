@@ -1,0 +1,14 @@
+{
+  "body": {
+    "depends_on_phase": null,
+    "from_rules": "functionally neutral",
+    "houses": [
+      10
+    ],
+    "nature": "functionally neutral",
+    "planet": "Moon",
+    "why": "Table 30 omits the Moon at Libra lagna because he owns the 10th, a quadrant, and his natural nature follows his phase: waxing he is a natural benefic and quadrant ownership makes him a functional malefic; waning he is a natural malefic and quadrant ownership makes him functionally neutral; this Moon is waning",
+    "yogakaraka": false
+  },
+  "status": 200
+}
