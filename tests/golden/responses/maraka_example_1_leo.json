@@ -1,0 +1,88 @@
+{
+  "body": {
+    "derivation": [
+      {
+        "house_of_life": 3,
+        "twelfth_from_it": 2
+      },
+      {
+        "house_of_life": 8,
+        "twelfth_from_it": 7
+      }
+    ],
+    "framing": "Many human beings are curious about how long they will live. An ethical astrologer will not scare a client by predicting death, but he may caution a client gently before critical periods and suggest some remedial measures to ward off an impending danger. An estimation of longevity is also helpful in matchmaking. After all, if one person will live for 81 years and the other only for 36 years, it is not advisable to approve a match between those two people. In matchmaking, it is desirable that the bridegroom and the bride have comparable longevity.",
+    "houses_of_life": {
+      "3": {
+        "rasi": "Libra",
+        "shows": "the vitality of one's existence"
+      },
+      "8": {
+        "rasi": "Pisces",
+        "shows": "the longevity"
+      }
+    },
+    "incomplete_note": null,
+    "lagna": 4,
+    "lagna_name": "Leo",
+    "malefic_contacts_included": true,
+    "maraka_grahas": [
+      {
+        "graha": 2,
+        "graha_name": "Mars",
+        "kind": "malefic contact",
+        "reasons": [
+          "aspects the 2nd house (Virgo)",
+          "aspects the 7th lord Saturn"
+        ]
+      },
+      {
+        "graha": 3,
+        "graha_name": "Mercury",
+        "kind": "house lord",
+        "reasons": [
+          "owns the 2nd house (Virgo)"
+        ]
+      },
+      {
+        "graha": 6,
+        "graha_name": "Saturn",
+        "kind": "house lord",
+        "reasons": [
+          "owns the 7th house (Aquarius) as co-lord",
+          "aspects the 2nd house (Virgo)",
+          "aspects the 7th house (Aquarius)"
+        ]
+      },
+      {
+        "graha": 7,
+        "graha_name": "Rahu",
+        "kind": "house lord",
+        "reasons": [
+          "owns the 7th house (Aquarius) as co-lord"
+        ]
+      }
+    ],
+    "maraka_sthanas": [
+      {
+        "house": 2,
+        "rasi": 5,
+        "rasi_name": "Virgo"
+      },
+      {
+        "house": 7,
+        "rasi": 10,
+        "rasi_name": "Aquarius"
+      }
+    ],
+    "not_ranked": "Section 14.2 remarks that the second example's Saturn 'may in fact be a stronger maraka' than the two house lords, but gives no rule for ranking marakas. We return every maraka with how it qualified and do not order them.",
+    "powerfully_undefined": "Section 14.2 says a malefic qualifies if it 'powerfully' conjoins or aspects the 2nd or 7th house or their lords. It does not say what makes the contact powerful, and neither worked example applies any threshold \u2014 both simply note the contacts and conclude. We report every contact with what made it, and do not filter on a strength the section never defines.",
+    "targets": [
+      "the 2nd house",
+      "the 7th house",
+      "the 2nd lord",
+      "the 7th lord"
+    ],
+    "use": "When we time one's death using a dasa, we should look for the involvement of maraka sthanas and maraka grahas. We can also use marakas when timing death using the transits of planets."
+  },
+  "status": 200
+}

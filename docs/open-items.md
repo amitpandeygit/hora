@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 64 waiting on evidence · 2 parked**
+**5 waiting on Amit · 65 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,29 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-108 — §14.2's "powerfully" is never quantified
+
+Beyond the lords of the 2nd and 7th, §14.2 admits a further class of maraka:
+
+> "If a malefic planet **powerfully** conjoins or aspects, using graha
+> drishti, the 2nd and 7th houses or their lords, then it qualifies as a
+> maraka graha."
+
+It never says what makes a contact powerful, and neither worked example applies
+any threshold — both simply note the contacts and conclude. Chapter 15 defines
+graha bala, but §14.2 cites it nowhere. The section also remarks that its second
+Saturn "may in fact be a stronger maraka than Mars and Mercury" without giving
+any rule for ranking marakas, and it never addresses co-lordship — its first
+example calls Saturn a maraka for owning Aquarius and does not mention Rahu.
+
+**What we do:** every contact is reported with what made it — conjunction or
+which aspect, and which of the four targets — and nothing is filtered or
+ordered. Both co-lords are returned, labelled as such. A caller applies whatever
+strength test they hold; we do not invent one.
+
+**Closes when:** a later section gives a threshold, a ranking, or a worked
+example that excludes a contact for being too weak.
 
 ### OI-107 — parivraaja yoga is named in Example 44 and never defined
 

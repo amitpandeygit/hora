@@ -361,6 +361,15 @@ CASES = [
     ("book_chart_14", "GET", "/v1/book-charts/14", None),
     ("book_chart_15_twins", "GET", "/v1/book-charts/15", None),
     ("book_chart_16_twins", "GET", "/v1/book-charts/16", None),
+    # Chapter 14: the maraka rules and both of section 14.2's examples.
+    ("maraka_rules", "GET", "/v1/marakas/rules", None),
+    ("maraka_example_1_leo", "POST", "/v1/marakas", {
+        "lagna": 4, "graha_signs": {"6": 8, "2": 2},
+    }),
+    ("maraka_example_2_pisces", "POST", "/v1/marakas", {
+        "lagna": 11, "graha_signs": {"2": 2, "3": 9, "6": 0},
+    }),
+    ("maraka_lords_only", "POST", "/v1/marakas", {"lagna": 4}),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
