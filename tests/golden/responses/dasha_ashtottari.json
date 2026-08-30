@@ -133,6 +133,8 @@
       "topocentric": false,
       "upagraha_rise_point": "middle"
     },
+    "start_star": 1,
+    "start_star_name": "Moon's own",
     "system": {
       "key": "ashtottari",
       "name": "Ashtottari",

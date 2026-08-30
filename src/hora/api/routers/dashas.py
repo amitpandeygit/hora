@@ -27,6 +27,7 @@ def dasha(req: DashaRequest) -> dict:
         return dasha_service.dasha_tree(
             to_instant(req), to_place(req), req.settings,
             system=req.system, levels=req.levels, cycles=req.cycles,
+            start_star=req.start_star,
             as_of=req.as_of, tz_name=req.tz_name,
             utc_offset_hours=req.utc_offset_hours,
         )

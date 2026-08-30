@@ -348,6 +348,12 @@ class DashaResponse(CalculationEnvelope):
     moon_longitude: float
     balance_at_birth: DashaBalanceOut
     year_length: str
+    start_star: int = Field(
+        1, description="Which constellation from the Moon's began the cycle"
+    )
+    start_star_name: str = Field(
+        "Moon's own", description="kshema, utpanna or adhana where §16.4.1 names it"
+    )
     periods: list[DashaPeriodOut]
     running: list[RunningPeriodOut]
 

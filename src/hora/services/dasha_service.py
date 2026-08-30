@@ -5,7 +5,7 @@ from datetime import datetime
 
 from hora.api.serialize import dasha_out, envelope
 from hora.charts.chart import Place, compute_chart
-from hora.core.const import Graha
+from hora.core.const import VIMSOTTARI_VARIATIONS, Graha
 from hora.core.settings import Settings
 from hora.core.timeutil import Instant, from_local
 from hora.dasha.base import balance_at_birth, compute_nakshatra_dasha, find_running
@@ -28,6 +28,7 @@ def dasha_tree(
     system: str,
     levels: int,
     cycles: int,
+    start_star: int = 1,
     as_of: str | None,
     tz_name: str | None,
     utc_offset_hours: float | None,
@@ -43,9 +44,9 @@ def dasha_tree(
 
     periods = compute_nakshatra_dasha(
         spec, moon, chart.instant.jd_ut, settings.dasha_year_length,
-        levels=levels, cycles=cycles,
+        levels=levels, cycles=cycles, start_star=start_star,
     )
-    lord, balance_years = balance_at_birth(spec, moon)
+    lord, balance_years = balance_at_birth(spec, moon, start_star)
 
     as_of_jd = chart.instant.jd_ut
     if as_of:
@@ -65,6 +66,11 @@ def dasha_tree(
         "moon_longitude": round(moon, 8),
         "balance_at_birth": {"lord": lord, "years": round(balance_years, 8)},
         "year_length": settings.dasha_year_length.value,
+        "start_star": start_star,
+        "start_star_name": next(
+            (v["name"] for v in VIMSOTTARI_VARIATIONS if v["star"] == start_star),
+            f"the {start_star}th from the Moon's",
+        ),
         "periods": [dasha_out(p, off) for p in periods],
         "running": [
             {"level": p.level, "lord": p.lord, "lord_name": p.lord_name}

@@ -58,4 +58,23 @@ DEFERRED_TO_TAJAKA = (
 DASHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "DASA_USES_ARE_NOT_IN_THE_CLASSICS",
     "DEFERRED_TO_TAJAKA",
+    "VARIATIONS_ARE_OFTEN_IGNORED",
+)
+
+
+#: §16.4.1's three alternative starting constellations, counted inclusively
+#: from the Moon's own. The fraction left at birth always comes from the
+#: Moon's own star; only the lord of the first dasa and the sequence move.
+VIMSOTTARI_VARIATIONS: tuple[dict, ...] = (
+    {"star": 1, "name": "Moon's own", "note": "the usual reckoning"},
+    {"star": 4, "name": "kshema", "note": None},
+    {"star": 5, "name": "utpanna", "note": None},
+    {"star": 8, "name": "adhana", "note": None},
+)
+
+#: Why the variations exist at all.
+VARIATIONS_ARE_OFTEN_IGNORED = (
+    "Many contemporary Vedic astrologers ignore these variations and always "
+    "reckon dasas from the lord of the constellation occupied by Moon. "
+    "However, this may not result in the best predictions always."
 )

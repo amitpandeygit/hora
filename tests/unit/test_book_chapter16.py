@@ -285,3 +285,136 @@ def test_the_same_proportional_rule_recurses_into_pratyantardasas():
     for pd in sun_ad.children:
         share = V.years[list(V.order).index(pd.lord)] / 120
         assert (pd.end_jd - pd.start_jd) == pytest.approx(span * share)
+
+
+# --------------------------------------------------------------------------
+# §16.4.1 Computation of Variations, and Example 51
+# --------------------------------------------------------------------------
+
+
+def test_the_three_variations_are_named_as_the_section_names_them():
+    """"We can take the lord of the 4th, 5th or 8th constellation from Moon's
+    constellation to start the first dasa. These 3 stars are called kshema,
+    utpanna and adhana stars.\""""
+    from hora.core.const import VIMSOTTARI_VARIATIONS
+
+    by_star = {v["star"]: v["name"] for v in VIMSOTTARI_VARIATIONS}
+    assert by_star[4] == "kshema"
+    assert by_star[5] == "utpanna"
+    assert by_star[8] == "adhana"
+    assert by_star[1] == "Moon's own"
+
+
+def test_example_51_stars_and_their_lords():
+    """From Dhanishtha the 4th is Uttarabhadrapada (Saturn), the 5th Revathi
+    (Mercury), the 8th Krittika (Sun). Counted inclusively."""
+    from hora.core.const import NAKSHATRA_LORD, NAKSHATRA_NAMES
+
+    moon_star = int(EX50_MOON // NAKSHATRA_SPAN)
+    assert NAKSHATRA_NAMES[moon_star].startswith("Dhanish")
+    for n, star, lord in ((4, "Uttara Bhadrapada", Graha.SATURN),
+                          (5, "Revati", Graha.MERCURY),
+                          (8, "Krittika", Graha.SUN)):
+        idx = (moon_star + n - 1) % 27
+        assert NAKSHATRA_NAMES[idx] == star
+        assert int(NAKSHATRA_LORD[idx]) == int(lord)
+
+
+@pytest.mark.parametrize(
+    "star,lord,balance",
+    [
+        (1, Graha.MARS, 7 * 0.32125),          # 2.24875, Example 50
+        (4, Graha.SATURN, 19 * 0.32125),       # 6.10375
+        (5, Graha.MERCURY, 17 * 0.32125),      # 5.46125
+        (8, Graha.SUN, 6 * 0.32125),           # 1.9275
+    ],
+)
+def test_example_51_balances(star, lord, balance):
+    """"Dasa lengths are the same as before, but the part of Saturn dasa left
+    at birth is 19 x 0.32125 = 6.10375 years", and likewise for the others."""
+    got_lord, got_balance = balance_at_birth(V, EX50_MOON, start_star=star)
+    assert got_lord == int(lord)
+    assert got_balance == pytest.approx(balance)
+
+
+def test_the_fraction_never_moves_only_the_lord_does():
+    """"We always compute the fraction left at birth in the first dasa based
+    on the fraction of the constellation occupied by Moon."
+
+    So every variation divides the same 0.32125 into a different planet's
+    dasa length — which is the whole content of the rule.
+    """
+    for star in (1, 4, 5, 8):
+        lord, balance = balance_at_birth(V, EX50_MOON, start_star=star)
+        length = V.years[list(V.order).index(lord)]
+        assert balance / length == pytest.approx(0.32125)
+
+
+@pytest.mark.parametrize(
+    "star,sequence",
+    [
+        (4, ["Saturn", "Mercury", "Ketu", "Venus"]),
+        (5, ["Mercury", "Ketu", "Venus", "Sun"]),
+        (8, ["Sun", "Moon", "Mars", "Rahu"]),
+    ],
+)
+def test_example_51_sequences(star, sequence):
+    """Each variation starts the Table 38 cycle at its own lord."""
+    import swisseph as swe
+
+    periods = compute_nakshatra_dasha(
+        V, EX50_MOON, swe.julday(*EX50_BIRTH), DashaYearLength.SAVANA,
+        levels=1, cycles=1, start_star=star)
+    assert [GRAHA_NAMES[p.lord] for p in periods[:4]] == sequence
+
+
+def test_the_default_is_unchanged_by_the_new_parameter():
+    """Adding the variations must not move the reckoning everything else uses."""
+    import swisseph as swe
+
+    jd = swe.julday(*EX50_BIRTH)
+    plain = compute_nakshatra_dasha(V, EX50_MOON, jd, DashaYearLength.SAVANA)
+    explicit = compute_nakshatra_dasha(V, EX50_MOON, jd, DashaYearLength.SAVANA,
+                                       start_star=1)
+    assert [(p.lord, p.start_jd) for p in plain] == \
+           [(p.lord, p.start_jd) for p in explicit]
+    assert balance_at_birth(V, EX50_MOON) == balance_at_birth(V, EX50_MOON, 1)
+
+
+def test_the_variations_are_reachable_through_the_api():
+    """The engine supporting §16.4.1 is only half of it; a caller has to be
+    able to ask for kshema, utpanna or adhana."""
+    from fastapi.testclient import TestClient
+
+    from hora.api.main import app
+
+    client = TestClient(app)
+    body = {"year": 2000, "month": 4, "day": 28, "hour": 5, "minute": 50,
+            "utc_offset_hours": -4.0,
+            "place": {"latitude": 42.5, "longitude": -71.2}, "levels": 1}
+
+    names = {}
+    for star in (1, 4, 5, 8):
+        got = client.post("/v1/dasha", json=body | {"start_star": star}).json()
+        assert got["start_star"] == star
+        names[star] = got["start_star_name"]
+        first = got["periods"][0]["lord_name"]
+        ratio = got["balance_at_birth"]["years"] / dict(
+            zip((GRAHA_NAMES[g] for g in V.order), V.years))[first]
+        # The fraction is the Moon's own whichever star starts the cycle.
+        assert ratio == pytest.approx(
+            client.post("/v1/dasha", json=body | {"start_star": 1}).json()
+            ["balance_at_birth"]["years"] / 7)
+
+    assert names == {1: "Moon's own", 4: "kshema", 5: "utpanna", 8: "adhana"}
+
+
+def test_an_out_of_range_start_star_is_refused():
+    from fastapi.testclient import TestClient
+
+    from hora.api.main import app
+
+    body = {"year": 2000, "month": 4, "day": 28, "hour": 5, "minute": 50,
+            "utc_offset_hours": -4.0,
+            "place": {"latitude": 42.5, "longitude": -71.2}, "start_star": 28}
+    assert TestClient(app).post("/v1/dasha", json=body).status_code == 422

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from hora.core import validate
 from hora.core.const import (
     CIVIL_YEAR_DAYS,
     GRAHA_NAMES,
@@ -113,6 +114,7 @@ def compute_nakshatra_dasha(
     *,
     levels: int = 2,
     cycles: int = 1,
+    start_star: int = 1,
 ) -> list[DashaPeriod]:
     """Build the dasha tree from the Moon's longitude at birth.
 
@@ -122,6 +124,12 @@ def compute_nakshatra_dasha(
     running at birth are reported with their true boundaries — this is what
     JHora does, and it is why the first mahadasha's children can start before
     the birth moment.
+
+    :param start_star: which constellation from the Moon's begins the cycle,
+        counted inclusively. 1 is the Moon's own and the default; §16.4.1
+        allows the 4th, 5th and 8th — the kshema, utpanna and adhana stars.
+        The fraction left at birth always comes from the Moon's own star
+        whichever is chosen, so only the lord and the sequence move.
     """
     days_per_year = year_days(year_length)
     lon = moon_longitude % 360.0
@@ -129,7 +137,7 @@ def compute_nakshatra_dasha(
     elapsed_fraction = (lon - nak * NAKSHATRA_SPAN) / NAKSHATRA_SPAN
 
     n = len(spec.order)
-    start_index = nak % n
+    start_index = (nak + validate.in_range("start_star", start_star, 1, 27) - 1) % n
     first_years = spec.years[start_index]
 
     # Wind back to the notional start of the running mahadasha.
@@ -155,11 +163,18 @@ def compute_nakshatra_dasha(
     return periods
 
 
-def balance_at_birth(spec: NakshatraDashaSpec, moon_longitude: float) -> tuple[int, float]:
-    """Lord of the birth mahadasha and the years of it remaining at birth."""
+def balance_at_birth(
+    spec: NakshatraDashaSpec, moon_longitude: float, start_star: int = 1
+) -> tuple[int, float]:
+    """Lord of the birth mahadasha and the years of it remaining at birth.
+
+    :param start_star: see :func:`compute_nakshatra_dasha`. §16.4.1 keeps the
+        fraction from the Moon's own star and moves only the lord, so the
+        balance is that lord's dasa length times the same fraction.
+    """
     lon = moon_longitude % 360.0
     nak = int(lon // NAKSHATRA_SPAN)
-    i = nak % len(spec.order)
+    i = (nak + validate.in_range("start_star", start_star, 1, 27) - 1) % len(spec.order)
     remaining_fraction = 1.0 - (lon - nak * NAKSHATRA_SPAN) / NAKSHATRA_SPAN
     return int(spec.order[i]), spec.years[i] * remaining_fraction
 

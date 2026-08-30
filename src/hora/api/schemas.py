@@ -59,6 +59,15 @@ class DashaRequest(ChartRequest):
     system: str = Field("vimshottari", description="Dasha system key")
     levels: int = Field(2, ge=1, le=6, description="1=mahadasha, 2=+antardasha, ...")
     cycles: int = Field(1, ge=1, le=3)
+    start_star: int = Field(
+        1, ge=1, le=27,
+        description=(
+            "Which constellation from the Moon's starts the cycle, counted "
+            "inclusively. 1 is the Moon's own. Section 16.4.1 allows 4, 5 and "
+            "8 — the kshema, utpanna and adhana stars. The balance at birth "
+            "always comes from the Moon's own star; only the lord moves."
+        ),
+    )
     as_of: str | None = Field(
         None, description="ISO datetime; when given, the running period chain is returned too"
     )
