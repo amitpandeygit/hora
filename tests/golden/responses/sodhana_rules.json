@@ -215,10 +215,126 @@
       ],
       "question": "Let us consider some other hypothetical examples to understand all the rules correctly."
     },
+    "example_43": {
+      "chart": "Chart 6",
+      "graha_pinda": 75,
+      "graha_products": [
+        {
+          "multiplier": 5,
+          "planet": "Sun",
+          "product": 15,
+          "rasi": "Ge",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 8,
+          "planet": "Mars",
+          "product": 24,
+          "rasi": "Ge",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 5,
+          "planet": "Mercury",
+          "product": 15,
+          "rasi": "Ge",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 7,
+          "planet": "Venus",
+          "product": 21,
+          "rasi": "Ar",
+          "rekhas": 3
+        }
+      ],
+      "question": "Let us continue with Mercury's SoAV found in Example 40 and Example 41.",
+      "rasi_pinda": 77,
+      "rasi_products": [
+        {
+          "multiplier": 7,
+          "product": 21,
+          "rasi": "Ar",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 10,
+          "product": 10,
+          "rasi": "Ta",
+          "rekhas": 1
+        },
+        {
+          "multiplier": 8,
+          "product": 24,
+          "rasi": "Ge",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 11,
+          "product": 22,
+          "rasi": "Aq",
+          "rekhas": 2
+        }
+      ],
+      "soav": [
+        3,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "sodhya_pinda": 152
+    },
     "intro": "We discussed the computation of BAV before. By applying some reductions on the values in BAV, we get \u201cSodhita Ashtakavarga\u201d (SoAV). Using it, we find Sodhya Pindas of different planets. These pindas are very important in predicting key events and we will talk about them again in the part \u201cTransit Analysis\u201d.",
-    "pinda_not_yet_defined": "Section 12.5 names sodhya pindas beside ashtakavarga as a second family of principles. Section 12.7 gives the pipeline \u2014 BAV, then reductions, then a Sodhita Ashtakavarga, then the pindas \u2014 and section 12.7.1 supplies the first reduction, Trikona Sodhana, at /v1/sodhana/trikona. The step that turns a SoAV into a pinda is still not defined, so nothing computes one. See docs/open-items.md OI-101.",
     "soav_is_a_reduced_bav": "A SoAV is a BAV with reductions applied. The pindas are computed from the SoAV, not from the BAV.",
     "soav_means": "Sodhita Ashtakavarga",
+    "sodhya_pinda": {
+      "definition": "After carrying out Trikona sodhana and then Ekaadhipatya sodhana on the BAV of a planet, we get the \u201cSodhita Ashtakavarga\u201d of that planet. We denote Sodhita Ashtakavarga with SoAV. From it, we find \u201cSodhya Pinda\u201d of each planet. This will be used in transit analysis.",
+      "excludes_lagna": "A graha pinda sums over the seven planets. Lagna is an ashtakavarga reference but has no multiplier in Table 29, and section 12.7.3 says 'all the 7 planets'. Rahu and Ketu are absent for the same reason.",
+      "footnote_45": "This chart has several purposes which will not be covered in this book. An example is Vaastu or Sthaapatya Veda or the Vedic Science of Architecture. The direction signified by the rasis containing most rekhas in the SoAV of a planet should contain the room in which the activity related to the planet takes place. For example, we should look at the SoAV of Venus to decide where bedroom should be. We should look Jupiter's SoAV to decide where money and jewels should be kept. We should look at Moon's SoAV to decide the living room (hall). Mercury is important for the study room. Sun is important for the pooja room.",
+      "footnote_45_not_implemented": "Footnote 45 gives a complete Vaastu rule \u2014 the direction of the rasi holding the most rekhas in a planet's SoAV \u2014 but says the subject 'will not be covered in this book'. It is transcribed and its five room assignments are served, and nothing computes a direction from it.",
+      "footnote_45_rooms": {
+        "Jupiter": "where money and jewels should be kept",
+        "Mercury": "the study room",
+        "Moon": "the living room (hall)",
+        "Sun": "the pooja room",
+        "Venus": "bedroom"
+      },
+      "graha_pinda_rule": "For each planet, we multiply the number in the rasi containing that planet with the multiplier of that planet (shown in Table 29). We find such a product for all the 7 planets. We find the sum of the products of all the 7 planets and the sum is called graha pinda.",
+      "inherits": "A pinda is computed from a SoAV, so it inherits both of section 12.7.2's open questions: D-41's uncovered tie and OI-104's undefined occupancy. Neither reaches Example 43, whose pairs all stop at rule (1).",
+      "rasi_pinda_rule": "For each rasi, we multiply the number in that rasi in SoAV with the multiplier of that rasi (shown in Table 28). We find such a product for all the 12 rasis. We find the sum of the products of all the 12 rasis and the sum is called rasi pinda.",
+      "rule": "By adding rasi pinda and graha pinda, we get \u201cSodhya Pinda\u201d of the planet whose SoAV we are working with.",
+      "table_28_rasimana": [
+        7,
+        10,
+        8,
+        4,
+        10,
+        6,
+        7,
+        8,
+        9,
+        5,
+        11,
+        12
+      ],
+      "table_29_grahamana": {
+        "Jupiter": 10,
+        "Mars": 8,
+        "Mercury": 5,
+        "Moon": 5,
+        "Saturn": 5,
+        "Sun": 5,
+        "Venus": 7
+      }
+    },
     "trikona_sodhana": {
       "disputed_case": "two rasis at zero and the third above zero",
       "disputed_case_note": "The reading PVR rejects differs from Parasara's on exactly 24 of the 729 possible trine triples, all of them with two zeros and a non-zero third. Everywhere else the two agree.",

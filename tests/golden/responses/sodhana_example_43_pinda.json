@@ -1,0 +1,190 @@
+{
+  "body": {
+    "definition": "After carrying out Trikona sodhana and then Ekaadhipatya sodhana on the BAV of a planet, we get the \u201cSodhita Ashtakavarga\u201d of that planet. We denote Sodhita Ashtakavarga with SoAV. From it, we find \u201cSodhya Pinda\u201d of each planet. This will be used in transit analysis.",
+    "graha_pinda": {
+      "excludes_lagna": "A graha pinda sums over the seven planets. Lagna is an ashtakavarga reference but has no multiplier in Table 29, and section 12.7.3 says 'all the 7 planets'. Rahu and Ketu are absent for the same reason.",
+      "products": [
+        {
+          "multiplier": 5,
+          "planet": "Sun",
+          "product": 15,
+          "rasi": "Gemini",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 5,
+          "planet": "Moon",
+          "product": 0,
+          "rasi": "Pisces",
+          "rekhas": 0
+        },
+        {
+          "multiplier": 8,
+          "planet": "Mars",
+          "product": 24,
+          "rasi": "Gemini",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 5,
+          "planet": "Mercury",
+          "product": 15,
+          "rasi": "Gemini",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 10,
+          "planet": "Jupiter",
+          "product": 0,
+          "rasi": "Leo",
+          "rekhas": 0
+        },
+        {
+          "multiplier": 7,
+          "planet": "Venus",
+          "product": 21,
+          "rasi": "Aries",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 5,
+          "planet": "Saturn",
+          "product": 0,
+          "rasi": "Leo",
+          "rekhas": 0
+        }
+      ],
+      "rule": "For each planet, we multiply the number in the rasi containing that planet with the multiplier of that planet (shown in Table 29). We find such a product for all the 7 planets. We find the sum of the products of all the 7 planets and the sum is called graha pinda.",
+      "total": 75
+    },
+    "occupancy_undefined": "Section 12.7.2 says 'occupied by a planet (or planets)' without saying whether Rahu and Ketu count. Example 42's occupants are Mars, Jupiter and Saturn only, so it does not settle the question. Our API makes the caller state which rasis are occupied rather than choosing for them.",
+    "owner": "Mercury",
+    "rasi_pinda": {
+      "products": [
+        {
+          "multiplier": 7,
+          "product": 21,
+          "rasi": "Aries",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 10,
+          "product": 10,
+          "rasi": "Taurus",
+          "rekhas": 1
+        },
+        {
+          "multiplier": 8,
+          "product": 24,
+          "rasi": "Gemini",
+          "rekhas": 3
+        },
+        {
+          "multiplier": 4,
+          "product": 0,
+          "rasi": "Cancer",
+          "rekhas": 0
+        },
+        {
+          "multiplier": 10,
+          "product": 0,
+          "rasi": "Leo",
+          "rekhas": 0
+        },
+        {
+          "multiplier": 6,
+          "product": 0,
+          "rasi": "Virgo",
+          "rekhas": 0
+        },
+        {
+          "multiplier": 7,
+          "product": 0,
+          "rasi": "Libra",
+          "rekhas": 0
+        },
+        {
+          "multiplier": 8,
+          "product": 0,
+          "rasi": "Scorpio",
+          "rekhas": 0
+        },
+        {
+          "multiplier": 9,
+          "product": 0,
+          "rasi": "Sagittarius",
+          "rekhas": 0
+        },
+        {
+          "multiplier": 5,
+          "product": 0,
+          "rasi": "Capricorn",
+          "rekhas": 0
+        },
+        {
+          "multiplier": 11,
+          "product": 22,
+          "rasi": "Aquarius",
+          "rekhas": 2
+        },
+        {
+          "multiplier": 12,
+          "product": 0,
+          "rasi": "Pisces",
+          "rekhas": 0
+        }
+      ],
+      "rule": "For each rasi, we multiply the number in that rasi in SoAV with the multiplier of that rasi (shown in Table 28). We find such a product for all the 12 rasis. We find the sum of the products of all the 12 rasis and the sum is called rasi pinda.",
+      "total": 77
+    },
+    "rule": "By adding rasi pinda and graha pinda, we get \u201cSodhya Pinda\u201d of the planet whose SoAV we are working with.",
+    "sodhya_pinda": 152,
+    "steps": {
+      "after_trikona": [
+        3,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "bav": [
+        7,
+        4,
+        7,
+        4,
+        4,
+        3,
+        4,
+        4,
+        4,
+        3,
+        6,
+        4
+      ],
+      "soav": [
+        3,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ]
+    },
+    "tie_hit_in_this_chart": [],
+    "tie_reading": null
+  },
+  "status": 200
+}

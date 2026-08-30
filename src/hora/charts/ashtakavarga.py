@@ -44,6 +44,8 @@ from hora.core.const import (
     SAV_STRONG_FROM,
     SAV_TOTAL,
     SUN_ASHTAKAVARGA_ROWS,
+    TABLE_28_RASIMANA,
+    TABLE_29_GRAHAMANA,
     VENUS_ASHTAKAVARGA_ROWS,
     Graha,
 )
@@ -844,3 +846,81 @@ def _reduce_co_owned(before: tuple[int, int], occupied: tuple[bool, bool]
         return (0, 0), "4a", False
     lower = min(before)                                 # (4b) both empty, differ
     return (lower, lower), "4b", False
+
+
+# --------------------------------------------------------------------------
+# §12.7.3 — Sodhya Pindas
+# --------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class SodhyaPinda:
+    """§12.7.3's pinda for one planet, with both halves and their working."""
+
+    #: The planet whose SoAV this was computed from.
+    owner: str
+    #: The SoAV it was computed from — a trikona- then ekaadhipatya-reduced
+    #: BAV. Not a raw BAV; §12.7.3 is explicit about the order.
+    soav: tuple[int, ...]
+    #: ``(rasi, rekhas, multiplier, product)`` for each of the twelve.
+    rasi_products: tuple[tuple[int, int, int, int], ...]
+    #: ``(planet, sign, rekhas, multiplier, product)`` for each of the seven.
+    graha_products: tuple[tuple[str, int, int, int, int], ...]
+    rasi_pinda: int
+    graha_pinda: int
+    #: Their sum.
+    sodhya_pinda: int
+
+
+def sodhya_pinda(owner: str, soav: Sequence[int],
+                 graha_signs: dict[str, int]) -> SodhyaPinda:
+    """§12.7.3's sodhya pinda from a planet's SoAV.
+
+    :param soav: twelve counts, Aries first — the output of
+        `ekaadhipatya_sodhana`, itself fed by `trikona_sodhana`. Passing a raw
+        BAV is a caller error the signature cannot catch, so §12.7.3's order
+        is stated on the service and the endpoint instead.
+    :param graha_signs: the seven planets of Table 29 to their signs. Lagna
+        and the nodes are not among them — see
+        `GRAHA_PINDA_EXCLUDES_LAGNA`.
+    """
+    if len(soav) != 12:
+        raise AshtakavargaError(
+            f"a SoAV has twelve values, one per rasi; got {len(soav)}")
+    for sign, value in enumerate(soav):
+        validate.in_range(f"{RASI_NAMES[sign]} rekhas", int(value), 0, 8)
+
+    missing = [p for p in TABLE_29_GRAHAMANA if p not in graha_signs]
+    if missing:
+        raise AshtakavargaError(
+            f"a graha pinda runs over all seven planets of Table 29; "
+            f"{', '.join(missing)} "
+            f"{'is' if len(missing) == 1 else 'are'} missing")
+    extra = [p for p in graha_signs if p not in TABLE_29_GRAHAMANA]
+    if extra:
+        raise AshtakavargaError(
+            f"{', '.join(sorted(extra))} has no multiplier in Table 29; the "
+            f"seven are {', '.join(TABLE_29_GRAHAMANA)}")
+    for name, sign in graha_signs.items():
+        validate.in_range(f"{name} sign", int(sign), 0, 11)
+
+    rasi_products = tuple(
+        (sign, int(soav[sign]), TABLE_28_RASIMANA[sign],
+         int(soav[sign]) * TABLE_28_RASIMANA[sign])
+        for sign in range(12)
+    )
+    graha_products = tuple(
+        (planet, int(graha_signs[planet]), int(soav[graha_signs[planet]]),
+         multiplier, int(soav[graha_signs[planet]]) * multiplier)
+        for planet, multiplier in TABLE_29_GRAHAMANA.items()
+    )
+    rasi_total = sum(product for *_, product in rasi_products)
+    graha_total = sum(product for *_, product in graha_products)
+    return SodhyaPinda(
+        owner=owner,
+        soav=tuple(int(v) for v in soav),
+        rasi_products=rasi_products,
+        graha_products=graha_products,
+        rasi_pinda=rasi_total,
+        graha_pinda=graha_total,
+        sodhya_pinda=rasi_total + graha_total,
+    )

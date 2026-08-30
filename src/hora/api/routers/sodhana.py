@@ -12,6 +12,8 @@ from hora.api.models_sodhana import (
     EkaadhipatyaIn,
     EkaadhipatyaOut,
     SodhanaRulesOut,
+    SodhyaPindaIn,
+    SodhyaPindaOut,
     TrikonaSodhanaIn,
     TrikonaSodhanaOut,
 )
@@ -44,6 +46,18 @@ def ekaadhipatya(req: EkaadhipatyaIn) -> dict:
         return sodhana_service.ekaadhipatya(
             req.owner, req.rekhas, req.reference_signs,
             req.occupied_signs, req.already_trikona_reduced)
+    except (sodhana_service.AshtakavargaError,
+            sodhana_service.InputError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/pinda", response_model=SodhyaPindaOut,
+             summary="Section 12.7.3 — a planet's sodhya pinda, end to end")
+def pinda(req: SodhyaPindaIn) -> dict:
+    try:
+        return sodhana_service.pinda(
+            req.owner, req.reference_signs, req.graha_signs,
+            req.occupied_signs)
     except (sodhana_service.AshtakavargaError,
             sodhana_service.InputError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

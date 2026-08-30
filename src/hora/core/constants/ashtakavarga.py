@@ -575,13 +575,13 @@ MUHURTA_DEFINITION = (
 
 #: §12.5 names "sodhya pindas" alongside ashtakavarga. Nothing read so far
 #: defines them. See docs/open-items.md OI-101.
-SODHYA_PINDA_NOT_YET_DEFINED = (
+SODHYA_PINDA_WHERE_DEFINED = (
     "Section 12.5 names sodhya pindas beside ashtakavarga as a second family "
-    "of principles. Section 12.7 gives the pipeline — BAV, then reductions, "
-    "then a Sodhita Ashtakavarga, then the pindas — and section 12.7.1 "
-    "supplies the first reduction, Trikona Sodhana, at /v1/sodhana/trikona. "
-    "The step that turns a SoAV into a pinda is still not defined, so nothing "
-    "computes one. See docs/open-items.md OI-101.")
+    "of principles without defining them. Section 12.7 defines the whole "
+    "pipeline — BAV, then Trikona Sodhana (12.7.1), then Ekaadhipatya "
+    "Sodhana (12.7.2), giving a Sodhita Ashtakavarga, then the pinda "
+    "(12.7.3). It is served at /v1/sodhana/pinda, which runs all four steps "
+    "and returns every intermediate.")
 
 
 # --------------------------------------------------------------------------
@@ -1037,3 +1037,94 @@ EXAMPLE_42_CASES: tuple[tuple[str, tuple[int, int], tuple[str, ...],
 #: Example 41 covers rule (1) and Example 42 the other five branches, so
 #: between them the book works every rule it states. Nothing is untested.
 EKAADHIPATYA_RULES_ALL_EXERCISED = ("1", "2", "3a", "3b", "4a", "4b")
+
+
+# -- §12.7.3 Sodhya Pindas --------------------------------------------------
+
+SODHYA_PINDA_DEFINITION = (
+    "After carrying out Trikona sodhana and then Ekaadhipatya sodhana on the "
+    "BAV of a planet, we get the “Sodhita Ashtakavarga” of that planet. "
+    "We denote Sodhita Ashtakavarga with SoAV. From it, we find “Sodhya "
+    "Pinda” of each planet. This will be used in transit analysis.")
+
+RASI_PINDA_RULE = (
+    "For each rasi, we multiply the number in that rasi in SoAV with the "
+    "multiplier of that rasi (shown in Table 28). We find such a product for "
+    "all the 12 rasis. We find the sum of the products of all the 12 rasis "
+    "and the sum is called rasi pinda.")
+
+GRAHA_PINDA_RULE = (
+    "For each planet, we multiply the number in the rasi containing that "
+    "planet with the multiplier of that planet (shown in Table 29). We find "
+    "such a product for all the 7 planets. We find the sum of the products of "
+    "all the 7 planets and the sum is called graha pinda.")
+
+SODHYA_PINDA_RULE = (
+    "By adding rasi pinda and graha pinda, we get “Sodhya Pinda” of the "
+    "planet whose SoAV we are working with.")
+
+#: Table 28 — the rasimana multipliers, Aries first.
+TABLE_28_RASIMANA: tuple[int, ...] = (7, 10, 8, 4, 10, 6, 7, 8, 9, 5, 11, 12)
+
+#: Table 29 — the grahamana multipliers. Seven planets; lagna and the nodes
+#: are not among them, and §12.7.3 says "all the 7 planets" outright.
+TABLE_29_GRAHAMANA: dict[str, int] = {
+    "Sun": 5, "Moon": 5, "Mars": 8, "Mercury": 5,
+    "Jupiter": 10, "Venus": 7, "Saturn": 5,
+}
+
+#: A graha pinda runs over seven planets, not the eight ashtakavarga
+#: references. Lagna has a multiplier in neither table.
+GRAHA_PINDA_EXCLUDES_LAGNA = (
+    "A graha pinda sums over the seven planets. Lagna is an ashtakavarga "
+    "reference but has no multiplier in Table 29, and section 12.7.3 says "
+    "'all the 7 planets'. Rahu and Ketu are absent for the same reason.")
+
+#: Footnote 45 — the SoAV's other use, which the book states and then declines
+#: to develop. Transcribed, not implemented.
+SODHYA_PINDA_FOOTNOTE_45 = (
+    "This chart has several purposes which will not be covered in this book. "
+    "An example is Vaastu or Sthaapatya Veda or the Vedic Science of "
+    "Architecture. The direction signified by the rasis containing most "
+    "rekhas in the SoAV of a planet should contain the room in which the "
+    "activity related to the planet takes place. For example, we should look "
+    "at the SoAV of Venus to decide where bedroom should be. We should look "
+    "Jupiter's SoAV to decide where money and jewels should be kept. We "
+    "should look at Moon's SoAV to decide the living room (hall). Mercury is "
+    "important for the study room. Sun is important for the pooja room.")
+
+#: The five rooms footnote 45 assigns. Recorded because it is concrete; not
+#: computed, because the book says the subject is out of its scope.
+FOOTNOTE_45_ROOMS: dict[str, str] = {
+    "Venus": "bedroom",
+    "Jupiter": "where money and jewels should be kept",
+    "Moon": "the living room (hall)",
+    "Mercury": "the study room",
+    "Sun": "the pooja room",
+}
+
+FOOTNOTE_45_NOT_IMPLEMENTED = (
+    "Footnote 45 gives a complete Vaastu rule — the direction of the rasi "
+    "holding the most rekhas in a planet's SoAV — but says the subject 'will "
+    "not be covered in this book'. It is transcribed and its five room "
+    "assignments are served, and nothing computes a direction from it.")
+
+EXAMPLE_43 = (
+    "Let us continue with Mercury's SoAV found in Example 40 and Example 41.")
+
+#: Example 43's input is Example 41's output, which is Example 40's output.
+EXAMPLE_43_SOAV: tuple[int, ...] = EXAMPLE_41_ANSWER
+
+EXAMPLE_43_RASI_PINDA = 77
+EXAMPLE_43_GRAHA_PINDA = 75
+EXAMPLE_43_SODHYA_PINDA = 152
+
+#: The products the example writes out, so the working is checked and not
+#: only the total. ``(what, rekhas, multiplier, product)``.
+EXAMPLE_43_RASI_PRODUCTS: tuple[tuple[str, int, int, int], ...] = (
+    ("Ar", 3, 7, 21), ("Ta", 1, 10, 10), ("Ge", 3, 8, 24), ("Aq", 2, 11, 22),
+)
+EXAMPLE_43_GRAHA_PRODUCTS: tuple[tuple[str, str, int, int, int], ...] = (
+    ("Sun", "Ge", 3, 5, 15), ("Mars", "Ge", 3, 8, 24),
+    ("Mercury", "Ge", 3, 5, 15), ("Venus", "Ar", 3, 7, 21),
+)

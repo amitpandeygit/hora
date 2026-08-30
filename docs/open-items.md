@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 62 waiting on evidence · 2 parked**
+**5 waiting on Amit · 61 waiting on evidence · 2 parked**
 
 ---
 
@@ -637,28 +637,6 @@ ours has an opinion. The caller states it.
 
 **Closes when:** the Transit Analysis part states it, or a worked example
 places a node in a co-owned pair.
-
-### OI-101 — a sodhya pinda is still not defined, though its inputs now are
-
-§12.5 named them beside ashtakavarga; §12.7 has now started defining them:
-
-> "By applying some reductions on the values in BAV, we get 'Sodhita
-> Ashtakavarga' (SoAV). Using it, we find Sodhya Pindas of different planets."
-
-So the pipeline is BAV → reductions → SoAV → pinda. **§12.7.1 supplies the
-first reduction only** — Trikona Sodhana, implemented and verified against
-Example 40. What is still missing is any further reduction (the section is
-numbered 12.7.1, so at least one more is expected) and the step that turns a
-SoAV into a pinda, which is the number the phrase actually names.
-
-§12.7 also says the pindas are used in the "Transit Analysis" part, which is
-outside chapter 12 — so the *use* may be far away even once the definition
-lands.
-
-**What we do:** `/v1/sodhana/trikona` computes the first reduction. Nothing
-computes a pinda, and the endpoint does not pretend a reduced BAV is one.
-
-**Closes when:** a later section defines the pinda itself.
 
 ### OI-81 — no §11.6 yoga can be reported fully present, because strength is not built
 

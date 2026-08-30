@@ -127,7 +127,7 @@ from hora.core.const import (
     SAV_STRONG_FROM,
     SAV_TOTAL,
     SAV_WORKED_EXAMPLE,
-    SODHYA_PINDA_NOT_YET_DEFINED,
+    SODHYA_PINDA_WHERE_DEFINED,
     TABLE_19_WORKED_READING,
     TABLE_27_CHART,
     TABLE_27_MERCURY_PAV,
@@ -228,7 +228,7 @@ def rules() -> dict:
             "Nothing in the tables is re-derived per chart."
         ),
         "muhurta_definition": MUHURTA_DEFINITION,
-        "sodhya_pinda_not_yet_defined": SODHYA_PINDA_NOT_YET_DEFINED,
+        "sodhya_pinda_where_defined": SODHYA_PINDA_WHERE_DEFINED,
         "sav_definition": SAV_DEFINITION,
         "samudaaya_means": SAMUDAAYA_MEANS,
         "sarva_means": SARVA_MEANS,

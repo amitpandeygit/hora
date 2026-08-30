@@ -5,6 +5,7 @@ from hora.charts.ashtakavarga import (
     AshtakavargaError,
     bhinnashtakavarga,
     ekaadhipatya_sodhana,
+    sodhya_pinda,
     trikona_sodhana,
 )
 from hora.core.const import (
@@ -26,12 +27,28 @@ from hora.core.const import (
     EXAMPLE_41_ANSWER,
     EXAMPLE_42,
     EXAMPLE_42_CASES,
+    EXAMPLE_43,
+    EXAMPLE_43_GRAHA_PINDA,
+    EXAMPLE_43_GRAHA_PRODUCTS,
+    EXAMPLE_43_RASI_PINDA,
+    EXAMPLE_43_RASI_PRODUCTS,
+    EXAMPLE_43_SOAV,
+    EXAMPLE_43_SODHYA_PINDA,
+    FOOTNOTE_45_NOT_IMPLEMENTED,
+    FOOTNOTE_45_ROOMS,
     GRAHA_NAMES,
+    GRAHA_PINDA_EXCLUDES_LAGNA,
+    GRAHA_PINDA_RULE,
     RASI_NAMES,
+    RASI_PINDA_RULE,
     SOAV_IS_A_REDUCED_BAV,
     SOAV_MEANS,
-    SODHYA_PINDA_NOT_YET_DEFINED,
+    SODHYA_PINDA_DEFINITION,
+    SODHYA_PINDA_FOOTNOTE_45,
+    SODHYA_PINDA_RULE,
     SODHYA_PINDAS_INTRO,
+    TABLE_28_RASIMANA,
+    TABLE_29_GRAHAMANA,
     TRIKONA_SODHANA_DISPUTED_CASE,
     TRIKONA_SODHANA_FOOTNOTE_44,
     TRIKONA_SODHANA_MEANS,
@@ -141,13 +158,102 @@ def ekaadhipatya(owner: str, rekhas: list[int] | None,
     }
 
 
+def pinda(owner: str, reference_signs: dict[str, int],
+          graha_signs: dict[str, int], occupied_signs: list[int]) -> dict:
+    """Section 12.7.3's sodhya pinda, run end to end from a chart.
+
+    BAV, then 12.7.1, then 12.7.2, then the pinda — the order 12.7.3 states.
+    Every intermediate is returned, because the pinda is one number and a
+    caller who cannot see the SoAV cannot check it.
+    """
+    bav = bhinnashtakavarga(owner, reference_signs)
+    trikona_step = trikona_sodhana(owner, bav.rekhas)
+    ekaadhipatya_step = ekaadhipatya_sodhana(
+        owner, trikona_step.after, occupied_signs)
+    result = sodhya_pinda(owner, ekaadhipatya_step.after, graha_signs)
+    ties = [list(p.signs) for p in ekaadhipatya_step.pairs
+            if p.tie_not_covered_by_the_book]
+    return {
+        "owner": result.owner,
+        "definition": SODHYA_PINDA_DEFINITION,
+        "steps": {
+            "bav": list(bav.rekhas),
+            "after_trikona": list(trikona_step.after),
+            "soav": list(result.soav),
+        },
+        "rasi_pinda": {
+            "rule": RASI_PINDA_RULE,
+            "total": result.rasi_pinda,
+            "products": [
+                {"rasi": str(RASI_NAMES[sign]), "rekhas": rekhas,
+                 "multiplier": multiplier, "product": product}
+                for sign, rekhas, multiplier, product in result.rasi_products
+            ],
+        },
+        "graha_pinda": {
+            "rule": GRAHA_PINDA_RULE,
+            "total": result.graha_pinda,
+            "excludes_lagna": GRAHA_PINDA_EXCLUDES_LAGNA,
+            "products": [
+                {"planet": planet, "rasi": str(RASI_NAMES[sign]),
+                 "rekhas": rekhas, "multiplier": multiplier,
+                 "product": product}
+                for planet, sign, rekhas, multiplier, product
+                in result.graha_products
+            ],
+        },
+        "sodhya_pinda": result.sodhya_pinda,
+        "rule": SODHYA_PINDA_RULE,
+        "tie_hit_in_this_chart": ties,
+        "tie_reading": EKAADHIPATYA_TIE_READING if ties else None,
+        "occupancy_undefined": EKAADHIPATYA_OCCUPANCY_UNDEFINED,
+    }
+
+
 def rules() -> dict:
     """Section 12.7's framing, its three rules, and Example 40."""
     return {
         "intro": SODHYA_PINDAS_INTRO,
         "soav_means": SOAV_MEANS,
         "soav_is_a_reduced_bav": SOAV_IS_A_REDUCED_BAV,
-        "pinda_not_yet_defined": SODHYA_PINDA_NOT_YET_DEFINED,
+        "sodhya_pinda": {
+            "definition": SODHYA_PINDA_DEFINITION,
+            "rasi_pinda_rule": RASI_PINDA_RULE,
+            "graha_pinda_rule": GRAHA_PINDA_RULE,
+            "rule": SODHYA_PINDA_RULE,
+            "table_28_rasimana": list(TABLE_28_RASIMANA),
+            "table_29_grahamana": dict(TABLE_29_GRAHAMANA),
+            "excludes_lagna": GRAHA_PINDA_EXCLUDES_LAGNA,
+            "inherits": (
+                "A pinda is computed from a SoAV, so it inherits both of "
+                "section 12.7.2's open questions: D-41's uncovered tie and "
+                "OI-104's undefined occupancy. Neither reaches Example 43, "
+                "whose pairs all stop at rule (1)."
+            ),
+            "footnote_45": SODHYA_PINDA_FOOTNOTE_45,
+            "footnote_45_rooms": dict(FOOTNOTE_45_ROOMS),
+            "footnote_45_not_implemented": FOOTNOTE_45_NOT_IMPLEMENTED,
+        },
+        "example_43": {
+            "question": EXAMPLE_43,
+            "soav": list(EXAMPLE_43_SOAV),
+            "rasi_pinda": EXAMPLE_43_RASI_PINDA,
+            "graha_pinda": EXAMPLE_43_GRAHA_PINDA,
+            "sodhya_pinda": EXAMPLE_43_SODHYA_PINDA,
+            "rasi_products": [
+                {"rasi": rasi, "rekhas": rekhas, "multiplier": multiplier,
+                 "product": product}
+                for rasi, rekhas, multiplier, product
+                in EXAMPLE_43_RASI_PRODUCTS
+            ],
+            "graha_products": [
+                {"planet": planet, "rasi": rasi, "rekhas": rekhas,
+                 "multiplier": multiplier, "product": product}
+                for planet, rasi, rekhas, multiplier, product
+                in EXAMPLE_43_GRAHA_PRODUCTS
+            ],
+            "chart": "Chart 6",
+        },
         "ekaadhipatya_sodhana": {
             "means": EKAADHIPATYA_SODHANA_MEANS,
             "rule": EKAADHIPATYA_SODHANA_RULE,
@@ -221,5 +327,5 @@ def rules() -> dict:
     }
 
 
-__all__ = ["AshtakavargaError", "InputError", "ekaadhipatya", "rules",
-           "trikona"]
+__all__ = ["AshtakavargaError", "InputError", "ekaadhipatya", "pinda",
+           "rules", "trikona"]

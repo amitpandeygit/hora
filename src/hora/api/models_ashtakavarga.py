@@ -112,7 +112,7 @@ class AshtakavargaRulesOut(BaseModel):
     )
     divisional_example: dict
     divisional_note: str
-    sodhya_pinda_not_yet_defined: str = Field(
+    sodhya_pinda_where_defined: str = Field(
         description="A second family of principles section 12.5 names and "
                     "nothing read so far defines. See OI-101.",
     )

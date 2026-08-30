@@ -38,12 +38,13 @@ class SodhanaRulesOut(BaseModel):
     intro: str
     soav_means: str
     soav_is_a_reduced_bav: str
-    pinda_not_yet_defined: str
     trikona_sodhana: dict
     ekaadhipatya_sodhana: dict
+    sodhya_pinda: dict
     example_40: dict
     example_41: dict
     example_42: dict
+    example_43: dict
 
 
 class EkaadhipatyaIn(BaseModel):
@@ -84,3 +85,30 @@ class EkaadhipatyaOut(BaseModel):
     tie_is_uncovered: str
     tie_reading: str
     tie_hit_in_this_chart: list[list[int]]
+
+
+class SodhyaPindaIn(BaseModel):
+    """Section 12.7.3, run end to end. `occupied_signs` is required for the
+    same reason as on /ekaadhipatya — the book gives no default."""
+
+    owner: str = Field(..., examples=["Mercury"])
+    reference_signs: dict[str, int] = Field(..., examples=[{
+        "Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+        "Jupiter": 4, "Venus": 0, "Saturn": 4, "Lagna": 5}])
+    graha_signs: dict[str, int] = Field(..., examples=[{
+        "Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+        "Jupiter": 4, "Venus": 0, "Saturn": 4}])
+    occupied_signs: list[int] = Field(..., examples=[[0, 2, 4, 11]])
+
+
+class SodhyaPindaOut(BaseModel):
+    owner: str
+    definition: str
+    steps: dict
+    rasi_pinda: dict
+    graha_pinda: dict
+    sodhya_pinda: int
+    rule: str
+    tie_hit_in_this_chart: list[list[int]]
+    tie_reading: str | None = None
+    occupancy_undefined: str

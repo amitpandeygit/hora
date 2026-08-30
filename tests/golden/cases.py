@@ -294,6 +294,15 @@ CASES = [
         "occupied_signs": [],
         "already_trikona_reduced": True,
     }),
+    ("sodhana_example_43_pinda", "POST", "/v1/sodhana/pinda", {
+        "owner": "Mercury",
+        "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+                            "Jupiter": 4, "Venus": 0, "Saturn": 4,
+                            "Lagna": 5},
+        "graha_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+                        "Jupiter": 4, "Venus": 0, "Saturn": 4},
+        "occupied_signs": [],
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

@@ -87,6 +87,12 @@ from hora.core.const import (
     EXAMPLE_40_WORKED,
     EXAMPLE_41_ANSWER,
     EXAMPLE_42_CASES,
+    EXAMPLE_43_GRAHA_PINDA,
+    EXAMPLE_43_GRAHA_PRODUCTS,
+    EXAMPLE_43_RASI_PINDA,
+    EXAMPLE_43_RASI_PRODUCTS,
+    EXAMPLE_43_SOAV,
+    EXAMPLE_43_SODHYA_PINDA,
     EXERCISE_18,
     EXERCISE_18_ANSWER,
     EXERCISE_18_HINT,
@@ -106,6 +112,9 @@ from hora.core.const import (
     EXERCISE_21_TENTH,
     EXERCISE_21_TENTH_REKHAS,
     EXERCISE_21_VERDICT,
+    FOOTNOTE_45_NOT_IMPLEMENTED,
+    FOOTNOTE_45_ROOMS,
+    GRAHA_PINDA_EXCLUDES_LAGNA,
     MUHURTA_DEFINITION,
     MUHURTA_FOOTNOTE,
     PRASTAARA_COLUMN_NOTE,
@@ -126,13 +135,16 @@ from hora.core.const import (
     SAV_TOTAL,
     SOAV_IS_A_REDUCED_BAV,
     SOAV_MEANS,
-    SODHYA_PINDA_NOT_YET_DEFINED,
+    SODHYA_PINDA_FOOTNOTE_45,
+    SODHYA_PINDA_WHERE_DEFINED,
     SODHYA_PINDAS_INTRO,
     SUN_ASHTAKAVARGA_ROWS,
     TABLE_19_WORKED_READING,
     TABLE_27_MERCURY_PAV,
     TABLE_27_OWNER,
     TABLE_27_TOTALS,
+    TABLE_28_RASIMANA,
+    TABLE_29_GRAHAMANA,
     TRIKONA_SODHANA_DISPUTED_CASE,
     TRIKONA_SODHANA_FOOTNOTE_44,
     TRINE_SET_NAMES,
@@ -1411,20 +1423,19 @@ def test_the_chart_endpoint_labels_itself_as_the_rasi_chart(client):
     assert body["chart"] == "D1"
 
 
-def test_sodhya_pindas_have_their_inputs_defined_but_not_the_pinda():
-    """§12.5 names them beside ashtakavarga. §12.7 then gives the pipeline —
-    BAV, reductions, SoAV, pindas — and §12.7.1 supplies the first reduction.
-    The step that makes a pinda is still missing. See OI-101."""
+def test_sodhya_pindas_are_named_in_12_5_and_defined_in_12_7():
+    """§12.5 names them beside ashtakavarga without saying what they are;
+    §12.7 defines the whole pipeline. OI-101 is closed."""
     assert "sodhya pindas" in AV_NOT_ONLY_RASI
-    assert "Trikona Sodhana" in SODHYA_PINDA_NOT_YET_DEFINED
-    assert "still not defined" in SODHYA_PINDA_NOT_YET_DEFINED
+    assert "12.7.3" in SODHYA_PINDA_WHERE_DEFINED
+    assert "/v1/sodhana/pinda" in SODHYA_PINDA_WHERE_DEFINED
 
 
 def test_the_rules_endpoint_carries_12_5(client):
     body = client.get("/v1/ashtakavarga/rules").json()
     assert "misconception" in body["not_only_rasi"]
     assert body["divisional_example"]["chart"] == "D12"
-    assert "sodhya pindas" in body["sodhya_pinda_not_yet_defined"]
+    assert "sodhya pindas" in body["sodhya_pinda_where_defined"]
     assert "auspicious pre-set time" in body["muhurta_definition"]
 
 
@@ -2472,7 +2483,7 @@ def test_the_sodhana_rules_endpoint_carries_section_12_7(client):
     assert len(body["example_40"]["worked"]) == 2
     assert len(body["trikona_sodhana"]["rules"]) == 3
     assert "24 of the 729" in body["trikona_sodhana"]["disputed_case_note"]
-    assert "still not defined" in body["pinda_not_yet_defined"]
+    assert body["sodhya_pinda"]["table_29_grahamana"]["Jupiter"] == 10
 
 
 # --------------------------------------------------------------------------
@@ -2667,3 +2678,178 @@ def test_the_sodhana_rules_endpoint_carries_12_7_2(client):
     assert len(body["example_42"]["cases"]) == 5
     assert "Rahu and Ketu" in body["ekaadhipatya_sodhana"][
         "occupancy_undefined"]
+
+
+# --------------------------------------------------------------------------
+# §12.7.3 — Sodhya Pindas, and Example 43
+# --------------------------------------------------------------------------
+
+CHART_6_GRAHA_SIGNS = {
+    name: sign for name, sign in CHART_6_SIGNS.items() if name != "Lagna"
+}
+
+
+def test_table_28_has_a_multiplier_for_every_rasi():
+    assert len(TABLE_28_RASIMANA) == 12
+    assert TABLE_28_RASIMANA == (7, 10, 8, 4, 10, 6, 7, 8, 9, 5, 11, 12)
+
+
+def test_table_29_has_a_multiplier_for_seven_planets_and_no_lagna():
+    """§12.7.3 says 'all the 7 planets'. Lagna is an ashtakavarga reference
+    but has no multiplier, and the nodes are absent for the same reason."""
+    assert list(TABLE_29_GRAHAMANA) == [
+        "Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+    assert "Lagna" not in TABLE_29_GRAHAMANA
+    assert set(TABLE_29_GRAHAMANA) < set(ASHTAKAVARGA_REFERENCES)
+    assert "no multiplier in Table 29" in GRAHA_PINDA_EXCLUDES_LAGNA
+
+
+def test_example_43s_rasi_pinda_product_by_product():
+    """The four non-zero products the example writes out, then the total."""
+    from hora.charts.ashtakavarga import sodhya_pinda
+
+    result = sodhya_pinda("Mercury", EXAMPLE_43_SOAV, CHART_6_GRAHA_SIGNS)
+    by_rasi = {RASI_ABBR[sign]: (rekhas, multiplier, product)
+               for sign, rekhas, multiplier, product in result.rasi_products}
+    for rasi, rekhas, multiplier, product in EXAMPLE_43_RASI_PRODUCTS:
+        assert by_rasi[rasi] == (rekhas, multiplier, product), rasi
+    assert result.rasi_pinda == EXAMPLE_43_RASI_PINDA == 77
+
+
+def test_example_43s_graha_pinda_product_by_product():
+    """'Sun, Mars and Mercury are in Ge, which has 3 rekhas in SoAV.'"""
+    from hora.charts.ashtakavarga import sodhya_pinda
+
+    result = sodhya_pinda("Mercury", EXAMPLE_43_SOAV, CHART_6_GRAHA_SIGNS)
+    by_planet = {planet: (RASI_ABBR[sign], rekhas, multiplier, product)
+                 for planet, sign, rekhas, multiplier, product
+                 in result.graha_products}
+    for planet, rasi, rekhas, multiplier, product in EXAMPLE_43_GRAHA_PRODUCTS:
+        assert by_planet[planet] == (rasi, rekhas, multiplier, product), planet
+    assert result.graha_pinda == EXAMPLE_43_GRAHA_PINDA == 75
+
+
+def test_example_43s_sodhya_pinda_is_the_sum_of_the_two():
+    from hora.charts.ashtakavarga import sodhya_pinda
+
+    result = sodhya_pinda("Mercury", EXAMPLE_43_SOAV, CHART_6_GRAHA_SIGNS)
+    assert result.sodhya_pinda == result.rasi_pinda + result.graha_pinda
+    assert result.sodhya_pinda == EXAMPLE_43_SODHYA_PINDA == 152
+
+
+def test_the_other_planets_contribute_nothing_because_their_rasis_are_zero():
+    """'Other planets are in rasis with zero in them.' Moon in Pi, Jupiter and
+    Saturn in Le — all zero after the two reductions."""
+    from hora.charts.ashtakavarga import sodhya_pinda
+
+    result = sodhya_pinda("Mercury", EXAMPLE_43_SOAV, CHART_6_GRAHA_SIGNS)
+    silent = {planet for planet, _, _, _, product in result.graha_products
+              if product == 0}
+    assert silent == {"Moon", "Jupiter", "Saturn"}
+    for planet in silent:
+        assert EXAMPLE_43_SOAV[CHART_6_GRAHA_SIGNS[planet]] == 0
+
+
+def test_the_whole_pipeline_runs_from_chart_6_to_one_hundred_and_fifty_two():
+    """§12.7.3's stated order: BAV, then 12.7.1, then 12.7.2, then the pinda.
+    Every intermediate is a printed answer from an earlier example."""
+    from hora.services import sodhana_service
+
+    body = sodhana_service.pinda(
+        "Mercury", CHART_6_SIGNS, CHART_6_GRAHA_SIGNS, [])
+    assert body["steps"]["bav"] == list(CHART_11_MERCURY_BAV)
+    assert body["steps"]["after_trikona"] == list(EXAMPLE_40_ANSWER)
+    assert body["steps"]["soav"] == list(EXAMPLE_41_ANSWER)
+    assert body["sodhya_pinda"] == EXAMPLE_43_SODHYA_PINDA == 152
+
+
+def test_a_pinda_needs_all_seven_planets_and_refuses_an_eighth():
+    from hora.charts.ashtakavarga import AshtakavargaError, sodhya_pinda
+
+    short = dict(CHART_6_GRAHA_SIGNS)
+    short.pop("Saturn")
+    with pytest.raises(AshtakavargaError, match="all seven planets"):
+        sodhya_pinda("Mercury", EXAMPLE_43_SOAV, short)
+
+    with_lagna = dict(CHART_6_GRAHA_SIGNS, Lagna=R["Vi"])
+    with pytest.raises(AshtakavargaError, match="no multiplier in Table 29"):
+        sodhya_pinda("Mercury", EXAMPLE_43_SOAV, with_lagna)
+
+
+def test_a_pinda_of_an_all_zero_soav_is_zero():
+    """The floor. A SoAV can legitimately reduce to nothing."""
+    from hora.charts.ashtakavarga import sodhya_pinda
+
+    result = sodhya_pinda("Mercury", [0] * 12, CHART_6_GRAHA_SIGNS)
+    assert result.rasi_pinda == result.graha_pinda == result.sodhya_pinda == 0
+
+
+def test_footnote_45s_vaastu_rule_is_recorded_and_not_computed():
+    """The footnote gives a complete rule but says the subject 'will not be
+    covered in this book'. We transcribe it and stop there."""
+    assert "will not be covered in this book" in SODHYA_PINDA_FOOTNOTE_45
+    assert FOOTNOTE_45_ROOMS["Venus"] == "bedroom"
+    assert FOOTNOTE_45_ROOMS["Sun"] == "the pooja room"
+    assert set(FOOTNOTE_45_ROOMS) == {
+        "Venus", "Jupiter", "Moon", "Mercury", "Sun"}
+    assert "nothing computes a direction" in FOOTNOTE_45_NOT_IMPLEMENTED
+
+
+def test_example_43_is_untouched_by_both_open_questions():
+    """A pinda inherits D-41's tie and OI-104's occupancy through the SoAV.
+    Example 41's pairs all stop at rule (1), so neither can reach Example 43 —
+    checked over every occupancy of up to three signs."""
+    from itertools import combinations
+
+    from hora.services import sodhana_service
+
+    for size in range(4):
+        for occupied in combinations(range(12), size):
+            body = sodhana_service.pinda(
+                "Mercury", CHART_6_SIGNS, CHART_6_GRAHA_SIGNS,
+                list(occupied))
+            assert body["sodhya_pinda"] == 152
+            assert body["tie_hit_in_this_chart"] == []
+
+
+def test_the_pinda_endpoint_reproduces_example_43(client):
+    body = client.post("/v1/sodhana/pinda", json={
+        "owner": "Mercury",
+        "reference_signs": CHART_6_SIGNS,
+        "graha_signs": CHART_6_GRAHA_SIGNS,
+        "occupied_signs": [],
+    }).json()
+    assert body["rasi_pinda"]["total"] == 77
+    assert body["graha_pinda"]["total"] == 75
+    assert body["sodhya_pinda"] == 152
+    assert body["steps"]["soav"] == list(EXAMPLE_43_SOAV)
+    assert len(body["rasi_pinda"]["products"]) == 12
+    assert len(body["graha_pinda"]["products"]) == 7
+
+
+def test_every_planet_has_a_pinda_in_chart_6(client):
+    """'we find Sodhya Pinda of each planet' — the structure has to work for
+    all eight ashtakavarga owners, lagna's own SoAV included."""
+    from hora.services import sodhana_service
+
+    pindas = {
+        owner: sodhana_service.pinda(
+            owner, CHART_6_SIGNS, CHART_6_GRAHA_SIGNS, [])["sodhya_pinda"]
+        for owner in ASHTAKAVARGA_REFERENCES
+    }
+    assert pindas["Mercury"] == 152
+    assert all(value >= 0 for value in pindas.values())
+    assert len(pindas) == 8
+
+
+def test_the_sodhana_rules_endpoint_carries_12_7_3(client):
+    body = client.get("/v1/sodhana/rules").json()
+    assert body["sodhya_pinda"]["table_28_rasimana"] == list(TABLE_28_RASIMANA)
+    assert body["sodhya_pinda"]["table_29_grahamana"] == dict(
+        TABLE_29_GRAHAMANA)
+    assert body["example_43"]["sodhya_pinda"] == 152
+    assert body["example_43"]["rasi_pinda"] == 77
+    assert body["example_43"]["graha_pinda"] == 75
+    assert body["sodhya_pinda"]["footnote_45_rooms"]["Mercury"] == (
+        "the study room")
+    assert "D-41" in body["sodhya_pinda"]["inherits"]

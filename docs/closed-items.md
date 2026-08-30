@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-5](#oi-5) | Upagrahas |
+| [OI-101](#oi-101) | "sodhya pindas" were named but not defined |
 | [OI-102](#oi-102) | Chart 3 had never been supplied |
 | [OI-100](#oi-100) | whether a sarvashtakavarga includes lagna's table |
 | [OI-99](#oi-99) | the ashtakavarga tables arrived one page at a time |
@@ -1724,3 +1725,47 @@ node (OI-68) — the first from the 1920s, though by the narrowest margin of the
 five.
 
 Chart 4 is still unseen. Nothing so far cites it.
+
+
+## OI-101 — "sodhya pindas" were named but not defined
+
+§12.5 named them beside ashtakavarga as a second family of principles and said
+nothing more:
+
+> "any principles based on ashtakavarga **and sodhya pindas** that let us
+> predict matters related to father must use D-12"
+
+**Closed by §12.7**, which defines the whole pipeline across three subsections,
+each verified against its own worked example:
+
+| step | section | verified by |
+|---|---|---|
+| BAV | §12.2 | Exercise 19, Table 27 |
+| Trikona Sodhana | §12.7.1 | Example 40 |
+| Ekaadhipatya Sodhana | §12.7.2 | Examples 41 and 42 |
+| SoAV → pinda | §12.7.3 | Example 43 |
+
+`POST /v1/sodhana/pinda` runs all four steps from a chart's reference signs and
+returns every intermediate, because a pinda is one number and a caller who
+cannot see the SoAV cannot check it. For Chart 6's Mercury the chain is
+
+    BAV            7 4 7 4 4 3 4 4 4 3 6 4
+    after trikona  3 1 3 0 0 0 0 0 0 0 2 0
+    SoAV           3 1 3 0 0 0 0 0 0 0 2 0   (rule (1) on all five pairs)
+    rasi pinda 77 + graha pinda 75 = 152
+
+every line of which is a printed answer from Exercise 18, Example 40, Example
+41 and Example 43 respectively.
+
+Two questions §12.7.2 left open — D-41's uncovered tie and OI-104's undefined
+occupancy — are inherited by every pinda, since a pinda is computed from a
+SoAV. Neither reaches Example 43: its five pairs all stop at rule (1), which a
+test confirms over every occupancy of up to three signs.
+
+Footnote 45's Vaastu use of the SoAV is transcribed with its five room
+assignments and deliberately not computed — the book says the subject "will not
+be covered in this book".
+
+§12.7 also says the pindas themselves are used in transit analysis, which is a
+later part of the book. The construction is complete; the application is not
+yet in scope.
