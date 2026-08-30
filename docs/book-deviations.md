@@ -1446,3 +1446,67 @@ The divergence is listed on `/v1/functional/rules`.
 
 **Closes when:** a worked example in a later chapter reads Taurus's Sun, or you
 decide the rule should override the table.
+
+## D-47 · §15.5.1's rule (2) illustration never reaches rule (2)
+
+**Status: BOOK DEFECT — no decision needed; the counting is still verifiable.**
+
+§15.5.1 states the cascade plainly: "We go from one rule to the next, only if
+we do not have a winner." Rules (3), (4), (5a) and (5b) each preface their
+example with "suppose we have a tie after step (N)". Rule (2)'s does not:
+
+> "Suppose Saturn is in Ge with Mercury, Rahu is in Ar, Mars is in Le, Jupiter
+> is in Ta."
+
+Saturn has a co-tenant and Rahu has none, so rule (1) already declares Saturn
+and the cascade stops before rule (2) is consulted. The example reaches the
+right planet by the wrong rule.
+
+**What we do:** `charts/colord.stronger` runs the cascade as written, so it
+decides this placement at rule (1). The rule-2 counts the section quotes — 2
+for Saturn, 1 for Rahu — are checked directly against `rule_2_count`, and a
+separate fixture gives Rahu a co-tenant so rule (2) genuinely decides.
+
+**Closes when:** nothing. The section's own cascade is unambiguous; only its
+illustration is loose.
+
+## D-48 · Exercise 25's answer does not follow from Chart 12
+
+**Status: BOOK DEFECT — our answer for Aquarius differs from the book's.**
+
+Exercise 25 asks for the primary lords of Aq and Sc in Chart 12. Four of the
+answer's premises contradict the chart it names. Chart 12 recomputes from its
+own birth line — 16 August 1958, 7:05 am (4:00 West), 83 W 53, 43 N 36 — with
+every graha inside an arcminute, so the chart is not in doubt.
+
+| the answer says | Chart 12 has |
+|---|---|
+| "Rahu is alone" | Rahu 2 Li 03 shares Libra with Jupiter 3 Li 06 |
+| Saturn's "dispositor (Jupiter again)" | Saturn 25 Sc 51; Scorpio's lord is Mars |
+| "Saturn is in a dual rasi" | Scorpio is fixed |
+| "Mars is in Sc" | Mars 22 Ar 05, in Aries |
+
+Everything the answer says about Rahu's dispositor being Venus, Rahu being in a
+movable rasi, Saturn being alone and Ketu being in Aries does hold. What fails
+is confined to Saturn's rasi and Mars's rasi. The answer is consistent with a
+chart in which Saturn sits in Sagittarius and Mars in Scorpio — which would
+make Saturn's dispositor Jupiter, put Saturn in a dual rasi, and let the basic
+rule settle Scorpio. Chart 12 puts Saturn in Scorpio and Mars in Aries.
+
+**On Chart 12 as printed:**
+
+| | book | ours |
+|---|---|---|
+| Aquarius | Saturn, by rule (4) | **Rahu, by rule (1)** — Rahu with Jupiter, Saturn alone |
+| Scorpio | Ketu, by the basic rule | Ketu, by rule (2) — Mars count 1, Ketu count 2 |
+
+Scorpio agrees on the planet but not the route: the basic rule cannot apply,
+because neither Mars nor Ketu is in Scorpio. Aquarius disagrees outright, and
+it disagrees at rule (1), the first rule the cascade tries.
+
+**What we do:** `charts/colord.stronger` runs the cascade against the chart as
+printed and returns Rahu for Aq and Ketu for Sc. The book's answers are not
+served.
+
+**Closes when:** the chart or the answer is corrected in a later printing, or
+you decide the exercise means a chart we do not hold.

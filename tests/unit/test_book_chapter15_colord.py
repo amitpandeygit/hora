@@ -339,3 +339,64 @@ def test_rule_5b_reports_that_it_needs_longitudes():
     assert verdict.rules[-1].rule == "5b"
     assert verdict.rules[-1].decided is None
     assert "needs longitudes" in verdict.rules[-1].detail
+
+
+# --------------------------------------------------------------------------
+# Exercise 25 — the primary lords of Aq and Sc in Chart 12. See D-48.
+# --------------------------------------------------------------------------
+
+
+def _chart_12():
+    from hora.charts.book import graha_longitudes
+
+    return {int(g): lon for g, lon in graha_longitudes(12).items()}
+
+
+def test_exercise_25_aquarius_gives_rahu_not_the_books_saturn():
+    """The book answers Saturn by rule (4). Chart 12 answers Rahu by rule (1).
+
+    Rahu at 2 Li 03 shares Libra with Jupiter at 3 Li 06, so he is not alone
+    and rule (1) decides at once. The answer's "Rahu is alone and Saturn is
+    alone" is the first of four premises that do not hold — see D-48.
+    """
+    verdict = stronger(Rasi.AQUARIUS, _chart_12(), purpose="arudha")
+    assert verdict.winner == int(Graha.RAHU)
+    assert verdict.decided_by == "1"
+    assert "Rahu with 1 other planet" in verdict.rules[1].detail
+
+
+def test_exercise_25_scorpio_reaches_the_books_planet_by_another_route():
+    """Ketu either way, but the book gets there by the basic rule.
+
+    That rule needs one co-lord to be sitting in Scorpio. Chart 12 has Mars at
+    22 Ar 05 and Ketu at 2 Ar 03 — both in Aries — so the basic rule cannot
+    fire and the cascade runs on to rule (2).
+    """
+    verdict = stronger(Rasi.SCORPIO, _chart_12(), purpose="arudha")
+    assert verdict.winner == int(Graha.KETU)
+    assert verdict.decided_by == "2"
+    assert verdict.rules[0].decided is False
+    assert "neither co-lord is in the rasi" in verdict.rules[0].detail
+
+
+def test_the_four_premises_of_exercise_25_that_chart_12_contradicts():
+    """Pinned so a later edit to Chart 12 cannot quietly make D-48 stale."""
+    from hora.core.const import RASI_LORD, RASI_MODALITY, Rasi
+
+    lons = _chart_12()
+    sign = lambda g: int(lons[int(g)] // 30)
+
+    # "Rahu is alone" — Jupiter is in the same rasi.
+    assert sign(Graha.RAHU) == sign(Graha.JUPITER) == int(Rasi.LIBRA)
+    # Saturn's dispositor is Mars, not Jupiter.
+    assert sign(Graha.SATURN) == int(Rasi.SCORPIO)
+    assert int(RASI_LORD[sign(Graha.SATURN)]) == int(Graha.MARS)
+    # Scorpio is fixed, not dual.
+    assert RASI_MODALITY[sign(Graha.SATURN)] == RASI_MODALITY[int(Rasi.TAURUS)]
+    # "Mars is in Sc" — he is in Aries, with Ketu.
+    assert sign(Graha.MARS) == sign(Graha.KETU) == int(Rasi.ARIES)
+
+    # What the answer does get right about Chart 12.
+    assert int(RASI_LORD[sign(Graha.RAHU)]) == int(Graha.VENUS)
+    assert [g for g in lons if g != int(Graha.SATURN)
+            and int(lons[g] // 30) == sign(Graha.SATURN)] == []
