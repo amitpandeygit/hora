@@ -2,6 +2,41 @@
   "body": {
     "combination_rule": "If all the three pairs result in the same longevity category, that will be the combined classification. If two pairs give one result and the third pair gives a different result, then the result given by two pairs dominates. Parasara gave further hints regarding this case and suggested finding the maximum longevity (paramaayush) of a person using Table 34.",
     "eighth_uses_table_32": "The first pair's 8th house comes from Table 32, as section 14.4 says in its own parenthesis \u2014 the same table Rudra uses, and not the ordinary 8th.",
+    "example_47": {
+      "category": "long",
+      "chart": {
+        "HL": "Ar",
+        "Lagna": "Ta",
+        "Merc": "Cn",
+        "Moon": "Ta",
+        "Sat": "Ge",
+        "Ven": "Cp"
+      },
+      "covers": "Example 47 works the two-against-one case: two pairs long, one middle, so long dominates and Table 34's middle-over-long cell gives 108 years. It is the only branch of section 14.4's combination rule the book works through.",
+      "pairs": [
+        {
+          "combination": "Movable + Movable",
+          "pair": 1,
+          "result": "long",
+          "working": "Lagna lord Venus is in Cp, a movable rasi. The 8th house is in Ge (see Table 32) and Mercury owns it. He is in Cn, another movable rasi."
+        },
+        {
+          "combination": "Fixed + Dual",
+          "pair": 2,
+          "result": "long",
+          "working": "Moon is in Ta, a fixed rasi. Saturn is in Ge, a dual rasi."
+        },
+        {
+          "combination": "Movable + Fixed",
+          "pair": 3,
+          "result": "middle",
+          "working": "Lagna in Ta, a fixed rasi. Horalagna is in Ar, a movable rasi."
+        }
+      ],
+      "paramaayush_years": 108,
+      "question": "Let us say that lagna is in Ta, HL is in Ar, Moon is in Ta, Mercury is in Cn, Venus is in Cp, and Saturn is in Ge.",
+      "result_text": "We see that two pairs indicate long life and one pair indicates middle life. So \u201clong life\u201d dominates and the native has long life. Using Table 34, we see that the paramaayush for this case is 108 years."
+    },
     "framing": "Many human beings are curious about how long they will live. An ethical astrologer will not scare a client by predicting death, but he may caution a client gently before critical periods and suggest some remedial measures to ward off an impending danger. An estimation of longevity is also helpful in matchmaking. After all, if one person will live for 81 years and the other only for 36 years, it is not advisable to approve a match between those two people. In matchmaking, it is desirable that the bridegroom and the bride have comparable longevity.",
     "intro": "This method allows us to determine the approximate range of one's longevity. In this method, we look at 3 pairs of planets/mathematical points. In each pair, we look at the two planets and see if they occupy a movable or fixed or dual rasi. Using Table 33, we look at the longevity category corresponding to the combination.",
     "pairs": [

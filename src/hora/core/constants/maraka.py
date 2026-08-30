@@ -457,3 +457,62 @@ PARAMAAYUSH_CAN_EXCEED_THE_RANGE = (
     "the same range, so the two are reported side by side rather than "
     "reconciled."
 )
+
+
+EXAMPLE_47 = (
+    "Let us say that lagna is in Ta, HL is in Ar, Moon is in Ta, Mercury is "
+    "in Cn, Venus is in Cp, and Saturn is in Ge."
+)
+
+#: Example 47's chart. A hypothetical, so it names only the six points §14.4
+#: needs and gives no birth data.
+EXAMPLE_47_CHART: dict[str, str] = {
+    "Lagna": "Ta", "HL": "Ar", "Moon": "Ta", "Merc": "Cn",
+    "Ven": "Cp", "Sat": "Ge",
+}
+
+#: Each pair as the example works it: ``(pair, the two placements, the
+#: combination it looks up, the result)``.
+EXAMPLE_47_PAIRS: tuple[tuple[int, str, str, str], ...] = (
+    (
+        1,
+        (
+            "Lagna lord Venus is in Cp, a movable rasi. The 8th house is in "
+            "Ge (see Table 32) and Mercury owns it. He is in Cn, another "
+            "movable rasi."
+        ),
+        "Movable + Movable",
+        "long",
+    ),
+    (
+        2,
+        "Moon is in Ta, a fixed rasi. Saturn is in Ge, a dual rasi.",
+        "Fixed + Dual",
+        "long",
+    ),
+    (
+        3,
+        "Lagna in Ta, a fixed rasi. Horalagna is in Ar, a movable rasi.",
+        "Movable + Fixed",
+        "middle",
+    ),
+)
+
+EXAMPLE_47_RESULT = (
+    "We see that two pairs indicate long life and one pair indicates middle "
+    "life. So “long life” dominates and the native has long life. Using "
+    "Table 34, we see that the paramaayush for this case is 108 years."
+)
+
+EXAMPLE_47_CATEGORY = "long"
+EXAMPLE_47_PARAMAAYUSH = 108
+
+#: Example 47 exercises the two-against-one branch, which is the only one
+#: Table 34 covers. The unanimous and three-way-split branches still have no
+#: worked example — see docs/open-items.md OI-110.
+EXAMPLE_47_COVERS = (
+    "Example 47 works the two-against-one case: two pairs long, one middle, "
+    "so long dominates and Table 34's middle-over-long cell gives 108 years. "
+    "It is the only branch of section 14.4's combination rule the book works "
+    "through."
+)

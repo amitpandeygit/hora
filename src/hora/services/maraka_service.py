@@ -27,6 +27,13 @@ from hora.core.const import (
     CHAPTER_14_INTRO,
     CHAPTER_14_NOT_COVERED,
     CHAPTER_14_SCOPE,
+    EXAMPLE_47,
+    EXAMPLE_47_CATEGORY,
+    EXAMPLE_47_CHART,
+    EXAMPLE_47_COVERS,
+    EXAMPLE_47_PAIRS,
+    EXAMPLE_47_PARAMAAYUSH,
+    EXAMPLE_47_RESULT,
     FOOTNOTE_50,
     GOOD_LONGEVITY_RULE,
     GRAHA_NAMES,
@@ -242,6 +249,19 @@ def section_14_4() -> dict:
             "says in its own parenthesis — the same table Rudra uses, and not "
             "the ordinary 8th."
         ),
+        "example_47": {
+            "question": EXAMPLE_47,
+            "chart": dict(EXAMPLE_47_CHART),
+            "pairs": [
+                {"pair": number, "working": working,
+                 "combination": combination, "result": result}
+                for number, working, combination, result in EXAMPLE_47_PAIRS
+            ],
+            "result_text": EXAMPLE_47_RESULT,
+            "category": EXAMPLE_47_CATEGORY,
+            "paramaayush_years": EXAMPLE_47_PARAMAAYUSH,
+            "covers": EXAMPLE_47_COVERS,
+        },
         "framing": FRAMING,
     }
 

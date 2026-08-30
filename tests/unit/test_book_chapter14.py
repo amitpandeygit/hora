@@ -768,3 +768,86 @@ def test_the_longevity_endpoints(client):
     assert result["category"] == "long"
     assert result["paramaayush_years"] == 108
     assert "predicting death" in result["framing"]
+
+
+# --------------------------------------------------------------------------
+# Example 47 — §14.4 worked through
+# --------------------------------------------------------------------------
+
+from hora.core.const import (
+    EXAMPLE_47_CATEGORY,
+    EXAMPLE_47_CHART,
+    EXAMPLE_47_COVERS,
+    EXAMPLE_47_PAIRS,
+    EXAMPLE_47_PARAMAAYUSH,
+)
+
+
+def _example_47() -> dict:
+    signs = {
+        int(Graha.MOON): R[EXAMPLE_47_CHART["Moon"]],
+        int(Graha.MERCURY): R[EXAMPLE_47_CHART["Merc"]],
+        int(Graha.VENUS): R[EXAMPLE_47_CHART["Ven"]],
+        int(Graha.SATURN): R[EXAMPLE_47_CHART["Sat"]],
+    }
+    return three_pairs(R[EXAMPLE_47_CHART["Lagna"]], signs,
+                       R[EXAMPLE_47_CHART["HL"]])
+
+
+def test_example_47s_eighth_house_comes_from_table_32():
+    """"The 8th house is in Ge (see Table 32) and Mercury owns it." The
+    ordinary 8th from Taurus is Sagittarius, so the example would have named
+    Jupiter had it counted the usual way."""
+    from hora.charts.maraka import ordinary_eighth
+
+    body = _example_47()
+    assert body["eighth_house"]["rasi"] == "Gemini"
+    assert body["eighth_house"]["lord_used"] == "Mercury"
+    assert RASI_ABBR[ordinary_eighth(R["Ta"])] == "Sg"
+
+
+@pytest.mark.parametrize(
+    "number,working,combination,result", EXAMPLE_47_PAIRS,
+    ids=[f"pair{p[0]}" for p in EXAMPLE_47_PAIRS])
+def test_each_of_example_47s_three_pairs(number, working, combination,
+                                         result):
+    """The modalities the example names, and the Table 33 row it looks up."""
+    pair = _example_47()["pairs"][number - 1]
+    assert pair["category"] == result
+    printed = {word.strip().lower() for word in combination.split("+")}
+    assert set(pair["modalities"]) == printed
+    assert working
+
+
+def test_example_47_combines_to_long_life_with_a_paramaayush_of_108():
+    """Two pairs long and one middle, so long dominates and the paramaayush
+    is 108 years."""
+    body = _example_47()
+    assert [p["category"] for p in body["pairs"]] == ["long", "long", "middle"]
+    assert body["category"] == EXAMPLE_47_CATEGORY == "long"
+    assert body["paramaayush_years"] == EXAMPLE_47_PARAMAAYUSH == 108
+    assert body["range_years"] == [72, 108]
+
+
+def test_example_47s_paramaayush_is_table_34s_middle_over_long_cell():
+    """The odd pair is middle and the majority is long, so the figure comes
+    from the row and column the combination rule picks — not from anywhere
+    else in the table."""
+    assert TABLE_34_PARAMAAYUSH["middle"]["long"] == 108
+    assert _example_47()["paramaayush_years"] == \
+        TABLE_34_PARAMAAYUSH["middle"]["long"]
+
+
+def test_example_47_is_the_only_branch_of_14_4_the_book_works():
+    """It exercises two-against-one. The unanimous and three-way-split
+    branches have no worked example — see OI-110."""
+    assert "two-against-one" in EXAMPLE_47_COVERS
+    assert "only branch" in EXAMPLE_47_COVERS
+
+
+def test_the_longevity_rules_endpoint_carries_example_47(client):
+    body = client.get("/v1/marakas/longevity-rules").json()["example_47"]
+    assert body["category"] == "long"
+    assert body["paramaayush_years"] == 108
+    assert len(body["pairs"]) == 3
+    assert body["chart"]["Lagna"] == "Ta"

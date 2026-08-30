@@ -378,6 +378,11 @@ CASES = [
         "ak_sign": 1, "graha_signs": {"8": 8},
     }),
     ("longevity_rules", "GET", "/v1/marakas/longevity-rules", None),
+    ("longevity_example_47", "POST", "/v1/marakas/longevity", {
+        "lagna": 1,
+        "graha_signs": {"1": 1, "3": 3, "5": 9, "6": 2},
+        "hl_sign": 0,
+    }),
     ("longevity_three_pairs", "POST", "/v1/marakas/longevity", {
         "lagna": 4,
         "graha_signs": {"0": 4, "1": 0, "2": 3, "3": 5, "4": 8, "5": 1,
