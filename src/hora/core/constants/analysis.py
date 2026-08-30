@@ -434,3 +434,122 @@ EXAMPLE_45_PARALLELS: tuple[tuple[str, str, str], ...] = (
      "Sun, Mercury and Ketu are in the 11th and Saturn aspects them"),
     ("Mars", "Mars is in the 12th house", "Mars is in the 12th house"),
 )
+
+
+# --------------------------------------------------------------------------
+# Example 46 — twins, two minutes apart
+# --------------------------------------------------------------------------
+
+EXAMPLE_46 = (
+    "Let us consider the D-24 charts (see Chart 15) and D-27 charts (see "
+    "Chart 16) of twins Satyam Gaur and Shivam Gaur, who were born just 2 "
+    "minutes apart. They have the same rasi chart, but Satyam Gaur was a "
+    "brilliant student and Shivam Gaur was a mediocre student. Satyam studied "
+    "commerce and accountancy and scored well. Shivam was a mediocre student "
+    "except in mathematics. Satyam is jovial, amicable and optimistic. Shivam "
+    "is a skeptic. He does not believe in astrology and always seeks rational "
+    "explanations. Let us try to explain these facts."
+)
+
+EXAMPLE_46_SATYAM_D24 = (
+    "D-24 is the chart that shows education. In Satyam's case, lagna is in Li "
+    "and lagna lord Venus is well-placed in a trine in a friendly house. "
+    "Moreover, the sign occupied by lagna lord is Ge, an intellectual sign. "
+    "Mercury is in the 5th house and that gives good memory and intelligence. "
+    "It also gives skills in commerce and accounting. Moreover, AL has "
+    "Mercury and it shows a person who is perceived as an intellectual person "
+    "as far as learning goes. Mars in 6th, Venus in 5th and nodes in 11th are "
+    "well-placed from AL."
+)
+
+EXAMPLE_46_SHIVAM_D24 = (
+    "In Shivam's D-24, lagna moved to Sc and lagna lord is debilitated. The "
+    "strength of lagna and lagna lord is very important in any chart. "
+    "Moreover, 5th lord Jupiter is also debilitated. Still, exalted Ketu's "
+    "aspect on Pi, the 5th house, gave him some skills in mathematics. But "
+    "the debilitation of lagna lord and 5th lord makes him a mediocre "
+    "student. From AL also, Mars in 7th, Venus in 6th, nodes in 12th are "
+    "badly placed. Malefics in 3rd, 6th and 11th from AL and benefics in "
+    "trines from it will give good results."
+)
+
+EXAMPLE_46_D27_RULE = (
+    "To see one's inherent nature, strengths and weaknesses, we should look "
+    "at D-27."
+)
+
+EXAMPLE_46_SATYAM_D27 = (
+    "In Satyam's D-27, lagna is in Ge and lagna lord Mercury aspects it. This "
+    "gives Bhadra yoga like results. The 5th house of emotions and judgment "
+    "is Libra and its lord Venus occupies it. This strength of lagna and 5th "
+    "house made him a very jovial, amicable, cheerful and balanced person."
+)
+
+EXAMPLE_46_SHIVAM_D27 = (
+    "On the other hand, lagna in Shivam's D-27 is in Cn. Lagna lord Moon is "
+    "debilitated in the 5th house of emotions. This gives an unhappy spirit. "
+    "The 5th house shows emotions and judgment and the 5th lord Mars is in "
+    "Vi. The 8th lord (skepticism) Saturn has an aspect with him from Pi. "
+    "This makes him skeptical and depressed. Mars in taamasik and analytical "
+    "sign Vi, with an aspect with 8th lord, makes him seek rational "
+    "explanations for everything."
+)
+
+#: What separates the twins, chart by chart: ``(chart, Satyam, Shivam)``.
+EXAMPLE_46_DIVERGENCE: tuple[tuple[str, str, str], ...] = (
+    ("D24", "Li", "Sc"),
+    ("D27", "Ge", "Cn"),
+)
+
+#: The reading each divergence carries, as ``(chart, claim, whose, what
+#: settles it)``.
+EXAMPLE_46_CLAIMS: tuple[tuple[str, str, str, str], ...] = (
+    ("D24", "lagna is in Li", "Satyam", "the D-24 of Asc 19 Pi 54"),
+    ("D24", "lagna lord Venus is well-placed in a trine", "Satyam",
+     "Venus falls in Gemini, the 9th from Libra"),
+    ("D24", "the sign occupied by lagna lord is Ge", "Satyam",
+     "Venus's D-24 sign"),
+    ("D24", "Mercury is in the 5th house", "Satyam",
+     "5th from Libra is Aquarius, where Mercury falls"),
+    ("D24", "AL has Mercury", "Satyam", "both fall in Aquarius"),
+    ("D24", "Mars in 6th, Venus in 5th and nodes in 11th ... from AL",
+     "Satyam", "from Aquarius: Cancer, Gemini and Sagittarius"),
+    ("D24", "lagna moved to Sc", "Shivam", "the D-24 of Asc 20 Pi 37"),
+    ("D24", "lagna lord is debilitated", "Shivam",
+     "Scorpio's lord Mars falls in Cancer, his debilitation"),
+    ("D24", "5th lord Jupiter is also debilitated", "Shivam",
+     "5th from Scorpio is Pisces; Jupiter falls in Capricorn"),
+    ("D24", "Mars in 7th, Venus in 6th, nodes in 12th ... from AL", "Shivam",
+     "from Capricorn: Cancer, Gemini and Sagittarius"),
+    ("D27", "lagna is in Ge", "Satyam", "the D-27 of Asc 19 Pi 54"),
+    ("D27", "The 5th house ... is Libra and its lord Venus occupies it",
+     "Satyam", "5th from Gemini is Libra, where Venus falls"),
+    ("D27", "lagna in Shivam's D-27 is in Cn", "Shivam",
+     "the D-27 of Asc 20 Pi 37"),
+    ("D27", "Lagna lord Moon is debilitated in the 5th house", "Shivam",
+     "5th from Cancer is Scorpio, the Moon's debilitation, where he falls"),
+    ("D27", "the 5th lord Mars is in Vi", "Shivam",
+     "Scorpio's lord Mars falls in Virgo"),
+    ("D27", "The 8th lord ... Saturn has an aspect with him from Pi",
+     "Shivam",
+     ("8th from Cancer is Aquarius; Saturn falls in Pisces, the 7th "
+      "from Virgo")),
+)
+
+#: The general rule Example 46 states in passing while reading Shivam's AL.
+AL_PLACEMENT_RULE = (
+    "Malefics in 3rd, 6th and 11th from AL and benefics in trines from it "
+    "will give good results."
+)
+
+#: **Finding.** Two minutes of birth time leave the rasi chart unchanged to
+#: the printed precision but move both varga lagnas by one sign.
+EXAMPLE_46_PRECISION = (
+    "The twins' printed rasi charts differ only in the ascendant (43'), the "
+    "Moon (1'), HL (59') and GL (2 deg 28'). Every graha is identical as "
+    "printed. Yet the D-24 lagna moves from Libra to Scorpio and the D-27 "
+    "lagna from Gemini to Cancer, because a D-24 division spans 1 deg 15' and "
+    "a D-27 division 1 deg 07'. This makes Example 46 the sharpest check in "
+    "the book on varga arithmetic: an error of one part in twenty-four would "
+    "show."
+)

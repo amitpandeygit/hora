@@ -43,7 +43,8 @@ def client():
 
 
 def test_the_register_holds_every_chart_supplied_so_far():
-    assert numbers() == (1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)
+    assert numbers() == (
+        1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)
     assert CHARTS_NOT_SUPPLIED == (4,)
     assert 4 not in numbers()
 
@@ -105,7 +106,7 @@ def test_a_recomputable_chart_has_a_place_and_the_others_say_why(number):
 
 
 def test_the_recomputable_charts_are_the_ones_with_full_birth_lines():
-    assert recomputable() == (3, 6, 7, 8, 10, 12, 13, 14)
+    assert recomputable() == (3, 6, 7, 8, 10, 12, 13, 14, 15, 16)
 
 
 # --------------------------------------------------------------------------
@@ -247,7 +248,7 @@ def test_the_index_endpoint_lists_every_chart(client):
     body = client.get("/v1/book-charts").json()
     assert len(body["charts"]) == len(numbers())
     assert body["not_supplied"] == [4]
-    assert body["recomputable"] == [3, 6, 7, 8, 10, 12, 13, 14]
+    assert body["recomputable"] == [3, 6, 7, 8, 10, 12, 13, 14, 15, 16]
 
 
 def test_the_chart_endpoint_derives_signs_and_lagna(client):
@@ -330,3 +331,22 @@ def test_sanjay_gandhis_chart_is_drawn_only_and_says_so():
     assert "longitudes" not in related
     assert "cannot be recomputed" in related["note"]
     assert len(related["drawn"]) == 13
+
+
+def test_charts_15_and_16_are_the_same_twins_seen_two_ways():
+    """Chart 15 prints their D-24, Chart 16 their D-27, from one pair of
+    rasi charts. So the two records share longitudes and differ only in the
+    divisional printed beside them."""
+    assert longitudes(15) == longitudes(16)
+    assert set(chart(15)["divisional"]) == {"D24"}
+    assert set(chart(16)["divisional"]) == {"D27"}
+    for number in (15, 16):
+        related = chart(number)["related"]["Shivam Gaur"]
+        assert related["birth_data"]["minute"] == 6 + 2
+
+
+def test_the_second_twin_is_recomputable_unlike_sanjay_gandhi():
+    """A related chart may or may not carry its own birth line. Shivam's does;
+    Sanjay Gandhi's does not, and each record says which."""
+    assert "birth_data" in chart(15)["related"]["Shivam Gaur"]
+    assert "birth_data" not in chart(14)["related"]["His younger brother"]

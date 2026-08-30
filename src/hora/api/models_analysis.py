@@ -34,3 +34,4 @@ class AnalysisRulesOut(BaseModel):
     tapaswi_yoga: dict
     example_44: dict
     example_45: dict
+    example_46: dict

@@ -1313,3 +1313,205 @@ def test_the_analysis_rules_endpoint_carries_example_45(client):
     assert len(body["sibling_steps"]) == 4
     assert len(body["parallels"]) == 5
     assert "Saturn sits in Libra" in body["verified"]
+
+
+# --------------------------------------------------------------------------
+# Example 46 — twins two minutes apart, Charts 15 and 16
+# --------------------------------------------------------------------------
+
+from hora.core.const import (
+    AL_PLACEMENT_RULE,
+    EXAMPLE_46_CLAIMS,
+    EXAMPLE_46_DIVERGENCE,
+    EXAMPLE_46_PRECISION,
+)
+
+
+def _twin(number: int, which: str) -> dict[str, float]:
+    from hora.charts.book import chart as book_chart
+    from hora.charts.book import longitude as parse
+
+    record = book_chart(number)
+    if which == "Shivam":
+        record = record["related"]["Shivam Gaur"]
+    return {name: parse(text) for name, text in record["longitudes"].items()}
+
+
+def _twin_record(number: int, which: str) -> dict:
+    from hora.charts.book import chart as book_chart
+
+    record = book_chart(number)
+    return record["related"]["Shivam Gaur"] if which == "Shivam" else record
+
+
+def test_the_twins_share_every_graha_in_the_printed_rasi_chart():
+    """"They have the same rasi chart." Only the ascendant, Moon, HL and GL
+    differ at all, and the Moon by one arcminute."""
+    satyam, shivam = _twin(15, "Satyam"), _twin(15, "Shivam")
+    differing = {name for name in satyam if satyam[name] != shivam[name]}
+    assert differing == {"Asc", "Moon", "HL", "GL"}
+    assert abs(satyam["Moon"] - shivam["Moon"]) * 60 < 1.5
+    assert 40 < abs(satyam["Asc"] - shivam["Asc"]) * 60 < 45
+
+
+@pytest.mark.parametrize("which,minute", [("Satyam", 6), ("Shivam", 8)])
+def test_each_twin_recomputes_from_their_own_birth_minute(which, minute):
+    """Two minutes apart, and both land within about one arcminute."""
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = _twin_record(15, which)
+    assert record["birth_data"]["minute"] == minute
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name=which, **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    printed = _twin(15, which)
+    for name, graha in GRAHA_OF_13.items():
+        gap = abs(computed.positions[int(graha)].longitude
+                  - printed[name]) * 60
+        assert gap < 1.1, f"{which} {name}: {gap:.2f}'"
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+
+@pytest.mark.parametrize("code,satyam,shivam", EXAMPLE_46_DIVERGENCE)
+def test_two_minutes_move_both_varga_lagnas_by_one_sign(code, satyam, shivam):
+    """The whole point of Example 46. A D-24 division spans 1 deg 15' and a
+    D-27 division 1 deg 07', so a 43' ascendant gap crosses a boundary in
+    both — and the book's two lagnas are exactly what we compute."""
+    from hora.charts.vargas import varga
+
+    number = 15 if code == "D24" else 16
+    assert RASI_ABBR[varga(_twin(number, "Satyam")["Asc"], code).sign] == satyam
+    assert RASI_ABBR[varga(_twin(number, "Shivam")["Asc"], code).sign] == shivam
+    assert satyam != shivam
+
+
+@pytest.mark.parametrize("number,which", [
+    (15, "Satyam"), (15, "Shivam"), (16, "Satyam"), (16, "Shivam")])
+def test_all_four_drawn_divisional_charts_reproduce(number, which):
+    """Twelve boxes each, AL aside — forty-eight in all."""
+    from hora.charts.vargas import varga
+
+    record = _twin_record(number, which)
+    code = "D24" if number == 15 else "D27"
+    printed = record["divisional"][code]
+    parsed = _twin(number, which)
+    for body, rasi in printed.items():
+        if body == "AL":
+            continue
+        assert RASI_ABBR[varga(parsed[body], code).sign] == rasi, body
+
+
+def test_satyams_d24_reading():
+    """Lagna Li, its lord Venus in Ge — the 9th, a trine. Mercury in the 5th,
+    which is also where AL falls."""
+    from hora.charts.vargas import varga
+
+    d24 = {b: varga(v, "D24").sign for b, v in _twin(15, "Satyam").items()}
+    lag = d24["Asc"]
+    assert RASI_ABBR[lag] == "Li"
+    assert int(RASI_LORD[lag]) == int(Graha.VENUS)
+    assert d24["Ven"] == (lag + 8) % 12 == R["Ge"], "the 9th, a trine"
+    fifth = (lag + 4) % 12
+    assert d24["Merc"] == fifth == R["Aq"]
+    al = R[_twin_record(15, "Satyam")["divisional"]["D24"]["AL"]]
+    assert al == fifth, "AL has Mercury"
+
+
+def test_satyams_placements_from_the_arudha_lagna():
+    """Mars in 6th, Venus in 5th and nodes in 11th are well-placed from AL."""
+    from hora.charts.vargas import varga
+
+    d24 = {b: varga(v, "D24").sign for b, v in _twin(15, "Satyam").items()}
+    al = R["Aq"]
+    assert d24["Mars"] == (al + 5) % 12 == R["Cn"]
+    assert d24["Ven"] == (al + 4) % 12 == R["Ge"]
+    assert d24["Rahu"] == d24["Ketu"] == (al + 10) % 12 == R["Sg"]
+
+
+def test_shivams_d24_debilitations():
+    """Lagna moved to Sc, its lord Mars debilitated in Cn; 5th lord Jupiter
+    debilitated in Cp. Both from the same two minutes."""
+    from hora.charts.vargas import varga
+
+    d24 = {b: varga(v, "D24").sign for b, v in _twin(15, "Shivam").items()}
+    lag = d24["Asc"]
+    assert RASI_ABBR[lag] == "Sc"
+    assert int(RASI_LORD[lag]) == int(Graha.MARS)
+    assert d24["Mars"] == R["Cn"], "Mars debilitates in Cancer"
+    fifth = (lag + 4) % 12
+    assert RASI_ABBR[fifth] == "Pi"
+    assert int(RASI_LORD[fifth]) == int(Graha.JUPITER)
+    assert d24["Jup"] == R["Cp"], "Jupiter debilitates in Capricorn"
+
+
+def test_shivams_placements_from_his_arudha_lagna_are_the_bad_ones():
+    """The same three bodies as Satyam's, in the same three rasis — but his
+    AL moved to Cp, so they read as 7th, 6th and 12th instead."""
+    from hora.charts.vargas import varga
+
+    d24 = {b: varga(v, "D24").sign for b, v in _twin(15, "Shivam").items()}
+    al = R[_twin_record(15, "Shivam")["divisional"]["D24"]["AL"]]
+    assert RASI_ABBR[al] == "Cp"
+    assert d24["Mars"] == (al + 6) % 12
+    assert d24["Ven"] == (al + 5) % 12
+    assert d24["Rahu"] == (al + 11) % 12
+    assert "3rd, 6th and 11th from AL" in AL_PLACEMENT_RULE
+
+
+def test_the_twins_d27_lagnas_and_their_lords():
+    """Satyam: Ge lagna with Mercury there, 5th Li holding its lord Venus.
+    Shivam: Cn lagna with a debilitated Moon in the 5th."""
+    from hora.charts.vargas import varga
+
+    satyam = {b: varga(v, "D27").sign for b, v in _twin(16, "Satyam").items()}
+    assert RASI_ABBR[satyam["Asc"]] == "Ge"
+    assert satyam["Merc"] == satyam["Asc"]
+    fifth = (satyam["Asc"] + 4) % 12
+    assert RASI_ABBR[fifth] == "Li"
+    assert satyam["Ven"] == fifth == R[str(RASI_ABBR[fifth])]
+
+    shivam = {b: varga(v, "D27").sign for b, v in _twin(16, "Shivam").items()}
+    assert RASI_ABBR[shivam["Asc"]] == "Cn"
+    assert int(RASI_LORD[shivam["Asc"]]) == int(Graha.MOON)
+    assert shivam["Moon"] == (shivam["Asc"] + 4) % 12 == R["Sc"]
+
+
+def test_shivams_eighth_lord_aspects_his_fifth_lord():
+    """"The 8th lord (skepticism) Saturn has an aspect with him from Pi." The
+    8th from Cancer is Aquarius, and Pisces is the 7th from Virgo."""
+    from hora.charts.vargas import varga
+
+    d27 = {b: varga(v, "D27").sign for b, v in _twin(16, "Shivam").items()}
+    lag = d27["Asc"]
+    eighth = (lag + 7) % 12
+    assert RASI_ABBR[eighth] == "Aq"
+    assert int(RASI_LORD[eighth]) == int(Graha.SATURN)
+    assert d27["Sat"] == R["Pi"]
+    assert d27["Mars"] == R["Vi"] == (d27["Sat"] + 6) % 12
+
+
+def test_every_claim_of_example_46_is_recorded_with_its_owner_and_reason():
+    assert len(EXAMPLE_46_CLAIMS) == 16
+    for code, claim, whose, why in EXAMPLE_46_CLAIMS:
+        assert code in ("D24", "D27")
+        assert whose in ("Satyam", "Shivam")
+        assert claim and why
+    assert {whose for _, _, whose, _ in EXAMPLE_46_CLAIMS} == {
+        "Satyam", "Shivam"}
+
+
+def test_the_precision_note_states_what_makes_this_the_sharpest_check():
+    assert "1 deg 15'" in EXAMPLE_46_PRECISION
+    assert "one part in twenty-four" in EXAMPLE_46_PRECISION
+
+
+def test_the_analysis_rules_endpoint_carries_example_46(client):
+    body = client.get("/v1/analysis/rules").json()["example_46"]
+    assert body["charts"] == [15, 16]
+    assert len(body["claims"]) == 16
+    assert body["divergence"] == [
+        {"chart": "D24", "Satyam": "Li", "Shivam": "Sc"},
+        {"chart": "D27", "Satyam": "Ge", "Shivam": "Cn"}]

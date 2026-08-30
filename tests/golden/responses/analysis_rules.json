@@ -296,6 +296,130 @@
       "uses_both_co_lords": "Rajiv's D-3 3rd house is Aquarius, which Saturn and Rahu co-own. Example 45 takes Saturn to fix Sanjay's lagna and then calls Rahu the '5th lord' in the same reading. Both are lords and the example uses each where it needs it. Section 15.5.1's cascade also picks Saturn here \u2014 rule 3, exalted in Libra \u2014 so nothing in the example separates 'primary lord' from 'stronger co-lord'.",
       "verified": "Section 13.4.2's sibling method reproduces the book's answer exactly: the 3rd from a Sagittarius D-3 lagna is Aquarius, its lord Saturn sits in Libra, and Libra is the lagna to read Sanjay's fortune from."
     },
+    "example_46": {
+      "al_placement_rule": "Malefics in 3rd, 6th and 11th from AL and benefics in trines from it will give good results.",
+      "charts": [
+        15,
+        16
+      ],
+      "claims": [
+        {
+          "chart": "D24",
+          "claim": "lagna is in Li",
+          "decided_by": "the D-24 of Asc 19 Pi 54",
+          "whose": "Satyam"
+        },
+        {
+          "chart": "D24",
+          "claim": "lagna lord Venus is well-placed in a trine",
+          "decided_by": "Venus falls in Gemini, the 9th from Libra",
+          "whose": "Satyam"
+        },
+        {
+          "chart": "D24",
+          "claim": "the sign occupied by lagna lord is Ge",
+          "decided_by": "Venus's D-24 sign",
+          "whose": "Satyam"
+        },
+        {
+          "chart": "D24",
+          "claim": "Mercury is in the 5th house",
+          "decided_by": "5th from Libra is Aquarius, where Mercury falls",
+          "whose": "Satyam"
+        },
+        {
+          "chart": "D24",
+          "claim": "AL has Mercury",
+          "decided_by": "both fall in Aquarius",
+          "whose": "Satyam"
+        },
+        {
+          "chart": "D24",
+          "claim": "Mars in 6th, Venus in 5th and nodes in 11th ... from AL",
+          "decided_by": "from Aquarius: Cancer, Gemini and Sagittarius",
+          "whose": "Satyam"
+        },
+        {
+          "chart": "D24",
+          "claim": "lagna moved to Sc",
+          "decided_by": "the D-24 of Asc 20 Pi 37",
+          "whose": "Shivam"
+        },
+        {
+          "chart": "D24",
+          "claim": "lagna lord is debilitated",
+          "decided_by": "Scorpio's lord Mars falls in Cancer, his debilitation",
+          "whose": "Shivam"
+        },
+        {
+          "chart": "D24",
+          "claim": "5th lord Jupiter is also debilitated",
+          "decided_by": "5th from Scorpio is Pisces; Jupiter falls in Capricorn",
+          "whose": "Shivam"
+        },
+        {
+          "chart": "D24",
+          "claim": "Mars in 7th, Venus in 6th, nodes in 12th ... from AL",
+          "decided_by": "from Capricorn: Cancer, Gemini and Sagittarius",
+          "whose": "Shivam"
+        },
+        {
+          "chart": "D27",
+          "claim": "lagna is in Ge",
+          "decided_by": "the D-27 of Asc 19 Pi 54",
+          "whose": "Satyam"
+        },
+        {
+          "chart": "D27",
+          "claim": "The 5th house ... is Libra and its lord Venus occupies it",
+          "decided_by": "5th from Gemini is Libra, where Venus falls",
+          "whose": "Satyam"
+        },
+        {
+          "chart": "D27",
+          "claim": "lagna in Shivam's D-27 is in Cn",
+          "decided_by": "the D-27 of Asc 20 Pi 37",
+          "whose": "Shivam"
+        },
+        {
+          "chart": "D27",
+          "claim": "Lagna lord Moon is debilitated in the 5th house",
+          "decided_by": "5th from Cancer is Scorpio, the Moon's debilitation, where he falls",
+          "whose": "Shivam"
+        },
+        {
+          "chart": "D27",
+          "claim": "the 5th lord Mars is in Vi",
+          "decided_by": "Scorpio's lord Mars falls in Virgo",
+          "whose": "Shivam"
+        },
+        {
+          "chart": "D27",
+          "claim": "The 8th lord ... Saturn has an aspect with him from Pi",
+          "decided_by": "8th from Cancer is Aquarius; Saturn falls in Pisces, the 7th from Virgo",
+          "whose": "Shivam"
+        }
+      ],
+      "d27_rule": "To see one's inherent nature, strengths and weaknesses, we should look at D-27.",
+      "divergence": [
+        {
+          "Satyam": "Li",
+          "Shivam": "Sc",
+          "chart": "D24"
+        },
+        {
+          "Satyam": "Ge",
+          "Shivam": "Cn",
+          "chart": "D27"
+        }
+      ],
+      "precision": "The twins' printed rasi charts differ only in the ascendant (43'), the Moon (1'), HL (59') and GL (2 deg 28'). Every graha is identical as printed. Yet the D-24 lagna moves from Libra to Scorpio and the D-27 lagna from Gemini to Cancer, because a D-24 division spans 1 deg 15' and a D-27 division 1 deg 07'. This makes Example 46 the sharpest check in the book on varga arithmetic: an error of one part in twenty-four would show.",
+      "question": "Let us consider the D-24 charts (see Chart 15) and D-27 charts (see Chart 16) of twins Satyam Gaur and Shivam Gaur, who were born just 2 minutes apart. They have the same rasi chart, but Satyam Gaur was a brilliant student and Shivam Gaur was a mediocre student. Satyam studied commerce and accountancy and scored well. Shivam was a mediocre student except in mathematics. Satyam is jovial, amicable and optimistic. Shivam is a skeptic. He does not believe in astrology and always seeks rational explanations. Let us try to explain these facts.",
+      "satyam_d24": "D-24 is the chart that shows education. In Satyam's case, lagna is in Li and lagna lord Venus is well-placed in a trine in a friendly house. Moreover, the sign occupied by lagna lord is Ge, an intellectual sign. Mercury is in the 5th house and that gives good memory and intelligence. It also gives skills in commerce and accounting. Moreover, AL has Mercury and it shows a person who is perceived as an intellectual person as far as learning goes. Mars in 6th, Venus in 5th and nodes in 11th are well-placed from AL.",
+      "satyam_d27": "In Satyam's D-27, lagna is in Ge and lagna lord Mercury aspects it. This gives Bhadra yoga like results. The 5th house of emotions and judgment is Libra and its lord Venus occupies it. This strength of lagna and 5th house made him a very jovial, amicable, cheerful and balanced person.",
+      "shivam_d24": "In Shivam's D-24, lagna moved to Sc and lagna lord is debilitated. The strength of lagna and lagna lord is very important in any chart. Moreover, 5th lord Jupiter is also debilitated. Still, exalted Ketu's aspect on Pi, the 5th house, gave him some skills in mathematics. But the debilitation of lagna lord and 5th lord makes him a mediocre student. From AL also, Mars in 7th, Venus in 6th, nodes in 12th are badly placed. Malefics in 3rd, 6th and 11th from AL and benefics in trines from it will give good results.",
+      "shivam_d27": "On the other hand, lagna in Shivam's D-27 is in Cn. Lagna lord Moon is debilitated in the 5th house of emotions. This gives an unhappy spirit. The 5th house shows emotions and judgment and the 5th lord Mars is in Vi. The 8th lord (skepticism) Saturn has an aspect with him from Pi. This makes him skeptical and depressed. Mars in taamasik and analytical sign Vi, with an aspect with 8th lord, makes him seek rational explanations for everything."
+    },
     "factors": [
       {
         "name": "Divisional Chart",

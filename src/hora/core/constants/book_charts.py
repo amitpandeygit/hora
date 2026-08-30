@@ -359,4 +359,125 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "chart, and Sanjay Gandhi's rasi chart beside both."
         ),
     },
+    15: {
+        "title": "D-24 — the twins Satyam and Shivam Gaur",
+        "birth": "November 4, 1970, 4:06 pm (IST), 76 E 53, 30 N 44",
+        "birth_data": {
+            "year": 1970, "month": 11, "day": 4, "hour": 16, "minute": 6,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 30 + 44 / 60, "longitude": 76 + 53 / 60},
+        "longitudes": {
+            "Asc": "19 Pi 54", "Sun": "18 Li 09", "Moon": "21 Sg 18",
+            "Mars": "16 Vi 04", "Merc": "23 Li 07", "Jup": "21 Li 57",
+            "Ven": "27 Li 32", "Sat": "26 Ar 16", "Rahu": "5 Aq 33",
+            "Ketu": "5 Le 33", "HL": "1 Le 04", "GL": "6 Li 02",
+        },
+        "divisional": {
+            "D24": {
+                "Sat": "Ta", "Ven": "Ge", "AL": "Aq", "Merc": "Aq",
+                "Mars": "Cn", "Jup": "Cp", "Moon": "Cp", "HL": "Le",
+                "Ketu": "Sg", "Rahu": "Sg", "GL": "Sg", "Sun": "Li",
+                "Asc": "Li",
+            },
+        },
+        "chara_karakas": {
+            "Ven": "AK", "Sat": "AmK", "Rahu": "BK", "Merc": "MK",
+            "Jup": "PiK", "Moon": "PK", "Sun": "GK", "Mars": "DK",
+        },
+        "retrograde": ("Ven", "Sat"),
+        "related": {
+            "Shivam Gaur": {
+                "title": "D-24 — Shivam Gaur, the second twin",
+                "birth": "November 4, 1970, 4:08 pm (IST), 76 E 53, 30 N 44",
+                "birth_data": {
+                    "year": 1970, "month": 11, "day": 4, "hour": 16,
+                    "minute": 8, "second": 0.0, "utc_offset_hours": 5.5,
+                },
+                "place": {"latitude": 30 + 44 / 60, "longitude": 76 + 53 / 60},
+                "longitudes": {
+                    "Asc": "20 Pi 37", "Sun": "18 Li 09", "Moon": "21 Sg 19",
+                    "Mars": "16 Vi 04", "Merc": "23 Li 07", "Jup": "21 Li 57",
+                    "Ven": "27 Li 32", "Sat": "26 Ar 16", "Rahu": "5 Aq 33",
+                    "Ketu": "5 Le 33", "HL": "2 Le 03", "GL": "8 Li 30",
+                },
+                "divisional": {
+                    "D24": {
+                        "Sat": "Ta", "Ven": "Ge", "GL": "Aq", "Merc": "Aq",
+                        "Mars": "Cn", "Jup": "Cp", "Moon": "Cp", "AL": "Cp",
+                        "Ketu": "Sg", "Rahu": "Sg", "Asc": "Sc", "Sun": "Li",
+                        "HL": "Vi",
+                    },
+                },
+                "retrograde": ("Ven", "Sat"),
+                "note": (
+                    "Born two minutes after his twin. Only the ascendant, "
+                    "Moon, HL and GL differ in the printed rasi chart — by "
+                    "43', 1', 59' and 2 deg 28' — yet the D-24 lagna moves "
+                    "from Libra to Scorpio."
+                ),
+            },
+        },
+        "first_seen": "chapter 13, Example 46",
+        "note": (
+            "Chart 15 prints the D-24 of both twins. They share a rasi chart "
+            "to the printed precision, so the D-24 is where they part."
+        ),
+    },
+    16: {
+        "title": "D-27 — the twins Satyam and Shivam Gaur",
+        "birth": "November 4, 1970, 4:06 pm (IST), 76 E 53, 30 N 44",
+        "birth_data": {
+            "year": 1970, "month": 11, "day": 4, "hour": 16, "minute": 6,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 30 + 44 / 60, "longitude": 76 + 53 / 60},
+        "longitudes": {
+            "Asc": "19 Pi 54", "Sun": "18 Li 09", "Moon": "21 Sg 18",
+            "Mars": "16 Vi 04", "Merc": "23 Li 07", "Jup": "21 Li 57",
+            "Ven": "27 Li 32", "Sat": "26 Ar 16", "Rahu": "5 Aq 33",
+            "Ketu": "5 Le 33", "HL": "1 Le 04", "GL": "6 Li 02",
+        },
+        "divisional": {
+            "D27": {
+                "GL": "Pi", "Sat": "Pi", "AL": "Pi", "HL": "Ar", "Jup": "Ta",
+                "Merc": "Ge", "Asc": "Ge", "Rahu": "Aq", "Sun": "Aq",
+                "Ketu": "Le", "Moon": "Sc", "Ven": "Li", "Mars": "Vi",
+            },
+        },
+        "retrograde": ("Ven", "Sat"),
+        "related": {
+            "Shivam Gaur": {
+                "title": "D-27 — Shivam Gaur, the second twin",
+                "birth": "November 4, 1970, 4:08 pm (IST), 76 E 53, 30 N 44",
+                "birth_data": {
+                    "year": 1970, "month": 11, "day": 4, "hour": 16,
+                    "minute": 8, "second": 0.0, "utc_offset_hours": 5.5,
+                },
+                "place": {"latitude": 30 + 44 / 60, "longitude": 76 + 53 / 60},
+                "longitudes": {
+                    "Asc": "20 Pi 37", "Sun": "18 Li 09", "Moon": "21 Sg 19",
+                    "Mars": "16 Vi 04", "Merc": "23 Li 07", "Jup": "21 Li 57",
+                    "Ven": "27 Li 32", "Sat": "26 Ar 16", "Rahu": "5 Aq 33",
+                    "Ketu": "5 Le 33", "HL": "2 Le 03", "GL": "8 Li 30",
+                },
+                "divisional": {
+                    "D27": {
+                        "AL": "Pi", "Sat": "Pi", "HL": "Ta", "Jup": "Ta",
+                        "GL": "Ta", "Merc": "Ge", "Rahu": "Aq", "Sun": "Aq",
+                        "Asc": "Cn", "Ketu": "Le", "Moon": "Sc", "Ven": "Li",
+                        "Mars": "Vi",
+                    },
+                },
+                "retrograde": ("Ven", "Sat"),
+                "note": "The same two minutes move the D-27 lagna from "
+                        "Gemini to Cancer.",
+            },
+        },
+        "first_seen": "chapter 13, Example 46",
+        "note": (
+            "Chart 16 prints the D-27 of the same twins. Section 13.4 reads "
+            "inherent nature, strengths and weaknesses from D-27."
+        ),
+    },
 }

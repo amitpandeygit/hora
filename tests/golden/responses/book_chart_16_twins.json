@@ -1,0 +1,122 @@
+{
+  "body": {
+    "birth": "November 4, 1970, 4:06 pm (IST), 76 E 53, 30 N 44",
+    "chara_karakas": null,
+    "divisional": {
+      "D27": {
+        "AL": "Pi",
+        "Asc": "Ge",
+        "GL": "Pi",
+        "HL": "Ar",
+        "Jup": "Ta",
+        "Ketu": "Le",
+        "Mars": "Vi",
+        "Merc": "Ge",
+        "Moon": "Sc",
+        "Rahu": "Aq",
+        "Sat": "Pi",
+        "Sun": "Aq",
+        "Ven": "Li"
+      }
+    },
+    "drawn": null,
+    "first_seen": "chapter 13, Example 46",
+    "lagna": "Pi",
+    "longitudes": {
+      "Asc": "19 Pi 54",
+      "GL": "6 Li 02",
+      "HL": "1 Le 04",
+      "Jup": "21 Li 57",
+      "Ketu": "5 Le 33",
+      "Mars": "16 Vi 04",
+      "Merc": "23 Li 07",
+      "Moon": "21 Sg 18",
+      "Rahu": "5 Aq 33",
+      "Sat": "26 Ar 16",
+      "Sun": "18 Li 09",
+      "Ven": "27 Li 32"
+    },
+    "note": "Chart 16 prints the D-27 of the same twins. Section 13.4 reads inherent nature, strengths and weaknesses from D-27.",
+    "number": 16,
+    "place": {
+      "latitude": 30.733333333333334,
+      "longitude": 76.88333333333334
+    },
+    "recomputable": true,
+    "related": {
+      "Shivam Gaur": {
+        "birth": "November 4, 1970, 4:08 pm (IST), 76 E 53, 30 N 44",
+        "birth_data": {
+          "day": 4,
+          "hour": 16,
+          "minute": 8,
+          "month": 11,
+          "second": 0.0,
+          "utc_offset_hours": 5.5,
+          "year": 1970
+        },
+        "divisional": {
+          "D27": {
+            "AL": "Pi",
+            "Asc": "Cn",
+            "GL": "Ta",
+            "HL": "Ta",
+            "Jup": "Ta",
+            "Ketu": "Le",
+            "Mars": "Vi",
+            "Merc": "Ge",
+            "Moon": "Sc",
+            "Rahu": "Aq",
+            "Sat": "Pi",
+            "Sun": "Aq",
+            "Ven": "Li"
+          }
+        },
+        "longitudes": {
+          "Asc": "20 Pi 37",
+          "GL": "8 Li 30",
+          "HL": "2 Le 03",
+          "Jup": "21 Li 57",
+          "Ketu": "5 Le 33",
+          "Mars": "16 Vi 04",
+          "Merc": "23 Li 07",
+          "Moon": "21 Sg 19",
+          "Rahu": "5 Aq 33",
+          "Sat": "26 Ar 16",
+          "Sun": "18 Li 09",
+          "Ven": "27 Li 32"
+        },
+        "note": "The same two minutes move the D-27 lagna from Gemini to Cancer.",
+        "place": {
+          "latitude": 30.733333333333334,
+          "longitude": 76.88333333333334
+        },
+        "retrograde": [
+          "Ven",
+          "Sat"
+        ],
+        "title": "D-27 \u2014 Shivam Gaur, the second twin"
+      }
+    },
+    "retrograde": [
+      "Ven",
+      "Sat"
+    ],
+    "signs": {
+      "Asc": "Pi",
+      "GL": "Li",
+      "HL": "Le",
+      "Jup": "Li",
+      "Ketu": "Le",
+      "Mars": "Vi",
+      "Merc": "Li",
+      "Moon": "Sg",
+      "Rahu": "Aq",
+      "Sat": "Ar",
+      "Sun": "Li",
+      "Ven": "Li"
+    },
+    "title": "D-27 \u2014 the twins Satyam and Shivam Gaur"
+  },
+  "status": 200
+}

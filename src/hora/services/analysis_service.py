@@ -11,6 +11,7 @@ from hora.charts.analysis import (
 from hora.core.const import (
     A3_BOOK_WRITING,
     A3_PERIODS,
+    AL_PLACEMENT_RULE,
     ANALYSIS_CLOSING,
     ANALYSIS_CLOSING_POINTS_AT,
     ANALYZING_CHARTS_INTRO,
@@ -34,6 +35,15 @@ from hora.core.const import (
     EXAMPLE_45_READING,
     EXAMPLE_45_SIBLING_STEPS,
     EXAMPLE_45_USES_BOTH_CO_LORDS,
+    EXAMPLE_46,
+    EXAMPLE_46_CLAIMS,
+    EXAMPLE_46_D27_RULE,
+    EXAMPLE_46_DIVERGENCE,
+    EXAMPLE_46_PRECISION,
+    EXAMPLE_46_SATYAM_D24,
+    EXAMPLE_46_SATYAM_D27,
+    EXAMPLE_46_SHIVAM_D24,
+    EXAMPLE_46_SHIVAM_D27,
     FOOTNOTE_49,
     HOUSE_VERSUS_ARUDHA_RULE,
     INFLUENCE_KINDS,
@@ -130,6 +140,26 @@ def rules() -> dict:
             "planets": dict(TAPASWI_PLANETS),
             "strengtheners": TAPASWI_STRENGTHENERS,
             "footnote_49": FOOTNOTE_49,
+        },
+        "example_46": {
+            "question": EXAMPLE_46,
+            "charts": [15, 16],
+            "d27_rule": EXAMPLE_46_D27_RULE,
+            "satyam_d24": EXAMPLE_46_SATYAM_D24,
+            "shivam_d24": EXAMPLE_46_SHIVAM_D24,
+            "satyam_d27": EXAMPLE_46_SATYAM_D27,
+            "shivam_d27": EXAMPLE_46_SHIVAM_D27,
+            "divergence": [
+                {"chart": code, "Satyam": first, "Shivam": second}
+                for code, first, second in EXAMPLE_46_DIVERGENCE
+            ],
+            "claims": [
+                {"chart": code, "claim": claim, "whose": whose,
+                 "decided_by": why}
+                for code, claim, whose, why in EXAMPLE_46_CLAIMS
+            ],
+            "al_placement_rule": AL_PLACEMENT_RULE,
+            "precision": EXAMPLE_46_PRECISION,
         },
         "example_45": {
             "question": EXAMPLE_45,

@@ -359,6 +359,8 @@ CASES = [
     ("book_chart_13", "GET", "/v1/book-charts/13", None),
     ("book_chart_6", "GET", "/v1/book-charts/6", None),
     ("book_chart_14", "GET", "/v1/book-charts/14", None),
+    ("book_chart_15_twins", "GET", "/v1/book-charts/15", None),
+    ("book_chart_16_twins", "GET", "/v1/book-charts/16", None),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
