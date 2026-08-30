@@ -370,20 +370,29 @@ CASES = [
         "lagna": 11, "graha_signs": {"2": 2, "3": 9, "6": 0},
     }),
     ("maraka_lords_only", "POST", "/v1/marakas", {"lagna": 4}),
-    ("rudra_rules", "GET", "/v1/marakas/rudra-rules", None),
-    ("rudra_leo", "GET", "/v1/marakas/rudra?lagna=4", None),
+    ("rudra_rules", "GET", "/v1/longevity/rudra-rules", None),
+    ("rudra_leo", "GET", "/v1/longevity/rudra?lagna=4", None),
     ("trishoola_scorpio", "GET",
-     "/v1/marakas/trishoola?rudra_sign=7", None),
-    ("maheswara_ketu_exception", "POST", "/v1/marakas/maheswara", {
+     "/v1/longevity/trishoola?rudra_sign=7", None),
+    ("maheswara_ketu_exception", "POST", "/v1/longevity/maheswara", {
         "ak_sign": 1, "graha_signs": {"8": 8},
     }),
-    ("longevity_rules", "GET", "/v1/marakas/longevity-rules", None),
-    ("longevity_example_47", "POST", "/v1/marakas/longevity", {
+    ("longevity_rules", "GET", "/v1/longevity/rules", None),
+    ("eighth_lord_rules", "GET", "/v1/longevity/eighth-lord-rules", None),
+    ("eighth_lord_exercise_23", "POST", "/v1/longevity/eighth-lord", {
+        "reference": 7, "graha_signs": {"3": 6},
+    }),
+    ("rudra_exercise_23", "POST", "/v1/longevity/rudra", {
+        "lagna": 7,
+        "graha_signs": {"4": 6, "3": 6},
+        "graha_longitudes": {"4": 201.45, "3": 208.15},
+    }),
+    ("longevity_example_47", "POST", "/v1/longevity/three-pairs", {
         "lagna": 1,
         "graha_signs": {"1": 1, "3": 3, "5": 9, "6": 2},
         "hl_sign": 0,
     }),
-    ("longevity_three_pairs", "POST", "/v1/marakas/longevity", {
+    ("longevity_three_pairs", "POST", "/v1/longevity/three-pairs", {
         "lagna": 4,
         "graha_signs": {"0": 4, "1": 0, "2": 3, "3": 5, "4": 8, "5": 1,
                         "6": 9},

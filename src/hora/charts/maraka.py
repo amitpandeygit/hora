@@ -14,10 +14,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from hora.charts.aspects import graha_aspects_sign
+from hora.charts.aspects import graha_aspects_sign, rasi_drishti
 from hora.core import validate
 from hora.core.const import (
     ADDITIONAL_MARAKA_TARGETS,
+    DEBILITATION_RASI,
+    EIGHTH_LORD_GROUPS,
     EXALTATION_RASI,
     GRAHA_NAMES,
     HOUSES_OF_LIFE,
@@ -30,6 +32,7 @@ from hora.core.const import (
     RASI_LORD,
     RASI_MODALITY,
     RASI_NAMES,
+    RUDRA_AFFLICTION_RULE,
     TABLE_32_EIGHTH,
     TABLE_33_LONGEVITY,
     TABLE_34_PARAMAAYUSH,
@@ -534,4 +537,193 @@ def three_pairs(lagna: int, graha_signs: dict[int, int],
         "reason": reason,
         "paramaayush_years": paramaayush,
         "paramaayush_note": paramaayush_note,
+    }
+
+
+# --------------------------------------------------------------------------
+# §14.5 — The Eighth Lord Method
+# --------------------------------------------------------------------------
+
+def house_group(house: int) -> tuple[str, str]:
+    """Which of §14.5's three groups a house falls in, and its category."""
+    number = validate.in_range("house", house, 1, 12)
+    for name, houses, category in EIGHTH_LORD_GROUPS:
+        if number in houses:
+            return name, category
+    raise MarakaError(  # pragma: no cover - the three groups tile 1..12
+        f"house {number} is in none of section 14.5's three groups")
+
+
+def eighth_lord_method(reference: int, graha_signs: dict[int, int]) -> dict:
+    """§14.5's method, from a reference the caller has chosen.
+
+    :param reference: the rasi of whichever of lagna and the 7th house the
+        caller judges stronger. §14.5 gives no way to compare them and both
+        its worked cases state the winner as a premise, so this is not
+        decided here.
+    """
+    index = validate.in_range("reference", reference, 0, 11)
+    positions = {int(g): int(s) for g, s in graha_signs.items()}
+    for graha, place in positions.items():
+        validate.in_range(f"graha {graha} sign", place, 0, 11)
+
+    eighth = ordinary_eighth(index)
+    lords = _lords_of(eighth)
+    lord = lords[0]
+    if lord not in positions:
+        raise MarakaError(
+            f"{GRAHA_NAMES[lord]} owns the 8th from {RASI_NAMES[index]} "
+            f"({RASI_NAMES[eighth]}), and the method reads where he sits, so "
+            f"his rasi is needed")
+
+    seat = positions[lord]
+    house = ((seat - index) % 12) + 1
+    group, category = house_group(house)
+    low, high = LONGEVITY_RANGES[category]
+    return {
+        "reference": index,
+        "reference_rasi": str(RASI_NAMES[index]),
+        "eighth_house": {
+            "rasi": str(RASI_NAMES[eighth]),
+            "by": "the ordinary count",
+            "lords": [str(GRAHA_NAMES[g]) for g in lords],
+            "lord_used": str(GRAHA_NAMES[lord]),
+        },
+        "lord_sign": seat,
+        "lord_rasi": str(RASI_NAMES[seat]),
+        "house_from_reference": house,
+        "group": group,
+        "category": category,
+        "range_years": [low, high],
+        "why": (
+            f"{GRAHA_NAMES[lord]} owns the 8th from {RASI_NAMES[index]}, "
+            f"which is {RASI_NAMES[eighth]}; he sits in {RASI_NAMES[seat]}, "
+            f"the {house}th from {RASI_NAMES[index]}, "
+            f"{'an' if group[0] in 'aeiou' else 'a'} {group} — so {category} "
+            f"life"
+        ),
+    }
+
+
+# --------------------------------------------------------------------------
+# §14.3's Rudra strength cascade, which Exercise 23 shows can be run
+# --------------------------------------------------------------------------
+
+def _cascade_step(first: int, second: int, positions: dict[int, int],
+                  longitudes: dict[int, float] | None) -> tuple[int | None, int, str]:
+    """§14.3's five tests in order. Returns (winner, step, detail)."""
+    seats = (positions[first], positions[second])
+
+    company = tuple(
+        sum(1 for g, s in positions.items() if s == seat and g != who)
+        for who, seat in zip((first, second), seats, strict=True))
+    if company[0] != company[1]:
+        winner = first if company[0] > company[1] else second
+        return winner, 1, (
+            f"{GRAHA_NAMES[first]} conjoins {company[0]} planets, "
+            f"{GRAHA_NAMES[second]} conjoins {company[1]}")
+
+    dignified = tuple(
+        EXALTATION_RASI.get(who) == seat or int(RASI_LORD[seat]) == who
+        for who, seat in zip((first, second), seats, strict=True))
+    if dignified[0] != dignified[1]:
+        winner = first if dignified[0] else second
+        return winner, 2, (
+            f"{GRAHA_NAMES[winner]} is in exaltation or his own rasi and the "
+            f"other is not")
+
+    with_exalted = tuple(
+        any(EXALTATION_RASI.get(g) == s for g, s in positions.items()
+            if s == seat and g != who)
+        for who, seat in zip((first, second), seats, strict=True))
+    if with_exalted[0] != with_exalted[1]:
+        winner = first if with_exalted[0] else second
+        return winner, 3, (
+            f"{GRAHA_NAMES[winner]} joins an exalted planet and the other "
+            f"does not")
+
+    aspected = tuple(
+        sum(1 for g, s in positions.items()
+            if g != who and seat in rasi_drishti(s))
+        for who, seat in zip((first, second), seats, strict=True))
+    if aspected[0] != aspected[1]:
+        winner = first if aspected[0] > aspected[1] else second
+        return winner, 4, (
+            f"{GRAHA_NAMES[first]} is rasi-aspected by {aspected[0]} planets, "
+            f"{GRAHA_NAMES[second]} by {aspected[1]}")
+
+    if longitudes is None:
+        return None, 5, (
+            "the first four tests tie, and the fifth — which planet is more "
+            "advanced in its rasi — needs longitudes, which were not given")
+    advance = tuple(longitudes[who] % 30 for who in (first, second))
+    if advance[0] == advance[1]:  # pragma: no cover - a genuine dead heat
+        return None, 5, "both planets are equally advanced in their rasis"
+    winner = first if advance[0] > advance[1] else second
+    return winner, 5, (
+        f"{GRAHA_NAMES[first]} is at {advance[0]:.2f} degrees of his rasi and "
+        f"{GRAHA_NAMES[second]} at {advance[1]:.2f}, so "
+        f"{GRAHA_NAMES[winner]} is more advanced")
+
+
+def rudra(lagna: int, graha_signs: dict[int, int],
+          graha_longitudes: dict[int, float] | None = None) -> dict:
+    """§14.3's Rudra, run through the strength cascade.
+
+    The affliction override — the weaker planet taking over if it is
+    debilitated or in an inimical sign *and* afflicted by "malefics like Mars,
+    Saturn, Rahu and Ketu" — is not applied, because "like" leaves that list
+    open. Whether the weaker candidate is debilitated is reported so a caller
+    can apply it. See docs/open-items.md OI-109.
+    """
+    base = rudra_candidates(lagna)
+    positions = {int(g): int(s) for g, s in graha_signs.items()}
+    for graha, place in positions.items():
+        validate.in_range(f"graha {graha} sign", place, 0, 11)
+
+    first, second = base.from_lagna[1], base.from_seventh[1]
+    if first == second:
+        return {
+            "candidates": [str(GRAHA_NAMES[first])],
+            "rudra": str(GRAHA_NAMES[first]),
+            "decided_by": None,
+            "why": (
+                f"both 8th houses have the same lord, {GRAHA_NAMES[first]}, "
+                f"so no comparison is needed"),
+            "trishoola": [],
+            "weaker_is_debilitated": None,
+        }
+    missing = [g for g in (first, second) if g not in positions]
+    if missing:
+        raise MarakaError(
+            f"the cascade needs the rasi of "
+            f"{', '.join(GRAHA_NAMES[g] for g in missing)}")
+
+    winner, step, detail = _cascade_step(
+        first, second, positions, graha_longitudes)
+    loser = None if winner is None else (
+        second if winner == first else first)
+    debilitated = (
+        None if loser is None
+        else DEBILITATION_RASI.get(loser) == positions[loser])
+    return {
+        "candidates": [str(GRAHA_NAMES[first]), str(GRAHA_NAMES[second])],
+        "from_lagna": {
+            "rasi": str(RASI_NAMES[base.from_lagna[0]]),
+            "lord": str(GRAHA_NAMES[first])},
+        "from_seventh": {
+            "rasi": str(RASI_NAMES[base.from_seventh[0]]),
+            "lord": str(GRAHA_NAMES[second])},
+        "rudra": None if winner is None else str(GRAHA_NAMES[winner]),
+        "rudra_sign": None if winner is None else positions[winner],
+        "rudra_rasi": (None if winner is None
+                       else str(RASI_NAMES[positions[winner]])),
+        "decided_by": step,
+        "why": detail,
+        "trishoola": (
+            [] if winner is None else
+            [{"sign": s, "rasi": str(RASI_NAMES[s])}
+             for s in trishoola_rasis(positions[winner])]),
+        "weaker_is_debilitated": debilitated,
+        "affliction_override": RUDRA_AFFLICTION_RULE,
     }

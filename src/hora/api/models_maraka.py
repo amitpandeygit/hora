@@ -55,3 +55,17 @@ class LongevityIn(BaseModel):
     graha_signs: dict[int, int] = Field(..., examples=[{
         "0": 4, "1": 0, "2": 3, "3": 5, "4": 8, "5": 1, "6": 9}])
     hl_sign: int = Field(..., ge=0, le=11, examples=[2])
+
+
+class EighthLordIn(BaseModel):
+    """Section 14.5. `reference` is whichever of lagna and the 7th house you
+    judge stronger — the section gives no way to compare them."""
+
+    reference: int = Field(..., ge=0, le=11, examples=[7])
+    graha_signs: dict[int, int] = Field(..., examples=[{"3": 6}])
+
+
+class RudraIn(BaseModel):
+    lagna: int = Field(..., ge=0, le=11, examples=[7])
+    graha_signs: dict[int, int] = Field(..., examples=[{"3": 6, "4": 6}])
+    graha_longitudes: dict[int, float] | None = Field(None, examples=[None])

@@ -10,6 +10,7 @@ from hora.charts.maraka import (
     MALEFICS,
     MarakaError,
     additional_marakas,
+    eighth_lord_method,
     houses_of_life,
     maheswara,
     maraka_grahas,
@@ -20,6 +21,7 @@ from hora.charts.maraka import (
     three_pairs,
     trishoola_rasis,
 )
+from hora.charts.maraka import rudra as _rudra_cascade
 from hora.core.const import (
     ADDITIONAL_MARAKA_POWERFULLY_UNDEFINED,
     ADDITIONAL_MARAKA_RULE,
@@ -27,6 +29,11 @@ from hora.core.const import (
     CHAPTER_14_INTRO,
     CHAPTER_14_NOT_COVERED,
     CHAPTER_14_SCOPE,
+    EIGHTH_LORD_GROUPS,
+    EIGHTH_LORD_METHOD_FAILED_HERE,
+    EIGHTH_LORD_METHOD_RULE,
+    EIGHTH_LORD_STRENGTH_IS_GIVEN,
+    EIGHTH_LORD_USES_THE_ORDINARY_EIGHTH,
     EXAMPLE_47,
     EXAMPLE_47_CATEGORY,
     EXAMPLE_47_CHART,
@@ -34,6 +41,27 @@ from hora.core.const import (
     EXAMPLE_47_PAIRS,
     EXAMPLE_47_PARAMAAYUSH,
     EXAMPLE_47_RESULT,
+    EXAMPLE_48,
+    EXAMPLE_48_BRANCHES,
+    EXAMPLE_48_EIGHTH_LORD,
+    EXAMPLE_48_REFERENCE,
+    EXERCISE_23,
+    EXERCISE_23_AGE_AT_DEATH,
+    EXERCISE_23_CASCADE_STEP,
+    EXERCISE_23_CATEGORY,
+    EXERCISE_23_EIGHTH_LORD,
+    EXERCISE_23_EIGHTH_LORD_CATEGORY,
+    EXERCISE_23_MAHESWARA,
+    EXERCISE_23_MAHESWARA_PLANET,
+    EXERCISE_23_MAIN_MARAKAS,
+    EXERCISE_23_MARAKAS,
+    EXERCISE_23_MERCURY_IS_A_FURTHER_CONSIDERATION,
+    EXERCISE_23_PAIR_CATEGORIES,
+    EXERCISE_23_RUDRA,
+    EXERCISE_23_RUDRA_PLANET,
+    EXERCISE_23_RUDRA_RASI,
+    EXERCISE_23_THREE_PAIRS,
+    EXERCISE_23_TRISHOOLA,
     FOOTNOTE_50,
     GOOD_LONGEVITY_RULE,
     GRAHA_NAMES,
@@ -77,6 +105,7 @@ from hora.core.const import (
     THREE_PAIRS_INTRO,
     THREE_PAIRS_TIEBREAK_RULE,
     TRISHOOLA_RULE,
+    WHICH_EIGHTH_HOUSE,
 )
 from hora.core.validate import InputError
 
@@ -216,6 +245,73 @@ def longevity(lagna: int, graha_signs: dict[int, int],
     body["range_text"] = LONGEVITY_RANGE_TEXT
     body["paramaayush_scope"] = PARAMAAYUSH_ONLY_FOR_THE_SPLIT_CASE
     return body
+
+
+def eighth_lord(reference: int, graha_signs: dict[int, int]) -> dict:
+    """Section 14.5's eighth lord method, from a reference the caller names."""
+    body = eighth_lord_method(reference, graha_signs)
+    body["framing"] = FRAMING
+    body["reference_is_the_callers"] = EIGHTH_LORD_STRENGTH_IS_GIVEN
+    body["uses_the_ordinary_eighth"] = EIGHTH_LORD_USES_THE_ORDINARY_EIGHTH
+    return body
+
+
+def rudra_for(lagna: int, graha_signs: dict[int, int],
+              graha_longitudes: dict[int, float] | None = None) -> dict:
+    """Section 14.3's Rudra, run through the strength cascade."""
+    body = _rudra_cascade(lagna, graha_signs, graha_longitudes)
+    body["strength_cascade"] = list(RUDRA_STRENGTH_CASCADE)
+    body["framing"] = FRAMING
+    return body
+
+
+def section_14_5() -> dict:
+    """Section 14.5's rule, Example 48 and where the two 8ths are used."""
+    return {
+        "rule": EIGHTH_LORD_METHOD_RULE,
+        "groups": [
+            {"group": name, "houses": list(houses), "category": category}
+            for name, houses, category in EIGHTH_LORD_GROUPS
+        ],
+        "uses_the_ordinary_eighth": EIGHTH_LORD_USES_THE_ORDINARY_EIGHTH,
+        "which_eighth_house": [
+            {"where": where, "eighth": which, "settled_by": how}
+            for where, which, how in WHICH_EIGHTH_HOUSE
+        ],
+        "reference_is_the_callers": EIGHTH_LORD_STRENGTH_IS_GIVEN,
+        "example_48": {
+            "question": EXAMPLE_48,
+            "reference": EXAMPLE_48_REFERENCE,
+            "eighth_lord": EXAMPLE_48_EIGHTH_LORD,
+            "branches": [
+                {"rasis": list(rasis), "group": group, "category": category}
+                for rasis, group, category in EXAMPLE_48_BRANCHES
+            ],
+        },
+        "exercise_23": {
+            "question": EXERCISE_23,
+            "chart": 8,
+            "marakas": EXERCISE_23_MARAKAS,
+            "main_marakas": [{"graha": name, "why": why}
+                             for name, why in EXERCISE_23_MAIN_MARAKAS],
+            "mercury": EXERCISE_23_MERCURY_IS_A_FURTHER_CONSIDERATION,
+            "rudra": EXERCISE_23_RUDRA,
+            "rudra_planet": EXERCISE_23_RUDRA_PLANET,
+            "rudra_rasi": EXERCISE_23_RUDRA_RASI,
+            "cascade_step": EXERCISE_23_CASCADE_STEP,
+            "trishoola": list(EXERCISE_23_TRISHOOLA),
+            "maheswara": EXERCISE_23_MAHESWARA,
+            "maheswara_planet": EXERCISE_23_MAHESWARA_PLANET,
+            "three_pairs": EXERCISE_23_THREE_PAIRS,
+            "category": EXERCISE_23_CATEGORY,
+            "pair_categories": list(EXERCISE_23_PAIR_CATEGORIES),
+            "age_at_death": EXERCISE_23_AGE_AT_DEATH,
+            "eighth_lord": EXERCISE_23_EIGHTH_LORD,
+            "eighth_lord_category": EXERCISE_23_EIGHTH_LORD_CATEGORY,
+            "method_failed_here": EIGHTH_LORD_METHOD_FAILED_HERE,
+        },
+        "framing": FRAMING,
+    }
 
 
 def section_14_4() -> dict:

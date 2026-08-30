@@ -1,0 +1,46 @@
+{
+  "body": {
+    "affliction_override": "However, if the weaker planet is debilitated or in an inimical sign and conjoined/aspected by malefics like Mars, Saturn, Rahu and Ketu, then it becomes Rudra.",
+    "candidates": [
+      "Jupiter",
+      "Mercury"
+    ],
+    "decided_by": 5,
+    "framing": "Many human beings are curious about how long they will live. An ethical astrologer will not scare a client by predicting death, but he may caution a client gently before critical periods and suggest some remedial measures to ward off an impending danger. An estimation of longevity is also helpful in matchmaking. After all, if one person will live for 81 years and the other only for 36 years, it is not advisable to approve a match between those two people. In matchmaking, it is desirable that the bridegroom and the bride have comparable longevity.",
+    "from_lagna": {
+      "lord": "Jupiter",
+      "rasi": "Sagittarius"
+    },
+    "from_seventh": {
+      "lord": "Mercury",
+      "rasi": "Gemini"
+    },
+    "rudra": "Mercury",
+    "rudra_rasi": "Libra",
+    "rudra_sign": 6,
+    "strength_cascade": [
+      "We say that a planet is stronger if it conjoins more planets.",
+      "If both planets conjoin the same number of planets, a planet in exaltation or own rasi is stronger.",
+      "A planet joining exalted planets is stronger.",
+      "A planet aspected by many planets (rasi aspect) is stronger.",
+      "Finally, a planet which is more advanced in its rasi is stronger."
+    ],
+    "trishoola": [
+      {
+        "rasi": "Libra",
+        "sign": 6
+      },
+      {
+        "rasi": "Aquarius",
+        "sign": 10
+      },
+      {
+        "rasi": "Gemini",
+        "sign": 2
+      }
+    ],
+    "weaker_is_debilitated": false,
+    "why": "Jupiter is at 21.45 degrees of his rasi and Mercury at 28.15, so Mercury is more advanced"
+  },
+  "status": 200
+}

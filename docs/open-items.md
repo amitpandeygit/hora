@@ -638,23 +638,21 @@ by side rather than reconciled.
 **Closes when:** a worked example gives a paramaayush for an unsplit chart, or
 a later section extends Table 34.
 
-### OI-109 — §14.3's Rudra cascade and Shiva's motion are both incomplete
+### OI-109 — §14.3's affliction override and Shiva's motion
 
-**The Rudra cascade.** Its five strength tests are stated in order, but the
-affliction override is not computable: the weaker planet takes over if it is
-"debilitated or in an inimical sign and conjoined/aspected by malefics **like**
-Mars, Saturn, Rahu and Ketu". "Like" leaves the list open, and no example works
-the cascade through.
+**The affliction override.** All five strength tests are computable — Exercise
+23 runs the cascade to its fifth and we reproduce it. The override is not: the
+weaker planet takes over if it is "debilitated or in an inimical sign and
+conjoined/aspected by malefics **like** Mars, Saturn, Rahu and Ketu". "Like"
+leaves the list open and no example applies it. The cascade decides Rudra;
+whether the weaker candidate is debilitated is reported beside it, unapplied.
 
 **Shiva's motion.** Footnote 50 builds Table 32 by counting zodiacally from odd
 rasis and anti-zodiacally from even ones, except that Shiva rasis use Shiva's
 motion — "will be discussed in Narayana Dasa". The stated part accounts for
-eight of twelve entries, and the four it misses are exactly the fixed rasis (a
-test proves it), which is what identifies them as the Shiva rasis.
-
-**What we do:** Table 32 is transcribed and checked against the stated part of
-footnote 50. `/v1/marakas/rudra` returns both candidates with the cascade
-rather than a verdict.
+eight of twelve entries; the four it misses are exactly the fixed rasis, which
+is what identifies them as the Shiva rasis. Table 32 is transcribed and checked
+against the stated part.
 
 **Closes when:** Narayana Dasa defines Shiva's motion, or an example runs the Rudra cascade.
 

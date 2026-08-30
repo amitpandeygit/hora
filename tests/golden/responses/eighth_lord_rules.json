@@ -1,0 +1,142 @@
+{
+  "body": {
+    "example_48": {
+      "branches": [
+        {
+          "category": "long",
+          "group": "quadrant",
+          "rasis": [
+            "Li",
+            "Cp",
+            "Ar",
+            "Cn"
+          ]
+        },
+        {
+          "category": "middle",
+          "group": "panaphara",
+          "rasis": [
+            "Sc",
+            "Aq",
+            "Ta",
+            "Le"
+          ]
+        },
+        {
+          "category": "short",
+          "group": "apoklima",
+          "rasis": [
+            "Sg",
+            "Pi",
+            "Ge",
+            "Vi"
+          ]
+        }
+      ],
+      "eighth_lord": "Venus",
+      "question": "Let us say that lagna is in Ar and Li is stronger than Ar. Then we take Li as the reference. The 8th lord is Venus. If Venus is in Li, Cp, Ar or Cn (i.e. a quadrant from Li), it shows long life. If Venus is in Sc, Aq, Ta or Le (i.e. a panaphara from Li), it shows middle life. If Venus is in Sg, Pi, Ge or Vi (i.e. an apoklima from Li), it shows short life.",
+      "reference": "Li"
+    },
+    "exercise_23": {
+      "age_at_death": 50,
+      "cascade_step": 5,
+      "category": "middle",
+      "chart": 8,
+      "eighth_lord": "Lagna is stronger than the 7th house. So let us take Sc as the reference. The 8th lord from it is Mercury. He is in an apoklima from Sc (12th). So the result is \u201cshort life\u201d. This method did not work here.",
+      "eighth_lord_category": "short",
+      "maheswara": "Mercury is AK. The 8th from him is Ta. The 8th from him has Rahu. So we take the 6th from Li and get Pi. Its lord Jupiter is Maheswara.",
+      "maheswara_planet": "Jupiter",
+      "main_marakas": [
+        {
+          "graha": "Jupiter",
+          "why": "owns the 2nd house"
+        },
+        {
+          "graha": "Venus",
+          "why": "owns the 7th house"
+        },
+        {
+          "graha": "Rahu",
+          "why": "is in the 7th house"
+        }
+      ],
+      "marakas": "Jupiter and Venus own the 2nd and 7th houses. Rahu is in the 7th house. These three planets are the main marakas. Mercury owns 8th and joins Jupiter and Venus. So he may also be considered a maraka.",
+      "mercury": "Exercise 23 adds Mercury as a maraka for owning the 8th and joining Jupiter and Venus. Section 14.2's stated rule for extra marakas needs a malefic reaching the 2nd or 7th house or their lords, and owning the 8th is not part of it \u2014 the 8th is a house of life, not death. The exercise hedges it as 'may also be considered', and nothing here computes it.",
+      "method_failed_here": "Exercise 23 ends 'This method did not work here'. The native died at 50, which is inside the 36-72 range the method of three pairs gives, while the eighth lord method gives short life. Both results are reported as the book reports them; neither is suppressed to make the chapter look consistent.",
+      "pair_categories": [
+        "middle",
+        "middle",
+        "short"
+      ],
+      "question": "Consider the rasi chart shown in Chart 8. Identify the maraka planets in this chart. Find Rudra, Trishoolas and Maheswara. Finally estimate the longevity category of the native using the method of three pairs and the eighth lord method.",
+      "rudra": "The 8th house from lagna is Sg (see Table 32) and its lord is Jupiter. The 8th house from Ta (the 7th house) is Ge and its lord is Mercury. Mercury is stronger, as he is more advanced in his rasi. He is Rudra. Rudra is in Libra. So Trishoola (Destroyer Shiva's trident) has spikes in Ge, Li and Aq.",
+      "rudra_planet": "Mercury",
+      "rudra_rasi": "Li",
+      "three_pairs": "Lagna lord and 8th lord show middle life (fixed+movable). Moon and Saturn show middle life (fixed+movable). Lagna and horalagna show short life (fixed+fixed). So the longevity category is \u201cmiddle life\u201d (36-72 years). The native died at the age of 50 years.",
+      "trishoola": [
+        "Ge",
+        "Li",
+        "Aq"
+      ]
+    },
+    "framing": "Many human beings are curious about how long they will live. An ethical astrologer will not scare a client by predicting death, but he may caution a client gently before critical periods and suggest some remedial measures to ward off an impending danger. An estimation of longevity is also helpful in matchmaking. After all, if one person will live for 81 years and the other only for 36 years, it is not advisable to approve a match between those two people. In matchmaking, it is desirable that the bridegroom and the bride have comparable longevity.",
+    "groups": [
+      {
+        "category": "long",
+        "group": "quadrant",
+        "houses": [
+          1,
+          4,
+          7,
+          10
+        ]
+      },
+      {
+        "category": "middle",
+        "group": "panaphara",
+        "houses": [
+          2,
+          5,
+          8,
+          11
+        ]
+      },
+      {
+        "category": "short",
+        "group": "apoklima",
+        "houses": [
+          3,
+          6,
+          9,
+          12
+        ]
+      }
+    ],
+    "reference_is_the_callers": "Section 14.5 says to take the stronger of lagna and the 7th house and does not say how to decide it. Example 48 opens 'Li is stronger than Ar' and Exercise 23 opens 'Lagna is stronger than the 7th house', both as premises. So the reference is the caller's to state.",
+    "rule": "Parasara and Jaimini prescribed another method for estimating the longevity category. Find the stronger of lagna and 7th house and take it as the reference. Find the 8th lord from it and see where he is placed from it. If he is in a quadrant, long life is indicated. If he is in a panaphara, middle life is indicated. If he is in an apoklima, short life is indicated.",
+    "uses_the_ordinary_eighth": "The eighth lord method counts the 8th the ordinary way. Exercise 23 settles it: from a Scorpio reference it names Mercury, who owns Gemini \u2014 the ordinary 8th from Scorpio. Table 32 sends Scorpio to Sagittarius and Jupiter. Example 48 cannot decide it, since both give Venus for a Libra reference.",
+    "which_eighth_house": [
+      {
+        "eighth": "Table 32",
+        "settled_by": "the section says so outright",
+        "where": "14.3 Rudra"
+      },
+      {
+        "eighth": "ordinary",
+        "settled_by": "exception 2 calls Sagittarius the 8th from a Taurus AK",
+        "where": "14.3 Maheswara"
+      },
+      {
+        "eighth": "Table 32",
+        "settled_by": "the section says so in its parenthesis",
+        "where": "14.4 first pair"
+      },
+      {
+        "eighth": "ordinary",
+        "settled_by": "Exercise 23 names Mercury from a Scorpio reference",
+        "where": "14.5 eighth lord method"
+      }
+    ]
+  },
+  "status": 200
+}

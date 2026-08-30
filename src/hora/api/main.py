@@ -35,6 +35,7 @@ from hora.api.routers import (
     karakas,
     karanas,
     lagnas,
+    longevity,
     maasas,
     marakas,
     panchanga,
@@ -105,6 +106,7 @@ app.include_router(analysis.router)
 app.include_router(family.router)
 app.include_router(book_charts.router)
 app.include_router(marakas.router)
+app.include_router(longevity.router)
 
 
 @app.get("/health", response_model=HealthOut, tags=["meta"])

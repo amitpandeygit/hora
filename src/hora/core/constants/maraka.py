@@ -516,3 +516,161 @@ EXAMPLE_47_COVERS = (
     "It is the only branch of section 14.4's combination rule the book works "
     "through."
 )
+
+
+# --------------------------------------------------------------------------
+# §14.5 — The Eighth Lord Method
+# --------------------------------------------------------------------------
+
+EIGHTH_LORD_METHOD_RULE = (
+    "Parasara and Jaimini prescribed another method for estimating the "
+    "longevity category. Find the stronger of lagna and 7th house and take it "
+    "as the reference. Find the 8th lord from it and see where he is placed "
+    "from it. If he is in a quadrant, long life is indicated. If he is in a "
+    "panaphara, middle life is indicated. If he is in an apoklima, short life "
+    "is indicated."
+)
+
+#: The three house groups and the category each gives.
+EIGHTH_LORD_GROUPS: tuple[tuple[str, tuple[int, ...], str], ...] = (
+    ("quadrant", (1, 4, 7, 10), "long"),
+    ("panaphara", (2, 5, 8, 11), "middle"),
+    ("apoklima", (3, 6, 9, 12), "short"),
+)
+
+#: **Finding.** §14.5 uses the *ordinary* 8th, not Table 32. Exercise 23
+#: settles it: with Scorpio as reference it calls the 8th lord Mercury, and
+#: Mercury owns Gemini, the ordinary 8th from Scorpio. Table 32 sends Scorpio
+#: to Sagittarius, whose lord is Jupiter.
+EIGHTH_LORD_USES_THE_ORDINARY_EIGHTH = (
+    "The eighth lord method counts the 8th the ordinary way. Exercise 23 "
+    "settles it: from a Scorpio reference it names Mercury, who owns Gemini "
+    "— the ordinary 8th from Scorpio. Table 32 sends Scorpio to Sagittarius "
+    "and Jupiter. Example 48 cannot decide it, since both give Venus for a "
+    "Libra reference."
+)
+
+#: Which 8th each part of chapter 14 uses. Getting one wrong is silent.
+WHICH_EIGHTH_HOUSE: tuple[tuple[str, str, str], ...] = (
+    ("14.3 Rudra", "Table 32", "the section says so outright"),
+    ("14.3 Maheswara", "ordinary",
+     "exception 2 calls Sagittarius the 8th from a Taurus AK"),
+    ("14.4 first pair", "Table 32", "the section says so in its parenthesis"),
+    ("14.5 eighth lord method", "ordinary",
+     "Exercise 23 names Mercury from a Scorpio reference"),
+)
+
+#: §14.5 says to take "the stronger of lagna and 7th house" without saying
+#: how to compare them, and both worked examples state the winner as given.
+EIGHTH_LORD_STRENGTH_IS_GIVEN = (
+    "Section 14.5 says to take the stronger of lagna and the 7th house and "
+    "does not say how to decide it. Example 48 opens 'Li is stronger than Ar' "
+    "and Exercise 23 opens 'Lagna is stronger than the 7th house', both as "
+    "premises. So the reference is the caller's to state."
+)
+
+EXAMPLE_48 = (
+    "Let us say that lagna is in Ar and Li is stronger than Ar. Then we take "
+    "Li as the reference. The 8th lord is Venus. If Venus is in Li, Cp, Ar or "
+    "Cn (i.e. a quadrant from Li), it shows long life. If Venus is in Sc, Aq, "
+    "Ta or Le (i.e. a panaphara from Li), it shows middle life. If Venus is "
+    "in Sg, Pi, Ge or Vi (i.e. an apoklima from Li), it shows short life."
+)
+
+#: Example 48's three branches, as ``(the rasis it lists, the group, the
+#: category)``. Every rasi appears exactly once across the three, so the
+#: example is exhaustive.
+EXAMPLE_48_BRANCHES: tuple[tuple[tuple[str, ...], str, str], ...] = (
+    (("Li", "Cp", "Ar", "Cn"), "quadrant", "long"),
+    (("Sc", "Aq", "Ta", "Le"), "panaphara", "middle"),
+    (("Sg", "Pi", "Ge", "Vi"), "apoklima", "short"),
+)
+
+EXAMPLE_48_REFERENCE = "Li"
+EXAMPLE_48_EIGHTH_LORD = "Venus"
+
+
+# --------------------------------------------------------------------------
+# Exercise 23 — the whole chapter over Chart 8
+# --------------------------------------------------------------------------
+
+EXERCISE_23 = (
+    "Consider the rasi chart shown in Chart 8. Identify the maraka planets in "
+    "this chart. Find Rudra, Trishoolas and Maheswara. Finally estimate the "
+    "longevity category of the native using the method of three pairs and the "
+    "eighth lord method."
+)
+
+EXERCISE_23_MARAKAS = (
+    "Jupiter and Venus own the 2nd and 7th houses. Rahu is in the 7th house. "
+    "These three planets are the main marakas. Mercury owns 8th and joins "
+    "Jupiter and Venus. So he may also be considered a maraka."
+)
+
+#: The three the exercise calls the main marakas, and how each qualifies.
+EXERCISE_23_MAIN_MARAKAS: tuple[tuple[str, str], ...] = (
+    ("Jupiter", "owns the 2nd house"),
+    ("Venus", "owns the 7th house"),
+    ("Rahu", "is in the 7th house"),
+)
+
+#: **Finding.** Mercury's route is not §14.2's stated rule. That rule admits a
+#: *malefic* conjoining or aspecting the 2nd or 7th house or their lords;
+#: Exercise 23 admits Mercury for owning the **8th** — a house of life — and
+#: joining the two lords. And Mercury here joins Jupiter and Venus, which by
+#: §13.2's reading makes him well-associated and so a natural benefic.
+EXERCISE_23_MERCURY_IS_A_FURTHER_CONSIDERATION = (
+    "Exercise 23 adds Mercury as a maraka for owning the 8th and joining "
+    "Jupiter and Venus. Section 14.2's stated rule for extra marakas needs a "
+    "malefic reaching the 2nd or 7th house or their lords, and owning the 8th "
+    "is not part of it — the 8th is a house of life, not death. The exercise "
+    "hedges it as 'may also be considered', and nothing here computes it."
+)
+
+EXERCISE_23_RUDRA = (
+    "The 8th house from lagna is Sg (see Table 32) and its lord is Jupiter. "
+    "The 8th house from Ta (the 7th house) is Ge and its lord is Mercury. "
+    "Mercury is stronger, as he is more advanced in his rasi. He is Rudra. "
+    "Rudra is in Libra. So Trishoola (Destroyer Shiva's trident) has spikes "
+    "in Ge, Li and Aq."
+)
+
+EXERCISE_23_RUDRA_PLANET = "Mercury"
+EXERCISE_23_RUDRA_RASI = "Li"
+EXERCISE_23_TRISHOOLA: tuple[str, ...] = ("Ge", "Li", "Aq")
+#: Which of §14.3's five strength tests decided it.
+EXERCISE_23_CASCADE_STEP = 5
+
+EXERCISE_23_MAHESWARA = (
+    "Mercury is AK. The 8th from him is Ta. The 8th from him has Rahu. So we "
+    "take the 6th from Li and get Pi. Its lord Jupiter is Maheswara."
+)
+EXERCISE_23_MAHESWARA_PLANET = "Jupiter"
+
+EXERCISE_23_THREE_PAIRS = (
+    "Lagna lord and 8th lord show middle life (fixed+movable). Moon and "
+    "Saturn show middle life (fixed+movable). Lagna and horalagna show short "
+    "life (fixed+fixed). So the longevity category is “middle life” (36-72 "
+    "years). The native died at the age of 50 years."
+)
+EXERCISE_23_CATEGORY = "middle"
+EXERCISE_23_PAIR_CATEGORIES: tuple[str, ...] = ("middle", "middle", "short")
+EXERCISE_23_AGE_AT_DEATH = 50
+
+EXERCISE_23_EIGHTH_LORD = (
+    "Lagna is stronger than the 7th house. So let us take Sc as the "
+    "reference. The 8th lord from it is Mercury. He is in an apoklima from Sc "
+    "(12th). So the result is “short life”. This method did not work here."
+)
+EXERCISE_23_EIGHTH_LORD_CATEGORY = "short"
+
+#: **The book records its own method failing.** The native died at 50, inside
+#: the middle-life range the three-pairs method gives; the eighth lord method
+#: says short life. §14.5's own exercise says so outright.
+EIGHTH_LORD_METHOD_FAILED_HERE = (
+    "Exercise 23 ends 'This method did not work here'. The native died at 50, "
+    "which is inside the 36-72 range the method of three pairs gives, while "
+    "the eighth lord method gives short life. Both results are reported as "
+    "the book reports them; neither is suppressed to make the chapter look "
+    "consistent."
+)

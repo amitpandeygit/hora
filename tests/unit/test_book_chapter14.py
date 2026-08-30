@@ -221,10 +221,10 @@ def test_only_graha_drishti_qualifies_an_additional_maraka():
     assert "using graha drishti" in ADDITIONAL_MARAKA_RULE
     import inspect
 
-    from hora.charts import maraka as module
+    from hora.charts.maraka import additional_marakas as fn
 
-    source = inspect.getsource(module)
-    assert "rasi_drishti" not in source
+    source = inspect.getsource(fn)
+    assert "rasi_drishti" not in source, "the maraka rule is graha drishti only"
     assert "graha_aspects_sign" in source
 
 
@@ -532,22 +532,22 @@ def test_each_of_14_3s_worked_examples_is_recorded(which, setup, result):
 # -- endpoints --------------------------------------------------------------
 
 def test_the_14_3_endpoints(client):
-    body = client.get("/v1/marakas/rudra-rules").json()
+    body = client.get("/v1/longevity/rudra-rules").json()
     assert len(body["table_32"]) == 12
     assert len(body["maheswara_exceptions"]) == 3
     assert len(body["maheswara_examples"]) == 4
     assert "predicting death" in body["framing"]
 
-    rudra = client.get("/v1/marakas/rudra", params={"lagna": R["Le"]}).json()
+    rudra = client.get("/v1/longevity/rudra", params={"lagna": R["Le"]}).json()
     assert rudra["candidates"] == ["Moon", "Saturn"]
     assert rudra["rudra"] is None
 
-    trishoola = client.get("/v1/marakas/trishoola",
+    trishoola = client.get("/v1/longevity/trishoola",
                            params={"rudra_sign": R["Sc"]}).json()
     assert [t["rasi"] for t in trishoola["trishoola"]] == [
         "Scorpio", "Pisces", "Cancer"]
 
-    mahes = client.post("/v1/marakas/maheswara", json={
+    mahes = client.post("/v1/longevity/maheswara", json={
         "ak_sign": R["Ta"], "graha_signs": {str(int(Graha.KETU)): R["Sg"]},
     }).json()
     assert mahes["maheswara_name"] == "Venus"
@@ -750,7 +750,7 @@ def test_a_co_owned_eighth_house_reports_both_lords():
 
 
 def test_the_longevity_endpoints(client):
-    body = client.get("/v1/marakas/longevity-rules").json()
+    body = client.get("/v1/longevity/rules").json()
     assert len(body["table_33"]) == 3
     assert body["table_34"]["long"]["long"] == 120
     assert body["table_34_factors"] == {
@@ -758,7 +758,7 @@ def test_the_longevity_endpoints(client):
     assert "Table 32" in body["eighth_uses_table_32"]
     assert "predicting death" in body["framing"]
 
-    result = client.post("/v1/marakas/longevity", json={
+    result = client.post("/v1/longevity/three-pairs", json={
         "lagna": R["Le"],
         "graha_signs": {"0": R["Le"], "1": R["Ar"], "2": R["Cn"],
                         "3": R["Vi"], "4": R["Sg"], "5": R["Ta"],
@@ -846,8 +846,269 @@ def test_example_47_is_the_only_branch_of_14_4_the_book_works():
 
 
 def test_the_longevity_rules_endpoint_carries_example_47(client):
-    body = client.get("/v1/marakas/longevity-rules").json()["example_47"]
+    body = client.get("/v1/longevity/rules").json()["example_47"]
     assert body["category"] == "long"
     assert body["paramaayush_years"] == 108
     assert len(body["pairs"]) == 3
     assert body["chart"]["Lagna"] == "Ta"
+
+
+# --------------------------------------------------------------------------
+# §14.5 — The Eighth Lord Method, Example 48 and Exercise 23
+# --------------------------------------------------------------------------
+
+from hora.charts.book import GRAHA_OF
+from hora.charts.book import graha_signs as book_graha_signs
+from hora.charts.book import lagna as book_lagna
+from hora.charts.book import longitudes as book_longitudes
+from hora.charts.book import signs as book_signs
+from hora.charts.maraka import (
+    eighth_lord_method,
+    house_group,
+    rudra,
+)
+from hora.core.const import (
+    EIGHTH_LORD_GROUPS,
+    EIGHTH_LORD_METHOD_FAILED_HERE,
+    EIGHTH_LORD_STRENGTH_IS_GIVEN,
+    EIGHTH_LORD_USES_THE_ORDINARY_EIGHTH,
+    EXAMPLE_48_BRANCHES,
+    EXAMPLE_48_EIGHTH_LORD,
+    EXAMPLE_48_REFERENCE,
+    EXERCISE_23_AGE_AT_DEATH,
+    EXERCISE_23_CASCADE_STEP,
+    EXERCISE_23_CATEGORY,
+    EXERCISE_23_EIGHTH_LORD_CATEGORY,
+    EXERCISE_23_MAHESWARA_PLANET,
+    EXERCISE_23_MAIN_MARAKAS,
+    EXERCISE_23_MERCURY_IS_A_FURTHER_CONSIDERATION,
+    EXERCISE_23_PAIR_CATEGORIES,
+    EXERCISE_23_RUDRA_PLANET,
+    EXERCISE_23_RUDRA_RASI,
+    EXERCISE_23_TRISHOOLA,
+    WHICH_EIGHTH_HOUSE,
+)
+
+
+def test_the_three_house_groups_tile_all_twelve_houses():
+    covered = [h for _, houses, _ in EIGHTH_LORD_GROUPS for h in houses]
+    assert sorted(covered) == list(range(1, 13))
+    assert [c for _, _, c in EIGHTH_LORD_GROUPS] == ["long", "middle", "short"]
+
+
+@pytest.mark.parametrize("house", range(1, 13))
+def test_every_house_falls_in_exactly_one_group(house):
+    group, category = house_group(house)
+    assert group in {"quadrant", "panaphara", "apoklima"}
+    assert category in LONGEVITY_RANGES
+
+
+@pytest.mark.parametrize("rasis,group,category", EXAMPLE_48_BRANCHES,
+                         ids=[b[1] for b in EXAMPLE_48_BRANCHES])
+def test_example_48s_three_branches(rasis, group, category):
+    """Lagna Ar with Li stronger, so Li is the reference and Venus the 8th
+    lord. Each branch lists the four rasis of one group from Libra."""
+    reference = R[EXAMPLE_48_REFERENCE]
+    for rasi in rasis:
+        house = ((R[rasi] - reference) % 12) + 1
+        assert house_group(house) == (group, category), rasi
+        body = eighth_lord_method(
+            reference, {int(Graha.VENUS): R[rasi]})
+        assert body["category"] == category
+        assert body["group"] == group
+        assert body["eighth_house"]["lord_used"] == EXAMPLE_48_EIGHTH_LORD
+
+
+def test_example_48_lists_every_rasi_exactly_once():
+    """Its three branches partition the zodiac, so the method always decides."""
+    listed = [r for rasis, _, _ in EXAMPLE_48_BRANCHES for r in rasis]
+    assert sorted(listed) == sorted(RASI_ABBR)
+
+
+def test_the_eighth_lord_method_uses_the_ordinary_eighth():
+    """Exercise 23 settles it: from a Scorpio reference the book names
+    Mercury, who owns Gemini — the ordinary 8th. Table 32 would send Scorpio
+    to Sagittarius and give Jupiter."""
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+
+    assert RASI_ABBR[ordinary_eighth(R["Sc"])] == "Ge"
+    assert RASI_ABBR[rudra_eighth(R["Sc"])] == "Sg"
+    body = eighth_lord_method(R["Sc"], {int(Graha.MERCURY): R["Li"]})
+    assert body["eighth_house"]["lord_used"] == "Mercury"
+    assert body["eighth_house"]["by"] == "the ordinary count"
+    assert "Exercise 23 settles it" in EIGHTH_LORD_USES_THE_ORDINARY_EIGHTH
+
+
+def test_example_48_cannot_settle_which_eighth_is_used():
+    """Libra gives Taurus and Venus under both counts, which is why the
+    exercise is the deciding case."""
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+
+    assert ordinary_eighth(R["Li"]) == rudra_eighth(R["Li"]) == R["Ta"]
+
+
+def test_the_four_places_chapter_14_reads_an_eighth_house():
+    """Two use Table 32 and two the ordinary count. Getting one wrong is
+    silent, so the map is recorded."""
+    assert len(WHICH_EIGHTH_HOUSE) == 4
+    by_place = {where: which for where, which, _ in WHICH_EIGHTH_HOUSE}
+    assert by_place["14.3 Rudra"] == "Table 32"
+    assert by_place["14.3 Maheswara"] == "ordinary"
+    assert by_place["14.4 first pair"] == "Table 32"
+    assert by_place["14.5 eighth lord method"] == "ordinary"
+
+
+def test_the_reference_is_the_callers_because_14_5_gives_no_comparison():
+    """Both worked cases state the winner as a premise."""
+    assert "does not say how to decide it" in EIGHTH_LORD_STRENGTH_IS_GIVEN
+    assert "as premises" in EIGHTH_LORD_STRENGTH_IS_GIVEN
+
+
+def test_the_eighth_lord_method_refuses_a_chart_without_the_lord():
+    with pytest.raises(MarakaError, match="his rasi is needed"):
+        eighth_lord_method(R["Sc"], {int(Graha.MOON): R["Aq"]})
+
+
+# -- Exercise 23, over Chart 8 ---------------------------------------------
+
+def _chart_8():
+    lagna = book_lagna(8)
+    signs = book_graha_signs(8)
+    parsed = book_longitudes(8)
+    longitudes = {int(g): parsed[name] for name, g in GRAHA_OF.items()}
+    return lagna, signs, longitudes
+
+
+def test_exercise_23s_three_main_marakas_are_all_found():
+    """Jupiter and Venus own the 2nd and 7th; Rahu is in the 7th."""
+    lagna, signs, _ = _chart_8()
+    found = {m["graha_name"]: m for m in marakas(lagna, signs)["maraka_grahas"]}
+    for name, why in EXERCISE_23_MAIN_MARAKAS:
+        assert name in found, name
+    assert found["Jupiter"]["kind"] == found["Venus"]["kind"] == "house lord"
+    assert "conjoins the 7th house" in " ".join(found["Rahu"]["reasons"])
+
+
+def test_our_maraka_list_is_a_superset_and_oi_108_is_why():
+    """§14.2's contact rule also catches the Sun, Mars and Ketu, all of which
+    aspect the 7th house from Scorpio. The exercise names only three as the
+    'main' ones, and the filter it used is the undefined 'powerfully'."""
+    lagna, signs, _ = _chart_8()
+    found = {m["graha_name"] for m in marakas(lagna, signs)["maraka_grahas"]}
+    named = {name for name, _ in EXERCISE_23_MAIN_MARAKAS}
+    assert named < found
+    assert found - named == {"Sun", "Mars", "Ketu"}
+    assert "does not say what makes the contact powerful" \
+        in ADDITIONAL_MARAKA_POWERFULLY_UNDEFINED
+
+
+def test_exercise_23s_mercury_uses_a_route_14_2_does_not_state():
+    """It admits Mercury for owning the 8th and joining the two lords. Owning
+    the 8th is not in §14.2's rule, and Mercury joining Jupiter and Venus
+    makes him well-associated and so a benefic."""
+    lagna, signs, _ = _chart_8()
+    found = {m["graha_name"] for m in marakas(lagna, signs)["maraka_grahas"]}
+    assert "Mercury" not in found
+    assert signs[int(Graha.MERCURY)] == signs[int(Graha.JUPITER)] \
+        == signs[int(Graha.VENUS)] == R["Li"]
+    assert "owning the 8th is not part of it" \
+        in EXERCISE_23_MERCURY_IS_A_FURTHER_CONSIDERATION
+
+
+def test_exercise_23s_rudra_is_decided_by_the_fifth_cascade_test():
+    """"Mercury is stronger, as he is more advanced in his rasi." Both
+    candidates are in Libra, so the first four tests tie."""
+    lagna, signs, longitudes = _chart_8()
+    body = rudra(lagna, signs, longitudes)
+    assert body["candidates"] == ["Jupiter", "Mercury"]
+    assert body["rudra"] == EXERCISE_23_RUDRA_PLANET == "Mercury"
+    assert body["decided_by"] == EXERCISE_23_CASCADE_STEP == 5
+    assert "more advanced" in body["why"]
+    assert RASI_ABBR[body["rudra_sign"]] == EXERCISE_23_RUDRA_RASI == "Li"
+
+
+def test_exercise_23s_trishoola_spikes():
+    """"Trishoola has spikes in Ge, Li and Aq"."""
+    lagna, signs, longitudes = _chart_8()
+    body = rudra(lagna, signs, longitudes)
+    spikes = {RASI_ABBR[t["sign"]] for t in body["trishoola"]}
+    assert spikes == set(EXERCISE_23_TRISHOOLA) == {"Ge", "Li", "Aq"}
+
+
+def test_the_cascade_cannot_reach_its_last_test_without_longitudes():
+    """Rules 1 to 4 tie here, so signs alone leave it undecided — and the
+    answer says which test it stopped at rather than guessing."""
+    lagna, signs, _ = _chart_8()
+    body = rudra(lagna, signs)
+    assert body["rudra"] is None
+    assert body["decided_by"] == 5
+    assert "needs longitudes" in body["why"]
+
+
+def test_exercise_23s_maheswara_takes_the_sixth_because_rahu_sits_there():
+    """The 8th from him has Rahu. So we take the 6th from Li and get Pi."""
+    _, signs, _ = _chart_8()
+    body = maheswara(signs[int(Graha.MERCURY)], signs)
+    assert body["house_used"] == 6
+    assert body["maheswara_name"] == EXERCISE_23_MAHESWARA_PLANET == "Jupiter"
+    assert signs[int(Graha.RAHU)] == R["Ta"]
+
+
+def test_exercise_23s_three_pairs_give_middle_life():
+    """Two middle and one short, and the native died at 50 — inside the
+    36-72 the method gives."""
+    lagna, signs, _ = _chart_8()
+    hl = book_signs(8)["HL"]
+    body = three_pairs(lagna, signs, hl)
+    assert [p["category"] for p in body["pairs"]] == list(
+        EXERCISE_23_PAIR_CATEGORIES)
+    assert body["category"] == EXERCISE_23_CATEGORY == "middle"
+    assert body["range_years"] == [36, 72]
+    low, high = body["range_years"]
+    assert low <= EXERCISE_23_AGE_AT_DEATH <= high
+
+
+def test_exercise_23s_eighth_lord_method_gives_short_life_and_the_book_says_so():
+    """"So the result is 'short life'. This method did not work here." The
+    book records its own method failing, and so do we."""
+    lagna, signs, _ = _chart_8()
+    body = eighth_lord_method(lagna, signs)
+    assert body["category"] == EXERCISE_23_EIGHTH_LORD_CATEGORY == "short"
+    assert body["house_from_reference"] == 12
+    assert body["group"] == "apoklima"
+    assert "did not work here" in EIGHTH_LORD_METHOD_FAILED_HERE
+
+
+def test_the_two_methods_disagree_on_chart_8_and_neither_is_suppressed():
+    """The chapter's own worked exercise has them disagree. Both are served."""
+    lagna, signs, _ = _chart_8()
+    hl = book_signs(8)["HL"]
+    assert three_pairs(lagna, signs, hl)["category"] == "middle"
+    assert eighth_lord_method(lagna, signs)["category"] == "short"
+    assert EXERCISE_23_AGE_AT_DEATH == 50
+
+
+def test_the_14_5_endpoints(client):
+    body = client.get("/v1/longevity/eighth-lord-rules").json()
+    assert len(body["groups"]) == 3
+    assert len(body["which_eighth_house"]) == 4
+    assert body["exercise_23"]["category"] == "middle"
+    assert body["exercise_23"]["age_at_death"] == 50
+    assert "did not work here" in body["exercise_23"]["method_failed_here"]
+
+    result = client.post("/v1/longevity/eighth-lord", json={
+        "reference": R["Sc"],
+        "graha_signs": {str(int(Graha.MERCURY)): R["Li"]},
+    }).json()
+    assert result["category"] == "short"
+    assert result["group"] == "apoklima"
+
+    decided = client.post("/v1/longevity/rudra", json={
+        "lagna": R["Sc"],
+        "graha_signs": {str(int(Graha.JUPITER)): R["Li"],
+                        str(int(Graha.MERCURY)): R["Li"]},
+        "graha_longitudes": {str(int(Graha.JUPITER)): 6 * 30 + 21.45,
+                             str(int(Graha.MERCURY)): 6 * 30 + 28.15},
+    }).json()
+    assert decided["rudra"] == "Mercury"
+    assert decided["decided_by"] == 5
