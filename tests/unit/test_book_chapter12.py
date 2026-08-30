@@ -85,6 +85,15 @@ from hora.core.const import (
     EXERCISE_19_ANSWER,
     EXERCISE_19_UNEXPLAINED_MARK,
     EXERCISE_20_ANSWER,
+    EXERCISE_21,
+    EXERCISE_21_ANSWER,
+    EXERCISE_21_GUESS,
+    EXERCISE_21_HINT,
+    EXERCISE_21_LAGNA,
+    EXERCISE_21_LAGNA_REKHAS,
+    EXERCISE_21_TENTH,
+    EXERCISE_21_TENTH_REKHAS,
+    EXERCISE_21_VERDICT,
     MUHURTA_DEFINITION,
     MUHURTA_FOOTNOTE,
     RASI_ABBR,
@@ -1910,3 +1919,112 @@ def test_the_hora_lagna_still_lands_in_the_printed_rasi(
 
     got = _special_lagnas(birth_data, place, Settings(node_type=NodeType.MEAN))
     assert RASI_ABBR[int(got["HL"] // 30)] == chart["HL"].split()[1]
+
+
+# --------------------------------------------------------------------------
+# Exercise 21 — the D-10 SAV of Chart 12, and her career
+# --------------------------------------------------------------------------
+
+def _chart_12_references() -> dict[str, float]:
+    return {
+        "Sun": _lon12(CHART_12["Sun"]), "Moon": _lon12(CHART_12["Moon"]),
+        "Mars": _lon12(CHART_12["Mars"]), "Mercury": _lon12(CHART_12["Merc"]),
+        "Jupiter": _lon12(CHART_12["Jup"]), "Venus": _lon12(CHART_12["Ven"]),
+        "Saturn": _lon12(CHART_12["Sat"]), "Lagna": _lon12(CHART_12["Asc"]),
+    }
+
+
+def test_exercise_21_is_transcribed_with_its_hint():
+    assert "unsuccessful career as a waiter" in EXERCISE_21
+    assert "lagna and the 10th house" in EXERCISE_21_HINT
+
+
+def test_exercise_21_d10_sav_is_computed_from_the_rasi_longitudes():
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    sav = sarvashtakavarga(signs_in_chart(_chart_12_references(), "D10"))
+    assert tuple(sav["rekhas"]) == EXERCISE_21_ANSWER
+    assert sav["total"] == SAV_TOTAL
+
+
+def test_exercise_21_answers_the_same_way_from_the_drawn_diagram():
+    """Chart 12 draws its D-10, so the exercise can be worked without any
+    varga at all — straight off the diagram. Both routes must agree, or one
+    of the varga and the transcription is wrong."""
+    from hora.charts.ashtakavarga import signs_in_chart
+
+    drawn = {
+        "Sun": R[CHART_12_D10_DRAWN["Sun"]],
+        "Moon": R[CHART_12_D10_DRAWN["Moon"]],
+        "Mars": R[CHART_12_D10_DRAWN["Mars"]],
+        "Mercury": R[CHART_12_D10_DRAWN["Merc"]],
+        "Jupiter": R[CHART_12_D10_DRAWN["Jup"]],
+        "Venus": R[CHART_12_D10_DRAWN["Ven"]],
+        "Saturn": R[CHART_12_D10_DRAWN["Sat"]],
+        "Lagna": R[CHART_12_D10_DRAWN["Asc"]],
+    }
+    assert drawn == signs_in_chart(_chart_12_references(), "D10")
+    assert tuple(sarvashtakavarga(drawn)["rekhas"]) == EXERCISE_21_ANSWER
+
+
+def test_exercise_21_hint_figures_are_lagna_39_and_tenth_31():
+    """The two numbers the hint sends the reader to, both derived."""
+    from hora.charts.ashtakavarga import sav_grade, signs_in_chart
+    from hora.charts.vargas import varga
+
+    sav = sarvashtakavarga(signs_in_chart(_chart_12_references(), "D10"))
+    lagna = varga(_lon12(CHART_12["Asc"]), "D10").sign
+    tenth = (lagna + 9) % 12
+    assert RASI_ABBR[lagna] == EXERCISE_21_LAGNA == "Vi"
+    assert RASI_ABBR[tenth] == EXERCISE_21_TENTH == "Ge"
+    assert sav["rekhas"][lagna] == EXERCISE_21_LAGNA_REKHAS == 39
+    assert sav["rekhas"][tenth] == EXERCISE_21_TENTH_REKHAS == 31
+    assert sav_grade(sav["rekhas"][lagna]) == "strong"
+    assert sav_grade(sav["rekhas"][tenth]) == "strong"
+
+
+def test_exercise_21_lagna_holds_the_maximum_in_the_chart():
+    from hora.charts.ashtakavarga import signs_in_chart
+    from hora.charts.vargas import varga
+
+    sav = sarvashtakavarga(signs_in_chart(_chart_12_references(), "D10"))
+    lagna = varga(_lon12(CHART_12["Asc"]), "D10").sign
+    assert sav["rekhas"][lagna] == max(sav["rekhas"])
+
+
+def test_exercise_21_lagna_beats_the_prime_ministers():
+    """Example 39 gives Vajpayee's D-10 lagna of 35 as the reason for 'his
+    success and good name'. Hers is 39. That is the book's own yardstick, so
+    the 'unsuccessful waiter' story cannot stand."""
+    assert EXERCISE_21_LAGNA_REKHAS > EXAMPLE_39_D10_SAV[R["Sc"]] == 35
+
+
+def test_exercise_21_verdict_is_no_and_says_which_figures_decide_it():
+    assert "No." in EXERCISE_21_VERDICT
+    assert "39 rekhas" in EXERCISE_21_VERDICT
+    assert "31" in EXERCISE_21_VERDICT
+
+
+def test_exercise_21_guess_stops_where_the_book_stops():
+    """§12.5 fixes which chart to read a career from; it gives no rule for
+    reading a *field* of work out of rekhas. The guess says so rather than
+    inventing one."""
+    assert "no rule that" in EXERCISE_21_GUESS
+    assert "Mercury" in EXERCISE_21_GUESS
+
+
+def test_exercise_21_both_hint_houses_are_owned_by_mercury():
+    """The one thing the chart does supply about the field."""
+    from hora.core.const import RASI_LORD
+
+    assert RASI_LORD[R[EXERCISE_21_LAGNA]] == Graha.MERCURY
+    assert RASI_LORD[R[EXERCISE_21_TENTH]] == Graha.MERCURY
+
+
+def test_the_rules_endpoint_carries_exercise_21(client):
+    body = client.get("/v1/ashtakavarga/rules").json()["exercise_21"]
+    assert body["answer"] == list(EXERCISE_21_ANSWER)
+    assert body["makes_sense"] is False
+    assert body["hint_figures"]["lagna"]["rekhas"] == 39
+    assert body["hint_figures"]["tenth"]["rekhas"] == 31
+    assert "book prints no answer" in body["answer_is_ours"]

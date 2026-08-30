@@ -78,7 +78,9 @@ class AshtakavargaRulesOut(BaseModel):
     exercise_18: dict
     exercise_19: dict
     exercise_20: dict
+    exercise_21: dict
     example_39: dict
+    chart_3: dict
     chart_12: dict
     sav_definition: str
     samudaaya_means: str

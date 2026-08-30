@@ -97,6 +97,50 @@
       "note": "Chart 12's diagram is its **D-10**, not its rasi chart, so the drawn placements check the varga as well as the transcription. Our D-10 reproduces all twelve.",
       "title": "D-10 SAV Exercise"
     },
+    "chart_3": {
+      "birth": "December 25, 1926, 5:12 am (IST), 78 E 10, 26 N 14",
+      "chara_karakas": {
+        "Jup": "DK",
+        "Mars": "PiK",
+        "Merc": "AK",
+        "Moon": "MK",
+        "Rahu": "BK",
+        "Sat": "PK",
+        "Sun": "GK",
+        "Ven": "AmK"
+      },
+      "drawn": {
+        "AL": "Cp",
+        "Asc": "Sc",
+        "GL": "Cn",
+        "HL": "Li",
+        "Jup": "Aq",
+        "Ketu": "Sg",
+        "Mars": "Ar",
+        "Merc": "Sc",
+        "Moon": "Le",
+        "Rahu": "Ge",
+        "Sat": "Sc",
+        "Sun": "Sg",
+        "Ven": "Sg"
+      },
+      "longitudes": {
+        "Asc": "14 Sc 18",
+        "GL": "21 Cn 25",
+        "HL": "13 Li 46",
+        "Jup": "2 Aq 05",
+        "Ketu": "14 Sg 30",
+        "Mars": "13 Ar 39",
+        "Merc": "20 Sc 59",
+        "Moon": "15 Le 28",
+        "Rahu": "14 Ge 30",
+        "Sat": "9 Sc 41",
+        "Sun": "9 Sg 35",
+        "Ven": "17 Sg 42"
+      },
+      "note": "Example 39 works from this chart without reprinting it. Both of its printed SAVs recompute from these longitudes exactly. The diagram prints AL, which the longitudes do not, so it is an independent check on section 9.2 over a Scorpio lagna.",
+      "title": "Rasi \u2014 A.B. Vajpayee"
+    },
     "classical_totals_provenance": "Not from this book. The chapter prints the tables and gives no totals. These figures come from the wider tradition and are used only as a check on the transcription; a mismatch would be reported, never corrected.",
     "divisional_example": {
       "chart": "D12",
@@ -418,6 +462,40 @@
       "chart": "Chart 6",
       "closing": "Using the above values, one can prepare a chart for SAV, as shown in Chart 11.",
       "question": "Find the number of rekhas in all the rasis in SAV for the same rasi chart (see Chart 6)."
+    },
+    "exercise_21": {
+      "answer": [
+        24,
+        25,
+        31,
+        28,
+        27,
+        39,
+        33,
+        29,
+        26,
+        22,
+        28,
+        25
+      ],
+      "answer_is_ours": "The book prints no answer to Exercise 21. This is our computation, and it sums to 337 like every other SAV.",
+      "chart": "Chart 12",
+      "guess": "A distinguished and successful career. Naming the field needs more than an SAV: the exercise says 'guess', and section 12.5 gives no rule that turns rekhas into a profession. What the chart does supply is that both houses the hint names \u2014 Virgo lagna and Gemini 10th \u2014 are owned by Mercury, so Mercury's significations are where a fuller reading would start.",
+      "hint": "Look at the number of rekhas in lagna and the 10th house.",
+      "hint_figures": {
+        "lagna": {
+          "rasi": "Vi",
+          "rekhas": 39
+        },
+        "tenth": {
+          "rasi": "Ge",
+          "rekhas": 31
+        }
+      },
+      "makes_sense": false,
+      "question": "Consider the D-10 chart of a lady, shown in Chart 12. Compute the SAV of this D-10. Suppose we are told that she has an unsuccessful career as a waiter in a small restaurant. Based on D-10's SAV, does it make sense? If not, guess her career.",
+      "varga": "D10",
+      "verdict": "No. Lagna in the D-10 holds 39 rekhas \u2014 the maximum in the chart and the highest D-10 lagna in the book, above the 35 that Example 39 gives as the reason for a Prime Minister's 'success and good name'. The 10th house holds 31, also strong by section 12.4's bands. An unsuccessful career in a menial job contradicts both figures."
     },
     "in_divisional_charts": "If we can judge the benefic positions of various planets with respect to 8 references in rasi chart, there is no reason why we should not do it in all the divisional charts. In fact, this becomes invaluable when we interpret transits in rasi chart with respect to the natal positions in divisional charts and transits in divisional charts with respect to the natal positions in rasi chart.",
     "intro": "Analyzing a chart and making correct predictions requires mixing many different principles and making fine compromises and judgments. Sage Parasara said that it is difficult for even great Maharshis. In Kali Yuga, human beings become sinful and the sins kill their intelligence. Parasara said that the intellectual pygmies of Kali Yuga cannot cope with too many complicated principles and presented ashtakavarga as a simple technique that lets them make reasonable predictions without much fuss.",

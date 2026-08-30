@@ -87,6 +87,15 @@ from hora.core.const import (
     EXERCISE_20,
     EXERCISE_20_ANSWER,
     EXERCISE_20_CLOSING,
+    EXERCISE_21,
+    EXERCISE_21_ANSWER,
+    EXERCISE_21_GUESS,
+    EXERCISE_21_HINT,
+    EXERCISE_21_LAGNA,
+    EXERCISE_21_LAGNA_REKHAS,
+    EXERCISE_21_TENTH,
+    EXERCISE_21_TENTH_REKHAS,
+    EXERCISE_21_VERDICT,
     MUHURTA_DEFINITION,
     MUHURTA_FOOTNOTE,
     RASI_NAMES,
@@ -270,6 +279,26 @@ def rules() -> dict:
                 "the drawn placements check the varga as well as the "
                 "transcription. Our D-10 reproduces all twelve."
             ),
+        },
+        "exercise_21": {
+            "question": EXERCISE_21,
+            "hint": EXERCISE_21_HINT,
+            "chart": "Chart 12",
+            "varga": "D10",
+            "answer": list(EXERCISE_21_ANSWER),
+            "answer_is_ours": (
+                "The book prints no answer to Exercise 21. This is our "
+                "computation, and it sums to 337 like every other SAV."
+            ),
+            "hint_figures": {
+                "lagna": {"rasi": EXERCISE_21_LAGNA,
+                          "rekhas": EXERCISE_21_LAGNA_REKHAS},
+                "tenth": {"rasi": EXERCISE_21_TENTH,
+                          "rekhas": EXERCISE_21_TENTH_REKHAS},
+            },
+            "makes_sense": False,
+            "verdict": EXERCISE_21_VERDICT,
+            "guess": EXERCISE_21_GUESS,
         },
         "exercise_20": {
             "question": EXERCISE_20,

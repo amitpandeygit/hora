@@ -695,3 +695,46 @@ CHART_3_CHARA_KARAKAS: dict[str, str] = {
     "Merc": "AK", "Ven": "AmK", "Rahu": "BK", "Moon": "MK",
     "Mars": "PiK", "Sat": "PK", "Sun": "GK", "Jup": "DK",
 }
+
+
+# --------------------------------------------------------------------------
+# Exercise 21 — the D-10 SAV of Chart 12, and what it says about her career
+# --------------------------------------------------------------------------
+
+EXERCISE_21 = (
+    "Consider the D-10 chart of a lady, shown in Chart 12. Compute the SAV of "
+    "this D-10. Suppose we are told that she has an unsuccessful career as a "
+    "waiter in a small restaurant. Based on D-10's SAV, does it make sense? "
+    "If not, guess her career.")
+
+EXERCISE_21_HINT = (
+    "Look at the number of rekhas in lagna and the 10th house.")
+
+#: Our computed answer, Aries first. The exercise prints none — the book asks
+#: the reader to work it. Sums to 337 like every other SAV.
+EXERCISE_21_ANSWER: tuple[int, ...] = (
+    24, 25, 31, 28, 27, 39, 33, 29, 26, 22, 28, 25)
+
+#: The two figures the hint sends the reader to, from a Virgo D-10 lagna.
+EXERCISE_21_LAGNA = "Vi"
+EXERCISE_21_LAGNA_REKHAS = 39
+EXERCISE_21_TENTH = "Ge"
+EXERCISE_21_TENTH_REKHAS = 31
+
+#: The verdict the hint's two figures force, in §12.4's own bands.
+EXERCISE_21_VERDICT = (
+    "No. Lagna in the D-10 holds 39 rekhas — the maximum in the chart and the "
+    "highest D-10 lagna in the book, above the 35 that Example 39 gives as the "
+    "reason for a Prime Minister's 'success and good name'. The 10th house "
+    "holds 31, also strong by section 12.4's bands. An unsuccessful career in "
+    "a menial job contradicts both figures.")
+
+#: Where the reading can and cannot go. Section 12.5 fixes the chart to use;
+#: it does not give a rule for reading a *field* of work out of an SAV.
+EXERCISE_21_GUESS = (
+    "A distinguished and successful career. Naming the field needs more than "
+    "an SAV: the exercise says 'guess', and section 12.5 gives no rule that "
+    "turns rekhas into a profession. What the chart does supply is that both "
+    "houses the hint names — Virgo lagna and Gemini 10th — are owned by "
+    "Mercury, so Mercury's significations are where a fuller reading would "
+    "start.")
