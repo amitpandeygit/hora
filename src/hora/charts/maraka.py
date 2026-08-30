@@ -598,7 +598,7 @@ def eighth_lord_method(reference: int, graha_signs: dict[int, int]) -> dict:
         "why": (
             f"{GRAHA_NAMES[lord]} owns the 8th from {RASI_NAMES[index]}, "
             f"which is {RASI_NAMES[eighth]}; he sits in {RASI_NAMES[seat]}, "
-            f"the {house}th from {RASI_NAMES[index]}, "
+            f"the {_ordinal(house)} from {RASI_NAMES[index]}, "
             f"{'an' if group[0] in 'aeiou' else 'a'} {group} — so {category} "
             f"life"
         ),

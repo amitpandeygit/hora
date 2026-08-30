@@ -1157,3 +1157,21 @@ def test_the_rules_endpoint_carries_the_closing(client):
     assert "not infallible" in body["closing"]
     assert len(body["use_and_caution"]) == 2
     assert "not infallible" in body["admits_its_gaps"]
+
+
+def test_ordinals_are_written_properly_everywhere_they_appear():
+    """A real chart run turned up "the 2th from Cancer" in the eighth lord
+    method's explanation. Every ordinal in the module goes through _ordinal
+    now, and none is built by pasting "th" onto a number."""
+    import inspect
+
+    from hora.charts import maraka as module
+
+    source = inspect.getsource(module)
+    assert "}th " not in source, 'an ordinal is being built as "{n}th"'
+    assert "}th (" not in source
+    assert "}th f" not in source
+
+    body = eighth_lord_method(R["Cn"], {int(Graha.SATURN): R["Le"]})
+    assert "the 2nd from" in body["why"]
+    assert "2th" not in body["why"]
