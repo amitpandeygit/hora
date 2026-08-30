@@ -112,3 +112,90 @@ def test_the_two_year_lengths_move_mahadasa_boundaries_by_months():
                                         starts(DashaYearLength.SAVANA))]
     assert drift[1] == pytest.approx(71, abs=1)      # 2nd mahadasa
     assert drift[8] == pytest.approx(560, abs=1)     # 9th
+
+
+# --------------------------------------------------------------------------
+# Example 50 — the chapter's worked example. See D-50 and OI-115.
+# --------------------------------------------------------------------------
+
+#: "born at 5:50 am on 2000 April 28 (time zone: 4 hours west of GMT).
+#: Moon is at 2°23' in Aq at the time of birth."
+EX50_MOON = 10 * 30 + 2 + 23 / 60
+EX50_BIRTH = (2000, 4, 28, 5 + 50 / 60)
+
+
+def test_example_50_steps_1_and_2_place_the_moon_in_dhanishtha():
+    """"the 3rd pada of Dhanishtha... starts at 23°20' in Cp and ends at
+    6°40' in Aq", and the advancement in it is 2Aq23 - 23Cp20 = 9°3'."""
+    start = 9 * 30 + 23 + 20 / 60                  # 23 Cp 20
+    assert EX50_MOON - start == pytest.approx(9 + 3 / 60)
+    assert start + NAKSHATRA_SPAN == pytest.approx(10 * 30 + 6 + 40 / 60)
+    pada = int((EX50_MOON - start) / (NAKSHATRA_SPAN / 4)) + 1
+    assert pada == 3
+
+
+def test_example_50_step_3_fraction_yet_to_be_traversed():
+    """"(13°20' - 9°3')/13°20' = 4°17'/13°20' = 257/800 = 0.32125\""""
+    left = NAKSHATRA_SPAN - (9 + 3 / 60)
+    assert left == pytest.approx(4 + 17 / 60)
+    assert left / NAKSHATRA_SPAN == pytest.approx(257 / 800)
+    assert left / NAKSHATRA_SPAN == pytest.approx(0.32125)
+
+
+def test_example_50_steps_4_to_6_give_mars_and_its_balance():
+    """"First dasa belongs to the lord of Dhanishtha. It is Mars." and
+    "7 x 0.32125 = 2.24875 years\""""
+    lord, balance = balance_at_birth(V, EX50_MOON)
+    assert lord == int(Graha.MARS)
+    assert balance == pytest.approx(2.24875)
+
+
+def test_example_50_step_5_sequence_from_mars():
+    """"Mars (7), Rahu (18), Jupiter (16), Saturn (19), Mercury (17),
+    Ketu (7), Venus (20), Sun (6), Moon (10)\""""
+    start = list(V.order).index(int(Graha.MARS))
+    got = [(GRAHA_NAMES[V.order[(start + k) % 9]], V.years[(start + k) % 9])
+           for k in range(9)]
+    assert got == [("Mars", 7), ("Rahu", 18), ("Jupiter", 16), ("Saturn", 19),
+                   ("Mercury", 17), ("Ketu", 7), ("Venus", 20), ("Sun", 6),
+                   ("Moon", 10)]
+
+
+def test_example_50s_own_breakdown_is_in_savana_units():
+    """"2 years 2 months 29 days 33 ghatis", with a ghati 1/60 of a day.
+
+    Only savana reads this way: 720 + 60 + 29 + 0.55 = 809.55 days, which is
+    2.24875 x 360 exactly. The same balance in sidereal years is 821.4 days and
+    cannot be written as 2y 2m 29d in any month length the chapter uses.
+    """
+    days = 2.24875 * 360
+    assert days == pytest.approx(2 * 360 + 2 * 30 + 29 + 33 / 60)
+    assert days == pytest.approx(809.55)
+
+
+def test_example_50_end_date_is_one_day_after_the_printed_one():
+    """See D-50. The time of day matches; the day count does not.
+
+    The balance is what remains of Mars dasa at birth, so it runs forward from
+    birth: 809.55 days from 5:50 am on 2000 April 28 is 2002 July 16, 19:02.
+    The example prints "about 7 pm on 2002 July 15", which is 808.55 days.
+    """
+    import swisseph as swe
+
+    birth_jd = swe.julday(*EX50_BIRTH)
+    year, month, day, hour = swe.revjul(birth_jd + 2.24875 * 360)
+    assert (year, month, day) == (2002, 7, 16)
+    assert int(hour) == 19                                   # the book's "7 pm"
+
+    printed_jd = swe.julday(2002, 7, 15, 19.0)
+    assert birth_jd + 2.24875 * 360 - printed_jd == pytest.approx(1.0, abs=0.01)
+
+
+def test_example_50_rules_out_sidereal_years():
+    """Under our default the same balance lands thirteen days later, so this
+    example is evidence for savana rather than a reason to doubt it."""
+    import swisseph as swe
+
+    days = 2.24875 * year_days(DashaYearLength.SIDEREAL)
+    year, month, day, _hour = swe.revjul(swe.julday(*EX50_BIRTH) + days)
+    assert (year, month, day) == (2002, 7, 28)

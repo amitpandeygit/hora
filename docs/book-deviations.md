@@ -1559,3 +1559,33 @@ ties and rule (2) genuinely decides — which then does give Libra.
 
 **Closes when:** nothing. The cascade is unambiguous; two of its illustrations
 are not.
+
+## D-50 · Example 50's end date is one day early
+
+**Status: BOOK DEFECT — one day, in the chapter's only worked example.**
+
+Every figure in Example 50 reproduces exactly: Moon's advancement in Dhanishtha
+9°3', the unspent fraction 257/800 = 0.32125, Mars as the lord, and a balance
+of 7 × 0.32125 = 2.24875 years, which the example itself breaks down as 2 years
+2 months 29 days 33 ghatis. In savana units — year 360 days, month 30, ghati
+1/60 of a day — that is 720 + 60 + 29 + 0.55 = **809.55 days**.
+
+Added to the stated birth of 5:50 am on 2000 April 28, that gives **2002 July
+16, 19:02**. The example says "about 7 pm on 2002 July 15".
+
+The time of day matches to two minutes, so the arithmetic path is the same and
+only the day count differs. Adding 808.55 days — one less — lands on 2002 July
+15 at 19:02, which is the example's answer exactly. The balance is the part of
+Mars dasa still to run at birth, so it is measured forward from birth and 809.55
+is the right count; the printed date is one day short.
+
+Sidereal years are not the explanation. At 365.2564 days the same balance gives
+2002 July 28, thirteen days out, which is what makes this example decisive
+evidence for savana under OI-115 rather than a reason to doubt it.
+
+**What we do:** the engine adds the balance forward from birth and returns July
+16. Every intermediate the example prints is fixtured and matches; the end date
+is fixtured as the divergence it is.
+
+**Closes when:** a later printing corrects the date, or a second worked example
+shows the inclusive count is deliberate.
