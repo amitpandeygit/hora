@@ -1,0 +1,14 @@
+{
+  "body": {
+    "arudha": null,
+    "chart": "D24",
+    "house": 5,
+    "matter": "academic reputation",
+    "references": [
+      "AL",
+      "Sun"
+    ],
+    "why": "related more to the perceived self (AL) than the true self (lagna), so it is seen from the 5th from arudha lagna; academic reputation can be seen in D-24 from the 5th from Sun"
+  },
+  "status": 200
+}

@@ -1,0 +1,274 @@
+{
+  "body": {
+    "baadhaka": {
+      "lords": [
+        "Venus"
+      ],
+      "occupants": [
+        "Mars"
+      ],
+      "sthaana": 1,
+      "sthaana_name": "Taurus"
+    },
+    "by_graha": {
+      "Jupiter": [
+        "graha drishti",
+        "quadrants"
+      ],
+      "Ketu": [
+        "trines",
+        "virodhargala"
+      ],
+      "Mars": [
+        "argala",
+        "baadhaka",
+        "rasi drishti",
+        "upachayas"
+      ],
+      "Mercury": [
+        "argala",
+        "rasi drishti",
+        "trines"
+      ],
+      "Moon": [
+        "argala",
+        "quadrants"
+      ],
+      "Rahu": [
+        "upachayas",
+        "virodhargala"
+      ],
+      "Saturn": [
+        "dusthanas",
+        "virodhargala"
+      ],
+      "Sun": [
+        "quadrants",
+        "trines"
+      ],
+      "Venus": [
+        "baadhaka",
+        "dusthanas",
+        "rasi drishti"
+      ]
+    },
+    "frame": {
+      "dusthanas": {
+        "effect": "bring obstacles",
+        "houses": [
+          6,
+          8,
+          12
+        ],
+        "signs": [
+          8,
+          10,
+          2
+        ]
+      },
+      "quadrants": {
+        "effect": "sustain it",
+        "houses": [
+          1,
+          4,
+          7,
+          10
+        ],
+        "signs": [
+          3,
+          6,
+          9,
+          0
+        ]
+      },
+      "trines": {
+        "effect": "let it prosper",
+        "houses": [
+          1,
+          5,
+          9
+        ],
+        "signs": [
+          3,
+          7,
+          11
+        ]
+      },
+      "upachayas": {
+        "effect": "let it grow",
+        "houses": [
+          3,
+          6,
+          10,
+          11
+        ],
+        "signs": [
+          5,
+          8,
+          0,
+          1
+        ]
+      }
+    },
+    "influences": [
+      {
+        "detail": "Taurus casts rasi drishti on Cancer",
+        "effect": "influences it",
+        "graha": 2,
+        "graha_name": "Mars",
+        "kind": "rasi drishti"
+      },
+      {
+        "detail": "Scorpio casts rasi drishti on Cancer",
+        "effect": "influences it",
+        "graha": 3,
+        "graha_name": "Mercury",
+        "kind": "rasi drishti"
+      },
+      {
+        "detail": "Aquarius casts rasi drishti on Cancer",
+        "effect": "influences it",
+        "graha": 5,
+        "graha_name": "Venus",
+        "kind": "rasi drishti"
+      },
+      {
+        "detail": "Jupiter in Capricorn aspects Cancer",
+        "effect": "influences it",
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "kind": "graha drishti"
+      },
+      {
+        "detail": "12th from Cancer (Gemini)",
+        "effect": "obstructs",
+        "graha": 6,
+        "graha_name": "Saturn",
+        "kind": "virodhargala"
+      },
+      {
+        "detail": "4th from Cancer (Libra)",
+        "effect": "intervenes",
+        "graha": 1,
+        "graha_name": "Moon",
+        "kind": "argala"
+      },
+      {
+        "detail": "11th from Cancer (Taurus)",
+        "effect": "intervenes",
+        "graha": 2,
+        "graha_name": "Mars",
+        "kind": "argala"
+      },
+      {
+        "detail": "3th from Cancer (Virgo)",
+        "effect": "obstructs",
+        "graha": 7,
+        "graha_name": "Rahu",
+        "kind": "virodhargala"
+      },
+      {
+        "detail": "5th from Cancer (Scorpio)",
+        "effect": "intervenes",
+        "graha": 3,
+        "graha_name": "Mercury",
+        "kind": "argala"
+      },
+      {
+        "detail": "9th from Cancer (Pisces)",
+        "effect": "obstructs",
+        "graha": 8,
+        "graha_name": "Ketu",
+        "kind": "virodhargala"
+      },
+      {
+        "detail": "Sun is in a quadrant from Cancer",
+        "effect": "sustain it",
+        "graha": 0,
+        "graha_name": "Sun",
+        "kind": "quadrants"
+      },
+      {
+        "detail": "Moon is in a quadrant from Cancer",
+        "effect": "sustain it",
+        "graha": 1,
+        "graha_name": "Moon",
+        "kind": "quadrants"
+      },
+      {
+        "detail": "Jupiter is in a quadrant from Cancer",
+        "effect": "sustain it",
+        "graha": 4,
+        "graha_name": "Jupiter",
+        "kind": "quadrants"
+      },
+      {
+        "detail": "Sun is in a trine from Cancer",
+        "effect": "let it prosper",
+        "graha": 0,
+        "graha_name": "Sun",
+        "kind": "trines"
+      },
+      {
+        "detail": "Mercury is in a trine from Cancer",
+        "effect": "let it prosper",
+        "graha": 3,
+        "graha_name": "Mercury",
+        "kind": "trines"
+      },
+      {
+        "detail": "Ketu is in a trine from Cancer",
+        "effect": "let it prosper",
+        "graha": 8,
+        "graha_name": "Ketu",
+        "kind": "trines"
+      },
+      {
+        "detail": "Mars is in a upachaya from Cancer",
+        "effect": "let it grow",
+        "graha": 2,
+        "graha_name": "Mars",
+        "kind": "upachayas"
+      },
+      {
+        "detail": "Rahu is in a upachaya from Cancer",
+        "effect": "let it grow",
+        "graha": 7,
+        "graha_name": "Rahu",
+        "kind": "upachayas"
+      },
+      {
+        "detail": "Venus is in a dusthana from Cancer",
+        "effect": "bring obstacles",
+        "graha": 5,
+        "graha_name": "Venus",
+        "kind": "dusthanas"
+      },
+      {
+        "detail": "Saturn is in a dusthana from Cancer",
+        "effect": "bring obstacles",
+        "graha": 6,
+        "graha_name": "Saturn",
+        "kind": "dusthanas"
+      },
+      {
+        "detail": "the baadhaka sthaana of Cancer is Taurus",
+        "effect": "creates troubles",
+        "graha": 5,
+        "graha_name": "Venus",
+        "kind": "baadhaka"
+      },
+      {
+        "detail": "the baadhaka sthaana of Cancer is Taurus",
+        "effect": "creates troubles",
+        "graha": 2,
+        "graha_name": "Mars",
+        "kind": "baadhaka"
+      }
+    ],
+    "sign": 3,
+    "sign_name": "Cancer",
+    "untouched": []
+  },
+  "status": 200
+}

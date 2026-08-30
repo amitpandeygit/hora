@@ -13,6 +13,7 @@ from hora.api import errors
 from hora.api.models import HealthOut
 from hora.api.models_reference import SettingsSchemaOut
 from hora.api.routers import (
+    analysis,
     argalas,
     arudhas,
     ashtakavarga,
@@ -97,6 +98,7 @@ app.include_router(ashtakavarga.router)
 app.include_router(sodhana.router)
 app.include_router(functional.router)
 app.include_router(baadhakas.router)
+app.include_router(analysis.router)
 
 
 @app.get("/health", response_model=HealthOut, tags=["meta"])

@@ -330,6 +330,16 @@ CASES = [
     ("baadhaka_check_by_occupancy", "POST", "/v1/baadhakas/check", {
         "graha": 2, "sign": 2, "graha_signs": {"2": 8},
     }),
+    # Section 13.4.1: the six factors, and factor 5 composed on one house.
+    ("analysis_rules", "GET", "/v1/analysis/rules", None),
+    ("analysis_matters", "GET", "/v1/analysis/matters", None),
+    ("analysis_matter_reputation", "GET",
+     "/v1/analysis/matter?name=academic%20reputation", None),
+    ("analysis_influences_cancer", "POST", "/v1/analysis/influences", {
+        "sign": 3,
+        "graha_signs": {"0": 3, "1": 6, "2": 1, "3": 7, "4": 9, "5": 10,
+                        "6": 2, "7": 5, "8": 11},
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

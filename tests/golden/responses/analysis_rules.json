@@ -1,0 +1,192 @@
+{
+  "body": {
+    "a3_example": "Suppose we are analyzing A3 in an author's D-10. While the 3rd house shows one's writing skills, it is A3 that shows one's books. If a planet is in a quadrant from A3, its periods may result in book writing. If a planet is in the 8th house from A3, its periods may bring obstacles in book writing. If a planet is a baadhaka from A3, it can create troubles in book-writing.",
+    "a3_periods": [
+      {
+        "result": "its periods may result in book writing",
+        "where": "in a quadrant from A3"
+      },
+      {
+        "result": "its periods may bring obstacles in book writing",
+        "where": "in the 8th house from A3"
+      },
+      {
+        "result": "it can create troubles in book-writing",
+        "where": "a baadhaka from A3"
+      }
+    ],
+    "arudha_is_maya": "An arudha shows the world's impression of a matter rather than the matter itself \u2014 maya. Distinctions and awards are the impression others form of intelligence and scholarship, so they are read from A5 and not from the 5th house.",
+    "closing": "Attention should be paid to the strength and avasthas of various planets and ashtakavarga strength of various houses. The presence of yogas should also be noted.",
+    "closing_points_at": [
+      {
+        "what": "strength",
+        "where": "chapter 15's graha bala, at /v1/strength"
+      },
+      {
+        "what": "avasthas",
+        "where": "chapter 4's avasthas, at /v1/avasthas"
+      },
+      {
+        "what": "ashtakavarga strength of houses",
+        "where": "chapter 12, at /v1/ashtakavarga"
+      },
+      {
+        "what": "yogas",
+        "where": "chapter 11's 168 yogas, at /v1/yogas"
+      }
+    ],
+    "d24_worked_example": [
+      {
+        "arudha": null,
+        "house": 4,
+        "matter": "education",
+        "note": "we see the 4th house",
+        "references": [
+          "lagna"
+        ]
+      },
+      {
+        "arudha": null,
+        "house": 5,
+        "matter": "intelligence",
+        "note": "related to the true self, so seen from the 5th from lagna; intelligence can be seen from the 5th from Jupiter",
+        "references": [
+          "lagna",
+          "Jupiter"
+        ]
+      },
+      {
+        "arudha": null,
+        "house": 5,
+        "matter": "scholarship",
+        "note": "related to the true self, so seen from the 5th from lagna; scholarship can be seen from the 5th from Mercury",
+        "references": [
+          "lagna",
+          "Mercury"
+        ]
+      },
+      {
+        "arudha": null,
+        "house": 5,
+        "matter": "academic reputation",
+        "note": "related more to the perceived self (AL) than the true self (lagna), so it is seen from the 5th from arudha lagna; academic reputation can be seen in D-24 from the 5th from Sun",
+        "references": [
+          "AL",
+          "Sun"
+        ]
+      },
+      {
+        "arudha": "A5",
+        "house": 5,
+        "matter": "academic distinctions and awards",
+        "note": "we can see one's academic distinctions/awards in A5, because they are maya (illusion) related to intelligence and scholarship",
+        "references": [
+          "lagna"
+        ]
+      },
+      {
+        "arudha": null,
+        "house": 5,
+        "matter": "students",
+        "note": "students can be seen from the 5th lord",
+        "references": [
+          "the 5th lord"
+        ]
+      },
+      {
+        "arudha": "A7",
+        "house": 7,
+        "matter": "the people one interacts with while learning",
+        "note": "we can see darapada (A7) in D-24 to figure out what kind of people one typically interacts with in one's learning related activities",
+        "references": [
+          "lagna"
+        ]
+      }
+    ],
+    "divisional_chart_for": [
+      {
+        "chart": "D16",
+        "matter": "happiness from a vehicle",
+        "note": "D-16 is the best chart"
+      },
+      {
+        "chart": "D30",
+        "matter": "a criminal's psychology",
+        "note": "D-30 is the best chart"
+      },
+      {
+        "chart": "D9",
+        "matter": "marriage",
+        "note": "D-9 is the best chart"
+      },
+      {
+        "chart": "D1",
+        "matter": "marriage as merely living together",
+        "note": "in a culture where marriage is not a dharma (duty) and a union of souls, but it is merely living together of two people, then rasi chart may be better than D-9"
+      },
+      {
+        "chart": "D20",
+        "matter": "religious activities",
+        "note": "then D-20 is the chart"
+      },
+      {
+        "chart": "D24",
+        "matter": "learning",
+        "note": "if we want to study one's learning, D-24 is the chart"
+      },
+      {
+        "chart": "D10",
+        "matter": "career and achievements in society",
+        "note": "D-10 chart is the correct chart"
+      }
+    ],
+    "factors": [
+      {
+        "name": "Divisional Chart",
+        "number": 1,
+        "rule": "Use the correct divisional chart for the matter of interest."
+      },
+      {
+        "name": "House",
+        "number": 2,
+        "rule": "We should choose the correct house after choosing the correct divisional chart."
+      },
+      {
+        "name": "Reference",
+        "number": 3,
+        "rule": "We should choose the correct reference for counting houses."
+      },
+      {
+        "name": "House vs Arudha",
+        "number": 4,
+        "rule": "Sometimes, an arudha pada is more appropriate to see a matter than a house."
+      },
+      {
+        "name": "Influences",
+        "number": 5,
+        "rule": "After we choose a house/arudha in a divisional chart to represent the matter of interest, the next step is to analyze the influences on it."
+      },
+      {
+        "name": "Standard Results",
+        "number": 6,
+        "rule": "There are many standard results given in literature for various planets and house lords in various houses. These results should be mastered."
+      }
+    ],
+    "house_versus_arudha": "Sometimes, an arudha pada is more appropriate to see a matter than a house. For example, we can see darapada (A7) in D-24 to figure out what kind of people one typically interacts with in one's learning related activities. We can see one's academic distinctions/awards in A5, because they are maya (illusion) related to intelligence and scholarship. The world forms an impression about one's intelligence and scholarship based on one's scores, ranks, grades, distinctions and awards.",
+    "influence_kinds": [
+      "rasi drishti",
+      "graha drishti",
+      "argala",
+      "house classes",
+      "baadhaka"
+    ],
+    "influence_kinds_note": "Section 13.4.1 names rasi drishti, graha drishti and argala directly, then the four house classes counted from the house, then baadhaka. All five are composed by /v1/analysis/influences.",
+    "influences_rule": "After we choose a house/arudha in a divisional chart to represent the matter of interest, the next step is to analyze the influences on it. Planets influence it with rasi drishti and graha drishti. We should also check for argala. We should judge the meaning of each influence. We can also judge the influences on a house by finding houses with respect to that house.",
+    "intro": "When we analyze the charts, we should remember all the concepts we learnt in the previous chapters. The following factors must be remembered:",
+    "reference_rule": "We should choose the correct reference for counting houses. In the above example of D-24, academic reputation is related more to the perceived self (AL) than the true self (lagna). So it is seen from the 5th from arudha lagna (AL). Intelligence and scholarship, on the other hand, are related to the true self and they are seen from the 5th from lagna. When the relevant karakas are stronger, we can use them as references instead of lagna.",
+    "standard_results": "There are many standard results given in literature for various planets and house lords in various houses. These results should be mastered.",
+    "standard_results_not_implemented": "Factor 6 points at the standard results in the classical literature, which section 13.1 sources to Dr. B.V. Raman's 'How to Judge a Horoscope'. The book does not reproduce them, so nothing here computes them.",
+    "third_house_versus_a3": "The 3rd house shows one's writing skills; A3 shows one's books."
+  },
+  "status": 200
+}

@@ -551,3 +551,256 @@ def test_the_check_endpoint_reports_how_not_just_whether(client):
     assert body["is_baadhaka"] is True
     assert body["by_occupancy"] is True
     assert body["by_lordship"] is False
+
+
+# --------------------------------------------------------------------------
+# §13.4.1 — Basic Guidelines
+# --------------------------------------------------------------------------
+
+from hora.charts.analysis import (
+    MATTERS,
+    AnalysisError,
+    influence_frame,
+    influences_on,
+)
+from hora.charts.analysis import plan as analysis_plan
+from hora.core.const import (
+    A3_PERIODS,
+    ANALYSIS_CLOSING,
+    ANALYSIS_CLOSING_POINTS_AT,
+    BASIC_GUIDELINES,
+    D24_MATTERS,
+    DIVISIONAL_CHART_FOR,
+    INFLUENCE_FRAME,
+    INFLUENCE_KINDS,
+    STANDARD_RESULTS_NOT_IMPLEMENTED,
+    STANDARD_RESULTS_RULE,
+    THIRD_HOUSE_VERSUS_A3,
+)
+
+#: A whole D-10, so factor 5 has something to work on.
+_D10 = {
+    int(Graha.SUN): 3, int(Graha.MOON): 6, int(Graha.MARS): 1,
+    int(Graha.MERCURY): 7, int(Graha.JUPITER): 9, int(Graha.VENUS): 10,
+    int(Graha.SATURN): 2, int(Graha.RAHU): 5, int(Graha.KETU): 11,
+}
+
+
+def test_the_six_factors_are_transcribed_in_order():
+    names = [name for name, _ in BASIC_GUIDELINES]
+    assert names == ["Divisional Chart", "House", "Reference",
+                     "House vs Arudha", "Influences", "Standard Results"]
+
+
+@pytest.mark.parametrize("matter,chart,note", DIVISIONAL_CHART_FOR)
+def test_factor_1s_chart_for_each_matter(matter, chart, note):
+    result = analysis_plan(matter)
+    assert result.chart == chart
+    assert result.why == note
+
+
+def test_factor_1_includes_the_case_where_the_rasi_chart_wins():
+    """"in a culture where marriage is not a dharma ... then rasi chart may be
+    better than D-9" — the same subject, two charts, decided by culture."""
+    assert analysis_plan("marriage").chart == "D9"
+    assert analysis_plan("marriage as merely living together").chart == "D1"
+
+
+@pytest.mark.parametrize(
+    "matter,house,references,arudha,note", D24_MATTERS,
+    ids=[m[0] for m in D24_MATTERS])
+def test_factors_2_to_4_from_the_d24_worked_example(
+        matter, house, references, arudha, note):
+    result = analysis_plan(matter)
+    assert result.chart == "D24"
+    assert result.house == house
+    assert result.references == references
+    assert result.arudha == arudha
+
+
+def test_factor_2s_three_houses_of_the_d24_example():
+    """4th education, 5th intelligence and its neighbours, 7th the people."""
+    by_house: dict[int, set[str]] = {}
+    for matter, house, *_ in D24_MATTERS:
+        by_house.setdefault(house, set()).add(matter)
+    assert set(by_house) == {4, 5, 7}
+    assert by_house[4] == {"education"}
+    assert "intelligence" in by_house[5] and "scholarship" in by_house[5]
+    assert by_house[7] == {"the people one interacts with while learning"}
+
+
+def test_factor_3_splits_the_true_self_from_the_perceived_self():
+    """"academic reputation is related more to the perceived self (AL) than
+    the true self (lagna)". Intelligence and scholarship go the other way."""
+    assert analysis_plan("academic reputation").references[0] == "AL"
+    assert analysis_plan("intelligence").references[0] == "lagna"
+    assert analysis_plan("scholarship").references[0] == "lagna"
+
+
+def test_factor_3_offers_a_karaka_as_a_second_reference():
+    """"When the relevant karakas are stronger, we can use them as references
+    instead of lagna." Each karaka the section names, against its matter."""
+    assert analysis_plan("scholarship").references == ("lagna", "Mercury")
+    assert analysis_plan("intelligence").references == ("lagna", "Jupiter")
+    assert analysis_plan("academic reputation").references == ("AL", "Sun")
+    assert analysis_plan("students").references == ("the 5th lord",)
+
+
+def test_factor_4_prefers_an_arudha_for_exactly_two_matters():
+    """A7 for the people one interacts with, A5 for distinctions and awards.
+    Both are impressions others form, which is why they are arudhas."""
+    with_arudha = {m.matter: m.arudha for m in MATTERS.values() if m.arudha}
+    assert with_arudha == {
+        "the people one interacts with while learning": "A7",
+        "academic distinctions and awards": "A5",
+    }
+
+
+def test_a_matter_the_section_does_not_name_is_refused_with_the_reason():
+    """§13.4.1 teaches a method and works two charts through it. Guessing a
+    correspondence it never gives would be inventing doctrine."""
+    with pytest.raises(AnalysisError, match="does not name"):
+        analysis_plan("litigation")
+    with pytest.raises(AnalysisError, match="influences_on"):
+        analysis_plan("litigation")
+
+
+# -- factor 5 ---------------------------------------------------------------
+
+def test_the_influence_frame_is_counted_from_the_house_not_from_lagna():
+    """"finding houses *with respect to* that house"."""
+    frame = influence_frame(R["Ar"])
+    assert frame["quadrants"]["signs"] == [R[a] for a in
+                                           ("Ar", "Cn", "Li", "Cp")]
+    assert frame["trines"]["signs"] == [R[a] for a in ("Ar", "Le", "Sg")]
+
+    shifted = influence_frame(R["Cn"])
+    assert shifted["quadrants"]["signs"] == [R[a] for a in
+                                             ("Cn", "Li", "Cp", "Ar")]
+
+
+@pytest.mark.parametrize("name,houses,effect", INFLUENCE_FRAME)
+def test_each_house_class_carries_the_effect_13_4_1_gives_it(
+        name, houses, effect):
+    frame = influence_frame(0)
+    assert frame[name]["houses"] == list(houses)
+    assert frame[name]["effect"] == effect
+    assert effect in (
+        "sustain it", "let it prosper", "let it grow", "bring obstacles")
+
+
+def test_influences_on_composes_all_five_kinds():
+    """Rasi drishti, graha drishti, argala, the house classes, baadhaka —
+    every kind §13.4.1 names, and every one already existed elsewhere."""
+    out = influences_on(R["Cn"], _D10)
+    kinds = {i["kind"] for i in out["influences"]}
+    assert "rasi drishti" in kinds
+    assert "graha drishti" in kinds
+    assert {"argala", "virodhargala"} & kinds
+    assert {"quadrants", "trines", "upachayas", "dusthanas"} & kinds
+    assert "baadhaka" in kinds
+    for kind in INFLUENCE_KINDS:
+        assert kind in ("rasi drishti", "graha drishti", "argala")
+
+
+def test_every_influence_carries_an_effect_and_a_detail():
+    """No bare list of planets: each row says what it does and why."""
+    for row in influences_on(R["Cn"], _D10)["influences"]:
+        assert row["effect"]
+        assert row["detail"]
+        assert row["graha_name"]
+
+
+def test_influences_reports_which_grahas_touch_nothing():
+    """The complement is as much an answer as the list."""
+    out = influences_on(R["Cn"], _D10)
+    touched = {i["graha_name"] for i in out["influences"]}
+    for name in out["untouched"]:
+        assert name not in touched
+    assert set(out["by_graha"]) == touched | set(out["untouched"])
+
+
+def test_influences_uses_13_3s_baadhaka_from_the_house_itself():
+    """Not from lagna — §13.4.1 says "if a planet is a baadhaka from A3"."""
+    out = influences_on(R["Aq"], _D10)
+    assert out["baadhaka"]["sthaana_name"] == "Libra"
+    assert out["baadhaka"]["lords"] == ["Venus"]
+
+
+def test_influences_without_positions_is_refused_with_the_reason():
+    with pytest.raises(AnalysisError, match="graha positions"):
+        influences_on(0, {})
+
+
+def test_the_a3_example_names_three_placements_including_a_baadhaka():
+    """"While the 3rd house shows one's writing skills, it is A3 that shows
+    one's books." Quadrant writes, the 8th obstructs, a baadhaka troubles."""
+    assert len(A3_PERIODS) == 3
+    where = [w for w, _ in A3_PERIODS]
+    assert "in a quadrant from A3" in where
+    assert "in the 8th house from A3" in where
+    assert "a baadhaka from A3" in where
+    assert "writing skills" in THIRD_HOUSE_VERSUS_A3
+    assert "books" in THIRD_HOUSE_VERSUS_A3
+
+
+def test_the_a3_examples_quadrant_and_eighth_agree_with_the_frame():
+    """The example's own two placements are the frame's quadrants and
+    dusthanas, so it is an instance of factor 5 rather than a separate rule."""
+    frame = influence_frame(R["Cn"])
+    assert 1 in frame["quadrants"]["houses"]
+    assert 8 in frame["dusthanas"]["houses"]
+
+
+def test_factor_6_points_outside_the_book_and_nothing_computes_it():
+    assert "should be mastered" in STANDARD_RESULTS_RULE
+    assert "does not reproduce them" in STANDARD_RESULTS_NOT_IMPLEMENTED
+    assert "Raman" in STANDARD_RESULTS_NOT_IMPLEMENTED
+
+
+def test_the_closing_sentence_points_at_four_things_we_already_built():
+    assert "strength and avasthas" in ANALYSIS_CLOSING
+    assert "ashtakavarga strength" in ANALYSIS_CLOSING
+    assert "yogas" in ANALYSIS_CLOSING
+    assert len(ANALYSIS_CLOSING_POINTS_AT) == 4
+    for _, where in ANALYSIS_CLOSING_POINTS_AT:
+        assert where.startswith("chapter")
+
+
+# -- endpoints --------------------------------------------------------------
+
+def test_the_analysis_rules_endpoint_carries_13_4_1(client):
+    body = client.get("/v1/analysis/rules").json()
+    assert len(body["factors"]) == 6
+    assert len(body["divisional_chart_for"]) == 7
+    assert len(body["d24_worked_example"]) == 7
+    assert len(body["a3_periods"]) == 3
+    assert len(body["closing_points_at"]) == 4
+    assert "baadhaka" in body["influence_kinds"]
+
+
+def test_the_matter_endpoint_answers_and_refuses(client):
+    body = client.get("/v1/analysis/matter",
+                      params={"name": "career and achievements in society"})
+    assert body.json()["chart"] == "D10"
+
+    refused = client.get("/v1/analysis/matter", params={"name": "litigation"})
+    assert refused.status_code == 400
+    assert "does not name" in refused.json()["error"]["message"]
+
+
+def test_the_matters_endpoint_lists_them_all_with_the_caveat(client):
+    body = client.get("/v1/analysis/matters").json()
+    assert len(body["matters"]) == len(MATTERS) == 14
+    assert "not a list of every question" in body["not_a_lookup_table"]
+
+
+def test_the_influences_endpoint_composes_the_five_kinds(client):
+    body = client.post("/v1/analysis/influences", json={
+        "sign": R["Cn"],
+        "graha_signs": {str(k): v for k, v in _D10.items()},
+    }).json()
+    kinds = {i["kind"] for i in body["influences"]}
+    assert "baadhaka" in kinds and "rasi drishti" in kinds
+    assert set(body["frame"]) == {"quadrants", "trines", "upachayas",
+                                  "dusthanas"}

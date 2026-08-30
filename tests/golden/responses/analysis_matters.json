@@ -1,0 +1,151 @@
+{
+  "body": {
+    "matters": [
+      {
+        "arudha": null,
+        "chart": "D30",
+        "house": null,
+        "matter": "a criminal's psychology",
+        "references": [
+          "lagna"
+        ],
+        "why": "D-30 is the best chart"
+      },
+      {
+        "arudha": "A5",
+        "chart": "D24",
+        "house": 5,
+        "matter": "academic distinctions and awards",
+        "references": [
+          "lagna"
+        ],
+        "why": "we can see one's academic distinctions/awards in A5, because they are maya (illusion) related to intelligence and scholarship"
+      },
+      {
+        "arudha": null,
+        "chart": "D24",
+        "house": 5,
+        "matter": "academic reputation",
+        "references": [
+          "AL",
+          "Sun"
+        ],
+        "why": "related more to the perceived self (AL) than the true self (lagna), so it is seen from the 5th from arudha lagna; academic reputation can be seen in D-24 from the 5th from Sun"
+      },
+      {
+        "arudha": null,
+        "chart": "D10",
+        "house": null,
+        "matter": "career and achievements in society",
+        "references": [
+          "lagna"
+        ],
+        "why": "D-10 chart is the correct chart"
+      },
+      {
+        "arudha": null,
+        "chart": "D24",
+        "house": 4,
+        "matter": "education",
+        "references": [
+          "lagna"
+        ],
+        "why": "we see the 4th house"
+      },
+      {
+        "arudha": null,
+        "chart": "D16",
+        "house": null,
+        "matter": "happiness from a vehicle",
+        "references": [
+          "lagna"
+        ],
+        "why": "D-16 is the best chart"
+      },
+      {
+        "arudha": null,
+        "chart": "D24",
+        "house": 5,
+        "matter": "intelligence",
+        "references": [
+          "lagna",
+          "Jupiter"
+        ],
+        "why": "related to the true self, so seen from the 5th from lagna; intelligence can be seen from the 5th from Jupiter"
+      },
+      {
+        "arudha": null,
+        "chart": "D24",
+        "house": null,
+        "matter": "learning",
+        "references": [
+          "lagna"
+        ],
+        "why": "if we want to study one's learning, D-24 is the chart"
+      },
+      {
+        "arudha": null,
+        "chart": "D9",
+        "house": null,
+        "matter": "marriage",
+        "references": [
+          "lagna"
+        ],
+        "why": "D-9 is the best chart"
+      },
+      {
+        "arudha": null,
+        "chart": "D1",
+        "house": null,
+        "matter": "marriage as merely living together",
+        "references": [
+          "lagna"
+        ],
+        "why": "in a culture where marriage is not a dharma (duty) and a union of souls, but it is merely living together of two people, then rasi chart may be better than D-9"
+      },
+      {
+        "arudha": null,
+        "chart": "D20",
+        "house": null,
+        "matter": "religious activities",
+        "references": [
+          "lagna"
+        ],
+        "why": "then D-20 is the chart"
+      },
+      {
+        "arudha": null,
+        "chart": "D24",
+        "house": 5,
+        "matter": "scholarship",
+        "references": [
+          "lagna",
+          "Mercury"
+        ],
+        "why": "related to the true self, so seen from the 5th from lagna; scholarship can be seen from the 5th from Mercury"
+      },
+      {
+        "arudha": null,
+        "chart": "D24",
+        "house": 5,
+        "matter": "students",
+        "references": [
+          "the 5th lord"
+        ],
+        "why": "students can be seen from the 5th lord"
+      },
+      {
+        "arudha": "A7",
+        "chart": "D24",
+        "house": 7,
+        "matter": "the people one interacts with while learning",
+        "references": [
+          "lagna"
+        ],
+        "why": "we can see darapada (A7) in D-24 to figure out what kind of people one typically interacts with in one's learning related activities"
+      }
+    ],
+    "not_a_lookup_table": "Section 13.4.1 teaches a method and works these matters through it. It is not a list of every question a chart can be asked, so anything else is refused rather than guessed at \u2014 choose the chart, house, reference and arudha yourself and post to /v1/analysis/influences."
+  },
+  "status": 200
+}
