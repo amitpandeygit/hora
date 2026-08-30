@@ -179,6 +179,12 @@ def avastha_by_alertness(
     Moolatrikona counts as an own rasi: the book's condition is "its exaltation
     rasi or an own rasi", and a moolatrikona rasi is one the planet owns.
 
+    **"Neutral or friendly" and "enemy" are read as the compound relationship**,
+    not the natural one. §15.4.2 does not say which, and chapter 3 defines both.
+    The two part company wherever natural enmity is offset by temporary
+    friendship, which changes the verdict between Swapna and Sushupta — see
+    docs/open-items.md OI-114.
+
     :raises AvasthaError: if the graha has no position.
     """
     if graha not in positions:

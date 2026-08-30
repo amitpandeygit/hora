@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 70 waiting on evidence · 2 parked**
+**5 waiting on Amit · 71 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,28 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-114 — §15.4.2 does not say whether "enemy" is natural or compound
+
+Its alertness rule turns on the relationship to the lord of the occupied rasi:
+"a rasi owned by a neutral or friendly planet" gives Swapna, "a rasi owned by an
+enemy" gives Sushupta. It does not say which friendship — chapter 3 defines both
+the natural (naisargika) table and the compound one that folds in temporary
+friendship.
+
+We use **compound**, undocumented until now. The two part company wherever
+natural enmity is offset by temporary friendship — a natural enemy in the 2nd,
+3rd, 4th, 10th, 11th or 12th becomes compound-neutral. On the first real chart
+we read, Jupiter in Gemini is naturally Mercury's enemy but compound-neutral, so
+he is **Swapna** under our reading and **Sushupta** under the natural one: one of
+seven planets changing state, and the gap between "medium" and "negligible".
+
+**What we do:** the reading is unchanged and now stated in
+`avastha_by_alertness`. §15.4.3's mood rules read dignity directly and are not
+affected.
+
+**Closes when:** a worked example places a planet in a naturally inimical rasi
+that temporary friendship offsets.
 
 ### OI-113 — chapter 11 reads "aspected" as graha drishti, undocumented
 

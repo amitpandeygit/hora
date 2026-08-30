@@ -651,3 +651,51 @@ def test_section_15_4_4_is_now_fully_verified():
     payload = strength_service.rules()["activity"]
     assert payload["verified"] is True
     assert payload["footnotes_verified"] is True
+
+
+def test_15_4_1s_four_worked_examples():
+    """"A planet at 23 deg in Cn will be in Kumaara avastha" and the three
+    others. Two odd rasis and two even, so the reversal is exercised."""
+    from hora.charts.avastha import avastha_by_age
+
+    abbr = ["Ar", "Ta", "Ge", "Cn", "Le", "Vi",
+            "Li", "Sc", "Sg", "Cp", "Aq", "Pi"]
+    for degrees, rasi, expected, results in (
+        (23, "Cn", "Kumaara", "Half"),
+        (19, "Li", "Vriddha", "Some"),
+        (14, "Sg", "Yuva", "Full"),
+        (27, "Pi", "Saisava", "Quarter"),
+    ):
+        got = avastha_by_age(abbr.index(rasi) * 30 + degrees)
+        assert got.name == expected, rasi
+        assert got.results == results
+
+
+def test_the_age_table_reverses_for_even_rasis_except_at_yuva():
+    """Table 35's two columns are mirror images, so only the middle band —
+    12 to 18 degrees, Yuva — falls on the same degrees in both."""
+    from hora.charts.avastha import avastha_by_age
+
+    same = [d for d in range(30)
+            if avastha_by_age(d + 0.5).name           # Aries, odd
+            == avastha_by_age(30 + d + 0.5).name]     # Taurus, even
+    assert same == list(range(12, 18))
+    assert avastha_by_age(14.0).name == "Yuva"
+    assert avastha_by_age(44.0).name == "Yuva"
+
+
+def test_15_4_2s_alertness_uses_the_compound_relationship():
+    """OI-114. §15.4.2 says "a rasi owned by a neutral or friendly planet"
+    without saying which friendship, and chapter 3 defines two. We read the
+    compound one, and it changes a real verdict: Jupiter in Gemini is
+    naturally Mercury's enemy but compound-neutral, so Swapna rather than
+    Sushupta."""
+    import inspect
+
+    from hora.charts.avastha import avastha_by_alertness
+    from hora.core.const import NATURAL_RELATION, Graha
+
+    assert NATURAL_RELATION[Graha.JUPITER][Graha.MERCURY] == 0, "natural enemy"
+    doc = inspect.getdoc(avastha_by_alertness)
+    assert "compound relationship" in doc
+    assert "OI-114" in doc
