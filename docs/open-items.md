@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 68 waiting on evidence · 2 parked**
+**5 waiting on Amit · 69 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,28 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-112 — remedial measures are named twice and defined once, for moksha
+
+§14.1 says an ethical astrologer "may caution a client gently before critical
+periods and **suggest some remedial measures** to ward off an impending
+danger", and gives none. No section read so far supplies any — no remedies
+chapter, no gemstone or mantra table, no propitiation keyed to affliction. The
+book states exactly one propitiation rule, §7.3.6's, aimed elsewhere:
+
+> "Propitiation of the deities corresponding to the strongest planet in the
+> 12th house in navamsa from Karakamsa lagna can take one's soul towards
+> moksha."
+
+That is liberation of the soul, not lengthening of life, and it says nothing
+about an empty house — which is the case in the first real chart we ran it on.
+
+**What we do:** nothing computes a remedy. §7.3.6 is implemented as printed.
+Longevity remedies would have to come from outside the book, and precedence.md
+says a silence may be filled only by an explicit decision, not by default.
+
+**Closes when:** a later chapter gives remedies, or you decide to source them
+from BPHS or elsewhere and that decision is recorded.
 
 ### OI-111 — which of §15.5.2's rules take one co-lord and which take both
 
