@@ -699,3 +699,84 @@ def test_15_4_2s_alertness_uses_the_compound_relationship():
     doc = inspect.getdoc(avastha_by_alertness)
     assert "compound relationship" in doc
     assert "OI-114" in doc
+
+
+# --------------------------------------------------------------------------
+# §15.4.3 names one state twice, and three states had no test at all.
+# --------------------------------------------------------------------------
+
+
+def test_mudita_is_two_different_states_sharing_one_name():
+    """§15.4.3 uses "Mudita" for a primary state and an additional one.
+
+    The primary one is "in a good friend's rasi". The additional one is "in a
+    friend's sign, conjoined or aspected by friends and conjoined by Jupiter" —
+    a strictly harder condition needing aspects. They can disagree, so nothing
+    may key mood states by name alone: the pair (name, additional) is the key.
+    """
+    both = [m for m in avasthas_by_mood(Graha.MOON, chart()) if m.name == "Mudita"]
+    assert len(both) == 2
+    primary, additional = sorted(both, key=lambda m: m.additional)
+    assert primary.additional is False
+    assert additional.additional is True
+    assert primary.when != additional.when
+    # Keying by name silently drops one of them. This is the trap.
+    assert len({m.name: m for m in both}) == 1
+
+
+def test_the_two_muditas_can_hold_different_answers_at_once():
+    for rasi in range(12):
+        pos = chart(moon=rasi * 30 + 10.0)
+        pair = {m.additional: m for m in avasthas_by_mood(Graha.MOON, pos)
+                if m.name == "Mudita"}
+        if pair[False].applies is True and pair[True].applies is None:
+            assert "friend" in pair[False].reason
+            assert "aspect" in pair[True].reason
+            return
+    pytest.fail("expected some rasi to decide one Mudita and not the other")
+
+
+def test_garvita_takes_moolatrikona_as_well_as_exaltation():
+    """§15.4.3's second additional state names both dignities, not just one."""
+    exalted = chart(sun=lon(10, "Ar"))          # Sun exalted in Aries
+    assert _mood(Graha.SUN, exalted)["Garvita"].applies is True
+    moola = chart(sun=lon(15, "Le"))            # Sun's moolatrikona is Leo 0-20
+    assert _mood(Graha.SUN, moola)["Garvita"].applies is True
+    assert "moolatrikona" in _mood(Graha.SUN, moola)["Garvita"].reason
+    debilitated = chart(sun=lon(10, "Li"))
+    assert _mood(Graha.SUN, debilitated)["Garvita"].applies is False
+
+
+def test_kshudhita_is_a_disjunction_and_short_circuits_past_missing_aspects():
+    """§15.4.3 gives Kshudhita four routes joined by "or": an enemy's rasi,
+    conjunction by enemies, aspect by enemies, or conjunction by Saturn.
+
+    Only the third needs aspects. A disjunction with one true branch is true
+    whatever the unknown branch holds, so a missing aspect must not drag a
+    decided True back to undetermined — and must not be read as False either.
+    """
+    known_true = chart(mars=lon(10, "Cn"))       # conjoined by Mercury, an enemy
+    state = _mood(Graha.MARS, known_true)["Kshudhita"]
+    assert state.applies is True
+    assert "conjoined by enemies" in state.reason
+
+    open_case = chart(mars=lon(10, "Ar"))        # own rasi, no enemy, no Saturn
+    state = _mood(Graha.MARS, open_case)["Kshudhita"]
+    assert state.applies is None
+    assert "no aspect data" in state.reason
+
+    # Supplying the aspects closes it, in whichever direction they point.
+    with_enemy = avasthas_by_mood(
+        Graha.MARS, open_case, aspected_by={int(Graha.VENUS)})
+    assert next(m for m in with_enemy if m.name == "Kshudhita").applies is True
+    with_friend = avasthas_by_mood(
+        Graha.MARS, open_case, aspected_by={int(Graha.JUPITER)})
+    assert next(m for m in with_friend if m.name == "Kshudhita").applies is False
+
+
+def _mood(graha, pos, **kw):
+    """Primary states only — safe to key by name once Mudita's twin is gone."""
+    return {m.name: m for m in avasthas_by_mood(graha, pos, **kw) if not m.additional} | {
+        m.name: m for m in avasthas_by_mood(graha, pos, **kw)
+        if m.additional and m.name != "Mudita"
+    }

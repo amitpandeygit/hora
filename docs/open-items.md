@@ -188,14 +188,14 @@ recensions.
 **Closes when:** what BPHS actually says is established, and whether 16° is well
 attested or itself a variant.
 
-### OI-18 — `charts/aspects.py` is premature and unverified
+### OI-18 — `drishti_value` in `charts/aspects.py` is still unverified
 
-Written during Phase 1 scaffolding from general knowledge, not from the book.
-Aspects and argalas are **chapter 10**, unaudited. `rasi_drishti` in it was
-found wrong and corrected; the rest is unchecked. Nothing imports it, and
-`tests/unit/test_not_yet_consumed.py` fails the moment anything does.
+Narrowed 2026-08-31: this entry claimed chapter 10 was unaudited and that
+nothing imported the file. Neither is true — 202 tests cover it, twelve modules
+import it. One function survives: `drishti_value`, the virupa partial-aspect
+table, which no chapter derives. `test_not_yet_consumed.py` keeps it out.
 
-**Closes when:** chapter 10 is audited and the module is re-derived from it.
+**Closes when:** a chapter derives the virupa table.
 
 ### OI-19 — sunrise: book says upper limb, PyJHora uses disc centre
 
