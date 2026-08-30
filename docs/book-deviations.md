@@ -1285,7 +1285,10 @@ the occupied one. So the book never demonstrates it.
 
 ## D-42 · Table 28 gives Virgo 6; Exercise 22's own answers require 5
 
-**Status: NEEDS YOU.** The table is used as printed. The conflict is recorded.
+**Status: parked with Amit, 2026-08-30.** He is checking the classical
+rasimana value against an outside source (BPHS, or a Jagannatha Hora run).
+Until then the table is used **as printed** and nothing changes. Do not
+re-raise this each turn.
 
 Table 28's rasimana multipliers are `7 10 8 4 10 6 7 8 9 5 11 12`. Exercise 22
 prints seven rasi pindas for Chart 7, and with Virgo at **6** every one of them
@@ -1320,7 +1323,10 @@ diagnosis safe.
 The conflict is served on that endpoint and on `/v1/sodhana/rules` as
 `table_28_virgo_conflict`, so no caller meets the difference unwarned.
 
-**Closes when:** you decide whether the table or the answers are authoritative.
+**Closes when:** Amit's outside check comes back. If the classical value is
+5, the table is a misprint and we switch; if 6, Exercise 22's answers were
+generated with a different multiplier and the disagreement is the book's to
+own. Either way one line changes: `TABLE_28_RASIMANA`.
 
 ## D-43 · §12.7.2 says "occupied by a planet", but the lagna occupies too
 
