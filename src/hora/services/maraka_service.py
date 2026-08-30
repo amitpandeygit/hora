@@ -11,10 +11,13 @@ from hora.charts.maraka import (
     MarakaError,
     additional_marakas,
     houses_of_life,
+    maheswara,
     maraka_grahas,
     maraka_houses,
     maraka_sthanas,
     marakas,
+    rudra_candidates,
+    trishoola_rasis,
 )
 from hora.core.const import (
     ADDITIONAL_MARAKA_POWERFULLY_UNDEFINED,
@@ -23,9 +26,15 @@ from hora.core.const import (
     CHAPTER_14_INTRO,
     CHAPTER_14_NOT_COVERED,
     CHAPTER_14_SCOPE,
+    FOOTNOTE_50,
     GOOD_LONGEVITY_RULE,
     GRAHA_NAMES,
     HOUSES_OF_LIFE_RULE,
+    MAHESWARA_EXAMPLES,
+    MAHESWARA_EXCEPTIONS,
+    MAHESWARA_NODE_SUBSTITUTES,
+    MAHESWARA_RULE,
+    MAHESWARA_USES_THE_ORDINARY_EIGHTH,
     MARAKA_CHART_ORDER,
     MARAKA_CHARTS,
     MARAKA_DERIVATION,
@@ -37,6 +46,17 @@ from hora.core.const import (
     MARAKA_STRONGER_NOT_A_RULE,
     MARAKA_STRONGER_REMARK,
     MARAKA_USE,
+    RASI_NAMES,
+    RUDRA_AFFLICTION_MALEFICS,
+    RUDRA_AFFLICTION_RULE,
+    RUDRA_INTRO,
+    RUDRA_MYTHOLOGY,
+    RUDRA_RULE,
+    RUDRA_STRENGTH_CASCADE,
+    SIXTH_IS_THE_ANTIZODIACAL_EIGHTH,
+    TABLE_32_CONSTRUCTION,
+    TABLE_32_EIGHTH,
+    TRISHOOLA_RULE,
 )
 from hora.core.validate import InputError
 
@@ -99,5 +119,75 @@ def rules() -> dict:
     }
 
 
+def rudra(lagna: int) -> dict:
+    """Section 14.3's two Rudra candidates for one lagna."""
+    result = rudra_candidates(lagna)
+    return {
+        "lagna": result.from_lagna[0],
+        "from_lagna": {"rasi": str(RASI_NAMES[result.from_lagna[0]]),
+                       "lord": str(GRAHA_NAMES[result.from_lagna[1]])},
+        "from_seventh": {"rasi": str(RASI_NAMES[result.from_seventh[0]]),
+                         "lord": str(GRAHA_NAMES[result.from_seventh[1]])},
+        "candidates": [str(GRAHA_NAMES[g]) for g in result.candidates],
+        "rudra": result.rudra,
+        "decided_by": result.decided_by,
+        "why": result.why,
+        "strength_cascade": list(RUDRA_STRENGTH_CASCADE),
+        "affliction_rule": RUDRA_AFFLICTION_RULE,
+        "framing": FRAMING,
+    }
+
+
+def trishoola(rudra_sign: int) -> dict:
+    """The three Trishoola rasis from the rasi Rudra occupies."""
+    signs = trishoola_rasis(rudra_sign)
+    return {
+        "rudra_sign": rudra_sign,
+        "rudra_rasi": str(RASI_NAMES[rudra_sign]),
+        "trishoola": [{"sign": s, "rasi": str(RASI_NAMES[s])} for s in signs],
+        "rule": TRISHOOLA_RULE,
+        "framing": FRAMING,
+    }
+
+
+def maheswara_for(ak_sign: int,
+                  graha_signs: dict[int, int] | None = None) -> dict:
+    """Section 14.3's Maheswara, with its three exceptions."""
+    body = maheswara(ak_sign, graha_signs)
+    body["rule"] = MAHESWARA_RULE
+    body["exceptions"] = list(MAHESWARA_EXCEPTIONS)
+    body["uses_the_ordinary_eighth"] = MAHESWARA_USES_THE_ORDINARY_EIGHTH
+    body["framing"] = FRAMING
+    return body
+
+
+def section_14_3() -> dict:
+    """Section 14.3's framing, Table 32 and the three definitions."""
+    return {
+        "mythology": RUDRA_MYTHOLOGY,
+        "intro": RUDRA_INTRO,
+        "table_32": dict(TABLE_32_EIGHTH),
+        "footnote_50": FOOTNOTE_50,
+        "table_32_construction": TABLE_32_CONSTRUCTION,
+        "rudra_rule": RUDRA_RULE,
+        "strength_cascade": list(RUDRA_STRENGTH_CASCADE),
+        "affliction_rule": RUDRA_AFFLICTION_RULE,
+        "affliction_malefics": list(RUDRA_AFFLICTION_MALEFICS),
+        "trishoola_rule": TRISHOOLA_RULE,
+        "maheswara_rule": MAHESWARA_RULE,
+        "maheswara_uses_the_ordinary_eighth":
+            MAHESWARA_USES_THE_ORDINARY_EIGHTH,
+        "maheswara_exceptions": list(MAHESWARA_EXCEPTIONS),
+        "maheswara_node_substitutes": dict(MAHESWARA_NODE_SUBSTITUTES),
+        "maheswara_examples": [
+            {"exception": which, "setup": setup, "yields": result}
+            for which, setup, result in MAHESWARA_EXAMPLES
+        ],
+        "sixth_is_the_antizodiacal_eighth": SIXTH_IS_THE_ANTIZODIACAL_EIGHTH,
+        "framing": FRAMING,
+    }
+
+
 __all__ = ["InputError", "MarakaError", "additional_marakas", "for_lagna",
-           "maraka_grahas", "maraka_sthanas", "rules"]
+           "maheswara_for", "maraka_grahas", "maraka_sthanas", "rudra",
+           "rules", "section_14_3", "trishoola"]

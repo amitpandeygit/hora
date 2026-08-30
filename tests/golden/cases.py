@@ -370,6 +370,13 @@ CASES = [
         "lagna": 11, "graha_signs": {"2": 2, "3": 9, "6": 0},
     }),
     ("maraka_lords_only", "POST", "/v1/marakas", {"lagna": 4}),
+    ("rudra_rules", "GET", "/v1/marakas/rudra-rules", None),
+    ("rudra_leo", "GET", "/v1/marakas/rudra?lagna=4", None),
+    ("trishoola_scorpio", "GET",
+     "/v1/marakas/trishoola?rudra_sign=7", None),
+    ("maheswara_ketu_exception", "POST", "/v1/marakas/maheswara", {
+        "ak_sign": 1, "graha_signs": {"8": 8},
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

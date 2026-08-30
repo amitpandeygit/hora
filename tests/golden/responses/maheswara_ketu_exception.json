@@ -1,0 +1,25 @@
+{
+  "body": {
+    "ak_rasi": "Taurus",
+    "ak_sign": 1,
+    "candidates": [],
+    "exceptions": [
+      "If the 8th lord from AK is in own rasi or exaltation rasi, then take the stronger of the 8th and 12th lords from him.",
+      "If Rahu or Ketu joins AK or the 8th from him, then we find the 6th lord from AK instead of the 8th lord. Please note that this is equivalent to taking the 8th lord in the anti-zodiacal order.",
+      "If Rahu becomes Maheswara, we take Mercury instead. If Ketu becomes Maheswara, we take Jupiter instead."
+    ],
+    "framing": "Many human beings are curious about how long they will live. An ethical astrologer will not scare a client by predicting death, but he may caution a client gently before critical periods and suggest some remedial measures to ward off an impending danger. An estimation of longevity is also helpful in matchmaking. After all, if one person will live for 81 years and the other only for 36 years, it is not advisable to approve a match between those two people. In matchmaking, it is desirable that the bridegroom and the bride have comparable longevity.",
+    "house_used": 6,
+    "maheswara": 5,
+    "maheswara_name": "Venus",
+    "needs_strength_comparison": false,
+    "rule": "The lord of the 8th house from AK (chara atma karaka) is called Maheswara. AK stands for the soul and the 8th lord from him stands for the liberation of soul. He represents the channels through which one's soul strives for liberation.",
+    "steps": [
+      "the 8th from the AK's Taurus is Sagittarius, whose lord Jupiter is Maheswara",
+      "exception 2: a node joins the AK or the 8th from him, so the 6th from Taurus \u2014 Libra \u2014 is read instead, and its lord Venus is Maheswara. That is the 8th counted anti-zodiacally"
+    ],
+    "untested_exceptions": [],
+    "uses_the_ordinary_eighth": "Table 32 is for Rudra only, as its title says. Maheswara counts the 8th in the ordinary way, which section 14.3's second exception settles: it calls Sagittarius the 8th from a Taurus AK, and Table 32 gives Gemini for Taurus. The first exception cannot decide it \u2014 its Gemini and Libra both give the same answer either way."
+  },
+  "status": 200
+}

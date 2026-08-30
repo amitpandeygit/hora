@@ -1,0 +1,74 @@
+{
+  "body": {
+    "affliction_malefics": [
+      "Mars",
+      "Saturn",
+      "Rahu",
+      "Ketu"
+    ],
+    "affliction_rule": "However, if the weaker planet is debilitated or in an inimical sign and conjoined/aspected by malefics like Mars, Saturn, Rahu and Ketu, then it becomes Rudra.",
+    "footnote_50": "For odd rasis, we count houses zodiacally. For even rasis, we count houses anti-zodiacally. For Brahma and Vishnu rasis, we use the regular motion. For Shiva rasis, we use Shiva's motion. That is how Table 32 is constructed. Shiva's rasi and Shiva's motion will be discussed in \u201cNarayana Dasa\u201d.",
+    "framing": "Many human beings are curious about how long they will live. An ethical astrologer will not scare a client by predicting death, but he may caution a client gently before critical periods and suggest some remedial measures to ward off an impending danger. An estimation of longevity is also helpful in matchmaking. After all, if one person will live for 81 years and the other only for 36 years, it is not advisable to approve a match between those two people. In matchmaking, it is desirable that the bridegroom and the bride have comparable longevity.",
+    "intro": "For every person, there are eleven rasis that represent the eleven Rudras. These rasis bring suffering related to various areas of life. Out of all the eleven Rudras, the one who brings suffering to the physical self is the most important one. In each chart, there is one planet that plays this role. That planet is simply called \u201cRudra\u201d. That planet stands for the suffering and destruction of the native. There are three rasis designated as Trishoola rasis and they bring death.",
+    "maheswara_examples": [
+      {
+        "exception": 1,
+        "setup": "AK is Mars and he is in Ge",
+        "yields": "the 8th house from AK is Cp and Saturn is Maheswara"
+      },
+      {
+        "exception": 1,
+        "setup": "Saturn is exalted in Li",
+        "yields": "from Saturn (Li), Venus owns the 8th house (Ta) and Mercury owns the 12th house (Vi); the stronger of Mercury and Venus becomes Maheswara"
+      },
+      {
+        "exception": 2,
+        "setup": "AK is Mars and he is in Taurus",
+        "yields": "Sg is the 8th house from Mars and Jupiter, lord of Sg, is Maheswara"
+      },
+      {
+        "exception": 2,
+        "setup": "Ketu is in Ta or Sg",
+        "yields": "we find the 6th house from Mars instead of the 8th; it is Li, and Venus owns it, so Venus becomes Maheswara"
+      }
+    ],
+    "maheswara_exceptions": [
+      "If the 8th lord from AK is in own rasi or exaltation rasi, then take the stronger of the 8th and 12th lords from him.",
+      "If Rahu or Ketu joins AK or the 8th from him, then we find the 6th lord from AK instead of the 8th lord. Please note that this is equivalent to taking the 8th lord in the anti-zodiacal order.",
+      "If Rahu becomes Maheswara, we take Mercury instead. If Ketu becomes Maheswara, we take Jupiter instead."
+    ],
+    "maheswara_node_substitutes": {
+      "Ketu": "Jupiter",
+      "Rahu": "Mercury"
+    },
+    "maheswara_rule": "The lord of the 8th house from AK (chara atma karaka) is called Maheswara. AK stands for the soul and the 8th lord from him stands for the liberation of soul. He represents the channels through which one's soul strives for liberation.",
+    "maheswara_uses_the_ordinary_eighth": "Table 32 is for Rudra only, as its title says. Maheswara counts the 8th in the ordinary way, which section 14.3's second exception settles: it calls Sagittarius the 8th from a Taurus AK, and Table 32 gives Gemini for Taurus. The first exception cannot decide it \u2014 its Gemini and Libra both give the same answer either way.",
+    "mythology": "In Indian mythology, there are eleven Rudras. They are all different forms of Lord Shiva. They bring suffering and death to a native. Trishoola or trident is the weapon of Lord Shiva. Maheswara is the Supreme form of Lord Shiva and he gives emancipation to the soul.",
+    "rudra_rule": "Consider the lord of the 8th house from (i) lagna and (ii) the 7th house. Find the 8th house using Table 32 and not in the normal way. The stronger of the two planets becomes Rudra. If the weaker planet is afflicted, it can also become Rudra.",
+    "sixth_is_the_antizodiacal_eighth": "Section 14.3 notes that taking the 6th lord from AK 'is equivalent to taking the 8th lord in the anti-zodiacal order'. Counting six forward and eight backward land on the same rasi from any starting point.",
+    "strength_cascade": [
+      "We say that a planet is stronger if it conjoins more planets.",
+      "If both planets conjoin the same number of planets, a planet in exaltation or own rasi is stronger.",
+      "A planet joining exalted planets is stronger.",
+      "A planet aspected by many planets (rasi aspect) is stronger.",
+      "Finally, a planet which is more advanced in its rasi is stronger."
+    ],
+    "table_32": {
+      "Aq": "Cp",
+      "Ar": "Sc",
+      "Cn": "Sg",
+      "Cp": "Ge",
+      "Ge": "Cp",
+      "Le": "Cn",
+      "Li": "Ta",
+      "Pi": "Le",
+      "Sc": "Sg",
+      "Sg": "Cn",
+      "Ta": "Ge",
+      "Vi": "Aq"
+    },
+    "table_32_construction": "Eight of Table 32's twelve entries follow footnote 50's stated rule \u2014 the 8th counted zodiacally from an odd rasi and anti-zodiacally from an even one. The four that do not are exactly Taurus, Leo, Scorpio and Aquarius, the fixed rasis, which identifies them as footnote 50's Shiva rasis. Shiva's motion is deferred to the Narayana Dasa chapter, so the table is held as data and checked against the part of the rule the footnote does state.",
+    "trishoola_rule": "The three trines from the rasi occupied by Rudra in rasi chart represent the three spikes of Shiva's Trishoola/trident. They are called Trishoola rasis. Depending on whether a native has short life or middle life or long life, one of the three Trishoola rasis kills the native during its Shoola dasa."
+  },
+  "status": 200
+}

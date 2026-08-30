@@ -170,3 +170,175 @@ MARAKA_STRONGER_NOT_A_RULE = (
     "marakas. We return every maraka with how it qualified and do not order "
     "them."
 )
+
+
+# --------------------------------------------------------------------------
+# §14.3 — Rudra, Trishoola and Maheswara
+# --------------------------------------------------------------------------
+
+RUDRA_MYTHOLOGY = (
+    "In Indian mythology, there are eleven Rudras. They are all different "
+    "forms of Lord Shiva. They bring suffering and death to a native. "
+    "Trishoola or trident is the weapon of Lord Shiva. Maheswara is the "
+    "Supreme form of Lord Shiva and he gives emancipation to the soul."
+)
+
+RUDRA_INTRO = (
+    "For every person, there are eleven rasis that represent the eleven "
+    "Rudras. These rasis bring suffering related to various areas of life. "
+    "Out of all the eleven Rudras, the one who brings suffering to the "
+    "physical self is the most important one. In each chart, there is one "
+    "planet that plays this role. That planet is simply called “Rudra”. "
+    "That planet stands for the suffering and destruction of the native. "
+    "There are three rasis designated as Trishoola rasis and they bring "
+    "death."
+)
+
+#: Table 32, rasi -> the rasi its 8th house falls in for Rudra. Not the
+#: ordinary 8th: see `TABLE_32_CONSTRUCTION`.
+TABLE_32_EIGHTH: dict[str, str] = {
+    "Ar": "Sc", "Ta": "Ge", "Ge": "Cp", "Cn": "Sg",
+    "Le": "Cn", "Vi": "Aq", "Li": "Ta", "Sc": "Sg",
+    "Sg": "Cn", "Cp": "Ge", "Aq": "Cp", "Pi": "Le",
+}
+
+FOOTNOTE_50 = (
+    "For odd rasis, we count houses zodiacally. For even rasis, we count "
+    "houses anti-zodiacally. For Brahma and Vishnu rasis, we use the regular "
+    "motion. For Shiva rasis, we use Shiva's motion. That is how Table 32 is "
+    "constructed. Shiva's rasi and Shiva's motion will be discussed in "
+    "“Narayana Dasa”."
+)
+
+#: **Finding.** Footnote 50's first sentence accounts for eight of the twelve
+#: entries: the 8th counted forward from an odd rasi and backward from an
+#: even one. The four it does not account for are exactly the four **fixed**
+#: rasis — Ta, Le, Sc and Aq — so those are footnote 50's "Shiva rasis", and
+#: the movable and dual ones are its Brahma and Vishnu rasis. Shiva's motion
+#: itself is deferred to the Narayana Dasa chapter, so Table 32 is kept as
+#: data rather than derived.
+TABLE_32_CONSTRUCTION = (
+    "Eight of Table 32's twelve entries follow footnote 50's stated rule — "
+    "the 8th counted zodiacally from an odd rasi and anti-zodiacally from an "
+    "even one. The four that do not are exactly Taurus, Leo, Scorpio and "
+    "Aquarius, the fixed rasis, which identifies them as footnote 50's Shiva "
+    "rasis. Shiva's motion is deferred to the Narayana Dasa chapter, so the "
+    "table is held as data and checked against the part of the rule the "
+    "footnote does state."
+)
+
+RUDRA_RULE = (
+    "Consider the lord of the 8th house from (i) lagna and (ii) the 7th "
+    "house. Find the 8th house using Table 32 and not in the normal way. The "
+    "stronger of the two planets becomes Rudra. If the weaker planet is "
+    "afflicted, it can also become Rudra."
+)
+
+#: §14.3's strength cascade for Rudra, in the order it gives them.
+RUDRA_STRENGTH_CASCADE: tuple[str, ...] = (
+    "We say that a planet is stronger if it conjoins more planets.",
+    (
+        "If both planets conjoin the same number of planets, a planet in "
+        "exaltation or own rasi is stronger."
+    ),
+    "A planet joining exalted planets is stronger.",
+    "A planet aspected by many planets (rasi aspect) is stronger.",
+    "Finally, a planet which is more advanced in its rasi is stronger.",
+)
+
+RUDRA_AFFLICTION_RULE = (
+    "However, if the weaker planet is debilitated or in an inimical sign and "
+    "conjoined/aspected by malefics like Mars, Saturn, Rahu and Ketu, then it "
+    "becomes Rudra."
+)
+
+#: The malefics §14.3 names for the affliction test, which is a shorter list
+#: than §14.2's — the Sun is absent, and "like" leaves it open-ended.
+RUDRA_AFFLICTION_MALEFICS = ("Mars", "Saturn", "Rahu", "Ketu")
+
+TRISHOOLA_RULE = (
+    "The three trines from the rasi occupied by Rudra in rasi chart represent "
+    "the three spikes of Shiva's Trishoola/trident. They are called Trishoola "
+    "rasis. Depending on whether a native has short life or middle life or "
+    "long life, one of the three Trishoola rasis kills the native during its "
+    "Shoola dasa."
+)
+
+MAHESWARA_RULE = (
+    "The lord of the 8th house from AK (chara atma karaka) is called "
+    "Maheswara. AK stands for the soul and the 8th lord from him stands for "
+    "the liberation of soul. He represents the channels through which one's "
+    "soul strives for liberation."
+)
+
+#: **Finding.** Maheswara uses the *ordinary* 8th, not Table 32. Exception 2
+#: settles it: "AK is Mars and he is in Taurus. Then Sg is the 8th house from
+#: Mars" — the ordinary 8th from Taurus is Sagittarius, while Table 32 gives
+#: Gemini. Table 32's own title says "for Rudra Calculation".
+MAHESWARA_USES_THE_ORDINARY_EIGHTH = (
+    "Table 32 is for Rudra only, as its title says. Maheswara counts the 8th "
+    "in the ordinary way, which section 14.3's second exception settles: it "
+    "calls Sagittarius the 8th from a Taurus AK, and Table 32 gives Gemini "
+    "for Taurus. The first exception cannot decide it — its Gemini and Libra "
+    "both give the same answer either way."
+)
+
+MAHESWARA_EXCEPTIONS: tuple[str, ...] = (
+    (
+        "If the 8th lord from AK is in own rasi or exaltation rasi, then take "
+        "the stronger of the 8th and 12th lords from him."
+    ),
+    (
+        "If Rahu or Ketu joins AK or the 8th from him, then we find the 6th "
+        "lord from AK instead of the 8th lord. Please note that this is "
+        "equivalent to taking the 8th lord in the anti-zodiacal order."
+    ),
+    (
+        "If Rahu becomes Maheswara, we take Mercury instead. If Ketu becomes "
+        "Maheswara, we take Jupiter instead."
+    ),
+)
+
+#: Exception 3's substitutions.
+MAHESWARA_NODE_SUBSTITUTES: dict[str, str] = {
+    "Rahu": "Mercury", "Ketu": "Jupiter"}
+
+#: §14.3's worked examples for the exceptions, each as
+#: ``(which exception, the setup, what it yields)``.
+MAHESWARA_EXAMPLES: tuple[tuple[int, str, str], ...] = (
+    (
+        1,
+        "AK is Mars and he is in Ge",
+        "the 8th house from AK is Cp and Saturn is Maheswara",
+    ),
+    (
+        1,
+        "Saturn is exalted in Li",
+        (
+            "from Saturn (Li), Venus owns the 8th house (Ta) and Mercury owns "
+            "the 12th house (Vi); the stronger of Mercury and Venus becomes "
+            "Maheswara"
+        ),
+    ),
+    (
+        2,
+        "AK is Mars and he is in Taurus",
+        "Sg is the 8th house from Mars and Jupiter, lord of Sg, is Maheswara",
+    ),
+    (
+        2,
+        "Ketu is in Ta or Sg",
+        (
+            "we find the 6th house from Mars instead of the 8th; it is Li, "
+            "and Venus owns it, so Venus becomes Maheswara"
+        ),
+    ),
+)
+
+#: Exception 2's own equivalence, which is checkable: the 6th zodiacally is
+#: the 8th anti-zodiacally.
+SIXTH_IS_THE_ANTIZODIACAL_EIGHTH = (
+    "Section 14.3 notes that taking the 6th lord from AK 'is equivalent to "
+    "taking the 8th lord in the anti-zodiacal order'. Counting six forward "
+    "and eight backward land on the same rasi from any starting point."
+)

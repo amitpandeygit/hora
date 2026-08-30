@@ -322,3 +322,233 @@ def test_the_rules_endpoint_carries_chapter_14(client):
     assert len(body["not_covered"]) == 2
     assert body["malefics"] == ["Ketu", "Mars", "Rahu", "Saturn", "Sun"]
     assert "predicting death" in body["framing"]
+
+
+# --------------------------------------------------------------------------
+# §14.3 — Rudra, Trishoola and Maheswara
+# --------------------------------------------------------------------------
+
+from hora.charts.maraka import (
+    maheswara,
+    ordinary_eighth,
+    rudra_candidates,
+    rudra_eighth,
+    trishoola_rasis,
+)
+from hora.core.const import (
+    FOOTNOTE_50,
+    MAHESWARA_EXAMPLES,
+    MAHESWARA_EXCEPTIONS,
+    MAHESWARA_NODE_SUBSTITUTES,
+    MAHESWARA_USES_THE_ORDINARY_EIGHTH,
+    MODALITY_NAMES_EN,
+    RASI_MODALITY,
+    RUDRA_AFFLICTION_MALEFICS,
+    RUDRA_AFFLICTION_RULE,
+    RUDRA_STRENGTH_CASCADE,
+    SIXTH_IS_THE_ANTIZODIACAL_EIGHTH,
+    TABLE_32_CONSTRUCTION,
+    TABLE_32_EIGHTH,
+)
+
+
+def test_table_32_covers_every_rasi():
+    assert set(TABLE_32_EIGHTH) == set(RASI_ABBR)
+    assert set(TABLE_32_EIGHTH.values()) <= set(RASI_ABBR)
+
+
+def test_footnote_50s_stated_rule_accounts_for_eight_of_the_twelve():
+    """"For odd rasis, we count houses zodiacally. For even rasis, we count
+    houses anti-zodiacally." That gives eight entries and misses four."""
+    follows, breaks = [], []
+    for abbr, eighth in TABLE_32_EIGHTH.items():
+        sign = R[abbr]
+        expected = (sign + 7) % 12 if sign % 2 == 0 else (sign - 7) % 12
+        (follows if expected == R[eighth] else breaks).append(abbr)
+    assert len(follows) == 8
+    assert sorted(breaks) == ["Aq", "Le", "Sc", "Ta"]
+
+
+def test_the_four_that_break_it_are_exactly_the_fixed_rasis():
+    """Which identifies footnote 50's "Shiva rasis". Its Brahma and Vishnu
+    rasis are then the movable and dual ones, which do follow the rule."""
+    breaks = {abbr for abbr, eighth in TABLE_32_EIGHTH.items()
+              if ((R[abbr] + 7) % 12 if R[abbr] % 2 == 0
+                  else (R[abbr] - 7) % 12) != R[eighth]}
+    fixed = {abbr for abbr in RASI_ABBR
+             if MODALITY_NAMES_EN[RASI_MODALITY[R[abbr]]] == "fixed"}
+    assert breaks == fixed == {"Ta", "Le", "Sc", "Aq"}
+    assert "Shiva rasis" in FOOTNOTE_50
+    assert "the fixed rasis" in TABLE_32_CONSTRUCTION
+
+
+def test_shivas_motion_is_deferred_so_table_32_stays_as_data():
+    """Footnote 50 says Shiva's motion "will be discussed in Narayana Dasa",
+    so four entries cannot be derived here and the table is transcribed."""
+    assert "Narayana Dasa" in FOOTNOTE_50
+    assert "held as data" in TABLE_32_CONSTRUCTION
+
+
+def test_table_32_differs_from_the_ordinary_eighth_in_eight_rasis():
+    """§14.3 warns of this outright: "Find the 8th house using Table 32 and
+    not in the normal way"."""
+    differ = [s for s in range(12) if rudra_eighth(s) != ordinary_eighth(s)]
+    assert len(differ) == 8
+    assert sorted(RASI_ABBR[s] for s in differ) == [
+        "Aq", "Cn", "Cp", "Le", "Pi", "Sc", "Ta", "Vi"]
+
+
+def test_rudra_has_two_candidates_from_the_lagna_and_the_seventh():
+    """"the lord of the 8th house from (i) lagna and (ii) the 7th house"."""
+    result = rudra_candidates(R["Le"])
+    assert RASI_ABBR[result.from_lagna[0]] == TABLE_32_EIGHTH["Le"] == "Cn"
+    assert RASI_ABBR[result.from_seventh[0]] == TABLE_32_EIGHTH["Aq"] == "Cp"
+    assert result.from_lagna[1] == int(Graha.MOON)
+    assert result.from_seventh[1] == int(Graha.SATURN)
+
+
+def test_rudra_is_not_decided_without_the_charts_positions():
+    """The strength cascade needs them, and the answer says so instead of
+    picking one."""
+    result = rudra_candidates(R["Le"])
+    assert result.rudra is None
+    assert result.decided_by is None
+    assert "needs the chart's positions" in result.why
+
+
+def test_the_strength_cascade_is_transcribed_in_order():
+    assert len(RUDRA_STRENGTH_CASCADE) == 5
+    assert "conjoins more planets" in RUDRA_STRENGTH_CASCADE[0]
+    assert "exaltation or own rasi" in RUDRA_STRENGTH_CASCADE[1]
+    assert "more advanced in its rasi" in RUDRA_STRENGTH_CASCADE[4]
+
+
+def test_the_affliction_rule_can_override_the_stronger_planet():
+    """"if the weaker planet is debilitated or in an inimical sign and
+    conjoined/aspected by malefics ... then it becomes Rudra"."""
+    assert "weaker planet is debilitated" in RUDRA_AFFLICTION_RULE
+    assert RUDRA_AFFLICTION_MALEFICS == ("Mars", "Saturn", "Rahu", "Ketu")
+    assert "Sun" not in RUDRA_AFFLICTION_MALEFICS, "shorter than 14.2's list"
+
+
+@pytest.mark.parametrize("sign", range(12))
+def test_the_three_trishoola_rasis_are_trines_from_rudra(sign):
+    trines = trishoola_rasis(sign)
+    assert len(set(trines)) == 3
+    assert trines[0] == sign
+    assert all((t - sign) % 4 == 0 for t in trines)
+
+
+# -- Maheswara --------------------------------------------------------------
+
+def test_maheswara_uses_the_ordinary_eighth_not_table_32():
+    """§14.3's second exception settles it: "AK is Mars and he is in Taurus.
+    Then Sg is the 8th house from Mars." The ordinary 8th from Taurus is
+    Sagittarius; Table 32 gives Gemini."""
+    assert RASI_ABBR[ordinary_eighth(R["Ta"])] == "Sg"
+    assert TABLE_32_EIGHTH["Ta"] == "Ge"
+    body = maheswara(R["Ta"], {int(Graha.KETU): R["Ar"]})
+    assert body["maheswara_name"] == "Jupiter"
+    assert "Sagittarius" in body["steps"][0]
+    assert "for Rudra only" in MAHESWARA_USES_THE_ORDINARY_EIGHTH
+
+
+def test_the_first_exceptions_example_cannot_decide_which_eighth():
+    """Its Gemini gives Capricorn either way, which is why exception 2 is the
+    one that settles it."""
+    assert RASI_ABBR[ordinary_eighth(R["Ge"])] == TABLE_32_EIGHTH["Ge"] == "Cp"
+
+
+def test_maheswara_base_rule_from_an_ak_in_gemini():
+    """"the 8th house from AK is Cp and Saturn is Maheswara"."""
+    body = maheswara(R["Ge"])
+    assert body["maheswara_name"] == "Saturn"
+    assert body["house_used"] == 8
+
+
+def test_exception_1_offers_the_eighth_and_twelfth_lords_from_him():
+    """"Saturn is exalted in Li. From Saturn (Li), Venus owns the 8th house
+    (Ta) and Mercury owns the 12th house (Vi)." Both are returned, because
+    §14.3 asks for the stronger and gives no cascade here."""
+    body = maheswara(R["Ge"], {int(Graha.SATURN): R["Li"]})
+    assert body["maheswara"] is None
+    assert body["needs_strength_comparison"] is True
+    assert [(c["graha_name"], c["house"], c["rasi"])
+            for c in body["candidates"]] == [
+        ("Venus", 8, "Taurus"), ("Mercury", 12, "Virgo")]
+
+
+@pytest.mark.parametrize("node_sign", ["Ta", "Sg"])
+def test_exception_2_reads_the_sixth_when_a_node_joins_ak_or_the_eighth(
+        node_sign):
+    """"Suppose Ketu is in Ta or Sg" — the AK's own rasi, or the 8th from
+    him. Either way the 6th is read and Venus becomes Maheswara."""
+    body = maheswara(R["Ta"], {int(Graha.KETU): R[node_sign]})
+    assert body["house_used"] == 6
+    assert body["maheswara_name"] == "Venus"
+    assert "anti-zodiacally" in body["steps"][-1]
+
+
+def test_exception_2s_equivalence_holds_from_every_rasi():
+    """"this is equivalent to taking the 8th lord in the anti-zodiacal
+    order." Six forward and eight backward land together, always."""
+    for sign in range(12):
+        assert (sign + 5) % 12 == (sign - 7) % 12
+    assert "anti-zodiacal order" in MAHESWARA_EXCEPTIONS[1]
+    assert "same rasi" in SIXTH_IS_THE_ANTIZODIACAL_EIGHTH
+
+
+def test_exception_2_fires_for_rahu_as_well_as_ketu():
+    """"If Rahu or Ketu joins AK or the 8th from him"."""
+    for node in (Graha.RAHU, Graha.KETU):
+        assert maheswara(R["Ta"], {int(node): R["Ta"]})["house_used"] == 6
+
+
+def test_exception_3_substitutes_mercury_for_rahu_and_jupiter_for_ketu():
+    """A node can only become Maheswara through co-lordship of Scorpio or
+    Aquarius, and then it is swapped out."""
+    assert MAHESWARA_NODE_SUBSTITUTES == {
+        "Rahu": "Mercury", "Ketu": "Jupiter"}
+    assert "we take Mercury instead" in MAHESWARA_EXCEPTIONS[2]
+    assert "we take Jupiter instead" in MAHESWARA_EXCEPTIONS[2]
+
+
+def test_without_positions_maheswara_names_the_exceptions_it_could_not_test():
+    """Never silently returns the base answer as though it were final."""
+    body = maheswara(R["Ge"])
+    assert len(body["untested_exceptions"]) == 2
+    assert any("exception 1" in note for note in body["untested_exceptions"])
+    assert any("exception 2" in note for note in body["untested_exceptions"])
+
+
+@pytest.mark.parametrize("which,setup,result", MAHESWARA_EXAMPLES,
+                         ids=[f"ex{e[0]}-{i}" for i, e
+                              in enumerate(MAHESWARA_EXAMPLES)])
+def test_each_of_14_3s_worked_examples_is_recorded(which, setup, result):
+    assert which in (1, 2)
+    assert setup and result
+
+
+# -- endpoints --------------------------------------------------------------
+
+def test_the_14_3_endpoints(client):
+    body = client.get("/v1/marakas/rudra-rules").json()
+    assert len(body["table_32"]) == 12
+    assert len(body["maheswara_exceptions"]) == 3
+    assert len(body["maheswara_examples"]) == 4
+    assert "predicting death" in body["framing"]
+
+    rudra = client.get("/v1/marakas/rudra", params={"lagna": R["Le"]}).json()
+    assert rudra["candidates"] == ["Moon", "Saturn"]
+    assert rudra["rudra"] is None
+
+    trishoola = client.get("/v1/marakas/trishoola",
+                           params={"rudra_sign": R["Sc"]}).json()
+    assert [t["rasi"] for t in trishoola["trishoola"]] == [
+        "Scorpio", "Pisces", "Cancer"]
+
+    mahes = client.post("/v1/marakas/maheswara", json={
+        "ak_sign": R["Ta"], "graha_signs": {str(int(Graha.KETU)): R["Sg"]},
+    }).json()
+    assert mahes["maheswara_name"] == "Venus"
+    assert mahes["house_used"] == 6

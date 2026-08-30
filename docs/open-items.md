@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 65 waiting on evidence · 2 parked**
+**5 waiting on Amit · 66 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,26 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-109 — §14.3's Rudra cascade and Shiva's motion are both incomplete
+
+**The Rudra cascade.** Its five strength tests are stated in order, but the
+affliction override is not computable: the weaker planet takes over if it is
+"debilitated or in an inimical sign and conjoined/aspected by malefics **like**
+Mars, Saturn, Rahu and Ketu". "Like" leaves the list open, and no example works
+the cascade through.
+
+**Shiva's motion.** Footnote 50 builds Table 32 by counting zodiacally from odd
+rasis and anti-zodiacally from even ones, except that Shiva rasis use Shiva's
+motion — "will be discussed in Narayana Dasa". The stated part accounts for
+eight of twelve entries, and the four it misses are exactly the fixed rasis (a
+test proves it), which is what identifies them as the Shiva rasis.
+
+**What we do:** Table 32 is transcribed and checked against the stated part of
+footnote 50. `/v1/marakas/rudra` returns both candidates with the cascade
+rather than a verdict.
+
+**Closes when:** Narayana Dasa defines Shiva's motion, or an example runs the Rudra cascade.
 
 ### OI-108 — §14.2's "powerfully" is never quantified
 

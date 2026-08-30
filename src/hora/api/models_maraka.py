@@ -37,3 +37,11 @@ class MarakaRulesOut(BaseModel):
     not_ranked: str
     use: str
     examples: list[dict]
+
+
+class MaheswaraIn(BaseModel):
+    """`graha_signs` drives exceptions 1 and 2; without it the answer names
+    which exceptions could not be tested."""
+
+    ak_sign: int = Field(..., ge=0, le=11, examples=[2])
+    graha_signs: dict[int, int] | None = Field(None, examples=[None])

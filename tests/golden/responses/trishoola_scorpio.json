@@ -1,0 +1,23 @@
+{
+  "body": {
+    "framing": "Many human beings are curious about how long they will live. An ethical astrologer will not scare a client by predicting death, but he may caution a client gently before critical periods and suggest some remedial measures to ward off an impending danger. An estimation of longevity is also helpful in matchmaking. After all, if one person will live for 81 years and the other only for 36 years, it is not advisable to approve a match between those two people. In matchmaking, it is desirable that the bridegroom and the bride have comparable longevity.",
+    "rudra_rasi": "Scorpio",
+    "rudra_sign": 7,
+    "rule": "The three trines from the rasi occupied by Rudra in rasi chart represent the three spikes of Shiva's Trishoola/trident. They are called Trishoola rasis. Depending on whether a native has short life or middle life or long life, one of the three Trishoola rasis kills the native during its Shoola dasa.",
+    "trishoola": [
+      {
+        "rasi": "Scorpio",
+        "sign": 7
+      },
+      {
+        "rasi": "Pisces",
+        "sign": 11
+      },
+      {
+        "rasi": "Cancer",
+        "sign": 3
+      }
+    ]
+  },
+  "status": 200
+}
