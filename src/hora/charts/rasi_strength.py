@@ -144,8 +144,14 @@ def lord_of(
     """The rasi's lord, resolving Scorpio and Aquarius through §15.5.1.
 
     Rule 6's note says so outright — "In the case of Aq and Sc, we use the
-    stronger lord" — and §15.5.1 says the stronger co-lord "acts as its lord",
-    so the same resolution is used wherever this cascade needs a lord.
+    stronger lord" — and §15.5.1 says the stronger co-lord "acts as its lord".
+
+    **Rule 2 is the exception and does not use this.** Exercise 26 counts a
+    co-lord's aspect even though it is not the stronger one: "Aq is aspected
+    by co-lord Rahu (though Saturn is the primary/stronger lord, Rahu's
+    aspect also counts)". So rule 2 takes `co_lords_of` instead. Rules 4 and
+    5 keep this resolution, which rule 6's note attests and nothing
+    contradicts — see docs/open-items.md OI-111.
 
     :returns: ``(lord, explanation)``. The lord is None when §15.5.1's own
         cascade could not decide, which stops this cascade too.
@@ -173,20 +179,34 @@ def occupants(rasi: int, longitudes: dict[int, float]) -> set[int]:
     return {g for g, lon in longitudes.items() if _sign(lon) == rasi}
 
 
+def co_lords_of(rasi: int) -> tuple[int, ...]:
+    """Every lord of a rasi — two for Scorpio and Aquarius, one otherwise.
+
+    Rule 2 counts all of them. Exercise 26 says so: a co-lord's aspect
+    counts even when it is not the stronger lord.
+    """
+    return CO_LORDS.get(rasi, (int(RASI_LORD[rasi]),))
+
+
 def rule_2_count(
     rasi: int,
-    lord: int,
+    lords: tuple[int, ...] | int,
     longitudes: dict[int, float],
 ) -> tuple[int, list[str]]:
-    """How many of Jupiter, Mercury and the rasi's lord occupy or aspect it.
+    """How many of Jupiter, Mercury and the rasi's lord(s) occupy or aspect it.
 
     Counted by **role**, matching §15.5.1's sibling rule: a lord that is also
-    Jupiter or Mercury contributes twice.
+    Jupiter or Mercury contributes twice. A co-owned rasi has two lords and
+    each is counted, per Exercise 26.
     """
+    owners = (int(lords),) if isinstance(lords, int) else tuple(
+        int(g) for g in lords)
     count, why = 0, []
-    for role, graha in (("Jupiter", int(Graha.JUPITER)),
-                        ("Mercury", int(Graha.MERCURY)),
-                        ("lord", int(lord))):
+    roles: list[tuple[str, int]] = [
+        ("Jupiter", int(Graha.JUPITER)), ("Mercury", int(Graha.MERCURY))]
+    roles += [
+        ("lord" if len(owners) == 1 else "co-lord", g) for g in owners]
+    for role, graha in roles:
         if graha not in longitudes:
             continue
         where = _sign(longitudes[graha])
@@ -295,7 +315,7 @@ def stronger(
         lords[rasi] = lord
 
     # --- Rule 2 ---
-    scores = {r: rule_2_count(r, lords[r], longitudes) for r in (a, b)}
+    scores = {r: rule_2_count(r, co_lords_of(r), longitudes) for r in (a, b)}
     detail = "; ".join(
         f"{RASI_NAMES[r]} count {n}" + (f" ({', '.join(why)})" if why else "")
         for r, (n, why) in scores.items()

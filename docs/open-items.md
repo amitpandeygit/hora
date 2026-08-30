@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 67 waiting on evidence · 2 parked**
+**5 waiting on Amit · 68 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,27 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-111 — which of §15.5.2's rules take one co-lord and which take both
+
+Exercise 26 settles rule 2 and leaves two rules open.
+
+Rule 2 counts **both** co-lords, by a parenthesis written to catch exactly this
+mistake: "Aq is aspected by co-lord Rahu (though Saturn is the primary/stronger
+lord, Rahu's aspect also counts)." Rule 6 takes the **stronger** co-lord, by its
+own note: "In the case of Aq and Sc, we use the stronger lord."
+
+Rules 4 and 5 also read a lord and neither §15.5.2 nor any exercise says which
+resolution they take; they keep the stronger lord, which rule 6 attests and
+nothing contradicts. The exercise also does not settle whether **two** co-lords
+both reaching a rasi count twice — its Aquarius has only Rahu reaching it. We
+count each, matching the section's existing role-based counting where a lord
+that is also Jupiter or Mercury already contributes twice.
+
+**What we do:** `co_lords_of` for rule 2, `lord_of` for rules 4 to 6.
+
+**Closes when:** an example runs rule 4 or 5 on a co-owned rasi, or one has two
+co-lords reaching the same rasi.
 
 ### OI-110 — §14.4 gives no paramaayush outside the two-against-one case
 

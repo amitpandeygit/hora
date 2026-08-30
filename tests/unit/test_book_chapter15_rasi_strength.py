@@ -288,3 +288,61 @@ def test_a_rasi_cannot_be_compared_with_itself():
 def test_an_unknown_purpose_is_refused():
     with pytest.raises(RasiStrengthError, match="unknown purpose"):
         stronger(AR, LI, {int(Graha.MARS): lon(10, "Ge")}, purpose="yoga")
+
+
+# --------------------------------------------------------------------------
+# Exercise 26 — rule 2 counts a co-lord that is not the stronger one
+# --------------------------------------------------------------------------
+
+def test_rule_2_counts_a_co_lord_that_is_not_the_stronger_lord():
+    """Exercise 26 (5): "Aq is aspected by co-lord Rahu (though Saturn is the
+    primary/stronger lord, Rahu's aspect also counts)."
+
+    Resolving Aquarius to one lord before rule 2 runs loses that aspect, which
+    is what this code used to do.
+    """
+    from hora.charts.rasi_strength import (
+        co_lords_of,
+        lord_of,
+        rule_2_count,
+    )
+    from hora.core.const import Graha
+
+    longitudes = {
+        int(Graha.RAHU): ABBR.index("Ar") * 30 + 10, int(Graha.KETU): ABBR.index("Li") * 30 + 10,
+        int(Graha.SATURN): ABBR.index("Ta") * 30 + 5,
+        int(Graha.JUPITER): ABBR.index("Ge") * 30 + 5,
+        int(Graha.MERCURY): ABBR.index("Cn") * 30 + 5,
+        int(Graha.SUN): ABBR.index("Le") * 30 + 5, int(Graha.MOON): ABBR.index("Vi") * 30 + 5,
+        int(Graha.MARS): ABBR.index("Sc") * 30 + 5, int(Graha.VENUS): ABBR.index("Sg") * 30 + 5,
+    }
+    stronger, _ = lord_of(ABBR.index("Aq"), longitudes)
+    assert stronger == int(Graha.SATURN), "Saturn is the stronger co-lord"
+
+    count, why = rule_2_count(ABBR.index("Aq"), co_lords_of(ABBR.index("Aq")), longitudes)
+    assert any("Rahu" in reason for reason in why)
+    assert count == 2
+
+    only_stronger, _ = rule_2_count(ABBR.index("Aq"), stronger, longitudes)
+    assert only_stronger == 1, "the old behaviour, kept as the contrast"
+
+
+def test_co_lords_of_returns_two_only_for_scorpio_and_aquarius():
+    from hora.charts.rasi_strength import co_lords_of
+
+    doubles = {ABBR[s] for s in range(12) if len(co_lords_of(s)) == 2}
+    assert doubles == {"Sc", "Aq"}
+    for sign in range(12):
+        assert 1 <= len(co_lords_of(sign)) <= 2
+
+
+def test_rule_6_still_takes_the_stronger_co_lord():
+    """Its own note says so — "In the case of Aq and Sc, we use the stronger
+    lord" — so the two rules genuinely differ. See OI-111."""
+    import inspect
+
+    from hora.charts import rasi_strength
+
+    source = inspect.getsource(rasi_strength.stronger)
+    assert "co_lords_of(r)" in source, "rule 2 takes both"
+    assert "lords[r]" in source, "the later rules take the resolved one"
