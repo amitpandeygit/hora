@@ -11,7 +11,13 @@ import re
 from typing import Any
 
 from hora.core import validate
-from hora.core.const import BOOK_CHARTS, CHARTS_NOT_SUPPLIED, RASI_ABBR, Graha
+from hora.core.const import (
+    BOOK_CHARTS,
+    CHARTS_NOT_SUPPLIED,
+    EXAMPLE_CHARTS,
+    RASI_ABBR,
+    Graha,
+)
 
 _LONGITUDE = re.compile(r"(\d+) ?([A-Za-z]{2}) ?(\d+)")
 
@@ -43,6 +49,20 @@ def longitude(text: str) -> float:
 def numbers() -> tuple[int, ...]:
     """Every chart number the book has supplied, ascending."""
     return tuple(sorted(BOOK_CHARTS))
+
+
+def example_numbers() -> tuple[int, ...]:
+    """Every example that supplies its own chart without a "Chart N"."""
+    return tuple(sorted(EXAMPLE_CHARTS))
+
+
+def example_chart(number: int) -> dict[str, Any]:
+    """One example's chart. Partial by nature — see the record's note."""
+    if number in EXAMPLE_CHARTS:
+        return EXAMPLE_CHARTS[number]
+    raise BookChartError(
+        f"Example {number} does not supply a chart. The examples that do are "
+        f"{', '.join(str(n) for n in example_numbers())}")
 
 
 def chart(number: int) -> dict[str, Any]:

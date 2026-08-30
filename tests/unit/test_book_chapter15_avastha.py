@@ -15,9 +15,12 @@ import pytest
 from hora.charts.avastha import (
     AvasthaError,
     all_avasthas,
+    avastha_by_activity,
     avastha_by_age,
     avastha_by_alertness,
     avasthas_by_mood,
+    ghati_at_birth,
+    sound_number,
 )
 from hora.charts.strength import AGE_RANK, StrengthError, compare, stronger
 from hora.core.const import (
@@ -780,3 +783,60 @@ def _mood(graha, pos, **kw):
         m.name: m for m in avasthas_by_mood(graha, pos, **kw)
         if m.additional and m.name != "Mudita"
     }
+
+
+# --------------------------------------------------------------------------
+# Example 49 — the section's only worked example, three grahas.
+# --------------------------------------------------------------------------
+
+#: Born 5:50 pm (IST), 4 April 1970, Machilipatnam (81E12, 16N15). The book
+#: gives M = 25 (Moon in Poorvabhadrapada), G = 30, L = 6 (Virgo lagna) and a
+#: name starting with "V". Only the Moon's constellation matters, so any
+#: longitude inside the 25th serves.
+EX49_MOON = 24 * (360 / 27) + 1.0
+EX49 = {
+    "moon_longitude": EX49_MOON, "lagna_rasi": 5, "ghati": 30, "name_sound": "V",
+}
+
+
+def test_example_49_derives_its_own_ghati_and_sound():
+    """The example states G = 30 and a sound number of 1; both are derived."""
+    assert ghati_at_birth(11 + 50 / 60) == 30      # 5:50 pm, sunrise 6 am
+    assert sound_number("V") == 1
+
+
+@pytest.mark.parametrize(
+    "graha,longitude,terms,index,name,strength_remainder,strength",
+    [
+        (Graha.MERCURY, lon(3 + 8 / 60, "Ar"), (1, 4, 1), 5, "Gamana", 2, "cheshta"),
+        (Graha.JUPITER, lon(9 + 46 / 60, "Li"), (15, 5, 3), 10, "Nriyalipsaa", 1, "drishti"),
+        (Graha.VENUS, lon(7 + 55 / 60, "Ar"), (1, 6, 3), 7, "Sabhaa", 2, "cheshta"),
+    ],
+)
+def test_example_49(graha, longitude, terms, index, name, strength_remainder, strength):
+    got = avastha_by_activity(graha, longitude, **EX49)
+    c, p, a = terms
+    assert (got.terms["C"], got.terms["P"], got.terms["A"]) == (c, p, a)
+    assert (got.terms["M"], got.terms["G"], got.terms["L"]) == (25, 30, 6)
+    assert got.index == index
+    assert got.name == name
+    assert got.strength_remainder == strength_remainder
+    assert got.strength == strength
+
+
+def test_example_49_shows_every_intermediate_the_book_prints():
+    """The book prints the arithmetic, not just the answer, for each graha.
+
+    Matching only the final avastha would hide a compensating error, so each
+    printed intermediate is checked: the product, the sum, the two remainders
+    and the adjusted total.
+    """
+    def values(result):
+        return [s.value for s in result.steps]
+
+    merc = avastha_by_activity(Graha.MERCURY, lon(3 + 8 / 60, "Ar"), **EX49)
+    assert values(merc) == [4, 65, 5, 5, 25, 26, 2, 5, 2]
+    jup = avastha_by_activity(Graha.JUPITER, lon(9 + 46 / 60, "Li"), **EX49)
+    assert values(jup) == [225, 286, 10, 10, 100, 101, 5, 10, 1]
+    ven = avastha_by_activity(Graha.VENUS, lon(7 + 55 / 60, "Ar"), **EX49)
+    assert values(ven) == [18, 79, 7, 7, 49, 50, 2, 5, 2]

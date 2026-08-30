@@ -17,6 +17,7 @@ from hora.charts.book import (
     chart,
     describe,
     divisional,
+    example_chart,
     graha_signs,
     is_recomputable,
     lagna,
@@ -350,3 +351,38 @@ def test_the_second_twin_is_recomputable_unlike_sanjay_gandhi():
     Sanjay Gandhi's does not, and each record says which."""
     assert "birth_data" in chart(15)["related"]["Shivam Gaur"]
     assert "birth_data" not in chart(14)["related"]["His younger brother"]
+
+
+# --------------------------------------------------------------------------
+# Charts the book prints inside an example, without a "Chart N".
+# --------------------------------------------------------------------------
+
+
+def test_example_49_chart_is_registered_and_marked_partial():
+    """The book gives this native a birth line but never a chart number.
+
+    It prints only the three longitudes its own computation needs, so the
+    record must say what is missing rather than read as a whole chart.
+    """
+    record = example_chart(49)
+    assert record["birth"].startswith("April 4, 1970, 5:50 pm (IST)")
+    assert set(record["longitudes"]) == {"Merc", "Jup", "Ven"}
+    assert record["stated"]["moon_constellation"] == 25
+    assert record["stated"]["lagna_rasi"] == "Vi"
+    assert "cannot be drawn" in record["note"]
+    with pytest.raises(BookChartError, match="does not supply a chart"):
+        example_chart(48)
+
+
+def test_example_49_register_agrees_with_the_chapter_15_fixture():
+    """The register and the worked-example test must not drift apart.
+
+    Both encode the same three longitudes. If either is edited alone, the
+    section 15.4.4 answers and the register stop describing one native.
+    """
+    from tests.unit.test_book_chapter15_avastha import lon
+
+    registered = example_chart(49)["longitudes"]
+    assert longitude(registered["Merc"]) == pytest.approx(lon(3 + 8 / 60, "Ar"))
+    assert longitude(registered["Jup"]) == pytest.approx(lon(9 + 46 / 60, "Li"))
+    assert longitude(registered["Ven"]) == pytest.approx(lon(7 + 55 / 60, "Ar"))

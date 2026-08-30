@@ -481,3 +481,38 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
         ),
     },
 }
+
+
+#: Charts the book supplies inside an example without giving them a "Chart N".
+#: Keyed by example number. They are partial by nature — an example prints only
+#: the longitudes its own computation needs — so the record says what is
+#: missing rather than implying a whole chart.
+EXAMPLE_CHARTS: dict[int, dict[str, Any]] = {
+    49: {
+        "title": "Section 15.4.4's worked example",
+        "birth": "April 4, 1970, 5:50 pm (IST), Machilipatnam, 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1970, "month": 4, "day": 4, "hour": 17, "minute": 50,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Merc": "3 Ar 08", "Jup": "9 Li 46", "Ven": "7 Ar 55",
+        },
+        "stated": {
+            "lagna_rasi": "Vi",
+            "moon_constellation": 25,
+            "sunrise": "6:00 am",
+            "ghati_at_birth": 30,
+            "name_initial": "V",
+        },
+        "first_seen": "chapter 15, Example 49",
+        "note": (
+            "Only the three grahas the example computes are printed. The Moon "
+            "is given as its constellation (Poorvabhadrapada, the 25th) and "
+            "the lagna as its rasi, with no longitude for either, so the "
+            "chart cannot be drawn. Sunrise is stated as 6:00 am rather than "
+            "computed; the book uses it to reach G = 30."
+        ),
+    },
+}
