@@ -99,6 +99,10 @@ from hora.core.const import (
     EXERCISE_21_VERDICT,
     MUHURTA_DEFINITION,
     MUHURTA_FOOTNOTE,
+    PRASTAARA_COLUMN_NOTE,
+    PRASTAARA_DEFINITION,
+    PRASTAARA_MEANS,
+    PRASTAARA_TRANSIT_REFERENCES,
     RASI_ABBR,
     SAMUDAAYA_MEANS,
     SARVA_MEANS,
@@ -114,6 +118,9 @@ from hora.core.const import (
     SODHYA_PINDA_NOT_YET_DEFINED,
     SUN_ASHTAKAVARGA_ROWS,
     TABLE_19_WORKED_READING,
+    TABLE_27_MERCURY_PAV,
+    TABLE_27_OWNER,
+    TABLE_27_TOTALS,
     YUGA_YEARS,
     Graha,
 )
@@ -2133,3 +2140,159 @@ def test_the_rules_endpoint_carries_exercise_21(client):
     assert len(body["guess_steps"]) == 6
     assert "Madonna" in body["final_answer"]
     assert "not claimed to" in body["final_answer_note"]
+
+
+# --------------------------------------------------------------------------
+# §12.6 — Prastaara Ashtakavarga, and Table 27
+# --------------------------------------------------------------------------
+
+def test_prastaara_means_spread_out():
+    assert PRASTAARA_MEANS == "spread-out"
+    assert "exact references" in PRASTAARA_DEFINITION
+
+
+def test_table_27_is_a_complete_eight_by_twelve_grid_of_zeroes_and_ones():
+    assert set(TABLE_27_MERCURY_PAV) == set(ASHTAKAVARGA_REFERENCES)
+    for reference, entries in TABLE_27_MERCURY_PAV.items():
+        assert len(entries) == 12, reference
+        assert set(entries) <= {0, 1}, reference
+
+
+def test_table_27s_printed_totals_are_its_own_column_sums():
+    """§12.6's closing NOTE: 'the sum of all the entries in each column – rasi
+    – in a PAV gives the number of rekhas in that rasi in BAV'."""
+    sums = tuple(sum(TABLE_27_MERCURY_PAV[r][i] for r in ASHTAKAVARGA_REFERENCES)
+                 for i in range(12))
+    assert sums == TABLE_27_TOTALS
+    assert "sum of all the entries in each column" in PRASTAARA_COLUMN_NOTE
+
+
+def test_our_prastaara_reproduces_table_27_cell_for_cell():
+    """All ninety-six entries, from Chart 6's eight reference signs."""
+    from hora.charts.ashtakavarga import prastaara
+
+    pav = prastaara(TABLE_27_OWNER, CHART_6_SIGNS)
+    assert pav.rows == TABLE_27_MERCURY_PAV
+    assert pav.rekhas == TABLE_27_TOTALS
+
+
+def test_a_prastaara_is_a_bhinnashtakavarga_stopped_one_step_earlier():
+    """Not a second calculation. A BAV counts the (reference, house) pairs and
+    throws the pairing away; a PAV keeps it. So the column sums must be the
+    BAV's rekhas by construction, not by coincidence."""
+    from hora.charts.ashtakavarga import bhinnashtakavarga, prastaara
+
+    for owner in ASHTAKAVARGA_REFERENCES:
+        pav = prastaara(owner, CHART_6_SIGNS)
+        bav = bhinnashtakavarga(owner, CHART_6_SIGNS)
+        assert pav.rekhas == bav.rekhas, owner
+        for sign in range(12):
+            assert sum(pav.rows[r][sign] for r in ASHTAKAVARGA_REFERENCES) \
+                == bav.rekhas[sign], (owner, sign)
+
+
+def test_table_27_is_exercise_18s_answer_in_a_different_shape():
+    """The book says so: 'For some people, the answer to Exercise 18 may
+    qualify as Mercury's PAV.' We hold both and check them against each other
+    rather than typing the same fact twice."""
+    for reference, rasis in EXERCISE_18_ANSWER.items():
+        row = tuple(1 if RASI_ABBR[i] in rasis else 0 for i in range(12))
+        assert row == TABLE_27_MERCURY_PAV[reference], reference
+
+
+def test_prastaara_answers_the_question_a_bav_cannot():
+    """§12.6's own example: 'if we know that a planet is benefic in Ta with
+    respect to 5 references, that may not be enough. We may need to know
+    exactly what those 5 references are.'"""
+    from hora.charts.ashtakavarga import benefic_from_in, bhinnashtakavarga
+
+    who = benefic_from_in("Mercury", CHART_6_SIGNS, R["Ta"])
+    assert who == ("Sun", "Mercury", "Venus", "Saturn")
+    assert len(who) == bhinnashtakavarga("Mercury", CHART_6_SIGNS).rekhas[R["Ta"]]
+
+
+def test_the_transit_question_gets_a_verdict_for_every_reference_asked():
+    """A transit rule that cannot be decided must say so, never return a bare
+    absence. Both halves of the answer are present here."""
+    from hora.charts.ashtakavarga import is_benefic_from
+
+    out = is_benefic_from(
+        "Mercury", CHART_6_SIGNS, R["Ta"], ["Venus", "Jupiter"])
+    assert out["verdicts"]["Venus"]["benefic"] is True
+    assert out["verdicts"]["Jupiter"]["benefic"] is False
+    assert "is not benefic" in out["verdicts"]["Jupiter"]["why"]
+    assert out["all_of_them"] is False
+    assert out["any_of_them"] is True
+
+
+def test_the_transit_question_refuses_an_empty_or_unknown_reference():
+    from hora.charts.ashtakavarga import AshtakavargaError, is_benefic_from
+
+    with pytest.raises(AshtakavargaError, match="at least one reference"):
+        is_benefic_from("Mercury", CHART_6_SIGNS, R["Ta"], [])
+    with pytest.raises(AshtakavargaError, match="unknown reference"):
+        is_benefic_from("Mercury", CHART_6_SIGNS, R["Ta"], ["Ketu"])
+
+
+def test_only_venus_of_the_books_three_transit_references_is_one_of_the_eight():
+    """§12.6 names 'Venus or DK or 7th lord in navamsa'. The last two are ways
+    of choosing which graha to ask about, not references in their own right."""
+    assert PRASTAARA_TRANSIT_REFERENCES == (
+        "Venus", "DK", "7th lord in navamsa")
+    inside = [r for r in PRASTAARA_TRANSIT_REFERENCES
+              if r in ASHTAKAVARGA_REFERENCES]
+    assert inside == ["Venus"]
+
+
+def test_every_planet_has_a_prastaara_not_just_mercury():
+    """'We prepare one PAV for each planet.' Table 27 shows one; the structure
+    has to exist for all eight references, lagna included."""
+    from hora.charts.ashtakavarga import prastaara
+
+    for owner in ASHTAKAVARGA_REFERENCES:
+        pav = prastaara(owner, CHART_6_SIGNS)
+        assert set(pav.rows) == set(ASHTAKAVARGA_REFERENCES), owner
+        assert sum(pav.rekhas) == CLASSICAL_TABLE_TOTALS[owner], owner
+
+
+def test_the_prastaara_endpoint_serves_table_27(client):
+    body = client.post("/v1/ashtakavarga/prastaara", json={
+        "owner": "Mercury",
+        "reference_signs": CHART_6_SIGNS,
+    }).json()
+    assert body["rekhas"] == list(TABLE_27_TOTALS)
+    assert body["means"] == "spread-out"
+    rows = {row["reference"]: row["entries"] for row in body["rows"]}
+    assert rows == {k: list(v) for k, v in TABLE_27_MERCURY_PAV.items()}
+    assert body["asked"] is None
+
+
+def test_the_prastaara_endpoint_answers_the_transit_question(client):
+    body = client.post("/v1/ashtakavarga/prastaara", json={
+        "owner": "Mercury",
+        "reference_signs": CHART_6_SIGNS,
+        "rasi": R["Ta"],
+        "references": ["Venus", "Jupiter"],
+    }).json()
+    assert body["asked"]["verdicts"]["Venus"]["benefic"] is True
+    assert body["asked"]["verdicts"]["Jupiter"]["benefic"] is False
+    assert body["asked"]["all_of_them"] is False
+
+
+def test_the_prastaara_endpoint_rejects_an_unknown_reference(client):
+    response = client.post("/v1/ashtakavarga/prastaara", json={
+        "owner": "Mercury",
+        "reference_signs": CHART_6_SIGNS,
+        "rasi": 1,
+        "references": ["Ketu"],
+    })
+    assert response.status_code == 400
+    assert "unknown reference" in response.json()["error"]["message"]
+
+
+def test_the_rules_endpoint_carries_section_12_6(client):
+    body = client.get("/v1/ashtakavarga/rules").json()["prastaara"]
+    assert body["means"] == "spread-out"
+    assert body["table_27"]["totals"] == list(TABLE_27_TOTALS)
+    assert body["table_27"]["exercise"] == 18
+    assert len(body["representations"]) == 3

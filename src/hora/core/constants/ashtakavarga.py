@@ -763,3 +763,87 @@ EXERCISE_21_GUESS_STEPS: tuple[tuple[str, str], ...] = (
 EXERCISE_21_FOOTNOTE_47_UNSEEN = (
     "Footnote 47 is cited after 'unconventional behavior in public life' and "
     "has not been supplied.")
+
+
+# --------------------------------------------------------------------------
+# §12.6 — Prastaara Ashtakavarga
+# --------------------------------------------------------------------------
+
+PRASTAARA_WHY = (
+    "Using the Bhinna Ashtakavarga (BAV) of a planet, we can find out the "
+    "rasis in which it is benefic with respect to more references and the "
+    "rasis in which it is malefic with respect to more references. To "
+    "interpret transits, this is sometimes not enough. For example, if we "
+    "know that a planet is benefic in Ta with respect to 5 references, that "
+    "may not be enough. We may need to know exactly what those 5 references "
+    "are. If we are looking for Jupiter's transit that brings marriage, for "
+    "example, we may want Jupiter to be benefic in his transit rasi with "
+    "respect to certain planets (Venus or DK or 7th lord in navamsa, for "
+    "example). In such situations, we need to know exactly which references a "
+    "planet is benefic from.")
+
+PRASTAARA_MEANS = "spread-out"
+
+PRASTAARA_DEFINITION = (
+    "For this purpose, we prepare “Prastaara Astakavarga”. It will be "
+    "denoted with PAV. Prastaara means “spread-out”. PAV is a "
+    "spreadsheet that shows the exact references from which a planet is "
+    "benefic in a rasi. We prepare one PAV for each planet. Different people "
+    "may represent PAV differently. Some people may cast a chart and write "
+    "the list of benefic references in each rasi. For some people, the answer "
+    "to Exercise 18 may qualify as Mercury's PAV. Some people may prefer to "
+    "represent the same information as shown in Table 27.")
+
+PRASTAARA_PURPOSE = (
+    "The basic purpose of a planet's PAV is to show the references with "
+    "respect to which the planet is benefic in each rasi.")
+
+#: §12.6's closing note, and the invariant it states.
+PRASTAARA_COLUMN_NOTE = (
+    "From PAV, we can construct BAV easily. From Table 27, we may note that "
+    "the sum of all the entries in each column – rasi – in a PAV "
+    "gives the number of rekhas in that rasi in BAV. This is shown in the "
+    "last row.")
+
+#: The book's own note that Exercise 18's answer already *is* a PAV, in a
+#: different representation. Our code holds both and they are checked against
+#: each other rather than typed twice.
+PRASTAARA_REPRESENTATIONS = (
+    "a chart with the benefic references written into each rasi",
+    "the answer to Exercise 18 — one list of rasis per reference",
+    "Table 27's grid — one row per reference, one column per rasi",
+)
+
+#: Table 27, Mercury's PAV for Exercise 18, row-wise in the printed
+#: orientation: reference -> 0/1 for Ar..Pi. Chart 6 is the chart.
+TABLE_27_MERCURY_PAV: dict[str, tuple[int, ...]] = {
+    #             Ar Ta Ge Cn Le Vi Li Sc Sg Cp Aq Pi
+    "Sun":       (1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0),
+    "Moon":      (1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0),
+    "Mars":      (1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1),
+    "Mercury":   (1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1),
+    "Jupiter":   (0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1),
+    "Venus":     (1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0),
+    "Saturn":    (1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1),
+    "Lagna":     (1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0),
+}
+
+#: Table 27's printed last row. It must equal the column sums *and* Mercury's
+#: BAV in Chart 6 — the note above says so, and both are checked.
+TABLE_27_TOTALS: tuple[int, ...] = (7, 4, 7, 4, 4, 3, 4, 4, 4, 3, 6, 4)
+
+TABLE_27_OWNER = "Mercury"
+TABLE_27_CHART = "Chart 6"
+
+#: The transit question §12.6 exists to answer, kept as the book phrases it so
+#: the endpoint's shape can be justified against it.
+PRASTAARA_TRANSIT_EXAMPLE = (
+    "If we are looking for Jupiter's transit that brings marriage, for "
+    "example, we may want Jupiter to be benefic in his transit rasi with "
+    "respect to certain planets (Venus or DK or 7th lord in navamsa, for "
+    "example).")
+
+#: §12.6 names three candidate references for that example. Only the first is
+#: an ashtakavarga reference; the other two are ways of *choosing* which
+#: reference to ask about, and they resolve to a graha before PAV sees them.
+PRASTAARA_TRANSIT_REFERENCES = ("Venus", "DK", "7th lord in navamsa")

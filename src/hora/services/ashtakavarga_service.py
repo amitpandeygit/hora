@@ -4,13 +4,16 @@ from __future__ import annotations
 from hora.charts.ashtakavarga import (
     AshtakavargaError,
     available_tables,
+    benefic_from_in,
     benefic_houses,
     benefic_rasis_from_chart,
     bhinnashtakavarga,
     describe,
     grade,
+    is_benefic_from,
     muhurta_strength,
     natal_grade,
+    prastaara,
     sarvashtakavarga,
     signs_in_chart,
     summed,
@@ -101,6 +104,14 @@ from hora.core.const import (
     EXERCISE_21_VERDICT,
     MUHURTA_DEFINITION,
     MUHURTA_FOOTNOTE,
+    PRASTAARA_COLUMN_NOTE,
+    PRASTAARA_DEFINITION,
+    PRASTAARA_MEANS,
+    PRASTAARA_PURPOSE,
+    PRASTAARA_REPRESENTATIONS,
+    PRASTAARA_TRANSIT_EXAMPLE,
+    PRASTAARA_TRANSIT_REFERENCES,
+    PRASTAARA_WHY,
     RASI_NAMES,
     SAMUDAAYA_MEANS,
     SARVA_MEANS,
@@ -118,6 +129,10 @@ from hora.core.const import (
     SAV_WORKED_EXAMPLE,
     SODHYA_PINDA_NOT_YET_DEFINED,
     TABLE_19_WORKED_READING,
+    TABLE_27_CHART,
+    TABLE_27_MERCURY_PAV,
+    TABLE_27_OWNER,
+    TABLE_27_TOTALS,
     TABLES_20_TO_26_NOTE,
     YUGA_FOOTNOTE,
     YUGA_YEARS,
@@ -282,6 +297,34 @@ def rules() -> dict:
                 "the drawn placements check the varga as well as the "
                 "transcription. Our D-10 reproduces all twelve."
             ),
+        },
+        "prastaara": {
+            "why": PRASTAARA_WHY,
+            "definition": PRASTAARA_DEFINITION,
+            "means": PRASTAARA_MEANS,
+            "purpose": PRASTAARA_PURPOSE,
+            "column_note": PRASTAARA_COLUMN_NOTE,
+            "representations": list(PRASTAARA_REPRESENTATIONS),
+            "transit_example": PRASTAARA_TRANSIT_EXAMPLE,
+            "transit_references": list(PRASTAARA_TRANSIT_REFERENCES),
+            "transit_references_note": (
+                "Only Venus is an ashtakavarga reference. The DK and the 7th "
+                "lord in navamsa are ways of *choosing* which graha to ask "
+                "about; they resolve to a graha before a PAV sees them."
+            ),
+            "table_27": {
+                "owner": TABLE_27_OWNER,
+                "chart": TABLE_27_CHART,
+                "exercise": 18,
+                "rows": {reference: list(entries)
+                         for reference, entries in TABLE_27_MERCURY_PAV.items()},
+                "totals": list(TABLE_27_TOTALS),
+                "note": (
+                    "The book says Exercise 18's answer already qualifies as "
+                    "Mercury's PAV. We hold both and check them against each "
+                    "other rather than typing the same fact twice."
+                ),
+            },
         },
         "exercise_21": {
             "question": EXERCISE_21,
@@ -452,5 +495,50 @@ def chart(reference_signs: dict[str, int], owner: str | None = None) -> dict:
     }
 
 
+def prastaara_view(owner: str, reference_signs: dict[str, int],
+                   rasi: int | None = None,
+                   references: list[str] | None = None) -> dict:
+    """§12.6's PAV for one planet, and optionally its one question.
+
+    With no `rasi`, the whole grid — Table 27's shape. With a `rasi`, the
+    references that rasi is benefic from, which is what §12.6 says a BAV
+    cannot tell you. With `references` too, a verdict for each one asked
+    about, so a transit rule gets an answer either way rather than an absence.
+    """
+    pav = prastaara(owner, reference_signs)
+    out: dict = {
+        "owner": pav.owner,
+        "table": pav.table,
+        "means": PRASTAARA_MEANS,
+        "purpose": PRASTAARA_PURPOSE,
+        "rows": [
+            {"reference": reference, "entries": list(entries),
+             "benefic_in": [str(RASI_NAMES[i])
+                            for i, on in enumerate(entries) if on]}
+            for reference, entries in pav.rows.items()
+        ],
+        "rekhas": list(pav.rekhas),
+        "rekhas_note": PRASTAARA_COLUMN_NOTE,
+        "benefic_from": [
+            {"sign": sign, "sign_name": str(RASI_NAMES[sign]),
+             "references": list(pav.benefic_from[sign]),
+             "rekhas": pav.rekhas[sign]}
+            for sign in range(12)
+        ],
+        "representations": list(PRASTAARA_REPRESENTATIONS),
+    }
+    if rasi is not None:
+        out["asked"] = (
+            is_benefic_from(owner, reference_signs, rasi, references)
+            if references else
+            {"owner": owner, "rasi": rasi,
+             "rasi_name": str(RASI_NAMES[rasi]),
+             "benefic_from": list(benefic_from_in(
+                 owner, reference_signs, rasi)),
+             "rekhas": pav.rekhas[rasi]}
+        )
+    return out
+
+
 __all__ = ["AshtakavargaError", "InputError", "benefic_rasis", "chart",
-           "divisional", "muhurta", "rules", "table"]
+           "divisional", "muhurta", "prastaara_view", "rules", "table"]

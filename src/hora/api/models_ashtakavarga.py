@@ -79,6 +79,7 @@ class AshtakavargaRulesOut(BaseModel):
     exercise_19: dict
     exercise_20: dict
     exercise_21: dict
+    prastaara: dict
     example_39: dict
     chart_3: dict
     chart_12: dict
@@ -226,3 +227,28 @@ class DivisionalIn(BaseModel):
     chart: str = Field("D1", examples=["D12"],
                        description="A varga code; D1 is the rasi chart.")
     owner: str | None = Field(None, examples=["Mercury"])
+
+
+class PrastaaraIn(BaseModel):
+    """§12.6. `rasi` and `references` are the transit question; without them
+    the response is Table 27's grid alone."""
+
+    owner: str = Field(..., examples=["Mercury"])
+    reference_signs: dict[str, int] = Field(..., examples=[{
+        "Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+        "Jupiter": 4, "Venus": 0, "Saturn": 4, "Lagna": 5}])
+    rasi: int | None = Field(None, ge=0, le=11, examples=[1])
+    references: list[str] | None = Field(None, examples=[["Venus"]])
+
+
+class PrastaaraOut(BaseModel):
+    owner: str
+    table: int
+    means: str
+    purpose: str
+    rows: list[dict]
+    rekhas: list[int]
+    rekhas_note: str
+    benefic_from: list[dict]
+    representations: list[str]
+    asked: dict | None = None

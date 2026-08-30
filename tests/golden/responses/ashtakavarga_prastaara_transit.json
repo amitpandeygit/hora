@@ -1,0 +1,405 @@
+{
+  "body": {
+    "asked": {
+      "all_of_them": false,
+      "any_of_them": true,
+      "asked_about": [
+        "Venus",
+        "Jupiter"
+      ],
+      "benefic_from": [
+        "Mercury",
+        "Saturn",
+        "Sun",
+        "Venus"
+      ],
+      "owner": "Mercury",
+      "rasi": 1,
+      "rasi_name": "Taurus",
+      "rekhas": 4,
+      "verdicts": {
+        "Jupiter": {
+          "benefic": false,
+          "why": "Mercury is not benefic in Taurus from Jupiter"
+        },
+        "Venus": {
+          "benefic": true,
+          "why": "Mercury is benefic in Taurus from Venus"
+        }
+      }
+    },
+    "benefic_from": [
+      {
+        "references": [
+          "Sun",
+          "Moon",
+          "Mars",
+          "Mercury",
+          "Venus",
+          "Saturn",
+          "Lagna"
+        ],
+        "rekhas": 7,
+        "sign": 0,
+        "sign_name": "Aries"
+      },
+      {
+        "references": [
+          "Sun",
+          "Mercury",
+          "Venus",
+          "Saturn"
+        ],
+        "rekhas": 4,
+        "sign": 1,
+        "sign_name": "Taurus"
+      },
+      {
+        "references": [
+          "Moon",
+          "Mars",
+          "Mercury",
+          "Jupiter",
+          "Venus",
+          "Saturn",
+          "Lagna"
+        ],
+        "rekhas": 7,
+        "sign": 2,
+        "sign_name": "Gemini"
+      },
+      {
+        "references": [
+          "Mars",
+          "Jupiter",
+          "Venus",
+          "Lagna"
+        ],
+        "rekhas": 4,
+        "sign": 3,
+        "sign_name": "Cancer"
+      },
+      {
+        "references": [
+          "Moon",
+          "Mercury",
+          "Venus",
+          "Saturn"
+        ],
+        "rekhas": 4,
+        "sign": 4,
+        "sign_name": "Leo"
+      },
+      {
+        "references": [
+          "Mars",
+          "Saturn",
+          "Lagna"
+        ],
+        "rekhas": 3,
+        "sign": 5,
+        "sign_name": "Virgo"
+      },
+      {
+        "references": [
+          "Sun",
+          "Moon",
+          "Mercury",
+          "Lagna"
+        ],
+        "rekhas": 4,
+        "sign": 6,
+        "sign_name": "Libra"
+      },
+      {
+        "references": [
+          "Sun",
+          "Mercury",
+          "Venus",
+          "Saturn"
+        ],
+        "rekhas": 4,
+        "sign": 7,
+        "sign_name": "Scorpio"
+      },
+      {
+        "references": [
+          "Moon",
+          "Mars",
+          "Venus",
+          "Lagna"
+        ],
+        "rekhas": 4,
+        "sign": 8,
+        "sign_name": "Sagittarius"
+      },
+      {
+        "references": [
+          "Moon",
+          "Mars",
+          "Jupiter"
+        ],
+        "rekhas": 3,
+        "sign": 9,
+        "sign_name": "Capricorn"
+      },
+      {
+        "references": [
+          "Sun",
+          "Mars",
+          "Mercury",
+          "Venus",
+          "Saturn",
+          "Lagna"
+        ],
+        "rekhas": 6,
+        "sign": 10,
+        "sign_name": "Aquarius"
+      },
+      {
+        "references": [
+          "Mars",
+          "Mercury",
+          "Jupiter",
+          "Saturn"
+        ],
+        "rekhas": 4,
+        "sign": 11,
+        "sign_name": "Pisces"
+      }
+    ],
+    "means": "spread-out",
+    "owner": "Mercury",
+    "purpose": "The basic purpose of a planet's PAV is to show the references with respect to which the planet is benefic in each rasi.",
+    "rekhas": [
+      7,
+      4,
+      7,
+      4,
+      4,
+      3,
+      4,
+      4,
+      4,
+      3,
+      6,
+      4
+    ],
+    "rekhas_note": "From PAV, we can construct BAV easily. From Table 27, we may note that the sum of all the entries in each column \u2013 rasi \u2013 in a PAV gives the number of rekhas in that rasi in BAV. This is shown in the last row.",
+    "representations": [
+      "a chart with the benefic references written into each rasi",
+      "the answer to Exercise 18 \u2014 one list of rasis per reference",
+      "Table 27's grid \u2014 one row per reference, one column per rasi"
+    ],
+    "rows": [
+      {
+        "benefic_in": [
+          "Aries",
+          "Taurus",
+          "Libra",
+          "Scorpio",
+          "Aquarius"
+        ],
+        "entries": [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0
+        ],
+        "reference": "Sun"
+      },
+      {
+        "benefic_in": [
+          "Aries",
+          "Gemini",
+          "Leo",
+          "Libra",
+          "Sagittarius",
+          "Capricorn"
+        ],
+        "entries": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "reference": "Moon"
+      },
+      {
+        "benefic_in": [
+          "Aries",
+          "Gemini",
+          "Cancer",
+          "Virgo",
+          "Sagittarius",
+          "Capricorn",
+          "Aquarius",
+          "Pisces"
+        ],
+        "entries": [
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "reference": "Mars"
+      },
+      {
+        "benefic_in": [
+          "Aries",
+          "Taurus",
+          "Gemini",
+          "Leo",
+          "Libra",
+          "Scorpio",
+          "Aquarius",
+          "Pisces"
+        ],
+        "entries": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "reference": "Mercury"
+      },
+      {
+        "benefic_in": [
+          "Gemini",
+          "Cancer",
+          "Capricorn",
+          "Pisces"
+        ],
+        "entries": [
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1
+        ],
+        "reference": "Jupiter"
+      },
+      {
+        "benefic_in": [
+          "Aries",
+          "Taurus",
+          "Gemini",
+          "Cancer",
+          "Leo",
+          "Scorpio",
+          "Sagittarius",
+          "Aquarius"
+        ],
+        "entries": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0
+        ],
+        "reference": "Venus"
+      },
+      {
+        "benefic_in": [
+          "Aries",
+          "Taurus",
+          "Gemini",
+          "Leo",
+          "Virgo",
+          "Scorpio",
+          "Aquarius",
+          "Pisces"
+        ],
+        "entries": [
+          1,
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "reference": "Saturn"
+      },
+      {
+        "benefic_in": [
+          "Aries",
+          "Gemini",
+          "Cancer",
+          "Virgo",
+          "Libra",
+          "Sagittarius",
+          "Aquarius"
+        ],
+        "entries": [
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "reference": "Lagna"
+      }
+    ],
+    "table": 22
+  },
+  "status": 200
+}

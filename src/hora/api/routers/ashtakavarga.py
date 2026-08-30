@@ -13,6 +13,8 @@ from hora.api.models_ashtakavarga import (
     DivisionalIn,
     MuhurtaIn,
     MuhurtaOut,
+    PrastaaraIn,
+    PrastaaraOut,
 )
 from hora.services import ashtakavarga_service
 
@@ -72,6 +74,17 @@ def divisional(req: DivisionalIn) -> dict:
     try:
         return ashtakavarga_service.divisional(
             req.reference_longitudes, req.chart, req.owner)
+    except (ashtakavarga_service.AshtakavargaError,
+            ashtakavarga_service.InputError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/prastaara", response_model=PrastaaraOut,
+             summary="Section 12.6 — which references a planet is benefic from")
+def prastaara(req: PrastaaraIn) -> dict:
+    try:
+        return ashtakavarga_service.prastaara_view(
+            req.owner, req.reference_signs, req.rasi, req.references)
     except (ashtakavarga_service.AshtakavargaError,
             ashtakavarga_service.InputError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc

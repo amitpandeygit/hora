@@ -266,6 +266,22 @@ CASES = [
                             "Jupiter": 4, "Venus": 0, "Saturn": 4,
                             "Lagna": 5},
     }),
+    # Table 27: Mercury's PAV for the same chart. The grid alone, then the
+    # transit question section 12.6 exists to answer.
+    ("ashtakavarga_table_27_pav", "POST", "/v1/ashtakavarga/prastaara", {
+        "owner": "Mercury",
+        "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+                            "Jupiter": 4, "Venus": 0, "Saturn": 4,
+                            "Lagna": 5},
+    }),
+    ("ashtakavarga_prastaara_transit", "POST", "/v1/ashtakavarga/prastaara", {
+        "owner": "Mercury",
+        "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,
+                            "Jupiter": 4, "Venus": 0, "Saturn": 4,
+                            "Lagna": 5},
+        "rasi": 1,
+        "references": ["Venus", "Jupiter"],
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

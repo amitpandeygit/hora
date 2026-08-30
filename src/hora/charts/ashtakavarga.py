@@ -12,6 +12,7 @@ number this module returns counts 1s, and the field names say `rekhas`.
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 from hora.core import validate
@@ -505,4 +506,115 @@ def describe(owner: str) -> dict:
                            for ref in ASHTAKAVARGA_REFERENCES},
         "rekhas_per_reference": rekhas_per_reference(owner),
         "total": table_total(owner),
+    }
+
+
+# --------------------------------------------------------------------------
+# §12.6 — Prastaara Ashtakavarga
+# --------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class Prastaara:
+    """One planet's PAV — §12.6's "spread-out" ashtakavarga.
+
+    `bhinnashtakavarga` already walks every (reference, house) pair; a BAV
+    throws the pairing away and keeps only the count. A PAV keeps it. So this
+    is not a second calculation, it is the same one stopped a step earlier,
+    and `rekhas` here is `Bhinnashtakavarga.rekhas` by construction.
+    """
+
+    #: The planet whose PAV this is.
+    owner: str
+    #: Which table it came from.
+    table: int
+    #: Reference name to twelve 0/1 entries, Aries first — Table 27's rows.
+    rows: dict[str, tuple[int, ...]]
+    #: Table 27's last row: the column sums, which are the BAV's rekhas.
+    rekhas: tuple[int, ...]
+    #: Sign index to the references the owner is benefic from there. The same
+    #: information read down a column instead of across a row.
+    benefic_from: tuple[tuple[str, ...], ...]
+
+
+def prastaara(owner: str, reference_signs: dict[str, int]) -> Prastaara:
+    """`owner`'s PAV — which references it is benefic from, in each rasi.
+
+    :param reference_signs: every name in `ASHTAKAVARGA_REFERENCES` to the
+        sign it occupies, 0 = Aries. All eight are required, as for a BAV.
+    """
+    bav = bhinnashtakavarga(owner, reference_signs)
+    rows = {
+        reference: tuple(
+            1 if reference in bav.contributors[sign] else 0
+            for sign in range(12)
+        )
+        for reference in ASHTAKAVARGA_REFERENCES
+    }
+    return Prastaara(
+        owner=bav.owner,
+        table=bav.table,
+        rows=rows,
+        rekhas=bav.rekhas,
+        benefic_from=bav.contributors,
+    )
+
+
+def benefic_from_in(owner: str, reference_signs: dict[str, int],
+                    rasi: int) -> tuple[str, ...]:
+    """Exactly which references `owner` is benefic from in one rasi.
+
+    §12.6's stated purpose in one call: "we need to know exactly which
+    references a planet is benefic from".
+    """
+    validate.in_range("rasi", rasi, 0, 11)
+    return prastaara(owner, reference_signs).benefic_from[rasi]
+
+
+def is_benefic_from(owner: str, reference_signs: dict[str, int], rasi: int,
+                    references: Sequence[str]) -> dict:
+    """§12.6's transit question: benefic in this rasi from *these* references?
+
+    The book's example is Jupiter's transit for marriage, wanted benefic from
+    Venus or the DK or the 7th lord in navamsa. Only the first is an
+    ashtakavarga reference — the other two are ways of choosing which graha to
+    ask about, and the caller resolves them to a name before calling here.
+
+    :param references: the references the caller cares about, in any order.
+    :returns: a verdict for each one, never a bare absence, plus whether all
+        of them hold.
+    """
+    if not references:
+        raise AshtakavargaError(
+            "name at least one reference to ask about; section 12.6 exists "
+            "because 'benefic in this rasi' on its own is the question a BAV "
+            "already answers")
+    unknown = [r for r in references if r not in ASHTAKAVARGA_REFERENCES]
+    if unknown:
+        raise AshtakavargaError(
+            f"unknown reference {', '.join(sorted(unknown))}; the eight are "
+            f"{', '.join(ASHTAKAVARGA_REFERENCES)}")
+
+    benefic = set(benefic_from_in(owner, reference_signs, rasi))
+    verdicts = {
+        reference: {
+            "benefic": reference in benefic,
+            "why": (
+                f"{owner} is benefic in {RASI_NAMES[rasi]} from {reference}"
+                if reference in benefic else
+                f"{owner} is not benefic in {RASI_NAMES[rasi]} from "
+                f"{reference}"
+            ),
+        }
+        for reference in references
+    }
+    return {
+        "owner": owner,
+        "rasi": rasi,
+        "rasi_name": RASI_NAMES[rasi],
+        "asked_about": list(references),
+        "verdicts": verdicts,
+        "all_of_them": all(v["benefic"] for v in verdicts.values()),
+        "any_of_them": any(v["benefic"] for v in verdicts.values()),
+        "benefic_from": sorted(benefic),
+        "rekhas": len(benefic),
     }
