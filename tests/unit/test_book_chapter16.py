@@ -199,3 +199,89 @@ def test_example_50_rules_out_sidereal_years():
     days = 2.24875 * year_days(DashaYearLength.SIDEREAL)
     year, month, day, _hour = swe.revjul(swe.julday(*EX50_BIRTH) + days)
     assert (year, month, day) == (2002, 7, 28)
+
+
+# --------------------------------------------------------------------------
+# §16.3 Antardasa Computation
+# --------------------------------------------------------------------------
+
+
+def _example_50_tree(levels=2):
+    import swisseph as swe
+
+    return compute_nakshatra_dasha(
+        V, EX50_MOON, swe.julday(*EX50_BIRTH), DashaYearLength.SAVANA,
+        levels=levels, cycles=1)
+
+
+def test_antardasas_start_from_the_mahadasa_lord_and_keep_the_dasa_order():
+    """"First antardasa will belong to the same planet and antardasas go in
+    the same sequence as dasas." Checked for every mahadasa, not just Venus."""
+    for mahadasa in _example_50_tree():
+        assert mahadasa.children[0].lord == mahadasa.lord
+        start = list(V.order).index(mahadasa.lord)
+        expected = [V.order[(start + k) % 9] for k in range(9)]
+        assert [ad.lord for ad in mahadasa.children] == expected
+
+
+def test_the_venus_antardasa_lengths_the_section_prints():
+    """"20x20/120 years = 3 years and 4 months... 20x6/120 years = 1 year...
+    20x10/120 years = 1 year and 8 months... 20x7/120 years = 1 year and 2
+    months.\""""
+    venus = next(p for p in _example_50_tree() if p.lord == int(Graha.VENUS))
+    years = {GRAHA_NAMES[ad.lord]: (ad.end_jd - ad.start_jd) / 360
+             for ad in venus.children}
+    assert years["Venus"] == pytest.approx(20 * 20 / 120)     # 3y 4m
+    assert years["Sun"] == pytest.approx(20 * 6 / 120)        # 1y
+    assert years["Moon"] == pytest.approx(20 * 10 / 120)      # 1y 8m
+    assert years["Mars"] == pytest.approx(20 * 7 / 120)       # 1y 2m
+
+
+def test_the_nine_antardasas_exhaust_their_mahadasa():
+    """"The complete length of the mahadasa is ditributed among antardasas in
+    the ratio of mahadasa years of planets." Nothing may be lost or invented."""
+    for mahadasa in _example_50_tree():
+        total = sum(ad.end_jd - ad.start_jd for ad in mahadasa.children)
+        assert total == pytest.approx(mahadasa.end_jd - mahadasa.start_jd)
+
+
+def test_the_first_dasa_divides_its_whole_length_not_the_birth_remainder():
+    """The section's one real trap.
+
+    "In the case of the first dasa, we don't divide the remainder at birth
+    (2.24875 years of Mars dasa remainder...) into 9 antardasas. Instead, we
+    divide the complete duration of the first dasa (7 years of Mars dasa...)
+    into 9 antardasas. So a few antardasas may be over before birth."
+
+    Dividing the remainder instead would give a Mars antardasa of
+    2.24875 x 7/120 = 0.131 years rather than 7 x 7/120 = 0.408, and would put
+    every antardasa after birth.
+    """
+    import swisseph as swe
+
+    birth_jd = swe.julday(*EX50_BIRTH)
+    mars = _example_50_tree()[0]
+    assert mars.lord == int(Graha.MARS)
+
+    assert (mars.end_jd - mars.start_jd) / 360 == pytest.approx(7.0)
+    assert (birth_jd - mars.start_jd) / 360 == pytest.approx(7 - 2.24875)
+    assert (mars.end_jd - birth_jd) / 360 == pytest.approx(2.24875)
+
+    first = mars.children[0]
+    assert (first.end_jd - first.start_jd) / 360 == pytest.approx(7 * 7 / 120)
+
+    before = [ad for ad in mars.children if ad.end_jd <= birth_jd]
+    assert len(before) == 5, "five antardasas are over before this native's birth"
+
+
+def test_the_same_proportional_rule_recurses_into_pratyantardasas():
+    """"We use the same procedure to divide each antardasa into 9
+    pratyantardasas, each pratyantardasa into 9 sookshma dasas and so on.\""""
+    venus = next(p for p in _example_50_tree(levels=3) if p.lord == int(Graha.VENUS))
+    sun_ad = next(ad for ad in venus.children if ad.lord == int(Graha.SUN))
+    assert sun_ad.children[0].lord == int(Graha.SUN)
+
+    span = sun_ad.end_jd - sun_ad.start_jd
+    for pd in sun_ad.children:
+        share = V.years[list(V.order).index(pd.lord)] / 120
+        assert (pd.end_jd - pd.start_jd) == pytest.approx(span * share)
