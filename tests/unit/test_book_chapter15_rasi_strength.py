@@ -346,3 +346,48 @@ def test_rule_6_still_takes_the_stronger_co_lord():
     source = inspect.getsource(rasi_strength.stronger)
     assert "co_lords_of(r)" in source, "rule 2 takes both"
     assert "lords[r]" in source, "the later rules take the resolved one"
+
+
+def test_the_rule_2_example_contradicts_the_sections_own_cascade():
+    """See D-49. Rule (1) gives Aries; the section concludes Libra.
+
+    Unlike section 15.5.1's equivalent slip, where rule (1) and rule (2) named
+    the same planet, here they disagree — so running the cascade as the
+    section instructs produces the opposite of the section's answer. Pinned so
+    the divergence is a recorded fact rather than a surprise.
+    """
+    longitudes = {
+        int(Graha.JUPITER): lon(10, "Ar"), int(Graha.MERCURY): lon(10, "Ta"),
+        int(Graha.VENUS): lon(11, "Ta"), int(Graha.MARS): lon(10, "Vi"),
+    }
+    verdict = stronger(AR, LI, longitudes)
+    assert verdict.decided_by == "1"
+    assert verdict.winner == AR                      # the book says Libra
+
+    # Give Libra an occupant so rule (1) ties, and rule (2) does give Libra.
+    tied = dict(longitudes) | {int(Graha.SATURN): lon(10, "Li")}
+    verdict = stronger(AR, LI, tied)
+    assert verdict.decided_by == "2"
+    assert verdict.winner == LI
+
+
+def test_rule_4s_note_holds_for_every_two_rasi_owner():
+    """"the two rasis owned by each planet have a different oddity".
+
+    The note is what makes rule (4) a guaranteed tie-break for graha arudhas,
+    so the claim is worth checking rather than trusting. All five two-rasi
+    owners satisfy it, which is why rule (4) can never leave a graha-arudha
+    tie standing.
+    """
+    from collections import defaultdict
+
+    from hora.core.const import RASI_IS_ODD, RASI_LORD
+
+    owned = defaultdict(list)
+    for rasi in range(12):
+        owned[int(RASI_LORD[rasi])].append(rasi)
+
+    pairs = [rs for rs in owned.values() if len(rs) == 2]
+    assert len(pairs) == 5                       # every graha but the luminaries
+    for first, second in pairs:
+        assert RASI_IS_ODD[first] != RASI_IS_ODD[second]

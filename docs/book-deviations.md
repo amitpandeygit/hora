@@ -1510,3 +1510,35 @@ served.
 
 **Closes when:** the chart or the answer is corrected in a later printing, or
 you decide the exercise means a chart we do not hold.
+
+## D-49 · §15.5.2's rule (2) illustration contradicts its own cascade
+
+**Status: BOOK DEFECT — sibling of D-47, and worse.**
+
+§15.5.2 opens with the same instruction as §15.5.1: "We go from one rule to the
+next only if there is no winner after the rule. When we have a winner, we stop
+and do not go to the next rule." Rules (3), (4), (5) and (6) each preface their
+example with "suppose we have a tie after rule (N)". Rule (2)'s does not:
+
+> "Suppose Jupiter is in Ar, Mercury and Venus are in Ta and Mars is in Vi."
+
+Aries holds Jupiter and Libra holds nothing, so rule (1) — "if one rasi
+contains more planets than the other rasi, then it is stronger" — declares
+**Aries** and the cascade stops. The section then computes rule (2) and
+concludes **Libra**.
+
+D-47 is the same omission in §15.5.1, but there rule (1) and rule (2) happened
+to name the same planet, so only the route was wrong. Here they disagree, so
+following the section's own cascade gives the opposite of the section's answer.
+
+The rule-2 counts themselves are sound: Aries 1 (Jupiter occupies), Libra 2
+(Mercury and lord Venus aspect from Taurus, Jupiter does not). Only the worked
+placement is unusable as a cascade illustration.
+
+**What we do:** `charts/rasi_strength.stronger` runs the cascade as written and
+returns Aries for these placements. The counts are checked directly against
+`rule_2_count`, and a separate fixture puts one planet in each rasi so rule (1)
+ties and rule (2) genuinely decides — which then does give Libra.
+
+**Closes when:** nothing. The cascade is unambiguous; two of its illustrations
+are not.
