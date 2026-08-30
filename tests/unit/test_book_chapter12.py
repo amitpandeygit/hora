@@ -53,6 +53,7 @@ from hora.core.const import (
     BAV_GRADING,
     BAV_NEUTRAL_COUNTS,
     BAV_UNFAVOURABLE_COUNTS,
+    BHAVA_CHAKRA_CONTROVERSY,
     BHINNA_MEANS,
     BINDU_REKHA_FOOTNOTE,
     CHART_3,
@@ -66,6 +67,9 @@ from hora.core.const import (
     CHART_12_D10_DRAWN,
     CLASSICAL_TABLE_TOTALS,
     CLASSICAL_TABLE_TOTALS_PROVENANCE,
+    CONTROVERSY_NAMING,
+    CONTROVERSY_NAMING_IS_MINOR,
+    CONTROVERSY_UNRESOLVED,
     EKAADHIPATYA_LAGNA_OCCUPIES,
     EKAADHIPATYA_RULES_ALL_EXERCISED,
     EKAADHIPATYA_TIE_IS_UNCOVERED,
@@ -120,10 +124,17 @@ from hora.core.const import (
     EXERCISE_22_SOAV,
     FOOTNOTE_45_NOT_IMPLEMENTED,
     FOOTNOTE_45_ROOMS,
+    FOOTNOTE_46,
     FOOTNOTE_47,
     GRAHA_PINDA_EXCLUDES_LAGNA,
     MUHURTA_DEFINITION,
     MUHURTA_FOOTNOTE,
+    NAMING_AGREES_WITH_FOOTNOTE_42,
+    PARASARA_CHECKSUM_ARGUMENT,
+    PARASARA_CHECKSUM_INVARIANT,
+    PARASARA_VARAHAMIHIRA_CONFLICT_TEXTS,
+    PARASARA_VARAHAMIHIRA_CONFLICTS,
+    PARASARA_VS_VARAHAMIHIRA,
     PRASTAARA_COLUMN_NOTE,
     PRASTAARA_DEFINITION,
     PRASTAARA_MEANS,
@@ -156,6 +167,10 @@ from hora.core.const import (
     TRIKONA_SODHANA_DISPUTED_CASE,
     TRIKONA_SODHANA_FOOTNOTE_44,
     TRINE_SET_NAMES,
+    VARAHAMIHIRA_NOT_IMPLEMENTED,
+    WHOLE_SIGN_IS_WHAT_WE_DO,
+    WHOLE_SIGN_STAND,
+    WHOLE_SIGN_STAND_TYPO,
     YUGA_YEARS,
     Graha,
 )
@@ -3034,3 +3049,168 @@ def test_the_sodhana_rules_endpoint_carries_exercise_22(client):
     assert body["pindas"]["Sun"] == {"rasi": 152, "graha": 81, "sodhya": 233}
     assert "D-42" in body["what_reproduces"]
     assert "fame" in body["footnote_47"]
+
+
+# --------------------------------------------------------------------------
+# §12.8 — Controversies
+# --------------------------------------------------------------------------
+
+def test_12_8_restates_footnote_42s_naming_convention():
+    """Two independent passages, one fact: a rekha is benefic, a bindu is
+    malefic, and other authors use the reverse. Nothing rests on our reading
+    of either alone."""
+    assert "bindu (dot) to denote a benefic house" in CONTROVERSY_NAMING
+    assert "opposite of what we learnt in this chapter" in CONTROVERSY_NAMING
+    assert "rekha (line)" in ASHTAKAVARGA_NOTATION
+    assert "1 denotes a benefic position" in ASHTAKAVARGA_NOTATION
+    assert "rekhas" in BAV_COUNT_IS_CALLED_REKHAS
+    assert "reverse" in NAMING_AGREES_WITH_FOOTNOTE_42
+
+
+def test_the_naming_controversy_is_called_minor_by_the_book_itself():
+    assert "not a serious issue at all" in CONTROVERSY_NAMING_IS_MINOR
+    assert "far more serious" in PARASARA_VS_VARAHAMIHIRA
+
+
+@pytest.mark.parametrize(
+    "owner,reference,house,parasara,varahamihira",
+    PARASARA_VARAHAMIHIRA_CONFLICTS)
+def test_our_tables_hold_parasaras_value_at_every_place_of_conflict(
+        owner, reference, house, parasara, varahamihira):
+    """§12.8 states these six cells in prose. Tables 20 and 24 were
+    transcribed from the printed grids. The two agree, which is an independent
+    check on the transcription — a typo in either would show here."""
+    from hora.charts.ashtakavarga import entry
+
+    assert entry(owner, reference, house) == parasara
+    assert varahamihira == 1 - parasara, "each conflict is a straight swap"
+
+
+def test_the_conflicts_touch_only_moon_and_venus():
+    """'inconsistencies between the lists of benefic houses of Moon and
+    Venus'. Nothing else is disputed."""
+    owners = {owner for owner, *_ in PARASARA_VARAHAMIHIRA_CONFLICTS}
+    assert owners == {"Moon", "Venus"}
+    assert len(PARASARA_VARAHAMIHIRA_CONFLICT_TEXTS) == 3
+
+
+def test_varahamihiras_tables_would_hold_the_same_totals():
+    """Every conflict swaps a benefic and a malefic within one reference's
+    column, so the classical totals survive either reading. That is why the
+    totals cannot arbitrate the controversy — and why they did not silently
+    validate our transcription against it."""
+    from hora.charts.ashtakavarga import table_total
+
+    swings: dict[str, int] = {}
+    for owner, _reference, _house, parasara, varahamihira in \
+            PARASARA_VARAHAMIHIRA_CONFLICTS:
+        swings[owner] = swings.get(owner, 0) + (varahamihira - parasara)
+    assert swings == {"Moon": 0, "Venus": 0}
+    for owner in swings:
+        assert table_total(owner) == CLASSICAL_TABLE_TOTALS[owner]
+
+
+def test_varahamihiras_readings_are_recorded_and_not_computed():
+    """§12.8: 'The definitions and calculations given in this chapter strictly
+    follow Parasara.' The six cells are kept as data so they are not lost."""
+    assert "strictly follow Parasara" in CONTROVERSY_UNRESOLVED
+    assert "cannot conclusively resolve" in CONTROVERSY_UNRESOLVED
+    assert "nothing computes with them" in VARAHAMIHIRA_NOT_IMPLEMENTED
+
+
+def test_parasaras_checksum_argument_holds_in_our_tables():
+    """§12.8's argument is that Parasara states each house three times — the
+    malefic count, the malefic list, the benefic list. The machine-checkable
+    residue: benefic and malefic must account for all eight references in
+    every house of every table."""
+    from hora.charts.ashtakavarga import entry
+
+    checks = 0
+    for owner in ASHTAKAVARGA_REFERENCES:
+        for house in range(1, 13):
+            benefic = sum(entry(owner, r, house)
+                          for r in ASHTAKAVARGA_REFERENCES)
+            assert 0 <= benefic <= 8, (owner, house)
+            assert benefic + (8 - benefic) == 8
+            checks += 1
+    assert checks == 96
+    assert "96 checks" in PARASARA_CHECKSUM_INVARIANT
+    assert "sukha" in PARASARA_CHECKSUM_ARGUMENT
+
+
+def test_footnote_46_explains_why_corruption_is_the_likely_cause():
+    assert "word of mouth" in FOOTNOTE_46
+    assert "corruption of texts in time" in PARASARA_VS_VARAHAMIHIRA
+
+
+def test_12_8s_whole_sign_stand_is_what_the_chapter_already_does():
+    """'Each rasi is a house and the 1st house is the rasi containing the
+    reference.' Saturn at 1 Vi with lagna at 29 Le is in the 2nd house, two
+    degrees away or not."""
+    from hora.charts.ashtakavarga import benefic_rasis
+
+    lagna, saturn = R["Le"], R["Vi"]
+    assert (lagna + 2 - 1) % 12 == saturn, "2nd from Leo is Virgo"
+
+    for owner in ASHTAKAVARGA_REFERENCES:
+        second_house_rasi = (lagna + 1) % 12
+        in_second = second_house_rasi in benefic_rasis(owner, "Lagna", lagna)
+        assert in_second == bool(_entry(owner, "Lagna", 2))
+
+
+def _entry(owner: str, reference: str, house: int) -> int:
+    from hora.charts.ashtakavarga import entry
+
+    return entry(owner, reference, house)
+
+
+def test_the_stand_counts_from_every_reference_not_only_lagna():
+    """PVR's objection to the bhava-chakra people is that they build
+    multi-sign houses 'only with respect to lagna and not with respect to all
+    the references'. Ours are whole-sign from all eight."""
+    from hora.charts.ashtakavarga import benefic_houses, benefic_rasis
+
+    for owner in ASHTAKAVARGA_REFERENCES:
+        for reference in ASHTAKAVARGA_REFERENCES:
+            for base in range(12):
+                expected = {(base + house - 1) % 12
+                            for house in benefic_houses(owner, reference)}
+                assert set(benefic_rasis(owner, reference, base)) == expected
+    assert "not only from lagna" in WHOLE_SIGN_IS_WHAT_WE_DO
+
+
+def test_no_house_division_method_exists_in_the_ashtakavarga_code():
+    """'We do not recognize the house division methods of Porphyry and others
+    in this book.' Nothing in the module takes one."""
+    import inspect
+
+    from hora.charts import ashtakavarga
+
+    source = inspect.getsource(ashtakavarga)
+    for word in ("porphyry", "sripathi", "placidus", "chalit", "bhava_chakra",
+                 "house_system", "cusp"):
+        assert word not in source.lower(), word
+    assert "neither here nor there" in BHAVA_CHAKRA_CONTROVERSY
+
+
+def test_the_whole_sign_stands_worked_example_misprints_virgo_as_libra():
+    """D-44. 'the 1st house is in Le, the 2nd house is in Li and Saturn is in
+    the 2nd house' — for a Saturn at 1 Vi. The 2nd from Leo is Virgo, which is
+    where that Saturn is, so the two halves of the sentence contradict each
+    other unless Li is read as Vi."""
+    assert "the 2nd house is in Li" in WHOLE_SIGN_STAND
+    assert "Saturn is at 1° in Vi" in WHOLE_SIGN_STAND
+
+    assert RASI_ABBR[(R["Le"] + 1) % 12] == "Vi"
+    assert RASI_ABBR[(R["Le"] + 1) % 12] != "Li"
+    assert "slip for 'Vi'" in WHOLE_SIGN_STAND_TYPO
+
+
+def test_the_rules_endpoint_carries_12_8(client):
+    body = client.get("/v1/ashtakavarga/rules").json()["controversies"]
+    assert len(body["conflicts"]) == 6
+    assert len(body["conflict_texts"]) == 3
+    assert all(c["ours"] == c["parasara"] for c in body["conflicts"])
+    assert all(c["ours"] != c["varahamihira"] for c in body["conflicts"])
+    assert "word of mouth" in body["footnote_46"]
+    assert "slip for 'Vi'" in body["whole_sign_stand_typo"]

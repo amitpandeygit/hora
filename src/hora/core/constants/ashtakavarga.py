@@ -1206,3 +1206,167 @@ EXERCISE_22_RASI_PINDAS_AS_TABLE_28_PRINTS: dict[str, int] = {
 FOOTNOTE_47 = (
     "Argalas on lagna show decisive influences on one's nature and argalas on "
     "GL show decisive influences on one's fame.")
+
+
+# --------------------------------------------------------------------------
+# §12.8 — Controversies
+# --------------------------------------------------------------------------
+
+CONTROVERSY_NAMING = (
+    "With some authors using the term bindu (dot) to denote a benefic house "
+    "and the term rekha (line) to denote a malefic house – which is the "
+    "opposite of what we learnt in this chapter – readers may be confused "
+    "when reading other books. So they should keep in mind that there are "
+    "different conventions in vogue. We are following Parasara's conventions "
+    "in this book.")
+
+CONTROVERSY_NAMING_IS_MINOR = (
+    "The above is merely a problem of different naming conventions. It is not "
+    "a serious issue at all. It is just a matter of getting used to different "
+    "nomenclature.")
+
+#: §12.8 restates footnote 42's naming trap in prose. Two passages, one fact —
+#: so nothing rests on our reading of either alone.
+NAMING_AGREES_WITH_FOOTNOTE_42 = (
+    "Section 12.8 and footnote 42 state the same convention independently: in "
+    "this book a rekha (line) is benefic and a bindu (dot) is malefic, which "
+    "is the reverse of what some other authors use. Our tables store 1 for "
+    "benefic and call the count 'rekhas', agreeing with both.")
+
+PARASARA_VS_VARAHAMIHIRA = (
+    "But there is another issue, which is far more serious. There are a few "
+    "inconsistencies between the lists of benefic houses of Moon and Venus as "
+    "given by Maharshi Parasara and the great astrologer Varahamihira, who is "
+    "relatively modern, as he belongs to 600 AD. These inconsistencies may "
+    "have arisen due to corruption of texts in time.")
+
+#: Footnote 46 — why corruption is the likely cause.
+FOOTNOTE_46 = (
+    "In India, books seldom existed on paper and classics were transmitted "
+    "from one generation to the other, mostly by word of mouth. People got "
+    "the classics by heart and recited them to their children and students. "
+    "Books were written in poetry, using nice meters, to facilitate "
+    "memorization.")
+
+PARASARA_CHECKSUM_ARGUMENT = (
+    "To define a planet's ashtakavarga, Parasara first gives the count of "
+    "references from which the planet is malefic in the 1st house and then he "
+    "lists the references. He does the same thing for all houses. So we can "
+    "crosscheck. As if this isn't enough, the Sage then lists the references "
+    "from which the planet is benefic. He does it in all the houses again. "
+    "Just as “checksum” values are transmitted in today's digital "
+    "communication schemes to provide resilience to transmission errors, the "
+    "Sage, who normally uses words sparingly, takes plenty of care to ensure "
+    "that his teachings on ashtakavarga remain difficult to corrupt. To "
+    "corrupt one house value in Parasara's account of ashtakavarga, one has "
+    "to consciously re-write the verses in three different places in a "
+    "consistent fashion. With the direct approach adopted by other authors, "
+    "one can change the table just by changing one word. For example, "
+    "changing “sukha” (comfort – 4th) to “suta” (son – 5th) changes one "
+    "value without affecting the meter used in the verses. With Parasara's "
+    "indirect approach, consistent changes in multiple places are required "
+    "for a single value change. So Parasara's indirect approach is superior "
+    "in corruption resistance. We will follow Parasara in this book.")
+
+#: The three places of conflict, as data. Each entry is
+#: ``(owner, reference, house, parasara, varahamihira)`` — and each conflict
+#: is a *swap* within one reference, so both readings leave the table's total
+#: unchanged. Our tables hold Parasara's values, which is checked.
+PARASARA_VARAHAMIHIRA_CONFLICTS: tuple[
+        tuple[str, str, int, int, int], ...] = (
+    ("Moon", "Moon", 9, 1, 0),
+    ("Moon", "Mars", 9, 0, 1),
+    ("Moon", "Jupiter", 2, 1, 0),
+    ("Moon", "Jupiter", 12, 0, 1),
+    ("Venus", "Mars", 4, 1, 0),
+    ("Venus", "Mars", 5, 0, 1),
+)
+
+#: How §12.8 groups them — three conflicts, the middle one spanning two
+#: houses of the same reference.
+PARASARA_VARAHAMIHIRA_CONFLICT_TEXTS: tuple[str, ...] = (
+    (
+        "Moon's ashtakavarga: As per Parasara, Moon is benefic in the 9th "
+        "from Moon and malefic in the 9th from Mars. As per Varahamihira, "
+        "Moon is malefic in the 9th from Moon and benefic in the 9th from "
+        "Mars."
+    ),
+    (
+        "Moon's ashtakavarga: As per Parasara, Moon is benefic in the 2nd "
+        "from Jupiter and malefic in the 12th from Jupiter. As per "
+        "Varahamihira, Moon is malefic in the 2nd from Jupiter and benefic "
+        "in the 12th from Jupiter."
+    ),
+    (
+        "Venus's ashtakavarga: As per Parasara, Venus is benefic in the 4th "
+        "from Mars and malefic in the 5th from Mars. As per Varahamihira, "
+        "Venus is malefic in the 4th from Mars and benefic in the 5th from "
+        "Mars."
+    ),
+)
+
+CONTROVERSY_UNRESOLVED = (
+    "The definitions and calculations given in this chapter strictly follow "
+    "Parasara for the reasons already mentioned. However, readers are welcome "
+    "to experiment and draw their own conclusions. Until authentic and "
+    "conclusive researches are conducted into the use of sodhya pindas in the "
+    "timing of events, we cannot conclusively resolve the above controversy.")
+
+#: Varahamihira's readings are recorded but nothing computes them: §12.8 says
+#: the chapter strictly follows Parasara.
+VARAHAMIHIRA_NOT_IMPLEMENTED = (
+    "Varahamihira's six differing cells are recorded as data so they are not "
+    "lost, and nothing computes with them. Section 12.8 says the chapter "
+    "strictly follows Parasara, and PVR's own calculations are our standard.")
+
+BHAVA_CHAKRA_CONTROVERSY = (
+    "Apart from this, there is another needless controversy related to "
+    "ashtakavarga. Some people prepare “bhava chakra” or “chalit chakra” "
+    "using Sripathi's (or Porphyry's) house devision method and use that "
+    "chart to cast ashtakavarga. If Saturn is at 3° in Vi and lagna is at 27° "
+    "in Le, they are very close and these people argue that Saturn is in the "
+    "1st house from lagna and not in the 2nd house. These people make a bhava "
+    "chakra accordingly and use it in ashtakavarga. However, if lagna is at "
+    "15° in Le, Saturn is at 3° in Vi and Jupiter is at 27° in Le, they may "
+    "take Saturn to be in the 2nd house from Jupiter. They compute a bhava "
+    "chakra with multi-sign houses only with respect to lagna and not with "
+    "respect to all the references used in ashtakavarga. So their approach is "
+    "neither here nor there.")
+
+WHOLE_SIGN_STAND = (
+    "The stand of this book is very clear – each bhava (house) with respect "
+    "to one reference can only be in one rasi. Even if Saturn is at 1° in Vi "
+    "and lagna is at 29° in Le, we still say that the 1st house is in Le, the "
+    "2nd house is in Li and Saturn is in the 2nd house (though he is only 2° "
+    "away from lagna). We do not recognize the house division methods of "
+    "Porphyry and others in this book. Each rasi is a house and the 1st house "
+    "is the rasi containing the reference. Readers will do well to follow "
+    "Maharshi Parasara and ignore the creations and borrowings of later day "
+    "Indian astrologers.")
+
+#: **Book defect.** The stand's worked example says "the 2nd house is in Li",
+#: but the 2nd from Leo is Virgo — which is where its own Saturn sits, and the
+#: same sentence says Saturn is in the 2nd house. See docs/book-deviations.md
+#: D-44.
+WHOLE_SIGN_STAND_TYPO = (
+    "Section 12.8's stand says 'the 1st house is in Le, the 2nd house is in "
+    "Li and Saturn is in the 2nd house' for a Saturn at 1 Vi. The 2nd from "
+    "Leo is Virgo, not Libra, and Virgo is where that Saturn is — so 'Li' is "
+    "a slip for 'Vi'. Read as Vi, the sentence is self-consistent and states "
+    "exactly the whole-sign rule the section is arguing for.")
+
+#: What the stand means for us, and it is what we already do.
+WHOLE_SIGN_IS_WHAT_WE_DO = (
+    "Every house in this chapter is counted whole-sign from the reference, "
+    "for all eight references and not only from lagna. That is what section "
+    "12.8 mandates, and no house-division method is offered anywhere in the "
+    "ashtakavarga code.")
+
+#: PVR's checksum argument, made testable: Parasara encodes each house three
+#: times, so benefic and malefic counts must sum to eight everywhere.
+PARASARA_CHECKSUM_INVARIANT = (
+    "Parasara states each house three times — the count of malefic "
+    "references, the list of malefic references, and the list of benefic "
+    "references. The machine-checkable residue is that benefic and malefic "
+    "must account for all eight references in every house of every table: "
+    "8 tables x 12 houses = 96 checks.")

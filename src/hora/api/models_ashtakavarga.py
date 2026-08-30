@@ -81,6 +81,7 @@ class AshtakavargaRulesOut(BaseModel):
     exercise_21: dict
     prastaara: dict
     example_39: dict
+    controversies: dict
     chart_3: dict
     chart_12: dict
     sav_definition: str

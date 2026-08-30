@@ -1350,3 +1350,30 @@ knows which set to pass. Our own fixtures pass the lagna's rasi.
 This settles only the lagna. Rahu and Ketu remain open under OI-104: Chart 7
 puts them in Aries and Libra, both of which already hold planets, so the
 exercise cannot distinguish them.
+
+## D-44 · §12.8's whole-sign example says "the 2nd house is in Li"; it is Vi
+
+**Status: resolved from the sentence itself.** A transcription slip, not a rule.
+
+§12.8 states the book's position on house division:
+
+> "Even if Saturn is at 1° in Vi and lagna is at 29° in Le, we still say that
+> the 1st house is in Le, the 2nd house is in **Li** and Saturn is in the 2nd
+> house (though he is only 2° away from lagna)."
+
+The 2nd from Leo is **Virgo**, not Libra. And the same sentence puts its Saturn
+at 1° Virgo and says he is in the 2nd house. The two halves cannot both hold
+with Li; read as Vi, they agree exactly and the sentence states the whole-sign
+rule the paragraph is arguing for.
+
+The paragraph above it agrees independently: a Saturn at 3° Vi with lagna at
+27° Le is 2nd-house by PVR and 1st-house by the people he is arguing against.
+Both readings put the boundary at the Le/Vi line, so nobody in the dispute
+thinks Libra is involved.
+
+**What we do:** the rule, not the typo. Every house in the chapter is counted
+whole-sign from its reference. `whole_sign_stand_typo` on
+`/v1/ashtakavarga/rules` carries the printed sentence and this reading, so the
+slip is visible rather than silently corrected.
+
+**Nothing needs deciding.** The correction is forced by the sentence itself.
