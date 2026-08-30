@@ -61,6 +61,8 @@ DASHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "VARIATIONS_ARE_OFTEN_IGNORED",
     "DASA_FROM_LAGNA",
     "DASA_LORD_AS_TEMPORARY_LAGNA",
+    "NO_GUIDELINES_FOR_SIGN_STRENGTH",
+    "STAR_SPANNING_TWO_SIGNS",
 )
 
 
@@ -124,4 +126,43 @@ DASA_LORD_AS_TEMPORARY_LAGNA = (
     "Each planet gives the results indicated by it in its dasas and "
     "antardasas. When analyzing antardasas, we can take the dasa lord as a "
     "temporary lagna and analyze the charts."
+)
+
+
+#: §16.5.2 admits the comparison it depends on is not defined anywhere.
+NO_GUIDELINES_FOR_SIGN_STRENGTH = (
+    "How do we know which sign is stronger? There are no clear guidelines in "
+    "the literature to compare the strengths."
+)
+
+#: §16.5.2's rule for choosing a variation, one entry per purpose. The two
+#: `stronger_when` clauses are opposites, and deliberately so: a sign that is
+#: stronger for reading general results is not the sign that is stronger for
+#: reading longevity.
+VARIATION_CHOICE: dict[str, dict] = {
+    "general": {
+        "compare": (1, 5),
+        "prefer": "utpanna",
+        "stronger_when": (
+            "A sign aspected by Jupiter and occupied by more planets may be "
+            "taken to be stronger."
+        ),
+        "fallback": (
+            "We can also use known events to see which dasa is working better."
+        ),
+    },
+    "longevity": {
+        "compare": (1, 4, 8),
+        "prefer": "kshema or adhana",
+        "stronger_when": (
+            "Here a sign aspected by marakas and malefics becomes stronger."
+        ),
+        "fallback": None,
+    },
+}
+
+#: The pada rule that resolves a star straddling two signs.
+STAR_SPANNING_TWO_SIGNS = (
+    "If the 5th star spans across 2 signs, take the sign containing the same "
+    "quarter as occupied by Moon in birthstar."
 )

@@ -13,10 +13,13 @@ from hora.core import validate
 from hora.core.const import (
     CIVIL_YEAR_DAYS,
     GRAHA_NAMES,
+    NAKSHATRA_NAMES,
     NAKSHATRA_SPAN,
+    RASI_NAMES,
     SAVANA_YEAR_DAYS,
     SIDEREAL_YEAR_DAYS,
     TROPICAL_YEAR_DAYS,
+    VARIATION_CHOICE,
 )
 from hora.core.settings import DashaYearLength
 
@@ -190,3 +193,69 @@ def find_running(periods: list[DashaPeriod], jd: float) -> list[DashaPeriod]:
         chain.append(match)
         level = match.children
     return chain
+
+
+@dataclass(frozen=True, slots=True)
+class VariationSign:
+    """Which sign a variation's starting star falls in, and how that was fixed."""
+
+    star: int
+    nakshatra: int
+    nakshatra_name: str
+    rasi: int
+    rasi_name: str
+    spans_two_signs: bool
+    reason: str
+
+
+def variation_sign(moon_longitude: float, star: int) -> VariationSign:
+    """§16.5.2's sign for one starting star, counted inclusively from Moon's.
+
+    A nakshatra is 13°20' and a sign 30°, so a star can straddle two signs.
+    The section resolves that by pada: "If the 5th star spans across 2 signs,
+    take the sign containing the same quarter as occupied by Moon in
+    birthstar." So the Moon's own pada picks which half of the star to read,
+    not the star's midpoint or its start.
+
+    :param moon_longitude: sidereal longitude of the Moon.
+    :param star: 1 for the Moon's own star, 4, 5 or 8 for the variations.
+    """
+    lon = moon_longitude % 360.0
+    birth_star = int(lon // NAKSHATRA_SPAN)
+    quarter = NAKSHATRA_SPAN / 4
+    pada = int((lon - birth_star * NAKSHATRA_SPAN) / quarter) + 1
+
+    index = (birth_star + validate.in_range("star", star, 1, 27) - 1) % 27
+    start = index * NAKSHATRA_SPAN
+    first, last = int(start // 30), int((start + NAKSHATRA_SPAN - 1e-9) // 30)
+
+    if first == last:
+        rasi = first
+        reason = f"{NAKSHATRA_NAMES[index]} lies wholly in {RASI_NAMES[rasi]}"
+    else:
+        rasi = int((start + (pada - 1) * quarter) // 30)
+        reason = (
+            f"{NAKSHATRA_NAMES[index]} spans {RASI_NAMES[first]} and "
+            f"{RASI_NAMES[last]}; the Moon is in pada {pada} of its own star, "
+            f"and that pada of {NAKSHATRA_NAMES[index]} is in {RASI_NAMES[rasi]}"
+        )
+    return VariationSign(
+        star=int(star), nakshatra=index, nakshatra_name=NAKSHATRA_NAMES[index],
+        rasi=rasi, rasi_name=RASI_NAMES[rasi],
+        spans_two_signs=first != last, reason=reason,
+    )
+
+
+def variation_candidates(moon_longitude: float, purpose: str) -> list[VariationSign]:
+    """The signs §16.5.2 says to compare, for one purpose.
+
+    General results weigh the Moon's sign against the 5th star's; longevity
+    weighs the Moon's against the 4th and 8th. The section gives no way to
+    settle which sign wins — "There are no clear guidelines in the literature
+    to compare the strengths" — so this returns the candidates and stops.
+    """
+    choice = VARIATION_CHOICE.get(purpose)
+    if choice is None:
+        raise ValueError(
+            f"purpose must be 'general' or 'longevity', got {purpose!r}")
+    return [variation_sign(moon_longitude, s) for s in choice["compare"]]

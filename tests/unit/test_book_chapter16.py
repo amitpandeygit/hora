@@ -508,3 +508,98 @@ def test_the_dasa_lord_becomes_a_temporary_lagna_for_antardasas():
 
     assert "temporary lagna" in DASA_LORD_AS_TEMPORARY_LAGNA
     assert "antardasas" in DASA_LORD_AS_TEMPORARY_LAGNA
+
+
+# --------------------------------------------------------------------------
+# §16.5.2 Using Dasa Variations
+# --------------------------------------------------------------------------
+
+#: The section's own worked case: Moon in Makha 3rd pada.
+MAKHA_3RD_PADA = 9 * NAKSHATRA_SPAN + 2.5 * (NAKSHATRA_SPAN / 4)
+
+
+def test_a_star_lying_in_one_sign_needs_no_pada_rule():
+    from hora.dasha.base import variation_sign
+
+    got = variation_sign(MAKHA_3RD_PADA, 1)
+    assert got.nakshatra_name == "Magha"
+    assert got.rasi_name == "Leo"
+    assert got.spans_two_signs is False
+
+
+def test_a_star_spanning_two_signs_is_resolved_by_the_moons_pada():
+    """"If Moon is in Makha 3rd pada, for example, 5th star is Chitra and it
+    starts in Virgo and ends in Libra. So we should take the 3rd quarter of
+    Chitra and we then get Libra."
+
+    Not the star's start, not its midpoint — the Moon's own quarter.
+    """
+    from hora.dasha.base import variation_sign
+
+    got = variation_sign(MAKHA_3RD_PADA, 5)
+    assert got.nakshatra_name == "Chitra"
+    assert got.spans_two_signs is True
+    assert got.rasi_name == "Libra"
+    assert "pada 3" in got.reason
+
+    # Chitra begins in Virgo, so taking the star's start would give Virgo.
+    assert int((got.nakshatra * NAKSHATRA_SPAN) // 30) != got.rasi
+
+
+def test_the_general_comparison_is_leo_against_libra():
+    """"So Leo's strength should be compared to Libra's.\""""
+    from hora.dasha.base import variation_candidates
+
+    got = variation_candidates(MAKHA_3RD_PADA, "general")
+    assert [v.rasi_name for v in got] == ["Leo", "Libra"]
+    assert [v.star for v in got] == [1, 5]
+
+
+def test_the_longevity_comparison_is_leo_virgo_and_scorpio():
+    """"If Moon is in Makha 3rd pada in Leo, 4th and 8th stars are Hasta
+    (Virgo) and Anuradha (Scorpio). We should compare the strengths of Leo,
+    Virgo and Scorpio.\""""
+    from hora.dasha.base import variation_candidates
+
+    got = variation_candidates(MAKHA_3RD_PADA, "longevity")
+    assert [v.nakshatra_name for v in got] == ["Magha", "Hasta", "Anuradha"]
+    assert [v.rasi_name for v in got] == ["Leo", "Virgo", "Scorpio"]
+
+
+def test_the_two_purposes_call_opposite_signs_stronger():
+    """The section's least obvious point.
+
+    For general results "a sign aspected by Jupiter and occupied by more
+    planets may be taken to be stronger"; for longevity "a sign aspected by
+    marakas and malefics becomes stronger". Strength here is not one quantity
+    read for two purposes — it is two different questions, and a single
+    strength routine used for both would be wrong for one of them.
+    """
+    from hora.core.const import VARIATION_CHOICE
+
+    general = VARIATION_CHOICE["general"]["stronger_when"]
+    longevity = VARIATION_CHOICE["longevity"]["stronger_when"]
+    assert "Jupiter" in general and "malefics" not in general
+    assert "marakas and malefics" in longevity and "Jupiter" not in longevity
+    assert VARIATION_CHOICE["general"]["compare"] == (1, 5)
+    assert VARIATION_CHOICE["longevity"]["compare"] == (1, 4, 8)
+
+
+def test_we_do_not_invent_the_comparison_the_book_says_is_undefined():
+    """"There are no clear guidelines in the literature to compare the
+    strengths." So the helper returns the candidate signs and stops; picking
+    a winner is not ours to do."""
+    from hora.core.const import NO_GUIDELINES_FOR_SIGN_STRENGTH
+    from hora.dasha.base import variation_candidates
+
+    assert "no clear guidelines" in NO_GUIDELINES_FOR_SIGN_STRENGTH
+    got = variation_candidates(MAKHA_3RD_PADA, "general")
+    assert all(not hasattr(v, "is_strongest") for v in got)
+    assert all(not hasattr(v, "strength") for v in got)
+
+
+def test_an_unknown_purpose_is_refused():
+    from hora.dasha.base import variation_candidates
+
+    with pytest.raises(ValueError, match="general.*longevity"):
+        variation_candidates(MAKHA_3RD_PADA, "wealth")
