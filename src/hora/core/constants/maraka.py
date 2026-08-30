@@ -674,3 +674,46 @@ EIGHTH_LORD_METHOD_FAILED_HERE = (
     "the book reports them; neither is suppressed to make the chapter look "
     "consistent."
 )
+
+
+# --------------------------------------------------------------------------
+# Chapter 14's closing caution
+# --------------------------------------------------------------------------
+
+CHAPTER_14_CLOSING = (
+    "The definitions and methods given in this chapter will be useful in "
+    "timing death using dasas. The two methods of outlined here for "
+    "determining the longevity category are not infallible. There are some "
+    "exceptions not covered in this book. So we should not be biased by these "
+    "calculations."
+)
+
+#: The book prints "The two methods of outlined here", which is a slip for
+#: "The two methods outlined here". Transcribed as printed.
+CHAPTER_14_CLOSING_TYPO = (
+    "The closing paragraph reads 'The two methods of outlined here'. The "
+    "stray 'of' is a slip for 'The two methods outlined here'. Kept as "
+    "printed."
+)
+
+#: **This is PVR saying the gaps are real.** Chapter 14 leaves several rules
+#: unstated — OI-108's "powerfully", OI-109's affliction override, OI-110's
+#: missing paramaayush cases, and §14.5's uncompared lagna and 7th. The
+#: closing paragraph says outright that the methods are not infallible and
+#: that exceptions are not covered. So those items are acknowledged
+#: incompleteness in the source, not a failure to find a rule that is there.
+CHAPTER_14_ADMITS_ITS_GAPS = (
+    "Chapter 14 closes by saying its two longevity methods 'are not "
+    "infallible' and that 'there are some exceptions not covered in this "
+    "book'. That is the author's own account of the gaps this project "
+    "recorded while working through it, and it is why none of them was filled "
+    "by guessing: the missing rules are missing from the source, not from our "
+    "reading of it. Exercise 23 shows one method failing outright on the "
+    "book's own chart."
+)
+
+#: What the chapter says its results are *for*, and the caution it ends on.
+CHAPTER_14_USE_AND_CAUTION: tuple[str, str] = (
+    "will be useful in timing death using dasas",
+    "we should not be biased by these calculations",
+)

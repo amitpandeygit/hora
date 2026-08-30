@@ -7,6 +7,7 @@
       "the 2nd lord",
       "the 7th lord"
     ],
+    "admits_its_gaps": "Chapter 14 closes by saying its two longevity methods 'are not infallible' and that 'there are some exceptions not covered in this book'. That is the author's own account of the gaps this project recorded while working through it, and it is why none of them was filled by guessing: the missing rules are missing from the source, not from our reading of it. Exercise 23 shows one method failing outright on the book's own chart.",
     "chart_order": [
       {
         "chart": "D1",
@@ -22,6 +23,8 @@
       }
     ],
     "charts": "Each chart has some rasis and planets that are called marakas (killers). Since death is an event relating to the physical existence, rasi chart is of utmost importance in seeing death. Rudramsa (D-11) shows the forces of death and destruction and it can also give insight into death. D-30 shows one's evils and punishment for the evils. Death can be a punishment for one's evils and so we should look at D-30 also. However, the most important chart is the rasi chart.",
+    "closing": "The definitions and methods given in this chapter will be useful in timing death using dasas. The two methods of outlined here for determining the longevity category are not infallible. There are some exceptions not covered in this book. So we should not be biased by these calculations.",
+    "closing_typo": "The closing paragraph reads 'The two methods of outlined here'. The stray 'of' is a slip for 'The two methods outlined here'. Kept as printed.",
     "derivation": [
       {
         "house_of_life": 3,
@@ -110,7 +113,11 @@
     "scope": "In this chapter, we will study some basic tools that are used in longevity determination techniques. There are formulas for determining longevity, based on ashtakavarga. But they do not always work and they will not be covered in this book. We will cover the estimation of longevity based on natal chart and dasas. Though there are many dasas that help us in timing death, we will cover only Shoola dasa in this book.",
     "sthana_rule": "The rasis containing the 2nd and 7th houses are called maraka sthanas (killer stations). When we use rasi-ruled dasas that can show death, dasas of these rasis can bring death. Lords of the 2nd and 7th houses are called maraka grahas (killer planets). When we use planet-ruled dasas that can show death, dasas of these planets can bring death.",
     "stronger_remark": "So Saturn is also a maraka and he may in fact be a stronger maraka than Mars and Mercury.",
-    "use": "When we time one's death using a dasa, we should look for the involvement of maraka sthanas and maraka grahas. We can also use marakas when timing death using the transits of planets."
+    "use": "When we time one's death using a dasa, we should look for the involvement of maraka sthanas and maraka grahas. We can also use marakas when timing death using the transits of planets.",
+    "use_and_caution": [
+      "will be useful in timing death using dasas",
+      "we should not be biased by these calculations"
+    ]
   },
   "status": 200
 }

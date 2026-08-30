@@ -1112,3 +1112,48 @@ def test_the_14_5_endpoints(client):
     }).json()
     assert decided["rudra"] == "Mercury"
     assert decided["decided_by"] == 5
+
+
+# --------------------------------------------------------------------------
+# Chapter 14's closing caution
+# --------------------------------------------------------------------------
+
+from hora.core.const import (
+    CHAPTER_14_ADMITS_ITS_GAPS,
+    CHAPTER_14_CLOSING,
+    CHAPTER_14_CLOSING_TYPO,
+    CHAPTER_14_USE_AND_CAUTION,
+)
+
+
+def test_the_chapter_closes_by_calling_its_own_methods_fallible():
+    assert "are not infallible" in CHAPTER_14_CLOSING
+    assert "exceptions not covered in this book" in CHAPTER_14_CLOSING
+    assert "should not be biased by these calculations" in CHAPTER_14_CLOSING
+
+
+def test_the_closing_says_what_the_results_are_for_and_warns_against_them():
+    use, caution = CHAPTER_14_USE_AND_CAUTION
+    assert use in CHAPTER_14_CLOSING
+    assert caution in CHAPTER_14_CLOSING
+
+
+def test_the_closings_stray_of_is_recorded_not_corrected():
+    """It prints "The two methods of outlined here"."""
+    assert "The two methods of outlined here" in CHAPTER_14_CLOSING
+    assert "slip for" in CHAPTER_14_CLOSING_TYPO
+
+
+def test_the_chapter_itself_accounts_for_the_gaps_we_recorded():
+    """OI-108, OI-109 and OI-110 are acknowledged incompleteness in the
+    source, not rules we failed to find — which is why none was filled by
+    guessing."""
+    assert "not infallible" in CHAPTER_14_ADMITS_ITS_GAPS
+    assert "missing from the source" in CHAPTER_14_ADMITS_ITS_GAPS
+
+
+def test_the_rules_endpoint_carries_the_closing(client):
+    body = client.get("/v1/marakas/rules").json()
+    assert "not infallible" in body["closing"]
+    assert len(body["use_and_caution"]) == 2
+    assert "not infallible" in body["admits_its_gaps"]

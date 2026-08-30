@@ -47,8 +47,14 @@ Resolved top down. The first rule that applies decides.
 | **1** | **Jagannatha Hora 8.0** (2016) | The benchmark. PVR's own software, and his latest word. Outranks the book where they differ. |
 | **2** | **The book — *Vedic Astrology: An Integrated Approach*** (2000) | Definitional sections and tables outrank prose and worked examples. |
 | **3** | **PVR's later writings** — his articles and the 2010 "Looking Back" note | Used to interpret 1 and 2, not to overrule them. |
-| **4** | **BPHS and other classical texts** | Context and research input. Recorded when it disagrees; never silently substituted. |
-| **5** | **Modern consensus / other software** | Weakest. Useful as a cross-check (PyJHora) but never decisive. |
+| **4** | **Brihat Parashara Hora Shastra** | PVR's own base text, so it ranks above the rest of the classical literature. Context and research input. Recorded when it disagrees; never silently substituted. |
+| **5** | **Other classical texts** | Jaimini Sutras, Saravali, Phaladeepika and the rest. Below BPHS because PVR does not build on them the same way. |
+| **6** | **Modern consensus / other software** | Weakest. Useful as a cross-check (PyJHora) but never decisive. |
+
+Ranks 1 to 3 are all PVR, so the ladder in short is **PVR, then BPHS, then
+everything else** — confirmed with Amit on 2026-08-30. Splitting rank 4 in two
+on the same date: BPHS is the base PVR himself works from, and lumping it with
+Saravali and Phaladeepika understated that.
 
 ### Why JHora outranks the book
 
@@ -120,7 +126,37 @@ threshold is a per-call parameter rather than a constant baked into a
 calculation. If the ladder needs a rule for "a stated rule that cannot be
 computed", this is the case that will motivate it.
 
-### Obligations on every entry
+### When PVR is silent
+
+The ladder above resolves **disagreement**. A different question, which chapter
+14 made unavoidable, is what to do when PVR states no rule at all.
+
+By chapter 14 the register held several of these: §14.2's undefined
+"powerfully" (OI-108), §14.3's open-ended affliction override (OI-109),
+§14.4's missing paramaayush for two of three cases (OI-110), and §14.5's
+instruction to take "the stronger of lagna and 7th house" without saying how to
+compare them.
+
+**A silence is not a licence to fill it from rank 4.** The rule is:
+
+1. **Say so.** The endpoint returns the answer it can compute and names what it
+   could not decide, in the reason. Never a bare absence, never a guess wearing
+   a verdict's clothes.
+2. **Push the choice to the caller** where the missing input is one a caller can
+   supply — `occupied_signs` in §12.7.2, the stronger reference in §14.5.
+3. **Record it** as an open item with what would close it.
+4. **Only then** may BPHS or another source be considered, and only by an
+   explicit decision recorded here — the same bar as overriding him.
+
+Chapter 14 is the reason this is written down rather than assumed. Its closing
+paragraph says the two longevity methods "are not infallible" and that "there
+are some exceptions not covered in this book", and Exercise 23 shows one of
+them failing on the book's own chart. So those gaps are **acknowledged
+incompleteness in the source**, not rules we failed to find. Filling them from
+elsewhere would produce answers PVR did not endorse while looking like answers
+he did.
+
+## Obligations on every entry
 
 1. **Register it here before encoding it.** The id exists first.
 2. **Cite both sources with section numbers**, so the conflict can be re-checked

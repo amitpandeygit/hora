@@ -36,6 +36,10 @@ class MarakaRulesOut(BaseModel):
     stronger_remark: str
     not_ranked: str
     use: str
+    closing: str
+    closing_typo: str
+    admits_its_gaps: str
+    use_and_caution: list[str]
     examples: list[dict]
 
 
