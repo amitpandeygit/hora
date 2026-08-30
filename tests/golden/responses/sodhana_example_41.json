@@ -1,0 +1,213 @@
+{
+  "body": {
+    "after": [
+      3,
+      1,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      0
+    ],
+    "before": [
+      3,
+      1,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      0
+    ],
+    "occupancy_undefined": "Section 12.7.2 says 'occupied by a planet (or planets)' without saying whether Rahu and Ketu count. Example 42's occupants are Mars, Jupiter and Saturn only, so it does not settle the question. Our API makes the caller state which rasis are occupied rather than choosing for them.",
+    "occupied_signs": [],
+    "owner": "Mercury",
+    "pairs": [
+      {
+        "after": [
+          3,
+          0
+        ],
+        "before": [
+          3,
+          0
+        ],
+        "lord": "Mars",
+        "occupied": [
+          false,
+          false
+        ],
+        "rule": "1",
+        "sign_names": [
+          "Aries",
+          "Scorpio"
+        ],
+        "signs": [
+          0,
+          7
+        ],
+        "tie_not_covered_by_the_book": false
+      },
+      {
+        "after": [
+          3,
+          0
+        ],
+        "before": [
+          3,
+          0
+        ],
+        "lord": "Mercury",
+        "occupied": [
+          false,
+          false
+        ],
+        "rule": "1",
+        "sign_names": [
+          "Gemini",
+          "Virgo"
+        ],
+        "signs": [
+          2,
+          5
+        ],
+        "tie_not_covered_by_the_book": false
+      },
+      {
+        "after": [
+          0,
+          0
+        ],
+        "before": [
+          0,
+          0
+        ],
+        "lord": "Jupiter",
+        "occupied": [
+          false,
+          false
+        ],
+        "rule": "1",
+        "sign_names": [
+          "Sagittarius",
+          "Pisces"
+        ],
+        "signs": [
+          8,
+          11
+        ],
+        "tie_not_covered_by_the_book": false
+      },
+      {
+        "after": [
+          1,
+          0
+        ],
+        "before": [
+          1,
+          0
+        ],
+        "lord": "Venus",
+        "occupied": [
+          false,
+          false
+        ],
+        "rule": "1",
+        "sign_names": [
+          "Taurus",
+          "Libra"
+        ],
+        "signs": [
+          1,
+          6
+        ],
+        "tie_not_covered_by_the_book": false
+      },
+      {
+        "after": [
+          0,
+          2
+        ],
+        "before": [
+          0,
+          2
+        ],
+        "lord": "Saturn",
+        "occupied": [
+          false,
+          false
+        ],
+        "rule": "1",
+        "sign_names": [
+          "Capricorn",
+          "Aquarius"
+        ],
+        "signs": [
+          9,
+          10
+        ],
+        "tie_not_covered_by_the_book": false
+      }
+    ],
+    "rule": "After we carry out Trikona Sodhana, we carry out another reduction on the pairs of signs that are owned by the same planet. Ar and Sc are owned by Mars; Ta and Li are owned by Venus; Ge and Vi are owned by Mercury; Sg and Pi are owned by Jupiter; and, Cp and Aq are owned by Saturn. We apply a reduction on these pairs of rasis separately, using the following rules:",
+    "rules": [
+      {
+        "number": "1",
+        "text": "If atleast one of the rasis has a zero in it, no reduction is necessary and stop here."
+      },
+      {
+        "number": "2",
+        "text": "If both the rasis are occupied by a planet (or planets), again no reduction is necessary and stop here."
+      },
+      {
+        "number": "3",
+        "text": "If one rasi is occupied by a planet (or planets) and the other is empty, then do the following:"
+      },
+      {
+        "number": "3a",
+        "text": "If the empty rasi has a lower value, replace the value with a zero."
+      },
+      {
+        "number": "3b",
+        "text": "If the empty rasi has a higher value, replace the value with the value in the other rasi."
+      },
+      {
+        "number": "4",
+        "text": "If both the rasis are empty, then do the following:"
+      },
+      {
+        "number": "4a",
+        "text": "If both the rasis have the same value, replace both with zero."
+      },
+      {
+        "number": "4b",
+        "text": "If they have different values, replace the higher value with the lower value."
+      }
+    ],
+    "tie_hit_in_this_chart": [],
+    "tie_is_uncovered": "Rule (3) splits on whether the empty rasi's value is lower or higher than the occupied one's. It does not say what to do when they are equal, and equal values survive Trikona Sodhana routinely.",
+    "tie_reading": "We read equal as (3a) and write zero. The book zeroes ties everywhere else it faces one: rule (4a) here zeroes two empty rasis holding the same value, and section 12.7.1's rule (2) zeroes three trines holding the same value. Reading equal as (3b) instead would leave the value standing, which is the only place in either reduction where a tie survives.",
+    "trikona_applied_first": false,
+    "untouched": {
+      "sign_names": [
+        "Cancer",
+        "Leo"
+      ],
+      "signs": [
+        3,
+        4
+      ],
+      "why": "Cancer and Leo have one owner each, so they are in no co-owned pair and section 12.7.2 never reaches them."
+    }
+  },
+  "status": 200
+}

@@ -1,5 +1,60 @@
 {
   "body": {
+    "ekaadhipatya_sodhana": {
+      "means": "Co-owned Reduction",
+      "occupancy_undefined": "Section 12.7.2 says 'occupied by a planet (or planets)' without saying whether Rahu and Ketu count. Example 42's occupants are Mars, Jupiter and Saturn only, so it does not settle the question. Our API makes the caller state which rasis are occupied rather than choosing for them.",
+      "rule": "After we carry out Trikona Sodhana, we carry out another reduction on the pairs of signs that are owned by the same planet. Ar and Sc are owned by Mars; Ta and Li are owned by Venus; Ge and Vi are owned by Mercury; Sg and Pi are owned by Jupiter; and, Cp and Aq are owned by Saturn. We apply a reduction on these pairs of rasis separately, using the following rules:",
+      "rules": [
+        {
+          "number": "1",
+          "text": "If atleast one of the rasis has a zero in it, no reduction is necessary and stop here."
+        },
+        {
+          "number": "2",
+          "text": "If both the rasis are occupied by a planet (or planets), again no reduction is necessary and stop here."
+        },
+        {
+          "number": "3",
+          "text": "If one rasi is occupied by a planet (or planets) and the other is empty, then do the following:"
+        },
+        {
+          "number": "3a",
+          "text": "If the empty rasi has a lower value, replace the value with a zero."
+        },
+        {
+          "number": "3b",
+          "text": "If the empty rasi has a higher value, replace the value with the value in the other rasi."
+        },
+        {
+          "number": "4",
+          "text": "If both the rasis are empty, then do the following:"
+        },
+        {
+          "number": "4a",
+          "text": "If both the rasis have the same value, replace both with zero."
+        },
+        {
+          "number": "4b",
+          "text": "If they have different values, replace the higher value with the lower value."
+        }
+      ],
+      "rules_all_exercised": [
+        "1",
+        "2",
+        "3a",
+        "3b",
+        "4a",
+        "4b"
+      ],
+      "rules_all_exercised_note": "Example 41 works rule (1) and Example 42 the other five branches, so the book works every rule it states.",
+      "tie_is_uncovered": "Rule (3) splits on whether the empty rasi's value is lower or higher than the occupied one's. It does not say what to do when they are equal, and equal values survive Trikona Sodhana routinely.",
+      "tie_reading": "We read equal as (3a) and write zero. The book zeroes ties everywhere else it faces one: rule (4a) here zeroes two empty rasis holding the same value, and section 12.7.1's rule (2) zeroes three trines holding the same value. Reading equal as (3b) instead would leave the value standing, which is the only place in either reduction where a tie survives.",
+      "unpaired": [
+        "Cn",
+        "Le"
+      ],
+      "unpaired_why": "Cancer and Leo have one owner each. The book's list of five pairs says so by omission."
+    },
     "example_40": {
       "answer": [
         3,
@@ -59,6 +114,106 @@
         }
       ],
       "worked_note": "The example works the fiery and watery sets longhand and leaves the earthy and airy ones to the reader. All four are computed and tested."
+    },
+    "example_41": {
+      "answer": [
+        3,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "note": "Example 41's answer is Example 40's answer: rule (1) fires on all five pairs and nothing moves.",
+      "question": "Let us continue with Example 40. Let us take Ar and Sc. Sc has zero in it and (1) applies. So there is no reduction. In fact, (1) applies to all pairs and so all the values remain unchanged after Ekaadhipatya reduction."
+    },
+    "example_42": {
+      "cases": [
+        {
+          "after": [
+            4,
+            2
+          ],
+          "before": [
+            4,
+            2
+          ],
+          "label": "a",
+          "occupied": [
+            "Ta",
+            "Li"
+          ],
+          "rule": "2",
+          "text": "Ta is occupied by Mars and Li by Jupiter and Saturn. In this case, rule (2) applies and we do not alter the values."
+        },
+        {
+          "after": [
+            4,
+            0
+          ],
+          "before": [
+            4,
+            2
+          ],
+          "label": "b",
+          "occupied": [
+            "Ta"
+          ],
+          "rule": "3a",
+          "text": "Ta is occupied by Mars and Li is empty. In this case, rule (3a) applies and we write zero in Li, as Li is empty and it has a lower value than Ta."
+        },
+        {
+          "after": [
+            2,
+            2
+          ],
+          "before": [
+            4,
+            2
+          ],
+          "label": "c",
+          "occupied": [
+            "Li"
+          ],
+          "rule": "3b",
+          "text": "Ta is empty and Li is occupied by Jupiter and Saturn. In this case, rule (3b) applies and we write 2 in Ta, as Ta is empty and it has a higher value than Li."
+        },
+        {
+          "after": [
+            2,
+            2
+          ],
+          "before": [
+            4,
+            2
+          ],
+          "label": "d",
+          "occupied": [],
+          "rule": "4b",
+          "text": "Ta and Li are empty. In this case, rule (4b) applies and we replace the higher value 4 with the lower value 2. So we write 2 in Ta."
+        },
+        {
+          "after": [
+            0,
+            0
+          ],
+          "before": [
+            2,
+            2
+          ],
+          "label": "e",
+          "occupied": [],
+          "rule": "4a",
+          "text": "Ta and Li are empty. In this case, rule (4a) applies and we write zero in Ta and Li."
+        }
+      ],
+      "question": "Let us consider some other hypothetical examples to understand all the rules correctly."
     },
     "intro": "We discussed the computation of BAV before. By applying some reductions on the values in BAV, we get \u201cSodhita Ashtakavarga\u201d (SoAV). Using it, we find Sodhya Pindas of different planets. These pindas are very important in predicting key events and we will talk about them again in the part \u201cTransit Analysis\u201d.",
     "pinda_not_yet_defined": "Section 12.5 names sodhya pindas beside ashtakavarga as a second family of principles. Section 12.7 gives the pipeline \u2014 BAV, then reductions, then a Sodhita Ashtakavarga, then the pindas \u2014 and section 12.7.1 supplies the first reduction, Trikona Sodhana, at /v1/sodhana/trikona. The step that turns a SoAV into a pinda is still not defined, so nothing computes one. See docs/open-items.md OI-101.",

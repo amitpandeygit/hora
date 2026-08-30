@@ -1247,3 +1247,38 @@ Chart 6 makes the boundary live: its Capricorn and Pisces both sit at exactly
 30, and both are graded strong.
 
 **Closes when:** you confirm, or a later passage settles it differently.
+
+## D-41 · §12.7.2's rule (3) does not cover an empty rasi of equal value
+
+**Status: NEEDS YOU.** A reading is implemented and flagged; it is not confirmed.
+
+Rule (3) applies when one rasi of a co-owned pair is occupied and the other is
+empty, and it splits two ways:
+
+> "(3a) If the empty rasi has a **lower** value, replace the value with a zero.
+> (3b) If the empty rasi has a **higher** value, replace the value with the
+> value in the other rasi."
+
+Equal is in neither branch, and equal values reach §12.7.2 routinely — Trikona
+Sodhana zeroes and subtracts but does nothing to stop two co-owned signs
+finishing level.
+
+The two readings differ. Under (3a) the empty rasi becomes 0; under (3b) it is
+replaced by a value it already holds, so nothing moves. A rekha is kept or lost.
+
+**What we do:** read equal as (3a) and write zero. The book zeroes ties
+everywhere else it meets one — rule (4a) here zeroes two empty rasis holding
+the same value, and §12.7.1's rule (2) zeroes three trines holding the same
+value. Reading equal as (3b) would make this the only place in either reduction
+where a tie survives.
+
+Every pair that hits the case is flagged in the result as
+`tie_not_covered_by_the_book`, and `/v1/sodhana/ekaadhipatya` returns
+`tie_hit_in_this_chart` listing them, so a caller can find the affected pairs
+rather than be quietly handed an answer.
+
+Neither Example 41 nor Example 42 reaches the case: 41 stops at rule (1) on all
+five pairs, and none of 42's five hypotheticals has the empty rasi level with
+the occupied one. So the book never demonstrates it.
+
+**Closes when:** you confirm the reading, or a later passage settles it.

@@ -66,6 +66,9 @@ from hora.core.const import (
     CHART_12_D10_DRAWN,
     CLASSICAL_TABLE_TOTALS,
     CLASSICAL_TABLE_TOTALS_PROVENANCE,
+    EKAADHIPATYA_RULES_ALL_EXERCISED,
+    EKAADHIPATYA_TIE_IS_UNCOVERED,
+    EKAADHIPATYA_UNPAIRED,
     EXAMPLE_37,
     EXAMPLE_37_HOUSES,
     EXAMPLE_37_RASIS,
@@ -82,6 +85,8 @@ from hora.core.const import (
     EXAMPLE_40_CHART,
     EXAMPLE_40_OWNER,
     EXAMPLE_40_WORKED,
+    EXAMPLE_41_ANSWER,
+    EXAMPLE_42_CASES,
     EXERCISE_18,
     EXERCISE_18_ANSWER,
     EXERCISE_18_HINT,
@@ -2468,3 +2473,197 @@ def test_the_sodhana_rules_endpoint_carries_section_12_7(client):
     assert len(body["trikona_sodhana"]["rules"]) == 3
     assert "24 of the 729" in body["trikona_sodhana"]["disputed_case_note"]
     assert "still not defined" in body["pinda_not_yet_defined"]
+
+
+# --------------------------------------------------------------------------
+# §12.7.2 — Ekaadhipatya Sodhana, and Examples 41 and 42
+# --------------------------------------------------------------------------
+
+def test_the_five_co_owned_pairs_are_derived_from_rasi_lord():
+    """§12.7.2 lists them — Ar/Sc Mars, Ta/Li Venus, Ge/Vi Mercury, Sg/Pi
+    Jupiter, Cp/Aq Saturn. We derive them and check against that list."""
+    from hora.charts.ashtakavarga import co_owned_pairs
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    pairs = {
+        str(GRAHA_NAMES[int(RASI_LORD[a])]): (RASI_ABBR[a], RASI_ABBR[b])
+        for a, b in co_owned_pairs()
+    }
+    assert pairs == {
+        "Mars": ("Ar", "Sc"), "Venus": ("Ta", "Li"), "Mercury": ("Ge", "Vi"),
+        "Jupiter": ("Sg", "Pi"), "Saturn": ("Cp", "Aq"),
+    }
+
+
+def test_cancer_and_leo_are_in_no_pair_and_are_never_reduced():
+    """Their owners hold one sign each, so §12.7.2 cannot reach them. Stated
+    by the book only through the omission from its list of five."""
+    from hora.charts.ashtakavarga import co_owned_pairs, ekaadhipatya_sodhana
+
+    paired = {s for pair in co_owned_pairs() for s in pair}
+    assert sorted(RASI_ABBR[s] for s in set(range(12)) - paired) == ["Cn", "Le"]
+    assert tuple(EKAADHIPATYA_UNPAIRED) == ("Cn", "Le")
+
+    rekhas = [5] * 12
+    result = ekaadhipatya_sodhana("Mercury", rekhas, set())
+    assert [RASI_ABBR[s] for s in result.untouched] == ["Cn", "Le"]
+    for sign in result.untouched:
+        assert result.after[sign] == rekhas[sign]
+
+
+def test_example_41_leaves_example_40s_answer_unchanged():
+    """'(1) applies to all pairs and so all the values remain unchanged.'"""
+    from hora.charts.ashtakavarga import ekaadhipatya_sodhana
+
+    result = ekaadhipatya_sodhana(
+        EXAMPLE_40_OWNER, EXAMPLE_40_ANSWER, occupied=set())
+    assert result.after == EXAMPLE_41_ANSWER == EXAMPLE_40_ANSWER
+    assert [pair.rule for pair in result.pairs] == ["1"] * 5
+
+
+def test_example_41_holds_whatever_the_occupancy_is():
+    """Rule (1) stops before occupancy is even consulted, so OI-104's open
+    question about Rahu and Ketu cannot affect this example."""
+    from itertools import combinations
+
+    from hora.charts.ashtakavarga import ekaadhipatya_sodhana
+
+    for size in range(4):
+        for occupied in combinations(range(12), size):
+            result = ekaadhipatya_sodhana(
+                EXAMPLE_40_OWNER, EXAMPLE_40_ANSWER, set(occupied))
+            assert result.after == EXAMPLE_41_ANSWER
+
+
+@pytest.mark.parametrize(
+    "label,before,occupied,after,rule,text", EXAMPLE_42_CASES,
+    ids=[c[0] for c in EXAMPLE_42_CASES])
+def test_example_42s_five_hypothetical_cases(
+        label, before, occupied, after, rule, text):
+    """Ta and Li each time, with the occupancy and rule the book names."""
+    from hora.charts.ashtakavarga import ekaadhipatya_sodhana
+
+    rekhas = [0] * 12
+    rekhas[R["Ta"]], rekhas[R["Li"]] = before
+    result = ekaadhipatya_sodhana(
+        "Venus", rekhas, {R[s] for s in occupied})
+    pair = next(p for p in result.pairs
+                if p.signs == (R["Ta"], R["Li"]))
+    assert pair.before == before
+    assert pair.after == after
+    assert pair.rule == rule
+    assert not pair.tie_not_covered_by_the_book
+
+
+def test_examples_41_and_42_between_them_work_every_rule():
+    """Example 41 covers (1); Example 42 covers (2), (3a), (3b), (4a), (4b).
+    Nothing the section states goes unexercised by the book itself."""
+    covered = {"1"} | {case[4] for case in EXAMPLE_42_CASES}
+    assert covered == set(EKAADHIPATYA_RULES_ALL_EXERCISED)
+    assert len(covered) == 6
+
+
+def test_rule_three_does_not_cover_an_equal_empty_rasi():
+    """D-41. (3a) fires on 'lower', (3b) on 'higher'; equal is in neither, and
+    equal values reach §12.7.2 routinely. We read it as (3a) and flag every
+    pair that hits it, so the choice is findable rather than silent."""
+    from hora.charts.ashtakavarga import ekaadhipatya_sodhana
+
+    rekhas = [0] * 12
+    rekhas[R["Ta"]], rekhas[R["Li"]] = 3, 3
+    result = ekaadhipatya_sodhana("Venus", rekhas, {R["Ta"]})
+    pair = next(p for p in result.pairs if p.signs == (R["Ta"], R["Li"]))
+    assert pair.rule == "3a"
+    assert pair.after == (3, 0)
+    assert pair.tie_not_covered_by_the_book is True
+    assert "does not say what to do when they are equal" \
+        in EKAADHIPATYA_TIE_IS_UNCOVERED
+
+
+def test_the_tie_is_the_only_case_the_four_rules_leave_open():
+    """Exhaustive over every pair state reachable after Trikona Sodhana:
+    both values 0-8, both occupancies. Exactly one shape is flagged."""
+    from itertools import product
+
+    from hora.charts.ashtakavarga import ekaadhipatya_sodhana
+
+    flagged = []
+    for first, second, busy_a, busy_b in product(
+            range(9), range(9), (False, True), (False, True)):
+        rekhas = [0] * 12
+        rekhas[R["Ta"]], rekhas[R["Li"]] = first, second
+        occupied = ({R["Ta"]} if busy_a else set()) | (
+            {R["Li"]} if busy_b else set())
+        pair = next(p for p in ekaadhipatya_sodhana(
+            "Venus", rekhas, occupied).pairs if p.signs == (R["Ta"], R["Li"]))
+        if pair.tie_not_covered_by_the_book:
+            flagged.append((first, second, busy_a, busy_b))
+    assert flagged, "the uncovered case must be reachable"
+    for first, second, busy_a, busy_b in flagged:
+        assert first == second != 0
+        assert busy_a != busy_b
+
+
+def test_a_reduction_never_raises_a_value():
+    """Both reductions can only lower. Exhaustive over the same space."""
+    from itertools import product
+
+    from hora.charts.ashtakavarga import ekaadhipatya_sodhana
+
+    for first, second, busy_a, busy_b in product(
+            range(9), range(9), (False, True), (False, True)):
+        rekhas = [0] * 12
+        rekhas[R["Ta"]], rekhas[R["Li"]] = first, second
+        occupied = ({R["Ta"]} if busy_a else set()) | (
+            {R["Li"]} if busy_b else set())
+        result = ekaadhipatya_sodhana("Venus", rekhas, occupied)
+        assert all(a <= b for a, b in zip(result.after, rekhas, strict=True))
+
+
+def test_the_ekaadhipatya_endpoint_reproduces_example_41(client):
+    body = client.post("/v1/sodhana/ekaadhipatya", json={
+        "owner": "Mercury",
+        "rekhas": list(EXAMPLE_40_ANSWER),
+        "occupied_signs": [],
+        "already_trikona_reduced": True,
+    }).json()
+    assert body["after"] == list(EXAMPLE_41_ANSWER)
+    assert [p["rule"] for p in body["pairs"]] == ["1"] * 5
+    assert body["untouched"]["sign_names"] == ["Cancer", "Leo"]
+    assert body["tie_hit_in_this_chart"] == []
+    assert body["trikona_applied_first"] is False
+
+
+def test_the_ekaadhipatya_endpoint_runs_trikona_first_from_a_chart(client):
+    """Given the eight reference signs it does all three steps: BAV, then
+    §12.7.1, then §12.7.2."""
+    body = client.post("/v1/sodhana/ekaadhipatya", json={
+        "owner": "Mercury",
+        "reference_signs": CHART_6_SIGNS,
+        "occupied_signs": [R["Ge"], R["Pi"], R["Le"], R["Ar"]],
+        "already_trikona_reduced": False,
+    }).json()
+    assert body["trikona_applied_first"] is True
+    assert body["before"] == list(EXAMPLE_40_ANSWER)
+    assert body["after"] == list(EXAMPLE_41_ANSWER)
+
+
+def test_the_ekaadhipatya_endpoint_requires_the_occupancy_to_be_stated(client):
+    """OI-104. There is no default, because the book gives none."""
+    response = client.post("/v1/sodhana/ekaadhipatya", json={
+        "owner": "Mercury",
+        "rekhas": list(EXAMPLE_40_ANSWER),
+        "already_trikona_reduced": True,
+    })
+    assert response.status_code == 422
+
+
+def test_the_sodhana_rules_endpoint_carries_12_7_2(client):
+    body = client.get("/v1/sodhana/rules").json()
+    assert body["ekaadhipatya_sodhana"]["means"] == "Co-owned Reduction"
+    assert body["ekaadhipatya_sodhana"]["unpaired"] == ["Cn", "Le"]
+    assert len(body["ekaadhipatya_sodhana"]["rules"]) == 8
+    assert body["example_41"]["answer"] == list(EXAMPLE_41_ANSWER)
+    assert len(body["example_42"]["cases"]) == 5
+    assert "Rahu and Ketu" in body["ekaadhipatya_sodhana"][
+        "occupancy_undefined"]

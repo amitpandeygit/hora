@@ -933,3 +933,107 @@ EXAMPLE_40_WORKED: tuple[tuple[str, tuple[str, ...], tuple[int, ...],
     ("fiery", ("Ar", "Le", "Sg"), (7, 4, 4), (3, 0, 0), 3),
     ("watery", ("Cn", "Sc", "Pi"), (4, 4, 4), (0, 0, 0), 2),
 )
+
+
+# -- §12.7.2 Ekaadhipatya Sodhana ------------------------------------------
+
+EKAADHIPATYA_SODHANA_MEANS = "Co-owned Reduction"
+
+EKAADHIPATYA_SODHANA_RULE = (
+    "After we carry out Trikona Sodhana, we carry out another reduction on "
+    "the pairs of signs that are owned by the same planet. Ar and Sc are "
+    "owned by Mars; Ta and Li are owned by Venus; Ge and Vi are owned by "
+    "Mercury; Sg and Pi are owned by Jupiter; and, Cp and Aq are owned by "
+    "Saturn. We apply a reduction on these pairs of rasis separately, using "
+    "the following rules:")
+
+#: The four rules as printed, with (3) and (4) carrying their two branches.
+EKAADHIPATYA_SODHANA_RULES: tuple[tuple[str, str], ...] = (
+    ("1", ("If atleast one of the rasis has a zero in it, no reduction is "
+           "necessary and stop here.")),
+    ("2", ("If both the rasis are occupied by a planet (or planets), again no "
+           "reduction is necessary and stop here.")),
+    ("3", ("If one rasi is occupied by a planet (or planets) and the other is "
+           "empty, then do the following:")),
+    ("3a", ("If the empty rasi has a lower value, replace the value with a "
+            "zero.")),
+    ("3b", ("If the empty rasi has a higher value, replace the value with the "
+            "value in the other rasi.")),
+    ("4", "If both the rasis are empty, then do the following:"),
+    ("4a", "If both the rasis have the same value, replace both with zero."),
+    ("4b", ("If they have different values, replace the higher value with the "
+            "lower value.")),
+)
+
+#: Cancer and Leo have one owner each, so they are in no pair and §12.7.2
+#: never touches them. The book's list of five pairs says so by omission.
+EKAADHIPATYA_UNPAIRED = ("Cn", "Le")
+
+#: **Gap.** Rule (3a) fires when the empty rasi is *lower*, (3b) when it is
+#: *higher*. Neither covers equal, which is reachable after Trikona Sodhana.
+#: See docs/book-deviations.md D-41.
+EKAADHIPATYA_TIE_IS_UNCOVERED = (
+    "Rule (3) splits on whether the empty rasi's value is lower or higher "
+    "than the occupied one's. It does not say what to do when they are "
+    "equal, and equal values survive Trikona Sodhana routinely.")
+
+#: The reading we implement, and why. Not confirmed — see D-41.
+EKAADHIPATYA_TIE_READING = (
+    "We read equal as (3a) and write zero. The book zeroes ties everywhere "
+    "else it faces one: rule (4a) here zeroes two empty rasis holding the "
+    "same value, and section 12.7.1's rule (2) zeroes three trines holding "
+    "the same value. Reading equal as (3b) instead would leave the value "
+    "standing, which is the only place in either reduction where a tie "
+    "survives.")
+
+#: **Gap.** "Occupied by a planet (or planets)" — Example 42 names only Mars,
+#: Jupiter and Saturn. Whether Rahu and Ketu occupy a rasi for this purpose is
+#: not stated. See docs/open-items.md OI-104.
+EKAADHIPATYA_OCCUPANCY_UNDEFINED = (
+    "Section 12.7.2 says 'occupied by a planet (or planets)' without saying "
+    "whether Rahu and Ketu count. Example 42's occupants are Mars, Jupiter "
+    "and Saturn only, so it does not settle the question. Our API makes the "
+    "caller state which rasis are occupied rather than choosing for them.")
+
+
+EXAMPLE_41 = (
+    "Let us continue with Example 40. Let us take Ar and Sc. Sc has zero in "
+    "it and (1) applies. So there is no reduction. In fact, (1) applies to "
+    "all pairs and so all the values remain unchanged after Ekaadhipatya "
+    "reduction.")
+
+#: Example 41's answer is Example 40's answer — nothing moves.
+EXAMPLE_41_ANSWER: tuple[int, ...] = EXAMPLE_40_ANSWER
+
+EXAMPLE_42 = (
+    "Let us consider some other hypothetical examples to understand all the "
+    "rules correctly.")
+
+#: Example 42's five hypothetical pairs, all Ta/Li:
+#: ``(label, (Ta, Li) before, occupied signs, (Ta, Li) after, rule)``.
+#: Between them they exercise rules (2), (3a), (3b), (4b) and (4a) — every
+#: rule except (1), which Example 41 covers.
+EXAMPLE_42_CASES: tuple[tuple[str, tuple[int, int], tuple[str, ...],
+                             tuple[int, int], str, str], ...] = (
+    ("a", (4, 2), ("Ta", "Li"), (4, 2), "2",
+     ("Ta is occupied by Mars and Li by Jupiter and Saturn. In this case, rule "
+     "(2) applies and we do not alter the values.")),
+    ("b", (4, 2), ("Ta",), (4, 0), "3a",
+     ("Ta is occupied by Mars and Li is empty. In this case, rule (3a) applies "
+     "and we write zero in Li, as Li is empty and it has a lower value than "
+     "Ta.")),
+    ("c", (4, 2), ("Li",), (2, 2), "3b",
+     ("Ta is empty and Li is occupied by Jupiter and Saturn. In this case, "
+     "rule (3b) applies and we write 2 in Ta, as Ta is empty and it has a "
+     "higher value than Li.")),
+    ("d", (4, 2), (), (2, 2), "4b",
+     ("Ta and Li are empty. In this case, rule (4b) applies and we replace the "
+     "higher value 4 with the lower value 2. So we write 2 in Ta.")),
+    ("e", (2, 2), (), (0, 0), "4a",
+     ("Ta and Li are empty. In this case, rule (4a) applies and we write zero "
+     "in Ta and Li.")),
+)
+
+#: Example 41 covers rule (1) and Example 42 the other five branches, so
+#: between them the book works every rule it states. Nothing is untested.
+EKAADHIPATYA_RULES_ALL_EXERCISED = ("1", "2", "3a", "3b", "4a", "4b")

@@ -4,15 +4,29 @@ from __future__ import annotations
 from hora.charts.ashtakavarga import (
     AshtakavargaError,
     bhinnashtakavarga,
+    ekaadhipatya_sodhana,
     trikona_sodhana,
 )
 from hora.core.const import (
+    EKAADHIPATYA_OCCUPANCY_UNDEFINED,
+    EKAADHIPATYA_RULES_ALL_EXERCISED,
+    EKAADHIPATYA_SODHANA_MEANS,
+    EKAADHIPATYA_SODHANA_RULE,
+    EKAADHIPATYA_SODHANA_RULES,
+    EKAADHIPATYA_TIE_IS_UNCOVERED,
+    EKAADHIPATYA_TIE_READING,
+    EKAADHIPATYA_UNPAIRED,
     ELEMENT_NAMES,
     EXAMPLE_40,
     EXAMPLE_40_ANSWER,
     EXAMPLE_40_CHART,
     EXAMPLE_40_OWNER,
     EXAMPLE_40_WORKED,
+    EXAMPLE_41,
+    EXAMPLE_41_ANSWER,
+    EXAMPLE_42,
+    EXAMPLE_42_CASES,
+    GRAHA_NAMES,
     RASI_NAMES,
     SOAV_IS_A_REDUCED_BAV,
     SOAV_MEANS,
@@ -71,6 +85,62 @@ def trikona(owner: str, rekhas: list[int] | None,
     }
 
 
+def ekaadhipatya(owner: str, rekhas: list[int] | None,
+                 reference_signs: dict[str, int] | None,
+                 occupied_signs: list[int],
+                 already_trikona_reduced: bool) -> dict:
+    """Section 12.7.2's co-owned reduction.
+
+    :param already_trikona_reduced: section 12.7.2 begins "After we carry out
+        Trikona Sodhana", so a BAV that has not been through 12.7.1 is the
+        wrong input. Say so explicitly rather than have us guess.
+    """
+    counts = (
+        list(bhinnashtakavarga(owner, reference_signs).rekhas)
+        if reference_signs is not None else list(rekhas or [])
+    )
+    if not already_trikona_reduced:
+        counts = list(trikona_sodhana(owner, counts).after)
+    result = ekaadhipatya_sodhana(owner, counts, occupied_signs)
+    flagged = [p for p in result.pairs if p.tie_not_covered_by_the_book]
+    return {
+        "owner": result.owner,
+        "rule": EKAADHIPATYA_SODHANA_RULE,
+        "rules": [{"number": number, "text": text}
+                  for number, text in EKAADHIPATYA_SODHANA_RULES],
+        "trikona_applied_first": not already_trikona_reduced,
+        "before": list(result.before),
+        "after": list(result.after),
+        "occupied_signs": sorted(set(occupied_signs)),
+        "pairs": [
+            {
+                "signs": list(pair.signs),
+                "sign_names": [str(RASI_NAMES[s]) for s in pair.signs],
+                "lord": str(GRAHA_NAMES[pair.lord]),
+                "before": list(pair.before),
+                "after": list(pair.after),
+                "occupied": list(pair.occupied),
+                "rule": pair.rule,
+                "tie_not_covered_by_the_book":
+                    pair.tie_not_covered_by_the_book,
+            }
+            for pair in result.pairs
+        ],
+        "untouched": {
+            "signs": list(result.untouched),
+            "sign_names": [str(RASI_NAMES[s]) for s in result.untouched],
+            "why": (
+                "Cancer and Leo have one owner each, so they are in no "
+                "co-owned pair and section 12.7.2 never reaches them."
+            ),
+        },
+        "occupancy_undefined": EKAADHIPATYA_OCCUPANCY_UNDEFINED,
+        "tie_is_uncovered": EKAADHIPATYA_TIE_IS_UNCOVERED,
+        "tie_reading": EKAADHIPATYA_TIE_READING,
+        "tie_hit_in_this_chart": [list(p.signs) for p in flagged],
+    }
+
+
 def rules() -> dict:
     """Section 12.7's framing, its three rules, and Example 40."""
     return {
@@ -78,6 +148,43 @@ def rules() -> dict:
         "soav_means": SOAV_MEANS,
         "soav_is_a_reduced_bav": SOAV_IS_A_REDUCED_BAV,
         "pinda_not_yet_defined": SODHYA_PINDA_NOT_YET_DEFINED,
+        "ekaadhipatya_sodhana": {
+            "means": EKAADHIPATYA_SODHANA_MEANS,
+            "rule": EKAADHIPATYA_SODHANA_RULE,
+            "rules": [{"number": number, "text": text}
+                      for number, text in EKAADHIPATYA_SODHANA_RULES],
+            "unpaired": list(EKAADHIPATYA_UNPAIRED),
+            "unpaired_why": (
+                "Cancer and Leo have one owner each. The book's list of five "
+                "pairs says so by omission."
+            ),
+            "occupancy_undefined": EKAADHIPATYA_OCCUPANCY_UNDEFINED,
+            "tie_is_uncovered": EKAADHIPATYA_TIE_IS_UNCOVERED,
+            "tie_reading": EKAADHIPATYA_TIE_READING,
+            "rules_all_exercised": list(EKAADHIPATYA_RULES_ALL_EXERCISED),
+            "rules_all_exercised_note": (
+                "Example 41 works rule (1) and Example 42 the other five "
+                "branches, so the book works every rule it states."
+            ),
+        },
+        "example_41": {
+            "question": EXAMPLE_41,
+            "answer": list(EXAMPLE_41_ANSWER),
+            "note": (
+                "Example 41's answer is Example 40's answer: rule (1) fires "
+                "on all five pairs and nothing moves."
+            ),
+        },
+        "example_42": {
+            "question": EXAMPLE_42,
+            "cases": [
+                {"label": label, "before": list(before),
+                 "occupied": list(occupied), "after": list(after),
+                 "rule": rule, "text": text}
+                for label, before, occupied, after, rule, text
+                in EXAMPLE_42_CASES
+            ],
+        },
         "trikona_sodhana": {
             "means": TRIKONA_SODHANA_MEANS,
             "rule": TRIKONA_SODHANA_RULE,
@@ -114,4 +221,5 @@ def rules() -> dict:
     }
 
 
-__all__ = ["AshtakavargaError", "InputError", "rules", "trikona"]
+__all__ = ["AshtakavargaError", "InputError", "ekaadhipatya", "rules",
+           "trikona"]

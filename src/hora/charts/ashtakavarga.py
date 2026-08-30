@@ -12,7 +12,7 @@ number this module returns counts 1s, and the field names say `rekhas`.
 """
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Collection, Sequence
 from dataclasses import dataclass
 
 from hora.core import validate
@@ -34,6 +34,7 @@ from hora.core.const import (
     MUHURTA_DEFINITION,
     MUHURTA_FOOTNOTE,
     RASI_ELEMENT,
+    RASI_LORD,
     RASI_NAMES,
     SATURN_ASHTAKAVARGA_ROWS,
     SAV_AVERAGE_FROM,
@@ -711,3 +712,135 @@ def trikona_sodhana(owner: str, rekhas: Sequence[int]) -> TrikonaSodhana:
         after=tuple(out),
         trines=tuple(reductions),
     )
+
+
+# --------------------------------------------------------------------------
+# §12.7.2 — Ekaadhipatya Sodhana
+# --------------------------------------------------------------------------
+
+def co_owned_pairs() -> tuple[tuple[int, int], ...]:
+    """The five pairs of signs sharing one owner, derived from `RASI_LORD`.
+
+    §12.7.2 lists them — Ar/Sc, Ta/Li, Ge/Vi, Sg/Pi, Cp/Aq — so they are
+    checked against that list rather than typed from it. Cancer and Leo have
+    one owner each and are in no pair, which is why the reduction never
+    touches them.
+    """
+    by_lord: dict[int, list[int]] = {}
+    for sign in range(12):
+        by_lord.setdefault(int(RASI_LORD[sign]), []).append(sign)
+    return tuple(
+        (signs[0], signs[1])
+        for _, signs in sorted(by_lord.items())
+        if len(signs) == 2
+    )
+
+
+@dataclass(frozen=True)
+class CoOwnedReduction:
+    """One co-owned pair's reduction, with the rule that decided it."""
+
+    #: The two signs, in the order §12.7.2 lists them.
+    signs: tuple[int, int]
+    #: The graha that owns both.
+    lord: int
+    #: What they held before.
+    before: tuple[int, int]
+    #: What they hold after.
+    after: tuple[int, int]
+    #: Which sign of the pair is occupied.
+    occupied: tuple[bool, bool]
+    #: "1", "2", "3a", "3b", "4a" or "4b".
+    rule: str
+    #: True when the pair hit the case §12.7.2 does not cover — one rasi
+    #: occupied, the other empty, and the two values equal. See D-41.
+    tie_not_covered_by_the_book: bool = False
+
+
+@dataclass(frozen=True)
+class EkaadhipatyaSodhana:
+    """§12.7.2's reduction over all five co-owned pairs."""
+
+    owner: str
+    before: tuple[int, ...]
+    after: tuple[int, ...]
+    pairs: tuple[CoOwnedReduction, ...]
+    #: Signs no pair contains — Cancer and Leo, always.
+    untouched: tuple[int, ...]
+
+
+def ekaadhipatya_sodhana(owner: str, rekhas: Sequence[int],
+                         occupied: Collection[int]) -> EkaadhipatyaSodhana:
+    """Reduce a trikona-reduced BAV by §12.7.2, one co-owned pair at a time.
+
+    :param rekhas: twelve counts, Aries first — the output of
+        `trikona_sodhana`, since §12.7.2 begins "After we carry out Trikona
+        Sodhana".
+    :param occupied: the signs holding a graha. §12.7.2 says "occupied by a
+        planet (or planets)" without saying whether Rahu and Ketu count, so
+        this is the caller's to state — see `EKAADHIPATYA_OCCUPANCY_UNDEFINED`.
+
+    The book's rule (3) splits on the empty rasi being *lower* or *higher* and
+    never says what happens when the two are equal. We read equal as (3a) and
+    write zero; `EKAADHIPATYA_TIE_READING` gives the reasoning and D-41
+    records that it is unconfirmed. Any pair that hits it is flagged in the
+    result, so a caller can find them rather than be quietly given an answer.
+    """
+    if len(rekhas) != 12:
+        raise AshtakavargaError(
+            f"a BAV has twelve rekhas, one per rasi; got {len(rekhas)}")
+    for sign, value in enumerate(rekhas):
+        validate.in_range(f"{RASI_NAMES[sign]} rekhas", int(value), 0, 8)
+    for sign in occupied:
+        validate.in_range("occupied sign", int(sign), 0, 11)
+
+    held = {int(sign) for sign in occupied}
+    out = [int(v) for v in rekhas]
+    reductions: list[CoOwnedReduction] = []
+
+    for first, second in co_owned_pairs():
+        before = (out[first], out[second])
+        busy = (first in held, second in held)
+        after, rule, tie = _reduce_co_owned(before, busy)
+        out[first], out[second] = after
+        reductions.append(CoOwnedReduction(
+            signs=(first, second), lord=int(RASI_LORD[first]),
+            before=before, after=after, occupied=busy, rule=rule,
+            tie_not_covered_by_the_book=tie,
+        ))
+
+    paired = {sign for pair in co_owned_pairs() for sign in pair}
+    return EkaadhipatyaSodhana(
+        owner=owner,
+        before=tuple(int(v) for v in rekhas),
+        after=tuple(out),
+        pairs=tuple(reductions),
+        untouched=tuple(sorted(set(range(12)) - paired)),
+    )
+
+
+def _reduce_co_owned(before: tuple[int, int], occupied: tuple[bool, bool]
+                     ) -> tuple[tuple[int, int], str, bool]:
+    """One pair, by §12.7.2's four rules in order. Returns the new values,
+    the rule that fired, and whether it was the uncovered tie."""
+    if 0 in before:
+        return before, "1", False                       # (1) a zero present
+    if occupied[0] and occupied[1]:
+        return before, "2", False                       # (2) both occupied
+
+    if occupied[0] != occupied[1]:                      # (3) one empty
+        empty = 1 if occupied[0] else 0
+        other = 1 - empty
+        if before[empty] > before[other]:
+            new = list(before)
+            new[empty] = before[other]                  # (3b) empty is higher
+            return (new[0], new[1]), "3b", False
+        tie = before[empty] == before[other]
+        new = list(before)
+        new[empty] = 0                                  # (3a) empty is lower
+        return (new[0], new[1]), "3a", tie
+
+    if before[0] == before[1]:                          # (4a) both empty, same
+        return (0, 0), "4a", False
+    lower = min(before)                                 # (4b) both empty, differ
+    return (lower, lower), "4b", False

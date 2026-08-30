@@ -288,6 +288,12 @@ CASES = [
         "owner": "Mercury",
         "rekhas": [7, 4, 7, 4, 4, 3, 4, 4, 4, 3, 6, 4],
     }),
+    ("sodhana_example_41", "POST", "/v1/sodhana/ekaadhipatya", {
+        "owner": "Mercury",
+        "rekhas": [3, 1, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0],
+        "occupied_signs": [],
+        "already_trikona_reduced": True,
+    }),
     # Exercise 19: all seven BAVs for Chart 6, which the book prints in full.
     ("ashtakavarga_exercise_19", "POST", "/v1/ashtakavarga/chart", {
         "reference_signs": {"Sun": 2, "Moon": 11, "Mars": 2, "Mercury": 2,

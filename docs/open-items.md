@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 61 waiting on evidence · 2 parked**
+**5 waiting on Amit · 62 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,26 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-104 — §12.7.2 does not say whether Rahu and Ketu occupy a rasi
+
+Rules (2), (3) and (4) all turn on whether a rasi is "occupied by a planet (or
+planets)". The section never says which bodies count.
+
+Neither example settles it. Example 42's hypotheticals name only Mars, Jupiter
+and Saturn as occupants; Example 41 stops at rule (1) on all five pairs, before
+occupancy is consulted — a test proves that by trying every occupancy of up to
+three signs and getting the same answer each time. It matters: the nodes are
+always somewhere and always opposite, so counting them makes two signs occupied
+in every chart, and a co-owned pair holding one shifts from rule (3) or (4) to
+rule (2) or (3) — a different rule, often a different answer.
+
+**What we do:** `/v1/sodhana/ekaadhipatya` requires `occupied_signs` with no
+default, and `ekaadhipatya_sodhana` takes the same argument — so no layer of
+ours has an opinion. The caller states it.
+
+**Closes when:** the Transit Analysis part states it, or a worked example
+places a node in a co-owned pair.
 
 ### OI-101 — a sodhya pinda is still not defined, though its inputs now are
 

@@ -9,6 +9,8 @@ from __future__ import annotations
 from fastapi import APIRouter, HTTPException
 
 from hora.api.models_sodhana import (
+    EkaadhipatyaIn,
+    EkaadhipatyaOut,
     SodhanaRulesOut,
     TrikonaSodhanaIn,
     TrikonaSodhanaOut,
@@ -30,6 +32,18 @@ def trikona(req: TrikonaSodhanaIn) -> dict:
     try:
         return sodhana_service.trikona(
             req.owner, req.rekhas, req.reference_signs)
+    except (sodhana_service.AshtakavargaError,
+            sodhana_service.InputError) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/ekaadhipatya", response_model=EkaadhipatyaOut,
+             summary="Section 12.7.2 — co-owned reduction of a reduced BAV")
+def ekaadhipatya(req: EkaadhipatyaIn) -> dict:
+    try:
+        return sodhana_service.ekaadhipatya(
+            req.owner, req.rekhas, req.reference_signs,
+            req.occupied_signs, req.already_trikona_reduced)
     except (sodhana_service.AshtakavargaError,
             sodhana_service.InputError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
