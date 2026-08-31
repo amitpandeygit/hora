@@ -140,6 +140,13 @@
         "number": 21,
         "recomputable": true,
         "title": "John F. Kennedy, Jr."
+      },
+      {
+        "birth": "December 7, 1954, 2:13 am (6:00 West), 93 W 15, 44 N 58",
+        "first_seen": "chapter 16, Example 57",
+        "number": 22,
+        "recomputable": true,
+        "title": "A lady"
       }
     ],
     "not_supplied": [
@@ -162,7 +169,8 @@
       18,
       19,
       20,
-      21
+      21,
+      22
     ]
   },
   "status": 200

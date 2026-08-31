@@ -47,7 +47,7 @@ def client():
 def test_the_register_holds_every_chart_supplied_so_far():
     assert numbers() == (
         1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-        20, 21)
+        20, 21, 22)
     assert CHARTS_NOT_SUPPLIED == (4,)
     assert 4 not in numbers()
 
@@ -110,7 +110,7 @@ def test_a_recomputable_chart_has_a_place_and_the_others_say_why(number):
 
 def test_the_recomputable_charts_are_the_ones_with_full_birth_lines():
     assert recomputable() == (
-        3, 6, 7, 8, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21)
+        3, 6, 7, 8, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22)
 
 
 # --------------------------------------------------------------------------
@@ -253,7 +253,7 @@ def test_the_index_endpoint_lists_every_chart(client):
     assert len(body["charts"]) == len(numbers())
     assert body["not_supplied"] == [4]
     assert body["recomputable"] == [
-        3, 6, 7, 8, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+        3, 6, 7, 8, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
 
 def test_the_chart_endpoint_derives_signs_and_lagna(client):

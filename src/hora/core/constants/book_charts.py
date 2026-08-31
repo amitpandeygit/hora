@@ -424,6 +424,41 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    22: {
+        "title": "A lady",
+        "birth": "December 7, 1954, 2:13 am (6:00 West), 93 W 15, 44 N 58",
+        "birth_data": {
+            "year": 1954, "month": 12, "day": 7, "hour": 2, "minute": 13,
+            "second": 0.0, "utc_offset_hours": -6.0,
+        },
+        "place": {"latitude": 44 + 58 / 60, "longitude": -(93 + 15 / 60)},
+        "longitudes": {
+            "Asc": "18 Vi 35", "Sun": "21 Sc 27", "Moon": "13 Ar 29",
+            "Mars": "8 Aq 55", "Merc": "11 Sc 29", "Jup": "6 Cn 02",
+            "Ven": "21 Li 28", "Sat": "22 Li 37", "Rahu": "13 Sg 29",
+            "Ketu": "13 Ge 29", "HL": "8 Ge 23", "GL": "4 Li 58",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Ven": "AmK", "Sun": "BK", "Rahu": "MK",
+            "Moon": "PiK", "Mars": "GK", "Merc": "PK", "Jup": "DK",
+        },
+        "retrograde": ("Jup",),
+        "drawn": {
+            "Moon": "Ar", "HL": "Ge", "Ketu": "Ge", "Mars": "Aq",
+            "Jup": "Cn", "AL": "Cp", "Rahu": "Sg", "Merc": "Sc",
+            "Sun": "Sc", "Sat": "Li", "Ven": "Li", "GL": "Li", "Asc": "Vi",
+        },
+        "events": {"died": "April 6, 1988"},
+        "first_seen": "chapter 16, Example 57",
+        "note": (
+            "The chart section 16.5.2's ayur path was built for: the Moon's "
+            "4th star straddles two signs and its own pada resolves it, and "
+            "the section's maraka-aspect criterion is actually applied to "
+            "choose between the candidate signs. Read from the Moon's own "
+            "star the dasa at death is Moon-Venus; read from the 4th star it "
+            "is Jupiter-Venus, the book's answer. Both reproduce."
+        ),
+    },
     21: {
         "title": "John F. Kennedy, Jr.",
         "birth": "November 25, 1960, 12:22 am (5:00 West), 77 W 02, 38 N 54",
