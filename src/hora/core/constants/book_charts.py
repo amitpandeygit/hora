@@ -424,6 +424,48 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    20: {
+        "title": "An engineer in USA",
+        "birth": "November 12, 1954, 7:52 am (IST), 78 E 50, 12 N 30",
+        "birth_data": {
+            "year": 1954, "month": 11, "day": 12, "hour": 7, "minute": 52,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 12.5, "longitude": 78 + 50 / 60},
+        "longitudes": {
+            "Asc": "18 Sc 09", "Sun": "25 Li 56", "Moon": "17 Ta 12",
+            "Mars": "21 Cp 12", "Merc": "7 Li 11", "Jup": "6 Cn 40",
+            "Ven": "1 Sc 05", "Sat": "19 Li 42", "Rahu": "14 Sg 50",
+            "Ketu": "14 Ge 50", "HL": "16 Sg 12", "GL": "1 Pi 43",
+        },
+        "chara_karakas": {
+            "Sun": "AK", "Mars": "AmK", "Sat": "BK", "Merc": "PK",
+            "Rahu": "PiK", "Jup": "GK", "Moon": "MK", "Ven": "DK",
+        },
+        "retrograde": ("Ven",),
+        "drawn": {
+            "AL": "Pi", "GL": "Pi", "Moon": "Ta", "Ketu": "Ge",
+            "Jup": "Cn", "Mars": "Cp", "HL": "Sg", "Rahu": "Sg",
+            "Ven": "Sc", "Asc": "Sc", "Merc": "Li", "Sun": "Li",
+            "Sat": "Li",
+        },
+        "events": {
+            "wife filed a lawsuit": "end of 1995",
+            "evicted, accounts frozen": "December 1995 to February 1996",
+            "returned to India": "mid-1996",
+            "returned to USA": "1998",
+        },
+        "first_seen": "chapter 16, Example 55",
+        "note": (
+            "The one chart where the author records his own prediction "
+            "failing. Read from the Moon's star it gives Jupiter-Moon at the "
+            "crisis; read from the utpanna star, Pushyami, it gives Venus "
+            "dasa with Rahu antardasa, which is the reading the example "
+            "keeps. Both reproduce. See also D-51: the example calls Venus "
+            "the lagna lord and later calls Ketu the lagna lord; Ketu is "
+            "right."
+        ),
+    },
     19: {
         "title": "Sri Navin Patnaik",
         "birth": "October 16, 1946, 12:58 am (IST), 85 E 50, 20 N 30",

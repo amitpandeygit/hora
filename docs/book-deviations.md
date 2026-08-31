@@ -1589,3 +1589,62 @@ is fixtured as the divergence it is.
 
 **Closes when:** a later printing corrects the date, or a second worked example
 shows the inclusive count is deliberate.
+
+## D-51 · Example 55 calls Venus the lagna lord, then calls Ketu the lagna lord
+
+**Status: BOOK DEFECT — the example contradicts itself, and Ketu is right.**
+
+Chart 20's lagna is Scorpio, owned by Mars with Ketu as co-lord. Example 55
+says of Venus:
+
+> "Venus is lagna lord and he gives Vesi yoga being in the 2nd from Sun."
+
+Venus owns Taurus and Libra. He is **in** Scorpio, at 1 Sc 05 against a lagna
+of 18 Sc 09 — in the lagna, not its lord. Three paragraphs later the same
+example says "Ketu is lagna lord in the 8th house", which is correct.
+
+Everything else in that sentence holds: Venus is in the 2nd from Sun and does
+give Vesi yoga, and the next clause — "being the 8th lord from AL" — is right
+too, since AL is in Pisces and the 8th from it is Venus's Libra. Only the
+lordship is wrong, and being in the lagna is itself favourable, so the
+conclusion "his dasa is good" survives its own reason.
+
+**What we do:** nothing to fix — no calculation reads this. Chart 20's record
+and the Example 55 fixtures assert Scorpio's lords are Mars and Ketu, and that
+Venus occupies the lagna rather than ruling it, so the slip cannot be copied
+into our data later.
+
+**Closes when:** a later printing corrects it.
+
+## D-52 · Example 55 calls the Moon exalted where our dignity says moolatrikona
+
+**Status: granularity, not a defect — but it will recur.**
+
+Example 55 argues Cancer is strong because it is "occupied by an exalted planet
+and owned by another exalted planet". Jupiter at 6 Cn 40 is exalted and we
+agree. The other planet is Cancer's lord the Moon, at 17 Ta 12. Taurus is the
+Moon's exaltation **sign**, but his exaltation degree is Taurus 3° and his
+moolatrikona runs Taurus 3°–30°, so at 17° our `sign_dignity` returns
+**moolatrikona**.
+
+Both readings are ordinary usage: the book means the sign, we report the
+degree. It matters because a reader checking "is the Moon exalted here?"
+against our output gets a different word from the one the example uses.
+
+Exactly two grahas can produce this, because only their moolatrikona sits
+inside their own exaltation sign:
+
+| graha | exalts at | moolatrikona | degrees that read differently |
+|---|---|---|---|
+| Moon | 3° Taurus | Taurus 3°–30° | Taurus 3°–30° |
+| Mercury | 15° Virgo | Virgo 15°–20° | Virgo 15°–20° |
+
+Unrelated to OI-83, which asks how near the exact degree counts as *deep*
+exaltation. This is about which of two named dignities applies at all.
+
+**What we do:** nothing changes. `sign_dignity` keeps reporting the finer of
+the two, and Example 55's fixture asserts moolatrikona while recording that
+the example says exalted.
+
+**Closes when:** nothing — unless you want a sign-level dignity reported
+alongside the degree-level one.

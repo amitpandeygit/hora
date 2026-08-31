@@ -126,6 +126,13 @@
         "number": 19,
         "recomputable": true,
         "title": "Sri Navin Patnaik"
+      },
+      {
+        "birth": "November 12, 1954, 7:52 am (IST), 78 E 50, 12 N 30",
+        "first_seen": "chapter 16, Example 55",
+        "number": 20,
+        "recomputable": true,
+        "title": "An engineer in USA"
       }
     ],
     "not_supplied": [
@@ -146,7 +153,8 @@
       16,
       17,
       18,
-      19
+      19,
+      20
     ]
   },
   "status": 200
