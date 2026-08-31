@@ -424,6 +424,39 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    21: {
+        "title": "John F. Kennedy, Jr.",
+        "birth": "November 25, 1960, 12:22 am (5:00 West), 77 W 02, 38 N 54",
+        "birth_data": {
+            "year": 1960, "month": 11, "day": 25, "hour": 0, "minute": 22,
+            "second": 0.0, "utc_offset_hours": -5.0,
+        },
+        "place": {"latitude": 38 + 54 / 60, "longitude": -(77 + 2 / 60)},
+        "longitudes": {
+            "Asc": "18 Le 39", "Sun": "9 Sc 38", "Moon": "4 Aq 06",
+            "Mars": "25 Ge 12", "Merc": "19 Li 55", "Jup": "12 Sg 31",
+            "Ven": "18 Sg 35", "Sat": "22 Sg 15", "Rahu": "17 Le 58",
+            "Ketu": "17 Aq 58", "HL": "19 Ar 11", "GL": "19 Ge 34",
+        },
+        "chara_karakas": {
+            "Mars": "AK", "Sat": "AmK", "Merc": "BK", "Rahu": "PK",
+            "Jup": "PiK", "Sun": "GK", "Ven": "MK", "Moon": "DK",
+        },
+        "retrograde": ("Mars",),
+        "drawn": {
+            "HL": "Ar", "GL": "Ge", "Mars": "Ge", "Ketu": "Aq", "Moon": "Aq",
+            "Rahu": "Le", "Asc": "Le", "Ven": "Sg", "Jup": "Sg", "Sat": "Sg",
+            "AL": "Sc", "Sun": "Sc", "Merc": "Li",
+        },
+        "events": {"died": "the night of July 16, 1999"},
+        "first_seen": "chapter 16, Example 56",
+        "note": (
+            "The first chart in the book to print a Rudra, and it disagrees "
+            "with section 14.3's own instruction — see D-53. Every body "
+            "recomputes within an arcminute. The example also puts Mercury "
+            "in mritya bhaga, a degree table we do not hold; see OI-117."
+        ),
+    },
     20: {
         "title": "An engineer in USA",
         "birth": "November 12, 1954, 7:52 am (IST), 78 E 50, 12 N 30",

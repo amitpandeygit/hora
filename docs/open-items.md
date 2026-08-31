@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 73 waiting on evidence · 2 parked**
+**5 waiting on Amit · 74 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,22 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-117 — Example 56 uses mritya bhaga; we hold no such table
+
+**Waiting on the book.**
+
+Example 56 says the 2nd lord "Mercury is in mritya bhaga in the 3rd house" as
+its reason for calling him a strong maraka. Mritya bhaga is a table of fatal
+degrees per rasi. We hold nothing of the kind — `Upagraha.MRITYU` is the
+time-based shadow planet and a different thing entirely, so it must not be
+mistaken for this.
+
+No chapter read so far gives the table, and the example does not print it.
+Mercury sits at 19 Li 55, so any candidate table has to mark roughly that
+degree of Libra as fatal, which is a check for whenever the table appears.
+
+**Closes when:** a chapter gives the mritya bhaga degrees, or you supply them.
 
 ### OI-116 — Example 54 uses Rajya saham; we compute no sahams
 

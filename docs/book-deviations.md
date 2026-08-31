@@ -1648,3 +1648,42 @@ the example says exalted.
 
 **Closes when:** nothing — unless you want a sign-level dignity reported
 alongside the degree-level one.
+
+## D-53 · Example 56's Rudra needs the ordinary 8th, which §14.3 forbids
+
+**Status: NEEDS YOU — this one changes a calculation.**
+
+§14.3 is explicit about which 8th house Rudra uses:
+
+> "Find the 8th house using Table 32 and not in the normal way."
+
+Table 32 differs from the ordinary 8th in eight of the twelve rasis, Leo among
+them. Chart 21 has a Leo lagna, and Example 56 says "He joins Jupiter, who is
+Rudra". Jupiter cannot be a candidate under Table 32:
+
+| | 8th from lagna Leo | 8th from the 7th, Aquarius | candidates |
+|---|---|---|---|
+| Table 32 | Cancer | Capricorn | Moon, Saturn |
+| ordinary | **Pisces** | Virgo | **Jupiter**, Mercury |
+
+Under Table 32 our §14.3 cascade returns **Saturn**, decided at rule 1 — Saturn
+has two co-tenants against the Moon's one. Under the ordinary 8th the same
+cascade returns **Jupiter**, also at rule 1, because Jupiter shares Sagittarius
+with Venus and Saturn while Mercury sits alone in Libra. So the cascade is not
+in question; only which 8th feeds it.
+
+Chapter 14 printed no Rudra, so Table 32 was transcribed and used on the
+section's own instruction but never checked against an answer. Example 56 is
+the first printed Rudra in the book, and it wants the ordinary 8th.
+
+There is precedent for the ordinary 8th winning: §14.5's eighth lord method
+raised the same question and Exercise 23 settled it that way, which is recorded
+in `EIGHTH_LORD_USES_THE_ORDINARY_EIGHTH`. That makes two of the chapter's
+three 8th-house rules resolving against the special table.
+
+**What we do:** nothing yet. `rudra()` still follows §14.3 and returns Saturn.
+The Example 56 fixture asserts both readings and states which the book's answer
+requires, so the divergence is visible rather than buried.
+
+**Closes when:** you decide whether Rudra should follow §14.3's instruction or
+its own worked example, or a second printed Rudra breaks the tie.
