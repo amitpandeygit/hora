@@ -147,6 +147,13 @@
         "number": 22,
         "recomputable": true,
         "title": "A lady"
+      },
+      {
+        "birth": "August 8, 1912, 7:38 pm (IST), 77 E 35, 13 N 00",
+        "first_seen": "chapter 16, Example 58",
+        "number": 23,
+        "recomputable": true,
+        "title": "Dr. B.V. Raman"
       }
     ],
     "not_supplied": [
@@ -170,7 +177,8 @@
       19,
       20,
       21,
-      22
+      22,
+      23
     ]
   },
   "status": 200

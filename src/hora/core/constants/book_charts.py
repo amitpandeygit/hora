@@ -424,6 +424,42 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    23: {
+        "title": "Dr. B.V. Raman",
+        "birth": "August 8, 1912, 7:38 pm (IST), 77 E 35, 13 N 00",
+        "birth_data": {
+            "year": 1912, "month": 8, "day": 8, "hour": 19, "minute": 38,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 13.0, "longitude": 77 + 35 / 60},
+        "longitudes": {
+            "Asc": "9 Aq 15", "Sun": "22 Cn 59", "Moon": "23 Ta 38",
+            "Mars": "21 Le 22", "Merc": "13 Le 57", "Jup": "12 Sc 58",
+            "Ven": "2 Le 15", "Sat": "10 Ta 09", "Rahu": "22 Pi 47",
+            "Ketu": "22 Vi 47", "HL": "8 Vi 34", "GL": "17 Ta 45",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Sun": "AmK", "Mars": "BK", "Merc": "MK",
+            "Jup": "PiK", "Sat": "PK", "Rahu": "GK", "Ven": "DK",
+        },
+        "retrograde": ("Merc",),
+        "drawn": {
+            "Rahu": "Pi", "Sat": "Ta", "Moon": "Ta", "AL": "Ta", "GL": "Ta",
+            "Asc": "Aq", "Sun": "Cn", "Merc": "Le", "Mars": "Le", "Ven": "Le",
+            "Jup": "Sc", "HL": "Vi", "Ketu": "Vi",
+        },
+        "events": {"died": "20 December 1998"},
+        "first_seen": "chapter 16, Example 58",
+        "note": (
+            "The pada rule fires twice here: the Moon's own star and the 8th "
+            "star both straddle two signs. Read from the Moon's star the dasa "
+            "at death is Venus-Sun; from the 8th star it is Mercury-Rahu. "
+            "Both reproduce. The ascendant is 8' out, about half a minute of "
+            "birth time. See OI-118: the example calls Venus and Mercury "
+            "marakas for occupying the 7th, which section 14.2's rule does "
+            "not reach."
+        ),
+    },
     22: {
         "title": "A lady",
         "birth": "December 7, 1954, 2:13 am (6:00 West), 93 W 15, 44 N 58",

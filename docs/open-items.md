@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 74 waiting on evidence · 2 parked**
+**5 waiting on Amit · 75 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,34 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-118 — chapter 16's examples treat occupants of the 2nd and 7th as marakas
+
+**NEEDS YOU. Adding a maraka category changes what the endpoint returns.**
+
+§14.2 gives two kinds: lords of the 2nd and 7th, and malefics powerfully
+contacting those houses or their lords. Chapter 16 uses a third — Example 56
+quotes Parasara, "Lords **and occupants** of these houses can kill a native",
+and Example 58 applies it to Venus, a benefic our rule never reaches. On Chart
+23 the example names five marakas and we find three:
+
+| graha | the example's reason | ours |
+|---|---|---|
+| Sun | owns the 7th | found, same reason |
+| Rahu | malefic in the 2nd | found, same reason |
+| Mars | 3rd lord in the 7th | found, but as a malefic conjoining the 7th |
+| Venus | occupies the 7th | **missing** |
+| Mercury | owns the 8th and occupies the 7th | **missing** |
+
+The two we miss are the ones the example rates highest and lowest, so the gap
+is not confined to marginal cases. Mercury adds a second question: he qualifies
+partly by owning the **8th**, a house of life, which §14.2 never makes a maraka.
+
+**What we do:** nothing. `marakas()` still implements §14.2 as written, and
+Example 58's fixture asserts which two the book names that we do not.
+
+**Closes when:** you decide whether occupants join §14.2's list, and whether a
+lord of a house of life placed in a house of death qualifies.
 
 ### OI-117 — Example 56 uses mritya bhaga; we hold no such table
 
