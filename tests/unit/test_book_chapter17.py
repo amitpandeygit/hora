@@ -16,9 +16,9 @@ from hora.core.const import (
     NAKSHATRA_SPAN,
     Graha,
 )
+from hora.core.settings import DashaYearLength
 from hora.dasha.base import balance_at_birth, compute_nakshatra_dasha
 from hora.dasha.nakshatra.systems import ASHTOTTARI as A
-from hora.core.settings import DashaYearLength
 
 
 def _table_lord(longitude: float) -> str:
