@@ -63,6 +63,7 @@ DASHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "DASA_LORD_AS_TEMPORARY_LAGNA",
     "NO_GUIDELINES_FOR_SIGN_STRENGTH",
     "STAR_SPANNING_TWO_SIGNS",
+    "TRIPOD_PRINCIPLE",
 )
 
 
@@ -165,4 +166,35 @@ VARIATION_CHOICE: dict[str, dict] = {
 STAR_SPANNING_TWO_SIGNS = (
     "If the 5th star spans across 2 signs, take the sign containing the same "
     "quarter as occupied by Moon in birthstar."
+)
+
+
+#: §16.5.3's tripod, innermost ring of the Sudarsana chakra first. `changes`
+#: orders how fast each one's results turn over: the soul's last long and
+#: change slowly, the mind's are shorter and faster, the body's faster still.
+TRIPOD_OF_LIFE: tuple[dict, ...] = (
+    {"reference": "lagna", "stands_for": "body", "ring": "innermost",
+     "judges": "pratyantardasa", "changes": 3},
+    {"reference": "Moon", "stands_for": "mind", "ring": "middle",
+     "judges": "antardasa", "changes": 2},
+    {"reference": "Sun", "stands_for": "soul", "ring": "outermost",
+     "judges": "mahadasa", "changes": 1},
+)
+
+#: Which dasa level a yoga shows its results in, by the yoga's own group.
+#: §16.5.3 names two groups and sends everything else to one place; the
+#: mapping is on our registry's group names so it can actually be applied.
+YOGA_LEVEL_BY_GROUP: dict[str, str] = {
+    "ravi": "mahadasa",
+    "chandra": "antardasa",
+}
+
+#: Where any other yoga shows, "primarily" being the section's own hedge.
+YOGA_LEVEL_DEFAULT = "pratyantardasa"
+
+#: The principle as printed, and whose it is.
+TRIPOD_PRINCIPLE = (
+    "Sun, Moon and lagna form the \"tripod of life\". Parasara clearly said "
+    "that we should analyze all charts with respect to the positions of Sun, "
+    "Moon and lagna."
 )

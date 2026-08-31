@@ -15,7 +15,14 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from hora.core import validate
-from hora.core.const import GRAHA_NAMES, NAVAGRAHA, RASI_NAMES, Graha
+from hora.core.const import (
+    GRAHA_NAMES,
+    NAVAGRAHA,
+    RASI_NAMES,
+    YOGA_LEVEL_BY_GROUP,
+    YOGA_LEVEL_DEFAULT,
+    Graha,
+)
 from hora.core.ephemeris.base import PlanetPosition
 
 
@@ -237,3 +244,24 @@ __all__ = [
     "register",
     "serialise",
 ]
+
+
+def dasa_level(key: str) -> str:
+    """§16.5.3's dasa level for one yoga, from the group it belongs to.
+
+    "If a planet takes part in a Ravi yoga (solar combination), it gives the
+    results of the yoga in its mahadasa. If a planet takes part in a Chandra
+    Yoga (lunar combination), it gives the results of the yoga in its
+    antardasas. If a planet takes part in other yogas (e.g. a Raja Yoga), it
+    gives the results of the yoga primarily in its pratyantardasas."
+
+    The section names two groups and sends every other yoga to one place, so
+    this reads the group rather than the yoga, and raja yogas land in the
+    default with the rest.
+
+    :raises YogaError: on an unknown yoga key.
+    """
+    spec = YOGA_REGISTRY.get(key)
+    if spec is None:
+        raise YogaError(f"unknown yoga {key!r}")
+    return YOGA_LEVEL_BY_GROUP.get(spec.group, YOGA_LEVEL_DEFAULT)

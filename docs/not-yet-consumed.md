@@ -638,12 +638,13 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapter 16's prose (9)
+### Part 2 — the dasa systems map and chapter 16's prose (11)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
 `DASA_LORD_AS_TEMPORARY_LAGNA` · `VIMSOTTARI_READING_EXAMPLES` ·
-`NO_GUIDELINES_FOR_SIGN_STRENGTH` · `STAR_SPANNING_TWO_SIGNS`
+`NO_GUIDELINES_FOR_SIGN_STRENGTH` · `STAR_SPANNING_TWO_SIGNS` ·
+`TRIPOD_OF_LIFE` · `TRIPOD_PRINCIPLE`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -661,6 +662,8 @@ it — but it is the coverage line for the whole part, and
 | `VIMSOTTARI_READING_EXAMPLES` | §16.5.1's nine illustrations. The section calls them "just a few examples", so they are deliberately not a lookup table — they will feed a reading layer, not a predictor |
 | `NO_GUIDELINES_FOR_SIGN_STRENGTH` | §16.5.2's own admission that the sign comparison it depends on is undefined. Nothing consumes it because nothing may: `variation_candidates` returns the candidate signs and refuses to pick |
 | `STAR_SPANNING_TWO_SIGNS` | §16.5.2's pada rule as printed. The rule itself is implemented in `variation_sign`; this is the sentence it came from |
+| `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
+| `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 
 **Two of the nine are built** — Vimsottari and Ashtottari, both nakshatra
 dasas. The remaining seven are six rasi dasas (Narayana, Lagna Kendradi Rasi,

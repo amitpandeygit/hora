@@ -603,3 +603,99 @@ def test_an_unknown_purpose_is_refused():
 
     with pytest.raises(ValueError, match="general.*longevity"):
         variation_candidates(MAKHA_3RD_PADA, "wealth")
+
+
+# --------------------------------------------------------------------------
+# §16.5.3 Rath's "Tripod of Life" Principle
+# --------------------------------------------------------------------------
+
+
+def test_the_tripod_rings_run_lagna_moon_sun_from_the_inside():
+    """"the innermost chakra representing the houses with respect to lagna
+    (body), next chakra representing the houses with respect to Moon (mind)
+    and the outermost chakra representing the houses with respect to Sun
+    (soul)." The order is the section's, and it is not alphabetical or by
+    planet — it is body, mind, soul outward.
+    """
+    from hora.core.const import TRIPOD_OF_LIFE
+
+    assert [t["reference"] for t in TRIPOD_OF_LIFE] == ["lagna", "Moon", "Sun"]
+    assert [t["stands_for"] for t in TRIPOD_OF_LIFE] == ["body", "mind", "soul"]
+    assert [t["ring"] for t in TRIPOD_OF_LIFE] == ["innermost", "middle", "outermost"]
+
+
+def test_the_slowest_results_belong_to_the_soul_and_the_fastest_to_the_body():
+    """"The results experienced due to soul (Sun) last long and change slowly.
+    The results experienced due to mind (Moon) last shorter and change fast.
+    The results experienced due to body (lagna) change even faster.\""""
+    from hora.core.const import TRIPOD_OF_LIFE
+
+    by_ref = {t["reference"]: t["changes"] for t in TRIPOD_OF_LIFE}
+    assert by_ref["Sun"] < by_ref["Moon"] < by_ref["lagna"]
+
+
+def test_each_reference_point_judges_its_own_dasa_level():
+    """"Sun is an important reference point... when judging the results of a
+    mahadasa. Moon... an antardasa. Lagna... a pratyantardasa."
+
+    The pairing is the tripod's point: the slowest-changing reference judges
+    the longest period.
+    """
+    from hora.core.const import TRIPOD_OF_LIFE
+
+    assert {t["reference"]: t["judges"] for t in TRIPOD_OF_LIFE} == {
+        "Sun": "mahadasa", "Moon": "antardasa", "lagna": "pratyantardasa"}
+
+
+def test_ravi_and_chandra_yogas_show_at_their_own_levels():
+    """"If a planet takes part in a Ravi yoga... it gives the results of the
+    yoga in its mahadasa. If a planet takes part in a Chandra Yoga... in its
+    antardasas.\""""
+    from hora.charts.planetary_yogas.registry import YOGA_REGISTRY, dasa_level
+
+    for key, spec in YOGA_REGISTRY.items():
+        if spec.group == "ravi":
+            assert dasa_level(key) == "mahadasa", key
+        elif spec.group == "chandra":
+            assert dasa_level(key) == "antardasa", key
+
+
+def test_every_other_yoga_including_raja_yogas_shows_in_pratyantardasas():
+    """"If a planet takes part in other yogas (e.g. a Raja Yoga), it gives the
+    results of the yoga primarily in its pratyantardasas."
+
+    The section picks raja yogas as its example of "other", so they must not
+    be given a level of their own however important they are elsewhere.
+    """
+    from hora.charts.planetary_yogas.registry import YOGA_REGISTRY, dasa_level
+
+    raja = [k for k, v in YOGA_REGISTRY.items() if v.group.startswith("raaja")]
+    assert raja, "the registry should hold raja yogas"
+    assert all(dasa_level(k) == "pratyantardasa" for k in raja)
+
+    named = {"ravi", "chandra"}
+    others = [k for k, v in YOGA_REGISTRY.items() if v.group not in named]
+    assert all(dasa_level(k) == "pratyantardasa" for k in others)
+
+
+def test_the_three_levels_partition_the_whole_registry():
+    """Every yoga gets exactly one level, and only the two named groups leave
+    the default — so a new yoga group cannot silently acquire a level."""
+    from collections import Counter
+
+    from hora.charts.planetary_yogas.registry import YOGA_REGISTRY, dasa_level
+
+    counts = Counter(dasa_level(k) for k in YOGA_REGISTRY)
+    assert set(counts) == {"mahadasa", "antardasa", "pratyantardasa"}
+    assert sum(counts.values()) == len(YOGA_REGISTRY)
+    assert counts["mahadasa"] == sum(
+        1 for v in YOGA_REGISTRY.values() if v.group == "ravi")
+    assert counts["antardasa"] == sum(
+        1 for v in YOGA_REGISTRY.values() if v.group == "chandra")
+
+
+def test_an_unknown_yoga_is_refused():
+    from hora.charts.planetary_yogas.registry import YogaError, dasa_level
+
+    with pytest.raises(YogaError, match="unknown yoga"):
+        dasa_level("nonesuch")
