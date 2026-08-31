@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 72 waiting on evidence · 2 parked**
+**5 waiting on Amit · 73 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,22 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-116 — Example 54 uses Rajya saham; we compute no sahams
+
+**Waiting on a later part of the book.**
+
+Example 54 reads "Rajya saham and GL are also in Libra" as one of three reasons
+Mercury could bring rulership. GL checks out; the saham cannot, because sahams
+are Tajika sensitive points and nothing here computes them. The example does
+not give the formula, and Part 2's own map defers Sudarsana Chakra dasa to
+"Tajaka Analysis", so the sahams belong to that part too.
+
+Guessing a formula from a passing mention would be exactly the wrong move, so
+Chart 19's record marks that claim unchecked rather than quietly dropping it.
+
+**Closes when:** the Tajaka part defines the sahams, or you supply the Rajya
+saham formula from another source.
 
 ### OI-115 — §16.2 uses savana years; our default is sidereal
 

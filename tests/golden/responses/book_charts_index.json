@@ -119,6 +119,13 @@
         "number": 18,
         "recomputable": true,
         "title": "A lady"
+      },
+      {
+        "birth": "October 16, 1946, 12:58 am (IST), 85 E 50, 20 N 30",
+        "first_seen": "chapter 16, Example 54",
+        "number": 19,
+        "recomputable": true,
+        "title": "Sri Navin Patnaik"
       }
     ],
     "not_supplied": [
@@ -138,7 +145,8 @@
       15,
       16,
       17,
-      18
+      18,
+      19
     ]
   },
   "status": 200

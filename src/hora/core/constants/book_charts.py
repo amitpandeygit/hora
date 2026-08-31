@@ -424,6 +424,40 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    19: {
+        "title": "Sri Navin Patnaik",
+        "birth": "October 16, 1946, 12:58 am (IST), 85 E 50, 20 N 30",
+        "birth_data": {
+            "year": 1946, "month": 10, "day": 16, "hour": 0, "minute": 58,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 20 + 30 / 60, "longitude": 85 + 50 / 60},
+        "longitudes": {
+            "Asc": "22 Cn 13", "Sun": "28 Vi 43", "Moon": "5 Ge 45",
+            "Mars": "21 Li 22", "Merc": "18 Li 27", "Jup": "11 Li 11",
+            "Ven": "6 Sc 37", "Sat": "14 Cn 36", "Rahu": "21 Ta 07",
+            "Ketu": "21 Sc 07", "HL": "6 Ta 11", "GL": "3 Li 33",
+        },
+        "chara_karakas": {
+            "Sun": "AK", "Mars": "AmK", "Merc": "BK", "Rahu": "PK",
+            "Jup": "PiK", "Ven": "GK", "Sat": "MK", "Moon": "DK",
+        },
+        "drawn": {
+            "HL": "Ta", "Rahu": "Ta", "AL": "Ta", "Moon": "Ge",
+            "Sat": "Cn", "Asc": "Cn", "Ketu": "Sc", "Ven": "Sc",
+            "Merc": "Li", "Mars": "Li", "GL": "Li", "Jup": "Li",
+            "Sun": "Vi",
+        },
+        "events": {"elected Chief Minister of Orissa": "early 2000"},
+        "first_seen": "chapter 16, Example 54",
+        "note": (
+            "Unlike Charts 17 and 18 the drawn diagram is the rasi chart "
+            "itself. Every body recomputes within an arcminute. Example 54 "
+            "also places Rajya saham in Libra; sahams are a Tajika concept "
+            "the book defers to a later part and we do not compute them, so "
+            "that one claim is unchecked — see docs/open-items.md OI-116."
+        ),
+    },
     18: {
         "title": "A lady",
         "birth": "June 1, 1972, 4:16 am (IST), 81 E 12, 16 N 15",
