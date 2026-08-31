@@ -105,6 +105,13 @@
         "number": 16,
         "recomputable": true,
         "title": "D-27 \u2014 the twins Satyam and Shivam Gaur"
+      },
+      {
+        "birth": "August 7, 1963, 9:14 pm (IST), 83 E 58, 21 N 27",
+        "first_seen": "chapter 16, Example 52",
+        "number": 17,
+        "recomputable": true,
+        "title": "Pandit Sanjay Rath"
       }
     ],
     "not_supplied": [
@@ -122,7 +129,8 @@
       13,
       14,
       15,
-      16
+      16,
+      17
     ]
   },
   "status": 200

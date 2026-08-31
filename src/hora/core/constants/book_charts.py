@@ -424,6 +424,43 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    17: {
+        "title": "Pandit Sanjay Rath",
+        "birth": "August 7, 1963, 9:14 pm (IST), 83 E 58, 21 N 27",
+        "birth_data": {
+            "year": 1963, "month": 8, "day": 7, "hour": 21, "minute": 14,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 21 + 27 / 60, "longitude": 83 + 58 / 60},
+        "longitudes": {
+            "Asc": "14 Pi 01", "Sun": "21 Cn 04", "Moon": "19 Aq 58",
+            "Mars": "13 Vi 40", "Merc": "13 Le 23", "Jup": "26 Pi 07",
+            "Ven": "14 Cn 56", "Sat": "26 Cp 49", "Rahu": "25 Ge 45",
+            "Ketu": "25 Sg 45", "HL": "13 Sc 16", "GL": "2 Sc 31",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Jup": "AmK", "Sun": "BK", "Mars": "PK",
+            "Merc": "GK", "Ven": "PiK", "Moon": "MK", "Rahu": "DK",
+        },
+        "retrograde": ("Sat",),
+        "divisional": {
+            "D10": {
+                "Asc": "Pi", "Sat": "Ta", "Rahu": "Aq", "Ven": "Cn",
+                "Jup": "Cn", "GL": "Cn", "Ketu": "Le", "Moon": "Le",
+                "Merc": "Sg", "AL": "Sc", "HL": "Sc", "Sun": "Li",
+                "Mars": "Vi", "A3": "Vi",
+            },
+        },
+        "first_seen": "chapter 16, Example 52",
+        "note": (
+            "The drawn diagram is the D-10, not the rasi chart; the printed "
+            "longitudes are the rasi and recompute from the birth line within "
+            "an arcminute for every graha. The ascendant is 16' out, which is "
+            "about a minute of birth time against a time printed to the "
+            "minute. A3 and AL are ours, not printed as longitudes — the "
+            "diagram places them and both agree."
+        ),
+    },
     16: {
         "title": "D-27 — the twins Satyam and Shivam Gaur",
         "birth": "November 4, 1970, 4:06 pm (IST), 76 E 53, 30 N 44",
