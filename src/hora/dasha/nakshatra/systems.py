@@ -1,7 +1,7 @@
 """Descriptors for the nakshatra-based dasha systems JHora supports."""
 from __future__ import annotations
 
-from hora.core.const import Graha
+from hora.core.const import ASHTOTTARI_ARCS, Graha
 from hora.dasha.base import NakshatraDashaSpec
 
 VIMSHOTTARI = NakshatraDashaSpec(
@@ -12,12 +12,17 @@ VIMSHOTTARI = NakshatraDashaSpec(
     years=(7, 20, 6, 10, 7, 18, 16, 19, 17),
 )
 
+#: §17.2.1's Table 39. The lords cover unequal arcs — Sun, Mars and Rahu take
+#: four nakshatras each (53°20') and the rest three (40°0') — and the cycle
+#: begins at Ardra, not Ashwini, so this cannot use the plain modulo rule.
 ASHTOTTARI = NakshatraDashaSpec(
     key="ashtottari",
     display_name="Ashtottari",
     order=(Graha.SUN, Graha.MOON, Graha.MARS, Graha.MERCURY,
            Graha.SATURN, Graha.JUPITER, Graha.RAHU, Graha.VENUS),
     years=(6, 15, 8, 17, 10, 19, 12, 21),
+    start_rule="arcs",
+    arc_starts=tuple(arc["start"] for arc in ASHTOTTARI_ARCS),
 )
 
 DWADASOTTARI = NakshatraDashaSpec(

@@ -638,14 +638,16 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapter 16's prose (14)
+### Part 2 — the dasa systems map and chapters 16-17's prose (17)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
 `DASA_LORD_AS_TEMPORARY_LAGNA` · `VIMSOTTARI_READING_EXAMPLES` ·
 `NO_GUIDELINES_FOR_SIGN_STRENGTH` · `STAR_SPANNING_TWO_SIGNS` ·
 `TRIPOD_OF_LIFE` · `TRIPOD_PRINCIPLE` · `USE_THE_VARIATIONS` ·
-`KENDRADI_GRAHA_DASA_INSTEAD` · `DASA_ERROR_RULE`
+`KENDRADI_GRAHA_DASA_INSTEAD` · `DASA_ERROR_RULE` ·
+`ASHTOTTARI_IS_CONDITIONAL` · `ASHTOTTARI_MEANS_108` ·
+`ASHTOTTARI_HAS_NO_KETU`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -668,6 +670,9 @@ it — but it is the coverage line for the whole part, and
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |
 | `KENDRADI_GRAHA_DASA_INSTEAD` | §16.7's condition for abandoning Vimsottari altogether. Not actionable twice over: the comparison it rests on, the stronger of lagna and Moon, is undefined, and Kendradi Graha Dasa is not one of Part 2's nine systems |
 | `DASA_ERROR_RULE` | §16.7's birthtime-error rule of thumb. The number it turns on **is** consumed — `BIRTHTIME_ERROR_DAYS_PER_MINUTE` — and a test checks the rule against the engine; this is the sentence it came from |
+| `ASHTOTTARI_IS_CONDITIONAL` | §17.1's warning that Parasara made this a conditional dasa and that the conditions are "highly controversial". No condition is given, so nothing can gate on it |
+| `ASHTOTTARI_MEANS_108` | Why the total is 108 and why some read the system as an ayur dasa. The 108 itself is consumed — Table 39's years sum to it |
+| `ASHTOTTARI_HAS_NO_KETU` | §17.1's reason for reading Ashtottari through the chara karakas. That Ketu has no dasa **is** consumed, in `ASHTOTTARI.order`; this is the inference drawn from it |
 
 **Two of the nine are built** — Vimsottari and Ashtottari, both nakshatra
 dasas. The remaining seven are six rasi dasas (Narayana, Lagna Kendradi Rasi,

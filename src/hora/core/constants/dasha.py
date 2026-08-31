@@ -67,6 +67,9 @@ DASHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "USE_THE_VARIATIONS",
     "KENDRADI_GRAHA_DASA_INSTEAD",
     "DASA_ERROR_RULE",
+    "ASHTOTTARI_IS_CONDITIONAL",
+    "ASHTOTTARI_MEANS_108",
+    "ASHTOTTARI_HAS_NO_KETU",
 )
 
 
@@ -233,4 +236,52 @@ DASA_ERROR_RULE = (
     "complete duration of the first dasa is n years. ... Considering this, we "
     "cannot use low level sub-periods of Vimsottari dasa (like sookshma "
     "dasas) confidently, unless we rectify the birthtime."
+)
+
+
+#: Table 39, as printed. Ashtottari does not lay equal nakshatra spans over
+#: its lords the way Vimsottari does: three lords cover four nakshatras
+#: (53°20') and five cover three (40°0'), and the cycle begins at Ardra rather
+#: than Ashwini. Each row is (start degree, arc length, nakshatra count,
+#: planet name, dasa years); the arcs run in the table's own order and Rahu's
+#: wraps 0°.
+ASHTOTTARI_ARCS: tuple[dict, ...] = (
+    {"start": 66 + 40 / 60, "length": 53 + 20 / 60, "nakshatras": 4,
+     "planet": "Sun", "years": 6},
+    {"start": 120.0, "length": 40.0, "nakshatras": 3,
+     "planet": "Moon", "years": 15},
+    {"start": 160.0, "length": 53 + 20 / 60, "nakshatras": 4,
+     "planet": "Mars", "years": 8},
+    {"start": 213 + 20 / 60, "length": 40.0, "nakshatras": 3,
+     "planet": "Mercury", "years": 17},
+    {"start": 253 + 20 / 60, "length": 40.0, "nakshatras": 3,
+     "planet": "Saturn", "years": 10},
+    {"start": 293 + 20 / 60, "length": 40.0, "nakshatras": 3,
+     "planet": "Jupiter", "years": 19},
+    {"start": 333 + 20 / 60, "length": 53 + 20 / 60, "nakshatras": 4,
+     "planet": "Rahu", "years": 12},
+    {"start": 26 + 40 / 60, "length": 40.0, "nakshatras": 3,
+     "planet": "Venus", "years": 21},
+)
+
+#: §17.1's own account of what the system is for, and how unsettled that is.
+ASHTOTTARI_IS_CONDITIONAL = (
+    "Sage Parasara listed it as a conditional dasa applicable only in some "
+    "charts. The conditions for its applicability are highly controversial."
+)
+
+#: Why 108, and why some read it as an ayur dasa.
+ASHTOTTARI_MEANS_108 = (
+    "the sum of all dasas is 108 years. Ashtottari means \"ashtottara sata\", "
+    "i.e. one hundred and eight. Because poornaayush (full life) of a man is "
+    "108 years, some scholars have suggested that ashtottari dasa is best "
+    "used as an ayur dasa, i.e. a dasa that shows longevity."
+)
+
+#: §17.1's reason for reading it through the chara karakas: Ketu has no dasa.
+ASHTOTTARI_HAS_NO_KETU = (
+    "Because only chara karakas, i.e. Rahu and the seven planets, have dasas "
+    "under the Ashtottari dasa scheme, it may also be suggested that it shows "
+    "events related to sustenance, achievements, raja yogas and moksha (just "
+    "like chara karakas do)."
 )

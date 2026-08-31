@@ -61,9 +61,14 @@ class NakshatraDashaSpec:
     order: tuple[int, ...]
     #: Period length in years, parallel to ``order``.
     years: tuple[float, ...]
-    #: How the starting lord is chosen from the Moon's nakshatra index (0-26).
-    #: ``mod`` walks ``order`` by ``nakshatra % len(order)``.
+    #: How the starting lord is chosen from the Moon's longitude. ``mod``
+    #: walks ``order`` by ``nakshatra % len(order)``, which assumes every lord
+    #: covers the same span. ``arcs`` reads ``arc_starts`` instead, for a
+    #: system whose lords cover unequal arcs — see §17.2.1 and Table 39.
     start_rule: str = "mod"
+    #: Start degree of each lord's arc, parallel to ``order``. Required when
+    #: ``start_rule`` is ``arcs``; the arcs are contiguous and wrap 0°.
+    arc_starts: tuple[float, ...] = ()
     #: Nakshatra count the cycle is laid over — 27 for most, 28 when
     #: Abhijit is included (Ashtottari, Yogini variants).
     nakshatra_count: int = 27
@@ -136,11 +141,20 @@ def compute_nakshatra_dasha(
     """
     days_per_year = year_days(year_length)
     lon = moon_longitude % 360.0
-    nak = int(lon // NAKSHATRA_SPAN)
-    elapsed_fraction = (lon - nak * NAKSHATRA_SPAN) / NAKSHATRA_SPAN
-
     n = len(spec.order)
-    start_index = (nak + validate.in_range("start_star", start_star, 1, 27) - 1) % n
+
+    if spec.start_rule == "arcs":
+        if start_star != 1:
+            raise ValueError(
+                f"{spec.display_name} lays its lords over unequal arcs, so "
+                f"§16.4.1's 4th/5th/8th-star variations do not apply to it")
+        start_index, remaining = _arc_index(spec, lon)
+        elapsed_fraction = 1.0 - remaining
+    else:
+        nak = int(lon // NAKSHATRA_SPAN)
+        elapsed_fraction = (lon - nak * NAKSHATRA_SPAN) / NAKSHATRA_SPAN
+        start_index = (
+            nak + validate.in_range("start_star", start_star, 1, 27) - 1) % n
     first_years = spec.years[start_index]
 
     # Wind back to the notional start of the running mahadasha.
@@ -166,6 +180,25 @@ def compute_nakshatra_dasha(
     return periods
 
 
+def _arc_index(spec: NakshatraDashaSpec, longitude: float) -> tuple[int, float]:
+    """Which of §17.2.1's arcs holds this longitude, and how much of it is left.
+
+    The arcs are unequal and the last wraps 0°, so this walks them rather than
+    dividing. Returns the index into ``spec.order`` and the fraction of that
+    arc still ahead of the Moon.
+    """
+    lon = longitude % 360.0
+    starts = spec.arc_starts
+    for i, start in enumerate(starts):
+        end = starts[(i + 1) % len(starts)]
+        inside = (start <= lon < end) if start < end else (lon >= start or lon < end)
+        if inside:
+            span = (end - start) % 360.0
+            travelled = (lon - start) % 360.0
+            return i, 1.0 - travelled / span
+    raise ValueError(f"no arc holds longitude {longitude}")
+
+
 def balance_at_birth(
     spec: NakshatraDashaSpec, moon_longitude: float, start_star: int = 1
 ) -> tuple[int, float]:
@@ -176,6 +209,14 @@ def balance_at_birth(
         balance is that lord's dasa length times the same fraction.
     """
     lon = moon_longitude % 360.0
+    if spec.start_rule == "arcs":
+        if start_star != 1:
+            raise ValueError(
+                f"{spec.display_name} lays its lords over unequal arcs, so "
+                f"§16.4.1's 4th/5th/8th-star variations do not apply to it")
+        i, remaining_fraction = _arc_index(spec, lon)
+        return int(spec.order[i]), spec.years[i] * remaining_fraction
+
     nak = int(lon // NAKSHATRA_SPAN)
     i = (nak + validate.in_range("start_star", start_star, 1, 27) - 1) % len(spec.order)
     remaining_fraction = 1.0 - (lon - nak * NAKSHATRA_SPAN) / NAKSHATRA_SPAN

@@ -138,7 +138,7 @@ JHora run each.
 | 4 | D-11 rudramsa: which of JHora's two variants is default, and what exactly is the reverse-counting rule? | reverse from the 12th | `vargas.py` |
 | 5 | D-5 panchamsa: does JHora use the BPHS unequal sign table or the cyclic rule? | BPHS table | `vargas.py` |
 | 6 | What are JHora's other five hora variants and its four drekkana variants? | Parashari + cyclic stubs | `vargas.py` |
-| 7 | Which nakshatra starts each non-Vimshottari dasha cycle? (Ashtottari is often counted from Ardra, not Ashwini) | plain modulo from Ashwini | `dasha/nakshatra/systems.py` |
+| 7 | Which nakshatra starts each non-Vimshottari dasha cycle? | **Ashtottari settled by Table 39** — Ardra, over unequal arcs; the other eight systems still use plain modulo from Ashwini | `dasha/nakshatra/systems.py` |
 | 8 | Does JHora's "Deva-datta ayanamsa" map to a Swiss Ephemeris mode, and which? | `SIDM_DJWHAL_KHUL` (a guess) | `settings.py` |
 | 9 | Combustion orbs — are JHora's the classical BPHS set, and does it use separate retrograde orbs? | BPHS with retrograde variants | `const.py` |
 | 10 | Does JHora resolve graha yuddha by latitude, or by brightness/other rule? | northern planet wins | `dignity.py` |
