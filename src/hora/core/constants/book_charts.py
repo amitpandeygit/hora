@@ -424,6 +424,48 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    18: {
+        "title": "A lady",
+        "birth": "June 1, 1972, 4:16 am (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1972, "month": 6, "day": 1, "hour": 4, "minute": 16,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "26 Ar 32", "Sun": "17 Ta 04", "Moon": "29 Sg 27",
+            "Mars": "18 Ge 55", "Merc": "12 Ta 14", "Jup": "12 Sg 49",
+            "Ven": "10 Ge 48", "Sat": "16 Ta 34", "Rahu": "5 Cp 06",
+            "Ketu": "5 Cn 06", "HL": "7 Ar 55", "GL": "10 Aq 32",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Rahu": "AmK", "Mars": "BK", "Sun": "MK",
+            "Jup": "PK", "Sat": "PiK", "Merc": "GK", "Ven": "DK",
+        },
+        "retrograde": ("Jup", "Ven"),
+        "divisional": {
+            "D7": {
+                "Asc": "Li", "Mars": "Li", "GL": "Ar", "HL": "Ta",
+                "AL": "Ge", "Moon": "Ge", "Jup": "Aq", "Sun": "Aq",
+                "Ketu": "Aq", "Sat": "Aq", "Merc": "Cp", "Rahu": "Le",
+                "Ven": "Le",
+            },
+        },
+        #: The only chart in the register with dated life events, which is
+        #: what lets Example 53 be checked against something outside itself.
+        "events": {
+            "first child": "November 1994",
+            "second child": "December 1996",
+        },
+        "first_seen": "chapter 16, Example 53",
+        "note": (
+            "The drawn diagram is the D-7, not the rasi chart; the printed "
+            "longitudes are the rasi and recompute from the birth line within "
+            "an arcminute, the ascendant included. Jupiter and Venus are "
+            "printed retrograde. Example 53's dasa dates only come out under "
+            "savana years — see docs/open-items.md OI-115."
+        ),
+    },
     17: {
         "title": "Pandit Sanjay Rath",
         "birth": "August 7, 1963, 9:14 pm (IST), 83 E 58, 21 N 27",

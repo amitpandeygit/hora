@@ -630,10 +630,11 @@ our default is sidereal, 365.2564.
 | JHora | 1 | sidereal — tier-2; PyJHora defaults to `TRUE_SIDEREAL_YEAR`, balance matched at 17y 11m 18d (parity 3) |
 | The book | 2 | savana, for every nakshatra dasa it computes |
 
-Precedence keeps JHora's default, but they diverge fast: Chart 12's mahadasa
-starts drift 71 days by the 2nd, 192 by the 5th, 560 by the 9th. So chapter 16's
-examples will not reproduce under it — a settings choice that reads as a defect.
-Both modes exist, so nothing changes until you say.
+Precedence keeps JHora's default, but Example 53 settles what the book does,
+against dated events rather than its own units: Rahu dasa starts Nov 1993 under
+savana, Feb 1994 under sidereal, and Saturn runs the pratyantardasa at both
+childbirths only under savana — sidereal gives Jupiter, and the example's
+conclusion would not follow. Nothing changes until you say.
 
 **Closes when:** a JHora run settles parity 3, or you prefer the book's examples.
 
