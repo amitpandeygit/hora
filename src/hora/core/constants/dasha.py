@@ -64,6 +64,9 @@ DASHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "NO_GUIDELINES_FOR_SIGN_STRENGTH",
     "STAR_SPANNING_TWO_SIGNS",
     "TRIPOD_PRINCIPLE",
+    "USE_THE_VARIATIONS",
+    "KENDRADI_GRAHA_DASA_INSTEAD",
+    "DASA_ERROR_RULE",
 )
 
 
@@ -197,4 +200,37 @@ TRIPOD_PRINCIPLE = (
     "Sun, Moon and lagna form the \"tripod of life\". Parasara clearly said "
     "that we should analyze all charts with respect to the positions of Sun, "
     "Moon and lagna."
+)
+
+
+#: §16.7's advice about the variations, which is the chapter's own summary of
+#: why §16.4.1 exists.
+USE_THE_VARIATIONS = (
+    "Though many people limit themselves to Vimsottari dasa started from the "
+    "birthstar, one is advised to use the variations mentioned in this "
+    "chapter for the best results."
+)
+
+#: §16.7's condition for preferring a different dasa system altogether. The
+#: comparison it rests on — the stronger of lagna and Moon — is not defined
+#: there, and Kendradi Graha Dasa is not among Part 2's nine systems either.
+KENDRADI_GRAHA_DASA_INSTEAD = (
+    "If all the quadrants from the stronger of lagna and Moon are occupied by "
+    "planets, \"Kendradi Graha Dasa\" is more appropriate than Vimsottari "
+    "dasa. Results from Vimsottari dasa may not be very good in such cases."
+)
+
+#: §16.7's rule of thumb for how birthtime error propagates into dasa dates:
+#: about ``m * n / 4`` days, for ``m`` minutes of error and a first dasa of
+#: ``n`` years. It is a mean-motion approximation — the true figure scales
+#: with the Moon's speed at birth, which ranges roughly ±13% around the mean.
+BIRTHTIME_ERROR_DAYS_PER_MINUTE = 0.25
+
+#: Why the rule of thumb matters.
+DASA_ERROR_RULE = (
+    "the error in the start/end dates of dasas have an error of approximately "
+    "m.n/4 days, if there is an error of m minutes in birthtime and the "
+    "complete duration of the first dasa is n years. ... Considering this, we "
+    "cannot use low level sub-periods of Vimsottari dasa (like sookshma "
+    "dasas) confidently, unless we rectify the birthtime."
 )

@@ -699,3 +699,102 @@ def test_an_unknown_yoga_is_refused():
 
     with pytest.raises(YogaError, match="unknown yoga"):
         dasa_level("nonesuch")
+
+
+# --------------------------------------------------------------------------
+# §16.7 Conclusion
+# --------------------------------------------------------------------------
+
+
+def test_the_birthtime_error_rule_holds_against_the_engine():
+    """"the error in the start/end dates of dasas have an error of
+    approximately m.n/4 days, if there is an error of m minutes in birthtime
+    and the complete duration of the first dasa is n years."
+
+    Checked on Chart 22, whose first dasa from the Moon's own star is Venus,
+    so n = 20. The rule is a mean-motion approximation: the true shift scales
+    with the Moon's speed at birth, which here is 1.13 times the mean, and
+    scaling by that reconciles the two to within one per cent.
+    """
+    from hora.charts.book import chart as book_chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import BIRTHTIME_ERROR_DAYS_PER_MINUTE
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = book_chart(22)
+
+    def end_of_first_dasa(offset_minutes):
+        birth = dict(record["birth_data"])
+        birth["minute"] += offset_minutes
+        instant = from_local(**birth)
+        chart = compute_chart(instant, Place(name="Chart 22", **record["place"]),
+                              Settings(node_type=NodeType.MEAN))
+        moon = chart.positions[int(Graha.MOON)]
+        periods = compute_nakshatra_dasha(
+            V, moon.longitude, instant.jd_ut, DashaYearLength.SAVANA,
+            levels=1, cycles=1)
+        return moon.speed_longitude, periods[0].end_jd
+
+    speed, base = end_of_first_dasa(0)
+    n = 20                                        # Venus's dasa length
+
+    for minutes in (1, 5, 10):
+        _speed, shifted = end_of_first_dasa(minutes)
+        moved = abs(shifted - base)
+        rule = minutes * n * BIRTHTIME_ERROR_DAYS_PER_MINUTE
+        scaled = rule * speed / 13.176358         # the Moon's mean daily motion
+        assert moved == pytest.approx(scaled, rel=0.02)
+        assert moved > rule                        # this Moon is faster than mean
+
+
+def test_a_later_birthtime_moves_the_first_dasa_earlier():
+    """The sign the rule does not state. A later birth leaves less of the
+    nakshatra untravelled, so the balance shrinks and the boundary arrives
+    sooner — the opposite of what "an error of m minutes" might suggest."""
+    from hora.charts.book import chart as book_chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = book_chart(22)
+
+    def end(offset):
+        birth = dict(record["birth_data"])
+        birth["minute"] += offset
+        instant = from_local(**birth)
+        chart = compute_chart(instant, Place(name="Chart 22", **record["place"]),
+                              Settings(node_type=NodeType.MEAN))
+        return compute_nakshatra_dasha(
+            V, chart.positions[int(Graha.MOON)].longitude, instant.jd_ut,
+            DashaYearLength.SAVANA, levels=1, cycles=1)[0].end_jd
+
+    assert end(5) < end(0)
+
+
+def test_the_rule_is_recorded_with_its_own_caution():
+    """"we cannot use low level sub-periods of Vimsottari dasa (like sookshma
+    dasas) confidently, unless we rectify the birthtime." The engine offers
+    six levels; the chapter says not to trust the deepest without rectifying.
+    """
+    from hora.core.const import DASA_ERROR_RULE
+
+    assert "sookshma" in DASA_ERROR_RULE
+    assert "rectify the birthtime" in DASA_ERROR_RULE
+
+
+def test_the_kendradi_condition_is_recorded_but_not_actionable():
+    """"If all the quadrants from the stronger of lagna and Moon are occupied
+    by planets, Kendradi Graha Dasa is more appropriate than Vimsottari dasa."
+
+    Two things stop this being usable. The comparison it rests on — the
+    stronger of lagna and Moon — is not defined in the chapter, and Kendradi
+    Graha Dasa is not one of the nine systems Part 2 teaches. The condition is
+    held as text so it is not mistaken for something we act on.
+    """
+    from hora.core.const import KENDRADI_GRAHA_DASA_INSTEAD, PART_2_DASA_SYSTEMS
+
+    assert "stronger of lagna and Moon" in KENDRADI_GRAHA_DASA_INSTEAD
+    names = {s["name"] for s in PART_2_DASA_SYSTEMS}
+    assert "Kendradi Graha Dasa" not in names
+    assert "Lagna Kendradi Rasi dasa" in names     # a different system
