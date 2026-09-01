@@ -19,10 +19,12 @@ from dataclasses import dataclass
 
 from hora.core import validate
 from hora.core.const import (
+    GRAHA_NAMES,
     MODALITY_NAMES,
     RASI_IS_ODD_FOOTED,
     RASI_MODALITY,
     RASI_NAMES,
+    Graha,
 )
 
 
@@ -72,6 +74,41 @@ VISHNU_QUADRANT_ORDER = (
     "We count the 1st, 5th, 9th houses from dasa seed, then count the same "
     "houses from the 10th house, then from the 7th house and finally from "
     "the 4th house."
+)
+
+
+#: §18.2.1's two exceptions, both keyed on who occupies the dasa seed. They
+#: do not override the same thing: Saturn replaces the movement *and* fixes
+#: the direction, while Ketu leaves the movement alone and only flips the
+#: direction. Nothing in the section says what happens when both sit in the
+#: seed, so that case is reported undecided rather than resolved.
+SEED_EXCEPTIONS: dict[str, dict] = {
+    "Saturn": {
+        "graha": int(Graha.SATURN),
+        "overrides": ("movement", "direction"),
+        "text": ("If Saturn occupies dasa seed, dasa progression becomes "
+                 "regular and zodiacal. ... We basically make the direction "
+                 "\"forward\" and use Brahma's progression."),
+    },
+    "Ketu": {
+        "graha": int(Graha.KETU),
+        "overrides": ("direction",),
+        "text": ("If Ketu occupies dasa seed, the basic direction of dasa "
+                 "progression becomes reversed. If it is normally forward, it "
+                 "becomes backward. If it is normally backward, it becomes "
+                 "forward."),
+    },
+}
+
+#: **Gap.** Saturn forces forward and Ketu reverses whatever the direction
+#: would be. §18.2.1 never says which wins when both occupy the seed, and no
+#: example shows it. See docs/open-items.md.
+BOTH_EXCEPTIONS_UNDEFINED = (
+    "Section 18.2.1 gives a Saturn exception and a Ketu exception separately "
+    "and never says what happens when both occupy the dasa seed. Saturn makes "
+    "the direction forward and the movement regular; Ketu reverses whatever "
+    "the direction would otherwise be. Whether Ketu then reverses Saturn's "
+    "forward, or Saturn's override stands alone, is not stated."
 )
 
 
@@ -130,19 +167,41 @@ class Progression:
     sign_names: tuple[str, ...]
     #: The house numbers those signs answer to, before direction is applied.
     houses: tuple[int, ...]
+    #: Which of §18.2.1's seed exceptions applied, if any.
+    exception: str | None
     why: str
 
 
-def progression(seed: int) -> Progression:
+def progression(seed: int, occupants: set[int] | None = None) -> Progression:
     """§18.2.1's full order of rasis for one dasa seed.
 
     :param seed: the stronger of lagna and the 7th, as a sign index.
-    :raises NarayanaError: on a sign outside 0-11.
+    :param occupants: grahas in the seed rasi. Needed only for §18.2.1's two
+        exceptions; omitted, neither can apply and the answer says so.
+    :raises NarayanaError: on a sign outside 0-11, or when both Saturn and
+        Ketu occupy the seed, which the section does not resolve.
     """
     index = validate.in_range("seed", seed, 0, 11)
     movement = movement_of(index)
     direction = direction_of(index)
     houses = house_order(index)
+
+    present = set() if occupants is None else {int(g) for g in occupants}
+    saturn = int(Graha.SATURN) in present
+    ketu = int(Graha.KETU) in present
+    exception = None
+    if saturn and ketu:
+        raise NarayanaError(
+            f"{RASI_NAMES[index]} holds both Saturn and Ketu. "
+            f"{BOTH_EXCEPTIONS_UNDEFINED}")
+    if saturn:
+        exception = "Saturn"
+        movement = MOVEMENTS["chara"]          # Brahma's regular progression
+        direction = "forward"
+        houses = tuple(1 + k for k in range(12))
+    elif ketu:
+        exception = "Ketu"
+        direction = "backward" if direction == "forward" else "forward"
     step = 1 if direction == "forward" else -1
     signs = tuple((index + step * (house - 1)) % 12 for house in houses)
     ninth = (index + 8) % 12
@@ -152,13 +211,29 @@ def progression(seed: int) -> Progression:
         direction=direction, ninth_from_seed=ninth,
         ninth_name=str(RASI_NAMES[ninth]),
         signs=signs, sign_names=tuple(str(RASI_NAMES[s]) for s in signs),
-        houses=houses,
-        why=(f"{RASI_NAMES[index]} is {movement['modality']}, so "
-             f"{movement['god']} governs it and the movement is "
-             f"{movement['movement']}; the 9th from it is {RASI_NAMES[ninth]}, "
-             f"{'odd' if RASI_IS_ODD_FOOTED[ninth] else 'even'}-footed, so the "
-             f"direction is {direction}"),
+        houses=houses, exception=exception,
+        why=_why(index, movement, ninth, direction, exception),
     )
+
+
+def _why(index: int, movement: dict, ninth: int, direction: str,
+         exception: str | None) -> str:
+    """One sentence saying how the movement and direction were arrived at."""
+    if exception == "Saturn":
+        return (f"{GRAHA_NAMES[Graha.SATURN]} occupies the seed "
+                f"{RASI_NAMES[index]}, so §18.2.1 makes the progression "
+                f"regular and zodiacal whatever the rasi's modality")
+    footed = "odd" if RASI_IS_ODD_FOOTED[ninth] else "even"
+    base = (f"{RASI_NAMES[index]} is {movement['modality']}, so "
+            f"{movement['god']} governs it and the movement is "
+            f"{movement['movement']}; the 9th from it is {RASI_NAMES[ninth]}, "
+            f"{footed}-footed")
+    if exception == "Ketu":
+        natural = "forward" if RASI_IS_ODD_FOOTED[ninth] else "backward"
+        return (f"{base}, so the direction would be {natural} — but "
+                f"{GRAHA_NAMES[Graha.KETU]} occupies the seed, which reverses "
+                f"it to {direction}")
+    return f"{base}, so the direction is {direction}"
 
 
 #: §18.2.1's own name for the stronger of lagna and the 7th.

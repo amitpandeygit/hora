@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 76 waiting on evidence · 2 parked**
+**5 waiting on Amit · 77 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,27 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-120 — §18.2.1 does not say what happens when Saturn and Ketu share the seed
+
+**Waiting on the book.**
+
+The section gives two exceptions on who occupies the dasa seed. Saturn makes
+the progression "regular and zodiacal" — Brahma's movement, direction forward,
+whatever the seed's modality. Ketu reverses whatever the direction would
+otherwise have been, leaving the movement alone.
+
+They act on different things, so they compose rather than simply conflict, and
+the composition is ambiguous: does Ketu reverse Saturn's imposed forward, or
+does Saturn's override stand whole with nothing left to reverse? The section
+states each alone and shows no chart with both. Both are separately confirmed
+against its four printed sequences, so this is the one open case.
+
+**What we do:** `progression` refuses a seed holding both, naming what each
+exception would do. Applying an order silently would be an invisible guess.
+
+**Closes when:** a later section or example shows a seed with both, or you
+choose an order.
 
 ### OI-119 — Example 61 needs a chart the book prints in a later part
 

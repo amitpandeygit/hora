@@ -241,3 +241,120 @@ def test_the_three_examples_cover_every_movement_and_both_directions():
     seeds = [BY_ABBR[s] for s in ("Sc", "Pi", "Cp")]
     assert {progression(s).god for s in seeds} == {"Brahma", "Shiva", "Vishnu"}
     assert {progression(s).direction for s in seeds} == {"forward", "backward"}
+
+
+# --------------------------------------------------------------------------
+# §18.2.1's two seed exceptions
+# --------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "seed,opening",
+    [("Sc", "Sc Sg Cp Aq Pi Ar"), ("Pi", "Pi Ar Ta Ge Cn Le")],
+)
+def test_the_saturn_exception(seed, opening):
+    """"If Saturn occupies dasa seed, dasa progression becomes regular and
+    zodiacal... We basically make the direction 'forward' and use Brahma's
+    progression."
+
+    It overrides both halves at once. Scorpio is fixed and Pisces dual, so
+    without the exception neither would take Brahma's movement, and both
+    would run backward or forward by their own 9th house.
+    """
+    from hora.core.const import Graha
+
+    got = progression(BY_ABBR[seed], {int(Graha.SATURN)})
+    assert got.exception == "Saturn"
+    assert got.god == "Brahma"
+    assert got.movement == "regular"
+    assert got.direction == "forward"
+    assert " ".join(ABBR[s] for s in got.signs[:6]) == opening
+    assert got.houses == tuple(range(1, 13))
+
+
+@pytest.mark.parametrize(
+    "seed,opening",
+    [("Sc", "Sc Ar Vi Aq Cn Sg"), ("Pi", "Pi Sc Cn Ge Aq Li")],
+)
+def test_the_ketu_exception(seed, opening):
+    """"If Ketu occupies dasa seed, the basic direction of dasa progression
+    becomes reversed."
+
+    Only the direction. The section makes the point itself by pairing each
+    case with an earlier example: Scorpio's 6th house is now counted forward
+    where Example 63 counted it backward, and Pisces' trines are counted
+    backward where Example 64 counted them forward.
+    """
+    from hora.core.const import Graha
+
+    plain = progression(BY_ABBR[seed])
+    got = progression(BY_ABBR[seed], {int(Graha.KETU)})
+
+    assert got.exception == "Ketu"
+    assert got.movement == plain.movement          # movement is untouched
+    assert got.houses == plain.houses
+    assert got.direction != plain.direction        # only the direction flips
+    assert " ".join(ABBR[s] for s in got.signs[:6]) == opening
+
+
+def test_the_ketu_exception_inverts_the_examples_it_is_compared_with():
+    """The section invites the comparison, so it is made: with Ketu in the
+    seed each progression is the earlier example's, mirrored about it."""
+    from hora.core.const import Graha
+
+    for seed in ("Sc", "Pi"):
+        plain = progression(BY_ABBR[seed])
+        flipped = progression(BY_ABBR[seed], {int(Graha.KETU)})
+        for house, plain_sign, flipped_sign in zip(
+                plain.houses, plain.signs, flipped.signs):
+            offset = house - 1
+            assert plain_sign == (BY_ABBR[seed] + offset * (
+                1 if plain.direction == "forward" else -1)) % 12
+            assert flipped_sign == (BY_ABBR[seed] - offset * (
+                1 if plain.direction == "forward" else -1)) % 12
+
+
+def test_no_exception_applies_when_the_seed_is_not_named(): 
+    """Both exceptions turn on who occupies the seed, so a caller who does not
+    say cannot have either applied to them."""
+    for seed in range(12):
+        assert progression(seed).exception is None
+        assert progression(seed, set()).exception is None
+        assert progression(seed, occupants=None).exception is None
+
+
+def test_other_grahas_in_the_seed_change_nothing():
+    """Only Saturn and Ketu are named. A seed full of everything else must
+    give the plain progression."""
+    from hora.core.const import Graha
+
+    others = {int(g) for g in (Graha.SUN, Graha.MOON, Graha.MARS,
+                               Graha.MERCURY, Graha.JUPITER, Graha.VENUS,
+                               Graha.RAHU)}
+    for seed in range(12):
+        assert progression(seed, others).signs == progression(seed).signs
+
+
+def test_a_seed_holding_both_saturn_and_ketu_is_refused():
+    """See OI-120. Saturn imposes forward; Ketu reverses whatever the
+    direction would be. §18.2.1 never says which acts on the other, and no
+    example shows a seed with both, so this is reported rather than resolved.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import BOTH_EXCEPTIONS_UNDEFINED, NarayanaError
+
+    with pytest.raises(NarayanaError, match="both Saturn and Ketu"):
+        progression(BY_ABBR["Sc"], {int(Graha.SATURN), int(Graha.KETU)})
+
+    assert "never says" in BOTH_EXCEPTIONS_UNDEFINED
+
+
+def test_the_two_exceptions_override_different_things():
+    """Saturn replaces the movement and fixes the direction; Ketu touches only
+    the direction. That asymmetry is why they compose rather than conflict,
+    and why the collision above is ambiguous rather than merely undecided.
+    """
+    from hora.dasha.rasi.narayana import SEED_EXCEPTIONS
+
+    assert SEED_EXCEPTIONS["Saturn"]["overrides"] == ("movement", "direction")
+    assert SEED_EXCEPTIONS["Ketu"]["overrides"] == ("direction",)
