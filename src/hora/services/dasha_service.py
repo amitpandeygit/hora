@@ -5,7 +5,7 @@ from datetime import datetime
 
 from hora.api.serialize import dasha_out, envelope
 from hora.charts.chart import Place, compute_chart
-from hora.core.const import VIMSOTTARI_VARIATIONS, Graha
+from hora.core.const import ASHTOTTARI_CAVEAT, VIMSOTTARI_VARIATIONS, Graha
 from hora.core.settings import Settings
 from hora.core.timeutil import Instant, from_local
 from hora.dasha.base import balance_at_birth, compute_nakshatra_dasha, find_running
@@ -75,6 +75,10 @@ def dasha_tree(
         "moon_longitude": round(moon, 8),
         "balance_at_birth": {"lord": lord, "years": round(balance_years, 8)},
         "year_length": settings.dasha_year_length.value,
+        # §17.2.3 and chapter 17's close: this system's applicability and its
+        # application are both contested, and the book says so itself. The
+        # caution travels with the result rather than living in a document.
+        "caveat": ASHTOTTARI_CAVEAT if system == "ashtottari" else None,
         "reckon_from": reckon_from,
         "seed_longitude": round(seed, 8),
         "start_star": start_star,

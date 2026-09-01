@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 75 waiting on evidence · 2 parked**
+**5 waiting on Amit · 76 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,22 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-119 — Example 61 needs a chart the book prints in a later part
+
+**Waiting on the book.**
+
+Example 61 reads Indira Gandhi's assassination through Ashtottari, but says
+"Her birthdata and assassination data are given in Example 110 (in a later
+chapter). Her rasi chart is given in Chart 61." We hold charts 1 to 23, so
+neither the chart nor the event date is available and none of its three claims
+can be checked: that Moon dasa ran 1980-1995, that Saturn antardasa was running
+at the assassination, and that Saturn is 7th lord in lagna with Moon in the 7th.
+
+The other two Ashtottari examples, 60 and 62, both check out in full, so this is
+a missing input rather than a doubt about the system.
+
+**Closes when:** Chart 61 arrives with Example 110.
 
 ### OI-118 — chapter 16's examples treat occupants of the 2nd and 7th as marakas
 

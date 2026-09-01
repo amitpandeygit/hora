@@ -71,6 +71,7 @@ DASHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "ASHTOTTARI_MEANS_108",
     "ASHTOTTARI_HAS_NO_KETU",
     "ASHTOTTARI_ANTARDASA_RULE",
+    "ASHTOTTARI_CAVEAT",
 )
 
 
@@ -313,4 +314,17 @@ ASHTOTTARI_APPLICABILITY_VIEWS: tuple[dict, ...] = (
      "text": ("Ashtottari dasa is applicable for daytime births in Krishna "
               "paksha (darker fortnight) and night time births in Sukla "
               "paksha (brighter fortnight).")},
+)
+
+
+#: Chapter 17's own closing caution. It is attached to every Ashtottari
+#: response rather than left in a document, because the section says the
+#: warning applies with special force to this dasa and a caller reading a
+#: result is exactly who needs to see it.
+ASHTOTTARI_CAVEAT = (
+    "Ashtottari dasa is a popular dasa, but its applicability as well as "
+    "application are controversial. Readers should keep this in mind and keep "
+    "their minds open to alternative views. What is taught in this book is "
+    "not the final truth. Of course, this applies to everything taught in "
+    "this book, but it is especially applicable to this chapter."
 )

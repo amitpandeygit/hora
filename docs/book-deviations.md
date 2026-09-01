@@ -1687,3 +1687,36 @@ requires, so the divergence is visible rather than buried.
 
 **Closes when:** you decide whether Rudra should follow §14.3's instruction or
 its own worked example, or a second printed Rudra breaks the tie.
+
+## D-54 · Example 62 calls Mercury Uttamaamsa; our dasavarga count says Paarijaataamsa
+
+**Status: one step apart, cause not established.**
+
+Example 62 lists "Mercury is in Uttamamsa" among its reasons for calling him a
+great yoga karaka in Chart 6. On the dasavarga scale Uttamaamsa is a count of
+three; Paarijaataamsa is two. We compute **two**, from Mercury being in his own
+Gemini in D1 and again in D9:
+
+| chart | rasi | dignity |
+|---|---|---|
+| D1 | Gemini | own |
+| D9 | Gemini | own |
+
+To reach three, one more of the ten vargas would have to give Mercury a
+dignity that counts. Which one, and under whose definition of "counts", the
+example does not say — it states the amsa and moves on.
+
+Everything else in that paragraph reproduces exactly, including the two
+ashtakavarga figures that are easy to get wrong: Mercury's BAV in Gemini is 7
+rekhas and Gemini's SAV is 34, both as printed. So this is one figure out of
+several, not a broken reading.
+
+Unrelated to OI-91, which asks what to do when the *two planets* of a pair have
+different counts. This is a single planet's count differing from the book's.
+
+**What we do:** nothing. `amsabala` reports the count and the charts that
+produced it, so a reader can see exactly which two vargas we found and judge
+the third for themselves.
+
+**Closes when:** a chapter defines which dignities count towards the dasavarga
+tally, or another example pins a count we can check the rule against.

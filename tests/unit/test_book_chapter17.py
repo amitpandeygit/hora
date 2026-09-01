@@ -358,3 +358,179 @@ def test_the_two_computable_views_disagree_by_construction():
 
     _first, second, third = ASHTOTTARI_APPLICABILITY_VIEWS
     assert set(second["needs"]).isdisjoint(third["needs"])
+
+
+# --------------------------------------------------------------------------
+# §17.3 Examples 60 and 62. Example 61 needs Chart 61 — see OI-119.
+# --------------------------------------------------------------------------
+
+
+def _chart(number):
+    from hora.charts.book import chart as book_chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = book_chart(number)
+    return compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name=f"Chart {number}", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+
+
+def test_example_60_ashtottari_gives_rahu_mercury_at_ramans_death():
+    """"Rahu-Mercury antardasa was running at the time of his death."
+
+    Example 58 read the same death through Vimsottari from the 8th star and
+    got Mercury-Rahu. The book calls it significant that the same two planets
+    appear in both, and they do — with their roles swapped.
+    """
+    import swisseph as swe
+
+    from hora.dasha.base import find_running
+    from hora.dasha.nakshatra.systems import VIMSHOTTARI
+
+    chart = _chart(23)
+    moon = chart.positions[int(Graha.MOON)].longitude
+    death = swe.julday(1998, 12, 20, 12.0)
+
+    ashtottari = compute_nakshatra_dasha(
+        A, moon, chart.instant.jd_ut, DashaYearLength.SAVANA, levels=2, cycles=1)
+    assert [GRAHA_NAMES[p.lord] for p in find_running(ashtottari, death)] == [
+        "Rahu", "Mercury"]
+
+    vimsottari = compute_nakshatra_dasha(
+        VIMSHOTTARI, moon, chart.instant.jd_ut, DashaYearLength.SAVANA,
+        levels=2, cycles=1, start_star=8)
+    assert [GRAHA_NAMES[p.lord] for p in find_running(vimsottari, death)] == [
+        "Mercury", "Rahu"]
+
+
+def test_example_60_needs_savana_years():
+    """A fifth chart where the book's answer only comes out under savana; the
+    sidereal default gives Rahu-Moon. See OI-115."""
+    import swisseph as swe
+
+    from hora.dasha.base import find_running
+
+    chart = _chart(23)
+    periods = compute_nakshatra_dasha(
+        A, chart.positions[int(Graha.MOON)].longitude, chart.instant.jd_ut,
+        DashaYearLength.SIDEREAL, levels=2, cycles=1)
+    running = [GRAHA_NAMES[p.lord]
+               for p in find_running(periods, swe.julday(1998, 12, 20, 12.0))]
+    assert running != ["Rahu", "Mercury"]
+
+
+def test_example_62_mercury_dasa_spans_1981_to_1997():
+    """"Mercury dasa ran during 1981-1997."
+
+    Savana puts it December 1980 to October 1997, so the printed range is its
+    start rounded up by a month. Sidereal runs to November 1998 and misses the
+    end by a year.
+    """
+    import swisseph as swe
+
+    chart = _chart(6)
+    moon = chart.positions[int(Graha.MOON)].longitude
+
+    def span(year_length):
+        periods = compute_nakshatra_dasha(
+            A, moon, chart.instant.jd_ut, year_length, levels=1, cycles=1)
+        mercury = next(p for p in periods if p.lord == int(Graha.MERCURY))
+        return swe.revjul(mercury.start_jd)[:2], swe.revjul(mercury.end_jd)[:2]
+
+    assert span(DashaYearLength.SAVANA) == ((1980, 12), (1997, 10))
+    assert span(DashaYearLength.SIDEREAL)[1][0] == 1998
+
+
+def test_example_62_mercury_is_lagna_lord_in_his_own_sign():
+    """"Mercury is lagna lord and he occupies an own sign.\""""
+    from hora.core.const import RASI_LORD
+
+    chart = _chart(6)
+    lagna = int(chart.lagna_longitude // 30)
+    mercury = int(chart.positions[int(Graha.MERCURY)].longitude // 30)
+    assert int(RASI_LORD[lagna]) == int(Graha.MERCURY)
+    assert int(RASI_LORD[mercury]) == int(Graha.MERCURY)
+
+
+def test_example_62_the_vipareeta_raja_yoga_pair():
+    """"a powerful Vipareeta Raja yoga between 3rd and 8th lord Mars and 12th
+    lord Sun, who are within a 17' from each other... Mercury is the dispositor
+    of Mars and Sun and joins them in his own rasi.\""""
+    from hora.core.const import RASI_LORD
+
+    chart = _chart(6)
+    lagna = int(chart.lagna_longitude // 30)
+    signs = {g: int(chart.positions[int(g)].longitude // 30)
+             for g in (Graha.SUN, Graha.MARS, Graha.MERCURY)}
+
+    assert int(RASI_LORD[(lagna + 2) % 12]) == int(Graha.MARS)     # 3rd lord
+    assert int(RASI_LORD[(lagna + 7) % 12]) == int(Graha.MARS)     # and 8th
+    assert int(RASI_LORD[(lagna + 11) % 12]) == int(Graha.SUN)     # 12th lord
+
+    separation = abs(chart.positions[int(Graha.MARS)].longitude
+                     - chart.positions[int(Graha.SUN)].longitude) * 60
+    assert separation < 17.0
+
+    # All three share Gemini, which Mercury owns.
+    assert signs[Graha.MARS] == signs[Graha.SUN] == signs[Graha.MERCURY]
+    assert int(RASI_LORD[signs[Graha.MERCURY]]) == int(Graha.MERCURY)
+
+
+def test_example_62_the_two_ashtakavarga_figures():
+    """"He has 7 rekhas in BAV and his rasi Gemini has 34 rekhas in SAV."""
+    from hora.charts.ashtakavarga import bhinnashtakavarga, sarvashtakavarga
+    from hora.charts.book import graha_signs
+    from hora.charts.book import lagna as book_lagna
+
+    signs = graha_signs(6)
+    reference = {
+        "Sun": signs[int(Graha.SUN)], "Moon": signs[int(Graha.MOON)],
+        "Mars": signs[int(Graha.MARS)], "Mercury": signs[int(Graha.MERCURY)],
+        "Jupiter": signs[int(Graha.JUPITER)], "Venus": signs[int(Graha.VENUS)],
+        "Saturn": signs[int(Graha.SATURN)], "Lagna": book_lagna(6),
+    }
+    gemini = 2
+    assert bhinnashtakavarga("Mercury", reference).rekhas[gemini] == 7
+    assert sarvashtakavarga(reference)["rekhas"][gemini] == 34
+
+
+def test_example_62_calls_mercury_uttamaamsa_where_we_count_one_fewer():
+    """See D-54. "Mercury is in Uttamamsa", which on the dasavarga scale is a
+    count of three; we count two, from D1 and D9 both giving him his own sign.
+
+    Pinned rather than hidden: everything else in the paragraph reproduces,
+    so this is one figure out of several.
+    """
+    from hora.services.varga_service import amsabala
+
+    chart = _chart(6)
+    group = amsabala(chart.positions[int(Graha.MERCURY)].longitude,
+                     int(Graha.MERCURY))["groups"]["dasavarga"]
+    assert group["count"] == 2
+    assert group["amsa"] == "Paarijaataamsa"
+    assert [v["chart"] for v in group["strong_in"]] == ["D1", "D9"]
+
+
+def test_the_caveat_travels_with_every_ashtottari_result():
+    """Chapter 17 says its own warning applies with special force here, so it
+    is attached to the response rather than left in a document. Vimsottari
+    carries none, which keeps the field meaningful."""
+    from fastapi.testclient import TestClient
+
+    from hora.api.main import app
+    from hora.core.const import ASHTOTTARI_CAVEAT
+
+    client = TestClient(app)
+    body = {"year": 1921, "month": 6, "day": 28, "hour": 12, "minute": 49,
+            "utc_offset_hours": 5.283,
+            "place": {"latitude": 18.43, "longitude": 79.15}, "levels": 1}
+
+    ashtottari = client.post("/v1/dasha", json=body | {"system": "ashtottari"}).json()
+    assert ashtottari["caveat"] == ASHTOTTARI_CAVEAT
+    assert "applicability as well as application are controversial" in ASHTOTTARI_CAVEAT
+
+    vimshottari = client.post("/v1/dasha", json=body | {"system": "vimshottari"}).json()
+    assert vimshottari["caveat"] is None

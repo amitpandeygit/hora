@@ -348,6 +348,11 @@ class DashaResponse(CalculationEnvelope):
     moon_longitude: float
     balance_at_birth: DashaBalanceOut
     year_length: str
+    caveat: str | None = Field(
+        None,
+        description=("The book's own caution about this dasa system, where it "
+                     "gives one. Ashtottari carries chapter 17's."),
+    )
     reckon_from: str = Field(
         "moon", description="Whether the cycle was seeded from Moon or lagna (§16.4.2)"
     )
