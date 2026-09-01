@@ -530,3 +530,130 @@ def antardasas(
              + (f" — but {exception} occupies the seed, making it {direction}"
                 if exception else "")),
     )
+
+
+# --------------------------------------------------------------------------
+# §18.4 Interpretation
+# --------------------------------------------------------------------------
+
+#: §18.4's central move, and the one most easily skipped. The rasi read as
+#: lagna during a dasa is the dasa rasi *only when the dasas were seeded from
+#: lagna*. Seeded from the 7th house — which both charts worked in this
+#: chapter are — it is the 7th from the dasa rasi instead, six signs away.
+DASA_LAGNA_RULE = (
+    "Narayana dasa gives the progression of lagna in life. During the dasa of "
+    "a rasi, that rasi acts as lagna. If dasas are started from the 7th house "
+    "from lagna, then Narayana dasa gives the progression of the 7th house. "
+    "So the 7th from dasa rasi gives the progressed lagna."
+)
+
+
+def dasa_lagna(dasa_rasi: int, seed: int, natal_lagna: int) -> int:
+    """The rasi read as lagna during one dasa.
+
+    :param dasa_rasi: the rasi whose dasa is running.
+    :param seed: the dasa seed, from :func:`dasa_seed`.
+    :param natal_lagna: the chart's own lagna.
+    :returns: the dasa rasi when the seed was lagna; the 7th from it when the
+        seed was the 7th house.
+    :raises NarayanaError: if the seed is neither lagna nor the 7th from it,
+        which §18.2.1 does not allow.
+    """
+    rasi = validate.in_range("dasa_rasi", dasa_rasi, 0, 11)
+    seed_index = validate.in_range("seed", seed, 0, 11)
+    lagna_index = validate.in_range("natal_lagna", natal_lagna, 0, 11)
+
+    if seed_index == lagna_index:
+        return rasi
+    if seed_index == (lagna_index + 6) % 12:
+        return (rasi + 6) % 12
+    raise NarayanaError(
+        f"the dasa seed {RASI_NAMES[seed_index]} is neither the lagna "
+        f"{RASI_NAMES[lagna_index]} nor the 7th from it; §18.2.1 admits only "
+        f"those two")
+
+
+def paaka_rasi(lagna_of_dasa: int, longitudes: dict[int, float],
+               lord: int | None = None) -> int:
+    """The rasi holding the lord of the dasa lagna.
+
+    :param lord: supply it when the dasa lagna is Scorpio or Aquarius, whose
+        lord §15.5.1 must settle.
+    :raises NarayanaError: when that lord's longitude was not given.
+    """
+    index = validate.in_range("dasa_lagna", lagna_of_dasa, 0, 11)
+    ruler = int(RASI_LORD[index]) if lord is None else int(lord)
+    if ruler not in longitudes:
+        raise NarayanaError(
+            f"no longitude given for {GRAHA_NAMES[ruler]}, the lord of the "
+            f"dasa lagna {RASI_NAMES[index]}")
+    return int(longitudes[ruler] // 30)
+
+
+#: §18.4's list of Parasara's principles, each keyed to what it reads. They
+#: are a register of how a dasa is judged, not a calculation: `houses` are
+#: counted from the dasa lagna unless `reference` says otherwise.
+PARASARA_DASA_PRINCIPLES: tuple[dict, ...] = (
+    {"houses": (3, 6), "who": "natural malefics", "gives": "success in ventures"},
+    {"houses": (3, 6), "who": "natural benefics", "gives": "failures"},
+    {"houses": (1, 5, 9, 8), "who": "natural benefics",
+     "gives": "happiness and success"},
+    {"houses": (1, 5, 9, 8), "who": "natural malefics",
+     "gives": "failures, obstructions and unhappiness"},
+    {"houses": (11,), "who": "any planet, benefic or malefic",
+     "gives": "gains"},
+    {"houses": (8, 12), "who": "Rahu", "gives": "constant fear"},
+    {"houses": (4,), "who": "malefics",
+     "gives": "discomfort and lack of happiness"},
+    {"houses": (4,), "who": "benefics",
+     "gives": "happiness, well-being and pleasures"},
+    {"houses": (2, 5), "who": "benefics",
+     "gives": "good name, fame and favors from authorities"},
+    {"houses": (2, 5), "who": "malefics", "gives": "bad results in those areas"},
+    {"houses": None, "who": "the lord of dasa lagna, or of a trine or quadrant "
+                            "from it, exalted or in own house",
+     "gives": "excellent results"},
+    {"houses": None, "who": "that lord debilitated", "gives": "bad results"},
+    {"houses": None, "who": "the lord of a dusthana from dasa lagna, debilitated",
+     "gives": "good results"},
+    {"houses": (7,), "who": "malefics afflicting the 7th and the paaka rasi",
+     "gives": "troubles in marriage", "reference": "dasa lagna and paaka rasi"},
+    {"houses": None, "who": "raja yogas and dhana yogas from dasa lagna",
+     "gives": "success"},
+    {"houses": None,
+     "who": "an exalted planet or one in own house, with dasa lagna or paaka rasi",
+     "gives": "all-round success and accumulation of wealth"},
+)
+
+#: §18.4's readings that use natal reference points rather than the dasa lagna.
+NATAL_REFERENCE_READINGS: tuple[dict, ...] = (
+    {"of": "raajya pada", "gives": "success in career"},
+    {"of": "upapada", "gives": "marriage"},
+    {"of": "the 2nd or 7th from upapada", "gives": "troubles in marriage"},
+    {"of": "GL", "gives": "power"},
+    {"of": "antardasas aspected by GL", "gives": "promotions"},
+    {"of": "antardasas aspecting upapada", "gives": "marriage"},
+)
+
+#: §18.4's division of each dasa into thirds, each with its own significator.
+DASA_THIRDS: tuple[dict, ...] = (
+    {"part": 1, "dominates": "the rasi"},
+    {"part": 2, "dominates": "its lord, who gives his results"},
+    {"part": 3, "dominates": "occupants of the rasi, and those who aspect it"},
+)
+
+#: How an antardasa's results are read, which is not from the dasa lagna.
+ANTARDASA_RESULT_RULE = (
+    "We also judge the results given in antardasas by looking at the house "
+    "occupied by antardasa lord from dasa rasi."
+)
+
+
+def dasa_thirds(start_years: float, length_years: float) -> tuple[dict, ...]:
+    """§18.4's three equal parts of one dasa, with their significators."""
+    span = validate.finite("length_years", length_years) / 3.0
+    return tuple(
+        {**third, "from_years": start_years + i * span,
+         "to_years": start_years + (i + 1) * span}
+        for i, third in enumerate(DASA_THIRDS)
+    )

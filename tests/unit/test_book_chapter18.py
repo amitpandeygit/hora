@@ -1192,3 +1192,166 @@ def test_choosing_the_seed_by_comparing_lords_is_not_implemented():
 
     assert "much" in ANTARDASA_SEED_BY_LORDS_UNQUANTIFIED
     assert "we compare the rasis" in ANTARDASA_SEED_BY_LORDS_UNQUANTIFIED
+
+
+# --------------------------------------------------------------------------
+# §18.4 Interpretation
+# --------------------------------------------------------------------------
+
+
+def test_dasa_lagna_is_the_dasa_rasi_only_when_the_seed_was_lagna():
+    """§18.4: "If dasas are started from the 7th house from lagna, then
+    Narayana dasa gives the progression of the 7th house. So the 7th from dasa
+    rasi gives the progressed lagna."
+
+    The distinction is silent and six signs wide. Every principle in the
+    section counts houses from the dasa lagna, so reading it from the dasa
+    rasi instead would invert most of them — the 3rd would become the 9th, the
+    trines would land on the dusthanas.
+    """
+    from hora.dasha.rasi.narayana import dasa_lagna
+
+    # Seeded from lagna: the dasa rasi is read as lagna.
+    for rasi in range(12):
+        assert dasa_lagna(rasi, R["Aries"], R["Aries"]) == rasi
+
+    # Seeded from the 7th: the 7th from the dasa rasi is.
+    for rasi in range(12):
+        assert dasa_lagna(rasi, R["Libra"], R["Aries"]) == (rasi + 6) % 12
+
+
+def test_both_charts_worked_in_this_chapter_use_the_shifted_reading():
+    """Charts 21 and 23 are both seeded from the 7th house, so neither reads
+    its dasa lagna as the dasa rasi. A test that only exercised lagna-seeded
+    charts would have missed the rule entirely.
+    """
+    from hora.charts.book import graha_longitudes, lagna
+    from hora.dasha.rasi.narayana import dasa_lagna, dasa_seed
+
+    for number in (21, 23):
+        longitudes = {int(g): lon for g, lon in graha_longitudes(number).items()}
+        natal = lagna(number)
+        seed = dasa_seed(natal, longitudes)["seed"]
+        assert seed == (natal + 6) % 12
+        for rasi in range(12):
+            assert dasa_lagna(rasi, seed, natal) == (rasi + 6) % 12
+
+
+def test_a_seed_that_is_neither_lagna_nor_the_seventh_is_refused():
+    """§18.2.1 admits only those two, so a third would mean the seed was
+    computed wrongly upstream and should not be quietly accommodated."""
+    from hora.dasha.rasi.narayana import NarayanaError, dasa_lagna
+
+    with pytest.raises(NarayanaError, match="neither the lagna"):
+        dasa_lagna(R["Aries"], R["Gemini"], R["Aries"])
+
+
+def test_paaka_rasi_is_where_the_dasa_lagnas_lord_sits():
+    """"We will denote the rasi containing the lord of dasa lagna with 'paaka
+    rasi'." Not the dasa lagna itself, and not the dasa rasi's lord."""
+    from hora.charts.book import graha_longitudes
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import paaka_rasi
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(23).items()}
+    for sign in range(12):
+        if sign in (R["Scorpio"], R["Aquarius"]):
+            continue                               # needs §15.5.1's lord
+        lord = int(RASI_LORD[sign])
+        assert paaka_rasi(sign, longitudes) == int(longitudes[lord] // 30)
+
+
+def test_paaka_rasi_needs_the_stronger_lord_for_the_co_owned_signs():
+    """Scorpio and Aquarius have two lords and give two different paaka rasis,
+    so the caller must resolve them rather than a default being taken."""
+    from hora.charts.book import graha_longitudes
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import paaka_rasi
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(23).items()}
+    by_mars = paaka_rasi(R["Scorpio"], longitudes, int(Graha.MARS))
+    by_ketu = paaka_rasi(R["Scorpio"], longitudes, int(Graha.KETU))
+    assert by_mars != by_ketu
+
+
+def test_a_missing_lord_longitude_is_refused_not_defaulted():
+    from hora.dasha.rasi.narayana import NarayanaError, paaka_rasi
+
+    with pytest.raises(NarayanaError, match="no longitude given"):
+        paaka_rasi(R["Aries"], {})
+
+
+def test_parasaras_principles_are_recorded_as_a_register():
+    """Sixteen readings, each naming what it looks at and what it gives. They
+    are a register rather than a calculation: nothing here predicts, and the
+    houses are counted from the dasa lagna unless an entry says otherwise.
+    """
+    from hora.dasha.rasi.narayana import PARASARA_DASA_PRINCIPLES
+
+    assert len(PARASARA_DASA_PRINCIPLES) == 16
+    for principle in PARASARA_DASA_PRINCIPLES:
+        assert principle["who"] and principle["gives"]
+        if principle["houses"]:
+            assert all(1 <= h <= 12 for h in principle["houses"])
+
+
+def test_the_third_and_sixth_reverse_the_usual_benefic_reading():
+    """"Natural malefics in the 3rd and 6th from dasa lagna give success in
+    ventures. Natural benefics in those houses give failures."
+
+    The inversion is the point, and it is the opposite of the trines-and-8th
+    rule two sentences later, so both are asserted together.
+    """
+    from hora.dasha.rasi.narayana import PARASARA_DASA_PRINCIPLES
+
+    by_key = {(p["houses"], p["who"]): p["gives"]
+              for p in PARASARA_DASA_PRINCIPLES if p["houses"]}
+    assert by_key[((3, 6), "natural malefics")] == "success in ventures"
+    assert by_key[((3, 6), "natural benefics")] == "failures"
+    assert by_key[((1, 5, 9, 8), "natural benefics")] == "happiness and success"
+    assert by_key[((1, 5, 9, 8), "natural malefics")].startswith("failures")
+
+
+def test_each_dasa_divides_into_three_equal_parts():
+    """"divide each dasa into three equal parts. The rasi dominates in the
+    first part. Its lord dominates in the second part... Occupants of the rasi
+    and those who aspect it dominate in the third part."
+    """
+    from hora.dasha.rasi.narayana import dasa_thirds
+
+    thirds = dasa_thirds(0.0, 9.0)
+    assert [t["part"] for t in thirds] == [1, 2, 3]
+    assert [t["from_years"] for t in thirds] == [0.0, 3.0, 6.0]
+    assert [t["to_years"] for t in thirds] == [3.0, 6.0, 9.0]
+    assert "rasi" in thirds[0]["dominates"]
+    assert "lord" in thirds[1]["dominates"]
+    assert "aspect" in thirds[2]["dominates"]
+
+    offset = dasa_thirds(12.5, 3.0)
+    assert offset[0]["from_years"] == 12.5
+    assert offset[2]["to_years"] == 15.5
+
+
+def test_antardasa_results_are_read_from_the_dasa_rasi_not_the_dasa_lagna():
+    """"We also judge the results given in antardasas by looking at the house
+    occupied by antardasa lord from dasa rasi."
+
+    A third reference point in one section — dasa lagna for the dasa, dasa
+    rasi for the antardasa, and the natal points below for their own readings.
+    """
+    from hora.dasha.rasi.narayana import ANTARDASA_RESULT_RULE
+
+    assert "from dasa rasi" in ANTARDASA_RESULT_RULE
+    assert "dasa lagna" not in ANTARDASA_RESULT_RULE
+
+
+def test_the_natal_reference_readings_are_recorded():
+    """"dasa of raajya pada gives success in career. Dasa of upapada may bring
+    marriage..." — read from natal points, not from the dasa lagna."""
+    from hora.dasha.rasi.narayana import NATAL_REFERENCE_READINGS
+
+    subjects = {r["of"] for r in NATAL_REFERENCE_READINGS}
+    assert "raajya pada" in subjects
+    assert "upapada" in subjects
+    assert "GL" in subjects
+    assert len(NATAL_REFERENCE_READINGS) == 6
