@@ -787,3 +787,161 @@ def test_example_66_second_cycle():
     for abbr, first in EX66_LENGTHS[:3]:
         year += second_cycle_length(first)
     assert year == 2002
+
+
+# --------------------------------------------------------------------------
+# Exercise 27 — Chart 21, and the first real chart the Ketu exception fires on.
+# --------------------------------------------------------------------------
+
+#: The exercise's twelve first-cycle dasas, in order, with their lengths.
+EX27_FIRST = [("Aq", 2), ("Vi", 11), ("Ar", 2), ("Sc", 3), ("Ge", 4),
+              ("Cp", 1), ("Le", 9), ("Pi", 3), ("Li", 2), ("Ta", 7),
+              ("Sg", 12), ("Cn", 5)]
+
+#: The eight second-cycle dasas it prints before stopping at paramayush.
+EX27_SECOND = [("Aq", 10), ("Vi", 1), ("Ar", 10), ("Sc", 9), ("Ge", 8),
+               ("Cp", 11), ("Le", 3), ("Pi", 9)]
+
+
+def _chart_21():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(21).items()},
+            {int(g): sign for g, sign in graha_signs(21).items()},
+            lagna(21))
+
+
+def test_exercise_27_seed_is_the_seventh_for_holding_more_planets():
+    """"The 7th house has 2 planets and lagna has only one. So the 7th house
+    acts as dasa seed." That is §15.5.2's rule 1."""
+    from hora.dasha.rasi.narayana import dasa_seed
+
+    longitudes, signs, lagna_sign = _chart_21()
+    assert lagna_sign == R["Leo"]
+    assert len([g for g, s in signs.items() if s == R["Leo"]]) == 1
+    assert len([g for g, s in signs.items() if s == R["Aquarius"]]) == 2
+
+    seed = dasa_seed(lagna_sign, longitudes)
+    assert seed["seed"] == R["Aquarius"]
+    assert seed["decided_by"] == "1"
+
+
+def test_exercise_27_hints_agree_with_section_15_5_1():
+    """"Saturn is the stronger lord of Aq and Ketu is the stronger lord of
+    Sc." The exercise gives these as hints; our cascade derives them."""
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+
+    longitudes, _signs, _lagna = _chart_21()
+    assert stronger(R["Aquarius"], longitudes,
+                    purpose="arudha").winner == int(Graha.SATURN)
+    assert stronger(R["Scorpio"], longitudes,
+                    purpose="arudha").winner == int(Graha.KETU)
+
+
+def test_exercise_27_ketu_reverses_the_direction():
+    """"Because Li (9th from Aq) is odd-footed, direction is normally
+    'forward'. But Ketu's presence in Aq reverses it and makes it 'backward'."
+
+    The first chart where the Ketu exception fires on real placements rather
+    than a constructed one.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import progression
+
+    _longitudes, signs, _lagna = _chart_21()
+    seed = R["Aquarius"]
+    occupants = {g for g, s in signs.items() if s == seed}
+    assert int(Graha.KETU) in occupants
+
+    got = progression(seed, occupants)
+    assert got.exception == "Ketu"
+    assert got.ninth_from_seed == R["Libra"]
+    assert RASI_IS_ODD_FOOTED[got.ninth_from_seed]
+    assert progression(seed).direction == "forward"      # without Ketu
+    assert got.direction == "backward"                   # with him
+    assert " ".join(ABBR[s] for s in got.signs) == \
+        "Aq Vi Ar Sc Ge Cp Le Pi Li Ta Sg Cn"
+
+
+@pytest.mark.parametrize("abbr,years", EX27_FIRST)
+def test_exercise_27_first_cycle_lengths(abbr, years):
+    """All twelve, each with its own counting direction and count."""
+    from hora.charts.colord import stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_21()
+    rasi = BY_ABBR[abbr]
+    lord = (stronger(rasi, longitudes, purpose="arudha").winner
+            if rasi in (R["Scorpio"], R["Aquarius"]) else int(RASI_LORD[rasi]))
+    got = dasa_length(rasi, lord, signs[lord], sign_dignity(lord, longitudes[lord]))
+    assert got.years == years, got.why
+    assert got.out_of_range is None
+
+
+def test_exercise_27_sagittarius_holds_its_own_lord():
+    """Sg's twelve years come from exception 1, not from a count of thirteen —
+    Jupiter sits in Sagittarius, so the count is one and the exception turns
+    the resulting zero into twelve. The first real chart to exercise it.
+    """
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    _longitudes, signs, _lagna = _chart_21()
+    assert int(RASI_LORD[R["Sagittarius"]]) == int(Graha.JUPITER)
+    assert signs[int(Graha.JUPITER)] == R["Sagittarius"]
+
+    got = dasa_length(R["Sagittarius"], int(Graha.JUPITER), R["Sagittarius"])
+    assert got.count == 1
+    assert got.years == 12
+    assert got.applied == ("contains its lord, so 12 rather than 0",)
+
+
+def test_exercise_27_first_cycle_dates():
+    """Nov 1960 to Nov 2021 — sixty-one years, checked as a running total."""
+    assert sum(years for _abbr, years in EX27_FIRST) == 61
+
+    year, dates = 1960, {}
+    for abbr, years in EX27_FIRST:
+        dates[abbr] = (year, year + years)
+        year += years
+    assert year == 2021
+
+    assert dates["Aq"] == (1960, 1962)
+    assert dates["Vi"] == (1962, 1973)
+    assert dates["Le"] == (1983, 1992)
+    assert dates["Sg"] == (2004, 2016)
+    assert dates["Cn"] == (2016, 2021)
+
+
+def test_exercise_27_second_cycle_dates():
+    """Eight more, each 12 less its first-cycle length, ending Nov 2082."""
+    from hora.dasha.rasi.narayana import second_cycle_length
+
+    first = dict(EX27_FIRST)
+    year = 2021
+    for abbr, expected in EX27_SECOND:
+        length = second_cycle_length(first[abbr])
+        assert length == expected, abbr
+        year += length
+    assert year == 2082
+
+
+def test_exercise_27_stops_past_paramayush_not_at_it():
+    """"We stop here because 120 years is the paramayush of human beings."
+
+    Nov 1960 plus 120 years is Nov 2080, and the list runs to Nov 2082 — the
+    dasa straddling the limit is printed whole rather than cut at it.
+    """
+    from hora.dasha.rasi.narayana import second_cycle_length
+
+    first = dict(EX27_FIRST)
+    year = 1960 + sum(years for _a, years in EX27_FIRST)
+    for abbr, _expected in EX27_SECOND[:-1]:
+        year += second_cycle_length(first[abbr])
+    assert year < 1960 + 120                       # the last dasa begins before
+    year += second_cycle_length(first[EX27_SECOND[-1][0]])
+    assert year > 1960 + 120                       # and ends after
+    assert year == 2082
