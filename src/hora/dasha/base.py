@@ -69,6 +69,11 @@ class NakshatraDashaSpec:
     #: Start degree of each lord's arc, parallel to ``order``. Required when
     #: ``start_rule`` is ``arcs``; the arcs are contiguous and wrap 0°.
     arc_starts: tuple[float, ...] = ()
+    #: Where a period's first sub-period starts. Vimsottari begins each
+    #: mahadasa's antardasas on the dasa lord himself (§16.3). Ashtottari
+    #: begins on "the planet that comes in the table *after* the dasa lord"
+    #: and ends on the lord (§17.2.2), so the whole run is rotated by one.
+    sub_periods_start_after_lord: bool = False
     #: Nakshatra count the cycle is laid over — 27 for most, 28 when
     #: Abhijit is included (Ashtottari, Yogini variants).
     nakshatra_count: int = 27
@@ -94,6 +99,8 @@ def _sub_periods(
     if level > max_level:
         return []
     idx = spec.order.index(lord)
+    if spec.sub_periods_start_after_lord:
+        idx = (idx + 1) % len(spec.order)
     total = spec.total_years
     out: list[DashaPeriod] = []
     cursor = start_jd

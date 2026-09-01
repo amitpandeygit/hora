@@ -1,0 +1,865 @@
+{
+  "body": {
+    "balance_at_birth": {
+      "lord": 0,
+      "years": 2.91828605
+    },
+    "input": {
+      "julian_day_ut": 2441591.833333333,
+      "local_time": "1972-10-01T13:30:00",
+      "place": {
+        "altitude": 0.0,
+        "latitude": 16.2,
+        "longitude": 81.13,
+        "name": "Machilipatnam"
+      },
+      "timezone": "Asia/Kolkata",
+      "utc": "1972-10-01T08:00:00+00:00",
+      "utc_offset_hours": 5.5
+    },
+    "moon_longitude": 94.0596796,
+    "periods": [
+      {
+        "children": [
+          {
+            "children": [],
+            "duration_days": 304.3803,
+            "end": "1970-07-03 07:51:08",
+            "end_jd": 2440770.598010828,
+            "level": 2,
+            "lord": 1,
+            "lord_name": "Moon",
+            "start": "1969-09-01 22:43:30",
+            "start_jd": 2440466.21771048
+          },
+          {
+            "children": [],
+            "duration_days": 162.33616,
+            "end": "1970-12-12 15:55:12",
+            "end_jd": 2440932.934171013,
+            "level": 2,
+            "lord": 2,
+            "lord_name": "Mars",
+            "start": "1970-07-03 07:51:08",
+            "start_jd": 2440770.598010828
+          },
+          {
+            "children": [],
+            "duration_days": 344.96434,
+            "end": "1971-11-22 15:03:51",
+            "end_jd": 2441277.898511407,
+            "level": 2,
+            "lord": 3,
+            "lord_name": "Mercury",
+            "start": "1970-12-12 15:55:12",
+            "start_jd": 2440932.934171013
+          },
+          {
+            "children": [],
+            "duration_days": 202.9202,
+            "end": "1972-06-12 13:08:57",
+            "end_jd": 2441480.818711638,
+            "level": 2,
+            "lord": 6,
+            "lord_name": "Saturn",
+            "start": "1971-11-22 15:03:51",
+            "start_jd": 2441277.898511407
+          },
+          {
+            "children": [],
+            "duration_days": 385.54838,
+            "end": "1973-07-03 02:18:37",
+            "end_jd": 2441866.367092079,
+            "level": 2,
+            "lord": 4,
+            "lord_name": "Jupiter",
+            "start": "1972-06-12 13:08:57",
+            "start_jd": 2441480.818711638
+          },
+          {
+            "children": [],
+            "duration_days": 243.50424,
+            "end": "1974-03-03 14:24:43",
+            "end_jd": 2442109.871332357,
+            "level": 2,
+            "lord": 7,
+            "lord_name": "Rahu",
+            "start": "1973-07-03 02:18:37",
+            "start_jd": 2441866.367092079
+          },
+          {
+            "children": [],
+            "duration_days": 426.13242,
+            "end": "1975-05-03 17:35:24",
+            "end_jd": 2442536.003752843,
+            "level": 2,
+            "lord": 5,
+            "lord_name": "Venus",
+            "start": "1974-03-03 14:24:43",
+            "start_jd": 2442109.871332357
+          },
+          {
+            "children": [],
+            "duration_days": 121.75212,
+            "end": "1975-09-02 11:38:27",
+            "end_jd": 2442657.755872982,
+            "level": 2,
+            "lord": 0,
+            "lord_name": "Sun",
+            "start": "1975-05-03 17:35:24",
+            "start_jd": 2442536.003752843
+          }
+        ],
+        "duration_days": 2191.538163,
+        "end": "1975-09-02 11:38:27",
+        "end_jd": 2442657.755872982,
+        "level": 1,
+        "lord": 0,
+        "lord_name": "Sun",
+        "start": "1969-09-01 22:43:30",
+        "start_jd": 2440466.21771048
+      },
+      {
+        "children": [
+          {
+            "children": [],
+            "duration_days": 405.8404,
+            "end": "1976-10-12 07:48:38",
+            "end_jd": 2443063.596273446,
+            "level": 2,
+            "lord": 2,
+            "lord_name": "Mars",
+            "start": "1975-09-02 11:38:27",
+            "start_jd": 2442657.755872982
+          },
+          {
+            "children": [],
+            "duration_days": 862.410851,
+            "end": "1979-02-21 17:40:16",
+            "end_jd": 2443926.00712443,
+            "level": 2,
+            "lord": 3,
+            "lord_name": "Mercury",
+            "start": "1976-10-12 07:48:38",
+            "start_jd": 2443063.596273446
+          },
+          {
+            "children": [],
+            "duration_days": 507.300501,
+            "end": "1980-07-13 00:52:59",
+            "end_jd": 2444433.307625009,
+            "level": 2,
+            "lord": 6,
+            "lord_name": "Saturn",
+            "start": "1979-02-21 17:40:16",
+            "start_jd": 2443926.00712443
+          },
+          {
+            "children": [],
+            "duration_days": 963.870951,
+            "end": "1983-03-03 21:47:09",
+            "end_jd": 2445397.178576109,
+            "level": 2,
+            "lord": 4,
+            "lord_name": "Jupiter",
+            "start": "1980-07-13 00:52:59",
+            "start_jd": 2444433.307625009
+          },
+          {
+            "children": [],
+            "duration_days": 608.760601,
+            "end": "1984-11-01 16:02:25",
+            "end_jd": 2446005.939176804,
+            "level": 2,
+            "lord": 7,
+            "lord_name": "Rahu",
+            "start": "1983-03-03 21:47:09",
+            "start_jd": 2445397.178576109
+          },
+          {
+            "children": [],
+            "duration_days": 1065.331051,
+            "end": "1987-10-02 23:59:08",
+            "end_jd": 2447071.270228021,
+            "level": 2,
+            "lord": 5,
+            "lord_name": "Venus",
+            "start": "1984-11-01 16:02:25",
+            "start_jd": 2446005.939176804
+          },
+          {
+            "children": [],
+            "duration_days": 304.3803,
+            "end": "1988-08-02 09:06:46",
+            "end_jd": 2447375.650528369,
+            "level": 2,
+            "lord": 0,
+            "lord_name": "Sun",
+            "start": "1987-10-02 23:59:08",
+            "start_jd": 2447071.270228021
+          },
+          {
+            "children": [],
+            "duration_days": 760.950751,
+            "end": "1990-09-02 07:55:51",
+            "end_jd": 2448136.601279237,
+            "level": 2,
+            "lord": 1,
+            "lord_name": "Moon",
+            "start": "1988-08-02 09:06:46",
+            "start_jd": 2447375.650528369
+          }
+        ],
+        "duration_days": 5478.845406,
+        "end": "1990-09-02 07:55:51",
+        "end_jd": 2448136.601279237,
+        "level": 1,
+        "lord": 1,
+        "lord_name": "Moon",
+        "start": "1975-09-02 11:38:27",
+        "start_jd": 2442657.755872982
+      },
+      {
+        "children": [
+          {
+            "children": [],
+            "duration_days": 459.952454,
+            "end": "1991-12-06 06:47:23",
+            "end_jd": 2448596.553733096,
+            "level": 2,
+            "lord": 3,
+            "lord_name": "Mercury",
+            "start": "1990-09-02 07:55:51",
+            "start_jd": 2448136.601279237
+          },
+          {
+            "children": [],
+            "duration_days": 270.560267,
+            "end": "1992-09-01 20:14:10",
+            "end_jd": 2448867.114000071,
+            "level": 2,
+            "lord": 6,
+            "lord_name": "Saturn",
+            "start": "1991-12-06 06:47:23",
+            "start_jd": 2448596.553733096
+          },
+          {
+            "children": [],
+            "duration_days": 514.064507,
+            "end": "1994-01-28 21:47:03",
+            "end_jd": 2449381.178507325,
+            "level": 2,
+            "lord": 4,
+            "lord_name": "Jupiter",
+            "start": "1992-09-01 20:14:10",
+            "start_jd": 2448867.114000071
+          },
+          {
+            "children": [],
+            "duration_days": 324.67232,
+            "end": "1994-12-19 13:55:12",
+            "end_jd": 2449705.850827695,
+            "level": 2,
+            "lord": 7,
+            "lord_name": "Rahu",
+            "start": "1994-01-28 21:47:03",
+            "start_jd": 2449381.178507325
+          },
+          {
+            "children": [],
+            "duration_days": 568.176561,
+            "end": "1996-07-09 18:09:26",
+            "end_jd": 2450274.027388344,
+            "level": 2,
+            "lord": 5,
+            "lord_name": "Venus",
+            "start": "1994-12-19 13:55:12",
+            "start_jd": 2449705.850827695
+          },
+          {
+            "children": [],
+            "duration_days": 162.33616,
+            "end": "1996-12-19 02:13:31",
+            "end_jd": 2450436.363548529,
+            "level": 2,
+            "lord": 0,
+            "lord_name": "Sun",
+            "start": "1996-07-09 18:09:26",
+            "start_jd": 2450274.027388344
+          },
+          {
+            "children": [],
+            "duration_days": 405.8404,
+            "end": "1998-01-28 22:23:41",
+            "end_jd": 2450842.203948993,
+            "level": 2,
+            "lord": 1,
+            "lord_name": "Moon",
+            "start": "1996-12-19 02:13:31",
+            "start_jd": 2450436.363548529
+          },
+          {
+            "children": [],
+            "duration_days": 216.448214,
+            "end": "1998-09-02 09:09:07",
+            "end_jd": 2451058.652162573,
+            "level": 2,
+            "lord": 2,
+            "lord_name": "Mars",
+            "start": "1998-01-28 22:23:41",
+            "start_jd": 2450842.203948993
+          }
+        ],
+        "duration_days": 2922.050883,
+        "end": "1998-09-02 09:09:07",
+        "end_jd": 2451058.652162573,
+        "level": 1,
+        "lord": 2,
+        "lord_name": "Mars",
+        "start": "1990-09-02 07:55:51",
+        "start_jd": 2448136.601279237
+      },
+      {
+        "children": [
+          {
+            "children": [],
+            "duration_days": 574.940567,
+            "end": "2000-03-30 07:43:32",
+            "end_jd": 2451633.592729896,
+            "level": 2,
+            "lord": 6,
+            "lord_name": "Saturn",
+            "start": "1998-09-02 09:09:07",
+            "start_jd": 2451058.652162573
+          },
+          {
+            "children": [],
+            "duration_days": 1092.387078,
+            "end": "2003-03-27 17:00:55",
+            "end_jd": 2452725.97980781,
+            "level": 2,
+            "lord": 4,
+            "lord_name": "Jupiter",
+            "start": "2000-03-30 07:43:32",
+            "start_jd": 2451633.592729896
+          },
+          {
+            "children": [],
+            "duration_days": 689.928681,
+            "end": "2005-02-14 15:18:13",
+            "end_jd": 2453415.908488598,
+            "level": 2,
+            "lord": 7,
+            "lord_name": "Rahu",
+            "start": "2003-03-27 17:00:55",
+            "start_jd": 2452725.97980781
+          },
+          {
+            "children": [],
+            "duration_days": 1207.375191,
+            "end": "2008-06-06 00:18:30",
+            "end_jd": 2454623.283679976,
+            "level": 2,
+            "lord": 5,
+            "lord_name": "Venus",
+            "start": "2005-02-14 15:18:13",
+            "start_jd": 2453415.908488598
+          },
+          {
+            "children": [],
+            "duration_days": 344.96434,
+            "end": "2009-05-16 23:27:09",
+            "end_jd": 2454968.24802037,
+            "level": 2,
+            "lord": 0,
+            "lord_name": "Sun",
+            "start": "2008-06-06 00:18:30",
+            "start_jd": 2454623.283679976
+          },
+          {
+            "children": [],
+            "duration_days": 862.410851,
+            "end": "2011-09-26 09:18:46",
+            "end_jd": 2455830.658871355,
+            "level": 2,
+            "lord": 1,
+            "lord_name": "Moon",
+            "start": "2009-05-16 23:27:09",
+            "start_jd": 2454968.24802037
+          },
+          {
+            "children": [],
+            "duration_days": 459.952454,
+            "end": "2012-12-29 08:10:18",
+            "end_jd": 2456290.611325213,
+            "level": 2,
+            "lord": 2,
+            "lord_name": "Mars",
+            "start": "2011-09-26 09:18:46",
+            "start_jd": 2455830.658871355
+          },
+          {
+            "children": [],
+            "duration_days": 977.398964,
+            "end": "2015-09-02 17:44:49",
+            "end_jd": 2457268.010289662,
+            "level": 2,
+            "lord": 3,
+            "lord_name": "Mercury",
+            "start": "2012-12-29 08:10:18",
+            "start_jd": 2456290.611325213
+          }
+        ],
+        "duration_days": 6209.358127,
+        "end": "2015-09-02 17:44:49",
+        "end_jd": 2457268.010289663,
+        "level": 1,
+        "lord": 3,
+        "lord_name": "Mercury",
+        "start": "1998-09-02 09:09:07",
+        "start_jd": 2451058.652162573
+      },
+      {
+        "children": [
+          {
+            "children": [],
+            "duration_days": 642.580634,
+            "end": "2017-06-06 07:40:56",
+            "end_jd": 2457910.590923729,
+            "level": 2,
+            "lord": 4,
+            "lord_name": "Jupiter",
+            "start": "2015-09-02 17:44:49",
+            "start_jd": 2457268.010289663
+          },
+          {
+            "children": [],
+            "duration_days": 405.8404,
+            "end": "2018-07-17 03:51:06",
+            "end_jd": 2458316.431324193,
+            "level": 2,
+            "lord": 7,
+            "lord_name": "Rahu",
+            "start": "2017-06-06 07:40:56",
+            "start_jd": 2457910.590923729
+          },
+          {
+            "children": [],
+            "duration_days": 710.220701,
+            "end": "2020-06-26 09:08:55",
+            "end_jd": 2459026.652025003,
+            "level": 2,
+            "lord": 5,
+            "lord_name": "Venus",
+            "start": "2018-07-17 03:51:06",
+            "start_jd": 2458316.431324193
+          },
+          {
+            "children": [],
+            "duration_days": 202.9202,
+            "end": "2021-01-15 07:14:00",
+            "end_jd": 2459229.572225235,
+            "level": 2,
+            "lord": 0,
+            "lord_name": "Sun",
+            "start": "2020-06-26 09:08:55",
+            "start_jd": 2459026.652025003
+          },
+          {
+            "children": [],
+            "duration_days": 507.300501,
+            "end": "2022-06-06 14:26:44",
+            "end_jd": 2459736.872725814,
+            "level": 2,
+            "lord": 1,
+            "lord_name": "Moon",
+            "start": "2021-01-15 07:14:00",
+            "start_jd": 2459229.572225235
+          },
+          {
+            "children": [],
+            "duration_days": 270.560267,
+            "end": "2023-03-04 03:53:31",
+            "end_jd": 2460007.43299279,
+            "level": 2,
+            "lord": 2,
+            "lord_name": "Mars",
+            "start": "2022-06-06 14:26:44",
+            "start_jd": 2459736.872725814
+          },
+          {
+            "children": [],
+            "duration_days": 574.940567,
+            "end": "2024-09-29 02:27:56",
+            "end_jd": 2460582.373560113,
+            "level": 2,
+            "lord": 3,
+            "lord_name": "Mercury",
+            "start": "2023-03-04 03:53:31",
+            "start_jd": 2460007.43299279
+          },
+          {
+            "children": [],
+            "duration_days": 338.200334,
+            "end": "2025-09-02 07:16:24",
+            "end_jd": 2460920.573893833,
+            "level": 2,
+            "lord": 6,
+            "lord_name": "Saturn",
+            "start": "2024-09-29 02:27:56",
+            "start_jd": 2460582.373560113
+          }
+        ],
+        "duration_days": 3652.563604,
+        "end": "2025-09-02 07:16:24",
+        "end_jd": 2460920.573893833,
+        "level": 1,
+        "lord": 6,
+        "lord_name": "Saturn",
+        "start": "2015-09-02 17:44:49",
+        "start_jd": 2457268.010289663
+      },
+      {
+        "children": [
+          {
+            "children": [],
+            "duration_days": 771.096761,
+            "end": "2027-10-13 09:35:45",
+            "end_jd": 2461691.670654713,
+            "level": 2,
+            "lord": 7,
+            "lord_name": "Rahu",
+            "start": "2025-09-02 07:16:24",
+            "start_jd": 2460920.573893833
+          },
+          {
+            "children": [],
+            "duration_days": 1349.419332,
+            "end": "2031-06-23 19:39:35",
+            "end_jd": 2463041.089986253,
+            "level": 2,
+            "lord": 5,
+            "lord_name": "Venus",
+            "start": "2027-10-13 09:35:45",
+            "start_jd": 2461691.670654713
+          },
+          {
+            "children": [],
+            "duration_days": 385.54838,
+            "end": "2032-07-13 08:49:15",
+            "end_jd": 2463426.638366693,
+            "level": 2,
+            "lord": 0,
+            "lord_name": "Sun",
+            "start": "2031-06-23 19:39:35",
+            "start_jd": 2463041.089986253
+          },
+          {
+            "children": [],
+            "duration_days": 963.870951,
+            "end": "2035-03-04 05:43:25",
+            "end_jd": 2464390.509317793,
+            "level": 2,
+            "lord": 1,
+            "lord_name": "Moon",
+            "start": "2032-07-13 08:49:15",
+            "start_jd": 2463426.638366693
+          },
+          {
+            "children": [],
+            "duration_days": 514.064507,
+            "end": "2036-07-30 07:16:18",
+            "end_jd": 2464904.573825047,
+            "level": 2,
+            "lord": 2,
+            "lord_name": "Mars",
+            "start": "2035-03-04 05:43:25",
+            "start_jd": 2464390.509317793
+          },
+          {
+            "children": [],
+            "duration_days": 1092.387078,
+            "end": "2039-07-27 16:33:42",
+            "end_jd": 2465996.960902961,
+            "level": 2,
+            "lord": 3,
+            "lord_name": "Mercury",
+            "start": "2036-07-30 07:16:18",
+            "start_jd": 2464904.573825047
+          },
+          {
+            "children": [],
+            "duration_days": 642.580634,
+            "end": "2041-04-30 06:29:49",
+            "end_jd": 2466639.541537027,
+            "level": 2,
+            "lord": 6,
+            "lord_name": "Saturn",
+            "start": "2039-07-27 16:33:42",
+            "start_jd": 2465996.960902961
+          },
+          {
+            "children": [],
+            "duration_days": 1220.903205,
+            "end": "2044-09-02 04:10:26",
+            "end_jd": 2467860.444741754,
+            "level": 2,
+            "lord": 4,
+            "lord_name": "Jupiter",
+            "start": "2041-04-30 06:29:49",
+            "start_jd": 2466639.541537027
+          }
+        ],
+        "duration_days": 6939.870848,
+        "end": "2044-09-02 04:10:26",
+        "end_jd": 2467860.444741756,
+        "level": 1,
+        "lord": 4,
+        "lord_name": "Jupiter",
+        "start": "2025-09-02 07:16:24",
+        "start_jd": 2460920.573893833
+      },
+      {
+        "children": [
+          {
+            "children": [],
+            "duration_days": 852.264841,
+            "end": "2047-01-02 10:31:48",
+            "end_jd": 2468712.709582729,
+            "level": 2,
+            "lord": 5,
+            "lord_name": "Venus",
+            "start": "2044-09-02 04:10:26",
+            "start_jd": 2467860.444741756
+          },
+          {
+            "children": [],
+            "duration_days": 243.50424,
+            "end": "2047-09-02 22:37:54",
+            "end_jd": 2468956.213823007,
+            "level": 2,
+            "lord": 0,
+            "lord_name": "Sun",
+            "start": "2047-01-02 10:31:48",
+            "start_jd": 2468712.709582729
+          },
+          {
+            "children": [],
+            "duration_days": 608.760601,
+            "end": "2049-05-03 16:53:10",
+            "end_jd": 2469564.974423702,
+            "level": 2,
+            "lord": 1,
+            "lord_name": "Moon",
+            "start": "2047-09-02 22:37:54",
+            "start_jd": 2468956.213823007
+          },
+          {
+            "children": [],
+            "duration_days": 324.67232,
+            "end": "2050-03-24 09:01:19",
+            "end_jd": 2469889.646744072,
+            "level": 2,
+            "lord": 2,
+            "lord_name": "Mars",
+            "start": "2049-05-03 16:53:10",
+            "start_jd": 2469564.974423702
+          },
+          {
+            "children": [],
+            "duration_days": 689.928681,
+            "end": "2052-02-12 07:18:37",
+            "end_jd": 2470579.57542486,
+            "level": 2,
+            "lord": 3,
+            "lord_name": "Mercury",
+            "start": "2050-03-24 09:01:19",
+            "start_jd": 2469889.646744072
+          },
+          {
+            "children": [],
+            "duration_days": 405.8404,
+            "end": "2053-03-24 03:28:47",
+            "end_jd": 2470985.415825324,
+            "level": 2,
+            "lord": 6,
+            "lord_name": "Saturn",
+            "start": "2052-02-12 07:18:37",
+            "start_jd": 2470579.57542486
+          },
+          {
+            "children": [],
+            "duration_days": 771.096761,
+            "end": "2055-05-04 05:48:07",
+            "end_jd": 2471756.512586204,
+            "level": 2,
+            "lord": 4,
+            "lord_name": "Jupiter",
+            "start": "2053-03-24 03:28:47",
+            "start_jd": 2470985.415825324
+          },
+          {
+            "children": [],
+            "duration_days": 487.008481,
+            "end": "2056-09-02 06:00:20",
+            "end_jd": 2472243.52106676,
+            "level": 2,
+            "lord": 7,
+            "lord_name": "Rahu",
+            "start": "2055-05-04 05:48:07",
+            "start_jd": 2471756.512586204
+          }
+        ],
+        "duration_days": 4383.076325,
+        "end": "2056-09-02 06:00:20",
+        "end_jd": 2472243.52106676,
+        "level": 1,
+        "lord": 7,
+        "lord_name": "Rahu",
+        "start": "2044-09-02 04:10:26",
+        "start_jd": 2467860.444741756
+      },
+      {
+        "children": [
+          {
+            "children": [],
+            "duration_days": 426.13242,
+            "end": "2057-11-02 09:11:01",
+            "end_jd": 2472669.653487246,
+            "level": 2,
+            "lord": 0,
+            "lord_name": "Sun",
+            "start": "2056-09-02 06:00:20",
+            "start_jd": 2472243.52106676
+          },
+          {
+            "children": [],
+            "duration_days": 1065.331051,
+            "end": "2060-10-02 17:07:44",
+            "end_jd": 2473734.984538462,
+            "level": 2,
+            "lord": 1,
+            "lord_name": "Moon",
+            "start": "2057-11-02 09:11:01",
+            "start_jd": 2472669.653487246
+          },
+          {
+            "children": [],
+            "duration_days": 568.176561,
+            "end": "2062-04-23 21:21:59",
+            "end_jd": 2474303.161099111,
+            "level": 2,
+            "lord": 2,
+            "lord_name": "Mars",
+            "start": "2060-10-02 17:07:44",
+            "start_jd": 2473734.984538462
+          },
+          {
+            "children": [],
+            "duration_days": 1207.375191,
+            "end": "2065-08-13 06:22:15",
+            "end_jd": 2475510.53629049,
+            "level": 2,
+            "lord": 3,
+            "lord_name": "Mercury",
+            "start": "2062-04-23 21:21:59",
+            "start_jd": 2474303.161099111
+          },
+          {
+            "children": [],
+            "duration_days": 710.220701,
+            "end": "2067-07-24 11:40:04",
+            "end_jd": 2476220.7569913,
+            "level": 2,
+            "lord": 6,
+            "lord_name": "Saturn",
+            "start": "2065-08-13 06:22:15",
+            "start_jd": 2475510.53629049
+          },
+          {
+            "children": [],
+            "duration_days": 1349.419332,
+            "end": "2071-04-03 21:43:54",
+            "end_jd": 2477570.176322841,
+            "level": 2,
+            "lord": 4,
+            "lord_name": "Jupiter",
+            "start": "2067-07-24 11:40:04",
+            "start_jd": 2476220.7569913
+          },
+          {
+            "children": [],
+            "duration_days": 852.264841,
+            "end": "2073-08-03 04:05:17",
+            "end_jd": 2478422.441163814,
+            "level": 2,
+            "lord": 7,
+            "lord_name": "Rahu",
+            "start": "2071-04-03 21:43:54",
+            "start_jd": 2477570.176322841
+          },
+          {
+            "children": [],
+            "duration_days": 1491.463472,
+            "end": "2077-09-02 15:12:41",
+            "end_jd": 2479913.904635516,
+            "level": 2,
+            "lord": 5,
+            "lord_name": "Venus",
+            "start": "2073-08-03 04:05:17",
+            "start_jd": 2478422.441163814
+          }
+        ],
+        "duration_days": 7670.383569,
+        "end": "2077-09-02 15:12:41",
+        "end_jd": 2479913.904635517,
+        "level": 1,
+        "lord": 5,
+        "lord_name": "Venus",
+        "start": "2056-09-02 06:00:20",
+        "start_jd": 2472243.52106676
+      }
+    ],
+    "reckon_from": "moon",
+    "running": [
+      {
+        "level": 1,
+        "lord": 0,
+        "lord_name": "Sun"
+      },
+      {
+        "level": 2,
+        "lord": 4,
+        "lord_name": "Jupiter"
+      }
+    ],
+    "seed_longitude": 94.0596796,
+    "settings": {
+      "apparent_positions": false,
+      "ayanamsa": "lahiri",
+      "custom_ayanamsa_deg": null,
+      "dasha_year_length": "sidereal",
+      "house_system": "whole_sign",
+      "include_outer_planets": false,
+      "ketu_mode": "opposite_rahu",
+      "language": "en",
+      "name_scheme": "book",
+      "node_direction": "retrograde",
+      "node_type": "true",
+      "rahu_ketu_aspects": false,
+      "sanskrit_names": false,
+      "sunrise_mode": "disc_upper_limb",
+      "topocentric": false,
+      "upagraha_rise_point": "middle"
+    },
+    "start_star": 1,
+    "start_star_name": "Moon's own",
+    "system": {
+      "key": "ashtottari",
+      "name": "Ashtottari",
+      "total_years": 108
+    },
+    "year_length": "sidereal"
+  },
+  "status": 200
+}

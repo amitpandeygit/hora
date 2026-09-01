@@ -70,6 +70,7 @@ DASHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "ASHTOTTARI_IS_CONDITIONAL",
     "ASHTOTTARI_MEANS_108",
     "ASHTOTTARI_HAS_NO_KETU",
+    "ASHTOTTARI_ANTARDASA_RULE",
 )
 
 
@@ -284,4 +285,32 @@ ASHTOTTARI_HAS_NO_KETU = (
     "under the Ashtottari dasa scheme, it may also be suggested that it shows "
     "events related to sustenance, achievements, raja yogas and moksha (just "
     "like chara karakas do)."
+)
+
+
+#: §17.2.2's antardasa rule, which differs from Vimsottari's. Kept as a
+#: sentence because the difference is easy to read past.
+ASHTOTTARI_ANTARDASA_RULE = (
+    "The first antardasa belongs to the planet that comes in the table "
+    "*after* the dasa lord. Then antardasas go in the same order as dasas and "
+    "the last antardasa belongs to dasa lord."
+)
+
+#: §17.2.3's three views on when Ashtottari applies. The section gives them
+#: without choosing, and §17.1 calls the conditions "highly controversial", so
+#: nothing here gates anything — a caller who wants one applies it themselves.
+#: ``computable`` says whether the condition can be evaluated from a chart at
+#: all; view 1 is vacuous rather than computable.
+ASHTOTTARI_APPLICABILITY_VIEWS: tuple[dict, ...] = (
+    {"view": 1, "computable": False,
+     "text": "Ashtottari dasa is applicable in all charts."},
+    {"view": 2, "computable": True,
+     "needs": ("Rahu's house from lagna", "Rahu's house from the lagna lord"),
+     "text": ("Ashtottari dasa is applicable if Rahu, who is not in lagna, is "
+              "in a quadrant or a trine from lagna lord.")},
+    {"view": 3, "computable": True,
+     "needs": ("whether the birth was by day or night", "the paksha"),
+     "text": ("Ashtottari dasa is applicable for daytime births in Krishna "
+              "paksha (darker fortnight) and night time births in Sukla "
+              "paksha (brighter fortnight).")},
 )

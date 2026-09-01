@@ -81,6 +81,11 @@ CASES = [
     ("dasha_vimshottari", "POST", "/v1/dasha",
      {**PVR, "system": "vimshottari", "levels": 3}),
     ("dasha_ashtottari", "POST", "/v1/dasha", {**PVR, "system": "ashtottari", "levels": 1}),
+    # Ashtottari's antardasas begin on the planet *after* the dasa lord
+    # (§17.2.2), unlike Vimsottari's. Captured at two levels so that rule is
+    # locked at the API boundary — at one level it was invisible.
+    ("dasha_ashtottari_antardasas", "POST", "/v1/dasha",
+     {**PVR, "system": "ashtottari", "levels": 2}),
     ("dasha_as_of", "POST", "/v1/dasha",
      {**PVR, "system": "vimshottari", "levels": 2, "as_of": "2026-08-25T10:00:00"}),
 

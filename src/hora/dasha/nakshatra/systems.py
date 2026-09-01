@@ -23,6 +23,7 @@ ASHTOTTARI = NakshatraDashaSpec(
     years=(6, 15, 8, 17, 10, 19, 12, 21),
     start_rule="arcs",
     arc_starts=tuple(arc["start"] for arc in ASHTOTTARI_ARCS),
+    sub_periods_start_after_lord=True,
 )
 
 DWADASOTTARI = NakshatraDashaSpec(

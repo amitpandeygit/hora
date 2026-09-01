@@ -229,3 +229,132 @@ def test_the_wrap_is_continuous_across_zero():
     _lord, after = balance_at_birth(A, 0.001)
     assert before > after
     assert before - after == pytest.approx(0.0, abs=1e-3)
+
+
+# --------------------------------------------------------------------------
+# §17.2.2 Antardasas
+# --------------------------------------------------------------------------
+
+
+def _antardasas(lord_name: str) -> list[str]:
+    import swisseph as swe
+
+    periods = compute_nakshatra_dasha(
+        A, 300.0, swe.julday(2000, 1, 1, 12.0), DashaYearLength.SAVANA,
+        levels=2, cycles=1)
+    period = next(p for p in periods if GRAHA_NAMES[p.lord] == lord_name)
+    return [GRAHA_NAMES[c.lord] for c in period.children]
+
+
+@pytest.mark.parametrize(
+    "lord,expected",
+    [
+        ("Jupiter", ["Rahu", "Venus", "Sun", "Moon", "Mars", "Mercury",
+                     "Saturn", "Jupiter"]),
+        ("Moon", ["Mars", "Mercury", "Saturn", "Jupiter", "Rahu", "Venus",
+                  "Sun", "Moon"]),
+    ],
+)
+def test_the_two_antardasa_runs_the_section_prints(lord, expected):
+    """"antardasas in Jupiter dasa go as: Rahu, Venus, Sun, Moon, Mars,
+    Mercury, Saturn and Jupiter. Antardasas in Moon dasa go as: Mars, Mercury,
+    Saturn, Jupiter, Rahu, Venus, Sun and Moon.\""""
+    assert _antardasas(lord) == expected
+
+
+def test_the_first_antardasa_is_the_planet_after_the_dasa_lord():
+    """"The first antardasa belongs to the planet that comes in the table
+    *after* the dasa lord... and the last antardasa belongs to dasa lord."
+
+    This is where Ashtottari parts company with Vimsottari, whose §16.3 rule
+    is that the first antardasa belongs to the dasa lord himself. Getting it
+    wrong leaves the right set of antardasas in the wrong time slots.
+    """
+    names = [GRAHA_NAMES[g] for g in A.order]
+    for i, lord in enumerate(names):
+        run = _antardasas(lord)
+        assert run[0] == names[(i + 1) % len(names)]
+        assert run[-1] == lord
+        assert set(run) == set(names)
+
+
+def test_vimsottari_still_begins_on_its_own_lord():
+    """The fix must not leak into the system that does it the other way."""
+    import swisseph as swe
+
+    from hora.dasha.nakshatra.systems import VIMSHOTTARI
+
+    periods = compute_nakshatra_dasha(
+        VIMSHOTTARI, 5.0, swe.julday(2000, 1, 1, 12.0),
+        DashaYearLength.SAVANA, levels=2, cycles=1)
+    assert periods[0].children[0].lord == periods[0].lord
+
+
+def test_the_antardasa_lengths_the_section_prints():
+    """"Sun dasa is of 6 years. Moon antardasa in Sun dasa is of 6 x 15/108 =
+    0.8333 year = 10 months. Mars antardasa ... 0.4444 year = 5 months 10
+    days. Mercury antardasa ... 0.9444 years = 11 months 10 days.\""""
+    import swisseph as swe
+
+    periods = compute_nakshatra_dasha(
+        A, 70.0, swe.julday(2000, 1, 1, 12.0), DashaYearLength.SAVANA,
+        levels=2, cycles=1)
+    sun = next(p for p in periods if GRAHA_NAMES[p.lord] == "Sun")
+    assert (sun.end_jd - sun.start_jd) / 360 == pytest.approx(6.0)
+
+    years = {GRAHA_NAMES[c.lord]: (c.end_jd - c.start_jd) / 360
+             for c in sun.children}
+    assert years["Moon"] == pytest.approx(6 * 15 / 108)
+    assert years["Mars"] == pytest.approx(6 * 8 / 108)
+    assert years["Mercury"] == pytest.approx(6 * 17 / 108)
+    assert sum(years.values()) == pytest.approx(6.0)
+
+
+def test_the_antardasas_divide_in_the_ratio_of_the_dasa_lengths():
+    """"The length of a dasa is divided into eight antardasas in the ratio of
+    the dasa lengths." Checked for every dasa, not just the Sun's."""
+    import swisseph as swe
+
+    periods = compute_nakshatra_dasha(
+        A, 70.0, swe.julday(2000, 1, 1, 12.0), DashaYearLength.SAVANA,
+        levels=2, cycles=1)
+    for period in periods:
+        span = period.end_jd - period.start_jd
+        for child in period.children:
+            share = A.years[list(A.order).index(child.lord)] / 108
+            assert (child.end_jd - child.start_jd) == pytest.approx(span * share)
+
+
+# --------------------------------------------------------------------------
+# §17.2.3 Application
+# --------------------------------------------------------------------------
+
+
+def test_the_three_applicability_views_are_recorded_without_choosing():
+    """§17.2.3 lists three views and picks none, and §17.1 calls the
+    conditions "highly controversial". Nothing gates on them."""
+    from hora.core.const import (
+        ASHTOTTARI_APPLICABILITY_VIEWS,
+        ASHTOTTARI_IS_CONDITIONAL,
+    )
+
+    assert len(ASHTOTTARI_APPLICABILITY_VIEWS) == 3
+    assert [v["view"] for v in ASHTOTTARI_APPLICABILITY_VIEWS] == [1, 2, 3]
+    assert "highly controversial" in ASHTOTTARI_IS_CONDITIONAL
+
+    # View 1 is vacuous; the other two name what a chart must supply.
+    first, second, third = ASHTOTTARI_APPLICABILITY_VIEWS
+    assert first["computable"] is False
+    assert second["computable"] and second["needs"]
+    assert third["computable"] and third["needs"]
+
+
+def test_the_two_computable_views_disagree_by_construction():
+    """View 2 turns on Rahu's placement, view 3 on the birth's time and
+    paksha. They share no input, so they cannot be reconciled — which is why
+    the section leaves the choice to the reader.
+    """
+    from hora.core.const import ASHTOTTARI_APPLICABILITY_VIEWS
+
+    _first, second, third = ASHTOTTARI_APPLICABILITY_VIEWS
+    assert set(second["needs"]).isdisjoint(third["needs"])
