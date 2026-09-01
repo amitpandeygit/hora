@@ -374,6 +374,20 @@ def stronger(
         "the former is stronger", None, False, detail + " — tie")
 
     # --- Rule 4 ---
+    # Rules 1 to 3 read only which rasi a graha is in, so they survive a
+    # partial chart. Rule 4 onwards needs the lords' own longitudes, and a
+    # caller may not have supplied them — say so rather than raising.
+    absent = [lords[r] for r in (a, b) if lords[r] not in longitudes]
+    if absent:
+        missing = ", ".join(GRAHA_NAMES[g] for g in sorted(set(absent)))
+        detail = (
+            f"rule 4 needs the longitude of each rasi's lord, and "
+            f"{missing} was not supplied"
+        )
+        add("4", "A rasi whose lord is in a rasi with a different oddity is "
+            "stronger", None, None, detail)
+        return finish(None, None, detail)
+
     differing = {
         r: RASI_IS_ODD[_sign(longitudes[lords[r]])] != RASI_IS_ODD[r]
         for r in (a, b)

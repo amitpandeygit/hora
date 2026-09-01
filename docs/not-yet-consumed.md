@@ -15,15 +15,14 @@ unconsumed, fails the suite.
 
 ## Register
 
-### Chapter 2 — rasi attributes (10)
+### Chapter 2 — rasi attributes (9)
 
-`RASI_LIMB` · `RASI_IS_ODD_FOOTED` · `RASI_DOSHA` · `RASI_GUNA` ·
+`RASI_LIMB` · `RASI_DOSHA` · `RASI_GUNA` ·
 `RASI_DIRECTION` · `RASI_COLOR` · `RASI_IS_NIGHT` · `RASI_RISING` ·
 `RASI_VARNA` · `MODALITY_DEITY`
 
 | Symbol | What will consume it |
 |---|---|
-| `RASI_IS_ODD_FOOTED` | Chara and other rasi dasas — §2.2.3 says "used in some dasas" |
 | `RASI_IS_NIGHT` | Divaratri bala, in shadbala |
 | `RASI_VARNA` | Varna koota, in marriage compatibility |
 | `RASI_RISING` | Dasa result timing — §2.2.11 says seershodaya planets give results in the first half of their dasa |
@@ -444,7 +443,7 @@ it up fails the suite. See [open-items.md](open-items.md#oi-31).
 `BHAVA_NAME` · `HOUSE_DEFINITION` · `HOUSE_ORDER_WRAPS` · `HOUSE_COMMON_REFERENCES` · `HOUSE_DEFAULT_REFERENCE` · `HOUSE_DEFAULT_REFERENCE_RULE` ·
 `GRAHA_DEFINITION` · `GRAHA_DEFINITION_NOTE` · `NODES_ARE_MATHEMATICAL_POINTS` · `UPAGRAHA_DEFINITION` · `UPAGRAHA_GLOSS` · `UPAGRAHA_COUNT` · `LAGNA_DEFINITION` · `SPECIAL_ASCENDANT_TERM` ·
 `GRAHA_ABBR` · `GRAHA_NAMES_SA` · `RASI_NAMES_SA` · `RASI_NAMES_SA_BOOK` ·
-`MODALITY_NAMES` · `DIRECTION_NAMES` · `DOSHA_NAMES` ·
+`DIRECTION_NAMES` · `DOSHA_NAMES` ·
 `ELEMENT_NAMES_SA` · `ELEMENT_SHARERS` · `GUNA_NAMES` ·
 `GUNA_ADJECTIVES` · `VARNA_NAMES` · `SEX_NAMES` · `RISING_NAMES` ·
 `AYANA_NAMES` · `RITU_NAMES` · `RITU_MEANINGS` · `RITU_MONTHS` ·
