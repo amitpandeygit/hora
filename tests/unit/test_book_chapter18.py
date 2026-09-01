@@ -171,3 +171,73 @@ def test_an_undecidable_seed_is_reported_rather_than_guessed():
     assert got["seed_name"] is None
     assert "rule 4 needs the longitude" in got["reason"]
     assert "Mars" in got["reason"] and "Venus" in got["reason"]
+
+
+# --------------------------------------------------------------------------
+# Examples 63, 64 and 65 — one per movement, between them both directions.
+# --------------------------------------------------------------------------
+
+ABBR = ["Ar", "Ta", "Ge", "Cn", "Le", "Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi"]
+BY_ABBR = {a: i for i, a in enumerate(ABBR)}
+
+
+@pytest.mark.parametrize(
+    "seed,god,movement,ninth,direction,sequence",
+    [
+        # Example 63: fixed seed, Shiva's 6th movement, backward.
+        ("Sc", "Shiva", "sixth", "Cn", "backward",
+         "Sc Ge Cp Le Pi Li Ta Sg Cn Aq Vi Ar"),
+        # Example 64: dual seed, Vishnu's trines, forward.
+        ("Pi", "Vishnu", "trinal", "Sc", "forward",
+         "Pi Cn Sc Sg Ar Le Vi Cp Ta Ge Li Aq"),
+        # Example 65: movable seed, Brahma's regular order, backward.
+        ("Cp", "Brahma", "regular", "Vi", "backward",
+         "Cp Sg Sc Li Vi Le Cn Ge Ta Ar Pi Aq"),
+    ],
+)
+def test_the_three_worked_progressions(seed, god, movement, ninth, direction,
+                                       sequence):
+    """Examples 63, 64 and 65, each checked on all twelve rasis rather than
+    the first few — the movements diverge late as well as early."""
+    got = progression(BY_ABBR[seed])
+    assert got.god == god
+    assert got.movement == movement
+    assert ABBR[got.ninth_from_seed] == ninth
+    assert got.direction == direction
+    assert " ".join(ABBR[s] for s in got.signs) == sequence
+
+
+def test_example_64_settles_vishnus_quadrant_order():
+    """§18.2.1 stops at "1st, 5th, 9th, then 10th, 2nd, 6th and so on", which
+    leaves the quadrants after the 10th open. Example 64 states them:
+
+        "then count the same houses from the 10th house, then from the 7th
+        house and finally from the 4th house"
+
+    So the quadrants run 1, 10, 7, 4 — each the 10th from the last — and the
+    module's continuation was right rather than merely consistent.
+    """
+    from hora.dasha.rasi.narayana import VISHNU_QUADRANT_ORDER
+
+    assert "from the 10th house, then from the 7th house and finally from" \
+        in VISHNU_QUADRANT_ORDER
+
+    quadrant_starts = house_order(BY_ABBR["Pi"])[::3]
+    assert quadrant_starts == (1, 10, 7, 4)
+
+
+def test_example_64s_two_named_trine_groups():
+    """"Trines from Pi are Pi, Cn and Sc. Trines from the 10th (Sg) are Sg,
+    Ar and Le." Both groups are named outright, so both are checked."""
+    got = progression(BY_ABBR["Pi"])
+    names = [ABBR[s] for s in got.signs]
+    assert names[0:3] == ["Pi", "Cn", "Sc"]
+    assert names[3:6] == ["Sg", "Ar", "Le"]
+
+
+def test_the_three_examples_cover_every_movement_and_both_directions():
+    """Between them the examples exercise all three gods and both directions,
+    which is why they can settle the module rather than merely sample it."""
+    seeds = [BY_ABBR[s] for s in ("Sc", "Pi", "Cp")]
+    assert {progression(s).god for s in seeds} == {"Brahma", "Shiva", "Vishnu"}
+    assert {progression(s).direction for s in seeds} == {"forward", "backward"}

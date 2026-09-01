@@ -63,16 +63,15 @@ DIRECTION_RULE = (
     "direction is backward."
 )
 
-#: **Inference.** The section prints Vishnu's order only as far as "1st, 5th,
-#: 9th, then 10th, 2nd, 6th and so on". Taking each next quadrant as the 10th
-#: from the previous reproduces those six exactly and covers all twelve
-#: houses once; the remaining six are ours, not the book's.
-VISHNU_QUADRANT_ORDER_IS_INFERRED = (
-    "§18.2.1 prints the trinal movement as far as \"1st, 5th, 9th, then "
-    "10th, 2nd, 6th and so on\". We continue it by taking each next quadrant "
-    "as the 10th from the previous, which reproduces the printed six and "
-    "visits every house once. The last six are an inference until an example "
-    "confirms them."
+#: §18.2.1 prints the trinal movement only as far as "1st, 5th, 9th, then
+#: 10th, 2nd, 6th and so on", leaving the quadrant order after the 10th open.
+#: Example 64 closes it outright: "then count the same houses from the 10th
+#: house, then from the 7th house and finally from the 4th house." Each next
+#: quadrant is the 10th from the previous, which is what this module does.
+VISHNU_QUADRANT_ORDER = (
+    "We count the 1st, 5th, 9th houses from dasa seed, then count the same "
+    "houses from the 10th house, then from the 7th house and finally from "
+    "the 4th house."
 )
 
 
