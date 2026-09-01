@@ -141,3 +141,91 @@ def test_the_star_variations_do_not_apply_to_ashtottari():
     with pytest.raises(ValueError, match="unequal arcs"):
         compute_nakshatra_dasha(A, 70.0, 2451545.0, DashaYearLength.SAVANA,
                                 start_star=4)
+
+
+# --------------------------------------------------------------------------
+# Example 59, and the NOTE on Rahu's wrapping arc
+# --------------------------------------------------------------------------
+
+
+def test_example_59_moon_at_24_leo():
+    """"Suppose Moon is at 24° in Leo... 144° is between 120°0' and 160°0'.
+    So it is in the 2nd arc of Table 39, which is ruled by Moon... the part of
+    the arc that is yet to be traversed by Moon is (160°0' - 144°0') = 16°. As
+    a fraction of the arc length (40°), this is 16°/40° = 0.4. The same
+    fraction of the full dasa length of Moon is 15 x 0.4 = 6 years."
+
+    Every figure the example prints, including the fraction.
+    """
+    from hora.dasha.base import _arc_index
+
+    longitude = 24.0 + 120.0
+    assert longitude == 144.0
+
+    index, remaining = _arc_index(A, longitude)
+    assert index == 1                                  # the 2nd arc
+    assert ASHTOTTARI_ARCS[index]["planet"] == "Moon"
+    assert ASHTOTTARI_ARCS[index]["length"] == pytest.approx(40.0)
+    assert remaining == pytest.approx(16.0 / 40.0)
+    assert remaining == pytest.approx(0.4)
+
+    lord, balance = balance_at_birth(A, longitude)
+    assert lord == int(Graha.MOON)
+    assert balance == pytest.approx(6.0)
+
+
+def test_example_59_continues_moon_mars_mercury_saturn():
+    """"The native will run Moon dasa of 6 years from his birth. Then 8 years
+    of Mars dasa will run. Then 17 years of Mercury dasa will run. Then 10
+    years of Saturn dasa will run.\""""
+    import swisseph as swe
+
+    birth = swe.julday(2000, 1, 1, 12.0)
+    periods = compute_nakshatra_dasha(
+        A, 144.0, birth, DashaYearLength.SAVANA, levels=1, cycles=1)
+
+    assert [GRAHA_NAMES[p.lord] for p in periods[:4]] == [
+        "Moon", "Mars", "Mercury", "Saturn"]
+    assert [(p.end_jd - p.start_jd) / 360 for p in periods[1:4]] == [
+        pytest.approx(8.0), pytest.approx(17.0), pytest.approx(10.0)]
+    # The first is truncated: 6 of its 15 years remain at birth.
+    assert (periods[0].end_jd - periods[0].start_jd) / 360 == pytest.approx(15.0)
+    assert (periods[0].end_jd - birth) / 360 == pytest.approx(6.0)
+
+
+@pytest.mark.parametrize(
+    "longitude,degrees_left,label",
+    [
+        (10.0, 16 + 40 / 60, "10 deg Aries, past the wrap"),
+        (350.0, 36 + 40 / 60, "20 deg Pisces, before it"),
+    ],
+)
+def test_the_note_on_rahus_wrapping_arc(longitude, degrees_left, label):
+    """"One has to be careful with the calculation if the first dasa is Rahu
+    dasa... we should use either 26°40' or 386°40' based on Moon's longitude."
+
+    The note exists because the arc's end is numerically below its start. Our
+    arithmetic takes the difference modulo 360 instead of choosing between two
+    written forms of the same point, which gets both sides right without the
+    bookkeeping the note describes.
+    """
+    from hora.dasha.base import _arc_index
+
+    index, remaining = _arc_index(A, longitude)
+    assert ASHTOTTARI_ARCS[index]["planet"] == "Rahu"
+
+    span = ASHTOTTARI_ARCS[index]["length"]
+    assert remaining * span == pytest.approx(degrees_left, abs=1e-6)
+
+    lord, balance = balance_at_birth(A, longitude)
+    assert lord == int(Graha.RAHU)
+    assert balance == pytest.approx(12.0 * degrees_left / span)
+
+
+def test_the_wrap_is_continuous_across_zero():
+    """A Moon a hair either side of 0° must give balances a hair apart, not a
+    jump — the failure the note is warning about."""
+    _lord, before = balance_at_birth(A, 359.999)
+    _lord, after = balance_at_birth(A, 0.001)
+    assert before > after
+    assert before - after == pytest.approx(0.0, abs=1e-3)
