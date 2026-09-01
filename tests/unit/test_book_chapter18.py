@@ -945,3 +945,133 @@ def test_exercise_27_stops_past_paramayush_not_at_it():
     year += second_cycle_length(first[EX27_SECOND[-1][0]])
     assert year > 1960 + 120                       # and ends after
     assert year == 2082
+
+
+# --------------------------------------------------------------------------
+# §18.3 Antardasas
+# --------------------------------------------------------------------------
+
+
+def _antardasa_inputs(chart_number):
+    """A chart, with the co-lord resolution §18.3 needs when a seed is Sc/Aq."""
+    from hora.charts.book import graha_longitudes
+    from hora.charts.colord import stronger as co_lord
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(chart_number).items()}
+    stronger_co_lord = {r: co_lord(r, longitudes, purpose="arudha").winner
+                        for r in (R["Scorpio"], R["Aquarius"])}
+    return longitudes, stronger_co_lord
+
+
+def _antardasas_for(chart_number, rasi, years=1):
+    from hora.charts.rasi_strength import stronger
+    from hora.dasha.rasi.narayana import antardasas
+
+    longitudes, co_lords = _antardasa_inputs(chart_number)
+    seed = stronger(rasi, (rasi + 6) % 12, longitudes, purpose="phalita").winner
+    return antardasas(rasi, years, longitudes,
+                      co_lords.get(seed) if seed in co_lords else None)
+
+
+def test_a_dasa_of_n_years_gives_twelve_antardasas_of_n_months():
+    """"If a dasa is of n years, then each antardasa in that dasa is for n
+    months." Which closes exactly, a year being twelve months."""
+    for years in (1, 2, 5, 11, 12):
+        got = _antardasas_for(21, R["Aquarius"], years)
+        assert len(got.signs) == 12
+        assert got.months_each == years
+        assert got.months_each * 12 == years * 12      # the dasa, in months
+
+
+@pytest.mark.parametrize("rasi", range(12))
+def test_every_dasas_antardasas_cover_the_twelve_rasis_once(rasi):
+    assert sorted(_antardasas_for(21, rasi).signs) == list(range(12))
+
+
+def test_the_antardasa_seed_is_the_stronger_of_the_dasa_rasi_and_its_seventh():
+    """"Let us denote the stronger of dasa rasi and the 7th from it with the
+    expression 'antardasa seed'." A second §15.5.2 comparison, per dasa —
+    §18.2.1's seed compared lagna with the 7th from *lagna*.
+    """
+    for rasi in range(12):
+        got = _antardasas_for(21, rasi)
+        assert got.seed in (rasi, (rasi + 6) % 12)
+
+
+def test_antardasas_begin_where_the_seeds_lord_sits_not_at_the_seed():
+    """"Antardasas start from the rasi containing the lord of antardasa seed."
+
+    The seed itself is not where they begin, and conflating the two would go
+    unnoticed whenever a seed happens to hold its own lord.
+    """
+    from hora.core.const import RASI_LORD
+
+    longitudes, _co_lords = _antardasa_inputs(23)
+    moved = 0
+    for rasi in range(12):
+        got = _antardasas_for(23, rasi)
+        lord = int(RASI_LORD[got.seed])
+        if lord in longitudes:
+            assert got.start == int(longitudes[lord] // 30)
+            if got.start != got.seed:
+                moved += 1
+    assert moved, "no seed's lord sat outside it, so this proved nothing"
+
+
+def test_the_direction_reads_odd_and_even_signs_not_odd_and_even_feet():
+    """§18.3's own NOTE: "We are talking about odd and even signs here and
+    *not* about odd-footed and even-footed signs."
+
+    The two disagree on Taurus, Leo, Scorpio and Aquarius. Chart 23 supplies
+    two of those as starting rasis, so the wrong rule would be caught rather
+    than merely possible: Leo is an odd sign but even-footed, Scorpio an even
+    sign but odd-footed, and each takes the direction its *sign* implies.
+    """
+    from hora.core.const import RASI_IS_ODD, RASI_IS_ODD_FOOTED
+
+    starts = {}
+    for rasi in range(12):
+        got = _antardasas_for(23, rasi)
+        starts.setdefault(got.start_name, got.direction)
+
+    assert starts["Leo"] == "forward"
+    assert RASI_IS_ODD[R["Leo"]] and not RASI_IS_ODD_FOOTED[R["Leo"]]
+
+    assert starts["Scorpio"] == "backward"
+    assert RASI_IS_ODD_FOOTED[R["Scorpio"]] and not RASI_IS_ODD[R["Scorpio"]]
+
+    for name, direction in starts.items():
+        odd = bool(RASI_IS_ODD[RASI_NAMES.index(name)])
+        assert direction == ("forward" if odd else "backward"), name
+
+
+def test_both_directions_arise_on_a_real_chart():
+    """Chart 23 splits six and six. A chart giving only one direction would
+    leave the rule half untested, which Chart 21 alone does."""
+    from collections import Counter
+
+    tally = Counter(_antardasas_for(23, rasi).direction for rasi in range(12))
+    assert tally["forward"] == 6
+    assert tally["backward"] == 6
+
+
+def test_the_antardasa_movement_is_regular_unlike_the_dasa_progression():
+    """"we take the 1st, 2nd, 3rd, 4th etc houses from there" — always the
+    regular order, where §18.2.1's progression takes one of three movements
+    from the seed's modality. Only the direction varies here.
+    """
+    for chart in (21, 23):
+        for rasi in range(12):
+            got = _antardasas_for(chart, rasi)
+            step = 1 if got.direction == "forward" else -1
+            expected = [(got.start + step * k) % 12 for k in range(12)]
+            assert list(got.signs) == expected
+
+
+def test_an_undecidable_antardasa_seed_is_refused():
+    """§15.5.2 can run out of rules. When it does the antardasa seed is
+    unknown, and guessing the dasa rasi would be invisible."""
+    from hora.dasha.rasi.narayana import NarayanaError, antardasas
+
+    with pytest.raises(NarayanaError, match="could not choose between"):
+        antardasas(R["Aries"], 3, {})
