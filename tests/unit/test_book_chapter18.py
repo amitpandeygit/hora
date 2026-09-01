@@ -1754,3 +1754,419 @@ def test_example_68_ranks_the_two_dasa_lagna_lords_the_way_the_example_does():
     assert sign_dignity(int(Graha.SATURN), longitudes[int(Graha.SATURN)]) == "exalted"
     assert sign_dignity(int(Graha.JUPITER), longitudes[int(Graha.JUPITER)]) == "neutral"
     assert signs[int(Graha.JUPITER)] == R["Leo"]
+
+
+# --------------------------------------------------------------------------
+# Example 69 — India's independence, Chart 25. A mundane chart, twelve
+# lengths, three dasas interpreted, and the chapter's first worked antardasa.
+# --------------------------------------------------------------------------
+
+#: The eleven dasas the example prints, in order. The twelfth, Li, runs past
+#: the span the example covers and is not printed.
+EX69_LENGTHS = [("Ta", 2), ("Sg", 10), ("Cn", 12), ("Aq", 7), ("Vi", 2),
+                ("Ar", 2), ("Sc", 7), ("Ge", 1), ("Cp", 6), ("Le", 1),
+                ("Pi", 5)]
+
+
+def _chart_25():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(25).items()},
+            {int(g): sign for g, sign in graha_signs(25).items()},
+            lagna(25))
+
+
+def test_chart_25_recomputes_from_the_independence_moment():
+    """Midnight IST on 15 August 1947 at 78 E 30, 27 N 00. Every graha inside
+    an arcminute and the ascendant inside a fifth of one, which is as close as
+    any chart in the book has come.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(25)
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 25", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    printed = longitudes(25)
+    for name, graha in (("Sun", Graha.SUN), ("Moon", Graha.MOON),
+                        ("Mars", Graha.MARS), ("Merc", Graha.MERCURY),
+                        ("Jup", Graha.JUPITER), ("Ven", Graha.VENUS),
+                        ("Sat", Graha.SATURN), ("Rahu", Graha.RAHU),
+                        ("Ketu", Graha.KETU)):
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 0.5
+
+
+def test_charts_25_and_26_are_the_eighth_and_ninth_votes_for_the_mean_node():
+    """OI-68. Chart 25's Rahu is 0.2' out under mean and 41' out under true."""
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    for number in (25, 26):
+        record, printed = chart(number), longitudes(number)["Rahu"]
+        errors = {}
+        for node in (NodeType.MEAN, NodeType.TRUE):
+            computed = compute_chart(
+                from_local(**record["birth_data"]),
+                Place(name=f"Chart {number}", **record["place"]),
+                Settings(node_type=node))
+            errors[node] = abs(
+                computed.positions[int(Graha.RAHU)].longitude - printed) * 60
+        assert errors[NodeType.MEAN] < 1.0, number
+        assert errors[NodeType.MEAN] < errors[NodeType.TRUE], number
+
+
+def test_example_69_seed_is_lagna_and_the_progression_is_shivas_sixth():
+    """The printed order is Ta, Sg, Cn, Aq, Vi, Ar, Sc, Ge, Cp, Le, Pi.
+
+    Ta is fixed, so Shiva's 6th movement; the 9th from Ta is Cp, even-footed,
+    so backward -- and 6 backward from Ta is indeed Sg. Rahu occupies the
+    seed, which is neither of §18.2.1's two exceptions.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_seed, progression
+
+    longitudes, signs, lagna_sign = _chart_25()
+    assert lagna_sign == R["Taurus"]
+
+    seed = dasa_seed(lagna_sign, longitudes)
+    assert seed["seed"] == R["Taurus"]
+    assert seed["decided_by"] == "2"
+
+    occupants = {g for g, sign in signs.items() if sign == seed["seed"]}
+    assert occupants == {int(Graha.RAHU)}
+
+    got = progression(seed["seed"], occupants)
+    assert got.god == "Shiva"
+    assert got.direction == "backward"
+    assert got.exception is None
+    assert [ABBR[s] for s in got.signs][:11] == [a for a, _y in EX69_LENGTHS]
+    assert ABBR[got.signs[11]] == "Li"          # the one the example stops before
+
+
+def test_example_69_seed_rule_2_counts_three_against_two():
+    """Both rasis hold exactly one graha, so rule 1 ties and rule 2 decides.
+
+    Jupiter aspects Ta from Li, Mercury aspects it from Cn, and so does its own
+    lord Venus -- three. Scorpio gets Mercury's aspect and its co-lord Ketu
+    sitting in it -- two.
+    """
+    from hora.dasha.rasi.narayana import dasa_seed
+
+    longitudes, signs, lagna_sign = _chart_25()
+    in_taurus = [g for g, s in signs.items() if s == R["Taurus"]]
+    in_scorpio = [g for g, s in signs.items() if s == R["Scorpio"]]
+    assert len(in_taurus) == len(in_scorpio) == 1        # rule 1 ties
+
+    reason = dasa_seed(lagna_sign, longitudes)["reason"]
+    assert "Taurus count 3" in reason
+    assert "Scorpio count 2" in reason
+
+
+@pytest.mark.parametrize("abbr,years", EX69_LENGTHS)
+def test_example_69_lengths(abbr, years):
+    """All eleven printed lengths, each from its own counting direction. No
+    graha in this chart is exalted or debilitated where the counts land, so
+    neither D-52 nor OI-121 touches this example -- it tests the base rule and
+    exception 1 alone.
+    """
+    from hora.charts.colord import stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_25()
+    rasi = BY_ABBR[abbr]
+    lord = (stronger(rasi, longitudes, purpose="arudha").winner
+            if rasi in (R["Scorpio"], R["Aquarius"]) else int(RASI_LORD[rasi]))
+    got = dasa_length(rasi, lord, signs[lord],
+                      sign_dignity(lord, longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_example_69_pins_the_co_lord_cascade_twice():
+    """Special note 1 sends Scorpio and Aquarius to §15.5.1, and this is the
+    first chart whose printed answers test what comes back. Both co-lords are
+    in different rasis from their partners, so the wrong choice is not a near
+    miss -- it is a different dasa length.
+
+    | rasi | co-lords | book | the other co-lord would give |
+    |---|---|---|---|
+    | Aquarius | Saturn in Cn, Rahu in Ta | 7 | 9 |
+    | Scorpio | Mars in Ge, Ketu in Sc | 7 | 12, by exception 1 |
+    """
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_25()
+    saturn, rahu = int(Graha.SATURN), int(Graha.RAHU)
+    mars, ketu = int(Graha.MARS), int(Graha.KETU)
+
+    assert stronger(R["Aquarius"], longitudes, purpose="arudha").winner == saturn
+    assert dasa_length(R["Aquarius"], saturn, signs[saturn]).years == 7
+    assert dasa_length(R["Aquarius"], rahu, signs[rahu]).years == 9
+
+    assert stronger(R["Scorpio"], longitudes, purpose="arudha").winner == mars
+    assert dasa_length(R["Scorpio"], mars, signs[mars]).years == 7
+    wrong = dasa_length(R["Scorpio"], ketu, signs[ketu])
+    assert wrong.count == 1 and wrong.years == 12
+
+
+def test_example_69_the_dates_the_example_prints():
+    """"Ta (02 years): Aug 1947 - Aug 1949" through "Pi (05 years): Aug 1997 -
+    Aug 2002." A running total from August 1947, so the printed dates check
+    all eleven lengths a second way. Every boundary is an August, so this
+    example says nothing about OI-115's savana year either.
+    """
+    year, spans = 1947, {}
+    for abbr, years in EX69_LENGTHS:
+        spans[abbr] = (year, year + years)
+        year += years
+
+    assert spans["Ta"] == (1947, 1949)
+    assert spans["Cn"] == (1959, 1971)
+    assert spans["Sc"] == (1982, 1989)
+    assert spans["Cp"] == (1990, 1996)
+    assert spans["Le"] == (1996, 1997)
+    assert spans["Pi"] == (1997, 2002)
+    assert year == 2002
+
+
+def test_example_69_capricorn_dasa_placements():
+    """"Mars in the 6th house, Jupiter in the 10th house and Ketu in the 11th
+    house from dasa lagna are well-placed. Conglomeration of planets in the
+    7th house... From paaka rasi also, Rahu is in the 11th house."
+
+    Taurus was the seed and Taurus is lagna, so the dasa lagna is Cp itself --
+    the second lagna-seeded chart in the chapter, after Chart 24.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_lagna, paaka_rasi
+
+    longitudes, signs, lagna_sign = _chart_25()
+    cp = dasa_lagna(R["Capricorn"], lagna_sign, lagna_sign)
+    assert cp == R["Capricorn"]
+
+    assert _house_from(cp, signs[int(Graha.MARS)]) == 6
+    assert _house_from(cp, signs[int(Graha.JUPITER)]) == 10
+    assert _house_from(cp, signs[int(Graha.KETU)]) == 11
+
+    seventh = (cp + 6) % 12
+    assert seventh == R["Cancer"]
+    assert len([g for g, s in signs.items() if s == seventh]) == 5
+
+    paaka = paaka_rasi(cp, longitudes)
+    assert paaka == R["Cancer"]                       # Cp's lord Saturn is there
+    assert _house_from(paaka, signs[int(Graha.RAHU)]) == 11
+
+
+def test_example_69_mars_aspects_the_ninth_from_the_capricorn_dasa_lagna():
+    """"Aspect of Mars on the analytical and tamasik rasi Vi containing the
+    9th house from dasa lagna made the judiciary system relatively
+    aggressive."
+
+    Both aspect systems agree here, which is worth knowing because the example
+    does not say which it means: Ge aspects Vi by rasi drishti, and Vi is also
+    the 4th from Ge, one of Mars's three special graha aspects.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_lagna
+
+    _longitudes, signs, lagna_sign = _chart_25()
+    cp = dasa_lagna(R["Capricorn"], lagna_sign, lagna_sign)
+    ninth = (cp + 8) % 12
+    assert ninth == R["Virgo"]
+
+    mars_sign = signs[int(Graha.MARS)]
+    assert mars_sign == R["Gemini"]
+    assert ninth in rasi_drishti(mars_sign)
+    assert (ninth - mars_sign) % 12 + 1 == 4          # Mars's 4th aspect
+
+
+def test_example_69_leo_dasa_leaves_only_mars_well_placed():
+    """"Dasa lagna during Le dasa is Le itself. Except Mars, no planet is
+    well-placed w.r.t. Le. In particular, planetary conglomeration in the 12th
+    house... Rahu in the 10th house from dasa lagna denies stable and capable
+    leadership."
+
+    One sign on from Cp and the whole chart inverts: the five planets fall
+    from the 7th to the 12th, Ketu from the 11th to the 4th, Jupiter from the
+    10th to the 3rd. Only Mars improves, from the 6th to the 11th.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_lagna
+
+    _longitudes, signs, lagna_sign = _chart_25()
+    le = dasa_lagna(R["Leo"], lagna_sign, lagna_sign)
+    assert le == R["Leo"]
+
+    houses = {}
+    for graha, sign in signs.items():
+        houses.setdefault(_house_from(le, sign), set()).add(graha)
+
+    assert houses[11] == {int(Graha.MARS)}
+    assert len(houses[12]) == 5
+    assert houses[10] == {int(Graha.RAHU)}
+    assert houses[4] == {int(Graha.KETU)}
+    assert houses[3] == {int(Graha.JUPITER)}
+
+
+def test_example_69_pisces_dasa_placements():
+    """"Most planets are well-placed w.r.t. Pisces... Jupiter owns the 10th
+    house and Mars aspects it... Ketu in the 9th house... Mars in the 4th
+    house... Rahu in the 3rd house from dasa lagna."
+
+    The five-planet conglomeration lands in the 5th, a trine, which is what
+    "most planets are well-placed" rests on.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_lagna, paaka_rasi
+
+    longitudes, signs, lagna_sign = _chart_25()
+    pi = dasa_lagna(R["Pisces"], lagna_sign, lagna_sign)
+    assert pi == R["Pisces"]
+    assert paaka_rasi(pi, longitudes) == R["Libra"]
+
+    fifth = (pi + 4) % 12
+    assert len([g for g, s in signs.items() if s == fifth]) == 5
+    assert _house_from(pi, signs[int(Graha.KETU)]) == 9
+    assert _house_from(pi, signs[int(Graha.MARS)]) == 4
+    assert _house_from(pi, signs[int(Graha.RAHU)]) == 3
+
+    tenth = (pi + 9) % 12
+    assert tenth == R["Sagittarius"]
+    assert int(RASI_LORD[tenth]) == int(Graha.JUPITER)
+    assert tenth in rasi_drishti(signs[int(Graha.MARS)])
+
+
+def test_example_69_pisces_antardasas_start_from_libra_going_forward():
+    """"Antardasas in Pisces dasa start from Libra and proceed in the forward
+    direction."
+
+    The chapter's first worked antardasa, and it exercises §18.3 whole. The
+    seed is the stronger of Pi and the 7th from it, Vi -- and nothing separates
+    them until rule 4, where Pi's lord Jupiter sits in odd Libra while Vi's
+    lord Mercury sits in even Cancer. So the seed is Pi, and the antardasas
+    begin where its lord is: Libra. Libra is an odd *sign*, so forward.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import antardasas
+
+    longitudes, signs, _lagna = _chart_25()
+    occupants = {g for g, sign in signs.items() if sign == R["Pisces"]}
+    assert not occupants                                # no exception fires
+
+    got = antardasas(R["Pisces"], 5, longitudes, seed_occupants=occupants)
+    assert got.seed == R["Pisces"]
+    assert got.start == R["Libra"]
+    assert got.direction == "forward"
+    assert got.exception is None
+    assert [ABBR[s] for s in got.signs[:3]] == ["Li", "Sc", "Sg"]
+    assert signs[int(Graha.JUPITER)] == got.start       # Libra holds Jupiter
+
+
+def test_example_69_scorpio_antardasa_holds_may_1998():
+    """"Antardasa at the time of nuclear tests was Sc." India tested on 11 and
+    13 May 1998.
+
+    Pisces runs five years from August 1997, so each of the twelve antardasas
+    is five months. Libra takes it to January 1998 and Scorpio to June, which
+    is the only antardasa May 1998 can fall in.
+    """
+    from hora.dasha.rasi.narayana import antardasas
+
+    longitudes, _signs, _lagna = _chart_25()
+    got = antardasas(R["Pisces"], 5, longitudes, seed_occupants=set())
+    assert got.months_each == 5
+
+    start = 1997 * 12 + 7                               # August 1997
+    spans = {ABBR[sign]: (start + i * got.months_each,
+                          start + (i + 1) * got.months_each)
+             for i, sign in enumerate(got.signs)}
+    may_1998 = 1998 * 12 + 4
+    running = [abbr for abbr, (a, b) in spans.items() if a <= may_1998 < b]
+    assert running == ["Sc"]
+
+
+def test_example_69_a3_is_aries_by_the_arudha_exception():
+    """"Sc aspects A3, which is in Ar." The example never derives it.
+
+    The 3rd from Ta is Cn, whose lord the Moon sits in Cn itself, so the count
+    is 1 and the arudha lands back on the house -- which §9.2's first exception
+    forbids. The 10th from there is Ar.
+    """
+    from hora.charts.arudha import arudha_pada
+
+    _longitudes, signs, lagna_sign = _chart_25()
+    got = arudha_pada(3, lagna_sign, signs)
+    assert got.before_exception == R["Cancer"]
+    assert got.exception_position == 1
+    assert got.sign == R["Aries"]
+
+
+def test_example_69_the_scorpio_antardasa_aspects_a3():
+    """"Sc aspects A3, which is in Ar. A3 shows the illusion related to
+    boldness... Antardasas aspecting A3 can bring weapons, just as antardasas
+    aspecting UL can bring marriage."
+
+    A fourth reference point in the chapter, and a different mechanism from
+    the other three. §18.4 reads an antardasa by the house its *lord* occupies
+    from the dasa rasi; this reads the antardasa **rasi** by what it aspects,
+    and the target is a natal arudha that has nothing to do with the dasa.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.aspects import rasi_drishti
+    from hora.dasha.rasi.narayana import ANTARDASA_ASPECT_RULE
+
+    _longitudes, signs, lagna_sign = _chart_25()
+    a3 = arudha_pada(3, lagna_sign, signs).sign
+    assert a3 in rasi_drishti(R["Scorpio"])
+
+    assert "A3" in ANTARDASA_ASPECT_RULE
+    assert "UL" in ANTARDASA_ASPECT_RULE
+
+
+def test_example_69s_mundane_readings_are_recorded_not_folded_in():
+    """The book's first mundane Narayana dasa. §18.4's sixteen principles give
+    a placement's valence; what it is *about* comes from the house, read for a
+    nation. Both halves are needed and only the first is in the principles, so
+    the pairings are kept as their own register.
+    """
+    from hora.dasha.rasi.narayana import (
+        MUNDANE_HOUSE_READINGS,
+        UNLISTED_DASA_LAGNA_READINGS,
+    )
+
+    houses = {r["house"] for r in MUNDANE_HOUSE_READINGS}
+    assert houses == {3, 7, 9, 10}
+    assert len(UNLISTED_DASA_LAGNA_READINGS) == 2
+
+
+def test_example_69s_two_unlisted_readings_are_not_in_the_sixteen():
+    """A conglomeration in the 12th giving "constant fear", and Rahu in the
+    10th denying leadership. Principle 6 gives constant fear for **Rahu** in
+    the 8th or 12th, and no principle reaches the 10th at all except through
+    lordship. Neither reading follows from the list.
+    """
+    from hora.dasha.rasi.narayana import PARASARA_DASA_PRINCIPLES
+
+    fear = [p for p in PARASARA_DASA_PRINCIPLES if "fear" in p["gives"]]
+    assert len(fear) == 1
+    assert fear[0]["who"] == "Rahu"
+    assert fear[0]["houses"] == (8, 12)
+
+    occupancy = [p for p in PARASARA_DASA_PRINCIPLES if p["houses"]]
+    assert not any(10 in p["houses"] for p in occupancy)

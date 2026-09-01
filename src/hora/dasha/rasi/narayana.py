@@ -658,3 +658,49 @@ def dasa_thirds(start_years: float, length_years: float) -> tuple[dict, ...]:
          "to_years": start_years + (i + 1) * span}
         for i, third in enumerate(DASA_THIRDS)
     )
+
+
+# --------------------------------------------------------------------------
+# Example 69 — readings §18.4's own list does not reach.
+# --------------------------------------------------------------------------
+
+#: Example 69 works India's independence chart, the book's first mundane
+#: Narayana dasa. §18.4's sixteen principles supply the *valence* of a
+#: placement; what it is actually about comes from the house's own
+#: significations, read for a nation rather than a person. The example never
+#: states this, but every reading it gives is built that way, so the pairs
+#: are recorded rather than inferred into the principles themselves.
+MUNDANE_HOUSE_READINGS: tuple[dict, ...] = (
+    {"house": 3, "reads": "weapons",
+     "text": "Rahu in the 3rd can also give aggressive weapon development, "
+             "as the 3rd house shows weapons."},
+    {"house": 7, "reads": "relations with other nations",
+     "text": "Conglomeration of planets in the 7th house (relations with "
+             "other nations) and Ketu in the 11th house gives gains from "
+             "foreign sources."},
+    {"house": 9, "reads": "religion",
+     "text": "Ketu in the 9th house from dasa lagna may denote religious "
+             "clashes and violence."},
+    {"house": 10, "reads": "the head of government",
+     "text": "Jupiter in the 10th house shows a versatile, intelligent and "
+             "knowledgable Brahmin leader."},
+)
+
+#: Two readings Example 69 gives that no principle in §18.4 covers, even by
+#: valence. Both are about the 10th and 12th from dasa lagna, and principle 6
+#: reaches the 12th only for Rahu.
+UNLISTED_DASA_LAGNA_READINGS: tuple[str, ...] = (
+    ("In particular, planetary conglomeration in the 12th house shows "
+     "constant fear and turbulence. It signals instability."),
+    ("Rahu in the 10th house from dasa lagna denies stable and capable "
+     "leadership."),
+)
+
+#: A second way to read an antardasa, and a fourth reference point in the
+#: chapter. §18.4 judges an antardasa by the house its *lord* occupies from
+#: the dasa rasi; this judges the antardasa **rasi** by what it aspects, and
+#: what it aspects is a natal arudha rather than anything in the dasa.
+ANTARDASA_ASPECT_RULE = (
+    "Antardasas aspecting A3 can bring weapons, just as antardasas aspecting "
+    "UL can bring marriage."
+)

@@ -161,6 +161,20 @@
         "number": 24,
         "recomputable": true,
         "title": "Bill Gates"
+      },
+      {
+        "birth": "August 15, 1947, 12:00 am (IST), 78 E 30, 27 N 00",
+        "first_seen": "chapter 18, Example 69",
+        "number": 25,
+        "recomputable": true,
+        "title": "India's independence"
+      },
+      {
+        "birth": "May 9, 1971, 9:20 am (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 18, printed with Example 69",
+        "number": 26,
+        "recomputable": true,
+        "title": "Narayana Dasa Exercise"
       }
     ],
     "not_supplied": [
@@ -186,7 +200,9 @@
       21,
       22,
       23,
-      24
+      24,
+      25,
+      26
     ]
   },
   "status": 200

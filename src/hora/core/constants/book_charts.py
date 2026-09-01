@@ -424,6 +424,74 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    26: {
+        "title": "Narayana Dasa Exercise",
+        "birth": "May 9, 1971, 9:20 am (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1971, "month": 5, "day": 9, "hour": 9, "minute": 20,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "17 Ge 40", "Sun": "24 Ar 26", "Moon": "9 Li 28",
+            "Mars": "9 Cp 14", "Merc": "0 Ar 58", "Jup": "9 Sc 53",
+            "Ven": "25 Pi 13", "Sat": "1 Ta 24", "Rahu": "25 Cp 42",
+            "Ketu": "25 Cn 42", "HL": "15 Le 14", "GL": "1 Aq 40",
+        },
+        "chara_karakas": {
+            "Ven": "AK", "Sun": "AmK", "Jup": "BK", "Moon": "MK",
+            "Mars": "PiK", "Rahu": "PK", "Sat": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "drawn": {
+            "Ven": "Pi", "Merc": "Ar", "Sun": "Ar", "Sat": "Ta", "Asc": "Ge",
+            "AL": "Aq", "GL": "Aq", "Ketu": "Cn", "Rahu": "Cp", "Mars": "Cp",
+            "HL": "Le", "Jup": "Sc", "Moon": "Li",
+        },
+        "first_seen": "chapter 18, printed with Example 69",
+        "note": (
+            "Printed in the middle of Example 69's pages but belonging to the "
+            "exercise that follows it, which the chart titles itself. Nothing "
+            "in Example 69 reads this chart."
+        ),
+    },
+    25: {
+        "title": "India's independence",
+        "birth": "August 15, 1947, 12:00 am (IST), 78 E 30, 27 N 00",
+        "birth_data": {
+            "year": 1947, "month": 8, "day": 15, "hour": 0, "minute": 0,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 27.0, "longitude": 78.5},
+        "longitudes": {
+            "Asc": "8 Ta 17", "Sun": "27 Cn 59", "Moon": "3 Cn 59",
+            "Mars": "7 Ge 27", "Merc": "13 Cn 41", "Jup": "25 Li 52",
+            "Ven": "22 Cn 34", "Sat": "20 Cn 28", "Rahu": "5 Ta 04",
+            "Ketu": "5 Sc 04", "HL": "4 Aq 06", "GL": "14 Ta 22",
+        },
+        "chara_karakas": {
+            "Sun": "AK", "Jup": "AmK", "Rahu": "BK", "Ven": "MK",
+            "Sat": "PiK", "Merc": "PK", "Mars": "GK", "Moon": "DK",
+        },
+        "drawn": {
+            "Rahu": "Ta", "Asc": "Ta", "GL": "Ta", "Mars": "Ge",
+            "Moon": "Cn", "Sat": "Cn", "Sun": "Cn", "Ven": "Cn", "Merc": "Cn",
+            "HL": "Aq", "Ketu": "Sc", "Jup": "Li", "AL": "Vi",
+        },
+        "events": {
+            "economy liberalised": "1991",
+            "hawala probe": "1996",
+            "minority government of the third force": "1996 to 1997",
+            "nuclear tests": "May 1998",
+        },
+        "first_seen": "chapter 18, Example 69",
+        "note": (
+            "A mundane chart, not a nativity -- the first Narayana dasa the "
+            "book works on a nation. It pins section 15.5.1 twice: only "
+            "Saturn over Rahu for Aquarius and Mars over Ketu for Scorpio "
+            "give the 7-year lengths printed for those two rasis."
+        ),
+    },
     24: {
         "title": "Bill Gates",
         "birth": "October 28, 1955, 9:18 pm (8:00 West), 122 W 20, 47 N 36",
