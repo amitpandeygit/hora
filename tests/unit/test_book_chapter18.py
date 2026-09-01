@@ -490,3 +490,150 @@ def test_the_exception_examples_agree_with_table_40():
     assert TABLE_40["Pi"]["b"].startswith("Pi Ar Ta Ge Cn Le")
     assert TABLE_40["Sc"]["c"].startswith("Sc Ar Vi Aq Cn Sg")
     assert TABLE_40["Pi"]["c"].startswith("Pi Sc Cn Ge Aq Li")
+
+
+# --------------------------------------------------------------------------
+# §18.2.2 Dasa Length
+# --------------------------------------------------------------------------
+
+
+def test_the_counting_direction_is_the_dasa_rasis_not_the_seeds():
+    """§18.2.2: "Counting is forward if dasa rasi is odd-footed."
+
+    §18.2.1's direction came from the 9th house from the *seed* and governs
+    the whole progression; this one is per dasa rasi and governs only its own
+    length. Conflating them would be easy and silent, so both are asserted
+    against each other here.
+    """
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    for rasi in range(12):
+        got = dasa_length(rasi, int(RASI_LORD[rasi]), rasi)
+        expected = "forward" if RASI_IS_ODD_FOOTED[rasi] else "backward"
+        assert got.counting == expected
+
+    # Aries: the progression runs forward, but Cancer's own length counts back.
+    assert progression(R["Aries"]).direction == "forward"
+    assert dasa_length(R["Cancer"], 1, 1).counting == "backward"
+
+
+@pytest.mark.parametrize("rasi", range(12))
+def test_a_rasi_holding_its_own_lord_gives_twelve_years(rasi):
+    """Exception 1: "we get zero by subtracting one from one. However, dasa
+    length becomes 12 years then." Zero would silently drop the period."""
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    got = dasa_length(rasi, int(RASI_LORD[rasi]), rasi)
+    assert got.count == 1
+    assert got.years == 12
+    assert "12 rather than 0" in got.applied[0]
+
+
+def test_exaltation_adds_a_year_and_debilitation_takes_one():
+    """Exceptions 2 and 3, against the same placement with no dignity given."""
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    # Aries is odd-footed, so forward: Ar, Ta, Ge, Cn is a count of four,
+    # and four less one is three years.
+    plain = dasa_length(R["Aries"], int(Graha.MARS), R["Cancer"])
+    assert plain.count == 4
+    assert plain.years == 3 and plain.applied == ()
+
+    assert dasa_length(R["Aries"], int(Graha.MARS), R["Cancer"],
+                       "exalted").years == 4
+    assert dasa_length(R["Aries"], int(Graha.MARS), R["Cancer"],
+                       "debilitated").years == 2
+
+
+def test_an_unstated_dignity_fires_neither_exception():
+    """Omitting the dignity must not be read as "neither exalted nor
+    debilitated" by accident — it happens to give the same number, so the
+    test checks that no exception was recorded as applied."""
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    got = dasa_length(R["Aries"], int(Graha.MARS), R["Cancer"], None)
+    assert got.applied == ()
+    for dignity in ("own", "moolatrikona", "friend", "neutral", "enemy"):
+        assert dasa_length(R["Aries"], int(Graha.MARS), R["Cancer"],
+                           dignity).years == got.years
+
+
+def test_the_base_rule_spans_one_to_twelve_years():
+    """Every count from 1 to 12 must give a usable length, and the twelve
+    lengths must be distinct — a dasa of 0 would drop a rasi from the cycle."""
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    years = {dasa_length(R["Aries"], int(Graha.MARS), place).years
+             for place in range(12)}
+    assert years == set(range(1, 13))
+
+
+def test_the_second_cycle_is_twelve_less_the_first():
+    """Special note 2. A 12-year first dasa gives none in the second, which is
+    ordinary rather than an error."""
+    from hora.dasha.rasi.narayana import second_cycle_length
+
+    assert second_cycle_length(1) == 11
+    assert second_cycle_length(7) == 5
+    assert second_cycle_length(12) == 0
+
+
+def test_scorpio_and_aquarius_need_the_stronger_lord():
+    """Special note 1: "If dasa rasi is Aq or Sc, it has two lords. We should
+    take the stronger lord when computing Narayana dasa."
+
+    The function takes the lord as given, so the caller resolves it — the same
+    §15.5.1 cascade the dasa seed uses. Both co-lords give different lengths
+    from the same chart, which is why the choice cannot be skipped.
+    """
+    from hora.charts.colord import CO_LORDS
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    assert set(CO_LORDS[R["Scorpio"]]) == {int(Graha.MARS), int(Graha.KETU)}
+    assert set(CO_LORDS[R["Aquarius"]]) == {int(Graha.SATURN), int(Graha.RAHU)}
+
+    mars = dasa_length(R["Scorpio"], int(Graha.MARS), R["Aries"])
+    ketu = dasa_length(R["Scorpio"], int(Graha.KETU), R["Cancer"])
+    assert mars.years != ketu.years
+
+
+def test_the_two_reachable_out_of_range_lengths_are_flagged():
+    """See OI-121. The exceptions can carry a length outside the 1-to-12 the
+    base rule allows, and §18.2.2 does not say whether they may combine.
+
+    Only two such cases are reachable, because the lord must actually exalt or
+    debilitate where the count puts it. Virgo is the only rasi a planet both
+    owns and exalts in, which is what lets exceptions 1 and 2 meet at all.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length, second_cycle_length
+
+    virgo = dasa_length(R["Virgo"], int(Graha.MERCURY), R["Virgo"], "exalted")
+    assert virgo.count == 1
+    assert virgo.years == 13
+    assert virgo.out_of_range is not None
+    assert second_cycle_length(virgo.years) == -1
+
+    sagittarius = dasa_length(R["Sagittarius"], int(Graha.JUPITER),
+                              R["Capricorn"], "debilitated")
+    assert sagittarius.count == 2
+    assert sagittarius.years == 0
+    assert sagittarius.out_of_range is not None
+
+
+def test_ordinary_lengths_carry_no_flag():
+    """The flag must be rare, or it says nothing. Every length the base rule
+    gives, with or without a dignity that keeps it in range, is unflagged."""
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    for rasi in range(12):
+        for place in range(12):
+            got = dasa_length(rasi, int(RASI_LORD[rasi]), place)
+            assert got.out_of_range is None, (rasi, place)

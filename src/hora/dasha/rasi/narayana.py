@@ -271,3 +271,114 @@ def dasa_seed(lagna: int, longitudes: dict[int, float]) -> dict:
         "decided_by": verdict.decided_by,
         "reason": verdict.reason,
     }
+
+
+#: §18.2.2's base rule and its three exceptions, as printed.
+DASA_LENGTH_RULE = (
+    "The length of a dasa is determined by the position of the lord of dasa "
+    "rasi with respect to dasa rasi. Counting is forward if dasa rasi is "
+    "odd-footed. Counting is backward if dasa rasi is even-footed. Count "
+    "houses from dasa rasi to its lord. Subtract one from the count. That "
+    "gives dasa length in years."
+)
+
+#: §18.2.2's second special note.
+SECOND_CYCLE_RULE = (
+    "After dasas of all the rasis are over, the second cycle starts. In the "
+    "second cycle, dasa lengths of various rasis are obtained by subtracting "
+    "the dasa length in the first cycle from 12 years."
+)
+
+
+@dataclass(frozen=True, slots=True)
+class DasaLength:
+    """One rasi's dasa length, and every step that produced it."""
+
+    rasi: int
+    rasi_name: str
+    lord: int
+    lord_name: str
+    #: Which way houses were counted, from the *dasa rasi's* own footedness —
+    #: not the progression's direction, which comes from the seed.
+    counting: str
+    #: Houses from the dasa rasi to its lord, counted that way. 1 to 12.
+    count: int
+    years: int
+    #: Exceptions applied, in the order §18.2.2 lists them.
+    applied: tuple[str, ...]
+    #: Set when the exceptions carry the length outside the 1-to-12 years the
+    #: base rule can produce, which §18.2.2 does not discuss. None otherwise.
+    out_of_range: str | None
+    why: str
+
+
+def dasa_length(
+    rasi: int,
+    lord: int,
+    lord_sign: int,
+    lord_dignity: str | None = None,
+) -> DasaLength:
+    """§18.2.2's length for one rasi's dasa, in years.
+
+    :param rasi: the dasa rasi.
+    :param lord: its lord — for Scorpio and Aquarius the stronger of the two,
+        by §15.5.1, which special note 1 requires.
+    :param lord_sign: the rasi the lord occupies.
+    :param lord_dignity: the lord's dignity there, from
+        :func:`hora.charts.dignity.sign_dignity`. Omitted, exceptions 2 and 3
+        cannot fire and the answer says so rather than assuming neither does.
+    """
+    index = validate.in_range("rasi", rasi, 0, 11)
+    place = validate.in_range("lord_sign", lord_sign, 0, 11)
+
+    forward = bool(RASI_IS_ODD_FOOTED[index])
+    counting = "forward" if forward else "backward"
+    step = (place - index) % 12 if forward else (index - place) % 12
+    count = step + 1                                   # inclusive of the rasi
+
+    applied: list[str] = []
+    if count == 1:
+        years = 12                                     # exception 1
+        applied.append("contains its lord, so 12 rather than 0")
+    else:
+        years = count - 1
+
+    if lord_dignity == "exalted":
+        years += 1
+        applied.append("lord exalted, so one year added")
+    elif lord_dignity == "debilitated":
+        years -= 1
+        applied.append("lord debilitated, so one year taken away")
+
+    out_of_range = None
+    if years > 12:
+        out_of_range = (
+            f"{years} years is beyond the 1 to 12 the base rule can give. "
+            f"Exception 1 set the length to 12 and exception 2 then added a "
+            f"year; §18.2.2 does not say whether they combine. The second "
+            f"cycle would be {12 - years} years. See docs/open-items.md."
+        )
+    elif years < 1:
+        out_of_range = (
+            f"{years} years leaves this rasi no dasa at all. Exception 3 took "
+            f"a year from a one-year period; §18.2.2 does not say whether it "
+            f"may. See docs/open-items.md."
+        )
+
+    why = (f"{RASI_NAMES[index]} is "
+           f"{'odd' if forward else 'even'}-footed, so houses are counted "
+           f"{counting}; its lord {GRAHA_NAMES[lord]} is in "
+           f"{RASI_NAMES[place]}, {count} houses away")
+    if applied:
+        why += "; " + "; ".join(applied)
+    return DasaLength(
+        rasi=index, rasi_name=str(RASI_NAMES[index]),
+        lord=int(lord), lord_name=str(GRAHA_NAMES[lord]),
+        counting=counting, count=count, years=years,
+        applied=tuple(applied), out_of_range=out_of_range, why=why,
+    )
+
+
+def second_cycle_length(first_cycle_years: int) -> int:
+    """Special note 2: the second cycle's length is 12 less the first's."""
+    return 12 - first_cycle_years

@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 77 waiting on evidence · 2 parked**
+**5 waiting on Amit · 78 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,28 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-121 — §18.2.2's length exceptions can leave a dasa of 13 years or none
+
+**Waiting on the book.** The base rule gives 1 to 12 years. Exception 1 turns
+a count of one into 12;
+exceptions 2 and 3 add or take a year for an exalted or debilitated lord.
+Nothing says whether they combine, and two combinations are reachable:
+
+| dasa rasi | lord | length | second cycle |
+|---|---|---|---|
+| Virgo | Mercury exalted in Virgo: 1 → 12, then +1 | **13** | **-1** |
+| Sagittarius | Jupiter debilitated in Cp: 2 → 1, then -1 | **0** | 12 |
+
+Virgo is the only rasi a planet both owns and exalts in, which is what lets
+exceptions 1 and 2 meet. Special note 2 makes the second cycle 12 less the
+first, so a 13-year first dasa asks for a negative one, which cannot be
+intended. A second-cycle 0 is ordinary and is not flagged.
+
+**What we do:** the length is computed as the rules read, and `out_of_range`
+says which exceptions combined. Capping at 12 would be a guess.
+
+**Closes when:** an example shows one, or you decide if exception 1 is terminal.
 
 ### OI-120 — §18.2.1 does not say what happens when Saturn and Ketu share the seed
 
