@@ -2473,3 +2473,218 @@ def test_every_reading_outside_the_sixteen_points_back_at_oi_122():
 
     source = Path("src/hora/dasha/rasi/narayana.py").read_text(encoding="utf-8")
     assert source.count("OI-122") == 5
+
+
+# --------------------------------------------------------------------------
+# §18.5 Narayana Dasa of Vargas
+# --------------------------------------------------------------------------
+
+def test_the_seed_house_of_a_varga_is_not_n_modulo_twelve():
+    """"To get the seed of D-n, just take the nth house. If n is greater than
+    12, subtract multiples of 12 from n."
+
+    The section works six out longhand and one of them is the whole point:
+    "The seed of D-24 is 24-12=12th house." `24 % 12` is 0, which is not a
+    house. The rule is `1 + (n - 1) % 12`, and D-30 confirms it from the other
+    side -- 30 - 24 = 6, two multiples subtracted, not one.
+    """
+    from hora.dasha.rasi.narayana import VARGA_SEED_HOUSE_EXAMPLES, seed_house
+
+    assert VARGA_SEED_HOUSE_EXAMPLES == {11: 11, 16: 4, 27: 3, 30: 6,
+                                         24: 12, 40: 4}
+    for divisions, house in VARGA_SEED_HOUSE_EXAMPLES.items():
+        assert seed_house(divisions) == house, divisions
+
+    # The four named in the opening paragraph, all at or under 12.
+    assert [seed_house(n) for n in (4, 7, 9, 10, 12)] == [4, 7, 9, 10, 12]
+
+    # And the trap, stated as a difference rather than an assertion of ours.
+    assert seed_house(24) == 12 != 24 % 12
+    assert seed_house(12) == 12 != 12 % 12
+
+
+def test_every_varga_we_compute_has_a_seed_house_in_range():
+    """Five of our twenty-three divisions are multiples of twelve, so the
+    naive reading would leave five charts with no seed house at all.
+    """
+    from hora.charts.vargas import VARGA_REGISTRY
+    from hora.dasha.rasi.narayana import seed_house
+
+    for code, entry in VARGA_REGISTRY.items():
+        divisions = entry[2]
+        assert 1 <= seed_house(divisions) <= 12, code
+
+    naive = [code for code, entry in VARGA_REGISTRY.items()
+             if entry[2] % 12 == 0]
+    assert naive == ["D12", "D24", "D60", "D108", "D144"]
+
+
+def test_the_seed_house_rationales_agree_with_the_arithmetic():
+    """§18.5 explains why each varga has the seed it has -- D-9 dharma, D-10
+    karma, D-7 procreation, D-4 and D-16 the home, D-12 and D-24 the evolution
+    of self. The meanings are prose, but they have to match the formula or one
+    of the two is wrong.
+    """
+    from hora.charts.vargas import VARGA_REGISTRY
+    from hora.dasha.rasi.narayana import VARGA_SEED_RATIONALE, seed_house
+
+    for entry in VARGA_SEED_RATIONALE:
+        for code in entry["vargas"]:
+            assert seed_house(VARGA_REGISTRY[code][2]) == entry["house"], code
+
+    # The pairs the section makes a point of: same seed, different chart.
+    paired = [e for e in VARGA_SEED_RATIONALE if len(e["vargas"]) == 2]
+    assert {e["house"] for e in paired} == {4, 12}
+
+
+def test_the_uses_the_section_names_for_each_vargas_dasa():
+    """"We can use Narayana dasa of D-4 to time changes in residence... D-10
+    to time events in career... D-24... learning and knowledge... D-9 to time
+    marriage... D-7... happiness from children... D-12... relations with
+    parents."
+    """
+    from hora.charts.vargas import VARGA_REGISTRY
+    from hora.dasha.rasi.narayana import VARGA_DASA_USES
+
+    assert set(VARGA_DASA_USES) == {"D4", "D10", "D24", "D9", "D7", "D12"}
+    for code in VARGA_DASA_USES:
+        assert code in VARGA_REGISTRY
+    assert "career" in VARGA_DASA_USES["D10"]
+    assert "parents" in VARGA_DASA_USES["D12"]
+
+
+def test_the_varga_lagna_reads_the_seed_house_in_the_rasi_chart():
+    """§18.5's procedure, steps 2 and 4: "Take that house in rasi chart...
+    Take the rasi occupied by him in the divisional chart of interest as
+    lagna."
+
+    Two charts, one step apart, and collapsing them is the mistake the
+    procedure is worded to prevent. On Chart 26, D-12 and D-24 share the 12th
+    house as their seed and so share Taurus and Venus -- but Venus sits in
+    different rasis in the two vargas, so their dasas start from different
+    lagnas.
+    """
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import VARGA_PROCEDURE, varga_lagna
+
+    longitudes, signs, lagna_sign = _chart_26()
+    assert len(VARGA_PROCEDURE) == 4
+    assert "in rasi chart" in VARGA_PROCEDURE[1]
+
+    results = {}
+    for code, divisions in (("D12", 12), ("D24", 24)):
+        varga_signs = {g: varga(lon, code).sign for g, lon in longitudes.items()}
+        got = varga_lagna(divisions, lagna_sign, varga_signs)
+        assert got["seed_house"] == 12
+        assert got["seed_rasi"] == R["Taurus"]           # from the rasi chart
+        assert got["lord"] == int(Graha.VENUS)
+        assert int(RASI_LORD[got["seed_rasi"]]) == got["lord"]
+        results[code] = got["lagna"]
+
+    assert results["D12"] != results["D24"]
+    assert signs[int(Graha.VENUS)] == R["Pisces"]        # and neither is D-1's
+
+
+def test_the_varga_lagna_refuses_a_co_owned_seed_rather_than_assuming():
+    """Step 3: "Find its lord. Take the stronger lord in the case of Aq and
+    Sc."
+
+    Chart 26's D-9 seeds on the 9th house, which is Aquarius, so the caveat is
+    live rather than hypothetical. §15.5.1 gives Rahu; `RASI_LORD` gives
+    Saturn; the two put the varga lagna seven signs apart. Defaulting would
+    not be a shade of wrong, it would be a different dasa sequence, so
+    `varga_lagna` refuses instead.
+    """
+    import pytest as _pytest
+
+    from hora.charts.colord import stronger
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import NarayanaError, varga_lagna
+
+    longitudes, _signs, lagna_sign = _chart_26()
+    varga_signs = {g: varga(lon, "D9").sign for g, lon in longitudes.items()}
+
+    with _pytest.raises(NarayanaError, match="Saturn and Rahu"):
+        varga_lagna(9, lagna_sign, varga_signs)
+
+    chosen = stronger(R["Aquarius"], longitudes, purpose="arudha").winner
+    assert chosen == int(Graha.RAHU)
+    by_rule = varga_lagna(9, lagna_sign, varga_signs, lord=chosen)
+    by_default = varga_lagna(9, lagna_sign, varga_signs,
+                             lord=int(Graha.SATURN))
+    assert by_rule["lagna"] == R["Leo"]
+    assert by_default["lagna"] == R["Capricorn"]
+    assert (by_rule["lagna"] - by_default["lagna"]) % 12 == 7
+
+
+def test_a_vargas_narayana_dasa_runs_the_ordinary_rules_from_that_lagna():
+    """Step 4: "find Narayana dasa of the divisional chart just as if it were
+    a rasi chart. Use the rules explained in the previous sections."
+
+    Nothing about §18.2.1 to §18.3 changes; only where lagna is. So the
+    varga's own dasa seed is still the stronger of that lagna and the 7th from
+    it, and the progression still comes from its modality and the 9th house.
+    """
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_seed, progression, varga_lagna
+
+    longitudes, _signs, lagna_sign = _chart_26()
+    varga_signs = {g: varga(lon, "D10").sign for g, lon in longitudes.items()}
+    varga_longitudes = {g: varga(lon, "D10").longitude
+                        for g, lon in longitudes.items()}
+
+    got = varga_lagna(10, lagna_sign, varga_signs)
+    assert got["seed_house"] == 10
+    assert got["lord"] == int(Graha.JUPITER)
+    assert got["lagna"] == R["Libra"]
+
+    seed = dasa_seed(got["lagna"], varga_longitudes)
+    assert seed["seed"] in (got["lagna"], (got["lagna"] + 6) % 12)
+    occupants = {g for g, s in varga_signs.items() if s == seed["seed"]}
+    order = progression(seed["seed"], occupants).signs
+    assert len(set(order)) == 12
+    assert order[0] == seed["seed"]
+
+
+def test_a_varga_dasa_has_no_dasa_lagna_and_saying_so_is_the_whole_warning():
+    """"Narayana dasa of vargas is not the progression of lagna or the 7th
+    house. So taking dasa rasi or the 7th from it as lagna and analyzing dasas
+    is has no technical basis. It applies only the rasi chart."
+
+    Every §18.4 reading hangs off `dasa_lagna`, so refusing there refuses the
+    lot -- the paaka rasi, the thirds, and all sixteen principles. The rasi
+    chart is untouched.
+    """
+    import pytest as _pytest
+
+    from hora.dasha.rasi.narayana import (
+        VARGA_INTERPRETATION_WARNING,
+        NarayanaError,
+        dasa_lagna,
+    )
+
+    for divisions in (2, 9, 10, 12, 24, 144):
+        with _pytest.raises(NarayanaError, match="no dasa lagna"):
+            dasa_lagna(R["Capricorn"], R["Taurus"], R["Taurus"],
+                       divisions=divisions)
+
+    assert dasa_lagna(R["Capricorn"], R["Taurus"], R["Taurus"]) == \
+        R["Capricorn"]
+    assert dasa_lagna(R["Capricorn"], R["Taurus"], R["Taurus"],
+                      divisions=1) == R["Capricorn"]
+    assert "no technical basis" in VARGA_INTERPRETATION_WARNING
+
+
+def test_the_warning_is_kept_with_its_two_printed_slips():
+    """"analyzing dasas is has no technical basis" and "It applies only the
+    rasi chart". Both read as slips for "dasas has" and "only to the rasi
+    chart". Kept as printed -- the meaning is not in doubt, and silently
+    tidying a quotation is how a register stops being one.
+    """
+    from hora.dasha.rasi.narayana import VARGA_INTERPRETATION_WARNING
+
+    assert "dasas is has no technical basis" in VARGA_INTERPRETATION_WARNING
+    assert "It applies only the rasi chart" in VARGA_INTERPRETATION_WARNING

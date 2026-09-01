@@ -549,20 +549,30 @@ DASA_LAGNA_RULE = (
 )
 
 
-def dasa_lagna(dasa_rasi: int, seed: int, natal_lagna: int) -> int:
-    """The rasi read as lagna during one dasa.
+def dasa_lagna(dasa_rasi: int, seed: int, natal_lagna: int,
+               divisions: int = 1) -> int:
+    """The rasi read as lagna during one dasa. Rasi chart only.
 
     :param dasa_rasi: the rasi whose dasa is running.
     :param seed: the dasa seed, from :func:`dasa_seed`.
     :param natal_lagna: the chart's own lagna.
+    :param divisions: the *n* of the chart this dasa was computed on. Anything
+        but 1 is refused — §18.5 says a varga's Narayana dasa progresses
+        neither lagna nor the 7th, so there is no dasa lagna to have. Every
+        §18.4 reading hangs off this function, so refusing here refuses them
+        all, :func:`paaka_rasi` and :func:`dasa_thirds` included.
     :returns: the dasa rasi when the seed was lagna; the 7th from it when the
         seed was the 7th house.
-    :raises NarayanaError: if the seed is neither lagna nor the 7th from it,
-        which §18.2.1 does not allow.
+    :raises NarayanaError: on a varga, or if the seed is neither lagna nor the
+        7th from it, which §18.2.1 does not allow.
     """
     rasi = validate.in_range("dasa_rasi", dasa_rasi, 0, 11)
     seed_index = validate.in_range("seed", seed, 0, 11)
     lagna_index = validate.in_range("natal_lagna", natal_lagna, 0, 11)
+    if int(divisions) != 1:
+        raise NarayanaError(
+            f"D-{int(divisions)} has no dasa lagna. "
+            f"{VARGA_INTERPRETATION_WARNING}")
 
     if seed_index == lagna_index:
         return rasi
@@ -581,6 +591,10 @@ def paaka_rasi(lagna_of_dasa: int, longitudes: dict[int, float],
     :param lord: supply it when the dasa lagna is Scorpio or Aquarius, whose
         lord §15.5.1 must settle.
     :raises NarayanaError: when that lord's longitude was not given.
+
+    There is no varga guard here because there is no way past
+    :func:`dasa_lagna` to reach it: a paaka rasi is the dasa lagna's lord's
+    rasi, and on a varga §18.5 says there is no dasa lagna.
     """
     index = validate.in_range("dasa_lagna", lagna_of_dasa, 0, 11)
     ruler = int(RASI_LORD[index]) if lord is None else int(lord)
@@ -725,3 +739,154 @@ EXALTED_DUSTHANA_LORD_CONVERSE = (
 KETU_IN_THE_ELEVENTH_IS_FOREIGN = (
     "Ketu in the 11th house shows gains from foreign sources."
 )
+
+
+# --------------------------------------------------------------------------
+# §18.5 Narayana Dasa of Vargas
+# --------------------------------------------------------------------------
+
+#: §18.5's rule for a varga's seed house, and the six worked cases it gives.
+#: Read it carefully: it is **not** ``n % 12``. The section works D-24 out to
+#: the 12th house, not the 0th, and does the same for D-30 by subtracting 24
+#: rather than 24 leaving nothing. See :func:`seed_house`.
+VARGA_SEED_HOUSE_RULE = (
+    "To get the seed of D-n, just take the nth house. For example, the seed "
+    "of D-11 is the 11th house. If n is greater than 12, subtract multiples "
+    "of 12 from n. For example, the seed of D-16 is 16-12=4th house. The seed "
+    "of D-27 is 27-24=3rd house. The seed of D-30 is 30-24=6th house. The "
+    "seed of D-24 is 24-12=12th house. The seed of D-40 is 40-36=4th house."
+)
+
+#: The six the section works out longhand, so the formula has an answer key.
+VARGA_SEED_HOUSE_EXAMPLES: dict[int, int] = {
+    11: 11, 16: 4, 27: 3, 30: 6, 24: 12, 40: 4,
+}
+
+#: §18.5's four steps, verbatim. Step 2 reads the **rasi** chart and step 4
+#: the varga, which is the whole of the method and easy to collapse.
+VARGA_PROCEDURE: tuple[str, ...] = (
+    "Find the seed house of the divisional chart of interest.",
+    "Take that house in rasi chart.",
+    "Find its lord. Take the stronger lord in the case of Aq and Sc.",
+    ("Take the rasi occupied by him in the divisional chart of interest as "
+     "lagna and find Narayana dasa of the divisional chart just as if it "
+     "were a rasi chart. Use the rules explained in the previous sections."),
+)
+
+#: Why each varga has the seed house it has. The section gives these as
+#: meaning, not as a rule to compute with -- the arithmetic above is the rule.
+VARGA_SEED_RATIONALE: tuple[dict, ...] = (
+    {"vargas": ("D9",), "house": 9, "shows": "dharma (duty)",
+     "text": ("D-9 shows dharma (duty). To get married, to live with one's "
+              "spouse and to perform religious ceremonies with spouse are "
+              "one's duties or dharma. This is why Navamsa is also called "
+              "Dharmamsa.")},
+    {"vargas": ("D10",), "house": 10, "shows": "karma or action in society",
+     "text": ("The seed of D-10 is the 10th house. That is why D-10 shows "
+              "one's karma or action in society.")},
+    {"vargas": ("D7",), "house": 7, "shows": "procreation",
+     "text": ("The seed of D-7 is the 7th house. Sex is for procreation and "
+              "begetting progeny.")},
+    {"vargas": ("D4", "D16"), "house": 4,
+     "shows": "house, and vehicles and pleasures",
+     "text": ("The seed of D-4 (house) and D-16 (vehicles and pleasures) is "
+              "the 4th house.")},
+    {"vargas": ("D12", "D24"), "house": 12, "shows": "the evolution of self",
+     "text": ("D-12 in the physical plane (it shows the lineage one belongs "
+              "to) and D-24 in the mental plane (it shows one's learning) "
+              "show the evolution of one's self in the respective planes. "
+              "They are both based on the 12th house as the seed, which "
+              "shows the evolution of self.")},
+)
+
+#: What §18.5 says each varga's Narayana dasa times.
+VARGA_DASA_USES: dict[str, str] = {
+    "D4": "changes in residence, happiness from home and stay in foreign countries",
+    "D10": "events in career",
+    "D24": "events related to learning and knowledge",
+    "D9": "marriage and events in marital life",
+    "D7": "happiness from children",
+    "D12": "relations with parents",
+}
+
+#: §18.5's closing warning, and the reason :func:`dasa_lagna` refuses a varga.
+#: Printed with two slips -- "analyzing dasas is has no technical basis" and
+#: "It applies only the rasi chart" -- and kept as printed.
+VARGA_INTERPRETATION_WARNING = (
+    "Narayana dasa of vargas is not the progression of lagna or the 7th "
+    "house. So taking dasa rasi or the 7th from it as lagna and analyzing "
+    "dasas is has no technical basis. It applies only the rasi chart."
+)
+
+
+def seed_house(divisions: int) -> int:
+    """§18.5's seed house for D-*n*, as a house number 1 to 12.
+
+    "Just take the nth house... If n is greater than 12, subtract multiples of
+    12 from n." That is ``1 + (n - 1) % 12`` and **not** ``n % 12``: the
+    section's own D-24 works out to the 12th house, where ``24 % 12`` would
+    give none at all. D-12, D-36, D-108 and D-144 hit the same case.
+
+    :param divisions: the *n* of D-*n*, one or more.
+    """
+    n = int(validate.positive("divisions", divisions))
+    return 1 + (n - 1) % 12
+
+
+def varga_lagna(
+    divisions: int,
+    natal_lagna: int,
+    varga_signs: dict[int, int],
+    lord: int | None = None,
+) -> dict:
+    """§18.5's four steps: the rasi a varga's Narayana dasa treats as lagna.
+
+    The seed house is counted in the **rasi** chart and its lord is then found
+    in the **varga**. Both halves matter: the same lord usually sits in
+    different rasis in the two charts, and using the varga throughout would
+    silently give another answer.
+
+    :param divisions: the *n* of D-*n*.
+    :param natal_lagna: the rasi chart's lagna, which the seed house counts
+        from.
+    :param varga_signs: rasi per graha **in the varga of interest**.
+    :param lord: **required** when the seed house's rasi is Scorpio or
+        Aquarius, whose lord step 3 sends to §15.5.1. It is not defaulted:
+        Chart 26's D-9 seeds on Aquarius, where §15.5.1 gives Rahu and
+        `RASI_LORD` gives Saturn, and the two put the varga lagna seven signs
+        apart -- a different dasa sequence, not a different shade of one.
+    :raises NarayanaError: when a co-owned seed rasi is given no lord, or when
+        the lord has no place in the varga.
+    """
+    lagna_index = validate.in_range("natal_lagna", natal_lagna, 0, 11)
+    house = seed_house(divisions)
+    rasi = (lagna_index + house - 1) % 12
+    from hora.charts.colord import CO_LORDS
+
+    if lord is None and rasi in CO_LORDS:
+        pair = " and ".join(GRAHA_NAMES[g] for g in CO_LORDS[rasi])
+        raise NarayanaError(
+            f"D-{int(divisions)}'s seed is the {house}th house, which is "
+            f"{RASI_NAMES[rasi]} -- owned by both {pair}. Step 3 sends that "
+            f"to section 15.5.1; pass the lord it chooses rather than "
+            f"letting one be assumed")
+    ruler = int(RASI_LORD[rasi]) if lord is None else int(lord)
+    if ruler not in varga_signs:
+        raise NarayanaError(
+            f"no place in D-{int(divisions)} for {GRAHA_NAMES[ruler]}, the "
+            f"lord of {RASI_NAMES[rasi]} -- the {house}th house, which is "
+            f"D-{int(divisions)}'s seed")
+    return {
+        "divisions": int(divisions),
+        "seed_house": house,
+        "seed_rasi": rasi,
+        "seed_rasi_name": str(RASI_NAMES[rasi]),
+        "lord": ruler,
+        "lord_name": str(GRAHA_NAMES[ruler]),
+        "lagna": int(varga_signs[ruler]),
+        "lagna_name": str(RASI_NAMES[varga_signs[ruler]]),
+        "why": (f"D-{int(divisions)}'s seed is the {house}th house, which is "
+                f"{RASI_NAMES[rasi]} in the rasi chart; its lord "
+                f"{GRAHA_NAMES[ruler]} occupies "
+                f"{RASI_NAMES[varga_signs[ruler]]} in D-{int(divisions)}"),
+    }

@@ -42,9 +42,10 @@ at 15° (D-5), the dosha assignment (D-1), upper-limb sunrise (D-10).
 
 **3a. Book typos we transcribe rather than correct.** "Graha Drishri" for
 Graha Drishti (D-24), two spellings each for subhaargala and paapaargala
-(D-25), and two different word-lists for the same reading in §10.5 and §10.7
-(D-26). None changes a calculation; all three would vanish under a
-"tidy-up" pass, and D-20 already showed that costs real information.
+(D-25), two different word-lists for the same reading in §10.5 and §10.7
+(D-26), and two slips in §18.5's interpretation warning (D-56). None changes a
+calculation; all would vanish under a "tidy-up" pass, and D-20 already showed
+that costs real information.
 
 **4. Two live divergences, one known-wrong and one undecided.**
 
@@ -1757,3 +1758,18 @@ printed match in order and that the missing one is Aries, so the divergence is
 recorded rather than smoothed over.
 
 **Closes when:** a later printing restores the sign.
+
+## D-56 · §18.5's interpretation warning is printed with two slips
+
+**Status: closed.** Transcribed as printed; nothing to compute.
+
+> "So taking dasa rasi or the 7th from it as lagna and analyzing dasas **is
+> has** no technical basis. **It applies only the rasi chart.**"
+
+The first reads as a slip for "dasas has"; the second wants "only **to** the
+rasi chart". Neither puts the meaning in doubt, and the sentence is load-bearing
+— it is the reason `dasa_lagna` refuses a varga — so it is stored word for word
+in `VARGA_INTERPRETATION_WARNING` and pinned by a test that names both slips.
+
+Same treatment as D-24 and D-25: tidying a quotation is how a register stops
+being one.
