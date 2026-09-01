@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-17's prose (19)
+### Part 2 — the dasa systems map and chapters 16-18's prose (20)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -647,7 +647,8 @@ inconsistency is settled would be the wrong order.
 `KENDRADI_GRAHA_DASA_INSTEAD` · `DASA_ERROR_RULE` ·
 `ASHTOTTARI_IS_CONDITIONAL` · `ASHTOTTARI_MEANS_108` ·
 `ASHTOTTARI_HAS_NO_KETU` · `ASHTOTTARI_ANTARDASA_RULE` ·
-`ASHTOTTARI_APPLICABILITY_VIEWS`
+`ASHTOTTARI_APPLICABILITY_VIEWS` ·
+`ANTARDASA_SEED_BY_LORDS_UNQUANTIFIED`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -673,7 +674,8 @@ it — but it is the coverage line for the whole part, and
 | `ASHTOTTARI_IS_CONDITIONAL` | §17.1's warning that Parasara made this a conditional dasa and that the conditions are "highly controversial". No condition is given, so nothing can gate on it |
 | `ASHTOTTARI_MEANS_108` | Why the total is 108 and why some read the system as an ayur dasa. The 108 itself is consumed — Table 39's years sum to it |
 | `ASHTOTTARI_HAS_NO_KETU` · `ASHTOTTARI_ANTARDASA_RULE` ·
-`ASHTOTTARI_APPLICABILITY_VIEWS` | §17.1's reason for reading Ashtottari through the chara karakas. That Ketu has no dasa **is** consumed, in `ASHTOTTARI.order`; this is the inference drawn from it |
+`ASHTOTTARI_APPLICABILITY_VIEWS` ·
+`ANTARDASA_SEED_BY_LORDS_UNQUANTIFIED` | §17.1's reason for reading Ashtottari through the chara karakas. That Ketu has no dasa **is** consumed, in `ASHTOTTARI.order`; this is the inference drawn from it |
 
 **Two of the nine are built** — Vimsottari and Ashtottari, both nakshatra
 dasas. The remaining seven are six rasi dasas (Narayana, Lagna Kendradi Rasi,

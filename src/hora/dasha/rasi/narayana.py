@@ -401,6 +401,28 @@ ANTARDASA_DIRECTION_IS_ODD_EVEN_SIGN = (
     "and even-footed signs)."
 )
 
+#: §18.3's antardasa exceptions. They test who occupies the **antardasa
+#: seed**, not the rasi the antardasas start from — those are usually
+#: different rasis, the second being where the first's lord sits. Saturn
+#: forces forward; Ketu reverses whatever the direction would be, exactly as
+#: their §18.2.1 counterparts do for the progression.
+ANTARDASA_EXCEPTIONS = (
+    "If Saturn occupies antardasa seed rasi, antardasas go in the forward "
+    "direction. If Ketu occupies antardasa seed rasi, antardasa direction is "
+    "reversed (from forward to backward or from backward to forward)."
+)
+
+#: **Gap.** Example 67 offers a second way to pick the antardasa seed — "If
+#: Cp is stronger than Cn (or Saturn is much stronger than Moon)" — comparing
+#: the two lords instead of the two rasis. "Much stronger" is not quantified
+#: and §15.5.2 grades no such margin, so only the rasi comparison is used.
+ANTARDASA_SEED_BY_LORDS_UNQUANTIFIED = (
+    "Example 67 allows the antardasa seed to be chosen by comparing the two "
+    "rasis' lords rather than the rasis — \"or Saturn is much stronger than "
+    "Moon\". It does not say what makes one lord *much* stronger, and no "
+    "section grades strength by margin, so we compare the rasis."
+)
+
 #: §18.3's length rule. A dasa of n years gives twelve antardasas of n months,
 #: which closes exactly because a year is twelve months.
 ANTARDASA_LENGTH_RULE = (
@@ -429,6 +451,8 @@ class Antardasas:
     sign_names: tuple[str, ...]
     #: Each antardasa's length in months, equal to the dasa's length in years.
     months_each: int
+    #: Which of §18.3's seed exceptions applied, if any.
+    exception: str | None
     why: str
 
 
@@ -437,6 +461,7 @@ def antardasas(
     dasa_years: int,
     longitudes: dict[int, float],
     seed_lord: int | None = None,
+    seed_occupants: set[int] | None = None,
 ) -> Antardasas:
     """§18.3's twelve antardasas for one Narayana dasa.
 
@@ -447,8 +472,10 @@ def antardasas(
     :param seed_lord: the antardasa seed's lord. Supply it when the seed is
         Scorpio or Aquarius, whose lord §15.5.1 must settle; otherwise it is
         read from the seed itself.
+    :param seed_occupants: grahas in the **antardasa seed** — not in the rasi
+        the antardasas start from. Needed only for §18.3's two exceptions.
     :raises NarayanaError: when §15.5.2 cannot decide between the dasa rasi
-        and the 7th from it.
+        and the 7th from it, or when Saturn and Ketu share the seed.
     """
     from hora.charts.rasi_strength import stronger
 
@@ -470,7 +497,22 @@ def antardasas(
 
     odd = bool(RASI_IS_ODD[start])
     direction = "forward" if odd else "backward"
-    step = 1 if odd else -1
+
+    present = set() if seed_occupants is None else {int(g) for g in seed_occupants}
+    saturn = int(Graha.SATURN) in present
+    ketu = int(Graha.KETU) in present
+    exception = None
+    if saturn and ketu:
+        raise NarayanaError(
+            f"the antardasa seed {RASI_NAMES[seed]} holds both Saturn and "
+            f"Ketu. {BOTH_EXCEPTIONS_UNDEFINED}")
+    if saturn:
+        exception, direction = "Saturn", "forward"
+    elif ketu:
+        exception = "Ketu"
+        direction = "backward" if direction == "forward" else "forward"
+
+    step = 1 if direction == "forward" else -1
     signs = tuple((start + step * k) % 12 for k in range(12))
 
     return Antardasas(
@@ -479,9 +521,12 @@ def antardasas(
         start=start, start_name=str(RASI_NAMES[start]),
         direction=direction, signs=signs,
         sign_names=tuple(str(RASI_NAMES[s]) for s in signs),
-        months_each=int(dasa_years),
+        months_each=int(dasa_years), exception=exception,
         why=(f"the stronger of {RASI_NAMES[index]} and {RASI_NAMES[seventh]} "
              f"is {RASI_NAMES[seed]}, whose lord {GRAHA_NAMES[lord]} is in "
              f"{RASI_NAMES[start]}; {RASI_NAMES[start]} is an "
-             f"{'odd' if odd else 'even'} sign, so counting is {direction}"),
+             f"{'odd' if odd else 'even'} sign, so counting would be "
+             f"{'forward' if odd else 'backward'}"
+             + (f" — but {exception} occupies the seed, making it {direction}"
+                if exception else "")),
     )

@@ -1075,3 +1075,120 @@ def test_an_undecidable_antardasa_seed_is_refused():
 
     with pytest.raises(NarayanaError, match="could not choose between"):
         antardasas(R["Aries"], 3, {})
+
+
+# --------------------------------------------------------------------------
+# Example 67 — antardasas worked from stated positions, with the exceptions.
+# --------------------------------------------------------------------------
+
+#: Example 67 states positions rather than giving a chart: "Lords of Cp and Cn
+#: are Saturn and Moon respectively. Suppose Saturn is in Le and Moon is in
+#: Ta." The seed is Cancer, so the Moon's Taurus is where antardasas begin.
+EX67_LONGITUDES = {6: 4 * 30 + 10.0, 1: 1 * 30 + 10.0}     # Saturn Le, Moon Ta
+
+
+def _example_67(seed_occupants):
+    """Example 67's antardasas, driven by its own stated positions.
+
+    The example fixes the seed by fiat — "Let us say Cn is stronger than Cp" —
+    so the strength comparison is short-circuited and only §18.3's counting is
+    under test here.
+    """
+    from hora.core.const import RASI_IS_ODD
+
+    start = int(EX67_LONGITUDES[1] // 30)          # where the Moon sits
+    direction = "forward" if RASI_IS_ODD[start] else "backward"
+    if 6 in seed_occupants:                        # Saturn in the seed
+        direction = "forward"
+    elif 8 in seed_occupants:                      # Ketu in the seed
+        direction = "backward" if direction == "forward" else "forward"
+    step = 1 if direction == "forward" else -1
+    return direction, [ABBR[(start + step * k) % 12] for k in range(12)]
+
+
+def test_example_67_normal_sequence():
+    """"Then antardasas start from Ta, which contains Moon. Because Ta is an
+    even sign, counting is backward. So antardasas go as — Ta, Ar, Pi, Aq, Cp,
+    Sg, Sc, Li, Vi, Le, Cn and Ge."
+    """
+    direction, signs = _example_67(set())
+    assert direction == "backward"
+    assert " ".join(signs) == "Ta Ar Pi Aq Cp Sg Sc Li Vi Le Cn Ge"
+
+
+def test_example_67_each_antardasa_is_five_months():
+    """"Cp dasa of 5 years is running... Each antardasa is of 5 months."""
+    from hora.dasha.rasi.narayana import antardasas
+
+    got = antardasas(R["Capricorn"], 5, EX67_LONGITUDES, seed_lord=1)
+    assert got.months_each == 5
+    assert len(got.signs) == 12
+
+
+def test_example_67_ketu_reverses_and_the_book_drops_a_sign():
+    """See D-55. "antardasa sequence becomes Ta, Ge, Cn, Le, Vi, Li, Sc, Sg,
+    Cp, Aq and Pi, if Ketu occupies Cn."
+
+    Eleven signs are printed where twelve are required, §18.3 having opened by
+    saying each dasa is divided into twelve. Counting forward from Taurus, the
+    missing one is Aries.
+    """
+    printed = ["Ta", "Ge", "Cn", "Le", "Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi"]
+    assert len(printed) == 11
+
+    direction, signs = _example_67({8})            # Ketu in the seed
+    assert direction == "forward"
+    assert signs[:11] == printed
+    assert signs[11] == "Ar"
+    assert set(ABBR) - set(printed) == {"Ar"}
+
+
+def test_example_67_saturn_forces_forward():
+    """"If Saturn occupies antardasa seed rasi, antardasas go in the forward
+    direction." Taurus would count backward on its own, so the exception is
+    doing the work rather than agreeing by chance."""
+    plain, _signs = _example_67(set())
+    assert plain == "backward"
+
+    direction, signs = _example_67({6})
+    assert direction == "forward"
+    assert " ".join(signs) == "Ta Ge Cn Le Vi Li Sc Sg Cp Aq Pi Ar"
+
+
+def test_the_antardasa_exceptions_read_the_seed_not_the_starting_rasi():
+    """"If Saturn occupies antardasa seed rasi..." — the seed, which is
+    Cancer here, not Taurus where the antardasas begin. The two are different
+    rasis whenever a seed's lord sits outside it, which is the usual case.
+    """
+    from hora.dasha.rasi.narayana import antardasas
+
+    seed_has_ketu = antardasas(R["Capricorn"], 5, EX67_LONGITUDES,
+                               seed_lord=1, seed_occupants={8})
+    assert seed_has_ketu.exception == "Ketu"
+    assert seed_has_ketu.start == R["Taurus"]      # where counting begins
+    assert seed_has_ketu.start != seed_has_ketu.seed
+    assert seed_has_ketu.direction == "forward"
+
+    none = antardasas(R["Capricorn"], 5, EX67_LONGITUDES, seed_lord=1)
+    assert none.exception is None
+    assert none.direction == "backward"
+
+
+def test_an_antardasa_seed_holding_both_saturn_and_ketu_is_refused():
+    """The same ambiguity as §18.2.1's, and unresolved for the same reason —
+    Saturn imposes forward, Ketu reverses whatever there is."""
+    from hora.dasha.rasi.narayana import NarayanaError, antardasas
+
+    with pytest.raises(NarayanaError, match="both Saturn and Ketu"):
+        antardasas(R["Capricorn"], 5, EX67_LONGITUDES, seed_lord=1,
+                   seed_occupants={6, 8})
+
+
+def test_choosing_the_seed_by_comparing_lords_is_not_implemented():
+    """Example 67 offers an alternative: "If Cp is stronger than Cn (or Saturn
+    is much stronger than Moon)". No section grades strength by margin, and
+    "much stronger" is unquantified, so the rasi comparison is used."""
+    from hora.dasha.rasi.narayana import ANTARDASA_SEED_BY_LORDS_UNQUANTIFIED
+
+    assert "much" in ANTARDASA_SEED_BY_LORDS_UNQUANTIFIED
+    assert "we compare the rasis" in ANTARDASA_SEED_BY_LORDS_UNQUANTIFIED

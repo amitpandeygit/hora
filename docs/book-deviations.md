@@ -1724,3 +1724,30 @@ the third for themselves.
 
 **Closes when:** a chapter defines which dignities count towards the dasavarga
 tally, or another example pins a count we can check the rule against.
+
+## D-55 · Example 67's Ketu antardasa sequence prints eleven of twelve rasis
+
+**Status: BOOK DEFECT — a dropped sign, not a rule.**
+
+§18.3 opens by saying "Each dasa is divided into 12 antardasas", and Example
+67's normal sequence duly lists twelve:
+
+> Ta, Ar, Pi, Aq, Cp, Sg, Sc, Li, Vi, Le, Cn and Ge
+
+Its Ketu variant lists eleven:
+
+> Ta, Ge, Cn, Le, Vi, Li, Sc, Sg, Cp, Aq and Pi
+
+Counting forward from Taurus, which is what the Ketu exception makes it do, the
+twelfth is **Aries**. Our sequence agrees with all eleven that are printed and
+supplies Aries at the end.
+
+Nothing turns on it: the rule is unambiguous, the other sequence in the same
+example is complete, and no antardasa can be dropped without the twelve failing
+to fill the dasa. It is a printing slip.
+
+**What we do:** return twelve. The Example 67 fixture asserts the eleven
+printed match in order and that the missing one is Aries, so the divergence is
+recorded rather than smoothed over.
+
+**Closes when:** a later printing restores the sign.
