@@ -637,3 +637,153 @@ def test_ordinary_lengths_carry_no_flag():
         for place in range(12):
             got = dasa_length(rasi, int(RASI_LORD[rasi]), place)
             assert got.out_of_range is None, (rasi, place)
+
+
+# --------------------------------------------------------------------------
+# Example 66 — Narayana dasa worked in full over Chart 23.
+# --------------------------------------------------------------------------
+
+#: The twelve lengths the example prints, in progression order.
+EX66_LENGTHS = [("Le", 1), ("Cp", 8), ("Ge", 2), ("Sc", 9), ("Ar", 4),
+                ("Vi", 1), ("Aq", 9), ("Cn", 3), ("Sg", 11), ("Ta", 3),
+                ("Li", 10), ("Pi", 4)]
+
+
+def _chart_23():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(23).items()},
+            {int(g): sign for g, sign in graha_signs(23).items()},
+            lagna(23))
+
+
+def test_example_66_seed_and_progression():
+    """"Because the 7th house (Le) is stronger than lagna (Aq), dasa seed is
+    Le... Neither Saturn nor Ketu occupies Le and the exceptions don't apply.
+    Dasa sequence is — Le, Cp, Ge, Sc, Ar, Vi, Aq, Cn, Sg, Ta, Li, Pi."
+    """
+    from hora.dasha.rasi.narayana import dasa_seed
+
+    longitudes, signs, lagna_sign = _chart_23()
+    seed = dasa_seed(lagna_sign, longitudes)
+    assert seed["lagna_name"] == "Aquarius"
+    assert seed["seventh_name"] == "Leo"
+    assert seed["seed"] == R["Leo"]
+
+    occupants = {g for g, sign in signs.items() if sign == seed["seed"]}
+    from hora.core.const import Graha
+    assert int(Graha.SATURN) not in occupants
+    assert int(Graha.KETU) not in occupants
+
+    got = progression(seed["seed"], occupants)
+    assert got.exception is None
+    assert got.god == "Shiva"
+    assert got.direction == "forward"
+    assert " ".join(ABBR[s] for s in got.signs) == \
+        "Le Cp Ge Sc Ar Vi Aq Cn Sg Ta Li Pi"
+
+
+def test_example_66_uses_the_stronger_lord_for_the_two_co_owned_rasis():
+    """Special note 1. The example counts Scorpio to Mars and Aquarius to
+    Saturn, which is what §15.5.1's cascade gives for this chart."""
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+
+    longitudes, _signs, _lagna = _chart_23()
+    assert stronger(R["Scorpio"], longitudes, purpose="arudha").winner == \
+        int(Graha.MARS)
+    assert stronger(R["Aquarius"], longitudes, purpose="arudha").winner == \
+        int(Graha.SATURN)
+
+
+@pytest.mark.parametrize("abbr,years", [c for c in EX66_LENGTHS if c[0] != "Cn"])
+def test_example_66_lengths(abbr, years):
+    """Eleven of the twelve, each with its own counting direction and count.
+    Cancer is the exception and is tested separately — see D-52.
+    """
+    from hora.charts.colord import stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_23()
+    rasi = BY_ABBR[abbr]
+    lord = (stronger(rasi, longitudes, purpose="arudha").winner
+            if rasi in (R["Scorpio"], R["Aquarius"]) else int(RASI_LORD[rasi]))
+    got = dasa_length(rasi, lord, signs[lord], sign_dignity(lord, longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_example_66_cancer_turns_on_what_exalted_means():
+    """See D-52. "However, Moon is exalted and we add one year. We get 2+1=3."
+
+    The Moon is at 23 Ta 38. Taurus is his exaltation sign, but his exaltation
+    degree is 3 and his moolatrikona runs from there to the sign's end, so
+    `sign_dignity` says moolatrikona and the year is not added. Both readings
+    are reachable; which one §18.2.2 means is the open question.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_23()
+    moon = int(Graha.MOON)
+    assert int(RASI_LORD[R["Cancer"]]) == moon
+    assert signs[moon] == R["Taurus"]
+    assert sign_dignity(moon, longitudes[moon]) == "moolatrikona"
+
+    by_degree = dasa_length(R["Cancer"], moon, signs[moon], "moolatrikona")
+    assert by_degree.count == 3
+    assert by_degree.years == 2                    # ours
+
+    by_sign = dasa_length(R["Cancer"], moon, signs[moon], "exalted")
+    assert by_sign.years == 3                      # the book's
+    assert "exalted" in by_sign.applied[0]
+
+
+def test_example_66_first_cycle_totals_sixty_five_years_the_books_way():
+    """"Thus the first cycle of dasas ends in Aug 1977", from a birth in
+    August 1912 — sixty-five years. Ours totals sixty-four, the whole
+    difference being Cancer's one year.
+    """
+    assert sum(years for _abbr, years in EX66_LENGTHS) == 65
+    ours = [(a, 2 if a == "Cn" else y) for a, y in EX66_LENGTHS]
+    assert sum(y for _a, y in ours) == 64
+
+
+def test_example_66_the_dates_the_example_prints():
+    """Each dasa runs from the last one's end, so the printed dates are a
+    running total and check the lengths a second way."""
+    starts, year = {}, 1912
+    for abbr, years in EX66_LENGTHS:
+        starts[abbr] = (year, year + years)
+        year += years
+
+    assert starts["Le"] == (1912, 1913)
+    assert starts["Cp"] == (1913, 1921)
+    assert starts["Ge"] == (1921, 1923)
+    assert starts["Sc"] == (1923, 1932)
+    assert starts["Ar"] == (1932, 1936)
+    assert starts["Vi"] == (1936, 1937)
+    assert starts["Aq"] == (1937, 1946)
+    assert starts["Cn"] == (1946, 1949)
+    assert starts["Sg"] == (1949, 1960)
+    assert starts["Ta"] == (1960, 1963)
+    assert starts["Li"] == (1963, 1973)
+    assert starts["Pi"] == (1973, 1977)
+
+
+def test_example_66_second_cycle():
+    """"Because Le dasa is of 1 year in the 1st cycle, it is 12-1=11 years in
+    the 2nd cycle... Cp 12-8=4... Ge 12-2=10." The order repeats unchanged.
+    """
+    from hora.dasha.rasi.narayana import second_cycle_length
+
+    assert second_cycle_length(1) == 11             # Leo, Aug 1977 to Aug 1988
+    assert second_cycle_length(8) == 4              # Capricorn, to Aug 1992
+    assert second_cycle_length(2) == 10             # Gemini, to Aug 2002
+
+    year = 1977
+    for abbr, first in EX66_LENGTHS[:3]:
+        year += second_cycle_length(first)
+    assert year == 2002

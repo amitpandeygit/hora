@@ -1616,38 +1616,42 @@ into our data later.
 
 **Closes when:** a later printing corrects it.
 
-## D-52 · Example 55 calls the Moon exalted where our dignity says moolatrikona
+## D-52 · "Exalted" at sign level or degree level, and it changes dasa lengths
 
-**Status: granularity, not a defect — but it will recur.**
+**Status: NEEDS YOU — no longer cosmetic.**
 
-Example 55 argues Cancer is strong because it is "occupied by an exalted planet
-and owned by another exalted planet". Jupiter at 6 Cn 40 is exalted and we
-agree. The other planet is Cancer's lord the Moon, at 17 Ta 12. Taurus is the
-Moon's exaltation **sign**, but his exaltation degree is Taurus 3° and his
-moolatrikona runs Taurus 3°–30°, so at 17° our `sign_dignity` returns
-**moolatrikona**.
-
-Both readings are ordinary usage: the book means the sign, we report the
-degree. It matters because a reader checking "is the Moon exalted here?"
-against our output gets a different word from the one the example uses.
-
-Exactly two grahas can produce this, because only their moolatrikona sits
-inside their own exaltation sign:
+Two grahas have their moolatrikona inside their own exaltation sign, so for
+those two the word "exalted" means different things at sign and degree level:
 
 | graha | exalts at | moolatrikona | degrees that read differently |
 |---|---|---|---|
 | Moon | 3° Taurus | Taurus 3°–30° | Taurus 3°–30° |
 | Mercury | 15° Virgo | Virgo 15°–20° | Virgo 15°–20° |
 
-Unrelated to OI-83, which asks how near the exact degree counts as *deep*
-exaltation. This is about which of two named dignities applies at all.
+`sign_dignity` reports the finer of the two, so a Moon at 23 Ta 38 comes back
+**moolatrikona** where the book says **exalted**.
 
-**What we do:** nothing changes. `sign_dignity` keeps reporting the finer of
-the two, and Example 55's fixture asserts moolatrikona while recording that
-the example says exalted.
+First seen in Example 55, where it only changed a word: the example called the
+Moon exalted to argue Cancer was strong, and the argument held either way.
+Example 66 is different. §18.2.2 adds a year to a dasa whose lord is exalted,
+and Chart 23's Cancer dasa turns on exactly this Moon:
 
-**Closes when:** nothing — unless you want a sign-level dignity reported
-alongside the degree-level one.
+| | Cancer dasa | first cycle ends |
+|---|---|---|
+| book, reading exaltation by sign | 2 + 1 = **3 years** | Aug 1977 |
+| ours, reading it by degree | **2 years** | Aug 1976 |
+
+Eleven of the twelve lengths agree exactly. That one disagreement moves the
+five dasas after it by a year each, and the second cycle inherits the offset,
+so every Narayana date from 1946 onward differs for this native.
+
+**What we do:** nothing yet. `dasa_length` takes the dignity from the caller,
+so both readings are reachable; passing `sign_dignity`'s answer gives 2 years,
+passing "exalted" gives the book's 3. The Example 66 fixture asserts both and
+names which is which.
+
+**Closes when:** you decide whether §18.2.2's "exalted" means the exaltation
+sign or the exaltation degrees. It affects only these two grahas.
 
 ## D-53 · Example 56's Rudra needs the ordinary 8th, which §14.3 forbids
 
