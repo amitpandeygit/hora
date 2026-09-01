@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 78 waiting on evidence · 2 parked**
+**5 waiting on Amit · 79 waiting on evidence · 2 parked**
 
 ---
 
@@ -617,6 +617,33 @@ direction may be assumed from the other.
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
+
+### OI-122 — §18.4's sixteen principles miss six readings its own examples make
+
+**Waiting on the book.** The sixteen are Parasara's and closed. They carry most
+of what the chapter says, but six readings in Example 69 and Exercise 28 fall
+outside them, and none is a matter of degree:
+
+| reading | where | why the sixteen miss it |
+|---|---|---|
+| a conglomeration in the 12th gives constant fear | Ex 69, Le dasa | principle 6 gives fear for **Rahu** in the 8th or 12th, not for a crowd |
+| Rahu in the 10th denies stable leadership | Ex 69, Le dasa | nothing reaches the 10th except through lordship |
+| an **exalted** dusthana lord gives hard times | Exercise 28, Pi dasa | principle 13 states only the debilitated case |
+| Ketu in the 11th gives **foreign** gains | both, same words | principle 5 gives any planet there bare "gains" |
+| houses read for a nation: 3rd weapons, 7th foreign relations, 9th religion, 10th the head of government | Ex 69 throughout | the principles give a placement's valence; its subject comes from the house |
+| an antardasa judged by what its **rasi** aspects, the target a natal arudha | Ex 69, Pi dasa | §18.4 judges an antardasa by the house its *lord* holds from the dasa rasi |
+
+The last is a different mechanism rather than a missing row — a fourth
+reference point in a section that already had three.
+
+**What we do:** each is its own named constant —
+`UNLISTED_DASA_LAGNA_READINGS`, `EXALTED_DUSTHANA_LORD_CONVERSE`,
+`KETU_IN_THE_ELEVENTH_IS_FOREIGN`, `MUNDANE_HOUSE_READINGS` and
+`ANTARDASA_ASPECT_RULE`. Folding them into `PARASARA_DASA_PRINCIPLES` would put
+words in Parasara's mouth. No interpretation layer reads either set yet, so
+nothing is blocked by leaving them apart.
+
+**Closes when:** a later chapter states them, or you say the list may grow.
 
 ### OI-121 — §18.2.2's exception 3 can leave a rasi no dasa at all
 

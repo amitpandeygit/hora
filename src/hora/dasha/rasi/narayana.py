@@ -669,7 +669,8 @@ def dasa_thirds(start_years: float, length_years: float) -> tuple[dict, ...]:
 #: placement; what it is actually about comes from the house's own
 #: significations, read for a nation rather than a person. The example never
 #: states this, but every reading it gives is built that way, so the pairs
-#: are recorded rather than inferred into the principles themselves.
+#: are recorded rather than inferred into the principles themselves. See
+#: OI-122, which gathers every reading the sixteen do not carry.
 MUNDANE_HOUSE_READINGS: tuple[dict, ...] = (
     {"house": 3, "reads": "weapons",
      "text": "Rahu in the 3rd can also give aggressive weapon development, "
@@ -688,7 +689,7 @@ MUNDANE_HOUSE_READINGS: tuple[dict, ...] = (
 
 #: Two readings Example 69 gives that no principle in §18.4 covers, even by
 #: valence. Both are about the 10th and 12th from dasa lagna, and principle 6
-#: reaches the 12th only for Rahu.
+#: reaches the 12th only for Rahu. See OI-122.
 UNLISTED_DASA_LAGNA_READINGS: tuple[str, ...] = (
     ("In particular, planetary conglomeration in the 12th house shows "
      "constant fear and turbulence. It signals instability."),
@@ -699,7 +700,8 @@ UNLISTED_DASA_LAGNA_READINGS: tuple[str, ...] = (
 #: A second way to read an antardasa, and a fourth reference point in the
 #: chapter. §18.4 judges an antardasa by the house its *lord* occupies from
 #: the dasa rasi; this judges the antardasa **rasi** by what it aspects, and
-#: what it aspects is a natal arudha rather than anything in the dasa.
+#: what it aspects is a natal arudha rather than anything in the dasa. See
+#: OI-122.
 ANTARDASA_ASPECT_RULE = (
     "Antardasas aspecting A3 can bring weapons, just as antardasas aspecting "
     "UL can bring marriage."
@@ -710,6 +712,7 @@ ANTARDASA_ASPECT_RULE = (
 #: converse without saying so: of the three dusthana lords from its dasa lagna
 #: Vi, two are exalted, and the answer reads that as hard times. The converse
 #: is not in the sixteen, so it is recorded here rather than added to them.
+#: See OI-122.
 EXALTED_DUSTHANA_LORD_CONVERSE = (
     "Lords of two dusthanas - Mars and Sun - are exalted and that suggests "
     "hard times."
@@ -718,7 +721,7 @@ EXALTED_DUSTHANA_LORD_CONVERSE = (
 #: Ketu in the 11th from dasa lagna. Principle 5 gives any planet there
 #: "gains"; both Example 69 and Exercise 28 make Ketu's gains specifically
 #: foreign ones, in the same words, so the reading is the book's and not a
-#: one-off turn of phrase.
+#: one-off turn of phrase. See OI-122.
 KETU_IN_THE_ELEVENTH_IS_FOREIGN = (
     "Ketu in the 11th house shows gains from foreign sources."
 )

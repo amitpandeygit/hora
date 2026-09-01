@@ -2438,3 +2438,38 @@ def test_ketu_in_the_eleventh_reads_as_foreign_gains_in_both_charts():
     _l26, signs_26, lagna_26 = _chart_26()
     vi = dasa_lagna(R["Pisces"], R["Sagittarius"], lagna_26)
     assert _house_from(vi, signs_26[int(Graha.KETU)]) == 11
+
+
+def test_oi_122_names_every_reading_the_sixteen_principles_do_not_carry():
+    """The gap has to be one register entry, not five constants nobody joins
+    up. OI-122 tabulates all six readings and names every constant holding
+    one, so a later chapter closing the gap closes it in one place.
+    """
+    from pathlib import Path
+
+    from hora.dasha.rasi import narayana
+
+    text = Path("docs/open-items.md").read_text(encoding="utf-8")
+    start = text.index("### OI-122")
+    entry = text[start:text.index("### OI-121", start)]
+
+    for symbol in ("UNLISTED_DASA_LAGNA_READINGS",
+                   "EXALTED_DUSTHANA_LORD_CONVERSE",
+                   "KETU_IN_THE_ELEVENTH_IS_FOREIGN",
+                   "MUNDANE_HOUSE_READINGS",
+                   "ANTARDASA_ASPECT_RULE"):
+        assert symbol in entry, symbol
+        assert hasattr(narayana, symbol), symbol
+
+    assert "Ex 69" in entry and "Exercise 28" in entry
+    assert entry.count("\n|") >= 7          # header, divider and six readings
+
+
+def test_every_reading_outside_the_sixteen_points_back_at_oi_122():
+    """Each constant cites the entry, so reading the code leads to the gap
+    rather than to a stray note.
+    """
+    from pathlib import Path
+
+    source = Path("src/hora/dasha/rasi/narayana.py").read_text(encoding="utf-8")
+    assert source.count("OI-122") == 5
