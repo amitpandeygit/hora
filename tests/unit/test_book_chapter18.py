@@ -2170,3 +2170,271 @@ def test_example_69s_two_unlisted_readings_are_not_in_the_sixteen():
 
     occupancy = [p for p in PARASARA_DASA_PRINCIPLES if p["houses"]]
     assert not any(10 in p["houses"] for p in occupancy)
+
+
+# --------------------------------------------------------------------------
+# Exercise 28 — Chart 26, and the first chart in the chapter whose dasa seed
+# is settled by §15.5.2's rule 4.
+# --------------------------------------------------------------------------
+
+#: The five dasas the answer prints, in order.
+EX28_LENGTHS = [("Sg", 11), ("Le", 5), ("Ar", 10), ("Pi", 4), ("Sc", 3)]
+
+
+def _chart_26():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(26).items()},
+            {int(g): sign for g, sign in graha_signs(26).items()},
+            lagna(26))
+
+
+def test_exercise_28_seed_is_the_first_settled_by_rule_4():
+    """"Both Ge and Sg are unoccupied. Neither is occupied or aspected by
+    Jupiter, Mercury or lord. Ge is an odd rasi and Mercury is also in an odd
+    rasi. But Sg is an odd rasi and Jupiter is in an even rasi. So Sg is
+    stronger."
+
+    The answer walks §15.5.2 in order and names where it stops. Rule 1 ties on
+    nothing, rule 2 ties on nothing, rule 3 cannot fire because neither rasi
+    holds a planet at all -- and rule 4 separates them on the oddity of the
+    rasis their lords sit in. Every other chart in the chapter stopped at
+    rule 1 or 2, so this is the first test of the cascade this far down.
+    """
+    from hora.core.const import RASI_IS_ODD, Graha
+    from hora.dasha.rasi.narayana import dasa_seed
+
+    longitudes, signs, lagna_sign = _chart_26()
+    assert lagna_sign == R["Gemini"]
+    assert not [g for g, s in signs.items()
+                if s in (R["Gemini"], R["Sagittarius"])]        # both unoccupied
+
+    seed = dasa_seed(lagna_sign, longitudes)
+    assert seed["seed"] == R["Sagittarius"]
+    assert seed["decided_by"] == "4"
+
+    # The oddities the answer spells out, in its own order.
+    assert RASI_IS_ODD[R["Gemini"]] and RASI_IS_ODD[signs[int(Graha.MERCURY)]]
+    assert RASI_IS_ODD[R["Sagittarius"]]
+    assert not RASI_IS_ODD[signs[int(Graha.JUPITER)]]
+    assert "same oddity" in seed["reason"]
+    assert "different oddity" in seed["reason"]
+
+
+def test_exercise_28_progression_is_vishnus_backward_trine():
+    """The printed order is Sg, Le, Ar, Pi, Sc. Sg is dual, so Vishnu; the 9th
+    from it is Le, even-footed, so backward. The trines of Sg run Sg, Le, Ar
+    and then the next quadrant's, starting at Pi.
+    """
+    from hora.dasha.rasi.narayana import progression
+
+    _longitudes, signs, _lagna = _chart_26()
+    occupants = {g for g, sign in signs.items() if sign == R["Sagittarius"]}
+    assert not occupants
+
+    got = progression(R["Sagittarius"], occupants)
+    assert got.god == "Vishnu"
+    assert got.direction == "backward"
+    assert [ABBR[s] for s in got.signs][:5] == [a for a, _y in EX28_LENGTHS]
+
+
+@pytest.mark.parametrize("abbr,years", EX28_LENGTHS)
+def test_exercise_28_lengths(abbr, years):
+    """Three of the five need exception 2: Le for an exalted Sun, and Ar and
+    Sc for an exalted Mars. All three exaltations are unambiguous by degree as
+    well as by sign, so D-52 does not touch this answer.
+    """
+    from hora.charts.colord import stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_26()
+    rasi = BY_ABBR[abbr]
+    lord = (stronger(rasi, longitudes, purpose="arudha").winner
+            if rasi in (R["Scorpio"], R["Aquarius"]) else int(RASI_LORD[rasi]))
+    got = dasa_length(rasi, lord, signs[lord],
+                      sign_dignity(lord, longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_exercise_28_pins_the_co_lord_cascade_a_third_time():
+    """Scorpio again, and again the answer forces the choice. Mars in Cp is
+    three houses on and exalted, giving 3; Ketu in Cn is nine, giving 8.
+    """
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_26()
+    mars, ketu = int(Graha.MARS), int(Graha.KETU)
+    assert stronger(R["Scorpio"], longitudes, purpose="arudha").winner == mars
+    assert dasa_length(R["Scorpio"], mars, signs[mars], "exalted").years == 3
+    assert dasa_length(R["Scorpio"], ketu, signs[ketu]).years == 8
+
+
+def test_exercise_28_the_dates_the_answer_prints():
+    """"Sg (11 years): May 1971 - May 1982" through "Sc (03 years): May 2001 -
+    May 2004." The native's story is dated against these: an excellent career
+    until 1997, which is exactly where Ar dasa ends.
+    """
+    year, spans = 1971, {}
+    for abbr, years in EX28_LENGTHS:
+        spans[abbr] = (year, year + years)
+        year += years
+
+    assert spans["Sg"] == (1971, 1982)
+    assert spans["Le"] == (1982, 1987)
+    assert spans["Ar"] == (1987, 1997)
+    assert spans["Pi"] == (1997, 2001)
+    assert spans["Sc"] == (2001, 2004)
+
+
+def test_exercise_28_states_the_dasa_lagna_rule_for_a_seventh_seeded_chart():
+    """"Because we started dasas from the 7th house instead of lagna, Narayana
+    dasa shows the progression of the 7th house instead of lagna. So dasa
+    lagna is the 7th from dasa rasi."
+
+    The clearest statement of §18.4's rule anywhere in the chapter, and it
+    arrives in an exercise answer rather than the section. It confirms from
+    the other side what Chart 24 showed: seeded from lagna the dasa lagna is
+    the dasa rasi; seeded from the 7th it is six signs away, always.
+    """
+    from hora.dasha.rasi.narayana import dasa_lagna, progression
+
+    _longitudes, signs, lagna_sign = _chart_26()
+    seed = R["Sagittarius"]
+    assert seed == (lagna_sign + 6) % 12
+
+    occupants = {g for g, sign in signs.items() if sign == seed}
+    for rasi in progression(seed, occupants).signs:
+        assert dasa_lagna(rasi, seed, lagna_sign) == (rasi + 6) % 12
+
+    assert dasa_lagna(R["Aries"], seed, lagna_sign) == R["Libra"]
+    assert dasa_lagna(R["Pisces"], seed, lagna_sign) == R["Virgo"]
+
+
+def test_exercise_28_aries_dasa_was_good_because_libras_lord_is_exalted():
+    """"During Ar dasa, dasa lagna is Li. Due to the exaltation of dasa lagna
+    lord Venus (among other things), it was a very good dasa."
+
+    Principle 11 -- the lord of dasa lagna exalted gives excellent results.
+    Ar dasa runs May 1987 to May 1997, and the exercise says the career was
+    excellent until 1997.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import (
+        PARASARA_DASA_PRINCIPLES,
+        dasa_lagna,
+        paaka_rasi,
+    )
+
+    longitudes, _signs, lagna_sign = _chart_26()
+    li = dasa_lagna(R["Aries"], R["Sagittarius"], lagna_sign)
+    assert li == R["Libra"]
+
+    venus = int(RASI_LORD[li])
+    assert venus == int(Graha.VENUS)
+    assert sign_dignity(venus, longitudes[venus]) == "exalted"
+    assert paaka_rasi(li, longitudes) == R["Pisces"]
+
+    eleventh = PARASARA_DASA_PRINCIPLES[10]
+    assert "exalted" in eleventh["who"]
+    assert eleventh["gives"] == "excellent results"
+
+
+def test_exercise_28_pisces_dasa_is_read_entirely_from_virgo():
+    """"During Pi dasa, dasa lagna is Vi. Lord of Vi is Mercury and he is in
+    the 8th house from it... Jupiter in the 3rd from dasa lagna suggests
+    failures. There are no malefics in the 3rd or 6th from dasa lagna. Saturn
+    in the 9th house suggests loss of fortune... Ketu in the 11th house shows
+    gains from foreign sources. Exalted 9th lord Venus is in the 7th house."
+
+    Every house here is counted from Vi, which is six signs from the rasi
+    whose dasa is running. Read from Pi instead, Saturn would sit in the 3rd
+    and Ketu in the 5th, and none of the answer would follow.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_lagna
+
+    longitudes, signs, lagna_sign = _chart_26()
+    vi = dasa_lagna(R["Pisces"], R["Sagittarius"], lagna_sign)
+    assert vi == R["Virgo"]
+
+    mercury = int(RASI_LORD[vi])
+    assert _house_from(vi, signs[mercury]) == 8
+    assert _house_from(vi, signs[int(Graha.JUPITER)]) == 3
+    assert _house_from(vi, signs[int(Graha.SATURN)]) == 9
+    assert _house_from(vi, signs[int(Graha.KETU)]) == 11
+
+    ninth = (vi + 8) % 12
+    venus = int(RASI_LORD[ninth])
+    assert venus == int(Graha.VENUS)
+    assert sign_dignity(venus, longitudes[venus]) == "exalted"
+    assert _house_from(vi, signs[venus]) == 7          # "he went abroad
+                                                       # following his wife"
+
+    # "There are no malefics in the 3rd or 6th from dasa lagna."
+    malefics = {int(Graha.SUN), int(Graha.MARS), int(Graha.SATURN),
+                int(Graha.RAHU), int(Graha.KETU)}
+    for house in (3, 6):
+        sign = (vi + house - 1) % 12
+        assert not {g for g, s in signs.items() if s == sign} & malefics
+
+
+def test_exercise_28_uses_principle_13_backwards():
+    """"Lords of two dusthanas - Mars and Sun - are exalted and that suggests
+    hard times."
+
+    §18.4 states principle 13 one way only: a **debilitated** dusthana lord
+    gives good results. The answer applies its converse. Of Virgo's three
+    dusthana lords, the 8th's (Mars) and the 12th's (Sun) are exalted while
+    the 6th's (Saturn) is not, which is why the answer says two and not three.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import (
+        EXALTED_DUSTHANA_LORD_CONVERSE,
+        PARASARA_DASA_PRINCIPLES,
+        dasa_lagna,
+    )
+
+    longitudes, _signs, lagna_sign = _chart_26()
+    vi = dasa_lagna(R["Pisces"], R["Sagittarius"], lagna_sign)
+
+    lords = {house: int(RASI_LORD[(vi + house - 1) % 12])
+             for house in (6, 8, 12)}
+    exalted = {house for house, lord in lords.items()
+               if sign_dignity(lord, longitudes[lord]) == "exalted"}
+    assert exalted == {8, 12}
+    assert lords[8] == int(Graha.MARS)
+    assert lords[12] == int(Graha.SUN)
+
+    thirteenth = PARASARA_DASA_PRINCIPLES[12]
+    assert "debilitated" in thirteenth["who"]
+    assert thirteenth["gives"] == "good results"
+    assert "hard times" in EXALTED_DUSTHANA_LORD_CONVERSE
+
+
+def test_ketu_in_the_eleventh_reads_as_foreign_gains_in_both_charts():
+    """Principle 5 gives any planet in the 11th "gains". Example 69 and
+    Exercise 28 both make Ketu's gains foreign ones, in the same words, so it
+    is the book's reading rather than a turn of phrase in one place.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import (
+        KETU_IN_THE_ELEVENTH_IS_FOREIGN,
+        dasa_lagna,
+    )
+
+    assert "foreign" in KETU_IN_THE_ELEVENTH_IS_FOREIGN
+
+    _l25, signs_25, lagna_25 = _chart_25()
+    cp = dasa_lagna(R["Capricorn"], lagna_25, lagna_25)
+    assert _house_from(cp, signs_25[int(Graha.KETU)]) == 11
+
+    _l26, signs_26, lagna_26 = _chart_26()
+    vi = dasa_lagna(R["Pisces"], R["Sagittarius"], lagna_26)
+    assert _house_from(vi, signs_26[int(Graha.KETU)]) == 11

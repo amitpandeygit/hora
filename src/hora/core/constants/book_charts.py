@@ -448,11 +448,18 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "AL": "Aq", "GL": "Aq", "Ketu": "Cn", "Rahu": "Cp", "Mars": "Cp",
             "HL": "Le", "Jup": "Sc", "Moon": "Li",
         },
+        "events": {
+            "excellent career in India": "until 1997",
+            "moved to the US following his wife": "1997",
+            "could not find work matching his qualifications": "after 1997",
+        },
         "first_seen": "chapter 18, printed with Example 69",
         "note": (
-            "Printed in the middle of Example 69's pages but belonging to the "
-            "exercise that follows it, which the chart titles itself. Nothing "
-            "in Example 69 reads this chart."
+            "Printed in the middle of Example 69's pages but read only by "
+            "Exercise 28, which the chart titles itself for. The only chart "
+            "in the book whose dasa seed is settled by section 15.5.2's "
+            "rule 4: both Ge and Sg are empty and unaspected, so nothing "
+            "above it fires."
         ),
     },
     25: {

@@ -704,3 +704,21 @@ ANTARDASA_ASPECT_RULE = (
     "Antardasas aspecting A3 can bring weapons, just as antardasas aspecting "
     "UL can bring marriage."
 )
+
+#: §18.4 states principle 13 in one direction only — a **debilitated** lord of
+#: a dusthana from dasa lagna gives good results. Exercise 28 applies its
+#: converse without saying so: of the three dusthana lords from its dasa lagna
+#: Vi, two are exalted, and the answer reads that as hard times. The converse
+#: is not in the sixteen, so it is recorded here rather than added to them.
+EXALTED_DUSTHANA_LORD_CONVERSE = (
+    "Lords of two dusthanas - Mars and Sun - are exalted and that suggests "
+    "hard times."
+)
+
+#: Ketu in the 11th from dasa lagna. Principle 5 gives any planet there
+#: "gains"; both Example 69 and Exercise 28 make Ketu's gains specifically
+#: foreign ones, in the same words, so the reading is the book's and not a
+#: one-off turn of phrase.
+KETU_IN_THE_ELEVENTH_IS_FOREIGN = (
+    "Ketu in the 11th house shows gains from foreign sources."
+)
