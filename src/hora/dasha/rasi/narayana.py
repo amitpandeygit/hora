@@ -308,8 +308,9 @@ class DasaLength:
     years: int
     #: Exceptions applied, in the order §18.2.2 lists them.
     applied: tuple[str, ...]
-    #: Set when the exceptions carry the length outside the 1-to-12 years the
-    #: base rule can produce, which §18.2.2 does not discuss. None otherwise.
+    #: Set when exception 3 takes a one-year period down to none, which
+    #: §18.2.2 does not discuss. The 13-year case is gone: Example 68 shows
+    #: exception 1 is terminal. None otherwise.
     out_of_range: str | None
     why: str
 
@@ -326,9 +327,11 @@ def dasa_length(
     :param lord: its lord — for Scorpio and Aquarius the stronger of the two,
         by §15.5.1, which special note 1 requires.
     :param lord_sign: the rasi the lord occupies.
-    :param lord_dignity: the lord's dignity there, from
-        :func:`hora.charts.dignity.sign_dignity`. Omitted, exceptions 2 and 3
-        cannot fire and the answer says so rather than assuming neither does.
+    :param lord_dignity: the lord's dignity there. Omitted, exceptions 2 and
+        3 cannot fire and the answer says so rather than assuming neither
+        does. §18.2.2 reads exaltation at sign level and
+        :func:`hora.charts.dignity.sign_dignity` reads it by degree, so the
+        caller settles which it wants. See D-52.
     """
     index = validate.in_range("rasi", rasi, 0, 11)
     place = validate.in_range("lord_sign", lord_sign, 0, 11)
@@ -340,27 +343,25 @@ def dasa_length(
 
     applied: list[str] = []
     if count == 1:
-        years = 12                                     # exception 1
+        # Exception 1, and it is terminal: exceptions 2 and 3 do not then
+        # adjust the 12. Example 68 settles this. Bill Gates' Mercury is at
+        # 23 Vi 19, exalted in the Virgo he owns, and the example needs him
+        # exalted -- Gemini's dasa is 4 years, which is 4 - 1 + 1. Yet the
+        # same Mercury gives Virgo 12 years, not 13. Virgo is the only rasi
+        # where exceptions 1 and 2 can meet, so this is the whole question.
+        years = 12
         applied.append("contains its lord, so 12 rather than 0")
     else:
         years = count - 1
-
-    if lord_dignity == "exalted":
-        years += 1
-        applied.append("lord exalted, so one year added")
-    elif lord_dignity == "debilitated":
-        years -= 1
-        applied.append("lord debilitated, so one year taken away")
+        if lord_dignity == "exalted":
+            years += 1
+            applied.append("lord exalted, so one year added")
+        elif lord_dignity == "debilitated":
+            years -= 1
+            applied.append("lord debilitated, so one year taken away")
 
     out_of_range = None
-    if years > 12:
-        out_of_range = (
-            f"{years} years is beyond the 1 to 12 the base rule can give. "
-            f"Exception 1 set the length to 12 and exception 2 then added a "
-            f"year; §18.2.2 does not say whether they combine. The second "
-            f"cycle would be {12 - years} years. See docs/open-items.md."
-        )
-    elif years < 1:
+    if years < 1:
         out_of_range = (
             f"{years} years leaves this rasi no dasa at all. Exception 3 took "
             f"a year from a one-year period; §18.2.2 does not say whether it "

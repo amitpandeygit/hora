@@ -603,22 +603,33 @@ def test_scorpio_and_aquarius_need_the_stronger_lord():
     assert mars.years != ketu.years
 
 
-def test_the_two_reachable_out_of_range_lengths_are_flagged():
-    """See OI-121. The exceptions can carry a length outside the 1-to-12 the
-    base rule allows, and §18.2.2 does not say whether they may combine.
+def test_exception_1_is_terminal_so_virgo_is_never_thirteen_years():
+    """See OI-121, which Example 68 closes on this side.
 
-    Only two such cases are reachable, because the lord must actually exalt or
-    debilitate where the count puts it. Virgo is the only rasi a planet both
-    owns and exalts in, which is what lets exceptions 1 and 2 meet at all.
+    Virgo is the only rasi a planet both owns and exalts in, so it is the only
+    place exceptions 1 and 2 can meet. Bill Gates has Mercury there, and the
+    example prints Vi 12 years -- not 13. It needs that same Mercury exalted
+    for its Ge dasa of 4 years, so the two cannot be told apart by what
+    "exalted" means. Exception 1 simply ends the calculation.
     """
     from hora.core.const import Graha
     from hora.dasha.rasi.narayana import dasa_length, second_cycle_length
 
     virgo = dasa_length(R["Virgo"], int(Graha.MERCURY), R["Virgo"], "exalted")
     assert virgo.count == 1
-    assert virgo.years == 13
-    assert virgo.out_of_range is not None
-    assert second_cycle_length(virgo.years) == -1
+    assert virgo.years == 12
+    assert virgo.applied == ("contains its lord, so 12 rather than 0",)
+    assert virgo.out_of_range is None
+    assert second_cycle_length(virgo.years) == 0
+
+
+def test_a_debilitated_lord_can_still_leave_a_rasi_no_dasa():
+    """The half of OI-121 that stays open. Exception 3 cannot meet exception
+    1 -- a lord in its own sign is never debilitated there -- so it meets the
+    base rule instead, and a count of 2 gives a dasa of no years at all.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
 
     sagittarius = dasa_length(R["Sagittarius"], int(Graha.JUPITER),
                               R["Capricorn"], "debilitated")
@@ -1355,3 +1366,391 @@ def test_the_natal_reference_readings_are_recorded():
     assert "upapada" in subjects
     assert "GL" in subjects
     assert len(NATAL_REFERENCE_READINGS) == 6
+
+
+# --------------------------------------------------------------------------
+# Example 68 — Bill Gates, Chart 24. The first lagna-seeded chart in the
+# chapter, and the one that settles two of its open questions at once.
+# --------------------------------------------------------------------------
+
+#: The seven dasas the example prints, in order, with the years it gives.
+EX68_LENGTHS = [("Ge", 4), ("Aq", 5), ("Li", 12), ("Vi", 12), ("Ta", 5),
+                ("Cp", 4), ("Sg", 8)]
+
+#: And the dates, which are a second reading of the same seven lengths.
+EX68_DATES = [("Ge", 1955, 1959), ("Aq", 1959, 1964), ("Li", 1964, 1976),
+              ("Vi", 1976, 1988), ("Ta", 1988, 1993), ("Cp", 1993, 1997),
+              ("Sg", 1997, 2005)]
+
+
+def _chart_24():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(24).items()},
+            {int(g): sign for g, sign in graha_signs(24).items()},
+            lagna(24))
+
+
+def _house_from(reference, sign):
+    """Houses counted the ordinary way, the reference itself being the 1st."""
+    return (sign - reference) % 12 + 1
+
+
+def test_chart_24_recomputes_from_bill_gates_birth_data():
+    """The chart is transcribed, so it is worth knowing it is the right one.
+    Every graha inside about an arcminute of what the book prints.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(24)
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 24", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    printed = longitudes(24)
+    for name, graha in (("Sun", Graha.SUN), ("Moon", Graha.MOON),
+                        ("Mars", Graha.MARS), ("Merc", Graha.MERCURY),
+                        ("Jup", Graha.JUPITER), ("Ven", Graha.VENUS),
+                        ("Sat", Graha.SATURN), ("Rahu", Graha.RAHU),
+                        ("Ketu", Graha.KETU)):
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.1, f"{name}: {error:.2f}'"
+
+
+def test_chart_24_is_a_seventh_chart_favouring_the_mean_node():
+    """OI-68 again, and this one is not close: the true node is over a degree
+    away and lands Rahu in a different sign from the one the book draws."""
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record, printed = chart(24), longitudes(24)["Rahu"]
+    errors = {}
+    for node in (NodeType.MEAN, NodeType.TRUE):
+        computed = compute_chart(
+            from_local(**record["birth_data"]),
+            Place(name="Chart 24", **record["place"]),
+            Settings(node_type=node))
+        errors[node] = abs(
+            computed.positions[int(Graha.RAHU)].longitude - printed) * 60
+    assert errors[NodeType.MEAN] < 1.0
+    assert errors[NodeType.TRUE] > 60.0
+
+
+def test_chart_24_chara_karakas_derive_from_the_printed_longitudes():
+    """The chart labels all eight. Saturn at 28 Li 21 is the most advanced and
+    takes AK; Rahu counts backwards from 30 and lands last, as DK."""
+    from hora.charts.book import chart
+    from hora.charts.karaka import chara_karakas
+    from hora.core.const import Graha
+
+    longitudes, _signs, _lagna = _chart_24()
+    eight = {g: lon for g, lon in longitudes.items() if g != int(Graha.KETU)}
+    ours = {k.graha: k.symbol for k in chara_karakas(eight)}
+
+    by_short = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+                "Merc": Graha.MERCURY, "Jup": Graha.JUPITER,
+                "Ven": Graha.VENUS, "Sat": Graha.SATURN, "Rahu": Graha.RAHU}
+    for short, symbol in chart(24)["chara_karakas"].items():
+        assert ours[int(by_short[short])] == symbol, short
+
+
+def test_chart_24_arudha_lagna_needs_the_seventh_house_exception():
+    """The chart draws AL in Vi, which the plain rule does not give. Lagna Ge
+    counts 4 houses to Mercury in Vi, and 4 from Vi is Sg -- the 7th from
+    lagna, which the arudha rule forbids. The 10th from there is Vi.
+    """
+    from hora.charts.arudha import arudha_pada
+
+    _longitudes, signs, lagna_sign = _chart_24()
+    got = arudha_pada(1, lagna_sign, signs)
+    assert got.sign == R["Virgo"]
+    assert got.before_exception == R["Sagittarius"]
+    assert got.exception_applied is True
+    assert got.exception_position == 7
+
+
+def test_example_68_raajya_pada_is_capricorn():
+    """"Cp contains raajya pada (A10 - arudha pada of the 10th house)." The
+    one thing point (1) rests on, and the chart does not draw it.
+    """
+    from hora.charts.arudha import arudha_pada
+
+    _longitudes, signs, lagna_sign = _chart_24()
+    assert arudha_pada(10, lagna_sign, signs).sign == R["Capricorn"]
+
+
+def test_example_68_seed_is_lagna_because_its_lord_aspects_it():
+    """"Lagna is stronger than the 7th house as its exalted lord aspects it.
+    So dasas start from Ge."
+
+    Section 15.5.2's rule 2 counts Jupiter, Mercury and the rasi's own lord.
+    Mercury in Vi aspects both Ge and Sg by rasi drishti, so he is one mark
+    each way; what parts them is that for Ge he is also the lord, and counts
+    again. Nothing above rule 2 separates them -- neither holds a planet.
+    """
+    from hora.dasha.rasi.narayana import dasa_seed
+
+    longitudes, signs, lagna_sign = _chart_24()
+    assert lagna_sign == R["Gemini"]
+    assert not [g for g, s in signs.items() if s in (R["Gemini"], R["Sagittarius"])]
+
+    seed = dasa_seed(lagna_sign, longitudes)
+    assert seed["seed"] == R["Gemini"]
+    assert seed["decided_by"] == "2"
+    assert "lord (Mercury) aspects from Virgo" in seed["reason"]
+
+
+def test_example_68_progression_is_vishnus_backward_trine():
+    """"So dasas start from Ge", and the printed order runs Ge, Aq, Li, Vi,
+    Ta, Cp, Sg. Gemini is dual, so Vishnu; the 9th from it is Aq, even-footed,
+    so backward. Neither Saturn nor Ketu is in Ge, so no exception fires.
+    """
+    from hora.dasha.rasi.narayana import progression
+
+    _longitudes, signs, lagna_sign = _chart_24()
+    assert lagna_sign == R["Gemini"]                 # and the seed is lagna
+    occupants = {g for g, sign in signs.items() if sign == lagna_sign}
+    assert not occupants
+
+    got = progression(lagna_sign, occupants)
+    assert got.god == "Vishnu"
+    assert got.direction == "backward"
+    assert got.exception is None
+    assert [ABBR[s] for s in got.signs][:7] == [a for a, _y in EX68_LENGTHS]
+
+
+@pytest.mark.parametrize("abbr,years", EX68_LENGTHS)
+def test_example_68_lengths_the_books_way(abbr, years):
+    """All seven, with Mercury read as exalted in Virgo -- which is what the
+    example does, in its arithmetic and twice in its prose. See D-52.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_24()
+    lord = int(RASI_LORD[BY_ABBR[abbr]])
+    dignity = ("exalted" if lord == int(Graha.MERCURY)
+               else sign_dignity(lord, longitudes[lord]))
+    got = dasa_length(BY_ABBR[abbr], lord, signs[lord], dignity)
+    assert got.years == years, got.why
+
+
+def test_example_68_settles_oi_121_and_d_52_together():
+    """The example turns on one planet, and only one reading of him fits.
+
+    Mercury sits at 23 Vi 19 and rules both Ge and Vi:
+
+    * Ge counts 4 houses forward to him. 4 - 1 = 3, and the example says 4, so
+      exception 2 fired and he is exalted -- though by degree he is past his
+      exaltation and his moolatrikona both, and `sign_dignity` says "own".
+      That is D-52, and it is decided here at sign level.
+    * Vi contains him, so exception 1 gives 12. Were exception 2 then to add
+      its year the answer would be 13, and the example prints 12. That is
+      OI-121, and exception 1 is terminal.
+
+    Neither can be traded against the other: it is the same planet in the same
+    degree in both dasas, so no reading of "exalted" makes both come out.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_24()
+    mercury = int(Graha.MERCURY)
+    assert signs[mercury] == R["Virgo"]
+    assert sign_dignity(mercury, longitudes[mercury]) == "own"
+
+    by_degree = dasa_length(R["Gemini"], mercury, signs[mercury], "own")
+    assert by_degree.count == 4
+    assert by_degree.years == 3                    # not the example's 4
+    by_sign = dasa_length(R["Gemini"], mercury, signs[mercury], "exalted")
+    assert by_sign.years == 4                      # the example's
+
+    virgo = dasa_length(R["Virgo"], mercury, signs[mercury], "exalted")
+    assert virgo.count == 1
+    assert virgo.years == 12                       # not 13
+    assert virgo.applied == ("contains its lord, so 12 rather than 0",)
+
+
+def test_example_68_the_dates_the_example_prints():
+    """"Ge (04 years): Oct 1955 - Oct 1959" and on to "Sg (08 years): Oct 1997
+    - Oct 2005." A running total from an October 1955 birth, so the dates
+    check the lengths a second way. Every boundary is an October, so this
+    example says nothing about OI-115's savana year.
+    """
+    year = 1955
+    for (abbr, years), (also, start, end) in zip(EX68_LENGTHS, EX68_DATES):
+        assert abbr == also
+        assert (year, year + years) == (start, end)
+        year += years
+    assert year == 2005
+
+
+def test_example_68_is_the_first_chart_whose_dasa_lagna_is_the_dasa_rasi():
+    """Section 18.4's rule read from the other side. Charts 21 and 23 were
+    both seeded from the 7th house, so on both the dasa lagna sat six signs
+    from the dasa rasi. Gates is seeded from lagna, and the example duly says
+    "During Cp dasa, dasa lagna is Cp" and "Dasa lagna is Sg".
+    """
+    from hora.dasha.rasi.narayana import dasa_lagna, progression
+
+    _longitudes, signs, lagna_sign = _chart_24()
+    occupants = {g for g, sign in signs.items() if sign == lagna_sign}
+    for rasi in progression(lagna_sign, occupants).signs:
+        assert dasa_lagna(rasi, lagna_sign, lagna_sign) == rasi
+
+    assert dasa_lagna(R["Capricorn"], lagna_sign, lagna_sign) == R["Capricorn"]
+    assert dasa_lagna(R["Sagittarius"], lagna_sign, lagna_sign) == R["Sagittarius"]
+
+
+def test_example_68_capricorn_dasa_paaka_rasi_and_raja_yoga():
+    """"During Cp dasa, dasa lagna is Cp and paaka rasi is Li. Lord of dasa
+    lagna is Saturn. He is exalted in the 10th house with the 10th lord Venus
+    (from dasa lagna). They form a powerful raja yoga w.r.t. dasa lagna as
+    well as paaka rasi."
+
+    From the paaka rasi Li, Saturn owns the 4th and the 5th -- a kendra and a
+    trine, which is what makes him Libra's yoga karaka -- and Venus is its
+    lord. So the same pair reads as a raja yoga from either reference.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_lagna, paaka_rasi
+
+    longitudes, signs, lagna_sign = _chart_24()
+    saturn, venus = int(Graha.SATURN), int(Graha.VENUS)
+
+    lagna_of_dasa = dasa_lagna(R["Capricorn"], lagna_sign, lagna_sign)
+    assert lagna_of_dasa == R["Capricorn"]
+    assert int(RASI_LORD[lagna_of_dasa]) == saturn
+    assert paaka_rasi(lagna_of_dasa, longitudes) == R["Libra"]
+
+    assert sign_dignity(saturn, longitudes[saturn]) == "exalted"
+    assert _house_from(lagna_of_dasa, signs[saturn]) == 10
+    assert signs[venus] == signs[saturn]
+    tenth = (lagna_of_dasa + 9) % 12
+    assert int(RASI_LORD[tenth]) == venus
+
+    # ... and w.r.t. the paaka rasi, where Saturn is the yoga karaka.
+    assert {h for h in (4, 5)
+            if int(RASI_LORD[(R["Libra"] + h - 1) % 12]) == saturn} == {4, 5}
+    assert int(RASI_LORD[R["Libra"]]) == venus
+
+
+def test_example_68_capricorn_dasa_placements_from_the_dasa_lagna():
+    """"Exalted Mercury is in a trine from dasa lagna and Jupiter is in 8th
+    from dasa lagna. Rahu is in 11th. Two powerful planets are in 10th. All
+    these are favorable placements." And "Sun owns the 8th house from dasa
+    lagna and he is debilitated."
+
+    Every one of these is a house counted from Cp, which is only the dasa
+    rasi because this chart happens to be seeded from lagna.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_lagna
+
+    longitudes, signs, lagna_sign = _chart_24()
+    cp = dasa_lagna(R["Capricorn"], lagna_sign, lagna_sign)
+
+    assert _house_from(cp, signs[int(Graha.MERCURY)]) == 9        # a trine
+    assert _house_from(cp, signs[int(Graha.JUPITER)]) == 8
+    assert _house_from(cp, signs[int(Graha.RAHU)]) == 11
+
+    tenth = (cp + 9) % 12
+    powerful = {g for g, sign in signs.items() if sign == tenth
+                and sign_dignity(g, longitudes[g]) in ("exalted", "own")}
+    assert powerful == {int(Graha.SATURN), int(Graha.VENUS)}
+
+    eighth = (cp + 7) % 12
+    assert eighth == R["Leo"]
+    assert int(RASI_LORD[eighth]) == int(Graha.SUN)
+    assert sign_dignity(int(Graha.SUN), longitudes[int(Graha.SUN)]) == "debilitated"
+
+
+def test_example_68_sagittarius_dasa_reads_from_a_different_lagna():
+    """"Dasa lagna is Sg and paaka rasi is Le... Dasa lagna lord Jupiter
+    occupies the 9th house... Rahu occupies the 12th house... Sun, the lord of
+    the 9th house from dasa lagna, is debilitated. He is also the lord of
+    paaka rasi."
+
+    The same nine placements as the Cp dasa above, read from a lagna one sign
+    away: Rahu moves from the 11th to the 12th, and Jupiter from the 8th to
+    the 9th. Nothing in the chart changed.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_lagna, paaka_rasi
+
+    longitudes, signs, lagna_sign = _chart_24()
+    sg = dasa_lagna(R["Sagittarius"], lagna_sign, lagna_sign)
+    assert sg == R["Sagittarius"]
+    assert int(RASI_LORD[sg]) == int(Graha.JUPITER)
+
+    paaka = paaka_rasi(sg, longitudes)
+    assert paaka == R["Leo"]
+    assert _house_from(sg, signs[int(Graha.JUPITER)]) == 9
+    assert _house_from(sg, signs[int(Graha.RAHU)]) == 12
+
+    ninth = (sg + 8) % 12
+    assert ninth == paaka                       # "He is also the lord of paaka rasi"
+    assert int(RASI_LORD[ninth]) == int(Graha.SUN)
+    assert sign_dignity(int(Graha.SUN), longitudes[int(Graha.SUN)]) == "debilitated"
+
+
+def test_example_68_sagittarius_dasa_tenth_and_eleventh_are_strong():
+    """"The 10th and 11th houses from dasa lagna are particularly strong.
+    Exalted Mercury occupies the 10th house from dasa lagna and he has a raaja
+    yoga with Mars w.r.t. dasa lagna."
+
+    Mercury owns the 7th and the 10th from Sg, both kendras; Mars owns the
+    5th, a trine. They are conjoined in Vi, which is the kendra-trine pairing
+    a raaja yoga asks for -- and it exists only w.r.t. this dasa lagna.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_lagna
+
+    longitudes, signs, _lagna = _chart_24()
+    sg = dasa_lagna(R["Sagittarius"], R["Gemini"], R["Gemini"])
+    mercury, mars = int(Graha.MERCURY), int(Graha.MARS)
+
+    assert _house_from(sg, signs[mercury]) == 10
+    assert signs[mars] == signs[mercury]
+
+    owned = lambda g: {h for h in range(1, 13)
+                       if int(RASI_LORD[(sg + h - 1) % 12]) == g}
+    assert owned(mercury) == {7, 10}                # both kendras
+    assert 5 in owned(mars)                         # a trine
+
+    eleventh = (sg + 10) % 12
+    assert eleventh == R["Libra"]
+    strong = {g for g, sign in signs.items() if sign == eleventh
+              and sign_dignity(g, longitudes[g]) in ("exalted", "own")}
+    assert strong == {int(Graha.SATURN), int(Graha.VENUS)}
+
+
+def test_example_68_ranks_the_two_dasa_lagna_lords_the_way_the_example_does():
+    """"The lord of dasa lagna is not particularly strong (not as strong as
+    the previous dasa's dasa lagna lord). But he is not weak either."
+
+    Cp's lord Saturn is exalted; Sg's lord Jupiter is in Leo, a friend's sign
+    -- neither dignified nor debilitated. Our own dignities give exactly that
+    ordering, which is the whole of the example's claim.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import Graha
+
+    longitudes, signs, _lagna = _chart_24()
+    assert sign_dignity(int(Graha.SATURN), longitudes[int(Graha.SATURN)]) == "exalted"
+    assert sign_dignity(int(Graha.JUPITER), longitudes[int(Graha.JUPITER)]) == "neutral"
+    assert signs[int(Graha.JUPITER)] == R["Leo"]

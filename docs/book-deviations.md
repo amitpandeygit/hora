@@ -1623,35 +1623,41 @@ into our data later.
 Two grahas have their moolatrikona inside their own exaltation sign, so for
 those two the word "exalted" means different things at sign and degree level:
 
-| graha | exalts at | moolatrikona | degrees that read differently |
+| graha | exalts at | `sign_dignity` says instead | band |
 |---|---|---|---|
-| Moon | 3° Taurus | Taurus 3°–30° | Taurus 3°–30° |
-| Mercury | 15° Virgo | Virgo 15°–20° | Virgo 15°–20° |
+| Moon | 3° Taurus | moolatrikona | Taurus 3°–30° |
+| Mercury | 15° Virgo | moolatrikona, then **own** | Virgo 15°–20°, 20°–30° |
 
 `sign_dignity` reports the finer of the two, so a Moon at 23 Ta 38 comes back
-**moolatrikona** where the book says **exalted**.
+**moolatrikona** and a Mercury at 23 Vi 19 comes back **own**, where the book
+calls both **exalted**.
 
-First seen in Example 55, where it only changed a word: the example called the
-Moon exalted to argue Cancer was strong, and the argument held either way.
-Example 66 is different. §18.2.2 adds a year to a dasa whose lord is exalted,
-and Chart 23's Cancer dasa turns on exactly this Moon:
+First seen in Example 55, where it only changed a word. §18.2.2 adds a year to
+a dasa whose lord is exalted, and two examples now turn on it:
 
-| | Cancer dasa | first cycle ends |
-|---|---|---|
-| book, reading exaltation by sign | 2 + 1 = **3 years** | Aug 1977 |
-| ours, reading it by degree | **2 years** | Aug 1976 |
+| example | graha | book | ours | cost |
+|---|---|---|---|---|
+| 66, Chart 23 | Moon 23 Ta 38 | Cn **3 years** | 2 | five later dasas shift a year; every date from 1946 on |
+| 68, Chart 24 | Mercury 23 Vi 19 | Ge **4 years** | 3 | every date in the example from 1959 on |
 
-Eleven of the twelve lengths agree exactly. That one disagreement moves the
-five dasas after it by a year each, and the second cycle inherits the offset,
-so every Narayana date from 1946 onward differs for this native.
+Example 68 is the stronger of the two and is close to decisive. It calls
+Mercury exalted three times in prose — including in the line that picks the
+dasa seed, "as its exalted lord aspects it" — and its Ge dasa of 4 years is
+arithmetically 4 − 1 + 1, which needs exception 2 to have fired. By degree that
+Mercury is not even moolatrikona; he is plainly in his own sign, so this is not
+a borderline reading of a boundary.
+
+Nothing yet points the other way: no example has needed exaltation read by
+degree.
 
 **What we do:** nothing yet. `dasa_length` takes the dignity from the caller,
-so both readings are reachable; passing `sign_dignity`'s answer gives 2 years,
-passing "exalted" gives the book's 3. The Example 66 fixture asserts both and
-names which is which.
+so both readings are reachable. The Example 66 and 68 fixtures assert both and
+name which is which.
 
 **Closes when:** you decide whether §18.2.2's "exalted" means the exaltation
-sign or the exaltation degrees. It affects only these two grahas.
+sign or the exaltation degrees. It affects only these two grahas — and, if you
+want the change made globally rather than in `dasa_length`'s callers, say so,
+because `sign_dignity` is used well beyond this chapter.
 
 ## D-53 · Example 56's Rudra needs the ordinary 8th, which §14.3 forbids
 

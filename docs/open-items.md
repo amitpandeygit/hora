@@ -18,7 +18,7 @@ implemented. Do not act on these, and do not re-raise them each session.
 | OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
-| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. Charts 3, 6, 7, 10 **and 12** reproduce with mean; with true they are 9', 39', 12', 56' and **77'** out |
+| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Seven** charts now reproduce with mean and none with true; Chart 24's Rahu is **79'** out, a whole sign wrong |
 
 Listed in the order I would take them: OI-39 is the only unambiguous defect and
 the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
@@ -618,27 +618,18 @@ direction may be assumed from the other.
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 
-### OI-121 — §18.2.2's length exceptions can leave a dasa of 13 years or none
+### OI-121 — §18.2.2's exception 3 can leave a rasi no dasa at all
 
-**Waiting on the book.** The base rule gives 1 to 12 years. Exception 1 turns
-a count of one into 12;
-exceptions 2 and 3 add or take a year for an exalted or debilitated lord.
-Nothing says whether they combine, and two combinations are reachable:
+**Waiting on the book.** Jupiter debilitated in Capricorn makes Sagittarius
+count 2, so the base rule gives 1 year and exception 3 takes it to **0**.
+`out_of_range` says so; capping at 1 would be a guess.
 
-| dasa rasi | lord | length | second cycle |
-|---|---|---|---|
-| Virgo | Mercury exalted in Virgo: 1 → 12, then +1 | **13** | **-1** |
-| Sagittarius | Jupiter debilitated in Cp: 2 → 1, then -1 | **0** | 12 |
+**Half of this is now closed.** Example 68 showed exception 1 is terminal —
+Bill Gates' Virgo dasa is 12 years, not 13, though its exalted Mercury would
+have added one. Exception 3 cannot meet exception 1, because a lord in its own
+sign is never debilitated there, so only this half survives.
 
-Virgo is the only rasi a planet both owns and exalts in, which is what lets
-exceptions 1 and 2 meet. Special note 2 makes the second cycle 12 less the
-first, so a 13-year first dasa asks for a negative one, which cannot be
-intended. A second-cycle 0 is ordinary and is not flagged.
-
-**What we do:** the length is computed as the rules read, and `out_of_range`
-says which exceptions combined. Capping at 12 would be a guess.
-
-**Closes when:** an example shows one, or you decide if exception 1 is terminal.
+**Closes when:** an example prints a 0-year dasa, or you cap it.
 
 ### OI-120 — §18.2.1 does not say what happens when Saturn and Ketu share the seed
 
@@ -1284,11 +1275,12 @@ in both examples anyway.
 **Closes when:** an example applies step 3 where the counts differ, or JHora's
 argala output settles it.
 
-### OI-68 — Charts 3, 6, 7, 10 and 12 all need the **mean** node; our default is `true`
+### OI-68 — Seven charts all need the **mean** node; our default is `true`
 
-Five charts print their own birth data, so all five can be recomputed rather
-than transcribed. All five reproduce every body to within one arcminute —
-**only with the mean node**.
+Seven charts print their own birth data, so all seven can be recomputed rather
+than transcribed. All seven reproduce every body to within one arcminute —
+**only with the mean node**. Charts 13 and 24 are the sixth and seventh; under
+`true`, Chart 24's Rahu is 79' out, in a different sign from the drawn one.
 
 | Chart | Rahu, mean | Rahu, true | printed |
 |---|---|---|---|
@@ -1299,7 +1291,7 @@ than transcribed. All five reproduce every body to within one arcminute —
 | 3 · Vajpayee, 1926, IST | 14 Ge 31 | 14 Ge 39 | 14 Ge 30 |
 
 Thirty-nine, twelve, fifty-six, **seventy-seven** and nine arcminutes out under
-`true`. Every other body lands within one arcminute — the book's own display
+`true` for the five tabled. Every other body lands within one arcminute — the book's own display
 rounding — except Chart 3's ascendant at 5.5', which is its printed birth
 minute being rounded, not a node question. Chart 8 does not separate the two.
 

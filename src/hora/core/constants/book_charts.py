@@ -424,6 +424,37 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    24: {
+        "title": "Bill Gates",
+        "birth": "October 28, 1955, 9:18 pm (8:00 West), 122 W 20, 47 N 36",
+        "birth_data": {
+            "year": 1955, "month": 10, "day": 28, "hour": 21, "minute": 18,
+            "second": 0.0, "utc_offset_hours": -8.0,
+        },
+        "place": {"latitude": 47 + 36 / 60, "longitude": -(122 + 20 / 60)},
+        "longitudes": {
+            "Asc": "25 Ge 38", "Sun": "11 Li 46", "Moon": "14 Pi 35",
+            "Mars": "16 Vi 51", "Merc": "23 Vi 19", "Jup": "4 Le 32",
+            "Ven": "26 Li 57", "Sat": "28 Li 21", "Rahu": "26 Sc 13",
+            "Ketu": "26 Ta 13", "HL": "26 Sg 41", "GL": "19 Li 57",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Ven": "AmK", "Merc": "BK", "Mars": "MK",
+            "Moon": "PiK", "Sun": "PK", "Jup": "GK", "Rahu": "DK",
+        },
+        "drawn": {
+            "Moon": "Pi", "Ketu": "Ta", "Asc": "Ge", "Jup": "Le",
+            "HL": "Sg", "Rahu": "Sc", "Ven": "Li", "Sun": "Li", "GL": "Li",
+            "Sat": "Li", "Merc": "Vi", "Mars": "Vi", "AL": "Vi",
+        },
+        "first_seen": "chapter 18, Example 68",
+        "note": (
+            "The first lagna-seeded chart in chapter 18, so the first on "
+            "which section 18.4's dasa lagna is the dasa rasi itself. Its "
+            "Virgo dasa settles OI-121: Mercury is exalted in his own Virgo, "
+            "so exceptions 1 and 2 meet, and the book prints 12 years, not 13."
+        ),
+    },
     23: {
         "title": "Dr. B.V. Raman",
         "birth": "August 8, 1912, 7:38 pm (IST), 77 E 35, 13 N 00",

@@ -154,6 +154,13 @@
         "number": 23,
         "recomputable": true,
         "title": "Dr. B.V. Raman"
+      },
+      {
+        "birth": "October 28, 1955, 9:18 pm (8:00 West), 122 W 20, 47 N 36",
+        "first_seen": "chapter 18, Example 68",
+        "number": 24,
+        "recomputable": true,
+        "title": "Bill Gates"
       }
     ],
     "not_supplied": [
@@ -178,7 +185,8 @@
       20,
       21,
       22,
-      23
+      23,
+      24
     ]
   },
   "status": 200
