@@ -358,3 +358,135 @@ def test_the_two_exceptions_override_different_things():
 
     assert SEED_EXCEPTIONS["Saturn"]["overrides"] == ("movement", "direction")
     assert SEED_EXCEPTIONS["Ketu"]["overrides"] == ("direction",)
+
+
+# --------------------------------------------------------------------------
+# Table 40 — every seed against every case, as printed.
+# --------------------------------------------------------------------------
+
+#: Table 40 verbatim: twelve seeds, each with (a) the normal progression,
+#: (b) the Saturn exception and (c) the Ketu exception. It is kept here rather
+#: than in `core/constants` because it is derivable from §18.2.1's rules — it
+#: is the book's check on our arithmetic, not an input to it, and holding it
+#: as a constant would make two sources of truth for one thing.
+TABLE_40: dict[str, dict[str, str]] = {
+    "Ar": {"a": "Ar Ta Ge Cn Le Vi Li Sc Sg Cp Aq Pi",
+           "b": "Ar Ta Ge Cn Le Vi Li Sc Sg Cp Aq Pi",
+           "c": "Ar Pi Aq Cp Sg Sc Li Vi Le Cn Ge Ta"},
+    "Ta": {"a": "Ta Sg Cn Aq Vi Ar Sc Ge Cp Le Pi Li",
+           "b": "Ta Ge Cn Le Vi Li Sc Sg Cp Aq Pi Ar",
+           "c": "Ta Li Pi Le Cp Ge Sc Ar Vi Aq Cn Sg"},
+    "Ge": {"a": "Ge Aq Li Vi Ta Cp Sg Le Ar Pi Sc Cn",
+           "b": "Ge Cn Le Vi Li Sc Sg Cp Aq Pi Ar Ta",
+           "c": "Ge Li Aq Pi Cn Sc Sg Ar Le Vi Cp Ta"},
+    "Cn": {"a": "Cn Ge Ta Ar Pi Aq Cp Sg Sc Li Vi Le",
+           "b": "Cn Le Vi Li Sc Sg Cp Aq Pi Ar Ta Ge",
+           "c": "Cn Le Vi Li Sc Sg Cp Aq Pi Ar Ta Ge"},
+    "Le": {"a": "Le Cp Ge Sc Ar Vi Aq Cn Sg Ta Li Pi",
+           "b": "Le Vi Li Sc Sg Cp Aq Pi Ar Ta Ge Cn",
+           "c": "Le Pi Li Ta Sg Cn Aq Vi Ar Sc Ge Cp"},
+    "Vi": {"a": "Vi Cp Ta Ge Li Aq Pi Cn Sc Sg Ar Le",
+           "b": "Vi Li Sc Sg Cp Aq Pi Ar Ta Ge Cn Le",
+           "c": "Vi Ta Cp Sg Le Ar Pi Sc Cn Ge Aq Li"},
+    "Li": {"a": "Li Sc Sg Cp Aq Pi Ar Ta Ge Cn Le Vi",
+           "b": "Li Sc Sg Cp Aq Pi Ar Ta Ge Cn Le Vi",
+           "c": "Li Vi Le Cn Ge Ta Ar Pi Aq Cp Sg Sc"},
+    "Sc": {"a": "Sc Ge Cp Le Pi Li Ta Sg Cn Aq Vi Ar",
+           "b": "Sc Sg Cp Aq Pi Ar Ta Ge Cn Le Vi Li",
+           "c": "Sc Ar Vi Aq Cn Sg Ta Li Pi Le Cp Ge"},
+    "Sg": {"a": "Sg Le Ar Pi Sc Cn Ge Aq Li Vi Ta Cp",
+           "b": "Sg Cp Aq Pi Ar Ta Ge Cn Le Vi Li Sc",
+           "c": "Sg Ar Le Vi Cp Ta Ge Li Aq Pi Cn Sc"},
+    "Cp": {"a": "Cp Sg Sc Li Vi Le Cn Ge Ta Ar Pi Aq",
+           "b": "Cp Aq Pi Ar Ta Ge Cn Le Vi Li Sc Sg",
+           "c": "Cp Aq Pi Ar Ta Ge Cn Le Vi Li Sc Sg"},
+    "Aq": {"a": "Aq Cn Sg Ta Li Pi Le Cp Ge Sc Ar Vi",
+           "b": "Aq Pi Ar Ta Ge Cn Le Vi Li Sc Sg Cp",
+           "c": "Aq Vi Ar Sc Ge Cp Le Pi Li Ta Sg Cn"},
+    "Pi": {"a": "Pi Cn Sc Sg Ar Le Vi Cp Ta Ge Li Aq",
+           "b": "Pi Ar Ta Ge Cn Le Vi Li Sc Sg Cp Aq",
+           "c": "Pi Sc Cn Ge Aq Li Vi Ta Cp Sg Le Ar"},
+}
+
+#: "If neither Saturn nor Ketu occupies dasa seed, we should use the normal
+#: progression. If Saturn occupies dasa seed, we should apply the Saturn
+#: exception. If Ketu occupies dasa seed, we should apply the Ketu exception."
+_CASE_OCCUPANTS = {"a": None, "b": {6}, "c": {8}}      # Saturn is 6, Ketu 8
+
+
+def test_table_40_is_internally_consistent():
+    """Before comparing anything: every row must list all twelve signs once
+    and open on its own seed. A transcription slip would otherwise be read as
+    a defect in the engine."""
+    assert len(TABLE_40) == 12
+    for seed, cases in TABLE_40.items():
+        assert set(cases) == {"a", "b", "c"}
+        for case, sequence in cases.items():
+            signs = sequence.split()
+            assert len(signs) == 12, (seed, case)
+            assert sorted(signs) == sorted(ABBR), (seed, case)
+            assert signs[0] == seed, (seed, case)
+
+
+@pytest.mark.parametrize("seed", sorted(TABLE_40))
+@pytest.mark.parametrize("case", ["a", "b", "c"])
+def test_table_40(seed, case):
+    """All twelve seeds against all three cases — 36 sequences, 432 signs."""
+    got = progression(BY_ABBR[seed], _CASE_OCCUPANTS[case])
+    assert " ".join(ABBR[s] for s in got.signs) == TABLE_40[seed][case]
+
+
+def test_the_saturn_column_is_the_plain_zodiac_from_every_seed():
+    """Column (b) should be twelve rotations of the zodiac and nothing else,
+    since the exception forces Brahma's movement and a forward direction."""
+    for seed, cases in TABLE_40.items():
+        start = BY_ABBR[seed]
+        expected = " ".join(ABBR[(start + k) % 12] for k in range(12))
+        assert cases["b"] == expected, seed
+
+
+def test_the_rows_where_two_cases_coincide_are_the_movable_seeds():
+    """Table 40 has four rows where two cases are identical, and each follows
+    from the rules rather than being a coincidence to memorise.
+
+    Aries and Libra are movable and already run forward, so Saturn — which
+    imposes exactly those two things — changes nothing and (a) equals (b).
+    Cancer and Capricorn are movable but run backward, so their movement is
+    already regular and Ketu's flip to forward lands on Saturn's own result,
+    making (b) equal (c). No row has (a) equal to (c), which would mean Ketu
+    had failed to reverse anything.
+    """
+    same_ab = {s for s, c in TABLE_40.items() if c["a"] == c["b"]}
+    same_bc = {s for s, c in TABLE_40.items() if c["b"] == c["c"]}
+    same_ac = {s for s, c in TABLE_40.items() if c["a"] == c["c"]}
+
+    assert same_ab == {"Ar", "Li"}
+    assert same_bc == {"Cn", "Cp"}
+    assert same_ac == set()
+
+    for seed in same_ab:
+        assert movement_of(BY_ABBR[seed])["modality"] == "movable"
+        assert direction_of(BY_ABBR[seed]) == "forward"
+    for seed in same_bc:
+        assert movement_of(BY_ABBR[seed])["modality"] == "movable"
+        assert direction_of(BY_ABBR[seed]) == "backward"
+
+    # Between them they are exactly the four movable signs.
+    assert same_ab | same_bc == {"Ar", "Cn", "Li", "Cp"}
+
+
+def test_the_three_examples_agree_with_table_40():
+    """Examples 63, 64 and 65 give normal progressions for Sc, Pi and Cp, and
+    the table gives the same three. Two independent printings of one fact."""
+    assert TABLE_40["Sc"]["a"] == "Sc Ge Cp Le Pi Li Ta Sg Cn Aq Vi Ar"
+    assert TABLE_40["Pi"]["a"] == "Pi Cn Sc Sg Ar Le Vi Cp Ta Ge Li Aq"
+    assert TABLE_40["Cp"]["a"] == "Cp Sg Sc Li Vi Le Cn Ge Ta Ar Pi Aq"
+
+
+def test_the_exception_examples_agree_with_table_40():
+    """The Saturn and Ketu paragraphs print four openings, and Table 40
+    prints the same four in full."""
+    assert TABLE_40["Sc"]["b"].startswith("Sc Sg Cp Aq Pi Ar")
+    assert TABLE_40["Pi"]["b"].startswith("Pi Ar Ta Ge Cn Le")
+    assert TABLE_40["Sc"]["c"].startswith("Sc Ar Vi Aq Cn Sg")
+    assert TABLE_40["Pi"]["c"].startswith("Pi Sc Cn Ge Aq Li")
