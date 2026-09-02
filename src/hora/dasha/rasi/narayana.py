@@ -809,6 +809,15 @@ VARGA_DASA_USES: dict[str, str] = {
     "D12": "relations with parents",
 }
 
+#: Example 70 states outright what the procedure only implies: the varga's own
+#: ascendant plays no part. It is not compared with the derived lagna, and it
+#: is not a fallback -- it is discarded. :func:`varga_lagna` cannot use it
+#: even by accident, taking only a graha-to-rasi map.
+VARGA_OWN_LAGNA_IS_IGNORED = (
+    "We ignore lagna in D-10 and treat the rasi containing Mars in D-10 as "
+    "lagna and use the rules of Narayana dasa of rasi chart."
+)
+
 #: §18.5's closing warning, and the reason :func:`dasa_lagna` refuses a varga.
 #: Printed with two slips -- "analyzing dasas is has no technical basis" and
 #: "It applies only the rasi chart" -- and kept as printed.

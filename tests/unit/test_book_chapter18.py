@@ -2688,3 +2688,131 @@ def test_the_warning_is_kept_with_its_two_printed_slips():
 
     assert "dasas is has no technical basis" in VARGA_INTERPRETATION_WARNING
     assert "It applies only the rasi chart" in VARGA_INTERPRETATION_WARNING
+
+
+# --------------------------------------------------------------------------
+# Example 70 — §18.5 walked end to end. The example supposes its chart rather
+# than printing one, so the positions here are the ones it supposes.
+# --------------------------------------------------------------------------
+
+def test_example_70_derives_the_varga_lagna_from_the_rasi_charts_tenth():
+    """"Suppose someone's rasi chart has lagna in Cn... The 10th house is the
+    seed of D-10. The 10th house in rasi chart is Ar. Its lord is Mars.
+    Suppose D-10 has lagna in Ta and Mars in Vi... So we treat Vi as lagna."
+
+    Three of the four steps in one sentence, and each uses a different chart:
+    the house number comes from the varga, the house from the rasi chart, and
+    the lord's seat from the varga again.
+    """
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import seed_house, varga_lagna
+
+    assert seed_house(10) == 10
+    tenth_from_cancer = (R["Cancer"] + 10 - 1) % 12
+    assert tenth_from_cancer == R["Aries"]
+    assert int(RASI_LORD[tenth_from_cancer]) == int(Graha.MARS)
+
+    got = varga_lagna(10, R["Cancer"], {int(Graha.MARS): R["Virgo"]})
+    assert got["seed_house"] == 10
+    assert got["seed_rasi"] == R["Aries"]
+    assert got["lord"] == int(Graha.MARS)
+    assert got["lagna"] == R["Virgo"]
+
+
+def test_example_70_ignores_the_vargas_own_lagna_outright():
+    """"We ignore lagna in D-10 and treat the rasi containing Mars in D-10 as
+    lagna."
+
+    The example supposes D-10's own lagna is Ta and then never mentions it
+    again -- it is not compared with Vi, and it is not a fallback. That is
+    structural here rather than a rule we remember to follow: `varga_lagna`
+    takes a graha-to-rasi map, so a varga ascendant has no way in. The answer
+    is Vi whatever D-10's lagna happens to be.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import VARGA_OWN_LAGNA_IS_IGNORED, varga_lagna
+
+    assert "ignore lagna" in VARGA_OWN_LAGNA_IS_IGNORED
+
+    for supposed_lagna in range(12):                 # Ta among them, and 11 more
+        varga_signs = {int(Graha.MARS): R["Virgo"],
+                       int(Graha.SUN): supposed_lagna}
+        assert varga_lagna(10, R["Cancer"], varga_signs)["lagna"] == R["Virgo"]
+
+
+def test_example_70_the_dasa_seed_is_still_lagna_against_the_seventh():
+    """"We take the stronger of Vi and Pi as the dasa seed."
+
+    §18.2.1 is unchanged by §18.5; only which rasi plays lagna has moved. So
+    the pair compared is the derived lagna and the 7th from it, and Pi is the
+    7th from Vi.
+    """
+    assert (R["Virgo"] + 6) % 12 == R["Pisces"]
+
+
+def test_example_70_progression_from_the_derived_lagna():
+    """"Suppose Vi is stronger and it does not contain Saturn or Ketu. Then
+    dasas go as Vi, Cp, Ta, Ge, Li, Aq etc."
+
+    Vi is dual, so Vishnu's trinal movement; the 9th from Vi is Ta, which is
+    odd-footed, so forward. The example stops at six signs and the rest follow
+    from the same walk.
+    """
+    from hora.core.const import RASI_IS_ODD_FOOTED
+    from hora.dasha.rasi.narayana import progression
+
+    ninth = (R["Virgo"] + 8) % 12
+    assert ninth == R["Taurus"]
+    assert RASI_IS_ODD_FOOTED[ninth]
+
+    got = progression(R["Virgo"], set())             # neither Saturn nor Ketu
+    assert got.god == "Vishnu"
+    assert got.direction == "forward"
+    assert got.exception is None
+    assert [ABBR[s] for s in got.signs][:6] == ["Vi", "Cp", "Ta", "Ge", "Li",
+                                                "Aq"]
+
+
+def test_example_70_confirms_everything_after_step_4_reads_the_varga():
+    """"We find the lengths of dasas and antardasas taking D-10 and applying
+    the rules taught for rasi chart."
+
+    So the rasi chart is used once, to get from the seed house to a lord, and
+    is then put down. The Saturn and Ketu exceptions are tested against D-10's
+    occupants, §15.5.2 compares D-10's rasis, and the lengths count to where
+    each lord sits in D-10 -- which is why `varga_lagna` returns a lagna and
+    nothing else, leaving the varga chart to be passed on to the primitives.
+    """
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import (
+        antardasas,
+        dasa_length,
+        dasa_seed,
+        varga_lagna,
+    )
+
+    longitudes, signs, lagna_sign = _chart_26()
+    tenth = {g: varga(lon, "D10") for g, lon in longitudes.items()}
+    varga_signs = {g: v.sign for g, v in tenth.items()}
+    varga_longitudes = {g: v.longitude for g, v in tenth.items()}
+
+    lagna_of_varga = varga_lagna(10, lagna_sign, varga_signs)["lagna"]
+    seed = dasa_seed(lagna_of_varga, varga_longitudes)
+    assert seed["seed"] in (lagna_of_varga, (lagna_of_varga + 6) % 12)
+
+    # Lengths count to where the lord sits in D-10, not in the rasi chart, and
+    # on this chart Mars is in different rasis in the two.
+    mars = int(Graha.MARS)
+    assert int(RASI_LORD[R["Aries"]]) == mars
+    assert varga_signs[mars] != signs[mars]
+    assert (dasa_length(R["Aries"], mars, varga_signs[mars]).count
+            != dasa_length(R["Aries"], mars, signs[mars]).count)
+
+    # And an antardasa divides a varga dasa on varga positions too.
+    years = dasa_length(seed["seed"], int(RASI_LORD[seed["seed"]]),
+                        varga_signs[int(RASI_LORD[seed["seed"]])]).years
+    got = antardasas(seed["seed"], years, varga_longitudes,
+                     seed_occupants=set())
+    assert got.months_each == years
+    assert len(set(got.signs)) == 12
