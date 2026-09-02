@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-21's prose (69)
+### Part 2 — the dasa systems map and chapters 16-21's prose (72)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -671,7 +671,9 @@ inconsistency is settled would be the wrong order.
 `MANDOOKA_DASA_IS_OF_RUDRAMSA` · `NAMES` · `SHOWS` ·
 `DIAGNOSTIC_CLAIMS` · `SEED_EXCEPTIONS_NOT_RESTATED` ·
 `CHECK_NARAYANA_ALONGSIDE` · `A5_SHOWS_ONES_FOLLOWING` ·
-`AL_IN_THE_DASA_RASI_GIVES_STATUS` · `SHOWS_SPIRITUAL_VISION`
+`AL_IN_THE_DASA_RASI_GIVES_STATUS` · `SHOWS_SPIRITUAL_VISION` ·
+`SPIRITUAL_READINGS` · `KETU_IS_THE_ONLY_LIBERATOR` ·
+`PARIVRAJA_YOGAS_NOT_BUILT`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -733,7 +735,10 @@ it — but it is the coverage line for the whole part, and
 | `CHECK_NARAYANA_ALONGSIDE` | Example 78's rule that the two rasi dasas are read together, Narayana for power and Sudasa for prosperity. Both compute; a layer that runs one and reports it alone is doing what this forbids |
 | `A5_SHOWS_ONES_FOLLOWING` | A ninth arudha reading, on Exercise 30's principle — the 5th shows one's following, so A5 shows what the world judges it by. `arudha_pada` computes it; the reading layer does not exist |
 | `AL_IN_THE_DASA_RASI_GIVES_STATUS` | The step §20.3 leaves out. Its rules 3 and 4 read houses *from* AL and never the dasa rasi being AL, though rule 3's own premise gives it; Example 79 supplies it, and the register tags that row with a different source |
-| `SHOWS_SPIRITUAL_VISION` | §21.1's statement of what Drigdasa shows. It is the fourth rasi dasa's division of labour — Narayana general, Lagna Kendradi material success, Sudasa money and power, Drigdasa spiritual vision — and chapter 21 gives no interpretation section, so this sentence is all it says about reading one |
+| `SHOWS_SPIRITUAL_VISION` | §21.1's statement of what Drigdasa shows. It completes the four rasi dasas' division of labour — Narayana general, Lagna Kendradi material success, Sudasa money and power, Drigdasa spiritual vision |
+| `SPIRITUAL_READINGS` | §21.3's eight readings. `spiritual_readings` decides which a dasa sign reaches; what is missing is a layer that acts on them, and two of the eight also need a judgement the section does not define |
+| `KETU_IS_THE_ONLY_LIBERATOR` | Rule 7's claim, which is stronger than the rule it justifies. Kept whole because a layer that paraphrases it into "Ketu favours liberation" says much less than the book |
+| `PARIVRAJA_YOGAS_NOT_BUILT` | Rule 1 fires only with parivraja yogas in the chart, and nothing in the engine detects them — no chapter so far has taught them. `spiritual_readings` reports the reading with its condition unmet rather than asserting or dropping it |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |

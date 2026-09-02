@@ -384,3 +384,226 @@ def test_example_80_confirms_the_footedness_test_on_a_real_chart():
     assert direction_of(R["Cancer"]) == "backward"
     assert direction_of(R["Leo"]) == "backward"
     assert kendradi.direction_of(R["Leo"]) == "forward"    # the wrong rule
+
+
+# --------------------------------------------------------------------------
+# §21.3 Interpretation
+# --------------------------------------------------------------------------
+
+def _chart_36_points():
+    """Chart 36's lagna and the three arudhas §21.3 reads."""
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.colord import stronger
+
+    longitudes, signs, lagna_sign = _chart_36()
+    overrides = {r: stronger(r, longitudes, purpose="arudha").winner
+                 for r in (7, 10)}
+    return {
+        "lagna": lagna_sign,
+        "arudha_lagna": arudha_pada(1, lagna_sign, signs, overrides).sign,
+        "mantrapada": arudha_pada(5, lagna_sign, signs, overrides).sign,
+        "mrityupada": arudha_pada(8, lagna_sign, signs, overrides).sign,
+        "signs": signs,
+    }
+
+
+def test_the_eight_readings_and_which_two_are_conditional():
+    """§21.3's eight, and the two the section leaves hanging on something it
+    does not settle — rule 1 on parivraja yogas, rule 8 on Rahu's
+    favourability.
+    """
+    from hora.dasha.rasi.drigdasa import SPIRITUAL_READINGS
+
+    assert [r["rule"] for r in SPIRITUAL_READINGS] == list(range(1, 9))
+    assert {r["reads"] for r in SPIRITUAL_READINGS} == {
+        "AL", "lagna", "A5", "A8", "Ketu", "Rahu"}
+
+    conditional = {r["rule"]: r["needs"] for r in SPIRITUAL_READINGS
+                   if r["needs"]}
+    assert set(conditional) == {1, 8}
+    assert "parivraja yogas" in conditional[1]
+    assert "favorable" in conditional[8]
+
+
+def test_rule_1_waits_on_parivraja_yogas_which_nothing_here_detects():
+    """"Dasa of arudha lagna can bring renunciation **if** there are parivraja
+    yogas in the chart."
+
+    No chapter so far has taught them and nothing in the engine finds them, so
+    the reading is reported with its condition unmet rather than asserted or
+    dropped. Told the condition holds it fires; told it fails it does not.
+    """
+    from hora.dasha.rasi.drigdasa import (
+        PARIVRAJA_YOGAS_NOT_BUILT,
+        spiritual_readings,
+    )
+
+    points = _chart_36_points()
+    al = points["arudha_lagna"]
+
+    undecided = spiritual_readings(al, **points)
+    rule_1 = next(r for r in undecided if r["rule"] == 1)
+    assert "parivraja yogas" in rule_1["undecided"]
+    assert rule_1["gives"] == "renunciation"
+
+    holds = spiritual_readings(al, **points, parivraja_yogas=True)
+    assert "undecided" not in next(r for r in holds if r["rule"] == 1)
+
+    fails = spiritual_readings(al, **points, parivraja_yogas=False)
+    assert not [r for r in fails if r["rule"] == 1]
+
+    assert "if there are parivraja yogas" in PARIVRAJA_YOGAS_NOT_BUILT
+
+
+def test_rule_8_branches_and_reports_both_when_rahu_is_unjudged():
+    """"Dasa of the sign containing Rahu can create progress after internal
+    turmoil if Rahu is favorable. If Rahu is unfavorable, it can take the
+    native in the direction of materialism."
+
+    Opposite results from one placement, and §21.3 never says what settles it.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.drigdasa import spiritual_readings
+
+    points = _chart_36_points()
+    rahu_sign = points["signs"][int(Graha.RAHU)]
+
+    unjudged = next(r for r in spiritual_readings(rahu_sign, **points)
+                    if r["rule"] == 8)
+    assert "undecided" in unjudged
+    assert "materialism" in unjudged["gives"] and "progress" in unjudged["gives"]
+
+    good = next(r for r in spiritual_readings(rahu_sign, **points,
+                                              rahu_favourable=True)
+                if r["rule"] == 8)
+    assert good["gives"] == "progress after internal turmoil"
+    assert "undecided" not in good
+
+    bad = next(r for r in spiritual_readings(rahu_sign, **points,
+                                             rahu_favourable=False)
+               if r["rule"] == 8)
+    assert "materialism" in bad["gives"]
+
+
+def test_lagna_reaches_two_readings_and_the_seventh_only_one():
+    """Rules 3 and 4 both concern lagna's dasa and give different things —
+    "internal awakening and self-realization", and "fame and power related to
+    spreading spiritual knowledge". The 7th shares only the first.
+    """
+    from hora.dasha.rasi.drigdasa import spiritual_readings
+
+    points = _chart_36_points()
+    lagna_sign = points["lagna"]
+
+    at_lagna = {r["rule"] for r in spiritual_readings(lagna_sign, **points)}
+    assert {3, 4} <= at_lagna
+
+    seventh = (lagna_sign + 6) % 12
+    at_seventh = {r["rule"] for r in spiritual_readings(seventh, **points)}
+    assert 3 in at_seventh
+    assert 4 not in at_seventh
+
+
+def test_rule_5_takes_an_aspect_and_rule_6_does_not():
+    """"Dasas of signs **containing or aspecting** mantrapada" against "Dasa
+    of the sign **containing** mrityupada". The asymmetry is the section's.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.dasha.rasi.drigdasa import spiritual_readings
+
+    points = _chart_36_points()
+    a5, a8 = points["mantrapada"], points["mrityupada"]
+
+    assert 5 in {r["rule"] for r in spiritual_readings(a5, **points)}
+    for aspecting in (s for s in range(12) if a5 in rasi_drishti(s)):
+        assert 5 in {r["rule"] for r in spiritual_readings(aspecting, **points)}
+
+    assert 6 in {r["rule"] for r in spiritual_readings(a8, **points)}
+    for aspecting in (s for s in range(12)
+                      if a8 in rasi_drishti(s) and s != a8):
+        assert 6 not in {r["rule"]
+                         for r in spiritual_readings(aspecting, **points)}
+
+
+def test_ketus_claim_is_stronger_than_the_rule_it_justifies():
+    """"Ketu is the significator of moksha... Ketu is the **only** planet who
+    can give real spiritual awakening and liberation."
+
+    Rule 7 needs only the first half. The second is the sharpest claim in the
+    chapter and is kept whole, because a reading layer that paraphrases it
+    into "Ketu favours liberation" says something much weaker.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.drigdasa import (
+        KETU_IS_THE_ONLY_LIBERATOR,
+        spiritual_readings,
+    )
+
+    points = _chart_36_points()
+    ketu_sign = points["signs"][int(Graha.KETU)]
+    assert 7 in {r["rule"] for r in spiritual_readings(ketu_sign, **points)}
+
+    assert "only planet" in KETU_IS_THE_ONLY_LIBERATOR
+    assert "real spiritual awakening and liberation" in KETU_IS_THE_ONLY_LIBERATOR
+
+
+def test_a5_is_the_mantrapada_here_and_showed_power_in_chapter_20():
+    """§21.3 names A5 "mantrapada"; Example 78 read the same pada as showing
+    one's following and the trappings of power.
+
+    Not a conflict. Exercise 30 stated the principle — an arudha shows the
+    appearance of its house's matter, narrowed by what is being asked, "in
+    career, because this is D-10". Asked about mantras the 5th's arudha is the
+    mantrapada; asked about power it is a following.
+    """
+    from hora.dasha.rasi.drigdasa import A5_IS_ALSO_THE_MANTRAPADA
+    from hora.dasha.rasi.narayana import ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER
+    from hora.dasha.rasi.sudasa import A5_SHOWS_ONES_FOLLOWING
+
+    assert "mantrapada" in A5_IS_ALSO_THE_MANTRAPADA
+    assert "arudha pada of the 5th house" in A5_IS_ALSO_THE_MANTRAPADA
+    assert "following" in A5_SHOWS_ONES_FOLLOWING
+    assert "because this is D-10" in ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER
+
+
+def test_a8_keeps_its_chapter_18_name_too():
+    """Example 75 wrote "mrityu pada", §21.3 writes "mrityupada". Same pada,
+    same house, and both spellings are the book's — so both are stored rather
+    than one being regularised, as D-24 and D-25 do for other variants.
+    """
+    from hora.dasha.rasi.drigdasa import SPIRITUAL_READINGS
+    from hora.dasha.rasi.narayana import ARUDHA_PADA_DASA_READINGS
+
+    from_18 = next(r for r in ARUDHA_PADA_DASA_READINGS if r["pada"] == "A8")
+    assert from_18["also"] == "mrityu pada"
+    assert from_18["house"] == 8
+
+    from_21 = next(r for r in SPIRITUAL_READINGS if r["reads"] == "A8")
+    assert "mrityupada" in from_21["text"]
+    assert "arudha pada of 8th house" in from_21["text"]
+
+
+def test_21_3_applied_across_chart_36s_drigdasa():
+    """The section on the chapter's own chart. Libra reaches three readings at
+    once — it is lagna, so rules 3 and 4, and it holds the mantrapada — while
+    two of the twelve rasis reach none at all, which the section allows for by
+    naming only six references.
+    """
+    from hora.dasha.rasi.drigdasa import progression, spiritual_readings
+
+    points = _chart_36_points()
+    assert points["arudha_lagna"] == R["Gemini"]
+    assert points["mantrapada"] == R["Libra"]
+    assert points["mrityupada"] == R["Leo"]
+
+    reached = {}
+    for sign in progression(points["lagna"]).signs:
+        rules = {r["rule"] for r in spiritual_readings(sign, **points)}
+        if rules:
+            reached[ABBR[sign]] = rules
+
+    assert reached["Li"] == {3, 4, 5}
+    assert reached["Ar"] == {3}                    # the 7th, rule 3 only
+    assert reached["Ge"] == {1}                    # the arudha lagna
+    assert reached["Le"] == {5, 6}
+    assert set(reached) == set(EX80_ORDER) - {"Cn", "Cp"}
