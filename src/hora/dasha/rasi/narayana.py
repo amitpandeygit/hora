@@ -911,3 +911,47 @@ def varga_lagna(
                 f"{GRAHA_NAMES[ruler]} occupies "
                 f"{RASI_NAMES[varga_signs[ruler]]} in D-{int(divisions)}"),
     }
+
+
+# --------------------------------------------------------------------------
+# Pratyantardasas — a third level §18.3 never described.
+# --------------------------------------------------------------------------
+
+#: §18.3 stops at antardasas. Example 71 goes one level further and, without
+#: naming a new rule, applies §18.3's own three steps to the antardasa rasi:
+#: the seed is the stronger of it and the 7th from it, the periods begin where
+#: that seed's lord sits, and the direction comes from whether that starting
+#: rasi is an odd or even *sign*. So the level is a recursion, not a new rule.
+PRATYANTARDASA_RULE = (
+    "Vi is stronger than Pi, as it has a planet. Lord of Vi is Mercury. He is "
+    "in Ar - an odd rasi. So pratyantardasas in Vi antardasa go as Ar, Ta, "
+    "Ge, Cn, Le etc. Vi antardasa is of 11 months and it runs from 4th April "
+    "1991 to 4th March 1992. Dividing it into 12 equal parts, we see that the "
+    "5th pratyantardasa runs from 27th July 1991 to 25th August 1991."
+)
+
+
+def pratyantardasas(
+    antardasa_rasi: int,
+    longitudes: dict[int, float],
+    seed_lord: int | None = None,
+    seed_occupants: set[int] | None = None,
+) -> Antardasas:
+    """The twelve pratyantardasas of one antardasa, in order.
+
+    Example 71 derives these exactly as §18.3 derives antardasas, one rasi
+    down, so this delegates rather than restating the rules. Only the units
+    differ: an antardasa is divided into twelve **equal parts** of itself
+    rather than into a count of months, and the example gives no formula for
+    them, so ``months_each`` on the result is not meaningful here — divide the
+    antardasa's own span by twelve.
+
+    :param antardasa_rasi: the rasi whose antardasa is being divided.
+    :param longitudes: the chart the dasa is being run in. For a varga dasa
+        that is the varga, not the rasi chart — Example 71 works in D-4
+        throughout.
+    :param seed_lord: the seed's lord, when the seed is Scorpio or Aquarius.
+    :param seed_occupants: grahas in the seed, for §18.3's two exceptions.
+    """
+    return antardasas(antardasa_rasi, 0, longitudes,
+                      seed_lord=seed_lord, seed_occupants=seed_occupants)

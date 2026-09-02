@@ -45,7 +45,10 @@ Graha Drishti (D-24), two spellings each for subhaargala and paapaargala
 (D-25), two different word-lists for the same reading in §10.5 and §10.7
 (D-26), and two slips in §18.5's interpretation warning (D-56). None changes a
 calculation; all would vanish under a "tidy-up" pass, and D-20 already showed
-that costs real information.
+that costs real information. Chapter 18 adds two of a different kind, where the
+book's own numbers disagree with each other rather than with ours: a
+transposed antardasa pair (D-57) and pratyantardasa dates that do not divide
+the antardasa they are cut from (D-58).
 
 **4. Two live divergences, one known-wrong and one undecided.**
 
@@ -1773,3 +1776,40 @@ in `VARGA_INTERPRETATION_WARNING` and pinned by a test that names both slips.
 
 Same treatment as D-24 and D-25: tidying a quotation is how a register stops
 being one.
+
+## D-57 · Example 71 prints its antardasa sequence with the first two swapped
+
+**Status: closed.** The same paragraph contradicts it twice, so the reading is
+not in doubt.
+
+> "So antardasas start from Vi. Because Vi is an even sign, they go in the
+> backward direction. Antardasas of 11 months go as **Le, Vi, Cn, Ge** etc."
+
+Backward from Vi is **Vi, Le, Cn, Ge**. The paragraph has just said the
+antardasas start from Vi, and the next one dates Vi antardasa from 4 April
+1991 — the day Le dasa itself begins, so Vi runs first. Cn and Ge are right,
+which is what makes it a transposition of the pair rather than a different
+rule.
+
+**What we do:** return Vi first. The Example 71 fixture asserts our order and
+asserts it is not the printed one, so the divergence is visible.
+
+Same shape as D-55, where Example 67 printed eleven of twelve rasis.
+
+## D-58 · Example 71's pratyantardasa dates do not divide its own antardasa
+
+**Status: closed.** Arithmetic, and it changes nothing the example concludes.
+
+> "Vi antardasa is of 11 months and it runs from 4th April 1991 to 4th March
+> 1992. Dividing it into 12 equal parts, we see that the 5th pratyantardasa
+> runs from 27th July 1991 to 25th August 1991."
+
+That span is 335 days, so a twelfth is 27.92 days and the 5th part runs
+**24 July to 21 August 1991**. The printed part is 29 days long and begins
+three days late; twelve of it would end the antardasa on 11 March 1992, not
+the 4th the same sentence gives.
+
+**What we do:** divide the antardasa as stated. The conclusion is unaffected —
+the native landed on 15 August 1991, which falls in the 5th pratyantardasa on
+either reading, and the 5th from Ar forward is Le either way. The fixture pins
+both sets of dates and the landing inside both.

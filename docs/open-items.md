@@ -606,13 +606,11 @@ Two quantities, two rates, two hemispheres, one number: HL and GL are right and
 the sunrise is not. Neither §5 definition is the book's — ours early both times,
 `disc_center` late both times, at no fixed fraction between (23% at 26 N, 53% at
 43 N). A toggle cannot fix it; it looks like a refraction or horizon-dip model
-that diverges with latitude.
-
-Reach: upagrahas divide the day into eighths, so a 50-second shift moves them by
-seconds of arc. In a **divisional** chart it is not monotone — Chart 12's GL is
-a rasi out yet lands in the same D-10 sign (so Exercise 21's reading survives),
-while its HL agrees in the rasi chart yet is one sign out in the D-10. Neither
-direction may be assumed from the other.
+diverging with latitude. Reach: upagrahas divide the day into eighths, so a
+50-second shift moves them by seconds of arc, and in a **divisional** chart it
+is not monotone — Chart 12's GL is a rasi out yet lands in the same D-10 sign
+(so Exercise 21's reading survives), while its HL agrees in the rasi chart yet
+is one sign out in the D-10. Neither direction may be assumed from the other.
 
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
@@ -657,13 +655,17 @@ houses from *something*: "We can see that Le is the 9th house."
 | the rasi chart's 4th house, D-4's seed | Sg | **9th** |
 | the derived lagna the dasas run from | Cp | 8th — ruled out |
 
-The first two are one sign here only because the ascendant fell in the second
-quarter of Virgo, which maps to the 4th from it — a coincidence, not an
-identity, and every other reading in the example is equally silent. A chart's
-own lagna is the ordinary meaning of "the 9th house" and is the likelier
-reading, but it stays a guess while one example carries both.
+The first two are one sign only because the ascendant fell in Virgo's second
+quarter, which maps to the 4th from it — a coincidence, not an identity, and
+every other reading in the example is equally silent. A chart's own lagna is
+the ordinary meaning of "the 9th house" and the likelier reading, but a guess
+while one example carries both.
 
-**What we do:** nothing computes it; `dasa_lagna` refuses a varga, so no
+Same subject, second facet: the example also counts "the 9th house from dasa
+rasi" for an antardasa inside a varga. §18.4 states that rule and §18.5 forbids
+taking the dasa rasi *as lagna*; whether they collide is not said.
+
+**What we do:** nothing computes either; `dasa_lagna` refuses a varga, so no
 reference is offered rather than a wrong one assumed.
 
 **Closes when:** an example reads a varga whose lagna and seed rasi differ.

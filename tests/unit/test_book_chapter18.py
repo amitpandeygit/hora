@@ -3110,3 +3110,195 @@ def test_example_71s_other_readings_are_counted_from_the_same_rasi():
     assert sign_dignity(mars, varga_longitudes[mars]) == "exalted"
     assert R["Leo"] in rasi_drishti(varga_signs[mars])
     assert _house_from(varga_signs[mars], R["Leo"]) == 8    # Mars's 8th aspect
+
+
+# --------------------------------------------------------------------------
+# Example 71's antardasa and pratyantardasa — the whole §15.5.2 cascade
+# walked in print, and a third dasa level §18.3 never described.
+# --------------------------------------------------------------------------
+
+def test_example_71_antardasa_seed_walks_all_four_rules_of_15_5_2():
+    """"Both have one planet each. Le is aspected by Mercury and Jupiter,
+    while Aq is aspected by Mercury and its co-lord Saturn. Neither contains
+    an exalted planet. Aq is an odd sign and its stronger lord is also in an
+    odd sign. On the other hand, Le is an odd sign and its lord is in an even
+    sign. So Le is stronger."
+
+    Four sentences, four rules, and the first time the book prints the whole
+    cascade in order. Our own trace reads back line for line -- including
+    naming Saturn as the co-lord that carries Aquarius through rule 2, where
+    Rahu neither occupies nor aspects it.
+    """
+    from hora.charts.rasi_strength import stronger
+
+    _rasi, _vsig, varga_longitudes, _lagna = _chart_27_d4()
+    got = stronger(R["Leo"], R["Aquarius"], varga_longitudes, purpose="phalita")
+
+    by_rule = {r.rule: r for r in got.rules}
+    assert not by_rule["1"].decided
+    assert "Leo contains 1 planet; Aquarius contains 1 planet" in by_rule["1"].detail
+    assert not by_rule["2"].decided
+    assert "co-lord (Saturn) aspects from Libra" in by_rule["2"].detail
+    assert not by_rule["3"].decided
+    assert "no exalted planet" in by_rule["3"].detail
+    assert by_rule["4"].decided
+
+    assert got.winner == R["Leo"]
+    assert got.decided_by == "4"
+
+
+def test_example_71_rule_4_gives_leo_whichever_co_lord_aquarius_takes():
+    """The book says "its stronger lord" without naming it, and the two
+    candidates cannot be told apart here: §15.5.1 gives Rahu, who sits in Leo,
+    and the co-lord the example names in rule 2 is Saturn, who sits in Libra.
+    Leo and Libra are both odd signs, so Aquarius matches its own oddity
+    either way and rule 4 hands Leo the seed regardless.
+    """
+    from hora.charts.colord import stronger as colord_stronger
+    from hora.core.const import RASI_IS_ODD, Graha
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_27_d4()
+    chosen = colord_stronger(R["Aquarius"], varga_longitudes,
+                             purpose="dasa").winner
+    assert chosen == int(Graha.RAHU)
+
+    assert RASI_IS_ODD[R["Aquarius"]]
+    for lord in (int(Graha.RAHU), int(Graha.SATURN)):
+        assert RASI_IS_ODD[varga_signs[lord]]           # Leo and Libra, both odd
+    assert RASI_IS_ODD[R["Leo"]]
+    assert not RASI_IS_ODD[varga_signs[int(Graha.SUN)]]  # Virgo, even
+
+
+def test_example_71_antardasas_start_from_virgo_going_backward():
+    """"So Le is stronger and antardasas start from the rasi containing Sun -
+    the lord of Le. So antardasas start from Vi. Because Vi is an even sign,
+    they go in the backward direction."
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import antardasas
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_27_d4()
+    occupants = {g for g, s in varga_signs.items() if s == R["Leo"]}
+    assert occupants == {int(Graha.RAHU)}
+
+    got = antardasas(R["Leo"], 11, varga_longitudes, seed_occupants=occupants)
+    assert got.seed == R["Leo"]
+    assert got.start == R["Virgo"]
+    assert varga_signs[int(Graha.SUN)] == got.start
+    assert got.direction == "backward"
+    assert got.exception is None
+    assert got.months_each == 11                        # "Antardasas of 11 months"
+
+
+def test_example_71_prints_its_antardasa_sequence_with_the_first_two_swapped():
+    """See D-57. "Antardasas of 11 months go as Le, Vi, Cn, Ge etc."
+
+    The same paragraph says antardasas **start from Vi** and go backward, and
+    backward from Vi is Vi, Le, Cn, Ge. The next paragraph then dates Vi
+    antardasa from 4 April 1991, which is the day Le dasa itself begins -- so
+    Vi is first and the printed pair is transposed. The other two are right.
+    """
+    from hora.dasha.rasi.narayana import antardasas
+
+    _rasi, _vsig, varga_longitudes, _lagna = _chart_27_d4()
+    got = antardasas(R["Leo"], 11, varga_longitudes, seed_occupants=set())
+
+    assert [ABBR[s] for s in got.signs[:4]] == ["Vi", "Le", "Cn", "Ge"]
+    assert [ABBR[s] for s in got.signs[:4]] != ["Le", "Vi", "Cn", "Ge"]
+    assert ABBR[got.signs[0]] == "Vi"                   # and the dates agree
+
+
+def test_example_71_reads_each_chart_from_its_own_lagna():
+    """"Sun owns the 9th house in D-4 and owns the 12th house in rasi chart."
+
+    One graha, one rasi, two charts, two references -- and both come out. Le
+    is the 9th from Sg, D-4's own lagna, and the 12th from Vi, the rasi
+    chart's. Whatever OI-123 settles, a varga's houses are not counted from
+    the rasi chart's lagna.
+    """
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_LORD, Graha
+
+    _rasi, _vsig, _vlon, lagna_sign = _chart_27_d4()
+    assert int(RASI_LORD[R["Leo"]]) == int(Graha.SUN)
+
+    d4_lagna = varga(longitudes(27)["Asc"], "D4").sign
+    assert _house_from(d4_lagna, R["Leo"]) == 9         # "in D-4"
+    assert _house_from(lagna_sign, R["Leo"]) == 12      # "in rasi chart"
+
+
+def test_example_71_judges_the_antardasa_from_the_dasa_rasi_even_in_a_varga():
+    """"Lord of Vi is Mercury and he occupies the 9th house from dasa rasi."
+
+    §18.4's `ANTARDASA_RESULT_RULE`, applied inside a varga. §18.5 forbids
+    taking the dasa rasi *as lagna*, but counting an antardasa lord's house
+    from it is a rule of its own and the example uses it here without
+    qualification. Mercury is in Ar in D-4, nine houses on from Le.
+    """
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import ANTARDASA_RESULT_RULE
+
+    _rasi, varga_signs, _vlon, _lagna = _chart_27_d4()
+    assert int(RASI_LORD[R["Virgo"]]) == int(Graha.MERCURY)
+    assert varga_signs[int(Graha.MERCURY)] == R["Aries"]
+    assert _house_from(R["Leo"], R["Aries"]) == 9
+    assert "from dasa rasi" in ANTARDASA_RESULT_RULE
+
+
+def test_example_71_pratyantardasas_recurse_18_3_one_level_down():
+    """"Vi is stronger than Pi, as it has a planet. Lord of Vi is Mercury. He
+    is in Ar - an odd rasi. So pratyantardasas in Vi antardasa go as Ar, Ta,
+    Ge, Cn, Le etc."
+
+    A third level, and §18.3 never mentioned one. No new rule is stated
+    because none is needed: the seed is the stronger of the antardasa rasi and
+    the 7th from it, the periods begin where that seed's lord sits, and the
+    direction is the starting rasi's own oddity. That is §18.3 verbatim, one
+    rasi down, so `pratyantardasas` delegates to `antardasas`.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import PRATYANTARDASA_RULE, pratyantardasas
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_27_d4()
+    assert varga_signs[int(Graha.SUN)] == R["Virgo"]     # Vi has a planet
+    assert not [g for g, s in varga_signs.items() if s == R["Pisces"]]
+
+    got = pratyantardasas(R["Virgo"], varga_longitudes, seed_occupants=set())
+    assert got.seed == R["Virgo"]
+    assert got.start == R["Aries"]
+    assert got.direction == "forward"
+    assert [ABBR[s] for s in got.signs[:5]] == ["Ar", "Ta", "Ge", "Cn", "Le"]
+    assert ABBR[got.signs[4]] == "Le"                    # the 5th
+    assert "5th pratyantardasa" in PRATYANTARDASA_RULE
+
+
+def test_example_71s_pratyantardasa_dates_do_not_divide_its_own_antardasa():
+    """See D-58. "Vi antardasa ... runs from 4th April 1991 to 4th March 1992.
+    Dividing it into 12 equal parts, we see that the 5th pratyantardasa runs
+    from 27th July 1991 to 25th August 1991."
+
+    That span is 335 days, so a twelfth is 27.92 days and the 5th part runs
+    24 July to 21 August. The printed part is 29 days long and starts three
+    days late; twelve of it would end the antardasa on 11 March, not the 4th
+    the same sentence gives. The conclusion is untouched either way -- the
+    native landed on 15 August 1991, inside the 5th part on both readings.
+    """
+    from datetime import date, timedelta
+
+    start, end = date(1991, 4, 4), date(1992, 3, 4)
+    assert (end - start).days == 335
+    part = (end - start).days / 12
+
+    ours = (start + timedelta(days=part * 4), start + timedelta(days=part * 5))
+    assert ours[0] == date(1991, 7, 24)
+    assert ours[1] == date(1991, 8, 21)
+
+    printed = (date(1991, 7, 27), date(1991, 8, 25))
+    assert (printed[1] - printed[0]).days == 29 != round(part)
+    assert start + timedelta(days=(printed[0] - start).days / 4 * 12) \
+        != end                                           # 11 March, not the 4th
+
+    landing = date(1991, 8, 15)
+    assert ours[0] <= landing < ours[1]
+    assert printed[0] <= landing < printed[1]

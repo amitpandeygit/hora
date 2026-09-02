@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-18's prose (32)
+### Part 2 — the dasa systems map and chapters 16-18's prose (33)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -654,7 +654,7 @@ inconsistency is settled would be the wrong order.
 `UNLISTED_DASA_LAGNA_READINGS` · `ANTARDASA_ASPECT_RULE` ·
 `EXALTED_DUSTHANA_LORD_CONVERSE` · `KETU_IN_THE_ELEVENTH_IS_FOREIGN` ·
 `VARGA_SEED_RATIONALE` · `VARGA_DASA_USES` ·
-`VARGA_HOUSE_REFERENCE_IS_AMBIGUOUS`
+`VARGA_HOUSE_REFERENCE_IS_AMBIGUOUS` · `VARGA_DIGNITY_IS_READ_IN_THE_VARGA`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -680,6 +680,7 @@ it — but it is the coverage line for the whole part, and
 | `VARGA_SEED_RATIONALE` | §18.5's account of why each varga has the seed house it has — dharma for D-9, karma for D-10, the evolution of self for D-12 and D-24. `seed_house` computes the houses; these are the meanings behind them, and a test holds the two together |
 | `VARGA_DASA_USES` | §18.5 names what six vargas' Narayana dasas time — career, marriage, children, residence, learning, parents. Choosing which varga answers a question is a reading, not a calculation; nothing selects one yet |
 | `VARGA_HOUSE_REFERENCE_IS_AMBIGUOUS` | Example 71 counts a varga's houses from a rasi that two rules can name, and its chart cannot separate them. Nothing computes a varga house reference until it is settled. **OI-123** |
+| `VARGA_DIGNITY_IS_READ_IN_THE_VARGA` | Example 71's note (1), which is the only place the book shows that a varga dasa's lengths take their dignities from the varga. `dasa_length` takes dignity from its caller, so this is the sentence that tells a caller which chart to read |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |
