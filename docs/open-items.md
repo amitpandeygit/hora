@@ -645,18 +645,28 @@ nothing is blocked by leaving them apart.
 
 **Closes when:** a later chapter states them, or you say the list may grow.
 
-### OI-121 — §18.2.2's exception 3 can leave a rasi no dasa at all
+### OI-123 — Example 71 reads a varga's houses from a rasi two rules can name
 
-**Waiting on the book.** Jupiter debilitated in Capricorn makes Sagittarius
-count 2, so the base rule gives 1 year and exception 3 takes it to **0**.
-`out_of_range` says so; capping at 1 would be a guess.
+**Waiting on the book.** §18.5 takes the dasa lagna away and Example 70
+ignores the varga's own lagna when building the dasas. Example 71 then counts
+houses from *something*: "We can see that Le is the 9th house."
 
-**Half of this is now closed.** Example 68 showed exception 1 is terminal —
-Bill Gates' Virgo dasa is 12 years, not 13, though its exalted Mercury would
-have added one. Exception 3 cannot meet exception 1, because a lord in its own
-sign is never debilitated there, so only this half survives.
+| candidate | Chart 27 | Le is the |
+|---|---|---|
+| the D-4's own lagna | Sg | **9th** |
+| the rasi chart's 4th house, D-4's seed | Sg | **9th** |
+| the derived lagna the dasas run from | Cp | 8th — ruled out |
 
-**Closes when:** an example prints a 0-year dasa, or you cap it.
+The first two are one sign here only because the ascendant fell in the second
+quarter of Virgo, which maps to the 4th from it — a coincidence, not an
+identity, and every other reading in the example is equally silent. A chart's
+own lagna is the ordinary meaning of "the 9th house" and is the likelier
+reading, but it stays a guess while one example carries both.
+
+**What we do:** nothing computes it; `dasa_lagna` refuses a varga, so no
+reference is offered rather than a wrong one assumed.
+
+**Closes when:** an example reads a varga whose lagna and seed rasi differ.
 
 ### OI-120 — §18.2.1 does not say what happens when Saturn and Ketu share the seed
 
@@ -1321,15 +1331,13 @@ one, and Chart 25's is 41'.
 Thirty-nine, twelve, fifty-six, **seventy-seven** and nine arcminutes out under
 `true` for the five tabled. Every other body lands within one arcminute — the
 book's display rounding — except Chart 3's ascendant at 5.5', which is its
-birth minute being rounded, not a node question. Chart 8 separates nothing.
+birth minute being rounded, not a node question. Chart 8 separates nothing, and
 Chart 3's margin is the narrowest, the nodes having been close in December
-1926; it corroborates rather than decides. The nine span 1542 to 1971 and both
-hemispheres, and Chart 10 predates the Gregorian reform, so the agreement is
-not an artefact of one era or one setup.
-
+1926. The nine span 1542 to 1971 and both hemispheres, and Chart 10 predates
+the Gregorian reform, so the agreement is not an artefact of one era or setup.
 This is the only hard evidence in the project about which convention the book
-uses, and it points against our default. The reference chart (Chart 1, 1972)
-cannot settle it: its JHora output is still the empty stub of OI-1.
+uses, and it points against our default. Chart 1 cannot settle it: its JHora
+output is still the empty stub of OI-1.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
 endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by the
@@ -1529,20 +1537,15 @@ instance: the book capitalises every relative, we store lowercase, and the
 check is satisfied.
 
 The flattening exists because PDF extraction inserts line breaks and
-hyphenation. But only whitespace and soft hyphens genuinely need normalising;
-case and punctuation survive extraction fine.
+hyphenation, but only whitespace and soft hyphens genuinely need normalising —
+case and punctuation survive extraction fine. Proposed: a second, stricter
+comparison collapsing those only, run alongside. Not written, because the check
+is PDF-gated and cannot be run here to see what it flags. The docstring states
+the real guarantee and
+`test_the_verbatim_check_is_case_and_punctuation_insensitive` pins the weakness.
 
-Proposed: a second, stricter comparison that collapses whitespace and soft
-hyphens only, run alongside the existing one. Not written, because the check is
-PDF-gated and cannot be run here to see what it flags.
-
-The docstring has been corrected to state the real guarantee, and
-`test_the_verbatim_check_is_case_and_punctuation_insensitive` pins the
-weakness so it is not mistaken for a stronger one.
-
-**Run 2026-08-27: all 109 fidelity checks pass** — weaker evidence than it
-sounds, since the comparison cannot see either known discrepancy and would
-pass whether or not they were fixed.
+**Run 2026-08-27: all 109 fidelity checks pass** — weaker than it sounds, since
+the comparison sees neither known discrepancy and would pass either way.
 
 **Closes when:** the stricter comparison is written and run against the PDF,
 and whatever it flags is settled.

@@ -305,13 +305,11 @@ class DasaLength:
     counting: str
     #: Houses from the dasa rasi to its lord, counted that way. 1 to 12.
     count: int
+    #: 0 to 12. Zero is a real answer, not a failure: Example 71 prints
+    #: Sagittarius at zero years and gives the rasi 12 in the second cycle.
     years: int
     #: Exceptions applied, in the order §18.2.2 lists them.
     applied: tuple[str, ...]
-    #: Set when exception 3 takes a one-year period down to none, which
-    #: §18.2.2 does not discuss. The 13-year case is gone: Example 68 shows
-    #: exception 1 is terminal. None otherwise.
-    out_of_range: str | None
     why: str
 
 
@@ -360,14 +358,6 @@ def dasa_length(
             years -= 1
             applied.append("lord debilitated, so one year taken away")
 
-    out_of_range = None
-    if years < 1:
-        out_of_range = (
-            f"{years} years leaves this rasi no dasa at all. Exception 3 took "
-            f"a year from a one-year period; §18.2.2 does not say whether it "
-            f"may. See docs/open-items.md."
-        )
-
     why = (f"{RASI_NAMES[index]} is "
            f"{'odd' if forward else 'even'}-footed, so houses are counted "
            f"{counting}; its lord {GRAHA_NAMES[lord]} is in "
@@ -378,7 +368,7 @@ def dasa_length(
         rasi=index, rasi_name=str(RASI_NAMES[index]),
         lord=int(lord), lord_name=str(GRAHA_NAMES[lord]),
         counting=counting, count=count, years=years,
-        applied=tuple(applied), out_of_range=out_of_range, why=why,
+        applied=tuple(applied), why=why,
     )
 
 
@@ -816,6 +806,28 @@ VARGA_DASA_USES: dict[str, str] = {
 VARGA_OWN_LAGNA_IS_IGNORED = (
     "We ignore lagna in D-10 and treat the rasi containing Mars in D-10 as "
     "lagna and use the rules of Narayana dasa of rasi chart."
+)
+
+#: Example 71 reads dignity in the **varga**, not the rasi chart, and never
+#: says so. Its note (1) calls Saturn exalted; in the rasi chart that Saturn is
+#: at 15 Ar 06, his *debilitation*, and only in D-4 does he stand in Libra.
+#: Three of Chart 27's lords change dignity between the two charts and two of
+#: the changes move a dasa length, so the rasi chart's dignities get three of
+#: the six printed answers wrong. :func:`dasa_length` takes the dignity from
+#: its caller, so the caller must read it in the same chart it counts in.
+VARGA_DIGNITY_IS_READ_IN_THE_VARGA = (
+    "Saturn is in the 4th house from Cp, reckoned in the backward direction "
+    "because Cp is an even-footed rasi. We get 4-1=3. However, Saturn is "
+    "exalted and we have to add one year. So Cp dasa is of 4 years."
+)
+
+#: Example 71 counts houses from Sagittarius, which on Chart 27 is both the
+#: D-4's own lagna and the rasi chart's 4th house -- D-4's seed. The two
+#: coincide only because of where the ascendant fell, so the example cannot
+#: say which it means. See OI-123; nothing computes a varga's house reference.
+VARGA_HOUSE_REFERENCE_IS_AMBIGUOUS = (
+    "We can see that Le is the 9th house. The 9th house shows prospering in a "
+    "foreign land."
 )
 
 #: §18.5's closing warning, and the reason :func:`dasa_lagna` refuses a varga.

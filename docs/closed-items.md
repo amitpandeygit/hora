@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-5](#oi-5) | Upagrahas |
+| [OI-121](#oi-121) | §18.2.2's exceptions could give 13 years or none |
 | [OI-101](#oi-101) | "sodhya pindas" were named but not defined |
 | [OI-102](#oi-102) | Chart 3 had never been supplied |
 | [OI-100](#oi-100) | whether a sarvashtakavarga includes lagna's table |
@@ -1769,3 +1770,27 @@ be covered in this book".
 §12.7 also says the pindas themselves are used in transit analysis, which is a
 later part of the book. The construction is complete; the application is not
 yet in scope.
+
+## OI-121 — §18.2.2's length exceptions could leave a dasa of 13 years or none
+
+**Closed by Examples 68 and 71, one half each.**
+
+Both halves were reachable in principle and neither was discussed by §18.2.2.
+
+**13 years.** Only Virgo can reach it: Mercury is the sole graha that both owns
+and exalts in one rasi, so exception 1 (a count of 1 gives 12) and exception 2
+(an exalted lord adds a year) can meet nowhere else. Example 68's Bill Gates
+has that Mercury, at 23 Vi 19, and the example prints Vi at **12** years. It
+also needs the same Mercury exalted for its Ge dasa of 4, so no reading of
+"exalted" makes both come out — exception 1 simply ends the calculation.
+
+**0 years.** Example 71's Chart 27, in D-4: Jupiter is debilitated in Cp, two
+houses from Sg, so 2 - 1 - 1 = 0. The book prints "Sg (00 years): -" with a
+dash for its dates and adds that "Sg dasa of 12 years will come in the second
+cycle", which is special note 2 applied unchanged. A dasa of no years is a real
+answer, not an overflow.
+
+`dasa_length` no longer adjusts after exception 1, and the `out_of_range` field
+that flagged both cases is gone — with both settled it could only ever have
+been None.
+

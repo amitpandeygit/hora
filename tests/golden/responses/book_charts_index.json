@@ -175,6 +175,13 @@
         "number": 26,
         "recomputable": true,
         "title": "Narayana Dasa Exercise"
+      },
+      {
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 18, Example 71",
+        "number": 27,
+        "recomputable": true,
+        "title": "Foreign Stay Example"
       }
     ],
     "not_supplied": [
@@ -202,7 +209,8 @@
       23,
       24,
       25,
-      26
+      26,
+      27
     ]
   },
   "status": 200

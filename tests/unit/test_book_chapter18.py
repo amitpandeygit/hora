@@ -604,7 +604,7 @@ def test_scorpio_and_aquarius_need_the_stronger_lord():
 
 
 def test_exception_1_is_terminal_so_virgo_is_never_thirteen_years():
-    """See OI-121, which Example 68 closes on this side.
+    """Example 68 closed this side of OI-121; Example 71 closed the other.
 
     Virgo is the only rasi a planet both owns and exalts in, so it is the only
     place exceptions 1 and 2 can meet. Bill Gates has Mercury there, and the
@@ -619,35 +619,43 @@ def test_exception_1_is_terminal_so_virgo_is_never_thirteen_years():
     assert virgo.count == 1
     assert virgo.years == 12
     assert virgo.applied == ("contains its lord, so 12 rather than 0",)
-    assert virgo.out_of_range is None
     assert second_cycle_length(virgo.years) == 0
 
 
-def test_a_debilitated_lord_can_still_leave_a_rasi_no_dasa():
-    """The half of OI-121 that stays open. Exception 3 cannot meet exception
-    1 -- a lord in its own sign is never debilitated there -- so it meets the
-    base rule instead, and a count of 2 gives a dasa of no years at all.
+def test_a_debilitated_lord_leaves_a_rasi_no_dasa_and_that_is_the_answer():
+    """The other half of OI-121, closed by Example 71 -- which prints exactly
+    this case. Exception 3 cannot meet exception 1, since a lord in its own
+    sign is never debilitated there, so it meets the base rule instead and a
+    count of 2 gives a dasa of no years at all. The book accepts the zero and
+    special note 2 hands the rasi 12 years in the second cycle.
     """
     from hora.core.const import Graha
-    from hora.dasha.rasi.narayana import dasa_length
+    from hora.dasha.rasi.narayana import dasa_length, second_cycle_length
 
     sagittarius = dasa_length(R["Sagittarius"], int(Graha.JUPITER),
                               R["Capricorn"], "debilitated")
     assert sagittarius.count == 2
     assert sagittarius.years == 0
-    assert sagittarius.out_of_range is not None
+    assert second_cycle_length(sagittarius.years) == 12
 
 
-def test_ordinary_lengths_carry_no_flag():
-    """The flag must be rare, or it says nothing. Every length the base rule
-    gives, with or without a dignity that keeps it in range, is unflagged."""
+def test_every_length_the_rules_can_produce_lies_between_zero_and_twelve():
+    """With both halves of OI-121 closed there is nothing left to flag, and
+    the field that flagged it is gone. What remains is a range: exception 1
+    gives 12 at the top and exception 3 gives 0 at the bottom, and nothing
+    reaches outside them.
+    """
     from hora.core.const import RASI_LORD
     from hora.dasha.rasi.narayana import dasa_length
 
+    seen = set()
     for rasi in range(12):
         for place in range(12):
-            got = dasa_length(rasi, int(RASI_LORD[rasi]), place)
-            assert got.out_of_range is None, (rasi, place)
+            for dignity in (None, "exalted", "debilitated", "own"):
+                got = dasa_length(rasi, int(RASI_LORD[rasi]), place, dignity)
+                assert 0 <= got.years <= 12, (rasi, place, dignity)
+                seen.add(got.years)
+    assert 0 in seen and 12 in seen
 
 
 # --------------------------------------------------------------------------
@@ -889,7 +897,6 @@ def test_exercise_27_first_cycle_lengths(abbr, years):
             if rasi in (R["Scorpio"], R["Aquarius"]) else int(RASI_LORD[rasi]))
     got = dasa_length(rasi, lord, signs[lord], sign_dignity(lord, longitudes[lord]))
     assert got.years == years, got.why
-    assert got.out_of_range is None
 
 
 def test_exercise_27_sagittarius_holds_its_own_lord():
@@ -2445,13 +2452,15 @@ def test_oi_122_names_every_reading_the_sixteen_principles_do_not_carry():
     up. OI-122 tabulates all six readings and names every constant holding
     one, so a later chapter closing the gap closes it in one place.
     """
+    import re as _re
     from pathlib import Path
 
     from hora.dasha.rasi import narayana
 
     text = Path("docs/open-items.md").read_text(encoding="utf-8")
     start = text.index("### OI-122")
-    entry = text[start:text.index("### OI-121", start)]
+    following = _re.search(r"^### OI-", text[start + 5:], _re.MULTILINE)
+    entry = text[start:start + 5 + following.start()]
 
     for symbol in ("UNLISTED_DASA_LAGNA_READINGS",
                    "EXALTED_DUSTHANA_LORD_CONVERSE",
@@ -2816,3 +2825,288 @@ def test_example_70_confirms_everything_after_step_4_reads_the_varga():
                      seed_occupants=set())
     assert got.months_each == years
     assert len(set(got.signs)) == 12
+
+
+# --------------------------------------------------------------------------
+# Example 71 — Chart 27, a Narayana dasa of D-4, and the printed zero-year
+# dasa that closes OI-121.
+# --------------------------------------------------------------------------
+
+#: The six the example prints, in order. Sagittarius is printed with a dash
+#: for its dates rather than a span, because it has none.
+EX71_LENGTHS = [("Cp", 4), ("Sg", 0), ("Sc", 3), ("Li", 9), ("Vi", 5),
+                ("Le", 11)]
+
+
+def _chart_27_d4():
+    """Chart 27's D-4, which is the chart the example actually works in, plus
+    the rasi chart the seed house is counted in."""
+    from hora.charts.book import graha_longitudes, lagna
+    from hora.charts.vargas import varga
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(27).items()}
+    fourth = {g: varga(lon, "D4") for g, lon in rasi.items()}
+    return (rasi,
+            {g: p.sign for g, p in fourth.items()},
+            {g: p.longitude for g, p in fourth.items()},
+            lagna(27))
+
+
+def test_chart_27_is_drawn_as_a_varga_and_our_d4_reproduces_it():
+    """The only chart in the book drawn as a divisional rather than a rasi
+    chart: both diagrams are the D-4 and the longitudes beneath them are the
+    rasi chart's. Twelve bodies, ascendant and both special lagnas included.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+
+    drawn = chart(27)["divisional"]["D4"]
+    printed = longitudes(27)
+    for name, sign in drawn.items():
+        if name == "AL":                       # derived below, not transcribed
+            continue
+        assert ABBR[varga(printed[name], "D4").sign] == sign, name
+
+
+def test_chart_27s_drawn_d4_arudha_lagna_is_derived_not_transcribed():
+    """The diagram puts AL in Aq. That is the **D-4's** arudha lagna, built
+    from the D-4's own lagna and lord, not the rasi chart's.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+
+    _rasi, varga_signs, _vlon, _lagna = _chart_27_d4()
+    varga_ascendant = varga(longitudes(27)["Asc"], "D4").sign
+    assert varga_ascendant == R["Sagittarius"]
+
+    got = arudha_pada(1, varga_ascendant, varga_signs)
+    assert ABBR[got.sign] == chart(27)["divisional"]["D4"]["AL"] == "Aq"
+
+
+def test_example_71_derives_capricorn_as_the_lagna_of_the_d4_dasa():
+    """"Lagna is at 14 Vi 52. The 4th house in rasi chart is Sg and Jupiter
+    owns it. He occupies Cp in D-4. Let us treat Cp as lagna."
+
+    §18.5's steps 1 to 4 on a real chart at last, and the rasi/varga split is
+    visible in one line: Sg is the rasi chart's 4th, Cp is where its lord sits
+    in D-4.
+    """
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import seed_house, varga_lagna
+
+    _rasi, varga_signs, _vlon, lagna_sign = _chart_27_d4()
+    assert lagna_sign == R["Virgo"]
+    assert seed_house(4) == 4
+
+    got = varga_lagna(4, lagna_sign, varga_signs)
+    assert got["seed_rasi"] == R["Sagittarius"]
+    assert int(RASI_LORD[R["Sagittarius"]]) == int(Graha.JUPITER)
+    assert got["lord"] == int(Graha.JUPITER)
+    assert got["lagna"] == R["Capricorn"]
+
+
+def test_example_71_dasa_seed_is_settled_by_rule_1_in_the_d4():
+    """"So dasa seed is the stronger rasi of Cp and Cn (which is the 7th from
+    Cp). As 2 planets occupy Cp, it is stronger than Cn."
+
+    §15.5.2's rule 1, counted in the **varga**: Jupiter and Mars are in Cp in
+    D-4 while only Venus is in Cn. In the rasi chart those three are spread
+    over Li, Ar and Ar, and the comparison would not be the same one.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_seed
+
+    rasi, varga_signs, varga_longitudes, _lagna = _chart_27_d4()
+
+    seed = dasa_seed(R["Capricorn"], varga_longitudes)
+    assert seed["seventh"] == R["Cancer"]
+    assert seed["seed"] == R["Capricorn"]
+    assert seed["decided_by"] == "1"
+    assert "Capricorn contains 2 planets" in seed["reason"]
+
+    in_capricorn = {g for g, s in varga_signs.items() if s == R["Capricorn"]}
+    assert in_capricorn == {int(Graha.JUPITER), int(Graha.MARS)}
+    assert {int(rasi[g] // 30) for g in in_capricorn} == {R["Libra"], R["Aries"]}
+
+
+def test_example_71_progression_is_brahmas_backward_regular():
+    """The printed order is Cp, Sg, Sc, Li, Vi, Le -- one sign back each time.
+
+    Cp is movable, so Brahma's regular movement; the 9th from Cp is Vi, which
+    is even-footed, so backward. Cp holds Jupiter and Mars in D-4, so neither
+    §18.2.1 exception fires.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import progression
+
+    _rasi, varga_signs, _vlon, _lagna = _chart_27_d4()
+    occupants = {g for g, s in varga_signs.items() if s == R["Capricorn"]}
+    assert int(Graha.SATURN) not in occupants
+    assert int(Graha.KETU) not in occupants
+
+    got = progression(R["Capricorn"], occupants)
+    assert got.god == "Brahma"
+    assert got.direction == "backward"
+    assert got.exception is None
+    assert [ABBR[s] for s in got.signs][:6] == [a for a, _y in EX71_LENGTHS]
+
+
+@pytest.mark.parametrize("abbr,years", EX71_LENGTHS)
+def test_example_71_lengths(abbr, years):
+    """All six, counted in D-4 with dignities read in D-4 -- which is what the
+    example's two notes spell out, and what
+    `test_example_71_reads_dignity_in_the_varga_not_the_rasi_chart` proves is
+    not interchangeable with the rasi chart's.
+    """
+    from hora.charts.colord import stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_27_d4()
+    rasi_index = BY_ABBR[abbr]
+    lord = (stronger(rasi_index, varga_longitudes, purpose="arudha").winner
+            if rasi_index in (R["Scorpio"], R["Aquarius"])
+            else int(RASI_LORD[rasi_index]))
+    got = dasa_length(rasi_index, lord, varga_signs[lord],
+                      sign_dignity(lord, varga_longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_example_71_reads_dignity_in_the_varga_not_the_rasi_chart():
+    """The example never says so, and it is the sharpest thing in it.
+
+    Note (1) calls Saturn **exalted**. In the rasi chart Saturn is at 15 Ar 06
+    -- Aries, his *debilitation*. In D-4 he is in Libra, his exaltation. Three
+    lords change dignity between the two charts and two of the changes move a
+    dasa length, so reading dignity in the rasi chart gets three of these six
+    answers wrong.
+
+    | lord | rasi chart | D-4 | length in D-4 | if read in the rasi chart |
+    |---|---|---|---|---|
+    | Saturn | Ar, debilitated | Li, exalted | Cp = 4 | 3 - 1 = 2 |
+    | Jupiter | Li, neutral | Cp, debilitated | Sg = 0 | 1 |
+    | Mars | Ar, own | Cp, exalted | Sc = 3 | 2 |
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    rasi, varga_signs, varga_longitudes, _lagna = _chart_27_d4()
+    cases = [(R["Capricorn"], Graha.SATURN, "debilitated", "exalted", 4, 2),
+             (R["Sagittarius"], Graha.JUPITER, "neutral", "debilitated", 0, 1),
+             (R["Scorpio"], Graha.MARS, "own", "exalted", 3, 2)]
+
+    for dasa_rasi, graha, in_rasi, in_varga, right, wrong in cases:
+        lord = int(graha)
+        assert sign_dignity(lord, rasi[lord]) == in_rasi, lord
+        assert sign_dignity(lord, varga_longitudes[lord]) == in_varga, lord
+        assert dasa_length(dasa_rasi, lord, varga_signs[lord],
+                           in_varga).years == right
+        assert dasa_length(dasa_rasi, lord, varga_signs[lord],
+                           in_rasi).years == wrong
+
+
+def test_example_71_prints_a_zero_year_dasa_and_closes_oi_121():
+    """"Jupiter is in the 2nd house from Sg. We get 2-1=1. However, Jupiter is
+    debilitated and we have to subtract one year. So Sg dasa is of zero years.
+    However, Sg dasa of 12 years will come in the second cycle."
+
+    The case OI-121 was waiting for, printed and accepted. A dasa of no years
+    is a real answer; special note 2 then makes the second cycle 12-0=12, and
+    the printed table gives Sg a dash for its dates rather than a span.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length, second_cycle_length
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_27_d4()
+    jupiter = int(Graha.JUPITER)
+    assert sign_dignity(jupiter, varga_longitudes[jupiter]) == "debilitated"
+
+    got = dasa_length(R["Sagittarius"], jupiter, varga_signs[jupiter],
+                      "debilitated")
+    assert got.count == 2                              # "the 2nd house from Sg"
+    assert got.counting == "forward"                   # Sg is odd-footed
+    assert got.years == 0
+    assert got.applied == ("lord debilitated, so one year taken away",)
+    assert second_cycle_length(got.years) == 12
+
+
+def test_example_71_the_dates_skip_the_zero_year_dasa():
+    """"Cp (04 years): Apr 1970 - Apr 1974", then "Sg (00 years): -", then
+    "Sc (03 years): Apr 1974 - Apr 1977."
+
+    A zero-year dasa takes no time, so the next one starts where the last
+    ended. The running total still checks every length, and it puts Le at
+    April 1991 -- four months before the native left for the US.
+    """
+    year, spans = 1970, {}
+    for abbr, years in EX71_LENGTHS:
+        spans[abbr] = None if years == 0 else (year, year + years)
+        year += years
+
+    assert spans["Cp"] == (1970, 1974)
+    assert spans["Sg"] is None
+    assert spans["Sc"] == (1974, 1977)
+    assert spans["Li"] == (1977, 1986)
+    assert spans["Vi"] == (1986, 1991)
+    assert spans["Le"] == (1991, 2002)
+
+
+def test_example_71_reads_houses_from_a_rasi_two_rules_can_name():
+    """"We can see that Le is the 9th house." From what?
+
+    Not from the derived lagna Cp, which makes Le the 8th. From Sg -- and on
+    this chart Sg is both the D-4's own ascendant and the rasi chart's 4th
+    house, which is D-4's seed. They coincide because the ascendant fell in
+    the second quarter of Virgo and that quarter maps to the 4th from Virgo,
+    so the example cannot tell the two rules apart. See OI-123.
+    """
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import (
+        VARGA_HOUSE_REFERENCE_IS_AMBIGUOUS,
+        varga_lagna,
+    )
+
+    _rasi, varga_signs, _vlon, lagna_sign = _chart_27_d4()
+
+    own_lagna = varga(longitudes(27)["Asc"], "D4").sign
+    seed_rasi = varga_lagna(4, lagna_sign, varga_signs)["seed_rasi"]
+    derived = varga_lagna(4, lagna_sign, varga_signs)["lagna"]
+
+    assert own_lagna == seed_rasi == R["Sagittarius"]      # the coincidence
+    assert derived == R["Capricorn"]
+    assert _house_from(own_lagna, R["Leo"]) == 9
+    assert _house_from(derived, R["Leo"]) == 8             # so not this one
+
+    assert varga_signs[int(Graha.RAHU)] == R["Leo"]
+    assert "9th house" in VARGA_HOUSE_REFERENCE_IS_AMBIGUOUS
+
+
+def test_example_71s_other_readings_are_counted_from_the_same_rasi():
+    """"Rahu signifies foreign things and he occupies Le. Exalted 12th lord
+    Mars aspects Le."
+
+    The 12th from Sg is Sc, whose lord Mars is exalted in Cp in D-4 and
+    aspects Le from there -- by rasi drishti, Cp being movable and Le a
+    non-adjacent fixed sign, and by Mars's own 8th aspect too. Every one of
+    these hangs off the same undecided reference, so none of them separates
+    OI-123's two candidates either.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_27_d4()
+    twelfth = (R["Sagittarius"] + 11) % 12
+    assert twelfth == R["Scorpio"]
+
+    mars = int(Graha.MARS)
+    assert int(RASI_LORD[twelfth]) == mars
+    assert sign_dignity(mars, varga_longitudes[mars]) == "exalted"
+    assert R["Leo"] in rasi_drishti(varga_signs[mars])
+    assert _house_from(varga_signs[mars], R["Leo"]) == 8    # Mars's 8th aspect
