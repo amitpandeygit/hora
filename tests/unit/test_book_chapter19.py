@@ -655,3 +655,156 @@ def test_example_76_dates_against_reagans_life():
     assert spans["Ge"][1].year == 2001
     for opens, closes in spans.values():
         assert opens.month == 2 and closes.month == 2   # his solar return
+
+
+def test_table_41_confirms_every_length_we_derived():
+    """Table 41: Ta 9, Aq 10, Sc 11, Le 7, Ar 8, Cp 8, Li 4, Cn 3, Pi 5,
+    Sg 10, Vi 9, Ge 6.
+
+    All twelve, derived before the table was read. The two that were in doubt
+    both land: Sc at 11 confirms Ketu over Mars and Aq at 10 confirms Rahu
+    over Saturn, so §15.5.1's rule 2 and rule 5a are both vindicated on the
+    same chart — and the ten-year swing on Scorpio goes the way our cascade
+    said it would.
+    """
+    printed = {"Ta": 9, "Aq": 10, "Sc": 11, "Le": 7, "Ar": 8, "Cp": 8,
+               "Li": 4, "Cn": 3, "Pi": 5, "Sg": 10, "Vi": 9, "Ge": 6}
+    assert dict(EX76_LENGTHS) == printed
+    assert [a for a, _y in EX76_LENGTHS] == list(printed)   # and in that order
+
+    # "Dasas from Ta to Pi add up to 65 years and run during 1911-1976."
+    to_pisces = [y for _a, y in EX76_LENGTHS[:9]]
+    assert sum(to_pisces) == 65
+    assert 1911 + 65 == 1976
+
+    # "Sg dasa runs during 1976-1986. Mr. Reagan became US President in 1980."
+    sagittarius_opens = 1911 + sum(to_pisces)
+    sagittarius_closes = sagittarius_opens + dict(EX76_LENGTHS)["Sg"]
+    assert (sagittarius_opens, sagittarius_closes) == (1976, 1986)
+    assert sagittarius_opens <= 1980 < sagittarius_closes
+
+
+def test_example_76_sagittarius_holds_the_atmakaraka():
+    """"Usually rasis containing AK give success. Sg has AK." Mercury at
+    28 Sg 49 is the most advanced graha in the chart."""
+    from hora.charts.karaka import chara_karakas
+    from hora.core.const import Graha
+
+    longitudes, signs, _lagna = _chart_34()
+    eight = {g: lon for g, lon in longitudes.items() if g != int(Graha.KETU)}
+    karakas = {k.symbol: k.graha for k in chara_karakas(eight)}
+
+    assert karakas["AK"] == int(Graha.MERCURY)
+    assert signs[karakas["AK"]] == R["Sagittarius"]
+
+
+def test_example_76_the_amk_argala_on_sagittarius_is_unobstructed():
+    """"Here Sg has an unobstructed argala from AmK Sun, who is in the 2nd
+    from Sg in Gopuramsa with 6 rekhas in ashtakavarga."
+
+    Three separate strengths on one graha, and all three come out. The Sun is
+    the amatyakaraka in the 2nd — a primary argala — and the 12th, which
+    obstructs it, is empty. He is strong in four of the ten dasavarga charts,
+    which is the count that names **Gopuraamsa**. And his own bhinnashtakavarga
+    gives Capricorn **6** rekhas.
+    """
+    from hora.charts.argala import argalas_on_sign
+    from hora.charts.ashtakavarga import bhinnashtakavarga
+    from hora.charts.dignity import sign_dignity
+    from hora.charts.karaka import chara_karakas
+    from hora.charts.vargas import AMSA_NAMES, VARGA_GROUPS, varga
+    from hora.core.const import NATURAL_MALEFIC, Graha
+
+    longitudes, signs, lagna_sign = _chart_34()
+    eight = {g: lon for g, lon in longitudes.items() if g != int(Graha.KETU)}
+    amk = {k.symbol: k.graha for k in chara_karakas(eight)}["AmK"]
+    assert amk == int(Graha.SUN)
+    assert signs[amk] == R["Capricorn"]
+    assert (signs[amk] - R["Sagittarius"]) % 12 + 1 == 2
+
+    occupants: dict[int, tuple[int, ...]] = {}
+    for graha, sign in signs.items():
+        occupants[sign] = (*occupants.get(sign, ()), graha)
+    found = {(e.kind, e.house): set(e.grahas)
+             for e in argalas_on_sign(
+                 R["Sagittarius"], occupants,
+                 ketu_sign=signs[int(Graha.KETU)],
+                 malefic=frozenset(int(g) for g in NATURAL_MALEFIC))}
+    assert found[("argala", 2)] == {amk}
+    assert found[("virodhargala", 12)] == set()        # nothing obstructs it
+
+    good = {"moolatrikona", "own", "exalted"}
+    strong = [code for code in VARGA_GROUPS["dasavarga"]
+              if sign_dignity(amk, varga(longitudes[amk], code).longitude) in good]
+    assert len(strong) == 4
+    assert AMSA_NAMES["dasavarga"][4] == "Gopuraamsa"
+
+    references = {"Sun": signs[int(Graha.SUN)], "Moon": signs[int(Graha.MOON)],
+                  "Mars": signs[int(Graha.MARS)],
+                  "Mercury": signs[int(Graha.MERCURY)],
+                  "Jupiter": signs[int(Graha.JUPITER)],
+                  "Venus": signs[int(Graha.VENUS)],
+                  "Saturn": signs[int(Graha.SATURN)], "Lagna": lagna_sign}
+    assert bhinnashtakavarga("Sun", references).rekhas[R["Capricorn"]] == 6
+
+
+def test_example_76_sagittarius_holds_ghati_lagna_and_the_lagna_lord():
+    """"More than anything else, Sg has GL. GL is the seat of power in a
+    chart... Lagna lord Mars is in Sg and he connects lagna to GL."
+    """
+    from hora.charts.book import longitudes as printed_longitudes
+    from hora.core.const import RASI_LORD, Graha
+
+    _longitudes, signs, lagna_sign = _chart_34()
+    assert int(printed_longitudes(34)["GL"] // 30) == R["Sagittarius"]
+
+    mars = int(RASI_LORD[lagna_sign])
+    assert mars == int(Graha.MARS)
+    assert signs[mars] == R["Sagittarius"]
+
+
+def test_the_stronger_co_lord_is_not_the_lord_everywhere():
+    """Example 76 says "lagna lord Mars" of a Scorpio lagna — while the same
+    chart's Scorpio dasa length and its arudha lagna both go to **Ketu** by
+    §15.5.1.
+
+    So the cascade answers only where a rule sends it, and `RASI_LORD` remains
+    the lord everywhere else. That is what D-4 decided when the nodes gained
+    co-lordship without gaining `RASI_LORD`, and this is the book confirming
+    it on a chart.
+    """
+    from hora.charts.colord import stronger
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.kendradi import STRONGER_CO_LORD_IS_NOT_THE_LORD
+
+    longitudes, signs, lagna_sign = _chart_34()
+    assert lagna_sign == R["Scorpio"]
+    assert int(RASI_LORD[R["Scorpio"]]) == int(Graha.MARS)      # the lord
+    assert stronger(R["Scorpio"], longitudes,
+                    purpose="arudha").winner == int(Graha.KETU)  # §15.5.1's
+    assert _ex76_lord(R["Scorpio"], longitudes, signs) == int(Graha.KETU)
+    assert "Lagna lord Mars" in STRONGER_CO_LORD_IS_NOT_THE_LORD
+
+
+def test_chapter_19s_only_reading_rules_are_recorded_together():
+    """Chapter 19 has no principle list — §19.3 is about whose movement this
+    is, not about reading a period. These four are all it gives, and they
+    arrive in Example 76 rather than in a section.
+
+    Unlike OI-122's eleven these are not readings a principle list fails to
+    carry; chapter 19 simply has no principle list.
+    """
+    from hora.dasha.rasi.kendradi import (
+        SUCCESS_READINGS,
+        WHY_AMK_ARGALA_GIVES_POWER,
+    )
+
+    looks_at = [r["looks_at"] for r in SUCCESS_READINGS]
+    assert looks_at == ["AK", "AmK", "GL", "lagna lord"]
+    assert all(r["text"] and r["gives"] and r["needs"] for r in SUCCESS_READINGS)
+
+    amk = next(r for r in SUCCESS_READINGS if r["looks_at"] == "AmK")
+    assert "unobstructed" in amk["needs"]
+    assert amk["gives"] == "political power"
+    assert "advisors, ministers, secretaries or bureaucrats" in \
+        WHY_AMK_ARGALA_GIVES_POWER

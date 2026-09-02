@@ -317,3 +317,51 @@ def movement_grouping(houses: tuple[int, ...]) -> dict:
     raise KendradiError(
         f"{houses} is neither of §19.3's two movements — it is not four "
         f"trines grouped by quadrant nor three quadrants grouped by trine")
+
+
+# --------------------------------------------------------------------------
+# Example 76 — how a Kendradi dasa is read.
+# --------------------------------------------------------------------------
+
+#: Chapter 19 has no principle list of its own — §19.3 is about whose movement
+#: this is, not about reading a period. These four are the only interpretive
+#: rules it gives, and they arrive in Example 76 rather than in a section.
+#: Every one is computable from what the engine already has; what is missing
+#: is the layer that would apply them. Unlike OI-122's eleven these are not
+#: readings §18.4's sixteen fail to carry — chapter 19 simply has no sixteen.
+SUCCESS_READINGS: tuple[dict, ...] = (
+    {"looks_at": "AK", "needs": "the rasi contains the atmakaraka",
+     "gives": "success",
+     "text": "Usually rasis containing AK give success."},
+    {"looks_at": "AmK", "needs": "an unobstructed argala from the amatyakaraka",
+     "gives": "political power",
+     "text": ("Signs having a strong argala of AmK show coming under the "
+              "decisive influence of good advisors, ministers and "
+              "bureaucrats. We find in the charts of politicians that rasis "
+              "having strong argalas from AmK give political power.")},
+    {"looks_at": "GL", "needs": "the rasi contains ghati lagna",
+     "gives": "power",
+     "text": "More than anything else, Sg has GL. GL is the seat of power in "
+             "a chart."},
+    {"looks_at": "lagna lord", "needs": "the lagna's lord occupies the rasi",
+     "gives": "a link between lagna and what the rasi holds",
+     "text": "Lagna lord Mars is in Sg and he connects lagna to GL."},
+)
+
+#: Example 76's reason for the AmK rule, which is the part that makes it more
+#: than an association. Recorded separately because a reading layer that gives
+#: the verdict without it says something the book does not.
+WHY_AMK_ARGALA_GIVES_POWER = (
+    "That is because political power usually brings a leader in the company "
+    "of excellent advisors, ministers, secretaries or bureaucrats."
+)
+
+#: Example 76 does not take "the lord" to mean §15.5.1's stronger co-lord. Its
+#: lagna is Scorpio and it says "lagna lord Mars", while the same chart's
+#: Scorpio *dasa length* and *arudha* both go to Ketu by §15.5.1. So the
+#: cascade answers only where a rule sends it, and `RASI_LORD` stays the lord
+#: everywhere else — which is what D-4 decided when the nodes gained
+#: co-lordship without gaining `RASI_LORD`.
+STRONGER_CO_LORD_IS_NOT_THE_LORD = (
+    "Lagna lord Mars is in Sg and he connects lagna to GL."
+)

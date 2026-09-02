@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-19's prose (54)
+### Part 2 — the dasa systems map and chapters 16-19's prose (57)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -665,7 +665,8 @@ inconsistency is settled would be the wrong order.
 `NARAYANA_IS_THE_MOST_IMPORTANT_PHALITA_DASA` · `MOOLA_DASA_OUT_OF_SCOPE` ·
 `MOOLA_DASA_WHEN_IT_IS_BETTER` · `SHOWS_MATERIAL_SUCCESS` ·
 `PARASARA_MOVEMENT_RULERS` · `LAKSHMI_SHOWS_PROSPERITY` ·
-`SUDASA_IS_KENDRADI_FROM_SREE_LAGNA`
+`SUDASA_IS_KENDRADI_FROM_SREE_LAGNA` · `SUCCESS_READINGS` ·
+`WHY_AMK_ARGALA_GIVES_POWER` · `STRONGER_CO_LORD_IS_NOT_THE_LORD`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -713,6 +714,9 @@ it — but it is the coverage line for the whole part, and
 | `PARASARA_MOVEMENT_RULERS` | §19.3's attribution of quadrants to Vishnu and trines to Lakshmi. `movement_grouping` computes which movement a house order is and names its ruler; this is the pairing that gives the answer meaning |
 | `LAKSHMI_SHOWS_PROSPERITY` | Why the Kendradi walk is the one for prosperity. A reading layer choosing between the two rasi dasas needs the reason, not just the label |
 | `SUDASA_IS_KENDRADI_FROM_SREE_LAGNA` | §19.3's forward reference — Sudasa is this dasa seeded from Sree Lagna. `sree_lagna` and `progression` both exist, so Sudasa is a seed away; the chapter that teaches it has not arrived |
+| `SUCCESS_READINGS` | Chapter 19's only four reading rules, all from Example 76 — AK in the rasi, an unobstructed AmK argala, GL in the rasi, the lagna lord there. Every input computes (`chara_karakas`, `argalas_on_sign`, `special_lagna`); the layer that applies them does not exist |
+| `WHY_AMK_ARGALA_GIVES_POWER` | The reason behind the AmK rule. A layer that gives the verdict without it claims more than the book does — the argala shows the *company of advisors*, from which power is inferred |
+| `STRONGER_CO_LORD_IS_NOT_THE_LORD` | Example 76 says "lagna lord Mars" of a Scorpio lagna while the same chart's dasa length and arudha go to Ketu. Records that §15.5.1 answers only where a rule sends it, which is what D-4 assumed when it left the primary-lord table alone |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |
