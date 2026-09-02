@@ -424,6 +424,39 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    35: {
+        "title": "Jayalalita — Sudasa",
+        "birth": "February 24, 1948, 2:36 pm (IST), 80 E 18, 13 N 05",
+        "birth_data": {
+            "year": 1948, "month": 2, "day": 24, "hour": 14, "minute": 36,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 13 + 5 / 60, "longitude": 80 + 18 / 60},
+        "longitudes": {
+            "Asc": "21 Ge 19", "Sun": "11 Aq 33", "Moon": "6 Le 42",
+            "Mars": "2 Le 09", "Merc": "2 Aq 40", "Jup": "2 Sg 01",
+            "Ven": "21 Pi 51", "Sat": "24 Cn 53", "Rahu": "24 Ar 48",
+            "Ketu": "24 Li 48", "HL": "15 Li 06", "GL": "20 Li 56",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Ven": "AmK", "Sun": "BK", "Moon": "MK",
+            "Rahu": "PiK", "Merc": "PK", "Mars": "GK", "Jup": "DK",
+        },
+        "retrograde": ("Merc", "Mars", "Sat"),
+        "drawn": {
+            "Ven": "Pi", "Rahu": "Ar", "Asc": "Ge", "Merc": "Aq", "Sun": "Aq",
+            "Sat": "Cn", "Mars": "Le", "Moon": "Le", "Jup": "Sg",
+            "HL": "Li", "Ketu": "Li", "AL": "Li", "GL": "Li",
+        },
+        "events": {"Chief Minister of Tamil Nadu": "1991 to 1996"},
+        "first_seen": "chapter 20, Example 79",
+        "note": (
+            "Libra holds HL, GL and AL together, so one Sudasa reaches all "
+            "three of section 20.3's readings at once -- wealth from HL, "
+            "power from GL, status from AL. No other chart in the book puts "
+            "the three special points in one rasi."
+        ),
+    },
     34: {
         "title": "Ronald Reagan — Lagna Kendradi Rasi Dasa",
         "birth": "February 6, 1911, 2:04 am (6:00 West), 89 W 47, 41 N 38",

@@ -579,6 +579,10 @@ def test_rules_3_and_4_speak_for_six_houses_from_al_and_no_others():
                   if r["gives"] == "growth of status")
     assert growth["houses"] == UPACHAYA
 
+    from_20_3 = {h for r in STATUS_FROM_ARUDHA_LAGNA
+                 if r["source"].startswith("\u00a720.3") for h in r["houses"]}
+    assert from_20_3 == {3, 6, 8, 10, 11, 12}          # six of twelve
+
     arudha = R["Cancer"]
     spoken = {}
     for house in range(1, 13):
@@ -588,7 +592,9 @@ def test_rules_3_and_4_speak_for_six_houses_from_al_and_no_others():
         if got["readings"]:
             spoken[house] = got["readings"]
 
-    assert set(spoken) == {3, 6, 8, 10, 11, 12}
+    # the 1st is Example 79's addition, not §20.3's
+    assert set(spoken) == from_20_3 | {1}
+    assert spoken[1] == ("status",)
     assert spoken[11] == ("growth of status",
                           "growth of status, particularly favorable")
     assert spoken[8] == spoken[12] == ("setbacks to one's status",)
@@ -665,11 +671,11 @@ def test_20_3_applied_across_vajpayees_sudasa():
     assert len(capricorn) == 3                       # power and authority, thrice
     assert status_from_arudha_lagna(R["Capricorn"], arudha)["house_from_al"] == 1
 
-    # every dasa sign is answerable, and only six houses from AL speak
+    # seven houses from AL speak — §20.3's six, plus the 1st from Example 79
     spoken = sum(1 for house in range(1, 13)
                  if status_from_arudha_lagna((arudha + house - 1) % 12,
                                              arudha)["readings"])
-    assert spoken == 6
+    assert spoken == 7
 
 
 # --------------------------------------------------------------------------
@@ -923,3 +929,242 @@ def test_example_78_calls_half_of_11_7_3s_first_yoga_a_powerful_raja_yoga():
     assert "do not conjoin" in got.reason           # the half that fails
     assert any("may still be felt, but not fully" in str(q)
                for q in (got.qualifiers or ()))
+
+
+# --------------------------------------------------------------------------
+# Example 79 — Jayalalita, Chart 35. One rasi holding AL, GL and HL.
+# --------------------------------------------------------------------------
+
+#: The eight the example prints, in its own order. Its last four are unstated.
+EX79_LENGTHS = [("Sg", 12), ("Pi", 3), ("Ge", 8), ("Vi", 7),
+                ("Cp", 6), ("Ar", 4), ("Cn", 11), ("Li", 6)]
+
+#: SL as the example states it: 22 degrees 22 minutes of Sagittarius.
+EX79_SREE_LAGNA = 240.0 + 22.0 + 22.0 / 60.0
+
+
+def test_example_79_walks_forward_from_sagittarius_in_three_groups():
+    """"Her SL is in 22 Sg 22. So dasas start from Sg. Because Sg is an odd
+    sign, counting of houses is in the zodiacal direction. Dasas go as Sg, Pi,
+    Ge, Vi (quadrants); Cp, Ar, Cn, Li (panapharas); Aq, Ta, Le, Sc
+    (apoklimas)."
+
+    The forward counterpart to Example 77's backward walk, and the example
+    labels its own groups.
+    """
+    from hora.dasha.rasi.sudasa import progression
+
+    got = progression(R["Sagittarius"], EX79_SREE_LAGNA)
+    assert got.direction == "forward"
+
+    by_group: dict[str, list[str]] = {}
+    for name, sign in zip(got.group_names, got.signs):
+        by_group.setdefault(name, []).append(ABBR[sign])
+    assert by_group["kendra"] == ["Sg", "Pi", "Ge", "Vi"]
+    assert by_group["panaphara"] == ["Cp", "Ar", "Cn", "Li"]
+    assert by_group["apoklima"] == ["Aq", "Ta", "Le", "Sc"]
+
+
+@pytest.mark.parametrize("abbr,years", EX79_LENGTHS)
+def test_example_79_lengths(abbr, years):
+    """The eight the example states. Sagittarius is exception 1 — "The first
+    dasa of Sg is of 12 years, because its lord Jupiter is in Sg" — and Libra
+    is exception 2, Venus being exalted in Pisces.
+    """
+    from hora.charts.book import graha_longitudes, graha_signs
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(35).items()}
+    signs = {int(g): s for g, s in graha_signs(35).items()}
+    rasi = {v: k for k, v in enumerate(ABBR)}[abbr]
+    lord = int(RASI_LORD[rasi])
+    got = dasa_length(rasi, lord, signs[lord],
+                      sign_dignity(lord, longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_example_79_sagittarius_is_exception_1_and_libra_exception_2():
+    """The two the example explains, named rather than only totalled."""
+    from hora.charts.book import graha_longitudes, graha_signs
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(35).items()}
+    signs = {int(g): s for g, s in graha_signs(35).items()}
+
+    jupiter = int(RASI_LORD[R["Sagittarius"]])
+    assert jupiter == int(Graha.JUPITER)
+    assert signs[jupiter] == R["Sagittarius"]          # "its lord Jupiter is in Sg"
+    sagittarius = dasa_length(R["Sagittarius"], jupiter, signs[jupiter])
+    assert sagittarius.count == 1 and sagittarius.years == 12
+
+    venus = int(RASI_LORD[R["Libra"]])
+    assert signs[venus] == R["Pisces"]
+    assert sign_dignity(venus, longitudes[venus]) == "exalted"
+    libra = dasa_length(R["Libra"], venus, signs[venus], "exalted")
+    assert libra.count == 6 and libra.years == 6       # 5 + 1 for exception 2
+
+
+def test_example_79_the_fraction_and_the_balance():
+    """"SL is at 22 22' in Sg and the remainder in first dasa at birth is 12 x
+    (30 - 22 22')/30 = 12 x 0.2544 years = 3 years 19 days."
+
+    Note what the balance has none of: months. Twelve months to a year and
+    thirty days to a month makes 0.0533 of a year 0 months and 19 days, which
+    is why the example writes it that way.
+    """
+    from hora.dasha.rasi.sudasa import first_dasa_fraction, years_to_dasa_ymdh
+
+    fraction = first_dasa_fraction(EX79_SREE_LAGNA)
+    assert fraction == pytest.approx((1800 - (22 * 60 + 22)) / 1800)
+    assert int(fraction * 10_000) / 10_000 == 0.2544   # the example truncates
+
+    balance = 12 * fraction
+    years, months, days, _hours = years_to_dasa_ymdh(balance)
+    assert (years, months, days) == (3, 0, 19)
+
+
+def test_example_79_libra_dasa_holds_her_chief_ministership():
+    """"Li dasa ran during Feb 1990-Feb 1996." She was Chief Minister
+    1991-1996.
+
+    The example states the window to the month and drops the 19 days it had
+    just computed: three years plus the other five dasas is 42 years from a
+    February 1948 birth, which is February 1990. Carrying the remainder puts
+    it at mid-March. Nothing turns on the three weeks — her term is inside on
+    either reckoning — but the offset is ours being more exact, not less.
+    """
+    from datetime import date
+
+    from hora.charts.book import chart, graha_longitudes, graha_signs
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.core.ephemeris import get_ephemeris
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_jd, from_local
+    from hora.dasha.rasi.narayana import (
+        dasa_length,
+        solar_arc_instant,
+        sub_period_arc,
+    )
+    from hora.dasha.rasi.sudasa import first_dasa_fraction, progression
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(35).items()}
+    signs = {int(g): s for g, s in graha_signs(35).items()}
+    ephemeris = get_ephemeris(Settings(node_type=NodeType.MEAN))
+
+    def sun_at(jd: float) -> float:
+        return ephemeris.position(jd, int(Graha.SUN)).longitude
+
+    birth = from_local(**chart(35)["birth_data"]).jd_ut
+    got = progression(R["Sagittarius"], EX79_SREE_LAGNA)
+
+    arc, spans = 0.0, {}
+    for index, sign in enumerate(got.signs[:8]):
+        lord = int(RASI_LORD[sign])
+        years = dasa_length(sign, lord, signs[lord],
+                            sign_dignity(lord, longitudes[lord])).years
+        if index == 0:
+            years *= first_dasa_fraction(EX79_SREE_LAGNA)
+        opens = solar_arc_instant(birth, arc, sun_at)
+        arc += sub_period_arc(years, 0)
+        spans[ABBR[sign]] = (from_jd(opens, utc_offset_hours=5.5).local.date(),
+                             from_jd(solar_arc_instant(birth, arc, sun_at),
+                                     utc_offset_hours=5.5).local.date())
+
+    opens, closes = spans["Li"]
+    assert (opens.year, closes.year) == (1990, 1996)
+    assert opens < date(1991, 6, 24) < closes          # she took office in it
+
+    # She left office on 12 May 1996, which is past the dasa on either
+    # reckoning — ours ends 15 March and the example says February. The
+    # example's own framing is loose too: "Chief Minister... during 1991-1996".
+    assert closes < date(1996, 5, 12)
+
+    # the three weeks: the balance rounded down to 3 years, plus the six whole
+    # dasas after it, is 42 years — which from a 24 February birth is the
+    # example's February 1990.
+    assert opens.month == 3
+    assert 3 + sum(y for _a, y in EX79_LENGTHS[1:7]) == 42
+
+
+def test_example_79_libra_reaches_all_three_readings_at_once():
+    """"As Libra contains AL, GL and HL, its dasa as per Sudasa must give
+    status, power and wealth."
+
+    The only chart in the book with the three special points in one rasi, so
+    the only place §20.3's readings all land together. Rules 1 and 2 admit
+    Libra by identity — it *is* HL's sign and GL's — and the AL reading is the
+    one §20.3 leaves out.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+    from hora.charts.book import longitudes as printed
+    from hora.charts.colord import stronger
+    from hora.dasha.rasi.sudasa import prosperity_ways, status_from_arudha_lagna
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(35).items()}
+    signs = {int(g): s for g, s in graha_signs(35).items()}
+    hora_lagna = int(printed(35)["HL"] // 30)
+    ghati_lagna = int(printed(35)["GL"] // 30)
+    arudha = arudha_pada(
+        1, lagna(35), signs,
+        {r: stronger(r, longitudes, purpose="arudha").winner for r in (7, 10)}
+    ).sign
+    assert hora_lagna == ghati_lagna == arudha == R["Libra"]
+
+    for target in (hora_lagna, ghati_lagna):
+        ways = prosperity_ways(R["Libra"], target, signs)
+        assert ways[0]["rule"] == "is the special lagna's sign"
+
+    status = status_from_arudha_lagna(R["Libra"], arudha)
+    assert status["house_from_al"] == 1
+    assert status["readings"] == ("status",)
+
+
+def test_the_al_reading_is_example_79s_rather_than_20_3s():
+    """§20.3 rules 3 and 4 read houses **from** AL and never the dasa rasi
+    being AL — though rule 3's own premise, "AL stands for one's status", is
+    exactly what would give it. Example 79 supplies the missing step, so the
+    register records a different source for that row than for the others.
+    """
+    from hora.dasha.rasi.sudasa import (
+        AL_IN_THE_DASA_RASI_GIVES_STATUS,
+        STATUS_FROM_ARUDHA_LAGNA,
+    )
+
+    by_source: dict[str, list[tuple[int, ...]]] = {}
+    for reading in STATUS_FROM_ARUDHA_LAGNA:
+        by_source.setdefault(reading["source"], []).append(reading["houses"])
+
+    assert by_source["Example 79"] == [(1,)]
+    assert set(by_source) == {"Example 79", "§20.3 rule 3", "§20.3 rule 4"}
+    assert "must give status, power and wealth" in AL_IN_THE_DASA_RASI_GIVES_STATUS
+
+
+def test_example_79s_sree_lagna_is_the_second_case_of_the_27_fold_error():
+    """The book has SL at 22 Sg 22; we get 22 Sg 13 from the printed
+    longitudes and 22 Sg 00 recomputed. Both are under an arcminute of Moon
+    once the 27-fold amplification is undone — the same finding Example 77
+    turned up, now on a second chart.
+
+    And as there, nothing in the example moves: SL is twenty-two degrees into
+    Sagittarius on every reading, so only rule 7's fraction shifts.
+    """
+    from hora.charts.book import graha_longitudes
+    from hora.charts.book import longitudes as printed
+    from hora.charts.special_lagna import (
+        SREE_LAGNA_AMPLIFIES_THE_MOON,
+        sree_lagna,
+    )
+    from hora.core.const import Graha
+
+    ours = sree_lagna(graha_longitudes(35)[Graha.MOON], printed(35)["Asc"])
+    assert int(ours // 30) == int(EX79_SREE_LAGNA // 30) == R["Sagittarius"]
+
+    gap = abs(ours - EX79_SREE_LAGNA)
+    assert gap * 60 < 15                                # under a quarter degree
+    assert (gap / SREE_LAGNA_AMPLIFIES_THE_MOON) * 60 < 1.0   # of Moon

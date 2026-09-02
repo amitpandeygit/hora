@@ -255,15 +255,32 @@ GL_GIVES_POWER_INSTEAD = (
 #: the arudha lagna as the example; rules 3 and 4 put that on a dasa and add
 #: the 8th and 12th as its opposite.
 STATUS_FROM_ARUDHA_LAGNA: tuple[dict, ...] = (
+    {"houses": (1,), "gives": "status", "source": "Example 79",
+     "text": ("As Libra contains AL, GL and HL, its dasa as per Sudasa must "
+              "give status, power and wealth.")},
     {"houses": (3, 6, 10, 11), "gives": "growth of status",
+     "source": "§20.3 rule 3",
      "text": ("Upachayas from any house stand for the growth of matters "
               "signified by that house. AL stands for one's status. So dasas "
               "of upachayas from AL bring growth of status.")},
     {"houses": (11,), "gives": "growth of status, particularly favorable",
+     "source": "§20.3 rule 3",
      "text": "Dasa of the 11th house from AL is particularly favorable."},
     {"houses": (8, 12), "gives": "setbacks to one's status",
+     "source": "§20.3 rule 4",
      "text": ("The 8th and 12th houses from AL bring setbacks to one's "
               "status. Their dasas can be unfavorable.")},
+)
+
+#: §20.3 rules 3 and 4 read houses **from** AL and never the dasa rasi being
+#: AL itself, though rule 3's premise — "AL stands for one's status" — is
+#: exactly what would give it. Example 79 supplies the missing step, so the
+#: first row of :data:`STATUS_FROM_ARUDHA_LAGNA` carries a different source
+#: from the other three and says so.
+AL_IN_THE_DASA_RASI_GIVES_STATUS = (
+    "As Libra contains AL, GL and HL, its dasa as per Sudasa must give "
+    "status, power and wealth. No wonder the native became a powerful Chief "
+    "Minister."
 )
 
 
