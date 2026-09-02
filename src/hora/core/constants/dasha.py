@@ -27,15 +27,20 @@ DASA_USES_ARE_NOT_IN_THE_CLASSICS = (
 #: nakshatra or rasi; ``purpose`` is the part's own parenthesis, kept in its
 #: printed order — Vimsottari reads "phalita/ayur" and Ashtottari
 #: "ayur/phalita", which is the only thing distinguishing their emphasis.
+#:
+#: ``key`` names a nakshatra system in ``NAKSHATRA_DASHA_SYSTEMS``; ``module``
+#: names a rasi dasa's module. A system with neither is not built.
 PART_2_DASA_SYSTEMS: tuple[dict, ...] = (
     {"name": "Vimsottari dasa", "kind": "nakshatra",
      "purpose": "phalita/ayur", "key": "vimshottari"},
     {"name": "Ashtottari dasa", "kind": "nakshatra",
      "purpose": "ayur/phalita", "key": "ashtottari"},
     {"name": "Narayana dasa", "kind": "rasi",
-     "purpose": "phalita - general", "key": None},
+     "purpose": "phalita - general", "key": None,
+     "module": "hora.dasha.rasi.narayana"},
     {"name": "Lagna Kendradi Rasi dasa", "kind": "rasi",
-     "purpose": "phalita - material fortune", "key": None},
+     "purpose": "phalita - material fortune", "key": None,
+     "module": "hora.dasha.rasi.kendradi"},
     {"name": "Sudasa", "kind": "rasi",
      "purpose": "phalita - material fortune", "key": None},
     {"name": "Drigdasa", "kind": "rasi",
