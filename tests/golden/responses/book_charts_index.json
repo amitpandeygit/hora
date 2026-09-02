@@ -210,6 +210,13 @@
         "number": 31,
         "recomputable": true,
         "title": "An electrical engineer \u2014 D-10 Narayana dasa"
+      },
+      {
+        "birth": "July 25, 1961, 5:10 pm (IST), 75 E 50, 22 N 44",
+        "first_seen": "chapter 18, Exercise 30",
+        "number": 32,
+        "recomputable": true,
+        "title": "A gentleman \u2014 Exercise 30, D-10 Narayana dasa"
       }
     ],
     "not_supplied": [
@@ -241,7 +248,8 @@
       27,
       28,
       29,
-      31
+      31,
+      32
     ]
   },
   "status": 200

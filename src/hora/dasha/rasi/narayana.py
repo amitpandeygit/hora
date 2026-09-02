@@ -898,6 +898,20 @@ CAREER_DASA_READINGS: tuple[dict, ...] = (
              "show trouble from enemies.")},
 )
 
+#: A structural consequence of §18.5 that no section states. In the rasi chart
+#: the dasa lagna moves every dasa, so §18.4's whole house frame rotates and
+#: its occupancy principles say something different each time. In a varga
+#: there is no dasa lagna: houses come from the varga's own ascendant, which
+#: never moves. So principles 1 to 10 give the **same** verdict in every dasa
+#: of that varga, and principles 11 to 16 name a dasa lagna that does not
+#: exist. What tells one varga dasa from another is the dasa rasi's own house,
+#: its lord, its occupants and what aspects it -- which is exactly what
+#: Examples 71 and 74 read, and nothing else.
+VARGA_HOUSE_FRAME_DOES_NOT_ROTATE = (
+    "Narayana dasa of vargas is not the progression of lagna or the 7th "
+    "house."
+)
+
 #: Example 74's reading of an afflicted karaka in the dasa rasi itself, which
 #: is neither a house nor a lordship. See OI-122.
 AFFLICTED_KARAKA_IN_THE_DASA_RASI = (

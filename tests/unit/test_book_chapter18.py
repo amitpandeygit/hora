@@ -4413,3 +4413,237 @@ def test_example_74_is_the_first_real_use_of_18_4s_thirds():
     assert (last // 12, last % 12 + 1) == (1995, 1)
     middle = base + round(parts[1]["from_years"] * 12)
     assert (middle // 12, middle % 12 + 1) == (1993, 5)
+
+
+# --------------------------------------------------------------------------
+# Exercise 30 — Chart 32, a D-10 dasa. Our derivation and our verdict,
+# recorded before the answer was read.
+# --------------------------------------------------------------------------
+
+EX30_LENGTHS = [("Sg", 11), ("Le", 3), ("Ar", 11), ("Pi", 4), ("Sc", 4),
+                ("Cn", 5)]
+
+
+def _chart_32_d10():
+    from hora.charts.book import graha_longitudes, longitudes
+    from hora.charts.vargas import varga
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(32).items()}
+    tenth = {g: varga(lon, "D10") for g, lon in rasi.items()}
+    return (rasi,
+            {g: p.sign for g, p in tenth.items()},
+            {g: p.longitude for g, p in tenth.items()},
+            int(longitudes(32)["Asc"] // 30),
+            varga(longitudes(32)["Asc"], "D10").sign)
+
+
+def test_chart_32s_drawn_d10_and_arudha_lagna_reproduce():
+    """Both diagrams are the D-10, the longitudes beneath them the rasi
+    chart's. Its chara karakas are decided by nine arcminutes: the Sun's
+    8.950 degrees of advancement takes PiK from Jupiter's 8.900.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart, longitudes
+    from hora.charts.karaka import chara_karakas
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(32)
+    for name, sign in chart(32)["divisional"]["D10"].items():
+        if name == "AL":
+            continue
+        assert ABBR[varga(printed[name], "D10").sign] == sign, name
+
+    rasi, varga_signs, _vlon, _lagna, d10_lagna = _chart_32_d10()
+    assert ABBR[arudha_pada(1, d10_lagna, varga_signs).sign] == "Cn"
+
+    eight = {g: lon for g, lon in rasi.items() if g != int(Graha.KETU)}
+    karakas = {k.graha: k.symbol for k in chara_karakas(eight)}
+    assert karakas[int(Graha.SUN)] == "PiK"
+    assert karakas[int(Graha.JUPITER)] == "PK"
+
+
+def test_exercise_30_dasa_seed_is_the_derived_lagna_itself():
+    """Our derivation. The 10th from the Sg rasi lagna is Vi, whose lord
+    Mercury is in Sg in the D-10 -- so Sg is lagna. §15.5.2 then keeps it:
+    Sg holds Mercury and the 7th from it, Ge, is empty, so rule 1 decides.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_seed, progression, varga_lagna
+
+    _rasi, varga_signs, varga_longitudes, rasi_lagna, _d10 = _chart_32_d10()
+    assert rasi_lagna == R["Sagittarius"]
+
+    derived = varga_lagna(10, rasi_lagna, varga_signs)
+    assert derived["seed_rasi"] == R["Virgo"]
+    assert derived["lord"] == int(Graha.MERCURY)
+    assert derived["lagna"] == R["Sagittarius"]
+
+    seed = dasa_seed(derived["lagna"], varga_longitudes)
+    assert seed["seed"] == R["Sagittarius"]
+    assert seed["decided_by"] == "1"
+
+    got = progression(seed["seed"],
+                      {g for g, s in varga_signs.items() if s == seed["seed"]})
+    assert got.god == "Vishnu"
+    assert got.direction == "backward"
+    assert got.exception is None
+    assert [ABBR[s] for s in got.signs][:6] == [a for a, _y in EX30_LENGTHS]
+
+
+@pytest.mark.parametrize("abbr,years", EX30_LENGTHS)
+def test_exercise_30_lengths(abbr, years):
+    """Our derivation. No lord is exalted or debilitated where the D-10 puts
+    it, so every one of these comes from the base rule alone -- neither D-52
+    nor exception 2 or 3 touches this exercise.
+    """
+    from hora.charts.colord import stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    _rasi, varga_signs, varga_longitudes, _lagna, _d10 = _chart_32_d10()
+    rasi_index = BY_ABBR[abbr]
+    lord = (stronger(rasi_index, varga_longitudes, purpose="arudha").winner
+            if rasi_index in (R["Scorpio"], R["Aquarius"])
+            else int(RASI_LORD[rasi_index]))
+    dignity = sign_dignity(lord, varga_longitudes[lord])
+    assert dignity not in ("exalted", "debilitated")
+    assert dasa_length(rasi_index, lord, varga_signs[lord],
+                       dignity).years == years
+
+
+def test_exercise_30_our_answer_is_cancer_dasa():
+    """**Our answer to the first half of Exercise 30: Cancer dasa**, July 1994
+    to July 1999, which holds 1996-1998 entire.
+
+    Scorpio is co-owned but does not need §15.5.1 here: Mars and Ketu are both
+    in Pi in the D-10, so either gives the same four years.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    _rasi, varga_signs, _vlon, _lagna, _d10 = _chart_32_d10()
+    assert varga_signs[int(Graha.MARS)] == varga_signs[int(Graha.KETU)]
+    assert dasa_length(R["Scorpio"], int(Graha.MARS),
+                       varga_signs[int(Graha.MARS)]).years == \
+        dasa_length(R["Scorpio"], int(Graha.KETU),
+                    varga_signs[int(Graha.KETU)]).years == 4
+
+    year, spans = 1961, {}
+    for abbr, years in EX30_LENGTHS:
+        spans[abbr] = (year, year + years)
+        year += years
+
+    assert spans["Cn"] == (1994, 1999)
+    assert spans["Cn"][0] <= 1996 and 1998 < spans["Cn"][1]
+
+
+def test_exercise_30_our_verdict_is_that_cancer_is_good_for_career():
+    """**Our answer to the second half: good.** Every reading is counted from
+    the D-10's own lagna Pi, which OI-123 settled.
+
+    | | | |
+    |---|---|---|
+    | Cancer is the 5th from lagna | a trine | Ex 74 names the 2nd and 5th for recognition from authorities |
+    | Cancer **is** the arudha lagna | the 1st from AL | Ex 74 read the 12th from AL as loss of professional status |
+    | Cancer is not the satru pada | A6 is Sc | so Ex 74's enemy reading does not apply |
+    | nothing occupies it | | no malefic sits in the dasa rasi |
+    | Jupiter aspects from the 9th | benefic in a trine | principle 3 |
+    | the waxing Moon aspects it | its own lord | benefic; elongation 147 degrees |
+    | the Sun aspects from the 3rd | the one malefic | and he is Ex 74's karaka of recognition |
+
+    Example 74's Aquarius was the 8th, the 12th from AL, the satru pada, and
+    held Sun with Rahu. Cancer is the mirror of it on every count.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import NATURAL_MALEFIC, Graha
+    from hora.dasha.rasi.narayana import varga_house
+
+    rasi, varga_signs, _vlon, _lagna, d10_lagna = _chart_32_d10()
+    assert d10_lagna == R["Pisces"]
+
+    al = arudha_pada(1, d10_lagna, varga_signs).sign
+    a6 = arudha_pada(6, d10_lagna, varga_signs).sign
+    assert varga_house(d10_lagna, R["Cancer"]) == 5
+    assert al == R["Cancer"]
+    assert a6 == R["Scorpio"] != R["Cancer"]
+
+    assert not [g for g, s in varga_signs.items() if s == R["Cancer"]]
+
+    aspecting = {g for g, s in varga_signs.items()
+                 if R["Cancer"] in rasi_drishti(s)}
+    assert aspecting == {int(Graha.SUN), int(Graha.MOON), int(Graha.JUPITER)}
+    assert varga_house(d10_lagna, varga_signs[int(Graha.JUPITER)]) == 9
+    assert aspecting & {int(g) for g in NATURAL_MALEFIC} == {int(Graha.SUN)}
+
+    elongation = (rasi[int(Graha.MOON)] - rasi[int(Graha.SUN)]) % 360
+    assert elongation < 180                            # waxing, so a benefic
+
+
+def test_exercise_30_the_asked_window_falls_in_the_weakest_third():
+    """The qualification on our verdict. Cancer's lord the Moon is in the 12th
+    from the D-10 lagna -- a trine's lord in a house of loss, and neither
+    exalted nor debilitated, so §18.4's principles 11 to 13 give no verdict.
+
+    §18.4's thirds put **his** third at March 1996 to November 1997, which is
+    most of the window the exercise asks about. So we would read the dasa as
+    good but its middle as its slowest stretch, firming from late 1997 when
+    the aspecting Jupiter and waxing Moon take over the last third -- nothing
+    occupies Cancer, so the last third belongs to those aspects alone.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import DASA_THIRDS, dasa_thirds, varga_house
+
+    _rasi, varga_signs, varga_longitudes, _lagna, d10_lagna = _chart_32_d10()
+    moon = int(RASI_LORD[R["Cancer"]])
+    assert moon == int(Graha.MOON)
+    assert varga_house(d10_lagna, varga_signs[moon]) == 12
+    assert sign_dignity(moon, varga_longitudes[moon]) not in ("exalted",
+                                                             "debilitated")
+
+    parts = dasa_thirds(0.0, 5.0)
+    base = 1994 * 12 + 6                               # July 1994
+    middle = base + round(parts[1]["from_years"] * 12)
+    last = base + round(parts[2]["from_years"] * 12)
+    assert (middle // 12, middle % 12 + 1) == (1996, 3)
+    assert (last // 12, last % 12 + 1) == (1997, 11)
+    assert "lord" in DASA_THIRDS[1]["dominates"]
+    assert "aspect" in DASA_THIRDS[2]["dominates"]
+
+
+def test_a_vargas_house_frame_does_not_rotate_between_dasas():
+    """Why the varga examples read so differently from the rasi-chart ones,
+    which no section says.
+
+    In the rasi chart the dasa lagna moves every dasa, so §18.4's frame
+    rotates and its occupancy principles say something new each time. In a
+    varga there is no dasa lagna: houses come from the varga's own ascendant,
+    which never moves. So principles 1 to 10 give the same verdict in every
+    dasa of that varga, and 11 to 16 name a lagna that does not exist. What
+    separates one varga dasa from another is the dasa rasi's own house, its
+    lord, its occupants and its aspects -- which is all Examples 71 and 74
+    and this exercise ever read.
+    """
+    import pytest as _pytest
+
+    from hora.dasha.rasi.narayana import (
+        VARGA_HOUSE_FRAME_DOES_NOT_ROTATE,
+        NarayanaError,
+        dasa_lagna,
+        varga_house,
+    )
+
+    _rasi, varga_signs, _vlon, _lagna, d10_lagna = _chart_32_d10()
+
+    for dasa_rasi in (R["Cancer"], R["Sagittarius"], R["Aries"]):
+        with _pytest.raises(NarayanaError, match="no dasa lagna"):
+            dasa_lagna(dasa_rasi, d10_lagna, d10_lagna, divisions=10)
+
+    # Jupiter is in the 9th whichever dasa is running, because the frame is fixed.
+    from hora.core.const import Graha
+    jupiter = varga_signs[int(Graha.JUPITER)]
+    assert {varga_house(d10_lagna, jupiter)} == {9}
+    assert "not the progression of lagna" in VARGA_HOUSE_FRAME_DOES_NOT_ROTATE

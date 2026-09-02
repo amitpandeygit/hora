@@ -424,6 +424,40 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    32: {
+        "title": "A gentleman — Exercise 30, D-10 Narayana dasa",
+        "birth": "July 25, 1961, 5:10 pm (IST), 75 E 50, 22 N 44",
+        "birth_data": {
+            "year": 1961, "month": 7, "day": 25, "hour": 17, "minute": 10,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 22 + 44 / 60, "longitude": 75 + 50 / 60},
+        "longitudes": {
+            "Asc": "9 Sg 44", "Sun": "8 Cn 57", "Moon": "6 Sg 11",
+            "Mars": "22 Le 37", "Merc": "20 Ge 08", "Jup": "8 Cp 54",
+            "Ven": "26 Ta 26", "Sat": "2 Cp 46", "Rahu": "5 Le 08",
+            "Ketu": "5 Aq 08", "HL": "16 Ge 09", "GL": "12 Sc 37",
+        },
+        "chara_karakas": {
+            "Ven": "AK", "Rahu": "AmK", "Mars": "BK", "Merc": "MK",
+            "Sun": "PiK", "Jup": "PK", "Moon": "GK", "Sat": "DK",
+        },
+        "retrograde": ("Jup", "Sat"),
+        "divisional": {
+            "D10": {
+                "Asc": "Pi", "Sun": "Ta", "Moon": "Aq", "Mars": "Pi",
+                "Merc": "Sg", "Jup": "Sc", "Ven": "Vi", "Sat": "Vi",
+                "Rahu": "Vi", "Ketu": "Pi", "HL": "Sc", "GL": "Sc",
+                "AL": "Cn",
+            },
+        },
+        "first_seen": "chapter 18, Exercise 30",
+        "note": (
+            "Its chara karakas turn on nine arcminutes -- the Sun at 8.950 "
+            "degrees of advancement takes PiK from Jupiter at 8.900, which "
+            "the printed labels confirm."
+        ),
+    },
     31: {
         "title": "An electrical engineer — D-10 Narayana dasa",
         "birth": "September 7, 1947, 6:00 pm (IST), 80 E 30, 15 N 54",
