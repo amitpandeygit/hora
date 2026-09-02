@@ -206,3 +206,146 @@ def years_to_dasa_ymdh(years: float) -> tuple[int, int, int, int]:
     if hours == 24:                                # carry, at a day boundary
         whole_days, hours = whole_days + 1, 0
     return whole_years, whole_months, whole_days, hours
+
+
+# --------------------------------------------------------------------------
+# §20.3 Interpretation
+# --------------------------------------------------------------------------
+
+#: §20.3's rules 1 and 2. The same three tests are run twice, against a
+#: different special lagna each time, and only the result named differs.
+SPECIAL_LAGNA_DASA_RULES: tuple[dict, ...] = (
+    {"lagna": "HL", "name": "Hora Lagna", "gives": "financial prosperity"},
+    {"lagna": "GL", "name": "Ghati Lagna", "gives": "power and authority"},
+)
+
+#: Rule 1's base, which says which dasa signs qualify at all.
+PROSPERITY_RULE = (
+    "Dasas of HL, 7th from HL and the signs aspecting HL bring financial "
+    "prosperity."
+)
+
+#: Rule 1's two reinforcements. Each is a separate way of reaching the same
+#: result, and the illustration counts them.
+PROSPERITY_REINFORCEMENTS = (
+    "If the lord of the dasa sign occupies or aspects HL, it will improve the "
+    "chance of financial prosperity. Similarly, if the lord of HL occupies or "
+    "aspects dasa sign, it will also improve the chances of financial "
+    "prosperity."
+)
+
+#: §20.3's own worked case, and the answer key for :func:`prosperity_ways`.
+#: It is the only place the book counts reinforcements rather than naming
+#: them, so "triply" is what fixes the arithmetic.
+PROSPERITY_ILLUSTRATION = (
+    "For example, say HL is in Aries, Mars is in Leo and Sun is in Scorpio. "
+    "Then (a) Leo aspects HL, (b) lord of Leo aspects HL and (c) lord of HL "
+    "occupies Leo. So Leo dasa is triply likely to bring financial "
+    "prosperity."
+)
+
+#: Rule 2, which carries rule 1 over to GL unchanged but for the result.
+GL_GIVES_POWER_INSTEAD = (
+    "Same thing holds for GL and the prescribed results are power and "
+    "authority instead of financial prosperity."
+)
+
+#: §20.3 rules 3 and 4, read from the arudha lagna. The upachayas were
+#: already recorded as showing growth of what their reference signifies, with
+#: the arudha lagna as the example; rules 3 and 4 put that on a dasa and add
+#: the 8th and 12th as its opposite.
+STATUS_FROM_ARUDHA_LAGNA: tuple[dict, ...] = (
+    {"houses": (3, 6, 10, 11), "gives": "growth of status",
+     "text": ("Upachayas from any house stand for the growth of matters "
+              "signified by that house. AL stands for one's status. So dasas "
+              "of upachayas from AL bring growth of status.")},
+    {"houses": (11,), "gives": "growth of status, particularly favorable",
+     "text": "Dasa of the 11th house from AL is particularly favorable."},
+    {"houses": (8, 12), "gives": "setbacks to one's status",
+     "text": ("The 8th and 12th houses from AL bring setbacks to one's "
+              "status. Their dasas can be unfavorable.")},
+)
+
+
+def prosperity_ways(
+    dasa_sign: int,
+    special_lagna_sign: int,
+    signs: dict[int, int],
+    *,
+    dasa_lord: int | None = None,
+    lagna_lord: int | None = None,
+) -> tuple[dict, ...]:
+    """Every way §20.3 rule 1 gives a dasa sign of reaching its result.
+
+    Three are possible and the illustration shows all three at once. The
+    result is a tuple so a caller can count it — "Leo dasa is **triply**
+    likely" is the only arithmetic the section does.
+
+    :param dasa_sign: the rasi whose dasa is running.
+    :param special_lagna_sign: HL's rasi for financial prosperity, GL's for
+        power and authority. Rule 2 makes them the same test.
+    :param signs: rasi per graha, for "occupies or aspects".
+    :param dasa_lord: the dasa sign's lord, for Scorpio and Aquarius. Left
+        None the primary lord is used — Example 76 showed the book means the
+        primary lord by "the lord" outside the rules that send it to §15.5.1.
+    :param lagna_lord: likewise for the special lagna's sign.
+    :returns: dicts with ``rule`` and ``why``, in the order §20.3 gives them.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    dasa = validate.in_range("dasa_sign", dasa_sign, 0, 11)
+    target = validate.in_range("special_lagna_sign", special_lagna_sign, 0, 11)
+    ways: list[dict] = []
+
+    if dasa == target:
+        ways.append({"rule": "is the special lagna's sign",
+                     "why": f"{RASI_NAMES[dasa]} holds it"})
+    elif dasa == (target + 6) % 12:
+        ways.append({"rule": "is the 7th from it",
+                     "why": f"{RASI_NAMES[dasa]} is the 7th from "
+                            f"{RASI_NAMES[target]}"})
+    elif target in rasi_drishti(dasa):
+        ways.append({"rule": "aspects it",
+                     "why": f"{RASI_NAMES[dasa]} aspects "
+                            f"{RASI_NAMES[target]}"})
+
+    ruler = int(RASI_LORD[dasa]) if dasa_lord is None else int(dasa_lord)
+    if ruler in signs and (signs[ruler] == target
+                           or target in rasi_drishti(signs[ruler])):
+        verb = "occupies" if signs[ruler] == target else "aspects"
+        ways.append({"rule": "its lord occupies or aspects the special lagna",
+                     "why": f"{GRAHA_NAMES[ruler]}, lord of "
+                            f"{RASI_NAMES[dasa]}, {verb} "
+                            f"{RASI_NAMES[target]} from "
+                            f"{RASI_NAMES[signs[ruler]]}"})
+
+    other = int(RASI_LORD[target]) if lagna_lord is None else int(lagna_lord)
+    if other in signs and (signs[other] == dasa
+                           or dasa in rasi_drishti(signs[other])):
+        verb = "occupies" if signs[other] == dasa else "aspects"
+        ways.append({"rule": "the special lagna's lord occupies or aspects it",
+                     "why": f"{GRAHA_NAMES[other]}, lord of "
+                            f"{RASI_NAMES[target]}, {verb} "
+                            f"{RASI_NAMES[dasa]} from "
+                            f"{RASI_NAMES[signs[other]]}"})
+    return tuple(ways)
+
+
+def status_from_arudha_lagna(dasa_sign: int, arudha_lagna_sign: int) -> dict:
+    """§20.3 rules 3 and 4 — what a dasa says about status, read from AL.
+
+    :returns: the house the dasa sign holds from AL, and the readings that
+        reach it. ``readings`` is empty for a house §20.3 does not name, which
+        is most of them — it speaks for six of the twelve.
+    """
+    dasa = validate.in_range("dasa_sign", dasa_sign, 0, 11)
+    arudha = validate.in_range("arudha_lagna_sign", arudha_lagna_sign, 0, 11)
+    house = (dasa - arudha) % 12 + 1
+    return {
+        "dasa_sign": dasa,
+        "dasa_sign_name": str(RASI_NAMES[dasa]),
+        "house_from_al": house,
+        "readings": tuple(r["gives"] for r in STATUS_FROM_ARUDHA_LAGNA
+                          if house in r["houses"]),
+    }
