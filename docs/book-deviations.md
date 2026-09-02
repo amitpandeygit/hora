@@ -47,8 +47,9 @@ Graha Drishti (D-24), two spellings each for subhaargala and paapaargala
 calculation; all would vanish under a "tidy-up" pass, and D-20 already showed
 that costs real information. Chapter 18 adds two of a different kind, where the
 book's own numbers disagree with each other rather than with ours: a
-transposed antardasa pair (D-57) and pratyantardasa dates that do not divide
-the antardasa they are cut from (D-58).
+transposed antardasa pair (D-57), pratyantardasa dates that do not divide the
+antardasa they are cut from (D-58), and an antardasa given 8 months where the
+same sentence says 10 (D-60).
 
 **4. Live divergences: one known-wrong, and undecided ones at D-52, D-53 and D-59.**
 
@@ -1844,3 +1845,22 @@ chapter puts a node in its Table 6 exaltation or debilitation as a dasa rasi's
 lord, so nothing else in the book so far can corroborate it.
 
 **Closes when:** a second example puts a node there, or you decide.
+
+## D-60 · Exercise 29's answer gives the 9th antardasa 8 months, not 10
+
+**Status: closed.** The same sentence contradicts it, and nothing turns on it.
+
+> "Each antardasa lasts 10 months. It takes 80 months (or 6 years and 8
+> months) for 8 antardasas to finish. So the 9th antardasa starts in February
+> 2000 and **runs for 8 months**."
+
+Ten. The clause two before it says so, and 8 x 10 = 80 is what puts the ninth
+at February 2000 in the first place. The "8 months" reads as a stray from the
+"6 years and 8 months" just ahead of it.
+
+**What we do:** ten months, February to December 2000. Early June 2000 falls
+inside on either reading, so the exercise's answer is unaffected. The fixture
+asserts the event lands inside both spans.
+
+Same shape as D-58, where Example 71's pratyantardasa dates did not divide the
+antardasa they were cut from.

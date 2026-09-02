@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 78 waiting on evidence · 2 parked**
+**5 waiting on Amit · 79 waiting on evidence · 2 parked**
 
 ---
 
@@ -616,6 +616,31 @@ is one sign out in the D-10. Neither direction may be assumed from the other.
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 
+### OI-124 — which chart §15.5.2's advancement rule reads, in a varga dasa
+
+**Waiting on the book.** Exercise 29's answer gives its dasa seed as "Le is
+stronger than Aq because Sun is more advanced in his rasi than Saturn" — the
+last rule of §15.5.2. Our cascade never reaches it: rule 2 decides two to one,
+Jupiter aspecting both from Li while Mercury reaches only Le from Cp. Same
+winner, so nothing is wrong today.
+
+But the reason the answer gives only works in the **rasi** chart:
+
+| | Sun | Saturn | stronger |
+|---|---|---|---|
+| rasi chart | 19 Ta 29 | 6 Cn 17 | Le, the book's answer |
+| navamsa | 25.35° | 26.55° | **Aq**, which would reverse the exercise |
+
+Everything else in §18.5 is read in the varga — Example 71 showed even dignity
+is. Either the prose reaches for a reason rather than the first one, which the
+book has done before, or advancement is the one thing counted in the rasi
+chart.
+
+**What we do:** nothing. No chart yet ties past rule 5 in a varga, so the
+question has never been live; `stronger` reads the longitudes it is given.
+
+**Closes when:** a varga example ties past rule 5, or one states which chart.
+
 ### OI-122 — §18.4's sixteen principles miss eight readings its own examples make
 
 **Waiting on the book.** The sixteen are Parasara's and closed. They carry most
@@ -1083,13 +1108,12 @@ Taken literally, **Gola and Yuga can never be present**. Proved exhaustively:
 | Yuga | 2 distinct signs | 0 of 792 sign-pair × lagna combinations |
 
 The reason is structural. Every set of one or two signs fits inside some
-seven-consecutive-sign window — the shorter arc between any two signs is at
-most six — and §11.5.3's five run-yogas (Naukaa, Koota, Chatra, Chaapa, Ardha
-Chandra) cover all twelve windows. So one of them always applies and always
-supersedes. One sign is also one modality, so an Aasraya yoga applies too.
-
-Three signs *can* escape every window (40 of 220 triples do), which is why
-Soola survives — rarely, in about 16% of three-sign charts.
+seven-consecutive-sign window — the shorter arc between any two signs is at most
+six — and §11.5.3's five run-yogas (Naukaa, Koota, Chatra, Chaapa, Ardha
+Chandra) cover all twelve windows, so one always applies and supersedes. One
+sign is also one modality, so an Aasraya yoga applies too. Three signs *can*
+escape every window (40 of 220 triples do), which is why Soola survives —
+rarely, in about 16% of three-sign charts.
 
 **We implement the rule as stated**, so both yogas are defined, transcribed and
 permanently absent. Their verdicts say so: the reason names the count *and* the

@@ -3816,9 +3816,11 @@ def test_example_73_picks_an_antardasa_by_what_its_rasi_holds():
 
 
 # --------------------------------------------------------------------------
-# Exercise 29 — Chart 30. Our derivation, recorded before the book's answer
-# was read. Any line that turns out to disagree is a finding, not a fixture
-# to be quietly adjusted.
+# Exercise 29 — Chart 30. Derived before the answer was read, and confirmed
+# by it: Vi antardasa in Sc dasa, from February 2000, the 2nd from UL.
+#
+# The answer matches on every number. It differs on one reason -- see
+# `test_exercise_29_the_book_names_a_later_rule_for_the_same_seed`.
 # --------------------------------------------------------------------------
 
 #: All twelve, in progression order, as we derive them.
@@ -3984,15 +3986,16 @@ def test_exercise_29_scorpio_dasa_holds_june_2000():
     assert varga_house(ul, R["Scorpio"]) == 4
 
 
-def test_exercise_29_our_answer_is_virgo_antardasa():
-    """**Our answer to Exercise 29: Virgo antardasa in Scorpio dasa**,
-    running February to December 2000.
+def test_exercise_29_the_answer_is_virgo_antardasa():
+    """"So the 9th antardasa starts in February 2000... The 9th antardasa
+    belongs to the 9th house from Ta in the backward direction. It is Vi."
 
-    Sc dasa is ten years, so each antardasa is ten months. The antardasa seed
-    is the stronger of Sc and Ta, and Ta takes rule 1 outright -- Venus
-    occupies it and Sc is empty. Ta's lord Venus is in Ta itself, so the
-    antardasas begin there; Ta is an even sign, so they run backward. Virgo
-    is the ninth, and the ninth begins eighty months after June 1993.
+    "Ta is stronger than Sc. Lord of Ta is Venus. He is in Ta itself. So
+    antardasas start from Ta. Because Ta is an even rasi, antardasas go in the
+    backward order. Each antardasa lasts 10 months. It takes 80 months (or 6
+    years and 8 months) for 8 antardasas to finish."
+
+    Every step of that is ours, derived before the answer was read.
     """
     from hora.charts.rasi_strength import stronger
     from hora.core.const import Graha
@@ -4021,15 +4024,11 @@ def test_exercise_29_our_answer_is_virgo_antardasa():
 
 
 def test_exercise_29_virgo_is_the_second_from_upapada():
-    """Our explanation. Example 72: "dasas of the 2nd and 7th houses from UL
-    can bring troubles in marriage and even a divorce" -- the 2nd and 7th
-    being a bhava's marakas, here killing the marriage rather than the native.
+    """"Vi is the 2nd house from UL and it shows the end of marriage."
 
-    Three things converge on Virgo. It is the 2nd from UL. It holds **Ketu**,
-    who is separation, and who is also the lord of the running dasa rasi
-    Scorpio -- so the dasa lord occupies the antardasa rasi. And it holds the
-    **arudha lagna**, how the native is seen, which fits an act the exercise
-    says was hers against advice.
+    Example 72's rule, and the answer names it outright. Ketu occupies Virgo
+    -- and Ketu is also the lord of the running dasa rasi Scorpio, so the dasa
+    lord sits in the antardasa rasi. The arudha lagna is there too.
     """
     from hora.charts.arudha import arudha_pada
     from hora.core.const import Graha
@@ -4053,7 +4052,11 @@ def test_exercise_29_virgo_is_the_second_from_upapada():
 
 
 def test_exercise_29_the_branch_rule_5a_closed_off():
-    """Worth recording because it is close. Had Scorpio gone to Mars, its dasa
+    """Worth recording because it is close, and because the printed Sc of 10
+    years is what confirms rule 5a -- the answer gives the length without
+    saying how it got there, and only Ketu produces it.
+
+    Had Scorpio gone to Mars, its dasa
     would be one year and June 2000 would fall in **Sg dasa** instead -- and
     Sg is the 6th from the navamsa lagna, Example 72's *other* marriage-ending
     dasa. So both branches explain the event; only rule 5a says which
@@ -4078,3 +4081,84 @@ def test_exercise_29_the_branch_rule_5a_closed_off():
         year += years
     else:                                               # pragma: no cover
         raise AssertionError("June 2000 fell outside the first five dasas")
+
+
+def test_exercise_29_the_book_names_a_later_rule_for_the_same_seed():
+    """"Le is stronger than Aq because Sun is more advanced in his rasi than
+    Saturn."
+
+    That is §15.5.2's **advancement** rule, the last in the cascade. Our
+    cascade never reaches it: rule 2 already decides, because Jupiter aspects
+    both from Li while Mercury reaches only Le from Cp, so Le counts two to
+    Aq's one. Same winner, a different reason.
+
+    Worth pinning twice over. Our rule 2 is not a near thing -- it is a clean
+    two to one. And the advancement rule only agrees if it is read in the
+    **rasi chart**: in the navamsa Saturn is at 26.55 degrees against the
+    Sun's 25.35, which would make Aq stronger and reverse the whole exercise.
+    See OI-124.
+    """
+    from hora.charts.book import graha_longitudes
+    from hora.charts.rasi_strength import stronger
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(30).items()}
+    varga_longitudes = {g: varga(lon, "D9").longitude for g, lon in rasi.items()}
+
+    got = stronger(R["Aquarius"], R["Leo"], varga_longitudes, purpose="phalita")
+    assert got.winner == R["Leo"]
+    assert got.decided_by == "2"
+    assert "Leo count 2" in got.reason
+
+    sun, saturn = int(Graha.SUN), int(Graha.SATURN)
+    assert rasi[sun] % 30 > rasi[saturn] % 30                    # the book's
+    assert varga_longitudes[sun] % 30 < varga_longitudes[saturn] % 30   # not
+
+
+def test_exercise_29_three_malefics_aspect_virgo_and_one_is_the_father():
+    """"Ketu occupies it and Sun, Mars and Rahu aspect it. Because of these
+    malefic influences, Vi periods can break her marriage. Sun's aspect on the
+    2nd from UL can denote father's influence in the break-up."
+
+    Virgo is dual, so the dual signs aspect it: Ge, Sg and Pi, which in the
+    navamsa hold exactly the Sun, Mars and Rahu. Three malefics on the 2nd
+    from UL, with Ketu sitting in it -- four malefic contacts and no benefic.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import NATURAL_MALEFIC, Graha
+
+    varga_signs, _vlon, _rasi, _d9 = _chart_30_d9()
+    aspecting = {g for g, sign in varga_signs.items()
+                 if R["Virgo"] in rasi_drishti(sign)}
+    assert aspecting == {int(Graha.SUN), int(Graha.MARS), int(Graha.RAHU)}
+    assert {g for g, s in varga_signs.items() if s == R["Virgo"]} == \
+        {int(Graha.KETU)}
+
+    contacts = aspecting | {int(Graha.KETU)}
+    assert contacts <= {int(g) for g in NATURAL_MALEFIC}
+    assert varga_signs[int(Graha.SUN)] == R["Gemini"]        # the father
+
+
+def test_exercise_29_prints_the_ninth_antardasa_as_eight_months():
+    """See D-60. "Each antardasa lasts 10 months... So the 9th antardasa
+    starts in February 2000 and runs for 8 months."
+
+    Ten, not eight -- the same sentence says so two clauses earlier, and the
+    "8 months" reads as a stray from "6 years and 8 months" just before it.
+    Early June 2000 falls inside on either reading, so nothing turns on it.
+    """
+    from hora.dasha.rasi.narayana import antardasas
+
+    varga_signs, varga_longitudes, _rasi, _d9 = _chart_30_d9()
+    got = antardasas(R["Scorpio"], 10, varga_longitudes,
+                     seed_occupants={g for g, s in varga_signs.items()
+                                     if s == R["Scorpio"]})
+    assert got.months_each == 10
+    assert 8 * got.months_each == 80                     # "80 months" ✓
+    assert 80 == 6 * 12 + 8                              # "6 years and 8 months" ✓
+
+    start = 1993 * 12 + 5 + 80
+    event = 2000 * 12 + 5                                # early June 2000
+    assert start <= event < start + 8                    # the printed 8
+    assert start <= event < start + got.months_each      # and the real 10
