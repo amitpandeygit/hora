@@ -424,6 +424,43 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    29: {
+        "title": "A lady — navamsa Narayana dasa, marriage",
+        "birth": "July 8, 1969, 10:47 am (IST), 82 E 15, 16 N 57",
+        "birth_data": {
+            "year": 1969, "month": 7, "day": 8, "hour": 10, "minute": 47,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 57 / 60, "longitude": 82 + 15 / 60},
+        "longitudes": {
+            "Asc": "4 Vi 08", "Sun": "22 Ge 26", "Moon": "11 Ar 59",
+            "Mars": "8 Sc 16", "Merc": "6 Ge 40", "Jup": "5 Vi 37",
+            "Ven": "7 Ta 57", "Sat": "13 Ar 53", "Rahu": "1 Pi 12",
+            "Ketu": "1 Vi 12", "HL": "29 Sc 10", "GL": "24 Cn 34",
+        },
+        "chara_karakas": {
+            "Rahu": "AK", "Sun": "AmK", "Sat": "BK", "Moon": "MK",
+            "Mars": "PiK", "Ven": "PK", "Merc": "GK", "Jup": "DK",
+        },
+        "retrograde": ("Mars",),
+        "divisional": {
+            "D9": {
+                "Asc": "Aq", "Sun": "Ar", "Moon": "Cn", "Mars": "Vi",
+                "Merc": "Sg", "Jup": "Aq", "Ven": "Pi", "Sat": "Le",
+                "Rahu": "Cn", "Ketu": "Cp", "HL": "Pi", "GL": "Aq",
+                "AL": "Sg", "UL": "Pi",
+            },
+        },
+        "events": {"married": "May 1989"},
+        "first_seen": "chapter 18, Example 73",
+        "note": (
+            "The first varga Narayana dasa seeded from the 7th: the derived "
+            "lagna is Pi and the dasas run from Vi. The only chart in the "
+            "book whose diagram draws the upapada, and the example uses it "
+            "throughout. Section 15.5.1's cascade is walked in print for "
+            "Scorpio -- \"Mars' count of 2 beats Ketu's count of 1\"."
+        ),
+    },
     28: {
         "title": "A lady — navamsa Narayana dasa",
         "birth": "September 12, 1971, 8:25 am (IST), 80 E 23, 16 N 13",

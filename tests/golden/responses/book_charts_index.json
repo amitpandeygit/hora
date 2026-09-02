@@ -189,6 +189,13 @@
         "number": 28,
         "recomputable": true,
         "title": "A lady \u2014 navamsa Narayana dasa"
+      },
+      {
+        "birth": "July 8, 1969, 10:47 am (IST), 82 E 15, 16 N 57",
+        "first_seen": "chapter 18, Example 73",
+        "number": 29,
+        "recomputable": true,
+        "title": "A lady \u2014 navamsa Narayana dasa, marriage"
       }
     ],
     "not_supplied": [
@@ -218,7 +225,8 @@
       25,
       26,
       27,
-      28
+      28,
+      29
     ]
   },
   "status": 200

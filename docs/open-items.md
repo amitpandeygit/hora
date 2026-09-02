@@ -616,10 +616,10 @@ is one sign out in the D-10. Neither direction may be assumed from the other.
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 
-### OI-122 — §18.4's sixteen principles miss seven readings its own examples make
+### OI-122 — §18.4's sixteen principles miss eight readings its own examples make
 
 **Waiting on the book.** The sixteen are Parasara's and closed. They carry most
-of what the chapter says, but seven readings in Examples 69 and 72 and
+of what the chapter says, but eight readings in Examples 69, 72 and 73 and
 Exercise 28 fall outside them, and none is a matter of degree:
 
 | reading | where | why the sixteen miss it |
@@ -631,6 +631,7 @@ Exercise 28 fall outside them, and none is a matter of degree:
 | houses read for a nation: 3rd weapons, 7th foreign relations, 9th religion, 10th the head of government | Ex 69 throughout | the principles give a placement's valence; its subject comes from the house |
 | an antardasa judged by what its **rasi** aspects, the target a natal arudha | Ex 69, Pi dasa | §18.4 judges an antardasa by the house its *lord* holds from the dasa rasi |
 | a navamsa dasa read for marriage: lagna and the 1st, 3rd, 8th from UL favour it, the 6th from lagna and the 2nd, 7th from UL threaten it | Ex 72 | the sixteen never read a bhava as a life of its own, nor name the upapada |
+| an antardasa rasi judged by what it **holds** — lagna, UL, UL's lord, the matter's karaka | Ex 73 | §18.4 reads an antardasa by the house its *lord* holds from the dasa rasi |
 
 The last is a different mechanism rather than a missing row — a fourth
 reference point in a section that already had three.
@@ -638,7 +639,8 @@ reference point in a section that already had three.
 **What we do:** each is its own named constant —
 `UNLISTED_DASA_LAGNA_READINGS`, `EXALTED_DUSTHANA_LORD_CONVERSE`,
 `KETU_IN_THE_ELEVENTH_IS_FOREIGN`, `MUNDANE_HOUSE_READINGS`,
-`ANTARDASA_ASPECT_RULE` and `NAVAMSA_MARRIAGE_DASA_RULES`. Folding them into
+`ANTARDASA_ASPECT_RULE`, `NAVAMSA_MARRIAGE_DASA_RULES` and
+`ANTARDASA_CANDIDATE_BY_CONTENTS`. Folding them into
 `PARASARA_DASA_PRINCIPLES` would put words in Parasara's mouth. No
 interpretation layer reads either set yet, so nothing is blocked.
 

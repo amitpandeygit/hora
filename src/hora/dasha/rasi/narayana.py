@@ -869,6 +869,16 @@ NAVAMSA_MARRIAGE_DASA_RULES: tuple[dict, ...] = (
      "why": "The 2nd and 7th houses from it show its end."},
 )
 
+#: Example 73 picks an antardasa by what its **rasi holds** -- lagna, the
+#: upapada, the upapada's lord, or the karaka of the matter. §18.4 reads an
+#: antardasa by the house its *lord* occupies from the dasa rasi, so this is
+#: another mechanism the sixteen do not carry. See OI-122.
+ANTARDASA_CANDIDATE_BY_CONTENTS = (
+    "Certainly, Aq with lagna and UL lord is a strong candidate and Pi with "
+    "UL and exalted Venus (significator of marriage) is an even stronger "
+    "candidate."
+)
+
 #: The qualification Example 72 attaches to both unfavourable readings, which
 #: keeps them from being read as predictions on their own.
 MARRIAGE_TROUBLE_NEEDS_CORROBORATION = (

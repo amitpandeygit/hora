@@ -2466,12 +2466,14 @@ def test_oi_122_names_every_reading_the_sixteen_principles_do_not_carry():
                    "EXALTED_DUSTHANA_LORD_CONVERSE",
                    "KETU_IN_THE_ELEVENTH_IS_FOREIGN",
                    "MUNDANE_HOUSE_READINGS",
-                   "ANTARDASA_ASPECT_RULE"):
+                   "ANTARDASA_ASPECT_RULE",
+                   "NAVAMSA_MARRIAGE_DASA_RULES",
+                   "ANTARDASA_CANDIDATE_BY_CONTENTS"):
         assert symbol in entry, symbol
         assert hasattr(narayana, symbol), symbol
 
     assert "Ex 69" in entry and "Exercise 28" in entry
-    assert entry.count("\n|") >= 7          # header, divider and six readings
+    assert entry.count("\n|") >= 8          # header, divider and the readings
 
 
 def test_every_reading_outside_the_sixteen_points_back_at_oi_122():
@@ -2481,7 +2483,7 @@ def test_every_reading_outside_the_sixteen_points_back_at_oi_122():
     from pathlib import Path
 
     source = Path("src/hora/dasha/rasi/narayana.py").read_text(encoding="utf-8")
-    assert source.count("OI-122") == 6
+    assert source.count("OI-122") == 7
 
 
 # --------------------------------------------------------------------------
@@ -3530,3 +3532,284 @@ def test_example_72s_marriage_rules_are_a_register_of_their_own():
     assert set(unfavourable["UL"]) == set(MARAKA_HOUSES)
     assert "when the chart has such indications" in \
         MARRIAGE_TROUBLE_NEEDS_CORROBORATION
+
+
+# --------------------------------------------------------------------------
+# Example 73 — Chart 29. The first varga dasa seeded from the 7th, and the
+# first time the book prints §15.5.1's counts.
+# --------------------------------------------------------------------------
+
+EX73_LENGTHS = [("Vi", 9), ("Cp", 5), ("Ta", 11), ("Ge", 6)]
+
+
+def _chart_29_d9():
+    from hora.charts.book import graha_longitudes, lagna
+    from hora.charts.vargas import varga
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(29).items()}
+    ninth = {g: varga(lon, "D9") for g, lon in rasi.items()}
+    return (rasi,
+            {g: p.sign for g, p in ninth.items()},
+            {g: p.longitude for g, p in ninth.items()},
+            lagna(29))
+
+
+def _d9_lagna_29():
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+
+    return varga(longitudes(29)["Asc"], "D9").sign
+
+
+def test_chart_29s_drawn_navamsa_reproduces():
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+
+    printed = longitudes(29)
+    for name, sign in chart(29)["divisional"]["D9"].items():
+        if name in ("AL", "UL"):
+            continue
+        assert ABBR[varga(printed[name], "D9").sign] == sign, name
+
+
+def test_chart_29_is_the_only_chart_whose_diagram_draws_the_upapada():
+    """AL in Sg and **UL in Pi**, both of the navamsa. AL needs Aquarius' lord
+    settled by §15.5.1 -- with Saturn it lands on the lagna itself and the
+    exception sends it to Sc, which is not what is drawn; with Rahu it lands
+    on Sg directly, which is.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_29_d9()
+    drawn = chart(29)["divisional"]["D9"]
+    lagna_of_varga = _d9_lagna_29()
+    assert lagna_of_varga == R["Aquarius"]
+
+    chosen = stronger(R["Aquarius"], varga_longitudes, purpose="dasa").winner
+    assert chosen == int(Graha.RAHU)
+    al = arudha_pada(1, lagna_of_varga, varga_signs, {R["Aquarius"]: chosen})
+    assert ABBR[al.sign] == drawn["AL"] == "Sg"
+
+    by_saturn = arudha_pada(1, lagna_of_varga, varga_signs,
+                            {R["Aquarius"]: int(Graha.SATURN)})
+    assert ABBR[by_saturn.sign] != drawn["AL"]
+
+    ul = arudha_pada(12, lagna_of_varga, varga_signs)
+    assert ABBR[ul.sign] == drawn["UL"] == "Pi"
+
+
+def test_example_73_is_the_first_varga_dasa_seeded_from_the_seventh():
+    """"Lagna is at 4 Vi 08. So the 9th house in rasi chart is Ta. Lord is
+    Venus. He is in Pi in Navamsa. Vi is stronger than Pi, as its lord Mercury
+    aspects it. So dasas start from Vi."
+
+    §18.5's step 4 makes Pi the lagna, and §18.2.1 then compares it with the
+    7th and picks the 7th. Every earlier varga example kept the derived lagna,
+    so this is the first time the comparison changes the answer.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_seed, varga_lagna
+
+    _rasi, varga_signs, varga_longitudes, lagna_sign = _chart_29_d9()
+    assert lagna_sign == R["Virgo"]
+
+    derived = varga_lagna(9, lagna_sign, varga_signs)
+    assert derived["seed_rasi"] == R["Taurus"]
+    assert derived["lord"] == int(Graha.VENUS)
+    assert derived["lagna"] == R["Pisces"]
+
+    seed = dasa_seed(derived["lagna"], varga_longitudes)
+    assert seed["seed"] == R["Virgo"] == (derived["lagna"] + 6) % 12
+    assert seed["decided_by"] == "2"
+    assert "lord (Mercury) aspects from Sagittarius" in seed["reason"]
+
+
+def test_example_73_progression_and_lengths():
+    """The printed order is Vi, Cp, Ta, Ge -- Vi is dual, so Vishnu, and the
+    9th from it is odd-footed Ta, so forward. Ta needs exception 2 for Venus
+    exalted in Pi; the rest come from the base rule.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length, progression
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_29_d9()
+    got = progression(R["Virgo"],
+                      {g for g, s in varga_signs.items() if s == R["Virgo"]})
+    assert got.god == "Vishnu"
+    assert got.direction == "forward"
+    assert [ABBR[s] for s in got.signs][:4] == [a for a, _y in EX73_LENGTHS]
+
+    for abbr, years in EX73_LENGTHS:
+        lord = int(RASI_LORD[BY_ABBR[abbr]])
+        length = dasa_length(BY_ABBR[abbr], lord, varga_signs[lord],
+                             sign_dignity(lord, varga_longitudes[lord]))
+        assert length.years == years, (abbr, length.why)
+
+
+def test_example_73_the_dates_and_the_ages():
+    """"Vi (09 years): Jul 1969 - Jul 1978" through "Ge (06 years): Jul 1994 -
+    Jul 2000", and "Dasa of Taurus runs from the age of 14 years to 25 years"
+    from a July 1969 birth.
+    """
+    year, spans = 1969, {}
+    for abbr, years in EX73_LENGTHS:
+        spans[abbr] = (year, year + years)
+        year += years
+
+    assert spans["Vi"] == (1969, 1978)
+    assert spans["Cp"] == (1978, 1983)
+    assert spans["Ta"] == (1983, 1994)
+    assert spans["Ge"] == (1994, 2000)
+    assert (spans["Ta"][0] - 1969, spans["Ta"][1] - 1969) == (14, 25)
+
+
+def test_example_73_applies_example_72s_upapada_rule():
+    """"Taurus is the 3rd from UL and its lord is exalted in UL. So Taurus
+    dasa can give marriage."
+
+    Example 72 stated the rule; this is the first chart it is used on. UL is
+    Pi, Taurus is the 3rd from it, and Taurus' lord Venus sits in Pi exalted
+    -- so the dasa rasi's lord is *in* the upapada, not merely aspecting it.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import (
+        NAVAMSA_MARRIAGE_DASA_RULES,
+        varga_house,
+    )
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_29_d9()
+    ul = arudha_pada(12, _d9_lagna_29(), varga_signs).sign
+    assert ul == R["Pisces"]
+    assert varga_house(ul, R["Taurus"]) == 3
+
+    venus = int(RASI_LORD[R["Taurus"]])
+    assert venus == int(Graha.VENUS)
+    assert varga_signs[venus] == ul
+    assert sign_dignity(venus, varga_longitudes[venus]) == "exalted"
+
+    favourable = next(r for r in NAVAMSA_MARRIAGE_DASA_RULES
+                      if r["from"] == "UL" and "favorable" in r["gives"])
+    assert 3 in favourable["houses"]
+
+
+def test_example_73_lagna_and_upapada_dasas_fall_outside_marriageable_ages():
+    """"Dasas of lagna and UL do not run at the ages when marriage is likely."
+
+    The rule's first two candidates are ruled out by *timing*, not by the
+    chart. Aq is lagna and Pi is UL, and both sit late in the walk -- the
+    fourth dasa already ends in 2000, at age 31.
+    """
+    from hora.dasha.rasi.narayana import progression
+
+    _rasi, varga_signs, _vlon, _lagna = _chart_29_d9()
+    order = progression(R["Virgo"],
+                        {g for g, s in varga_signs.items() if s == R["Virgo"]}).signs
+
+    assert order.index(R["Aquarius"]) > 3               # lagna, after Ge
+    assert order.index(R["Pisces"]) > 3                 # UL, later still
+    assert order.index(R["Taurus"]) == 2                # the one that runs
+
+
+def test_example_73_walks_15_5_1_in_print_for_the_first_time():
+    """"As Sc is aspected by co-lord Ketu, it is stronger than Ta. However,
+    Mars is the stronger lord of Sc, as he is aspected by Mercury and his
+    dispositor (Mercury again). Ketu is aspected only by his dispositor
+    (Saturn) and Mars' count of 2 beats Ketu's count of 1."
+
+    Two cascades in three sentences, and both counts are printed. §15.5.2's
+    rule 2 gives Scorpio the antardasa seed on Ketu's aspect alone; §15.5.1
+    then hands Scorpio to Mars two to one. Our reason strings name the same
+    grahas from the same rasis, dispositors included.
+    """
+    from hora.charts.colord import stronger as colord_stronger
+    from hora.charts.rasi_strength import stronger
+    from hora.core.const import Graha
+
+    _rasi, _vsig, varga_longitudes, _lagna = _chart_29_d9()
+
+    seed = stronger(R["Taurus"], R["Scorpio"], varga_longitudes,
+                    purpose="phalita")
+    assert seed.winner == R["Scorpio"]
+    assert seed.decided_by == "2"
+    by_rule = {r.rule: r for r in seed.rules}
+    assert "Taurus contains 0 planets; Scorpio contains 0 planets" in by_rule["1"].detail
+    assert "co-lord (Ketu) aspects from Capricorn" in by_rule["2"].detail
+
+    lord = colord_stronger(R["Scorpio"], varga_longitudes, purpose="dasa")
+    assert lord.winner == int(Graha.MARS)
+    assert "Mars count 2" in lord.reason
+    assert "dispositor (Mercury) aspects from Sagittarius" in lord.reason
+    assert "Ketu count 1" in lord.reason
+    assert "dispositor (Saturn) aspects from Leo" in lord.reason
+
+
+def test_example_73_antardasas_and_the_marriage():
+    """"So antardasas start from Vi. The 7th antardasa belongs to Pi. Each
+    antardasa is of 11 months and the 7th antardasa starts after 5.5 years. It
+    runs during Jan-Dec 1989. The lady got married in May 1989."
+
+    Ta dasa is 11 years, so each antardasa is 11 months and six of them make
+    5.5 years from July 1983 -- January 1989. Pi is the 7th from Vi in either
+    direction, being opposite it, so this example does not test §18.3's
+    direction rule; ours goes backward, Vi being an even sign.
+    """
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import antardasas
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_29_d9()
+    lord = stronger(R["Scorpio"], varga_longitudes, purpose="dasa").winner
+    got = antardasas(R["Taurus"], 11, varga_longitudes, seed_lord=lord,
+                     seed_occupants={g for g, s in varga_signs.items()
+                                     if s == R["Scorpio"]})
+    assert got.seed == R["Scorpio"]
+    assert got.start == R["Virgo"] == varga_signs[int(Graha.MARS)]
+    assert got.direction == "backward"
+    assert got.months_each == 11
+    assert got.signs[6] == R["Pisces"]
+    assert (R["Pisces"] - got.start) % 12 == 6          # opposite, so either way
+
+    months = 6 * got.months_each                        # 5.5 years
+    assert months == 66
+    start = 1983 * 12 + 6 + months                      # July 1983 + 66 months
+    assert (start // 12, start % 12 + 1) == (1989, 1)   # January 1989
+    finish = start + got.months_each
+    assert (finish // 12, finish % 12 + 1) == (1989, 12)
+    assert start <= 1989 * 12 + 4 < finish              # married May 1989
+
+
+def test_example_73_picks_an_antardasa_by_what_its_rasi_holds():
+    """"Certainly, Aq with lagna and UL lord is a strong candidate and Pi with
+    UL and exalted Venus (significator of marriage) is an even stronger
+    candidate."
+
+    A third way to read an antardasa. §18.4 reads the house its *lord* holds
+    from the dasa rasi; Example 69 read what the antardasa rasi *aspects*;
+    this reads what it *contains*. Aq holds the navamsa lagna and Jupiter, who
+    owns UL; Pi is UL itself and holds an exalted Venus, marriage's karaka.
+    See OI-122.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import ANTARDASA_CANDIDATE_BY_CONTENTS
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_29_d9()
+    lagna_of_varga = _d9_lagna_29()
+    ul = arudha_pada(12, lagna_of_varga, varga_signs).sign
+
+    assert lagna_of_varga == R["Aquarius"]
+    assert varga_signs[int(RASI_LORD[ul])] == R["Aquarius"]   # UL lord Jupiter
+
+    assert ul == R["Pisces"]
+    venus = int(Graha.VENUS)
+    assert varga_signs[venus] == ul
+    assert sign_dignity(venus, varga_longitudes[venus]) == "exalted"
+
+    assert "significator of marriage" in ANTARDASA_CANDIDATE_BY_CONTENTS
