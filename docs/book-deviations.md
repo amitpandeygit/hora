@@ -52,7 +52,7 @@ same sentence says 10 (D-60). A third, D-58, was **withdrawn**: §18.6 measures
 dasa time by the Sun's arc rather than in days, and under that measure the
 book's dates were right and ours were not.
 
-**4. Live divergences: one known-wrong, and undecided ones at D-52, D-53 and D-59.**
+**4. Live divergences: one known-wrong, and undecided ones at D-52, D-53, D-59 and D-61.**
 
 **[OI-36](open-items.md) — known wrong.** `ABHIJIT_END` runs
 53'20" past what §1.3.6 defines, because classical Muhurta convention was
@@ -1885,3 +1885,40 @@ asserts the event lands inside both spans.
 
 Same shape as D-58, where Example 71's pratyantardasa dates did not divide the
 antardasa they were cut from.
+
+## D-61 · Example 78 calls half of §11.7.3's yoga 1 a powerful raja yoga
+
+**Status: NEEDS YOU — it changes a yoga verdict, not a shade of one.**
+
+§11.7.3's first advanced raaja yoga has two conditions:
+
+> "If (a) chara putra karaka (PK) and chara atmaka karaka (AK) are conjoined
+> **and** (b) lagna and 5th lords conjoin, then Raaja Yoga is present... If only
+> one condition is satisfied, still the results may be felt, **but not fully**."
+
+Example 78 recalls it with (b) gone and a house clause added:
+
+> "Scorpio is lagna and houses a **powerful** raja yoga between AK (Mercury) and
+> PK (Saturn). We studied in the chapter "Yogas" that the conjunction of AK and
+> PK is a raja yoga, **especially in 1st and 5th**."
+
+"Especially in 1st and 5th" is not in yoga 1 at all — it is yoga **2**'s clause
+(c), "AK and PK are in lagna or the 5th house". So the example reads yoga 1's
+first condition through yoga 2's placement rule and calls the result powerful.
+
+On Chart 3 that is the difference between a verdict and half of one:
+
+| | Vajpayee |
+|---|---|
+| (a) AK Mercury and PK Saturn conjoined | **holds**, and in lagna |
+| (b) lagna lord Mars and 5th lord Jupiter conjoined | **fails** |
+| §11.7.3 as printed | absent; "may be felt, but not fully" |
+| Example 78 | a **powerful** raja yoga |
+
+**What we do:** nothing. `raaja_pk_ak_and_lords` reports the yoga absent and
+names the half that holds as a qualifier, so a reading layer already sees "AK
+Mercury and PK Saturn are conjoined" — the information the example acts on is
+not lost, only the verdict differs.
+
+**Closes when:** you decide whether a partial §11.7.3 #1 with AK and PK in the
+1st or 5th should be reported present, or a later section restates the yoga.

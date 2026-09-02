@@ -349,3 +349,26 @@ def status_from_arudha_lagna(dasa_sign: int, arudha_lagna_sign: int) -> dict:
         "readings": tuple(r["gives"] for r in STATUS_FROM_ARUDHA_LAGNA
                           if house in r["houses"]),
     }
+
+
+# --------------------------------------------------------------------------
+# Example 78 — reading two rasi dasas together
+# --------------------------------------------------------------------------
+
+#: Example 78's combination rule, and the clearest statement in the book of
+#: how the two rasi dasas divide the work. §19.3 gave the movements their
+#: rulers; this says what to do with them.
+CHECK_NARAYANA_ALONGSIDE = (
+    "Of course, Narayana is important for power, though Sri Lakshmi gives "
+    "prosperity. So we should always check Narayana dasa along with Sudasa."
+)
+
+#: A ninth arudha, on the same principle Exercise 30 stated for all of them —
+#: an arudha shows the *appearance* of its house's matter. The 5th shows one's
+#: following, so A5 shows what the world judges that following by.
+A5_SHOWS_ONES_FOLLOWING = (
+    "Cp contains AL and A5. AL shows status and A5 can show power. The 5th "
+    "house shows one's following. A5 shows things based on which the world "
+    "forms an impression about one's following. It can show the trappings of "
+    "power."
+)

@@ -670,3 +670,256 @@ def test_20_3_applied_across_vajpayees_sudasa():
                  if status_from_arudha_lagna((arudha + house - 1) % 12,
                                              arudha)["readings"])
     assert spoken == 6
+
+
+# --------------------------------------------------------------------------
+# Example 78 — Vajpayee's Sudasa read, and read against his Narayana dasa.
+# --------------------------------------------------------------------------
+
+def _chart_3():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(3).items()},
+            {int(g): sign for g, sign in graha_signs(3).items()},
+            lagna(3))
+
+
+def _chart_3_lord(rasi, longitudes, signs):
+    from hora.charts.colord import CO_LORDS, stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    if rasi not in CO_LORDS:
+        return int(RASI_LORD[rasi])
+    years = {g: dasa_length(rasi, g, signs[g],
+                            sign_dignity(g, longitudes[g])).years
+             for g in CO_LORDS[rasi]}
+    got = stronger(rasi, longitudes, purpose="dasa", dasa_years=years)
+    return got.winner if got.winner is not None else int(RASI_LORD[rasi])
+
+
+def _chart_3_years(rasi):
+    from hora.charts.dignity import sign_dignity
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_3()
+    lord = _chart_3_lord(rasi, longitudes, signs)
+    return dasa_length(rasi, lord, signs[lord],
+                       sign_dignity(lord, longitudes[lord])).years
+
+
+def test_example_78_capricorn_reaches_gls_result_all_three_ways():
+    """"His GL is in Cancer. Capricorn is the 7th house from GL and it can
+    bring power and authority. Its lord Saturn aspects GL. Moon is the lord of
+    GL and he aspects Cp. So Cp dasa is very favorable."
+
+    §20.3's three ways, named one by one on a real chart — and our reasons
+    name the same grahas from the same rasis. "Very favorable" is the same
+    count the illustration called "triply likely".
+    """
+    from hora.charts.book import longitudes as printed
+    from hora.dasha.rasi.sudasa import prosperity_ways
+
+    _longitudes, signs, _lagna = _chart_3()
+    ghati_lagna = int(printed(3)["GL"] // 30)
+    assert ghati_lagna == R["Cancer"]
+    assert R["Capricorn"] == (ghati_lagna + 6) % 12
+
+    ways = prosperity_ways(R["Capricorn"], ghati_lagna, signs)
+    assert len(ways) == 3
+    assert ways[0]["rule"] == "is the 7th from it"
+    assert "Saturn, lord of Capricorn, aspects Cancer from Scorpio" in ways[1]["why"]
+    assert "Moon, lord of Cancer, aspects Capricorn from Leo" in ways[2]["why"]
+
+
+def test_example_78_capricorn_holds_both_al_and_a5():
+    """"Moreover, Cp contains AL and A5. AL shows status and A5 can show
+    power."
+
+    Two arudhas in the dasa rasi, and neither needs §9.2's exception. A5 is a
+    ninth arudha for the register, on the principle Exercise 30 stated for all
+    of them: an arudha shows the appearance of its house's matter, and the 5th
+    house shows one's following.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.colord import stronger
+    from hora.dasha.rasi.sudasa import A5_SHOWS_ONES_FOLLOWING
+
+    longitudes, signs, lagna_sign = _chart_3()
+    overrides = {r: stronger(r, longitudes, purpose="arudha").winner
+                 for r in (7, 10)}
+
+    for house in (1, 5):
+        got = arudha_pada(house, lagna_sign, signs, overrides)
+        assert got.sign == R["Capricorn"], house
+        assert got.exception_position is None
+
+    assert "A5 shows things based on which the world forms an impression" in \
+        A5_SHOWS_ONES_FOLLOWING
+    assert "trappings of power" in A5_SHOWS_ONES_FOLLOWING
+
+
+def test_example_78_capricorn_in_the_second_cycle_covers_both_premierships():
+    """"Capricorn dasa in the second cycle made him the Prime Minister of
+    India."
+
+    The second cycle needs three of the chapter's rules at once: §18.2.2's
+    special note 2 for its lengths, §20.2 rule 7 for the partial first dasa
+    that shifts every boundary, and §18.6's solar arc for the dates. Vajpayee
+    was Prime Minister in May 1996 and from March 1998.
+    """
+    from datetime import date
+
+    from hora.charts.book import chart
+    from hora.core.const import Graha
+    from hora.core.ephemeris import get_ephemeris
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_jd, from_local
+    from hora.dasha.rasi.narayana import (
+        second_cycle_length,
+        solar_arc_instant,
+        sub_period_arc,
+    )
+    from hora.dasha.rasi.sudasa import first_dasa_fraction, progression
+
+    ephemeris = get_ephemeris(Settings(node_type=NodeType.MEAN))
+
+    def sun_at(jd: float) -> float:
+        return ephemeris.position(jd, int(Graha.SUN)).longitude
+
+    birth = from_local(**chart(3)["birth_data"]).jd_ut
+    got = progression(R["Capricorn"], EX77_SREE_LAGNA)
+
+    arc = 0.0
+    for index, sign in enumerate(got.signs):        # first cycle
+        years = _chart_3_years(sign)
+        if index == 0:
+            years *= first_dasa_fraction(EX77_SREE_LAGNA)
+        arc += sub_period_arc(years, 0)
+
+    opens = solar_arc_instant(birth, arc, sun_at)   # second cycle starts here
+    arc += sub_period_arc(second_cycle_length(_chart_3_years(R["Capricorn"])), 0)
+    closes = solar_arc_instant(birth, arc, sun_at)
+
+    first = from_jd(opens, utc_offset_hours=5.5).local.date()
+    last = from_jd(closes, utc_offset_hours=5.5).local.date()
+    assert second_cycle_length(2) == 10             # 12 - the first cycle's 2
+    assert first.year == 1991 and last.year == 2001
+    assert first < date(1996, 5, 16) < last         # his first premiership
+    assert first < date(1998, 3, 19) < last         # and his second
+
+
+def test_example_78_narayana_scorpio_runs_at_the_same_time():
+    """"Sri Vajpayee was running the Narayana dasa of Sc during the same time
+    and so he became the Prime Minister."
+
+    Two rasi dasas from two different seeds, landing on the same decade. His
+    Narayana seed is Scorpio and the **Saturn exception fires** on it — Saturn
+    sits there — so the movement is Brahma's regular one, forward. Scorpio is
+    therefore the first dasa of each cycle, and in the second it runs ten
+    years from the end of the first.
+    """
+    from datetime import date
+
+    from hora.charts.book import chart
+    from hora.core.const import Graha
+    from hora.core.ephemeris import get_ephemeris
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_jd, from_local
+    from hora.dasha.rasi.narayana import (
+        dasa_seed,
+        progression,
+        second_cycle_length,
+        solar_arc_instant,
+        sub_period_arc,
+    )
+
+    longitudes, signs, lagna_sign = _chart_3()
+    seed = dasa_seed(lagna_sign, longitudes)
+    assert seed["seed"] == R["Scorpio"] == lagna_sign
+
+    occupants = {g for g, s in signs.items() if s == seed["seed"]}
+    assert int(Graha.SATURN) in occupants
+    walk = progression(seed["seed"], occupants)
+    assert walk.exception == "Saturn"
+    assert walk.god == "Brahma"
+    assert walk.direction == "forward"
+    assert walk.signs[0] == R["Scorpio"]
+
+    ephemeris = get_ephemeris(Settings(node_type=NodeType.MEAN))
+
+    def sun_at(jd: float) -> float:
+        return ephemeris.position(jd, int(Graha.SUN)).longitude
+
+    birth = from_local(**chart(3)["birth_data"]).jd_ut
+    arc = sum(sub_period_arc(_chart_3_years(s), 0) for s in walk.signs)
+    opens = solar_arc_instant(birth, arc, sun_at)
+    arc += sub_period_arc(second_cycle_length(_chart_3_years(R["Scorpio"])), 0)
+    closes = solar_arc_instant(birth, arc, sun_at)
+
+    first = from_jd(opens, utc_offset_hours=5.5).local.date()
+    last = from_jd(closes, utc_offset_hours=5.5).local.date()
+    assert first.year == 1991 and last.year == 2001
+    assert first < date(1996, 5, 16) < last
+    assert first < date(1998, 3, 19) < last
+
+
+def test_example_78_says_to_read_the_two_rasi_dasas_together():
+    """"Of course, Narayana is important for power, though Sri Lakshmi gives
+    prosperity. So we should always check Narayana dasa along with Sudasa."
+
+    The clearest statement in the book of how the two divide the work. §19.3
+    gave the movements their rulers; this says what to do with them, and it
+    cuts against reading either alone.
+    """
+    from hora.dasha.rasi.kendradi import LAKSHMI_SHOWS_PROSPERITY
+    from hora.dasha.rasi.sudasa import CHECK_NARAYANA_ALONGSIDE
+
+    assert "always check Narayana dasa along with Sudasa" in \
+        CHECK_NARAYANA_ALONGSIDE
+    assert "Narayana is important for power" in CHECK_NARAYANA_ALONGSIDE
+    assert "goddess of wealth and prosperity" in LAKSHMI_SHOWS_PROSPERITY
+
+
+def test_example_78_calls_half_of_11_7_3s_first_yoga_a_powerful_raja_yoga():
+    """See D-61. "Scorpio is lagna and houses a powerful raja yoga between AK
+    (Mercury) and PK (Saturn)."
+
+    §11.7.3's yoga 1 wants two conditions and says a single one is "felt, but
+    not fully". Vajpayee has the first and not the second, so our detector
+    reports the yoga absent and names the half that holds. The example calls
+    it powerful, reading yoga 1's first condition through yoga **2**'s
+    placement clause — "especially in 1st and 5th" is not in yoga 1 at all.
+    """
+    from hora.charts.book import chart
+    from hora.charts.book import longitudes as printed
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.karaka import chara_karakas
+    from hora.charts.planetary_yogas.raaja_advanced import _detect_1
+    from hora.charts.planetary_yogas.registry import YogaInput
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    longitudes, signs, lagna_sign = _chart_3()
+    eight = {g: lon for g, lon in longitudes.items() if g != int(Graha.KETU)}
+    karakas = {k.symbol: k.graha for k in chara_karakas(eight)}
+    assert karakas["AK"] == int(Graha.MERCURY)
+    assert karakas["PK"] == int(Graha.SATURN)
+    assert signs[karakas["AK"]] == signs[karakas["PK"]] == lagna_sign
+
+    record = chart(3)
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 3", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    got = _detect_1(YogaInput(rasis=signs, chart="D1", lagna_rasi=lagna_sign,
+                              lagna_longitude=printed(3)["Asc"],
+                              positions=computed.positions))
+
+    assert got.present is False                     # ours, per §11.7.3 as printed
+    assert "AK Mercury and PK Saturn are conjoined" in got.reason
+    assert "do not conjoin" in got.reason           # the half that fails
+    assert any("may still be felt, but not fully" in str(q)
+               for q in (got.qualifiers or ()))
