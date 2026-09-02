@@ -292,3 +292,182 @@ def test_sudasa_and_lagna_kendradi_usually_walk_differently():
 
     assert agree + disagree >= 20
     assert disagree > agree * 3
+
+
+# --------------------------------------------------------------------------
+# Example 77 — Sri Vajpayee, Chart 3, worked step by step.
+# --------------------------------------------------------------------------
+
+#: The twelve the example prints, in its own order.
+EX77_LENGTHS = [("Cp", 2), ("Li", 2), ("Cn", 11), ("Ar", 12), ("Sg", 2),
+                ("Vi", 10), ("Ge", 5), ("Pi", 1), ("Sc", 2), ("Le", 8),
+                ("Ta", 7), ("Aq", 3)]
+
+#: SL as the example states it: 12 degrees 21 minutes of Capricorn.
+EX77_SREE_LAGNA = 270.0 + 12.0 + 21.0 / 60.0
+
+
+def _ex77_lord(rasi, longitudes, signs):
+    from hora.charts.colord import CO_LORDS, stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    if rasi not in CO_LORDS:
+        return int(RASI_LORD[rasi])
+    years = {g: dasa_length(rasi, g, signs[g],
+                            sign_dignity(g, longitudes[g])).years
+             for g in CO_LORDS[rasi]}
+    got = stronger(rasi, longitudes, purpose="dasa", dasa_years=years)
+    return got.winner if got.winner is not None else int(RASI_LORD[rasi])
+
+
+def test_example_77_walks_backward_from_capricorn_in_three_groups():
+    """"First 4 dasas will belong to kendras from Cp, reckoned in the backward
+    direction. They are Cp, Li, Cn and Ar... panapharas... Sg, Vi, Ge and
+    Pi... apoklimas... Sc, Le, Ta and Aq."
+
+    The example names each group's members, so the walk can be checked group
+    by group rather than only as a list.
+    """
+    from hora.dasha.rasi.sudasa import progression
+
+    got = progression(R["Capricorn"], EX77_SREE_LAGNA)
+    assert got.direction == "backward"                 # "Capricorn is an even sign"
+
+    by_group: dict[str, list[str]] = {}
+    for name, sign in zip(got.group_names, got.signs):
+        by_group.setdefault(name, []).append(ABBR[sign])
+    assert by_group["kendra"] == ["Cp", "Li", "Cn", "Ar"]
+    assert by_group["panaphara"] == ["Sg", "Vi", "Ge", "Pi"]
+    assert by_group["apoklima"] == ["Sc", "Le", "Ta", "Aq"]
+    assert [ABBR[s] for s in got.signs] == [a for a, _y in EX77_LENGTHS]
+
+
+@pytest.mark.parametrize("abbr,years", EX77_LENGTHS)
+def test_example_77_lengths(abbr, years):
+    """All twelve, from §18.2.2 by way of rule 6. Scorpio and Aquarius both go
+    to §15.5.1 and both are settled at rule 1.
+    """
+    from hora.charts.book import graha_longitudes, graha_signs
+    from hora.charts.dignity import sign_dignity
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(3).items()}
+    signs = {int(g): s for g, s in graha_signs(3).items()}
+    rasi = {v: k for k, v in enumerate(ABBR)}[abbr]
+    lord = _ex77_lord(rasi, longitudes, signs)
+    got = dasa_length(rasi, lord, signs[lord],
+                      sign_dignity(lord, longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_example_77_lengths_total_sixty_five_years():
+    """Not stated, but it is the check the twelve have to pass together."""
+    assert sum(y for _a, y in EX77_LENGTHS) == 65
+
+
+def test_example_77_the_fraction_and_its_arithmetic():
+    """"The fraction of the first dasa left at birth = (30 - 12 21')/30 =
+    (1800 - 741)/1800 = 0.5883."
+
+    The example does the arithmetic in arcminutes, which is the clearest way
+    to see it: 12 degrees 21 minutes is 741 of the 1800 in a rasi.
+    """
+    from hora.dasha.rasi.sudasa import first_dasa_fraction
+
+    assert 12 * 60 + 21 == 741
+    assert 30 * 60 == 1800
+    assert first_dasa_fraction(EX77_SREE_LAGNA) == pytest.approx(
+        (1800 - 741) / 1800)
+    exact = first_dasa_fraction(EX77_SREE_LAGNA)
+    assert exact == pytest.approx(1059 / 1800)
+    assert int(exact * 10_000) / 10_000 == 0.5883      # the example truncates
+
+
+def test_example_77_the_balance_is_measured_in_18_6s_units():
+    """"First dasa of Cp is of 2 years and 0.5883 of it is 1.1766 years, i.e.,
+    1 year 2 months 3 days 14 hours."
+
+    That conversion fixes the units: twelve months to a year and thirty days
+    to a month, which is §18.6's measure where a day is one degree of the
+    Sun's motion. On a calendar it would not come out to the hour.
+    """
+    from hora.dasha.rasi.sudasa import (
+        FIRST_DASA_BALANCE_EXAMPLE,
+        first_dasa_fraction,
+        years_to_dasa_ymdh,
+    )
+
+    balance = 2 * first_dasa_fraction(EX77_SREE_LAGNA)
+    # The exact value is 2 x 1059/1800 = 1.17666..., which the example prints
+    # truncated rather than rounded — 0.5883 and 1.1766, not 0.5883 and 1.1767.
+    assert balance == pytest.approx(2 * 1059 / 1800)
+    assert f"{balance:.4f}" == "1.1767"
+    assert int(balance * 10_000) / 10_000 == 1.1766
+    assert years_to_dasa_ymdh(balance) == (1, 2, 3, 14)
+    assert "1 year 2 months 3 days 14 hours" in FIRST_DASA_BALANCE_EXAMPLE
+
+    # the units, stated as their own check
+    assert years_to_dasa_ymdh(1.0) == (1, 0, 0, 0)
+    assert years_to_dasa_ymdh(1 / 12) == (0, 1, 0, 0)
+    assert years_to_dasa_ymdh(1 / 360) == (0, 0, 1, 0)
+    assert years_to_dasa_ymdh(1 / 8640) == (0, 0, 0, 1)
+
+
+def test_example_77_libra_follows_the_partial_capricorn():
+    """"So this is the remainder of Cp dasa at birth. After this, Li dasa of 2
+    years will start."
+
+    Only the first dasa is cut; the second is whole, and it is the second sign
+    of the walk rather than a repeat of the first.
+    """
+    from hora.dasha.rasi.sudasa import progression
+
+    got = progression(R["Capricorn"], EX77_SREE_LAGNA)
+    assert ABBR[got.signs[1]] == "Li"
+    assert dict(EX77_LENGTHS)["Li"] == 2
+
+
+def test_our_sree_lagna_differs_from_the_books_by_less_than_an_arcminute_of_moon():
+    """The one thing in Example 77 we do not reproduce, and why it is small.
+
+    The example says SL is at 12 21' Capricorn; we get 12 07' 39" recomputed
+    from Chart 3's birth data and 11 54' from its printed longitudes. But SL
+    is the lagna plus the Moon's progress through its nakshatra taken as a
+    fraction of the whole zodiac, so it multiplies the Moon's error by
+    360/13 20' = **27**. The book's SL needs a Moon half an arcminute later
+    than ours — below the precision the chart itself is printed to.
+
+    Nothing in the example turns on it: SL is twelve degrees into Capricorn on
+    every reading, so the seed, the direction and all twelve lengths are
+    unchanged. Only rule 7's fraction moves, by about eleven days of a
+    two-year dasa.
+    """
+    from hora.charts.book import graha_longitudes
+    from hora.charts.book import longitudes as printed
+    from hora.charts.special_lagna import (
+        SREE_LAGNA_AMPLIFIES_THE_MOON,
+        sree_lagna,
+        sree_lagna_moon_sensitivity,
+    )
+    from hora.core.const import NAKSHATRA_SPAN, Graha
+    from hora.dasha.rasi.sudasa import first_dasa_fraction
+
+    assert SREE_LAGNA_AMPLIFIES_THE_MOON == pytest.approx(27.0)
+    assert sree_lagna_moon_sensitivity(1.0) == pytest.approx(27.0)
+    assert NAKSHATRA_SPAN * 27 == pytest.approx(360.0)
+
+    moon = graha_longitudes(3)[Graha.MOON]
+    ours = sree_lagna(moon, printed(3)["Asc"])
+    assert int(ours // 30) == int(EX77_SREE_LAGNA // 30) == R["Capricorn"]
+    assert abs(ours - EX77_SREE_LAGNA) * 60 < 30      # under half a degree
+
+    # the Moon shift the book's SL implies, in arcminutes
+    implied = abs(ours - EX77_SREE_LAGNA) / SREE_LAGNA_AMPLIFIES_THE_MOON
+    assert implied * 60 < 1.5                          # about one arcminute
+
+    # and it costs about eleven days of a two-year first dasa
+    drift = abs(first_dasa_fraction(ours)
+                - first_dasa_fraction(EX77_SREE_LAGNA)) * 2 * 360
+    assert 5 < drift < 15                              # in dasa days

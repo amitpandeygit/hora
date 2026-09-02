@@ -177,3 +177,32 @@ def progression(
         houses=HOUSE_ORDER, group_names=groups,
         first_dasa_fraction=fraction, why=why,
     )
+
+
+#: §20.2 rule 7's own worked conversion, which fixes the units of the answer:
+#: 1.1766 years is "1 year 2 months 3 days 14 hours". That is twelve months of
+#: thirty days — §18.6's measure, where a day is one degree of the Sun's
+#: motion — and not a calendar year.
+FIRST_DASA_BALANCE_EXAMPLE = (
+    "First dasa of Cp is of 2 years and 0.5883 of it is 1.1766 years, i.e., 1 "
+    "year 2 months 3 days 14 hours."
+)
+
+
+def years_to_dasa_ymdh(years: float) -> tuple[int, int, int, int]:
+    """A dasa length in years as years, months, days and whole hours.
+
+    §18.6's units throughout: twelve months to a year, thirty days to a month,
+    a day being one degree of the Sun's motion. Example 77 turns 1.1766 years
+    into "1 year 2 months 3 days 14 hours" this way.
+    """
+    total = validate.non_negative("years", years)
+    whole_years = int(total)
+    months = (total - whole_years) * 12.0
+    whole_months = int(months)
+    days = (months - whole_months) * 30.0
+    whole_days = int(days)
+    hours = round((days - whole_days) * 24.0)
+    if hours == 24:                                # carry, at a day boundary
+        whole_days, hours = whole_days + 1, 0
+    return whole_years, whole_months, whole_days, hours

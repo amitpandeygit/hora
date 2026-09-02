@@ -312,6 +312,24 @@ def birthtime_correction(
     )
 
 
+#: Sree Lagna multiplies the Moon's error by 360/13°20' = 27. §5.7 does not
+#: say so and no exercise depends on it, but Sudasa does: §20.2 rule 7 scales
+#: the first dasa by SL's degrees within its sign, so a chart printed to the
+#: arcminute pins that fraction only to about 27 arcminutes of SL.
+SREE_LAGNA_AMPLIFIES_THE_MOON = 360.0 / NAKSHATRA_SPAN
+
+
+def sree_lagna_moon_sensitivity(arcminutes_of_moon_error: float) -> float:
+    """Arcminutes of Sree Lagna error for a given error in the Moon.
+
+    SL is the lagna plus the Moon's progress through its nakshatra taken as a
+    fraction of the whole zodiac. The fraction has 13°20' underneath it and
+    360° on top, so every arcminute the Moon is out moves SL by 27.
+    """
+    return validate.finite("arcminutes_of_moon_error",
+                           arcminutes_of_moon_error) * SREE_LAGNA_AMPLIFIES_THE_MOON
+
+
 def ghati_lagna_birthtime_sensitivity(minutes_of_error: float) -> float:
     """Degrees of Ghati Lagna error for a given birthtime error (§5.5 comment 1).
 
