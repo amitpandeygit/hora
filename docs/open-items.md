@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 79 waiting on evidence · 2 parked**
+**5 waiting on Amit · 80 waiting on evidence · 2 parked**
 
 ---
 
@@ -317,14 +317,11 @@ houses. Derived from the book's own house lists, not asserted:
 | Capricorn | Venus | 10th | 5th |
 | Aquarius | Venus | 4th | 9th |
 
-The lagna lord is a separate, trivial case the book has already handled —
-"Lagna can be taken as a quadrant or a trine here. It is both" — so he holds
-both sides in every chart and is excluded from the table above.
-
-Taurus alone also makes Dharma-Karmadhipati unreachable: Saturn lords both the
-9th (Capricorn) and the 10th (Aquarius), so for that lagna the two lords can
-never associate. It is the only lagna whose 9th and 10th share a lord —
-Capricorn and Aquarius are the only adjacent pair of signs under one lord.
+The lagna lord is a separate, trivial case the book has handled — "Lagna can be
+taken as a quadrant or a trine here. It is both" — so he is excluded above.
+Taurus alone also makes Dharma-Karmadhipati unreachable: Saturn lords both its
+9th and 10th, and Capricorn and Aquarius are the only adjacent pair under one
+lord, so it is the only lagna where those two lords can never associate.
 
 **What we do:** nothing is concluded. `raaja_basic` reports such a planet as a
 qualifier naming the houses, and `dharma_karmadhipati` says outright when the
@@ -640,6 +637,28 @@ chart.
 question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
+
+### OI-125 — §19 never says whether a Kendradi dasa has a dasa lagna
+
+**Waiting on the book.** §19.3 says the dasa "shows the progression of lagna
+using the movement ruled by Sri Lakshmi", so lagna progresses here as it does
+in Narayana. But §19 gives no §18.4, and its seed is the stronger of lagna and
+the 7th — so on a 7th-seeded chart the question §18.4 answers for Narayana is
+open here:
+
+| | Narayana, §18.4 | Kendradi |
+|---|---|---|
+| seeded from lagna | dasa lagna = dasa rasi | not stated |
+| seeded from the 7th | dasa lagna = 7th from dasa rasi | not stated |
+
+§18.4's reasoning — the dasas progress whichever house they were seeded from —
+applies word for word, and §19.3 uses the same phrase, so carrying it over is
+the natural reading and probably right.
+
+**What we do:** nothing computes it; `kendradi` has no `dasa_lagna`, and
+`narayana.dasa_lagna` names §18.2.1's seed rule in its docstring.
+
+**Closes when:** a Kendradi example reads houses from anything.
 
 ### OI-122 — §18.4's sixteen principles miss eleven readings its own examples make
 

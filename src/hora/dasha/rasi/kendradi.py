@@ -202,3 +202,118 @@ def progression(
         houses=HOUSE_ORDER, group_names=groups,
         exception=exception, why=why,
     )
+
+
+# --------------------------------------------------------------------------
+# §19.3 Interpretation
+# --------------------------------------------------------------------------
+
+#: §19.3's attribution, which is what gives this dasa its meaning.
+PARASARA_MOVEMENT_RULERS: tuple[dict, ...] = (
+    {"houses": "quadrants", "ruler": "Sri Maha Vishnu"},
+    {"houses": "trines", "ruler": "Sri Maha Lakshmi"},
+)
+
+#: §19.3's naming, and it inverts what a reader expects. A sequence built of
+#: **trines** (1st, 5th, 9th, then the next quadrant's) is called
+#: *quadrant-based*, because the groups it steps between are quadrants. A
+#: sequence built of **quadrants** (1st, 4th, 7th, 10th, then the next
+#: trine's) is called *trine-based*, because the groups are trines. The label
+#: names the outer grouping, never the inner step.
+MOVEMENT_NAMING: tuple[dict, ...] = (
+    {"sequence": "1st, 5th, 9th, 10th etc", "steps": "trines",
+     "grouping": "quadrant-based", "ruler": "Narayana",
+     "seen_in": "Narayana dasa's dual signs — §18.2.1's Vishnu movement"},
+    {"sequence": "1st, 4th, 7th, 10th", "steps": "quadrants",
+     "grouping": "trine-based", "ruler": "Lakshmi",
+     "seen_in": "Kendradi rasi dasa — §19.2's order"},
+)
+
+#: §19.3's own words for the inversion, kept because paraphrasing it is how a
+#: reader ends up with it backwards.
+MOVEMENT_NAMING_TEXT = (
+    "In other words, the sequence 1st, 5th, 9th, 10th etc is quadrant-based "
+    "and it is ruled by Narayana. The sequence 1st, 4th, 7th, 10th is "
+    "trine-based and it is ruled by Lakshmi."
+)
+
+#: Why this dasa is the one for material fortune — §19.1 said it shows
+#: material success; §19.3 says why.
+LAKSHMI_SHOWS_PROSPERITY = (
+    "So Kendradi rasi dasa uses the movement ruled by Lakshmi. Lakshmi is the "
+    "goddess of wealth and prosperity. So this dasa shows the periods of "
+    "prosperity. It shows the progression of lagna using the movement ruled "
+    "by Sri Lakshmi."
+)
+
+#: §19.3's forward reference. Sudasa is this same dasa from a different seed,
+#: which is why :func:`progression` takes the seed and the lagna separately.
+#: §5.7 had already recorded that Sree Lagna is used in Sudasa; this is the
+#: other end of that link.
+SUDASA_IS_KENDRADI_FROM_SREE_LAGNA = (
+    "We will learn Sudasa in a later chapter. Sudasa is also a Kendradi Rasi "
+    "Dasa, but started from Sree Lagna instead of lagna. Sree Lagna is the "
+    "Lakshmi sthana in a horoscope. So its progression using the movement "
+    "ruled by Sri Lakshmi is more important."
+)
+
+
+#: §19.2 and §19.3 name the same three groups from different members. Rule 4
+#: lists the second as "2nd, 5th, 8th and 11th"; §19.3 calls it "the quadrants
+#: of 5th/9th", which would start it at the 5th. The **sets** are identical —
+#: {2,5,8,11} is the quadrant-set of 5 — and §19.2's printed orders settle the
+#: order within each group, so nothing turns on it. Recorded because the two
+#: descriptions look like they disagree and do not.
+SECOND_GROUP_IS_LISTED_FROM_ITS_LOWEST = (
+    "Next 4 dasas will belong to the panapharas (2nd, 5th, 8th and 11th) from "
+    "dasa seed."
+)
+
+
+def _trine_set(house: int) -> frozenset[int]:
+    return frozenset(((house - 1 + 4 * k) % 12) + 1 for k in range(3))
+
+
+def _quadrant_set(house: int) -> frozenset[int]:
+    return frozenset(((house - 1 + 3 * k) % 12) + 1 for k in range(4))
+
+
+def movement_grouping(houses: tuple[int, ...]) -> dict:
+    """Which of §19.3's two movements a twelve-house order is, and who rules.
+
+    Makes the section's claim checkable rather than only quoted. A run of four
+    trines whose leaders form a quadrant is **quadrant-based** and Narayana's;
+    a run of three quadrants whose leaders form a trine is **trine-based** and
+    Lakshmi's.
+
+    :param houses: twelve house numbers, 1 to 12, each once.
+    :returns: the grouping, its ruler, and the groups themselves.
+    :raises KendradiError: on an order that is neither.
+    """
+    if sorted(houses) != list(range(1, 13)):
+        raise KendradiError(
+            "expected the twelve houses once each, got "
+            f"{sorted(houses)}")
+
+    by_three = [houses[i:i + 3] for i in range(0, 12, 3)]
+    if (all(frozenset(g) == _trine_set(g[0]) for g in by_three)
+            and frozenset(g[0] for g in by_three) == _quadrant_set(by_three[0][0])):
+        return {"grouping": "quadrant-based", "ruler": "Narayana",
+                "steps": "trines", "groups": tuple(by_three)}
+
+    by_four = [houses[i:i + 4] for i in range(0, 12, 4)]
+    if all(frozenset(g) == _quadrant_set(g[0]) for g in by_four):
+        # The three groups are then necessarily the quadrant-sets of a trine.
+        # §19.3 names them from their trine members — "the quadrants of lagna,
+        # then of 5th/9th, then of the 3rd trine" — while §19.2 lists each
+        # from its lowest member, 1st, 2nd and 3rd. The sets are the same, and
+        # §19.2's printed orders give the order within them, so that is what
+        # `house_signs` follows. See SECOND_GROUP_IS_LISTED_FROM_ITS_LOWEST.
+        assert {frozenset(g) for g in by_four} == {
+            _quadrant_set(h) for h in _trine_set(by_four[0][0])}
+        return {"grouping": "trine-based", "ruler": "Lakshmi",
+                "steps": "quadrants", "groups": tuple(by_four)}
+
+    raise KendradiError(
+        f"{houses} is neither of §19.3's two movements — it is not four "
+        f"trines grouped by quadrant nor three quadrants grouped by trine")

@@ -256,3 +256,150 @@ def test_house_signs_refuses_a_direction_it_does_not_know():
 
     with pytest.raises(KendradiError, match="forward"):
         house_signs(R["Aries"], "widdershins")
+
+
+# --------------------------------------------------------------------------
+# §19.3 Interpretation — whose movement this is, and why that matters.
+# --------------------------------------------------------------------------
+
+def test_parasaras_two_rulers():
+    """"Parasara taught that the quadrants are ruled by Sri Maha Vishnu and
+    the trines are ruled by Sri Maha Lakshmi."
+    """
+    from hora.dasha.rasi.kendradi import PARASARA_MOVEMENT_RULERS
+
+    by_houses = {r["houses"]: r["ruler"] for r in PARASARA_MOVEMENT_RULERS}
+    assert by_houses == {"quadrants": "Sri Maha Vishnu",
+                         "trines": "Sri Maha Lakshmi"}
+
+
+def test_the_naming_is_the_inverse_of_what_the_steps_look_like():
+    """"the sequence 1st, 5th, 9th, 10th etc is quadrant-based and it is ruled
+    by Narayana. The sequence 1st, 4th, 7th, 10th is trine-based and it is
+    ruled by Lakshmi."
+
+    Read quickly this is backwards: the sequence made of **trines** is called
+    quadrant-based, and the one made of **quadrants** is called trine-based.
+    The label names the outer grouping, never the inner step. Pinned as a
+    contradiction between the two so it cannot be silently "corrected".
+    """
+    from hora.dasha.rasi.kendradi import MOVEMENT_NAMING, MOVEMENT_NAMING_TEXT
+
+    by_ruler = {m["ruler"]: m for m in MOVEMENT_NAMING}
+    assert by_ruler["Narayana"]["steps"] == "trines"
+    assert by_ruler["Narayana"]["grouping"] == "quadrant-based"
+    assert by_ruler["Lakshmi"]["steps"] == "quadrants"
+    assert by_ruler["Lakshmi"]["grouping"] == "trine-based"
+
+    for movement in MOVEMENT_NAMING:                 # steps never match label
+        assert not movement["grouping"].startswith(movement["steps"][:5])
+
+    assert "1st, 5th, 9th, 10th etc is quadrant-based" in MOVEMENT_NAMING_TEXT
+    assert "1st, 4th, 7th, 10th is trine-based" in MOVEMENT_NAMING_TEXT
+
+
+def test_the_two_movements_classify_from_their_house_orders_alone():
+    """§19.3's claim made checkable rather than only quoted.
+
+    Narayana dasa's dual-sign order really is four trines whose leaders form a
+    quadrant; Kendradi's really is three quadrants whose sets are a trine's.
+    Neither classification is asserted by hand — both fall out of the orders
+    the two chapters print.
+    """
+    from hora.dasha.rasi.kendradi import HOUSE_ORDER, movement_grouping
+    from hora.dasha.rasi.narayana import house_order
+
+    kendradi = movement_grouping(HOUSE_ORDER)
+    assert kendradi["grouping"] == "trine-based"
+    assert kendradi["ruler"] == "Lakshmi"
+    assert kendradi["steps"] == "quadrants"
+    assert kendradi["groups"] == ((1, 4, 7, 10), (2, 5, 8, 11), (3, 6, 9, 12))
+
+    vishnu = movement_grouping(house_order(R["Gemini"]))   # a dual sign
+    assert vishnu["grouping"] == "quadrant-based"
+    assert vishnu["ruler"] == "Narayana"
+    assert vishnu["steps"] == "trines"
+    assert vishnu["groups"] == ((1, 5, 9), (10, 2, 6), (7, 11, 3), (4, 8, 12))
+
+
+def test_narayanas_other_two_movements_are_neither():
+    """"This progression is seen for dual signs in Narayana dasa" — only for
+    dual signs. Brahma's regular walk and Shiva's 6th are neither of §19.3's
+    two, so the classifier refuses them rather than forcing a ruler on them.
+    """
+    from hora.dasha.rasi.kendradi import KendradiError, movement_grouping
+    from hora.dasha.rasi.narayana import house_order
+
+    for movable_or_fixed in (R["Aries"], R["Taurus"]):
+        with pytest.raises(KendradiError, match="neither"):
+            movement_grouping(house_order(movable_or_fixed))
+
+
+def test_the_two_sections_name_the_same_groups_from_different_members():
+    """§19.2 rule 4 lists the second group as "2nd, 5th, 8th and 11th"; §19.3
+    calls it "the quadrants of 5th/9th", which would start it at the 5th.
+
+    The sets are identical — {2,5,8,11} is the quadrant-set of 5 — and §19.2's
+    printed orders settle the order within each group. They look like they
+    disagree and do not.
+    """
+    from hora.dasha.rasi.kendradi import (
+        GROUPS,
+        SECOND_GROUP_IS_LISTED_FROM_ITS_LOWEST,
+        _quadrant_set,
+    )
+
+    assert set(GROUPS[1]["houses"]) == set(_quadrant_set(5))
+    assert set(GROUPS[2]["houses"]) == set(_quadrant_set(9))
+    assert set(GROUPS[0]["houses"]) == set(_quadrant_set(1))
+    assert GROUPS[1]["houses"][0] == 2          # §19.2's listing, not §19.3's
+    assert "2nd, 5th, 8th and 11th" in SECOND_GROUP_IS_LISTED_FROM_ITS_LOWEST
+
+
+def test_lakshmis_movement_is_why_this_dasa_is_for_prosperity():
+    """"Lakshmi is the goddess of wealth and prosperity. So this dasa shows
+    the periods of prosperity."
+
+    §19.1 said it shows material success; §19.3 says why. The two statements
+    have to agree or one of them is a transcription slip.
+    """
+    from hora.dasha.rasi.kendradi import (
+        LAKSHMI_SHOWS_PROSPERITY,
+        SHOWS_MATERIAL_SUCCESS,
+    )
+
+    assert "material success" in SHOWS_MATERIAL_SUCCESS
+    assert "periods of prosperity" in LAKSHMI_SHOWS_PROSPERITY
+    assert "goddess of wealth and prosperity" in LAKSHMI_SHOWS_PROSPERITY
+    assert "progression of lagna" in LAKSHMI_SHOWS_PROSPERITY
+
+
+def test_sudasa_is_this_dasa_from_sree_lagna_and_chapter_5_already_said_so():
+    """"Sudasa is also a Kendradi Rasi Dasa, but started from Sree Lagna
+    instead of lagna."
+
+    §5.7 recorded `SREE_LAGNA_USED_IN = "Sudasa"` before this chapter existed;
+    this is the other end of that link, and it tells us Sudasa will reuse this
+    module with a different seed. `progression` already takes the seed and the
+    lagna separately, so it is ready for it.
+    """
+    import inspect
+
+    from hora.charts.special_lagna import (
+        SREE_ALSO_MEANS,
+        SREE_LAGNA_USED_IN,
+        sree_lagna,
+    )
+    from hora.dasha.rasi.kendradi import (
+        SUDASA_IS_KENDRADI_FROM_SREE_LAGNA,
+        progression,
+    )
+
+    assert SREE_LAGNA_USED_IN == "Sudasa"
+    assert "Lakshmi" in SREE_ALSO_MEANS
+    assert "Lakshmi sthana" in SUDASA_IS_KENDRADI_FROM_SREE_LAGNA
+    assert "also a Kendradi Rasi Dasa" in SUDASA_IS_KENDRADI_FROM_SREE_LAGNA
+    assert callable(sree_lagna)
+
+    params = list(inspect.signature(progression).parameters)
+    assert params[:2] == ["seed", "lagna"]      # seed and lagna are separable

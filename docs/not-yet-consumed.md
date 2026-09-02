@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-19's prose (51)
+### Part 2 — the dasa systems map and chapters 16-19's prose (54)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -663,7 +663,9 @@ inconsistency is settled would be the wrong order.
 `MAHADASA_AND_ANTARDASA_COEXIST` · `SOLAR_ARC_IS_REQUIRED_FOR_CORRECT_RESULTS` ·
 `SOLAR_ARC_REFERENCE_SOFTWARE` · `SEED_CHOICE_READINGS` ·
 `NARAYANA_IS_THE_MOST_IMPORTANT_PHALITA_DASA` · `MOOLA_DASA_OUT_OF_SCOPE` ·
-`MOOLA_DASA_WHEN_IT_IS_BETTER` · `SHOWS_MATERIAL_SUCCESS`
+`MOOLA_DASA_WHEN_IT_IS_BETTER` · `SHOWS_MATERIAL_SUCCESS` ·
+`PARASARA_MOVEMENT_RULERS` · `LAKSHMI_SHOWS_PROSPERITY` ·
+`SUDASA_IS_KENDRADI_FROM_SREE_LAGNA`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -708,6 +710,9 @@ it — but it is the coverage line for the whole part, and
 | `MOOLA_DASA_OUT_OF_SCOPE` | §19.1 describes Kendradi Graha Dasa, or Moola dasa, in full and then declines to teach it. Recorded so its absence is visibly deliberate rather than an oversight, and so a reader meeting the name elsewhere finds the book's position |
 | `MOOLA_DASA_WHEN_IT_IS_BETTER` | §19.1's one testable claim about it — four planets in quadrants from the stronger of lagna and Moon. Nothing consumes it because Moola dasa is not built, but it is the condition under which it would matter |
 | `SHOWS_MATERIAL_SUCCESS` | §19.1's statement of what Lagna Kendradi Rasi Dasa is *for*. Narayana is general-purpose (§18.6); this one is narrow, and a reading layer choosing between them needs that |
+| `PARASARA_MOVEMENT_RULERS` | §19.3's attribution of quadrants to Vishnu and trines to Lakshmi. `movement_grouping` computes which movement a house order is and names its ruler; this is the pairing that gives the answer meaning |
+| `LAKSHMI_SHOWS_PROSPERITY` | Why the Kendradi walk is the one for prosperity. A reading layer choosing between the two rasi dasas needs the reason, not just the label |
+| `SUDASA_IS_KENDRADI_FROM_SREE_LAGNA` | §19.3's forward reference — Sudasa is this dasa seeded from Sree Lagna. `sree_lagna` and `progression` both exist, so Sudasa is a seed away; the chapter that teaches it has not arrived |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |
