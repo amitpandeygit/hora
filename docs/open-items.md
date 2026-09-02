@@ -787,7 +787,10 @@ Precedence keeps JHora's default, but Example 53 settles what the book does,
 against dated events rather than its own units: Rahu dasa starts Nov 1993 under
 savana, Feb 1994 under sidereal, and Saturn runs the pratyantardasa at both
 childbirths only under savana — sidereal gives Jupiter, and the example's
-conclusion would not follow. Nothing changes until you say.
+conclusion would not follow. Nothing changes until you say. **Scoped to
+nakshatra dasas**: §18.6 measures *rasi* dasa time by the Sun's arc, so a
+rasi-dasa year is a solar revolution and not 360 days. Whatever you decide here
+must not be carried across to `sub_period_arc`.
 
 **Closes when:** a JHora run settles parity 3, or you prefer the book's examples.
 
@@ -1082,18 +1085,14 @@ contradicts §11.5.4's example on the same page. Do not count it, and rule and
 example agree exactly.
 
 **So a yoga the book itself says may not operate well does not count as
-applicable.** Implemented as a `weakened` flag, set only by the Dala detectors
-— §11.5.2's clause is the only place the book says a yoga does not fully
-operate. Combustion (§11.2.4) and Kemadruma (§11.3.4) weaken *results*, which
-is a different claim, and they do not set it.
-
-**This is a judgement call.** It is the reading under which the section is
-self-consistent, which is why it was taken — but PVR never says it, and a
-reader could instead conclude that his example simply overlooked the Sarpa.
-Registered as PVR-13.
-
-It does not rescue Gola or Yuga (OI-79): those are superseded by Aasraya and
-Aakriti yogas, which carry no weakening clause at all.
+applicable.** Implemented as a `weakened` flag, set only by the Dala detectors —
+§11.5.2's clause is the only place the book says a yoga does not fully operate.
+Combustion (§11.2.4) and Kemadruma (§11.3.4) weaken *results*, a different
+claim, and do not set it. **This is a judgement call**: it is the reading under
+which the section is self-consistent, but PVR never says it and a reader could
+conclude his example simply overlooked the Sarpa. Registered as PVR-13. It does
+not rescue Gola or Yuga (OI-79), which are superseded by Aasraya and Aakriti
+yogas that carry no weakening clause at all.
 
 **Closes when:** JHora's Naabhasa output shows whether a weakened Dala yoga
 suppresses a Sankhya one.

@@ -3278,35 +3278,60 @@ def test_example_71_pratyantardasas_recurse_18_3_one_level_down():
     assert "5th pratyantardasa" in PRATYANTARDASA_RULE
 
 
-def test_example_71s_pratyantardasa_dates_do_not_divide_its_own_antardasa():
-    """See D-58. "Vi antardasa ... runs from 4th April 1991 to 4th March 1992.
-    Dividing it into 12 equal parts, we see that the 5th pratyantardasa runs
-    from 27th July 1991 to 25th August 1991."
+def test_example_71s_pratyantardasa_dates_need_18_6s_solar_arc():
+    """See D-58, **withdrawn**. This was raised as a book defect on the
+    reading that twelve equal parts means twelve equal spans of days. §18.6
+    says otherwise: a period's length is the arc the Sun traverses in it.
 
-    That span is 335 days, so a twelfth is 27.92 days and the 5th part runs
-    24 July to 21 August. The printed part is 29 days long and starts three
-    days late; twelve of it would end the antardasa on 11 March, not the 4th
-    the same sentence gives. The conclusion is untouched either way -- the
-    native landed on 15 August 1991, inside the 5th part on both readings.
+    An 11-month antardasa is 330 degrees and each pratyantardasa is 27.5. The
+    Sun crawls through July and August, so those parts take more days than the
+    winter ones -- and the printed dates fall out.
+
+    | | 5th pratyantardasa |
+    |---|---|
+    | equal days | 24 July - 21 August 1991 |
+    | §18.6's solar arc | 28 July 00:08 - 25 August 1991 |
+    | the book | 27 July - 25 August 1991 |
     """
     from datetime import date, timedelta
 
+    from hora.core.const import Graha
+    from hora.core.ephemeris import get_ephemeris
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_jd, from_local
+    from hora.dasha.rasi.narayana import solar_arc_instant, sub_period_arc
+
+    # what the equal-days reading gave, and why it looked like a defect
     start, end = date(1991, 4, 4), date(1992, 3, 4)
-    assert (end - start).days == 335
-    part = (end - start).days / 12
+    by_days = start + timedelta(days=(end - start).days / 12 * 4)
+    assert by_days == date(1991, 7, 24)
 
-    ours = (start + timedelta(days=part * 4), start + timedelta(days=part * 5))
-    assert ours[0] == date(1991, 7, 24)
-    assert ours[1] == date(1991, 8, 21)
+    ephemeris = get_ephemeris(Settings())
 
-    printed = (date(1991, 7, 27), date(1991, 8, 25))
-    assert (printed[1] - printed[0]).days == 29 != round(part)
-    assert start + timedelta(days=(printed[0] - start).days / 4 * 12) \
-        != end                                           # 11 March, not the 4th
+    def sun_at(jd: float) -> float:
+        return ephemeris.position(jd, int(Graha.SUN)).longitude
 
-    landing = date(1991, 8, 15)
-    assert ours[0] <= landing < ours[1]
-    assert printed[0] <= landing < printed[1]
+    anchor = from_local(year=1991, month=4, day=4, hour=17, minute=50,
+                        second=0.0, utc_offset_hours=5.5).jd_ut
+    arc = sub_period_arc(11, 2)
+    assert arc == 27.5
+
+    def local(jd: float) -> date:
+        return from_jd(jd, utc_offset_hours=5.5).local.date()
+
+    opens = solar_arc_instant(anchor, arc * 4, sun_at)
+    closes = solar_arc_instant(anchor, arc * 5, sun_at)
+    assert local(opens) == date(1991, 7, 28)          # the book says the 27th
+    assert local(closes) == date(1991, 8, 25)         # and the 25th, exactly
+    assert (opens - anchor) > 0
+
+    # the antardasa itself, which the book dates to 4 March 1992
+    assert local(solar_arc_instant(anchor, sub_period_arc(11, 1), sun_at)) == \
+        date(1992, 3, 4)
+
+    landing = from_local(year=1991, month=8, day=15, hour=12, minute=0,
+                         second=0.0, utc_offset_hours=5.5).jd_ut
+    assert opens <= landing < closes
 
 
 # --------------------------------------------------------------------------
@@ -5035,3 +5060,142 @@ def test_the_chapter_now_reads_eight_arudha_padas():
         assert 1 <= house <= 12
         if house not in (8,):                        # 8 needs §15.5.1 here
             assert 0 <= arudha_pada(house, d16_lagna, varga_signs).sign <= 11
+
+
+# --------------------------------------------------------------------------
+# §18.6 Sub-divisions of Narayana Dasa — and what "equal" means.
+# --------------------------------------------------------------------------
+
+def test_the_six_levels_and_their_order():
+    """"we can divide each antardasa into 12 equal pratyantardasas... each
+    pratyantardasa into 12 equal sookshma-antardasas (or simply sookshma
+    dasas), each sookshma-antardasa into 12 equal praana-antardasas (or simply
+    praana dasas) and each praana-antardasa into 12 equal deha-antardasas."
+
+    Example 75 named praana and deha without ordering them or mentioning
+    sookshma at all. This settles both: six levels, each twelve parts of the
+    one above, sookshma between pratyantardasa and praana.
+    """
+    from hora.dasha.rasi.narayana import SUB_DIVISION_LEVELS
+
+    names = [level["level"] for level in SUB_DIVISION_LEVELS]
+    assert names == ["dasa", "antardasa", "pratyantardasa",
+                     "sookshma-antardasa", "praana-antardasa",
+                     "deha-antardasa"]
+    assert [level["depth"] for level in SUB_DIVISION_LEVELS] == [0, 1, 2, 3, 4, 5]
+    assert SUB_DIVISION_LEVELS[0]["parts_of_parent"] is None
+    assert all(level["parts_of_parent"] == 12 for level in SUB_DIVISION_LEVELS[1:])
+
+
+def test_a_period_is_measured_by_the_suns_arc_not_by_days():
+    """"How do we measure the length of a sub-period? In days, hours, minutes
+    and seconds? No! We measure the length of a period by the angle of the arc
+    traversed by Sun during that period... In other words, we take 1 year=12
+    months and 1 month=30 days, where 1 day is the time in which Sun moves by
+    1 degree."
+
+    So a dasa year is one revolution of the Sun and a dasa month is 30
+    degrees of it. §18.6's own case is the answer key.
+    """
+    from hora.dasha.rasi.narayana import (
+        DASA_TIME_IS_SOLAR_ARC,
+        DASA_YEAR_MONTH_DAY,
+        sub_period_arc,
+    )
+
+    assert "In days, hours" not in DASA_TIME_IS_SOLAR_ARC
+    assert "arc traversed by Sun" in DASA_TIME_IS_SOLAR_ARC
+    assert "1 month=30 days" in DASA_YEAR_MONTH_DAY
+
+    assert sub_period_arc(1, 0) == 360.0              # a year is a revolution
+    assert sub_period_arc(1, 1) == 30.0               # a month is 30 degrees
+
+    # "If the dasa is of 5 years, each antardasa is of 5 months... 5x30=150"
+    assert sub_period_arc(5, 1) == 150.0
+    # "150/12=12 30' during each pratyantardasa"
+    assert sub_period_arc(5, 2) == 12.5
+
+    # and on down to the level the section stops at
+    assert sub_period_arc(5, 5) == 150.0 / 12 ** 4
+
+
+def test_the_solar_arc_instant_reproduces_a_dasa_start():
+    """A period boundary is where the Sun has moved the period's arc, so a
+    native's 21st dasa-year ends at his 21st sidereal solar return.
+
+    Chart 27's Le dasa begins after 4 + 0 + 3 + 9 + 5 = 21 years, and the
+    example dates it to April 1991 from an April 1970 birth.
+    """
+    from hora.core.const import Graha
+    from hora.core.ephemeris import get_ephemeris
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_jd, from_local
+    from hora.dasha.rasi.narayana import solar_arc_instant, sub_period_arc
+
+    ephemeris = get_ephemeris(Settings())
+
+    def sun_at(jd: float) -> float:
+        return ephemeris.position(jd, int(Graha.SUN)).longitude
+
+    birth = from_local(year=1970, month=4, day=4, hour=17, minute=50,
+                       second=0.0, utc_offset_hours=5.5).jd_ut
+    got = solar_arc_instant(birth, sub_period_arc(21, 0), sun_at)
+    assert got is not None
+
+    when = from_jd(got, utc_offset_hours=5.5).local
+    assert (when.year, when.month) == (1991, 4)
+
+    # and the Sun really is back where he started
+    from hora.core.timeutil import norm180
+
+    assert abs(norm180(sun_at(got) - sun_at(birth))) < 1e-3
+
+    assert solar_arc_instant(birth, 0.0, sun_at) == birth
+
+
+def test_the_solar_arc_is_not_the_same_as_equal_days():
+    """The whole point of the section. Twelve equal arcs are not twelve equal
+    spans of time, because the Sun is slower in July than in January -- and
+    that difference is what put D-58's dates four days out.
+    """
+    from hora.core.const import Graha
+    from hora.core.ephemeris import get_ephemeris
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_local
+    from hora.dasha.rasi.narayana import solar_arc_instant
+
+    ephemeris = get_ephemeris(Settings())
+
+    def sun_at(jd: float) -> float:
+        return ephemeris.position(jd, int(Graha.SUN)).longitude
+
+    winter = from_local(year=1991, month=1, day=1, hour=0, minute=0,
+                        second=0.0, utc_offset_hours=0.0).jd_ut
+    summer = from_local(year=1991, month=7, day=1, hour=0, minute=0,
+                        second=0.0, utc_offset_hours=0.0).jd_ut
+
+    thirty = 30.0
+    winter_days = solar_arc_instant(winter, thirty, sun_at) - winter
+    summer_days = solar_arc_instant(summer, thirty, sun_at) - summer
+    assert summer_days > winter_days + 1.0            # over a day apart
+    assert 29.0 < winter_days < 31.5
+    assert 29.0 < summer_days < 32.0
+
+
+def test_the_section_names_pvrs_own_program_as_the_reference():
+    """"A free software program... can be downloaded at
+    http://www.VedicAstrologer.org. Given the birthdata and the start year and
+    length of a mahadasa, this software program can divide the mahadasa upto
+    the level of deha-antardasas using Sun's longitude as the measure of
+    time."
+
+    Recorded because it is a check we could actually run one day, and because
+    it says what inputs the division needs: birth data, start year, length.
+    """
+    from hora.dasha.rasi.narayana import (
+        SOLAR_ARC_IS_REQUIRED_FOR_CORRECT_RESULTS,
+        SOLAR_ARC_REFERENCE_SOFTWARE,
+    )
+
+    assert SOLAR_ARC_REFERENCE_SOFTWARE.endswith("VedicAstrologer.org")
+    assert "Then only correct results" in SOLAR_ARC_IS_REQUIRED_FOR_CORRECT_RESULTS

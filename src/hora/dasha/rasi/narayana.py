@@ -440,7 +440,11 @@ class Antardasas:
     direction: str
     signs: tuple[int, ...]
     sign_names: tuple[str, ...]
-    #: Each antardasa's length in months, equal to the dasa's length in years.
+    #: Each antardasa's length in **dasa** months, equal to the dasa's length
+    #: in years. A dasa month is 30 degrees of the Sun's motion, not a
+    #: calendar month — see §18.6 and :func:`sub_period_arc`. Treating these
+    #: as calendar months puts a boundary days out, which is what made D-58
+    #: look like a defect in the book when it was a defect in our arithmetic.
     months_each: int
     #: Which of §18.3's seed exceptions applied, if any.
     exception: str | None
@@ -1140,3 +1144,108 @@ MAHADASA_AND_ANTARDASA_COEXIST = (
     "native had the comfort of vehicles in Li dasa. However, Ta antardasa was "
     "bad due to Rahu and A8."
 )
+
+
+# --------------------------------------------------------------------------
+# §18.6 Sub-divisions of Narayana Dasa
+# --------------------------------------------------------------------------
+
+#: §18.6's six levels. Each is twelve equal parts of the one above, and the
+#: section names them in order — which Example 75 had left open, and which
+#: adds sookshma, a level nothing before it mentioned.
+SUB_DIVISION_LEVELS: tuple[dict, ...] = (
+    {"level": "dasa", "depth": 0, "parts_of_parent": None, "also": "mahadasa"},
+    {"level": "antardasa", "depth": 1, "parts_of_parent": 12, "also": None},
+    {"level": "pratyantardasa", "depth": 2, "parts_of_parent": 12, "also": None},
+    {"level": "sookshma-antardasa", "depth": 3, "parts_of_parent": 12,
+     "also": "sookshma dasa"},
+    {"level": "praana-antardasa", "depth": 4, "parts_of_parent": 12,
+     "also": "praana dasa"},
+    {"level": "deha-antardasa", "depth": 5, "parts_of_parent": 12, "also": None},
+)
+
+#: §18.6's answer to what "equal" means, and it is not the calendar. This is
+#: the section that makes every date in chapter 18 a solar-arc date.
+DASA_TIME_IS_SOLAR_ARC = (
+    "We measure the length of a period (or a sub-period) by the angle of the "
+    "arc traversed by Sun during that period. Two periods are said to be "
+    "equal if and only if Sun moves by the same degrees, minutes and seconds "
+    "during the two periods."
+)
+
+#: The unit, stated as a chain. A rasi-dasa year is one full revolution of the
+#: Sun in sidereal longitude, so 12 months of 30 degrees each.
+DASA_YEAR_MONTH_DAY = (
+    "In other words, we take 1 year=12 months and 1 month=30 days, where 1 "
+    "day is the time in which Sun moves by 1 degree."
+)
+
+#: §18.6's own worked case, which is the answer key for :func:`sub_period_arc`.
+SOLAR_ARC_EXAMPLE = (
+    "If the dasa is of 5 years, each antardasa is of 5 months. This "
+    "corresponds to the time in which Sun moves by 5x30=150. When each "
+    "antardasa divided into 12 equal pratyantardasas, Sun moves by exactly "
+    "150/12=12 30' during each pratyantardasa."
+)
+
+#: Why it matters, in the section's own words.
+SOLAR_ARC_IS_REQUIRED_FOR_CORRECT_RESULTS = (
+    "Thus we should divide time in the space of Sun's longitude when dividing "
+    "dasas upto praana-antardasas or deha-antardasas. Then only correct "
+    "results will be obtained."
+)
+
+#: §18.6's pointer to PVR's own free Windows program, which divides a mahadasa
+#: to deha-antardasa level using the Sun's longitude as the measure of time.
+SOLAR_ARC_REFERENCE_SOFTWARE = "http://www.VedicAstrologer.org"
+
+
+def sub_period_arc(dasa_years: float, depth: int = 1) -> float:
+    """The Sun's arc, in degrees, for one sub-period of a Narayana dasa.
+
+    A dasa of *n* years is *n* revolutions of the Sun — "1 day is the time in
+    which Sun moves by 1 degree", so a year is 360 of them. Each level below
+    divides that by twelve.
+
+    :param dasa_years: the dasa's length in years, from :func:`dasa_length`.
+    :param depth: 0 for the dasa itself, 1 for an antardasa, 2 for a
+        pratyantardasa, and on to 5 for a deha-antardasa.
+    :returns: degrees of solar motion. §18.6's own case: a 5-year dasa gives
+        150 degrees per antardasa and 12.5 per pratyantardasa.
+    """
+    years = validate.non_negative("dasa_years", dasa_years)
+    level = validate.in_range("depth", depth, 0, 5)
+    return years * 360.0 / (12.0 ** level)
+
+
+def solar_arc_instant(
+    start_jd: float,
+    arc_degrees: float,
+    sun_longitude_at,
+    *,
+    year_days: float = 365.256360417,
+) -> float | None:
+    """When the Sun has moved ``arc_degrees`` from ``start_jd``.
+
+    The Sun never retrogrades, so its sidereal longitude rises monotonically
+    and an arc of *a* degrees is reached exactly once. A mean-rate estimate
+    lands within a couple of days — the equation of centre is the only error —
+    and the crossing is then solved for inside a window that can hold only one.
+
+    :param sun_longitude_at: callable taking a Julian day and returning the
+        Sun's **sidereal** longitude in degrees. Kept as a parameter so this
+        module stays clear of the ephemeris.
+    :param year_days: days per 360 degrees, for the estimate only; the answer
+        comes from the ephemeris, not from this.
+    :returns: the Julian day, or None if the crossing could not be bracketed.
+    """
+    from hora.panchanga.solver import scan_for_crossing
+
+    arc = validate.non_negative("arc_degrees", arc_degrees)
+    if arc == 0.0:
+        return start_jd
+    estimate = start_jd + arc * year_days / 360.0
+    target = (sun_longitude_at(start_jd) + arc) % 360.0
+    window = year_days / 12.0                      # a month either side
+    return scan_for_crossing(sun_longitude_at, target,
+                             estimate - window, estimate + window)

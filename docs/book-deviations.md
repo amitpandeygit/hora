@@ -47,9 +47,10 @@ Graha Drishti (D-24), two spellings each for subhaargala and paapaargala
 calculation; all would vanish under a "tidy-up" pass, and D-20 already showed
 that costs real information. Chapter 18 adds two of a different kind, where the
 book's own numbers disagree with each other rather than with ours: a
-transposed antardasa pair (D-57), pratyantardasa dates that do not divide the
-antardasa they are cut from (D-58), and an antardasa given 8 months where the
-same sentence says 10 (D-60).
+transposed antardasa pair (D-57) and an antardasa given 8 months where the
+same sentence says 10 (D-60). A third, D-58, was **withdrawn**: §18.6 measures
+dasa time by the Sun's arc rather than in days, and under that measure the
+book's dates were right and ours were not.
 
 **4. Live divergences: one known-wrong, and undecided ones at D-52, D-53 and D-59.**
 
@@ -1804,23 +1805,36 @@ asserts it is not the printed one, so the divergence is visible.
 
 Same shape as D-55, where Example 67 printed eleven of twelve rasis.
 
-## D-58 · Example 71's pratyantardasa dates do not divide its own antardasa
+## D-58 · WITHDRAWN — Example 71's pratyantardasa dates were right and ours were wrong
 
-**Status: closed.** Arithmetic, and it changes nothing the example concludes.
+**Status: withdrawn by §18.6, which we had not yet read when this was raised.**
+
+The claim was that this could not divide into twelve equal parts:
 
 > "Vi antardasa is of 11 months and it runs from 4th April 1991 to 4th March
-> 1992. Dividing it into 12 equal parts, we see that the 5th pratyantardasa
-> runs from 27th July 1991 to 25th August 1991."
+> 1992... the 5th pratyantardasa runs from 27th July 1991 to 25th August 1991."
 
-That span is 335 days, so a twelfth is 27.92 days and the 5th part runs
-**24 July to 21 August 1991**. The printed part is 29 days long and begins
-three days late; twelve of it would end the antardasa on 11 March 1992, not
-the 4th the same sentence gives.
+It cannot, in **days** — 335 days over twelve is 27.92, and that gives 24 July
+to 21 August. But §18.6 says days are not the measure: *"We measure the length
+of a period by the angle of the arc traversed by Sun during that period. Two
+periods are said to be equal if and only if Sun moves by the same degrees,
+minutes and seconds."* An 11-month antardasa is 330 degrees of solar motion and
+each pratyantardasa is 27.5 degrees — and the Sun crawls through July and
+August, so those parts take more days than the winter ones.
 
-**What we do:** divide the antardasa as stated. The conclusion is unaffected —
-the native landed on 15 August 1991, which falls in the 5th pratyantardasa on
-either reading, and the 5th from Ar forward is Le either way. The fixture pins
-both sets of dates and the landing inside both.
+| | 5th pratyantardasa |
+|---|---|
+| ours, equal days | 24 July – 21 August 1991 |
+| ours, §18.6's solar arc | **28 July 00:08 – 25 August 1991** |
+| the book | **27 July – 25 August 1991** |
+
+The end matches to the day and the start is eight minutes past midnight on the
+28th. The book was right throughout.
+
+**What we do:** `sub_period_arc` and `solar_arc_instant` implement the measure,
+and the Example 71 fixture now asserts the solar-arc dates against the book's
+rather than asserting a disagreement. The lesson is recorded on
+`Antardasas.months_each`, whose name invites exactly this mistake.
 
 ## D-59 · Example 72 does not add a year for an exalted **node**
 
