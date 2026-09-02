@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-19's prose (61)
+### Part 2 — the dasa systems map and chapters 16-20's prose (64)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -668,7 +668,8 @@ inconsistency is settled would be the wrong order.
 `SUDASA_IS_KENDRADI_FROM_SREE_LAGNA` · `SUCCESS_READINGS` ·
 `WHY_AMK_ARGALA_GIVES_POWER` · `STRONGER_CO_LORD_IS_NOT_THE_LORD` ·
 `SUDASA_IS_SUPERIOR` · `GATI_NAMES` · `MANDOOKA_DASA_MISATTRIBUTION` ·
-`MANDOOKA_DASA_IS_OF_RUDRAMSA`
+`MANDOOKA_DASA_IS_OF_RUDRAMSA` · `NAMES` · `SHOWS` ·
+`DIAGNOSTIC_CLAIMS`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -723,6 +724,9 @@ it — but it is the coverage line for the whole part, and
 | `GATI_NAMES` | The two movements §19.4 names. `kendraadi gati` is built and is `HOUSE_ORDER`; `mandooki gati` is defined only as "the 3rd/11th jump" plus a pointer to a Kalachakra discussion the book has not given, so it is recorded and not built |
 | `MANDOOKA_DASA_MISATTRIBUTION` | §19.4's correction of another author — the only place the book disputes a named dasa by attribution. A claim about naming, not a calculation, so it is stored whole |
 | `MANDOOKA_DASA_IS_OF_RUDRAMSA` | What the real Mandooka dasa is for — wars and death, read in D-11. The chart is in the varga registry; the dasa waits on mandooki gati, which waits on Kalachakra |
+| `NAMES` | Sudasa's three names. "Rasi Dasa" unqualified means this one specifically, not the category Narayana and Lagna Kendradi also belong to — a reading layer taking a system by name needs that |
+| `SHOWS` | §20.1's statement of what Sudasa is for. With Narayana's "general purpose" and Lagna Kendradi's "material success" it completes the three rasi dasas' division of labour; choosing among them is the reading |
+| `DIAGNOSTIC_CLAIMS` | §20.1's three claims, stated as consequences — a leader in power "must" be in a favourable Sudasa. The strongest falsifiable statements the book makes about any dasa, and the natural first check once a chart with dated events is to hand |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |

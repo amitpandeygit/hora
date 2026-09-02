@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 80 waiting on evidence · 2 parked**
+**5 waiting on Amit · 81 waiting on evidence · 2 parked**
 
 ---
 
@@ -637,6 +637,25 @@ chart.
 question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
+
+### OI-126 — §20.2 drops §19.2's Saturn and Ketu exceptions without saying so
+
+**Waiting on the book.** §20.2 rule 2 is §19.2 rule 2 with SL for lagna and the
+NOTE kept — and both exception sentences gone. They were phrased "in the
+stronger of lagna and 7th", which Sudasa has no analogue for, so the omission
+may be because the *phrase* does not apply rather than because the exceptions
+do not.
+
+Chart 8 makes it decisive rather than academic. Its Sree Lagna and its Lagna
+Kendradi seed are both Scorpio, **Ketu sits there**, and chapter 19's exception
+reverses Lagna Kendradi to forward while Sudasa runs backward — the two orders
+share only the first period. Whichever way it goes, it decides eleven of twelve
+dasas on any chart with Saturn or Ketu in the SL rasi.
+
+**What we do:** apply neither. §20.2 states none, and inventing one would be a
+guess in a place the book has been explicit twice before.
+
+**Closes when:** a Sudasa example has Saturn or Ketu in the SL rasi.
 
 ### OI-125 — §19 never says whether a Kendradi dasa has a dasa lagna
 

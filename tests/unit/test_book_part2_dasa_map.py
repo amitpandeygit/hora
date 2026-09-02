@@ -51,7 +51,7 @@ def test_vimsottari_and_ashtottari_are_ordered_oppositely():
     assert by_name["Ashtottari dasa"]["purpose"] == "ayur/phalita"
 
 
-def test_four_of_the_nine_are_built():
+def test_five_of_the_nine_are_built():
     """This is the coverage line for Part 2 and should fail — loudly — as each
     one lands. A nakshatra system is built when its `key` is in the service's
     registry; a rasi dasa when it names a `module` that imports.
@@ -66,13 +66,13 @@ def test_four_of_the_nine_are_built():
             importlib.import_module(system["module"])
             built.add(system["name"])
     assert built == {"Vimsottari dasa", "Ashtottari dasa", "Narayana dasa",
-                     "Lagna Kendradi Rasi dasa"}
+                     "Lagna Kendradi Rasi dasa", "Sudasa"}
 
     missing = [s["name"] for s in PART_2_DASA_SYSTEMS
                if s["key"] is None and not s.get("module")]
-    assert len(missing) == 5
+    assert len(missing) == 4
     assert "Kalachakra dasa" in missing      # a nakshatra dasa we do not have
-    assert missing[0] == "Sudasa"            # the next one the book teaches
+    assert missing[0] == "Drigdasa"          # the next one the book teaches
 
 
 def test_the_engine_carries_nakshatra_systems_part_2_never_names():
