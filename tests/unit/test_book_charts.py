@@ -47,7 +47,7 @@ def client():
 def test_the_register_holds_every_chart_supplied_so_far():
     assert numbers() == (
         1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-        20, 21, 22, 23, 24, 25, 26, 27, 28, 29)
+        20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30)
     assert CHARTS_NOT_SUPPLIED == (4,)
     assert 4 not in numbers()
 

@@ -3813,3 +3813,268 @@ def test_example_73_picks_an_antardasa_by_what_its_rasi_holds():
     assert sign_dignity(venus, varga_longitudes[venus]) == "exalted"
 
     assert "significator of marriage" in ANTARDASA_CANDIDATE_BY_CONTENTS
+
+
+# --------------------------------------------------------------------------
+# Exercise 29 — Chart 30. Our derivation, recorded before the book's answer
+# was read. Any line that turns out to disagree is a finding, not a fixture
+# to be quietly adjusted.
+# --------------------------------------------------------------------------
+
+#: All twelve, in progression order, as we derive them.
+EX29_LENGTHS = [("Le", 2), ("Vi", 8), ("Li", 7), ("Sc", 10), ("Sg", 10),
+                ("Cp", 5), ("Aq", 6), ("Pi", 5), ("Ar", 8), ("Ta", 12),
+                ("Ge", 7), ("Cn", 5)]
+
+
+def _chart_30_d9():
+    from hora.charts.book import graha_longitudes, longitudes
+    from hora.charts.vargas import varga
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(30).items()}
+    ninth = {g: varga(lon, "D9") for g, lon in rasi.items()}
+    return ({g: p.sign for g, p in ninth.items()},
+            {g: p.longitude for g, p in ninth.items()},
+            int(longitudes(30)["Asc"] // 30),
+            varga(longitudes(30)["Asc"], "D9").sign)
+
+
+def _ex29_lord(rasi, varga_signs, varga_longitudes):
+    """§15.5.1 for a co-owned rasi, with rule 5a's lengths supplied."""
+    from hora.charts.colord import CO_LORDS, stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    if rasi not in CO_LORDS:
+        return int(RASI_LORD[rasi])
+    years = {g: dasa_length(rasi, g, varga_signs[g],
+                            sign_dignity(g, varga_longitudes[g])).years
+             for g in CO_LORDS[rasi]}
+    return stronger(rasi, varga_longitudes, purpose="dasa",
+                    dasa_years=years).winner
+
+
+def test_chart_30_is_not_recomputable_and_its_navamsa_still_reproduces():
+    """The chart gives 3 June 1976 and nothing else -- no time, no place. The
+    printed longitudes are the rasi chart's and both diagrams are the navamsa,
+    which reproduces from them exactly, arudha lagna and upapada included.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart, is_recomputable, longitudes
+    from hora.charts.vargas import varga
+
+    assert not is_recomputable(30)
+    drawn = chart(30)["divisional"]["D9"]
+    printed = longitudes(30)
+    for name, sign in drawn.items():
+        if name in ("AL", "UL"):
+            continue
+        assert ABBR[varga(printed[name], "D9").sign] == sign, name
+
+    varga_signs, _vlon, _rasi_lagna, lagna_of_varga = _chart_30_d9()
+    assert lagna_of_varga == R["Cancer"]
+    assert ABBR[arudha_pada(1, lagna_of_varga, varga_signs).sign] == drawn["AL"]
+    assert ABBR[arudha_pada(12, lagna_of_varga, varga_signs).sign] == drawn["UL"]
+
+
+def test_exercise_29_seed_is_leo_and_saturn_rewrites_the_progression():
+    """Our derivation. §18.5: D-9's seed is the 9th house, which is Cn from
+    the Sc lagna; its lord the Moon is in Aq in the navamsa, so Aq is lagna.
+    §15.5.2 then prefers the 7th: Le takes rule 2 two to one.
+
+    Le holds **Saturn**, so §18.2.1's exception fires and the movement becomes
+    Brahma's regular one. Le is fixed, so without the exception it would be
+    Shiva's 6th -- Le, Cp, Ge, Sc... a completely different order and a
+    completely different answer.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_seed, progression, varga_lagna
+
+    varga_signs, varga_longitudes, rasi_lagna, _d9 = _chart_30_d9()
+    assert rasi_lagna == R["Scorpio"]
+
+    derived = varga_lagna(9, rasi_lagna, varga_signs)
+    assert derived["seed_rasi"] == R["Cancer"]
+    assert derived["lord"] == int(Graha.MOON)
+    assert derived["lagna"] == R["Aquarius"]
+
+    seed = dasa_seed(derived["lagna"], varga_longitudes)
+    assert seed["seed"] == R["Leo"]
+    assert seed["decided_by"] == "2"
+    assert "Leo count 2" in seed["reason"] and "Aquarius count 1" in seed["reason"]
+
+    occupants = {g for g, s in varga_signs.items() if s == R["Leo"]}
+    assert occupants == {int(Graha.SATURN)}
+    got = progression(R["Leo"], occupants)
+    assert got.exception == "Saturn"
+    assert got.god == "Brahma"
+    assert got.direction == "forward"
+    assert [ABBR[s] for s in got.signs] == [a for a, _y in EX29_LENGTHS]
+
+
+def test_exercise_29_scorpio_needs_15_5_1s_rule_5a():
+    """Our derivation, and the first time the co-lord cascade has had to go
+    past rule 4 in this book.
+
+    Neither Mars nor Ketu is in Scorpio, neither is joined, neither draws
+    Jupiter, Mercury or its dispositor, neither is exalted, and both sit in
+    dual rasis -- basic through 4 all tie. Rule 5a is the dasa-duration
+    tie-break: "take the planet giving a larger length for dasa". Mars in Sg
+    gives 1 year, Ketu in Vi gives 10, so Scorpio takes Ketu and 10 years.
+    """
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    varga_signs, varga_longitudes, _rasi, _d9 = _chart_30_d9()
+    mars, ketu = int(Graha.MARS), int(Graha.KETU)
+
+    undecided = stronger(R["Scorpio"], varga_longitudes, purpose="dasa")
+    assert undecided.winner is None                     # without the lengths
+    assert "5a" in undecided.reason
+
+    by_mars = dasa_length(R["Scorpio"], mars, varga_signs[mars])
+    by_ketu = dasa_length(R["Scorpio"], ketu, varga_signs[ketu])
+    assert (by_mars.years, by_ketu.years) == (1, 10)
+
+    settled = stronger(R["Scorpio"], varga_longitudes, purpose="dasa",
+                       dasa_years={mars: by_mars.years, ketu: by_ketu.years})
+    assert settled.winner == ketu
+    assert settled.decided_by == "5a"
+
+
+@pytest.mark.parametrize("abbr,years", EX29_LENGTHS)
+def test_exercise_29_lengths(abbr, years):
+    """Our derivation, all twelve, counted and dignified in the navamsa."""
+    from hora.charts.dignity import sign_dignity
+    from hora.dasha.rasi.narayana import dasa_length
+
+    varga_signs, varga_longitudes, _rasi, _d9 = _chart_30_d9()
+    rasi_index = BY_ABBR[abbr]
+    lord = _ex29_lord(rasi_index, varga_signs, varga_longitudes)
+    got = dasa_length(rasi_index, lord, varga_signs[lord],
+                      sign_dignity(lord, varga_longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_exercise_29_scorpio_dasa_holds_june_2000():
+    """Our derivation. From 3 June 1976: Le to 1978, Vi to 1986, Li to 1993,
+    then Sc for ten years to 2003.
+
+    Scorpio itself is the 5th from the navamsa lagna and the 4th from UL --
+    neither of Example 72's marriage-ending houses. So the dasa does not
+    explain the event, which is why the exercise asks for the antardasa.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.dasha.rasi.narayana import varga_house
+
+    varga_signs, _vlon, _rasi, lagna_of_varga = _chart_30_d9()
+    year, spans = 1976, {}
+    for abbr, years in EX29_LENGTHS:
+        spans[abbr] = (year, year + years)
+        year += years
+
+    assert spans["Sc"] == (1993, 2003)
+    assert spans["Sc"][0] <= 2000 < spans["Sc"][1]
+
+    ul = arudha_pada(12, lagna_of_varga, varga_signs).sign
+    assert ul == R["Leo"]
+    assert varga_house(lagna_of_varga, R["Scorpio"]) == 5
+    assert varga_house(ul, R["Scorpio"]) == 4
+
+
+def test_exercise_29_our_answer_is_virgo_antardasa():
+    """**Our answer to Exercise 29: Virgo antardasa in Scorpio dasa**,
+    running February to December 2000.
+
+    Sc dasa is ten years, so each antardasa is ten months. The antardasa seed
+    is the stronger of Sc and Ta, and Ta takes rule 1 outright -- Venus
+    occupies it and Sc is empty. Ta's lord Venus is in Ta itself, so the
+    antardasas begin there; Ta is an even sign, so they run backward. Virgo
+    is the ninth, and the ninth begins eighty months after June 1993.
+    """
+    from hora.charts.rasi_strength import stronger
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import antardasas
+
+    varga_signs, varga_longitudes, _rasi, _d9 = _chart_30_d9()
+    seed = stronger(R["Scorpio"], R["Taurus"], varga_longitudes,
+                    purpose="phalita")
+    assert seed.winner == R["Taurus"]
+    assert seed.decided_by == "1"
+
+    got = antardasas(R["Scorpio"], 10, varga_longitudes,
+                     seed_occupants={g for g, s in varga_signs.items()
+                                     if s == R["Scorpio"]})
+    assert got.seed == R["Taurus"]
+    assert got.start == R["Taurus"] == varga_signs[int(Graha.VENUS)]
+    assert got.direction == "backward"
+    assert got.months_each == 10
+    assert got.signs[8] == R["Virgo"]                   # the ninth
+
+    start = 1993 * 12 + 5 + 8 * got.months_each         # June 1993 + 80 months
+    assert (start // 12, start % 12 + 1) == (2000, 2)   # February 2000
+    finish = start + got.months_each
+    assert (finish // 12, finish % 12 + 1) == (2000, 12)
+    assert start <= 2000 * 12 + 5 < finish              # early June 2000
+
+
+def test_exercise_29_virgo_is_the_second_from_upapada():
+    """Our explanation. Example 72: "dasas of the 2nd and 7th houses from UL
+    can bring troubles in marriage and even a divorce" -- the 2nd and 7th
+    being a bhava's marakas, here killing the marriage rather than the native.
+
+    Three things converge on Virgo. It is the 2nd from UL. It holds **Ketu**,
+    who is separation, and who is also the lord of the running dasa rasi
+    Scorpio -- so the dasa lord occupies the antardasa rasi. And it holds the
+    **arudha lagna**, how the native is seen, which fits an act the exercise
+    says was hers against advice.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import (
+        NAVAMSA_MARRIAGE_DASA_RULES,
+        varga_house,
+    )
+
+    varga_signs, varga_longitudes, _rasi, lagna_of_varga = _chart_30_d9()
+    ul = arudha_pada(12, lagna_of_varga, varga_signs).sign
+    al = arudha_pada(1, lagna_of_varga, varga_signs).sign
+
+    assert varga_house(ul, R["Virgo"]) == 2
+    ending = next(r for r in NAVAMSA_MARRIAGE_DASA_RULES
+                  if r["from"] == "UL" and "divorce" in r["gives"])
+    assert 2 in ending["houses"]
+
+    assert varga_signs[int(Graha.KETU)] == R["Virgo"]
+    assert _ex29_lord(R["Scorpio"], varga_signs, varga_longitudes) == int(Graha.KETU)
+    assert al == R["Virgo"]
+
+
+def test_exercise_29_the_branch_rule_5a_closed_off():
+    """Worth recording because it is close. Had Scorpio gone to Mars, its dasa
+    would be one year and June 2000 would fall in **Sg dasa** instead -- and
+    Sg is the 6th from the navamsa lagna, Example 72's *other* marriage-ending
+    dasa. So both branches explain the event; only rule 5a says which
+    antardasa the exercise is asking for.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_length, varga_house
+
+    varga_signs, varga_longitudes, _rasi, lagna_of_varga = _chart_30_d9()
+    year = 1976
+    for abbr, _ours in EX29_LENGTHS[:5]:
+        rasi_index = BY_ABBR[abbr]
+        lord = (int(Graha.MARS) if rasi_index == R["Scorpio"]
+                else int(RASI_LORD[rasi_index]))
+        years = dasa_length(rasi_index, lord, varga_signs[lord],
+                            sign_dignity(lord, varga_longitudes[lord])).years
+        if year <= 2000 < year + years:
+            assert abbr == "Sg"
+            assert varga_house(lagna_of_varga, rasi_index) == 6
+            break
+        year += years
+    else:                                               # pragma: no cover
+        raise AssertionError("June 2000 fell outside the first five dasas")

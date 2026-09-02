@@ -424,6 +424,36 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    30: {
+        "title": "A lady — Exercise 29, a marriage ended",
+        "birth": "June 3, 1976",
+        "longitudes": {
+            "Asc": "0 Sc 39", "Sun": "19 Ta 29", "Moon": "23 Cn 39",
+            "Mars": "16 Cn 42", "Merc": "1 Ta 29", "Jup": "22 Ar 43",
+            "Ven": "15 Ta 29", "Sat": "6 Cn 17", "Rahu": "17 Li 33",
+            "Ketu": "17 Ar 33", "HL": "6 Ta 24", "GL": "17 Li 30",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Jup": "AmK", "Sun": "BK", "Mars": "MK",
+            "Ven": "PiK", "Rahu": "PK", "Sat": "GK", "Merc": "DK",
+        },
+        "divisional": {
+            "D9": {
+                "Asc": "Cn", "Sun": "Ge", "Moon": "Aq", "Mars": "Sg",
+                "Merc": "Cp", "Jup": "Li", "Ven": "Ta", "Sat": "Le",
+                "Rahu": "Pi", "Ketu": "Vi", "HL": "Aq", "GL": "Pi",
+                "AL": "Vi", "UL": "Le",
+            },
+        },
+        "events": {"marriage ended": "early June 2000"},
+        "first_seen": "chapter 18, Exercise 29",
+        "note": (
+            "Not recomputable: the chart gives a date and nothing else -- no "
+            "time, no place. The dasas still date from 3 June 1976, which is "
+            "enough for the exercise. Both diagrams are the navamsa, and it "
+            "draws the upapada, as Chart 29 does."
+        ),
+    },
     29: {
         "title": "A lady — navamsa Narayana dasa, marriage",
         "birth": "July 8, 1969, 10:47 am (IST), 82 E 15, 16 N 57",
