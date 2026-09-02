@@ -2470,12 +2470,13 @@ def test_oi_122_names_every_reading_the_sixteen_principles_do_not_carry():
                    "NAVAMSA_MARRIAGE_DASA_RULES",
                    "ANTARDASA_CANDIDATE_BY_CONTENTS",
                    "CAREER_DASA_READINGS",
-                   "AFFLICTED_KARAKA_IN_THE_DASA_RASI"):
+                   "AFFLICTED_KARAKA_IN_THE_DASA_RASI",
+                   "ARUDHA_PADA_DASA_READINGS"):
         assert symbol in entry, symbol
         assert hasattr(narayana, symbol), symbol
 
     assert "Ex 69" in entry and "Exercise 28" in entry
-    assert entry.count("\n|") >= 10         # header, divider and the readings
+    assert entry.count("\n|") >= 11         # header, divider and the readings
 
 
 def test_every_reading_outside_the_sixteen_points_back_at_oi_122():
@@ -2485,7 +2486,7 @@ def test_every_reading_outside_the_sixteen_points_back_at_oi_122():
     from pathlib import Path
 
     source = Path("src/hora/dasha/rasi/narayana.py").read_text(encoding="utf-8")
-    assert source.count("OI-122") == 9
+    assert source.count("OI-122") == 10
 
 
 # --------------------------------------------------------------------------
@@ -4416,8 +4417,11 @@ def test_example_74_is_the_first_real_use_of_18_4s_thirds():
 
 
 # --------------------------------------------------------------------------
-# Exercise 30 — Chart 32, a D-10 dasa. Our derivation and our verdict,
-# recorded before the answer was read.
+# Exercise 30 — Chart 32, a D-10 dasa. Derived before the answer was read.
+# The dasa, all six lengths and the verdict were right; two indicators were
+# missed and one qualification was wrong. Both are kept below rather than
+# tidied away — see `test_exercise_30_the_event_fell_in_the_third_we_called
+# _weakest`.
 # --------------------------------------------------------------------------
 
 EX30_LENGTHS = [("Sg", 11), ("Le", 3), ("Ar", 11), ("Pi", 4), ("Sc", 4),
@@ -4513,9 +4517,9 @@ def test_exercise_30_lengths(abbr, years):
                        dignity).years == years
 
 
-def test_exercise_30_our_answer_is_cancer_dasa():
-    """**Our answer to the first half of Exercise 30: Cancer dasa**, July 1994
-    to July 1999, which holds 1996-1998 entire.
+def test_exercise_30_the_answer_is_cancer_dasa():
+    """"Cancer dasa was running in 1996-1998." July 1994 to July 1999, and
+    all six printed lengths are ours.
 
     Scorpio is co-owned but does not need §15.5.1 here: Mars and Ketu are both
     in Pi in the D-10, so either gives the same four years.
@@ -4539,9 +4543,10 @@ def test_exercise_30_our_answer_is_cancer_dasa():
     assert spans["Cn"][0] <= 1996 and 1998 < spans["Cn"][1]
 
 
-def test_exercise_30_our_verdict_is_that_cancer_is_good_for_career():
-    """**Our answer to the second half: good.** Every reading is counted from
-    the D-10's own lagna Pi, which OI-123 settled.
+def test_exercise_30_cancer_is_good_for_career():
+    """"So this period must have been excellent for the native's career."
+    Ours too, derived before the answer was read. Every reading is counted
+    from the D-10's own lagna Pi, which OI-123 settled.
 
     | | | |
     |---|---|---|
@@ -4555,6 +4560,10 @@ def test_exercise_30_our_verdict_is_that_cancer_is_good_for_career():
 
     Example 74's Aquarius was the 8th, the 12th from AL, the satru pada, and
     held Sun with Rahu. Cancer is the mirror of it on every count.
+
+    The answer adds two we did not compute: an **argala** from each of Jupiter
+    and Sun alongside their aspects, and **A9**, the bhaagya pada, which also
+    falls in Cancer. Both are tested below.
     """
     from hora.charts.arudha import arudha_pada
     from hora.charts.aspects import rasi_drishti
@@ -4582,16 +4591,20 @@ def test_exercise_30_our_verdict_is_that_cancer_is_good_for_career():
     assert elongation < 180                            # waxing, so a benefic
 
 
-def test_exercise_30_the_asked_window_falls_in_the_weakest_third():
-    """The qualification on our verdict. Cancer's lord the Moon is in the 12th
-    from the D-10 lagna -- a trine's lord in a house of loss, and neither
-    exalted nor debilitated, so §18.4's principles 11 to 13 give no verdict.
+def test_exercise_30_the_event_fell_in_the_third_we_called_weakest():
+    """Our one wrong call, kept so it is not repeated.
 
-    §18.4's thirds put **his** third at March 1996 to November 1997, which is
-    most of the window the exercise asks about. So we would read the dasa as
-    good but its middle as its slowest stretch, firming from late 1997 when
-    the aspecting Jupiter and waxing Moon take over the last third -- nothing
-    occupies Cancer, so the last third belongs to those aspects alone.
+    We qualified the verdict: Cancer's lord the Moon is in the 12th from the
+    D-10 lagna, so §18.4's thirds would make **his** stretch -- March 1996 to
+    November 1997 -- the dasa's slowest. The native sold his company in
+    **February 1997**, squarely inside it.
+
+    The reasoning was ours, not the book's. Nothing in §18.4 penalises a
+    benefic in the 12th; principle 6 reaches the 12th only for Rahu, and
+    Example 74's "12th house of losses" was counted from AL, not from lagna,
+    and was about the dasa rasi rather than its lord. The Moon here is
+    waxing, is Cancer's own lord, and aspects Cancer from where he stands --
+    all of which argue the other way and which we did not weigh.
     """
     from hora.charts.dignity import sign_dignity
     from hora.core.const import RASI_LORD, Graha
@@ -4647,3 +4660,93 @@ def test_a_vargas_house_frame_does_not_rotate_between_dasas():
     jupiter = varga_signs[int(Graha.JUPITER)]
     assert {varga_house(d10_lagna, jupiter)} == {9}
     assert "not the progression of lagna" in VARGA_HOUSE_FRAME_DOES_NOT_ROTATE
+
+
+def test_exercise_30s_cancer_holds_the_bhaagya_pada_as_well():
+    """"Moreover, it has bhaagya pada (A9 - arudha pada of the 9th house)...
+    Dasa of A9 in D-10 can give excellent position in career."
+
+    We missed this one. Cancer holds **two** arudhas in the D-10 -- the arudha
+    lagna and A9 -- and the answer rests its "excellent" on the second. The
+    9th from the Pi lagna is Sc, whose co-lords Mars and Ketu are both in Pi,
+    so §15.5.1 does not need to choose: either gives Cancer.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import Graha
+
+    _rasi, varga_signs, _vlon, _lagna, d10_lagna = _chart_32_d10()
+    ninth = (d10_lagna + 8) % 12
+    assert ninth == R["Scorpio"]
+    assert varga_signs[int(Graha.MARS)] == varga_signs[int(Graha.KETU)]
+
+    for co_lord in (Graha.MARS, Graha.KETU):
+        got = arudha_pada(9, d10_lagna, varga_signs, {ninth: int(co_lord)})
+        assert got.sign == R["Cancer"], co_lord
+
+    assert arudha_pada(1, d10_lagna, varga_signs).sign == R["Cancer"]
+
+
+def test_exercise_30s_argalas_on_cancer_come_from_jupiter_and_sun():
+    """"Cancer has argalas and rasi aspects from lagna lord Jupiter and Sun."
+
+    The other one we missed. Both grahas give Cancer an argala *and* a rasi
+    aspect: the Sun from Ta, the 11th, a primary argala; Jupiter from Sc, the
+    5th, a secondary one. Jupiter is also the D-10 lagna's lord, which is why
+    the answer names him that way.
+
+    Worth recording that both are obstructed on our reckoning -- Venus, Saturn
+    and Rahu sit in the 3rd against the Sun's one graha, and Mars and Ketu in
+    the 9th against Jupiter's one. The answer cites the argalas without
+    mentioning the virodhargalas.
+    """
+    from hora.charts.argala import argalas_on_sign
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import NATURAL_MALEFIC, RASI_LORD, Graha
+
+    _rasi, varga_signs, _vlon, _lagna, d10_lagna = _chart_32_d10()
+    assert int(RASI_LORD[d10_lagna]) == int(Graha.JUPITER)
+
+    occupants: dict[int, tuple[int, ...]] = {}
+    for graha, sign in varga_signs.items():
+        occupants[sign] = (*occupants.get(sign, ()), graha)
+
+    found = {}
+    for entry in argalas_on_sign(
+            R["Cancer"], occupants, ketu_sign=varga_signs[int(Graha.KETU)],
+            malefic=frozenset(int(g) for g in NATURAL_MALEFIC)):
+        if entry.grahas:
+            found[(entry.kind, entry.house)] = set(entry.grahas)
+
+    assert found[("argala", 11)] == {int(Graha.SUN)}
+    assert found[("argala", 5)] == {int(Graha.JUPITER)}
+    for graha in (Graha.SUN, Graha.JUPITER):
+        assert R["Cancer"] in rasi_drishti(varga_signs[int(graha)])
+
+    assert len(found[("virodhargala", 3)]) == 3      # against the Sun's one
+    assert len(found[("virodhargala", 9)]) == 2      # against Jupiter's one
+
+
+def test_the_chapter_reads_six_arudha_padas_and_exercise_30_says_why():
+    """"A9 shows the illusion associated with fortune (in career, because this
+    is D-10). It shows the things based on which people form impression about
+    one's fortune."
+
+    Six arudhas are read across the chapter and the principle behind them
+    arrives only here, in the last exercise: an arudha shows the *appearance*
+    of its house's matter, narrowed by the chart it is read in. Gathered so a
+    reading layer meets them as one mechanism rather than six coincidences.
+    """
+    from hora.dasha.rasi.narayana import (
+        ARUDHA_PADA_DASA_READINGS,
+        ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER,
+    )
+
+    padas = {r["pada"]: r for r in ARUDHA_PADA_DASA_READINGS}
+    assert set(padas) == {"A1", "A3", "A6", "A9", "A10", "UL"}
+    assert padas["A9"]["also"] == "bhaagya pada"
+    assert padas["A6"]["also"] == "satru pada"
+    assert padas["A10"]["also"] == "raajya pada"
+    assert padas["UL"]["house"] == 12
+
+    assert "form impression" in ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER
+    assert "because this is D-10" in ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER

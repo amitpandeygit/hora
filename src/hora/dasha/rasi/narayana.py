@@ -898,6 +898,42 @@ CAREER_DASA_READINGS: tuple[dict, ...] = (
              "show trouble from enemies.")},
 )
 
+#: Arudha padas are the chapter's most-used reading mechanism outside §18.4's
+#: sixteen, and they arrive one example at a time. Exercise 30 states the
+#: principle behind all of them: an arudha shows the *appearance* of its
+#: house's matter -- "the things based on which people form impression" -- so
+#: a dasa of A-n gives that matter's outward form. Exercise 30 also notes the
+#: meaning is narrowed by the chart it is read in: "the illusion associated
+#: with fortune (in career, because this is D-10)". See OI-122.
+ARUDHA_PADA_DASA_READINGS: tuple[dict, ...] = (
+    {"pada": "A1", "also": "arudha lagna", "house": 1, "where": "Ex 74, Ex 30",
+     "gives": "status; the 12th from it shows setbacks in professional status"},
+    {"pada": "A3", "also": None, "house": 3, "where": "Ex 69",
+     "gives": ("the illusion related to boldness or the things based on which "
+               "the world forms impression about one's boldness, i.e. one's "
+               "weapons")},
+    {"pada": "A6", "also": "satru pada", "house": 6, "where": "Ex 74",
+     "gives": "trouble from enemies"},
+    {"pada": "A9", "also": "bhaagya pada", "house": 9, "where": "Ex 30",
+     "gives": ("the illusion associated with fortune... the trappings of "
+               "fortune, like good position and money")},
+    {"pada": "A10", "also": "raajya pada", "house": 10, "where": "Ex 68",
+     "gives": "success in career"},
+    {"pada": "UL", "also": "upapada", "house": 12, "where": "Ex 72, Ex 73",
+     "gives": "marriage; the 1st, 3rd and 8th from it favour it, the 2nd and "
+              "7th end it"},
+)
+
+#: Exercise 30's statement of what an arudha pada is for, which the chapter
+#: had been using since Example 68 without ever saying.
+ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER = (
+    "A9 shows the illusion associated with fortune (in career, because this "
+    "is D-10). It shows the things based on which people form impression "
+    "about one's fortune. It essentially shows the trappings of fortune, like "
+    "good position and money. Dasa of A9 in D-10 can give excellent position "
+    "in career."
+)
+
 #: A structural consequence of §18.5 that no section states. In the rasi chart
 #: the dasa lagna moves every dasa, so §18.4's whole house frame rotates and
 #: its occupancy principles say something different each time. In a varga

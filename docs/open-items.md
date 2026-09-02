@@ -641,11 +641,11 @@ question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
 
-### OI-122 — §18.4's sixteen principles miss ten readings its own examples make
+### OI-122 — §18.4's sixteen principles miss eleven readings its own examples make
 
 **Waiting on the book.** The sixteen are Parasara's and closed. They carry most
-of what the chapter says, but ten readings in Examples 69, 72, 73 and 74 and
-Exercise 28 fall outside them, and none is a matter of degree:
+of what the chapter says, but eleven readings across Examples 68 to 74 and
+Exercises 28 and 30 fall outside them, and none is a matter of degree:
 
 | reading | where | why the sixteen miss it |
 |---|---|---|
@@ -654,10 +654,10 @@ Exercise 28 fall outside them, and none is a matter of degree:
 | Ketu in the 11th gives **foreign** gains | both, same words | principle 5 gives any planet there bare "gains" |
 | houses read for a nation: 3rd weapons, 7th foreign relations, 9th religion, 10th the head of government | Ex 69 throughout | the principles give a placement's valence; its subject comes from the house |
 | an antardasa judged by what its **rasi** aspects, the target a natal arudha | Ex 69, Pi dasa | §18.4 judges an antardasa by the house its *lord* holds from the dasa rasi |
-| a navamsa dasa read for marriage: lagna and the 1st, 3rd, 8th from UL favour it, the 6th from lagna and the 2nd, 7th from UL threaten it | Ex 72 | the sixteen never read a bhava as a life of its own, nor name the upapada |
-| an antardasa rasi judged by what it **holds** — lagna, UL, UL's lord, the matter's karaka | Ex 73 | §18.4 reads an antardasa by the house its *lord* holds from the dasa rasi |
+| a navamsa dasa read for marriage: lagna and the 1st, 3rd, 8th from UL favour it, the 6th from lagna and the 2nd, 7th from UL threaten it; and an antardasa rasi judged by what it **holds** | Ex 72, 73 | the sixteen never read a bhava as a life of its own, and read an antardasa by the house its *lord* holds from the dasa rasi |
 | a D-10 dasa read for career: the 8th from lagna, the 2nd and 5th for recognition, the 12th from AL, the satru pada A6 | Ex 74 | the sixteen never name an arudha pada, and give the 8th only for benefics and malefics |
 | a karaka afflicted **in the dasa rasi** — the Sun with Rahu, giving scandal | Ex 74 | neither a house nor a lordship, so no principle reaches it |
+| a dasa of an **arudha pada** — A1, A3, A6, A9, A10 or UL, each showing the appearance of its house's matter | Ex 68 to 74, Ex 30 | the sixteen never name an arudha; Exercise 30 states the principle behind all six |
 
 The last is a different mechanism rather than a missing row — a fourth
 reference point in a section that already had three.
@@ -666,8 +666,9 @@ reference point in a section that already had three.
 `UNLISTED_DASA_LAGNA_READINGS`, `EXALTED_DUSTHANA_LORD_CONVERSE`,
 `KETU_IN_THE_ELEVENTH_IS_FOREIGN`, `MUNDANE_HOUSE_READINGS`,
 `ANTARDASA_ASPECT_RULE`, `NAVAMSA_MARRIAGE_DASA_RULES`,
-`ANTARDASA_CANDIDATE_BY_CONTENTS`, `CAREER_DASA_READINGS` and
-`AFFLICTED_KARAKA_IN_THE_DASA_RASI`. Folding them into
+`ANTARDASA_CANDIDATE_BY_CONTENTS`, `CAREER_DASA_READINGS`,
+`AFFLICTED_KARAKA_IN_THE_DASA_RASI` and `ARUDHA_PADA_DASA_READINGS`. Folding
+them into
 `PARASARA_DASA_PRINCIPLES` would put words in Parasara's mouth. No
 interpretation layer reads either set yet, so nothing is blocked.
 
