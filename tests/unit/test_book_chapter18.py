@@ -2468,12 +2468,14 @@ def test_oi_122_names_every_reading_the_sixteen_principles_do_not_carry():
                    "MUNDANE_HOUSE_READINGS",
                    "ANTARDASA_ASPECT_RULE",
                    "NAVAMSA_MARRIAGE_DASA_RULES",
-                   "ANTARDASA_CANDIDATE_BY_CONTENTS"):
+                   "ANTARDASA_CANDIDATE_BY_CONTENTS",
+                   "CAREER_DASA_READINGS",
+                   "AFFLICTED_KARAKA_IN_THE_DASA_RASI"):
         assert symbol in entry, symbol
         assert hasattr(narayana, symbol), symbol
 
     assert "Ex 69" in entry and "Exercise 28" in entry
-    assert entry.count("\n|") >= 8          # header, divider and the readings
+    assert entry.count("\n|") >= 10         # header, divider and the readings
 
 
 def test_every_reading_outside_the_sixteen_points_back_at_oi_122():
@@ -2483,7 +2485,7 @@ def test_every_reading_outside_the_sixteen_points_back_at_oi_122():
     from pathlib import Path
 
     source = Path("src/hora/dasha/rasi/narayana.py").read_text(encoding="utf-8")
-    assert source.count("OI-122") == 7
+    assert source.count("OI-122") == 9
 
 
 # --------------------------------------------------------------------------
@@ -4162,3 +4164,252 @@ def test_exercise_29_prints_the_ninth_antardasa_as_eight_months():
     event = 2000 * 12 + 5                                # early June 2000
     assert start <= event < start + 8                    # the printed 8
     assert start <= event < start + got.months_each      # and the real 10
+
+
+# --------------------------------------------------------------------------
+# Example 74 — Chart 31, a D-10 Narayana dasa. The chart that confirms
+# OI-123 outright, and the first real use of §18.4's thirds.
+# --------------------------------------------------------------------------
+
+EX74_LENGTHS = [("Cn", 3), ("Ge", 11), ("Ta", 11), ("Ar", 10), ("Pi", 9),
+                ("Aq", 5)]
+
+
+def _chart_31_d10():
+    from hora.charts.book import graha_longitudes, longitudes
+    from hora.charts.vargas import varga
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(31).items()}
+    tenth = {g: varga(lon, "D10") for g, lon in rasi.items()}
+    return (rasi,
+            {g: p.sign for g, p in tenth.items()},
+            {g: p.longitude for g, p in tenth.items()},
+            int(longitudes(31)["Asc"] // 30),
+            varga(longitudes(31)["Asc"], "D10").sign)
+
+
+def test_chart_31s_drawn_d10_reproduces():
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+
+    printed = longitudes(31)
+    for name, sign in chart(31)["divisional"]["D10"].items():
+        if name == "AL":
+            continue
+        assert ABBR[varga(printed[name], "D10").sign] == sign, name
+
+
+def test_example_74_derives_capricorn_and_then_prefers_the_seventh():
+    """"The 10th house in rasi chart is Sc and Mars is its lord. Mars is in Cp
+    in D-10. Cn is stronger than Cp, as Jupiter occupies it and its lord Moon
+    aspects it."
+
+    Scorpio is co-owned, so §18.5's step 3 sends it to §15.5.1 -- and
+    `varga_lagna` refuses to guess. §15.5.1 gives Mars in both charts here, so
+    which one it reads does not arise.
+    """
+    import pytest as _pytest
+
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import NarayanaError, dasa_seed, varga_lagna
+
+    rasi, varga_signs, varga_longitudes, rasi_lagna, _d10 = _chart_31_d10()
+    assert rasi_lagna == R["Aquarius"]
+
+    with _pytest.raises(NarayanaError, match="Mars and Ketu"):
+        varga_lagna(10, rasi_lagna, varga_signs)
+    for chart_longitudes in (rasi, varga_longitudes):
+        assert stronger(R["Scorpio"], chart_longitudes,
+                        purpose="arudha").winner == int(Graha.MARS)
+
+    derived = varga_lagna(10, rasi_lagna, varga_signs, lord=int(Graha.MARS))
+    assert derived["seed_rasi"] == R["Scorpio"]
+    assert derived["lagna"] == R["Capricorn"]
+
+    seed = dasa_seed(derived["lagna"], varga_longitudes)
+    assert seed["seed"] == R["Cancer"] == (derived["lagna"] + 6) % 12
+    assert seed["decided_by"] == "2"
+    assert "Jupiter (Jupiter) occupies it" in seed["reason"]
+    assert "lord (Moon) aspects from Taurus" in seed["reason"]
+
+
+def test_example_74_progression_is_brahmas_backward_regular():
+    """The printed order is Cn, Ge, Ta, Ar, Pi, Aq -- one sign back each time.
+    Cn is movable, so Brahma; the 9th from it is Pi, even-footed, so backward.
+    Only Jupiter occupies the seed, so no §18.2.1 exception fires.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import progression
+
+    _rasi, varga_signs, _vlon, _lagna, _d10 = _chart_31_d10()
+    occupants = {g for g, s in varga_signs.items() if s == R["Cancer"]}
+    assert occupants == {int(Graha.JUPITER)}
+
+    got = progression(R["Cancer"], occupants)
+    assert got.god == "Brahma"
+    assert got.direction == "backward"
+    assert got.exception is None
+    assert [ABBR[s] for s in got.signs][:6] == [a for a, _y in EX74_LENGTHS]
+
+
+@pytest.mark.parametrize("abbr,years", [c for c in EX74_LENGTHS if c[0] != "Cn"])
+def test_example_74_lengths(abbr, years):
+    """Five of the six. Four need exception 2 -- Venus, Mars, Jupiter and
+    Saturn are each exalted where the D-10 puts them. Cancer is the exception
+    and is tested separately; see D-52.
+    """
+    from hora.charts.colord import stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    _rasi, varga_signs, varga_longitudes, _lagna, _d10 = _chart_31_d10()
+    rasi_index = BY_ABBR[abbr]
+    lord = (stronger(rasi_index, varga_longitudes, purpose="arudha").winner
+            if rasi_index in (R["Scorpio"], R["Aquarius"])
+            else int(RASI_LORD[rasi_index]))
+    got = dasa_length(rasi_index, lord, varga_signs[lord],
+                      sign_dignity(lord, varga_longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_example_74_cancer_is_d_52s_third_example_and_it_moves_every_date():
+    """See D-52. Cancer's lord the Moon is in Taurus in the D-10, at 6.67
+    degrees -- past his 3-degree exaltation, so `sign_dignity` says
+    moolatrikona and exception 2 does not fire. Two years, where the book
+    prints three.
+
+    The sharpest instance yet: Cancer is the *first* dasa, so the missing year
+    moves every printed date after it. Sep 1950, 1961, 1972, 1982, 1991 and
+    1996 all become a year early, and Aq dasa would end before the setbacks
+    the example dates to 1994-1996 had finished.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    _rasi, varga_signs, varga_longitudes, _lagna, _d10 = _chart_31_d10()
+    moon = int(Graha.MOON)
+    assert varga_signs[moon] == R["Taurus"]
+    assert varga_longitudes[moon] % 30 > 3.0
+    assert sign_dignity(moon, varga_longitudes[moon]) == "moolatrikona"
+
+    by_degree = dasa_length(R["Cancer"], moon, varga_signs[moon], "moolatrikona")
+    by_sign = dasa_length(R["Cancer"], moon, varga_signs[moon], "exalted")
+    assert (by_degree.years, by_sign.years) == (2, 3)
+
+    ours = sum(y if a != "Cn" else by_degree.years for a, y in EX74_LENGTHS)
+    theirs = sum(y for _a, y in EX74_LENGTHS)
+    assert (ours, theirs) == (48, 49)
+    assert 1947 + theirs == 1996                     # the printed end of Aq
+
+
+def test_example_74_the_dates_the_example_prints():
+    """From September 1947, and the setbacks of 1994-1996 fall in the last
+    dasa printed."""
+    year, spans = 1947, {}
+    for abbr, years in EX74_LENGTHS:
+        spans[abbr] = (year, year + years)
+        year += years
+
+    assert spans["Cn"] == (1947, 1950)
+    assert spans["Pi"] == (1982, 1991)
+    assert spans["Aq"] == (1991, 1996)
+    assert spans["Aq"][0] <= 1994 < spans["Aq"][1]
+
+
+def test_example_74_settles_oi_123_on_a_chart_where_all_four_candidates_differ():
+    """"Aq is the 8th house from lagna in D-10."
+
+    Examples 71 and 72 closed OI-123 between them, each ruling out what the
+    other could not. This chart needs no pairing: its D-10 lagna, its seed
+    house rasi, its derived lagna and its rasi chart's lagna are four
+    different signs, and only one of them makes Aq the 8th.
+
+    | candidate | sign | Aq is the |
+    |---|---|---|
+    | the D-10's own lagna | Cn | **8th** |
+    | the seed house rasi | Sc | 4th |
+    | the derived lagna | Cp | 2nd |
+    | the rasi chart's lagna | Aq | 1st |
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import varga_house, varga_lagna
+
+    _rasi, varga_signs, _vlon, rasi_lagna, d10_lagna = _chart_31_d10()
+    derived = varga_lagna(10, rasi_lagna, varga_signs, lord=int(Graha.MARS))
+
+    candidates = {d10_lagna, derived["seed_rasi"], derived["lagna"], rasi_lagna}
+    assert len(candidates) == 4                      # all four distinct
+
+    assert varga_house(d10_lagna, R["Aquarius"]) == 8
+    assert varga_house(derived["seed_rasi"], R["Aquarius"]) == 4
+    assert varga_house(derived["lagna"], R["Aquarius"]) == 2
+    assert varga_house(rasi_lagna, R["Aquarius"]) == 1
+
+
+def test_example_74_reads_aquarius_from_the_arudhas_as_well():
+    """"It is the 12th house of losses from AL, showing some setbacks in
+    professional status... Sun owns the 2nd house here and he is in Aq,
+    afflicted by enemy Rahu... Aquarius has Satru pada (arudha pada of 6th
+    house) and it can show trouble from enemies."
+
+    Three more references on one rasi, all built from the D-10's own lagna:
+    the arudha lagna, the 2nd house's lord, and the arudha of the 6th.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import CAREER_DASA_READINGS, varga_house
+
+    _rasi, varga_signs, _vlon, _lagna, d10_lagna = _chart_31_d10()
+
+    al = arudha_pada(1, d10_lagna, varga_signs).sign
+    assert al == R["Pisces"]
+    assert varga_house(al, R["Aquarius"]) == 12
+
+    second = (d10_lagna + 1) % 12
+    assert second == R["Leo"]
+    assert int(RASI_LORD[second]) == int(Graha.SUN)
+    assert varga_signs[int(Graha.SUN)] == R["Aquarius"]
+    assert varga_signs[int(Graha.RAHU)] == R["Aquarius"]
+
+    satru_pada = arudha_pada(6, d10_lagna, varga_signs).sign
+    assert satru_pada == R["Aquarius"]
+
+    sources = {r["from"] for r in CAREER_DASA_READINGS}
+    assert sources == {"lagna", "AL", "A6"}
+
+
+def test_example_74_is_the_first_real_use_of_18_4s_thirds():
+    """"Because of the exaltation of Saturn in a quadrant, the middle part of
+    this dasa must be good. Because the occupants of a rasi dominate the last
+    one-third of a dasa, that was when Sun and Rahu gave the troubles."
+
+    `DASA_THIRDS` had been a register with nothing to point at. Here both the
+    second and third parts are used, and they date the event: Aquarius' lord
+    Saturn rules the middle, and its occupants Sun and Rahu the last, which
+    runs from January 1995.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import DASA_THIRDS, dasa_thirds, varga_house
+
+    _rasi, varga_signs, varga_longitudes, _lagna, d10_lagna = _chart_31_d10()
+
+    saturn = int(RASI_LORD[R["Aquarius"]])
+    assert saturn == int(Graha.SATURN)
+    assert sign_dignity(saturn, varga_longitudes[saturn]) == "exalted"
+    assert varga_house(d10_lagna, varga_signs[saturn]) in (1, 4, 7, 10)
+    assert "lord" in DASA_THIRDS[1]["dominates"]
+
+    occupants = {g for g, s in varga_signs.items() if s == R["Aquarius"]}
+    assert occupants == {int(Graha.SUN), int(Graha.RAHU)}
+    assert "occupants" in DASA_THIRDS[2]["dominates"]
+
+    parts = dasa_thirds(0.0, 5.0)
+    base = 1991 * 12 + 8                                  # September 1991
+    last = base + round(parts[2]["from_years"] * 12)
+    assert (last // 12, last % 12 + 1) == (1995, 1)
+    middle = base + round(parts[1]["from_years"] * 12)
+    assert (middle // 12, middle % 12 + 1) == (1993, 5)

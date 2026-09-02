@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-18's prose (36)
+### Part 2 — the dasa systems map and chapters 16-18's prose (38)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -656,7 +656,8 @@ inconsistency is settled would be the wrong order.
 `VARGA_SEED_RATIONALE` · `VARGA_DASA_USES` ·
 `VARGA_DIGNITY_IS_READ_IN_THE_VARGA` · `NAVAMSA_MARRIAGE_DASA_RULES` ·
 `MARRIAGE_TROUBLE_NEEDS_CORROBORATION` · `PRATYANTARDASA_RULE` ·
-`ANTARDASA_CANDIDATE_BY_CONTENTS`
+`ANTARDASA_CANDIDATE_BY_CONTENTS` · `CAREER_DASA_READINGS` ·
+`AFFLICTED_KARAKA_IN_THE_DASA_RASI`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -686,6 +687,8 @@ it — but it is the coverage line for the whole part, and
 | `MARRIAGE_TROUBLE_NEEDS_CORROBORATION` | The qualification Example 72 puts on both unfavourable readings — "when the chart has such indications". It stops the rule being read as a prediction, so any layer consuming the rules must carry it |
 | `PRATYANTARDASA_RULE` | Example 71's derivation of the third dasa level. `pratyantardasas` computes the sequence; the sentence records that the book states no new rule for it, only §18.3 applied one rasi down |
 | `ANTARDASA_CANDIDATE_BY_CONTENTS` | Example 73's third way to read an antardasa — by what its rasi holds, rather than by its lord's house or by what it aspects. The contents are computable; choosing among candidates on their strength is the reading. **OI-122** |
+| `CAREER_DASA_READINGS` | Example 74's four readings for a D-10 dasa, counted from the varga lagna, the arudha lagna and the satru pada A6. `varga_house` and `arudha_pada` compute every reference; the reading layer is what is missing. **OI-122** |
+| `AFFLICTED_KARAKA_IN_THE_DASA_RASI` | Example 74's Sun-with-Rahu reading — a karaka afflicted in the dasa rasi itself, which is neither a house nor a lordship and so reaches nothing in §18.4. **OI-122** |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |

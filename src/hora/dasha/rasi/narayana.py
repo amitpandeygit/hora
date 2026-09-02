@@ -879,6 +879,33 @@ ANTARDASA_CANDIDATE_BY_CONTENTS = (
     "candidate."
 )
 
+#: Example 74's readings for a D-10 Narayana dasa and career. As with the
+#: navamsa's marriage rules, the reference is the varga's own lagna, and the
+#: rest count from the arudha lagna or from an arudha pada. None is in §18.4's
+#: sixteen. See OI-122.
+CAREER_DASA_READINGS: tuple[dict, ...] = (
+    {"from": "lagna", "houses": (8,),
+     "gives": "tension, frustration, worries and setbacks (related to career)"},
+    {"from": "lagna", "houses": (2, 5),
+     "gives": "recognition from authorities",
+     "why": ("The 2nd and 5th houses and also Sun show recognition from "
+             "authorities in a chart.")},
+    {"from": "AL", "houses": (12,),
+     "gives": "setbacks in professional status",
+     "why": "It is the 12th house of losses from AL."},
+    {"from": "A6", "houses": (1,), "gives": "trouble from enemies",
+     "why": ("Aquarius has Satru pada (arudha pada of 6th house) and it can "
+             "show trouble from enemies.")},
+)
+
+#: Example 74's reading of an afflicted karaka in the dasa rasi itself, which
+#: is neither a house nor a lordship. See OI-122.
+AFFLICTED_KARAKA_IN_THE_DASA_RASI = (
+    "Sun owns the 2nd house here and he is in Aq, afflicted by enemy Rahu. "
+    "Affliction of Sun by Rahu in dasa rasi can show scandals and making a "
+    "bad name with authorities."
+)
+
 #: The qualification Example 72 attaches to both unfavourable readings, which
 #: keeps them from being read as predictions on their own.
 MARRIAGE_TROUBLE_NEEDS_CORROBORATION = (

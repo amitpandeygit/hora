@@ -424,6 +424,42 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    31: {
+        "title": "An electrical engineer — D-10 Narayana dasa",
+        "birth": "September 7, 1947, 6:00 pm (IST), 80 E 30, 15 N 54",
+        "birth_data": {
+            "year": 1947, "month": 9, "day": 7, "hour": 18, "minute": 0,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 15 + 54 / 60, "longitude": 80.5},
+        "longitudes": {
+            "Asc": "16 Aq 50", "Sun": "20 Le 55", "Moon": "12 Ta 40",
+            "Mars": "22 Ge 40", "Merc": "29 Le 21", "Jup": "28 Li 35",
+            "Ven": "21 Le 59", "Sat": "23 Cn 25", "Rahu": "3 Ta 48",
+            "Ketu": "3 Sc 48", "HL": "22 Le 37", "GL": "25 Aq 56",
+        },
+        "chara_karakas": {
+            "Merc": "AK", "Jup": "AmK", "Rahu": "BK", "Sat": "MK",
+            "Mars": "PiK", "Ven": "PK", "Sun": "GK", "Moon": "DK",
+        },
+        "divisional": {
+            "D10": {
+                "Asc": "Cn", "Sun": "Aq", "Moon": "Ta", "Mars": "Cp",
+                "Merc": "Ta", "Jup": "Cn", "Ven": "Pi", "Sat": "Li",
+                "Rahu": "Aq", "Ketu": "Le", "HL": "Pi", "GL": "Li",
+                "AL": "Pi",
+            },
+        },
+        "events": {"suspended from his job": "1994 to 1996"},
+        "first_seen": "chapter 18, Example 74",
+        "note": (
+            "The chart that confirms OI-123 outright: its D-10 lagna Cn, its "
+            "seed house rasi Sc, its derived lagna Cp and its rasi lagna Aq "
+            "are four different signs, and only the D-10's own lagna makes "
+            "Aq the 8th house the example calls it. Also the first real use "
+            "of section 18.4's thirds, which date the event."
+        ),
+    },
     30: {
         "title": "A lady — Exercise 29, a marriage ended",
         "birth": "June 3, 1976",

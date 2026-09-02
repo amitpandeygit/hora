@@ -641,22 +641,23 @@ question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
 
-### OI-122 — §18.4's sixteen principles miss eight readings its own examples make
+### OI-122 — §18.4's sixteen principles miss ten readings its own examples make
 
 **Waiting on the book.** The sixteen are Parasara's and closed. They carry most
-of what the chapter says, but eight readings in Examples 69, 72 and 73 and
+of what the chapter says, but ten readings in Examples 69, 72, 73 and 74 and
 Exercise 28 fall outside them, and none is a matter of degree:
 
 | reading | where | why the sixteen miss it |
 |---|---|---|
-| a conglomeration in the 12th gives constant fear | Ex 69, Le dasa | principle 6 gives fear for **Rahu** in the 8th or 12th, not for a crowd |
-| Rahu in the 10th denies stable leadership | Ex 69, Le dasa | nothing reaches the 10th except through lordship |
+| a conglomeration in the 12th gives constant fear, and Rahu in the 10th denies stable leadership | Ex 69, Le dasa | principle 6 gives fear for **Rahu** in the 8th or 12th, not for a crowd, and nothing reaches the 10th except through lordship |
 | an **exalted** dusthana lord gives hard times | Exercise 28, Pi dasa | principle 13 states only the debilitated case |
 | Ketu in the 11th gives **foreign** gains | both, same words | principle 5 gives any planet there bare "gains" |
 | houses read for a nation: 3rd weapons, 7th foreign relations, 9th religion, 10th the head of government | Ex 69 throughout | the principles give a placement's valence; its subject comes from the house |
 | an antardasa judged by what its **rasi** aspects, the target a natal arudha | Ex 69, Pi dasa | §18.4 judges an antardasa by the house its *lord* holds from the dasa rasi |
 | a navamsa dasa read for marriage: lagna and the 1st, 3rd, 8th from UL favour it, the 6th from lagna and the 2nd, 7th from UL threaten it | Ex 72 | the sixteen never read a bhava as a life of its own, nor name the upapada |
 | an antardasa rasi judged by what it **holds** — lagna, UL, UL's lord, the matter's karaka | Ex 73 | §18.4 reads an antardasa by the house its *lord* holds from the dasa rasi |
+| a D-10 dasa read for career: the 8th from lagna, the 2nd and 5th for recognition, the 12th from AL, the satru pada A6 | Ex 74 | the sixteen never name an arudha pada, and give the 8th only for benefics and malefics |
+| a karaka afflicted **in the dasa rasi** — the Sun with Rahu, giving scandal | Ex 74 | neither a house nor a lordship, so no principle reaches it |
 
 The last is a different mechanism rather than a missing row — a fourth
 reference point in a section that already had three.
@@ -664,8 +665,9 @@ reference point in a section that already had three.
 **What we do:** each is its own named constant —
 `UNLISTED_DASA_LAGNA_READINGS`, `EXALTED_DUSTHANA_LORD_CONVERSE`,
 `KETU_IN_THE_ELEVENTH_IS_FOREIGN`, `MUNDANE_HOUSE_READINGS`,
-`ANTARDASA_ASPECT_RULE`, `NAVAMSA_MARRIAGE_DASA_RULES` and
-`ANTARDASA_CANDIDATE_BY_CONTENTS`. Folding them into
+`ANTARDASA_ASPECT_RULE`, `NAVAMSA_MARRIAGE_DASA_RULES`,
+`ANTARDASA_CANDIDATE_BY_CONTENTS`, `CAREER_DASA_READINGS` and
+`AFFLICTED_KARAKA_IN_THE_DASA_RASI`. Folding them into
 `PARASARA_DASA_PRINCIPLES` would put words in Parasara's mouth. No
 interpretation layer reads either set yet, so nothing is blocked.
 
@@ -1240,18 +1242,15 @@ response lists `grahas_considered` so the choice is visible in the output and
 not only in the request.
 
 **§11.5 sharpens it three ways.** §11.5.1's Aasraya yogas say "**all the
-planets**", so two extra grahas must agree and the flag matters more — though
-it can never make the yoga impossible, since the nodes are always six signs
-apart and six signs apart is always the same modality. §11.5.2's Dala yogas say
-"natural benefics/malefics" instead, which §3.2.2 settles, and their own Sarpa
-example is built from Mars, **Rahu and Ketu** — so the flag governs the phrase
-"a planet" only, and those detectors ignore it. And §11.5.3's preamble is the
-closest the book comes to an answer: "Rahu and Ketu are **not counted as
+planets**", so two extra grahas must agree — though it can never make the yoga
+impossible, the nodes being always six signs apart and so always the same
+modality. §11.5.2's Dala yogas say "natural benefics/malefics" instead, which
+§3.2.2 settles, and their own Sarpa example is built from Mars, **Rahu and
+Ketu** — so the flag governs the phrase "a planet" only. And §11.5.3's preamble
+is the closest the book comes to an answer: "Rahu and Ketu are **not counted as
 planets by many authors**" — matching our default, but attribution rather than
-a ruling, and scoped to the Aakriti twenty.
-
-The default is the conservative one — it under-reports rather than
-over-reports — but it *is* a choice, and it is not PVR's.
+a ruling, and scoped to the Aakriti twenty. The default is the conservative one
+— it under-reports — but it *is* a choice, and it is not PVR's.
 
 **Closes when:** JHora's yoga output settles it, or a later chapter uses a node
 to form one of these.

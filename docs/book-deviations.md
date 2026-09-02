@@ -1644,6 +1644,7 @@ a dasa whose lord is exalted, and two examples now turn on it:
 |---|---|---|---|---|
 | 66, Chart 23 | Moon 23 Ta 38 | Cn **3 years** | 2 | five later dasas shift a year; every date from 1946 on |
 | 68, Chart 24 | Mercury 23 Vi 19 | Ge **4 years** | 3 | every date in the example from 1959 on |
+| 74, Chart 31 | Moon at 6.67° of Taurus **in D-10** | Cn **3 years** | 2 | Cancer is the *first* dasa, so all six printed dates move |
 
 Example 68 is the stronger of the two and is close to decisive. It calls
 Mercury exalted three times in prose — including in the line that picks the
@@ -1651,6 +1652,12 @@ dasa seed, "as its exalted lord aspects it" — and its Ge dasa of 4 years is
 arithmetically 4 − 1 + 1, which needs exception 2 to have fired. By degree that
 Mercury is not even moolatrikona; he is plainly in his own sign, so this is not
 a borderline reading of a boundary.
+
+Example 74 is the third, and the most expensive: its Cancer dasa is the first
+of the sequence, so the missing year moves every date the example prints. It is
+also the first in a **varga** — Example 71 showed dignity there is read in the
+varga, and the Moon's D-10 Taurus is past his 3-degree exaltation just as his
+rasi-chart Taurus was in Example 66.
 
 Nothing yet points the other way: no example has needed exaltation read by
 degree.
