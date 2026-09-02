@@ -424,6 +424,42 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    33: {
+        "title": "Accident example — D-16 Narayana dasa",
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1970, "month": 4, "day": 4, "hour": 17, "minute": 50,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "14 Vi 52", "Sun": "20 Pi 52", "Moon": "28 Aq 35",
+            "Mars": "26 Ar 40", "Merc": "3 Ar 07", "Jup": "9 Li 45",
+            "Ven": "7 Ar 55", "Sat": "15 Ar 06", "Rahu": "16 Aq 53",
+            "Ketu": "16 Le 53", "HL": "15 Pi 42", "GL": "8 Vi 40",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Mars": "AmK", "Sun": "BK", "Sat": "MK",
+            "Rahu": "PiK", "Jup": "PK", "Ven": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "divisional": {
+            "D16": {
+                "Asc": "Cn", "Sun": "Sc", "Moon": "Sc", "Mars": "Ge",
+                "Merc": "Ta", "Jup": "Vi", "Ven": "Le", "Sat": "Sg",
+                "Rahu": "Ta", "Ketu": "Ta", "HL": "Le", "GL": "Ar",
+                "AL": "Pi",
+            },
+        },
+        "events": {"vehicular accident": "December 1996"},
+        "first_seen": "chapter 18, Example 75",
+        "note": (
+            "The same native as Chart 27, to the arcsecond -- the book draws "
+            "him twice, in D-4 for Example 71's foreign stay and in D-16 "
+            "here for a vehicle. Both nodes fall in Taurus in the D-16, "
+            "Aquarius and Leo being both fixed and their degrees identical."
+        ),
+    },
     32: {
         "title": "A gentleman — Exercise 30, D-10 Narayana dasa",
         "birth": "July 25, 1961, 5:10 pm (IST), 75 E 50, 22 N 44",

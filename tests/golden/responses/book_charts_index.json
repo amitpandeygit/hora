@@ -217,6 +217,13 @@
         "number": 32,
         "recomputable": true,
         "title": "A gentleman \u2014 Exercise 30, D-10 Narayana dasa"
+      },
+      {
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 18, Example 75",
+        "number": 33,
+        "recomputable": true,
+        "title": "Accident example \u2014 D-16 Narayana dasa"
       }
     ],
     "not_supplied": [
@@ -249,7 +256,8 @@
       28,
       29,
       31,
-      32
+      32,
+      33
     ]
   },
   "status": 200

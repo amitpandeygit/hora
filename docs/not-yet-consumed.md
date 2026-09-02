@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-18's prose (41)
+### Part 2 — the dasa systems map and chapters 16-18's prose (44)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -658,7 +658,9 @@ inconsistency is settled would be the wrong order.
 `MARRIAGE_TROUBLE_NEEDS_CORROBORATION` · `PRATYANTARDASA_RULE` ·
 `ANTARDASA_CANDIDATE_BY_CONTENTS` · `CAREER_DASA_READINGS` ·
 `AFFLICTED_KARAKA_IN_THE_DASA_RASI` · `VARGA_HOUSE_FRAME_DOES_NOT_ROTATE` ·
-`ARUDHA_PADA_DASA_READINGS` · `ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER`
+`ARUDHA_PADA_DASA_READINGS` · `ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER` ·
+`DASA_LEVEL_BY_EVENT_DURATION` · `CHOOSE_THE_DASA_LEVEL_BY_THE_EVENT` ·
+`MAHADASA_AND_ANTARDASA_COEXIST`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -693,6 +695,9 @@ it — but it is the coverage line for the whole part, and
 | `VARGA_HOUSE_FRAME_DOES_NOT_ROTATE` | Why §18.4's occupancy principles say the same thing in every dasa of a varga: with no dasa lagna the house frame is the varga's own ascendant and never moves. A reading layer has to know this before it applies the sixteen to a varga at all |
 | `ARUDHA_PADA_DASA_READINGS` | The six arudhas chapter 18 reads a dasa by — A1, A3, A6, A9, A10 and UL. `arudha_pada` computes every one; what is missing is the layer that reads a dasa of one. **OI-122** |
 | `ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER` | Exercise 30's statement of the principle behind all six, which the chapter had used since Example 68 without saying. It also records that the meaning narrows to the chart the arudha is read in |
+| `DASA_LEVEL_BY_EVENT_DURATION` | Example 75's five dasa levels against how long an event matters. The first three are computed — `antardasas` and `pratyantardasas` — but choosing which to read is the reading layer's job, and the last two have no lengths at all |
+| `CHOOSE_THE_DASA_LEVEL_BY_THE_EVENT` | The rule itself, and the only place praana-antardasa and deha-antardasa are named. It gives them neither a length nor an order, so nothing computes them; a reading layer needs it before it treats pratyantardasa as the floor |
+| `MAHADASA_AND_ANTARDASA_COEXIST` | Example 75's demonstration that two levels can say opposite things at once and neither cancels the other — ten good years with one bad ten-month period inside them. A reading layer must not resolve them into one verdict |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |

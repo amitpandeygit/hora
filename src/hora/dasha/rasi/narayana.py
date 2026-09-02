@@ -912,8 +912,12 @@ ARUDHA_PADA_DASA_READINGS: tuple[dict, ...] = (
      "gives": ("the illusion related to boldness or the things based on which "
                "the world forms impression about one's boldness, i.e. one's "
                "weapons")},
+    {"pada": "A4", "also": "vahanapada", "house": 4, "where": "Ex 75",
+     "gives": "vehicles; the 12th from it gives losses to the vehicle"},
     {"pada": "A6", "also": "satru pada", "house": 6, "where": "Ex 74",
      "gives": "trouble from enemies"},
+    {"pada": "A8", "also": "mrityu pada", "house": 8, "where": "Ex 75",
+     "gives": "trouble in the matters of the chart it is read in"},
     {"pada": "A9", "also": "bhaagya pada", "house": 9, "where": "Ex 30",
      "gives": ("the illusion associated with fortune... the trappings of "
                "fortune, like good position and money")},
@@ -1089,3 +1093,50 @@ def pratyantardasas(
     """
     return antardasas(antardasa_rasi, 0, longitudes,
                       seed_lord=seed_lord, seed_occupants=seed_occupants)
+
+# --------------------------------------------------------------------------
+# Example 75 — which dasa level an event belongs to.
+# --------------------------------------------------------------------------
+
+#: Example 75 closes the chapter's dasa material with the rule for choosing a
+#: level, which no section had stated: match the level to how long the event
+#: matters for. The spans are the book's own words, not arithmetic -- it gives
+#: no lengths for the last two, and does not say which of them is deeper.
+DASA_LEVEL_BY_EVENT_DURATION: tuple[dict, ...] = (
+    {"level": "mahadasa", "depth": 1, "event_lasts": "longer periods",
+     "shows": "the mood of longer periods"},
+    {"level": "antardasa", "depth": 2, "event_lasts": "a few months",
+     "shows": "events applicable to the antardasa's own span"},
+    {"level": "pratyantardasa", "depth": 3, "event_lasts": "just a week",
+     "shows": "events of about a week"},
+    {"level": "praana-antardasa", "depth": None, "event_lasts": "just an hour",
+     "shows": "a temporary activity that remains in the mind for an hour"},
+    {"level": "deha-antardasa", "depth": None, "event_lasts": "just an hour",
+     "shows": "a temporary activity that remains in the mind for an hour"},
+)
+
+#: The rule itself, and the two levels below pratyantardasa that only this
+#: passage names. §18.3 gave antardasas and Example 71 gave pratyantardasas by
+#: recursion; whether praana and deha continue the same recursion, and which
+#: of them is deeper, the book does not say. Nothing computes them.
+CHOOSE_THE_DASA_LEVEL_BY_THE_EVENT = (
+    "Based on the event of interest, we should judiciously choose mahadasa or "
+    "antardasa or pratyantardasa for examination. If an event plays a role in "
+    "a native's life for just a week, it is probably shown in "
+    "pratyantardasa. If an event plays a role in a native's life for a few "
+    "months, it is probably shown in antardasa. Mahadasa shows the mood of "
+    "longer periods. If we want to analyze a temporary activity that remains "
+    "in a native's mind for just an hour, it is probably seen in the "
+    "praana-antardasa or deha-antardasa running then. We should determine the "
+    "effective period of an event and judiciously choose the dasa division in "
+    "which it should be seen."
+)
+
+#: Example 75 reads the mahadasa and the antardasa as saying different things
+#: at once, and neither cancels the other. The dasa gave the comfort of
+#: vehicles for ten years; one ten-month antardasa inside it gave the crash.
+MAHADASA_AND_ANTARDASA_COEXIST = (
+    "With Li being the 4th house and having the argala of lord Venus, the "
+    "native had the comfort of vehicles in Li dasa. However, Ta antardasa was "
+    "bad due to Rahu and A8."
+)

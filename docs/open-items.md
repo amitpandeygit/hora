@@ -657,7 +657,7 @@ Exercises 28 and 30 fall outside them, and none is a matter of degree:
 | a navamsa dasa read for marriage: lagna and the 1st, 3rd, 8th from UL favour it, the 6th from lagna and the 2nd, 7th from UL threaten it; and an antardasa rasi judged by what it **holds** | Ex 72, 73 | the sixteen never read a bhava as a life of its own, and read an antardasa by the house its *lord* holds from the dasa rasi |
 | a D-10 dasa read for career: the 8th from lagna, the 2nd and 5th for recognition, the 12th from AL, the satru pada A6 | Ex 74 | the sixteen never name an arudha pada, and give the 8th only for benefics and malefics |
 | a karaka afflicted **in the dasa rasi** — the Sun with Rahu, giving scandal | Ex 74 | neither a house nor a lordship, so no principle reaches it |
-| a dasa of an **arudha pada** — A1, A3, A6, A9, A10 or UL, each showing the appearance of its house's matter | Ex 68 to 74, Ex 30 | the sixteen never name an arudha; Exercise 30 states the principle behind all six |
+| a dasa of an **arudha pada** — A1, A3, A4, A6, A8, A9, A10 or UL, each showing the appearance of its house's matter | Ex 68 to 75, Ex 30 | the sixteen never name an arudha; Exercise 30 states the principle behind all eight |
 
 The last is a different mechanism rather than a missing row — a fourth
 reference point in a section that already had three.

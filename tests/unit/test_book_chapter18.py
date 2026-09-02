@@ -4726,15 +4726,17 @@ def test_exercise_30s_argalas_on_cancer_come_from_jupiter_and_sun():
     assert len(found[("virodhargala", 9)]) == 2      # against Jupiter's one
 
 
-def test_the_chapter_reads_six_arudha_padas_and_exercise_30_says_why():
+def test_exercise_30_states_the_principle_behind_every_arudha_reading():
     """"A9 shows the illusion associated with fortune (in career, because this
     is D-10). It shows the things based on which people form impression about
     one's fortune."
 
-    Six arudhas are read across the chapter and the principle behind them
-    arrives only here, in the last exercise: an arudha shows the *appearance*
-    of its house's matter, narrowed by the chart it is read in. Gathered so a
-    reading layer meets them as one mechanism rather than six coincidences.
+    Arudhas are read all through the chapter and the principle behind them
+    arrives only here: an arudha shows the *appearance* of its house's matter,
+    narrowed by the chart it is read in. Gathered so a reading layer meets
+    them as one mechanism rather than a run of coincidences. Example 75 then
+    adds two more, which `test_the_chapter_now_reads_eight_arudha_padas`
+    covers.
     """
     from hora.dasha.rasi.narayana import (
         ARUDHA_PADA_DASA_READINGS,
@@ -4742,7 +4744,7 @@ def test_the_chapter_reads_six_arudha_padas_and_exercise_30_says_why():
     )
 
     padas = {r["pada"]: r for r in ARUDHA_PADA_DASA_READINGS}
-    assert set(padas) == {"A1", "A3", "A6", "A9", "A10", "UL"}
+    assert {"A1", "A3", "A6", "A9", "A10", "UL"} <= set(padas)
     assert padas["A9"]["also"] == "bhaagya pada"
     assert padas["A6"]["also"] == "satru pada"
     assert padas["A10"]["also"] == "raajya pada"
@@ -4750,3 +4752,286 @@ def test_the_chapter_reads_six_arudha_padas_and_exercise_30_says_why():
 
     assert "form impression" in ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER
     assert "because this is D-10" in ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER
+
+
+# --------------------------------------------------------------------------
+# Example 75 — Chart 33, a D-16 dasa, and the chapter's rule for choosing
+# which dasa level an event belongs to.
+# --------------------------------------------------------------------------
+
+EX75_LENGTHS = [("Vi", 4), ("Cp", 1), ("Ta", 3), ("Ge", 11), ("Li", 10)]
+
+
+def _chart_33_d16():
+    from hora.charts.book import graha_longitudes, longitudes
+    from hora.charts.vargas import varga
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(33).items()}
+    sixteenth = {g: varga(lon, "D16") for g, lon in rasi.items()}
+    return (rasi,
+            {g: p.sign for g, p in sixteenth.items()},
+            {g: p.longitude for g, p in sixteenth.items()},
+            int(longitudes(33)["Asc"] // 30),
+            varga(longitudes(33)["Asc"], "D16").sign)
+
+
+def test_chart_33_is_chart_27_read_in_a_different_varga():
+    """The book draws this native twice: Chart 27 in D-4 for Example 71's
+    foreign stay, Chart 33 in D-16 here for a vehicle. Same birth line, same
+    twelve longitudes to the arcsecond -- so one set of numbers feeds two
+    §18.5 dasas that share nothing but their source.
+    """
+    from hora.charts.book import chart, longitudes
+
+    assert longitudes(27) == longitudes(33)
+    assert chart(27)["birth"] == chart(33)["birth"]
+    assert set(chart(27)["divisional"]) == {"D4"}
+    assert set(chart(33)["divisional"]) == {"D16"}
+
+
+def test_chart_33s_drawn_d16_reproduces_with_both_nodes_in_taurus():
+    """Rahu and Ketu share Taurus in the D-16. They are six signs apart in the
+    rasi chart, but Aquarius and Leo are both fixed -- so both count from Leo
+    -- and their degrees are identical at 16 53, which lands them on the same
+    amsa. Nothing else in the chapter puts the nodes together.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(33)
+    for name, sign in chart(33)["divisional"]["D16"].items():
+        if name == "AL":
+            continue
+        assert ABBR[varga(printed[name], "D16").sign] == sign, name
+
+    _rasi, varga_signs, _vlon, _lagna, _d16 = _chart_33_d16()
+    assert varga_signs[int(Graha.RAHU)] == varga_signs[int(Graha.KETU)] == \
+        R["Taurus"]
+    assert printed["Rahu"] % 30 == printed["Ketu"] % 30
+
+
+def test_example_75_seed_house_of_d16_is_the_fourth():
+    """"The seed of D-16 is the 4th house, as 16-12=4. The 4th lord in Rasi
+    chart is Jupiter. In D-16, he is in Vi and Vi is stronger than Pi."
+
+    The section's own worked case for the seed-house formula, now on a chart.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import (
+        dasa_seed,
+        progression,
+        seed_house,
+        varga_lagna,
+    )
+
+    _rasi, varga_signs, varga_longitudes, rasi_lagna, _d16 = _chart_33_d16()
+    assert seed_house(16) == 4
+    assert rasi_lagna == R["Virgo"]
+
+    derived = varga_lagna(16, rasi_lagna, varga_signs)
+    assert derived["seed_rasi"] == R["Sagittarius"]
+    assert derived["lord"] == int(Graha.JUPITER)
+    assert derived["lagna"] == R["Virgo"]
+
+    seed = dasa_seed(derived["lagna"], varga_longitudes)
+    assert seed["seed"] == R["Virgo"]
+    assert seed["decided_by"] == "1"
+
+    got = progression(seed["seed"],
+                      {g for g, s in varga_signs.items() if s == R["Virgo"]})
+    assert got.god == "Vishnu"
+    assert got.direction == "forward"
+    assert [ABBR[s] for s in got.signs][:5] == [a for a, _y in EX75_LENGTHS]
+
+
+@pytest.mark.parametrize("abbr,years", EX75_LENGTHS)
+def test_example_75_lengths(abbr, years):
+    """All five printed, and every one from the base rule alone -- no lord is
+    exalted or debilitated where the D-16 puts it."""
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    _rasi, varga_signs, varga_longitudes, _lagna, _d16 = _chart_33_d16()
+    lord = int(RASI_LORD[BY_ABBR[abbr]])
+    dignity = sign_dignity(lord, varga_longitudes[lord])
+    assert dignity not in ("exalted", "debilitated")
+    assert dasa_length(BY_ABBR[abbr], lord, varga_signs[lord],
+                       dignity).years == years
+
+
+def test_example_75_antardasa_in_december_1996_is_taurus():
+    """"Li is aspected by Mercury and its lord Venus and it is stronger. Its
+    lord Venus is in Le, an odd rasi. So antardasas start from Le and go in
+    the forward direction... 9 antardasas finish after 90 months and the 10th
+    antardasa runs in the 92nd month. The 10th house from Le is Ta."
+
+    Our rule 2 names the book's two grahas and nothing else.
+    """
+    from hora.charts.rasi_strength import stronger
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import antardasas
+
+    _rasi, varga_signs, varga_longitudes, _lagna, _d16 = _chart_33_d16()
+    seed = stronger(R["Libra"], R["Aries"], varga_longitudes, purpose="phalita")
+    assert seed.winner == R["Libra"]
+    assert seed.decided_by == "2"
+    assert "Mercury (Mercury) aspects from Taurus" in seed.reason
+    assert "lord (Venus) aspects from Leo" in seed.reason
+
+    got = antardasas(R["Libra"], 10, varga_longitudes,
+                     seed_occupants={g for g, s in varga_signs.items()
+                                     if s == R["Libra"]})
+    assert got.start == R["Leo"] == varga_signs[int(Graha.VENUS)]
+    assert got.direction == "forward"
+    assert got.months_each == 10
+
+    elapsed = (1996 * 12 + 11) - (1989 * 12 + 3)      # Apr 1989 to Dec 1996
+    assert elapsed == 92 == 7 * 12 + 8
+    assert 9 * got.months_each == 90
+    assert got.signs[elapsed // got.months_each] == R["Taurus"]
+
+
+def test_example_75_taurus_is_the_twelfth_from_vahanapada_and_holds_a8():
+    """"Ta is the 12th from vahanapada (A4 - arudha pada of the 4th house). It
+    can give losses to the vehicle. Lord of A4 is Mercury and he is with Rahu
+    and Ketu in Ta. Moreover, mrityu pada (A8) is in Ta."
+
+    A8 takes two rules to reach. Aquarius is the 8th from the D-16 lagna and
+    is co-owned; §15.5.1 gives **Rahu** at rule 1, since he sits with Mercury
+    and Ketu while Saturn is alone. The arudha then lands on Leo -- the 7th
+    from Aquarius -- so §9.2's exception throws it to the 10th from there,
+    which is Taurus. With Saturn instead it would be Libra and the example's
+    reason would vanish.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.colord import stronger
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import varga_house
+
+    _rasi, varga_signs, varga_longitudes, _lagna, d16_lagna = _chart_33_d16()
+    assert d16_lagna == R["Cancer"]
+
+    a4 = arudha_pada(4, d16_lagna, varga_signs).sign
+    assert a4 == R["Gemini"]
+    assert varga_house(a4, R["Taurus"]) == 12
+    assert int(RASI_LORD[a4]) == int(Graha.MERCURY)
+    assert {g for g, s in varga_signs.items() if s == R["Taurus"]} == \
+        {int(Graha.MERCURY), int(Graha.RAHU), int(Graha.KETU)}
+
+    aquarius_lord = stronger(R["Aquarius"], varga_longitudes,
+                             purpose="dasa").winner
+    assert aquarius_lord == int(Graha.RAHU)
+    a8 = arudha_pada(8, d16_lagna, varga_signs, {R["Aquarius"]: aquarius_lord})
+    assert a8.before_exception == R["Leo"]
+    assert a8.exception_position == 7
+    assert a8.sign == R["Taurus"]
+
+    by_saturn = arudha_pada(8, d16_lagna, varga_signs,
+                            {R["Aquarius"]: int(Graha.SATURN)})
+    assert by_saturn.sign != R["Taurus"]
+
+
+def test_example_75_the_dasa_and_the_antardasa_say_different_things_at_once():
+    """"With Li being the 4th house and having the argala of lord Venus, the
+    native had the comfort of vehicles in Li dasa. However, Ta antardasa was
+    bad due to Rahu and A8."
+
+    Libra is the 4th from the D-16 lagna -- vehicles and comforts -- and its
+    own lord Venus gives it an argala from the 11th. Ten good years, with one
+    ten-month antardasa inside them that crashed the car. Neither cancels the
+    other, which is the point of the closing passage.
+    """
+    from hora.charts.argala import argalas_on_sign
+    from hora.core.const import NATURAL_MALEFIC, RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import (
+        MAHADASA_AND_ANTARDASA_COEXIST,
+        varga_house,
+    )
+
+    _rasi, varga_signs, _vlon, _lagna, d16_lagna = _chart_33_d16()
+    assert varga_house(d16_lagna, R["Libra"]) == 4
+    assert int(RASI_LORD[R["Libra"]]) == int(Graha.VENUS)
+
+    occupants: dict[int, tuple[int, ...]] = {}
+    for graha, sign in varga_signs.items():
+        occupants[sign] = (*occupants.get(sign, ()), graha)
+    found = {(e.kind, e.house): set(e.grahas)
+             for e in argalas_on_sign(
+                 R["Libra"], occupants, ketu_sign=varga_signs[int(Graha.KETU)],
+                 malefic=frozenset(int(g) for g in NATURAL_MALEFIC))
+             if e.grahas}
+    assert found[("argala", 11)] == {int(Graha.VENUS)}
+
+    assert "comfort of vehicles" in MAHADASA_AND_ANTARDASA_COEXIST
+    assert "However" in MAHADASA_AND_ANTARDASA_COEXIST
+
+
+def test_example_75_names_two_dasa_levels_below_pratyantardasa():
+    """"If we want to analyze a temporary activity that remains in a native's
+    mind for just an hour, it is probably seen in the praana-antardasa or
+    deha-antardasa running then."
+
+    §18.3 gave antardasas and Example 71 derived pratyantardasas by recursion.
+    This passage names two more levels and gives neither a length nor an
+    order, so nothing computes them -- but a reading layer has to know they
+    exist before it claims pratyantardasa is the floor.
+    """
+    from hora.dasha.rasi.narayana import (
+        CHOOSE_THE_DASA_LEVEL_BY_THE_EVENT,
+        DASA_LEVEL_BY_EVENT_DURATION,
+    )
+
+    levels = {r["level"]: r for r in DASA_LEVEL_BY_EVENT_DURATION}
+    assert set(levels) == {"mahadasa", "antardasa", "pratyantardasa",
+                           "praana-antardasa", "deha-antardasa"}
+    assert [levels[n]["depth"] for n in
+            ("mahadasa", "antardasa", "pratyantardasa")] == [1, 2, 3]
+    assert levels["praana-antardasa"]["depth"] is None
+    assert levels["deha-antardasa"]["depth"] is None
+    assert "praana-antardasa or deha-antardasa" in CHOOSE_THE_DASA_LEVEL_BY_THE_EVENT
+
+
+def test_the_dasa_level_is_chosen_by_how_long_the_event_matters():
+    """"We should determine the effective period of an event and judiciously
+    choose the dasa division in which it should be seen."
+
+    The chapter's last rule, and the one that governs every example in it.
+    Example 75 uses the antardasa because a crash matters for months; Exercise
+    29 used one because a divorce does; Example 74 used the dasa's thirds
+    because a suspension ran for two years.
+    """
+    from hora.dasha.rasi.narayana import (
+        CHOOSE_THE_DASA_LEVEL_BY_THE_EVENT,
+        DASA_LEVEL_BY_EVENT_DURATION,
+    )
+
+    spans = {r["level"]: r["event_lasts"] for r in DASA_LEVEL_BY_EVENT_DURATION}
+    assert spans["pratyantardasa"] == "just a week"
+    assert spans["antardasa"] == "a few months"
+    assert spans["mahadasa"] == "longer periods"
+    assert spans["praana-antardasa"] == spans["deha-antardasa"] == "just an hour"
+    assert "effective period of an event" in CHOOSE_THE_DASA_LEVEL_BY_THE_EVENT
+
+
+def test_the_chapter_now_reads_eight_arudha_padas():
+    """A4 the vahanapada and A8 the mrityu pada join the six Exercise 30
+    gathered. Every one is a house number and a meaning, so a reading layer
+    gets a table rather than eight anecdotes.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.dasha.rasi.narayana import ARUDHA_PADA_DASA_READINGS
+
+    padas = {r["pada"]: r for r in ARUDHA_PADA_DASA_READINGS}
+    assert set(padas) == {"A1", "A3", "A4", "A6", "A8", "A9", "A10", "UL"}
+    assert padas["A4"]["also"] == "vahanapada"
+    assert padas["A8"]["also"] == "mrityu pada"
+
+    # every one names a house arudha_pada can actually compute
+    _rasi, varga_signs, _vlon, _lagna, d16_lagna = _chart_33_d16()
+    for reading in ARUDHA_PADA_DASA_READINGS:
+        house = reading["house"]
+        assert 1 <= house <= 12
+        if house not in (8,):                        # 8 needs §15.5.1 here
+            assert 0 <= arudha_pada(house, d16_lagna, varga_signs).sign <= 11
