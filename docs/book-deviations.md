@@ -50,7 +50,7 @@ book's own numbers disagree with each other rather than with ours: a
 transposed antardasa pair (D-57) and pratyantardasa dates that do not divide
 the antardasa they are cut from (D-58).
 
-**4. Two live divergences, one known-wrong and one undecided.**
+**4. Live divergences: one known-wrong, and undecided ones at D-52, D-53 and D-59.**
 
 **[OI-36](open-items.md) — known wrong.** `ABHIJIT_END` runs
 53'20" past what §1.3.6 defines, because classical Muhurta convention was
@@ -1813,3 +1813,34 @@ the 4th the same sentence gives.
 the native landed on 15 August 1991, which falls in the 5th pratyantardasa on
 either reading, and the 5th from Ar forward is Le either way. The fixture pins
 both sets of dates and the landing inside both.
+
+## D-59 · Example 72 does not add a year for an exalted **node**
+
+**Status: NEEDS YOU — it changes a dasa length.** Sibling of D-52: both ask
+what §18.2.2's exception 2 means by "exalted".
+
+Chart 28's Aquarius dasa, in the navamsa. §15.5.1 gives Rahu as the stronger
+co-lord, and Rahu is in Gemini in D-9 — which by **§3.3's own Table 6** is his
+exaltation, the value D-4 records us as following on your approval.
+
+| | count | base | exception 2 | length |
+|---|---|---|---|---|
+| ours, Table 6 applied | 9 | 8 | +1 | **9** |
+| the book prints | 9 | 8 | not applied | **8** |
+
+Saturn does not rescue it: he is in Aries in D-9, eleven houses on, giving 10
+and then 9 for his debilitation. Only "Rahu, not exalted" gives 8, so this is
+not a co-lord question.
+
+Two readings fit. Either exception 2 does not reach the nodes at all — D-4
+already notes Table 6 gives them an exaltation *rasi* but no deep-exaltation
+degree, so they have no exaltation in the sense the other seven do — or the
+example simply did not apply Table 6 here.
+
+**What we do:** nothing. `dasa_length` takes the dignity from its caller, so
+both are reachable, and the Example 72 fixture asserts both and names which is
+which. One example is thin evidence either way, and no other chart in the
+chapter puts a node in its Table 6 exaltation or debilitation as a dasa rasi's
+lord, so nothing else in the book so far can corroborate it.
+
+**Closes when:** a second example puts a node there, or you decide.

@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-5](#oi-5) | Upagrahas |
+| [OI-123](#oi-123) | what a varga's houses are counted from |
 | [OI-121](#oi-121) | §18.2.2's exceptions could give 13 years or none |
 | [OI-101](#oi-101) | "sodhya pindas" were named but not defined |
 | [OI-102](#oi-102) | Chart 3 had never been supplied |
@@ -1793,4 +1794,34 @@ answer, not an overflow.
 `dasa_length` no longer adjusts after exception 1, and the `out_of_range` field
 that flagged both cases is gone — with both settled it could only ever have
 been None.
+
+## OI-123 — what a varga's houses are counted from
+
+**Closed by Examples 71 and 72 together.** Neither could do it alone.
+
+§18.5 takes the dasa lagna away and Example 70 discards the varga's own lagna
+when building the dasas, which left four candidates and no rule.
+
+| candidate | Ex 71, D-4 | Ex 72, D-9 |
+|---|---|---|
+| the varga's own lagna | Sg — Le is the 9th | Li — "Here Li is lagna" |
+| the seed house rasi | Sg — same sign here | Ge — **ruled out** |
+| the rasi chart's lagna | Vi — **ruled out** | Li — passes |
+| the derived lagna the dasas run from | Cp — ruled out | Ge — ruled out |
+
+Example 71's D-4 lagna and seed rasi are one sign, so it cannot part those two
+— but it names the rasi chart's lagna separately, "Sun owns the 9th house in
+D-4 and owns the 12th house in rasi chart", and Leo is the 9th from Sg and the
+12th from Vi. Example 72's D-9 lagna is Li while its seed rasi is Ge, and it
+says "Here Li is lagna". Chart 28's ascendant is vargottama, so its rasi and
+D-9 lagnas coincide and it cannot part *those* two — which is exactly what
+Example 71 already settled.
+
+Only the varga's own lagna survives both. `varga_house` counts from it;
+`dasa_lagna` still refuses a varga, because §18.5 takes away the *progressed*
+lagna, not the chart's own one.
+
+The second facet closes with it: Example 71's "the 9th house from dasa rasi"
+for an antardasa is §18.4's own rule, which counts from the dasa rasi without
+calling it lagna, so §18.5's warning does not reach it.
 

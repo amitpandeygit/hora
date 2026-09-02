@@ -182,6 +182,13 @@
         "number": 27,
         "recomputable": true,
         "title": "Foreign Stay Example"
+      },
+      {
+        "birth": "September 12, 1971, 8:25 am (IST), 80 E 23, 16 N 13",
+        "first_seen": "chapter 18, Example 72",
+        "number": 28,
+        "recomputable": true,
+        "title": "A lady \u2014 navamsa Narayana dasa"
       }
     ],
     "not_supplied": [
@@ -210,7 +217,8 @@
       24,
       25,
       26,
-      27
+      27,
+      28
     ]
   },
   "status": 200

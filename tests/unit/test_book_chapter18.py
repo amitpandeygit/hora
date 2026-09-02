@@ -2481,7 +2481,7 @@ def test_every_reading_outside_the_sixteen_points_back_at_oi_122():
     from pathlib import Path
 
     source = Path("src/hora/dasha/rasi/narayana.py").read_text(encoding="utf-8")
-    assert source.count("OI-122") == 5
+    assert source.count("OI-122") == 6
 
 
 # --------------------------------------------------------------------------
@@ -3055,36 +3055,36 @@ def test_example_71_the_dates_skip_the_zero_year_dasa():
     assert spans["Le"] == (1991, 2002)
 
 
-def test_example_71_reads_houses_from_a_rasi_two_rules_can_name():
-    """"We can see that Le is the 9th house." From what?
+def test_example_71_reads_houses_from_the_d4s_own_lagna():
+    """"We can see that Le is the 9th house." From the D-4's own ascendant Sg
+    -- not from the derived lagna Cp, which makes Le the 8th.
 
-    Not from the derived lagna Cp, which makes Le the 8th. From Sg -- and on
-    this chart Sg is both the D-4's own ascendant and the rasi chart's 4th
-    house, which is D-4's seed. They coincide because the ascendant fell in
-    the second quarter of Virgo and that quarter maps to the 4th from Virgo,
-    so the example cannot tell the two rules apart. See OI-123.
+    On this chart Sg is also the rasi chart's 4th house, D-4's seed, because
+    the ascendant fell in Virgo's second quarter and that quarter maps to the
+    4th from Virgo. So Example 71 alone could not part those two; Example 72,
+    whose D-9 lagna and seed rasi differ, is what does. See OI-123, closed.
     """
     from hora.charts.book import longitudes
     from hora.charts.vargas import varga
     from hora.core.const import Graha
     from hora.dasha.rasi.narayana import (
-        VARGA_HOUSE_REFERENCE_IS_AMBIGUOUS,
+        VARGA_HOUSES_ARE_READ_FROM_THE_VARGA_LAGNA,
+        varga_house,
         varga_lagna,
     )
 
     _rasi, varga_signs, _vlon, lagna_sign = _chart_27_d4()
 
     own_lagna = varga(longitudes(27)["Asc"], "D4").sign
-    seed_rasi = varga_lagna(4, lagna_sign, varga_signs)["seed_rasi"]
-    derived = varga_lagna(4, lagna_sign, varga_signs)["lagna"]
+    derived = varga_lagna(4, lagna_sign, varga_signs)
 
-    assert own_lagna == seed_rasi == R["Sagittarius"]      # the coincidence
-    assert derived == R["Capricorn"]
-    assert _house_from(own_lagna, R["Leo"]) == 9
-    assert _house_from(derived, R["Leo"]) == 8             # so not this one
+    assert own_lagna == derived["seed_rasi"] == R["Sagittarius"]   # coincide
+    assert derived["lagna"] == R["Capricorn"]
+    assert varga_house(own_lagna, R["Leo"]) == 9
+    assert varga_house(derived["lagna"], R["Leo"]) == 8            # not this
 
     assert varga_signs[int(Graha.RAHU)] == R["Leo"]
-    assert "9th house" in VARGA_HOUSE_REFERENCE_IS_AMBIGUOUS
+    assert len(VARGA_HOUSES_ARE_READ_FROM_THE_VARGA_LAGNA) == 2
 
 
 def test_example_71s_other_readings_are_counted_from_the_same_rasi():
@@ -3302,3 +3302,231 @@ def test_example_71s_pratyantardasa_dates_do_not_divide_its_own_antardasa():
     landing = date(1991, 8, 15)
     assert ours[0] <= landing < ours[1]
     assert printed[0] <= landing < printed[1]
+
+
+# --------------------------------------------------------------------------
+# Example 72 — Chart 28, a navamsa Narayana dasa, and the chart that closes
+# OI-123 by having a D-9 lagna its seed house rasi does not share.
+# --------------------------------------------------------------------------
+
+EX72_LENGTHS = [("Ge", 12), ("Aq", 8), ("Li", 2)]
+
+
+def _chart_28_d9():
+    from hora.charts.book import graha_longitudes, lagna
+    from hora.charts.vargas import varga
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(28).items()}
+    ninth = {g: varga(lon, "D9") for g, lon in rasi.items()}
+    return (rasi,
+            {g: p.sign for g, p in ninth.items()},
+            {g: p.longitude for g, p in ninth.items()},
+            lagna(28))
+
+
+def _d9_lagna():
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+
+    return varga(longitudes(28)["Asc"], "D9").sign
+
+
+def test_chart_28_is_the_second_chart_drawn_as_a_varga_and_our_d9_matches():
+    """Both diagrams are the navamsa, the longitudes beneath them the rasi
+    chart's -- the same presentation as Chart 27. Twelve positions."""
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+
+    printed = longitudes(28)
+    for name, sign in chart(28)["divisional"]["D9"].items():
+        if name == "AL":
+            continue
+        assert ABBR[varga(printed[name], "D9").sign] == sign, name
+
+
+def test_chart_28s_drawn_d9_arudha_lagna_is_derived_not_transcribed():
+    """AL in Aq, built from the D-9's own lagna Li and its lord Venus in Sg."""
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart
+
+    _rasi, varga_signs, _vlon, _lagna = _chart_28_d9()
+    got = arudha_pada(1, _d9_lagna(), varga_signs)
+    assert ABBR[got.sign] == chart(28)["divisional"]["D9"]["AL"] == "Aq"
+
+
+def test_example_72_derives_gemini_as_the_lagna_of_the_d9_dasa():
+    """"Lagna in rasi chart is Li. The seed for navamsa (D-9) is the 9th
+    house. The 9th lord in rasi chart is Mercury. He is in Ge in navamsa and
+    Ge is stronger than Sg. So dasas start from Ge."
+    """
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_seed, seed_house, varga_lagna
+
+    _rasi, varga_signs, varga_longitudes, lagna_sign = _chart_28_d9()
+    assert lagna_sign == R["Libra"]
+    assert seed_house(9) == 9
+
+    got = varga_lagna(9, lagna_sign, varga_signs)
+    assert got["seed_rasi"] == R["Gemini"]
+    assert int(RASI_LORD[R["Gemini"]]) == int(Graha.MERCURY)
+    assert got["lagna"] == R["Gemini"]
+
+    seed = dasa_seed(got["lagna"], varga_longitudes)
+    assert seed["seed"] == R["Gemini"]
+    assert seed["decided_by"] == "1"
+    assert "Gemini contains 3 planets; Sagittarius contains 2" in seed["reason"]
+
+
+def test_example_72_progression_is_vishnus_backward_trine():
+    """The printed order is Ge, Aq, Li. Ge is dual, so Vishnu; the 9th from it
+    is Aq, even-footed, so backward -- the same walk Chart 24 took in Example
+    68, from the same seed."""
+    from hora.dasha.rasi.narayana import progression
+
+    _rasi, varga_signs, _vlon, _lagna = _chart_28_d9()
+    occupants = {g for g, s in varga_signs.items() if s == R["Gemini"]}
+    got = progression(R["Gemini"], occupants)
+    assert got.god == "Vishnu"
+    assert got.direction == "backward"
+    assert [ABBR[s] for s in got.signs][:3] == [a for a, _y in EX72_LENGTHS]
+
+
+@pytest.mark.parametrize("abbr,years", [c for c in EX72_LENGTHS if c[0] != "Aq"])
+def test_example_72_lengths(abbr, years):
+    """Ge and Li. Aquarius is the exception and is tested separately -- see
+    D-59."""
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_28_d9()
+    rasi_index = BY_ABBR[abbr]
+    lord = int(RASI_LORD[rasi_index])
+    got = dasa_length(rasi_index, lord, varga_signs[lord],
+                      sign_dignity(lord, varga_longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_example_72_aquarius_turns_on_whether_a_node_can_be_exalted():
+    """See D-59. §15.5.1 gives Rahu as Aquarius' stronger co-lord, and Rahu is
+    in Gemini in D-9 -- his exaltation by §3.3's Table 6, which we follow.
+
+    Counting backward from Aq, Rahu is nine houses on, so 9 - 1 = 8. Adding
+    exception 2's year for an exalted lord gives 9; the example prints 8.
+    Saturn does not explain it either: he is eleven houses on and debilitated
+    in Aries, giving 10 - 1 = 9 as well. Only "Rahu, not exalted" gives 8.
+    """
+    from hora.charts.colord import stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    _rasi, varga_signs, varga_longitudes, _lagna = _chart_28_d9()
+    rahu, saturn = int(Graha.RAHU), int(Graha.SATURN)
+    assert stronger(R["Aquarius"], varga_longitudes, purpose="dasa").winner == rahu
+    assert varga_signs[rahu] == R["Gemini"]
+    assert sign_dignity(rahu, varga_longitudes[rahu]) == "exalted"
+
+    by_table_6 = dasa_length(R["Aquarius"], rahu, varga_signs[rahu], "exalted")
+    assert by_table_6.count == 9
+    assert by_table_6.years == 9                        # ours
+
+    without = dasa_length(R["Aquarius"], rahu, varga_signs[rahu], None)
+    assert without.years == 8                           # the book's
+
+    # and the other co-lord reaches neither answer
+    assert sign_dignity(saturn, varga_longitudes[saturn]) == "debilitated"
+    assert dasa_length(R["Aquarius"], saturn, varga_signs[saturn],
+                       "debilitated").years == 9
+
+
+def test_example_72_the_dates_and_the_marriage():
+    """"Ge (12 years): Sep 1971 - Sep 1983", "Aq (08 years)", "Li (02 years):
+    Sep 1991 - Sep 1993". She married in August 1993, inside Li dasa.
+    """
+    year, spans = 1971, {}
+    for abbr, years in EX72_LENGTHS:
+        spans[abbr] = (year, year + years)
+        year += years
+
+    assert spans["Ge"] == (1971, 1983)
+    assert spans["Aq"] == (1983, 1991)
+    assert spans["Li"] == (1991, 1993)
+
+
+def test_example_72_closes_oi_123_because_its_two_lagnas_differ():
+    """"Here Li is lagna. So its dasa can certainly bring marriage."
+
+    Li is the D-9's own ascendant. The seed house rasi is Ge -- the rasi
+    chart's 9th -- and so is the derived lagna the dasas run from, so both are
+    ruled out here. The rasi chart's lagna survives on this chart only because
+    the ascendant at 0 Li 12 is vargottama; Example 71 had already ruled it
+    out by naming it separately. Between them only the varga's own lagna is
+    left.
+    """
+    from hora.dasha.rasi.narayana import varga_house, varga_lagna
+
+    _rasi, varga_signs, _vlon, lagna_sign = _chart_28_d9()
+    own = _d9_lagna()
+    derived = varga_lagna(9, lagna_sign, varga_signs)
+
+    assert own == R["Libra"]                        # "Here Li is lagna"
+    assert derived["seed_rasi"] == R["Gemini"] != own
+    assert derived["lagna"] == R["Gemini"] != own
+    assert lagna_sign == own                        # vargottama, so no help
+    assert varga_house(own, R["Libra"]) == 1
+
+
+def test_example_71_had_already_ruled_out_the_rasi_charts_lagna():
+    """The other half of the elimination. "Sun owns the 9th house in D-4 and
+    owns the 12th house in rasi chart" -- Leo is the 9th from Sg, the D-4's
+    lagna, and the 12th from Vi, the rasi chart's. Naming them apart is what
+    rules the rasi lagna out as the varga's reference.
+    """
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+    from hora.dasha.rasi.narayana import varga_house
+
+    _rasi, _vsig, _vlon, lagna_27 = _chart_27_d4()
+    d4_lagna = varga(longitudes(27)["Asc"], "D4").sign
+
+    assert varga_house(d4_lagna, R["Leo"]) == 9
+    assert (R["Leo"] - lagna_27) % 12 + 1 == 12
+    assert d4_lagna != lagna_27
+
+
+def test_example_72s_marriage_rules_are_a_register_of_their_own():
+    """"Dasas of the 1st, 3rd and 8th houses from upapada (UL) are also
+    favorable for marriage... dasas of 6th house from lagna, dasas of the 2nd
+    and 7th houses from UL can bring troubles in marriage and even a divorce
+    when the chart has such indications."
+
+    A bhava read as if it were a life: the 1st, 3rd and 8th from UL give the
+    marriage its birth, vitality and longevity, and the 2nd and 7th are its
+    marakas -- §14.2's houses, applied to a bhava instead of a native. None of
+    it is in §18.4's sixteen. See OI-122.
+    """
+    from hora.dasha.rasi.narayana import (
+        MARRIAGE_TROUBLE_NEEDS_CORROBORATION,
+        NAVAMSA_MARRIAGE_DASA_RULES,
+    )
+
+    by_source = {}
+    for rule in NAVAMSA_MARRIAGE_DASA_RULES:
+        by_source.setdefault(rule["from"], []).append(rule)
+    assert set(by_source) == {"lagna", "UL"}
+
+    favourable = {r["from"]: r["houses"] for r in NAVAMSA_MARRIAGE_DASA_RULES
+                  if "favorable" in r["gives"]}
+    assert favourable == {"lagna": (1,), "UL": (1, 3, 8)}
+
+    unfavourable = {r["from"]: r["houses"] for r in NAVAMSA_MARRIAGE_DASA_RULES
+                    if "divorce" in r["gives"]}
+    assert unfavourable == {"lagna": (6,), "UL": (2, 7)}
+
+    # The 2nd and 7th are §14.2's maraka houses, here for a bhava not a life.
+    from hora.core.const import MARAKA_HOUSES
+
+    assert set(unfavourable["UL"]) == set(MARAKA_HOUSES)
+    assert "when the chart has such indications" in \
+        MARRIAGE_TROUBLE_NEEDS_CORROBORATION

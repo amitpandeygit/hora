@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 79 waiting on evidence · 2 parked**
+**5 waiting on Amit · 78 waiting on evidence · 2 parked**
 
 ---
 
@@ -616,11 +616,11 @@ is one sign out in the D-10. Neither direction may be assumed from the other.
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
 and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 
-### OI-122 — §18.4's sixteen principles miss six readings its own examples make
+### OI-122 — §18.4's sixteen principles miss seven readings its own examples make
 
 **Waiting on the book.** The sixteen are Parasara's and closed. They carry most
-of what the chapter says, but six readings in Example 69 and Exercise 28 fall
-outside them, and none is a matter of degree:
+of what the chapter says, but seven readings in Examples 69 and 72 and
+Exercise 28 fall outside them, and none is a matter of degree:
 
 | reading | where | why the sixteen miss it |
 |---|---|---|
@@ -630,45 +630,19 @@ outside them, and none is a matter of degree:
 | Ketu in the 11th gives **foreign** gains | both, same words | principle 5 gives any planet there bare "gains" |
 | houses read for a nation: 3rd weapons, 7th foreign relations, 9th religion, 10th the head of government | Ex 69 throughout | the principles give a placement's valence; its subject comes from the house |
 | an antardasa judged by what its **rasi** aspects, the target a natal arudha | Ex 69, Pi dasa | §18.4 judges an antardasa by the house its *lord* holds from the dasa rasi |
+| a navamsa dasa read for marriage: lagna and the 1st, 3rd, 8th from UL favour it, the 6th from lagna and the 2nd, 7th from UL threaten it | Ex 72 | the sixteen never read a bhava as a life of its own, nor name the upapada |
 
 The last is a different mechanism rather than a missing row — a fourth
 reference point in a section that already had three.
 
 **What we do:** each is its own named constant —
 `UNLISTED_DASA_LAGNA_READINGS`, `EXALTED_DUSTHANA_LORD_CONVERSE`,
-`KETU_IN_THE_ELEVENTH_IS_FOREIGN`, `MUNDANE_HOUSE_READINGS` and
-`ANTARDASA_ASPECT_RULE`. Folding them into `PARASARA_DASA_PRINCIPLES` would put
-words in Parasara's mouth. No interpretation layer reads either set yet, so
-nothing is blocked by leaving them apart.
+`KETU_IN_THE_ELEVENTH_IS_FOREIGN`, `MUNDANE_HOUSE_READINGS`,
+`ANTARDASA_ASPECT_RULE` and `NAVAMSA_MARRIAGE_DASA_RULES`. Folding them into
+`PARASARA_DASA_PRINCIPLES` would put words in Parasara's mouth. No
+interpretation layer reads either set yet, so nothing is blocked.
 
 **Closes when:** a later chapter states them, or you say the list may grow.
-
-### OI-123 — Example 71 reads a varga's houses from a rasi two rules can name
-
-**Waiting on the book.** §18.5 takes the dasa lagna away and Example 70
-ignores the varga's own lagna when building the dasas. Example 71 then counts
-houses from *something*: "We can see that Le is the 9th house."
-
-| candidate | Chart 27 | Le is the |
-|---|---|---|
-| the D-4's own lagna | Sg | **9th** |
-| the rasi chart's 4th house, D-4's seed | Sg | **9th** |
-| the derived lagna the dasas run from | Cp | 8th — ruled out |
-
-The first two are one sign only because the ascendant fell in Virgo's second
-quarter, which maps to the 4th from it — a coincidence, not an identity, and
-every other reading in the example is equally silent. A chart's own lagna is
-the ordinary meaning of "the 9th house" and the likelier reading, but a guess
-while one example carries both.
-
-Same subject, second facet: the example also counts "the 9th house from dasa
-rasi" for an antardasa inside a varga. §18.4 states that rule and §18.5 forbids
-taking the dasa rasi *as lagna*; whether they collide is not said.
-
-**What we do:** nothing computes either; `dasa_lagna` refuses a varga, so no
-reference is offered rather than a wrong one assumed.
-
-**Closes when:** an example reads a varga whose lagna and seed rasi differ.
 
 ### OI-120 — §18.2.1 does not say what happens when Saturn and Ketu share the seed
 

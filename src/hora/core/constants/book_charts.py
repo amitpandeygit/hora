@@ -424,6 +424,41 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    28: {
+        "title": "A lady — navamsa Narayana dasa",
+        "birth": "September 12, 1971, 8:25 am (IST), 80 E 23, 16 N 13",
+        "birth_data": {
+            "year": 1971, "month": 9, "day": 12, "hour": 8, "minute": 25,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 13 / 60, "longitude": 80 + 23 / 60},
+        "longitudes": {
+            "Asc": "0 Li 12", "Sun": "25 Le 14", "Moon": "29 Ta 39",
+            "Mars": "18 Cp 28", "Merc": "7 Le 18", "Jup": "6 Sc 36",
+            "Ven": "29 Le 25", "Sat": "13 Ta 01", "Rahu": "19 Cp 02",
+            "Ketu": "19 Cn 02", "HL": "9 Sc 26", "GL": "0 Pi 52",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Ven": "AmK", "Sun": "BK", "Mars": "MK",
+            "Sat": "PiK", "Rahu": "PK", "Merc": "GK", "Jup": "DK",
+        },
+        "divisional": {
+            "D9": {
+                "Asc": "Li", "Sun": "Sc", "Moon": "Vi", "Mars": "Ge",
+                "Merc": "Ge", "Jup": "Le", "Ven": "Sg", "Sat": "Ar",
+                "Rahu": "Ge", "Ketu": "Sg", "HL": "Vi", "GL": "Cn",
+                "AL": "Aq",
+            },
+        },
+        "events": {"married": "August 1993"},
+        "first_seen": "chapter 18, Example 72",
+        "note": (
+            "The second chart drawn as a varga rather than a rasi chart -- "
+            "both diagrams are the navamsa. It closes OI-123: the D-9's own "
+            "lagna is Li while the seed house rasi is Ge, and the example "
+            "says \"Here Li is lagna\"."
+        ),
+    },
     27: {
         "title": "Foreign Stay Example",
         "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",

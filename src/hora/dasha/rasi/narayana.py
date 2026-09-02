@@ -821,13 +821,60 @@ VARGA_DIGNITY_IS_READ_IN_THE_VARGA = (
     "exalted and we have to add one year. So Cp dasa is of 4 years."
 )
 
-#: Example 71 counts houses from Sagittarius, which on Chart 27 is both the
-#: D-4's own lagna and the rasi chart's 4th house -- D-4's seed. The two
-#: coincide only because of where the ascendant fell, so the example cannot
-#: say which it means. See OI-123; nothing computes a varga's house reference.
-VARGA_HOUSE_REFERENCE_IS_AMBIGUOUS = (
-    "We can see that Le is the 9th house. The 9th house shows prospering in a "
-    "foreign land."
+#: A varga dasa has no dasa lagna, but its chart still has houses, and they
+#: are counted from the **varga's own lagna** -- the one Example 70 discards
+#: for building the dasas. Two examples pin it between them, and neither could
+#: alone. Example 71's D-4 lagna and seed house rasi are the same sign, but it
+#: names the rasi chart's lagna separately ("owns the 9th house in D-4 and
+#: owns the 12th house in rasi chart"), ruling that out. Example 72's D-9
+#: lagna is Li while its seed rasi is Ge, and it says "Here Li is lagna",
+#: ruling out the seed rasi and the derived lagna together. Only the varga's
+#: own lagna survives both. See OI-123 in docs/closed-items.md.
+VARGA_HOUSES_ARE_READ_FROM_THE_VARGA_LAGNA: tuple[str, ...] = (
+    "Sun owns the 9th house in D-4 and owns the 12th house in rasi chart.",
+    "Here Li is lagna. So its dasa can certainly bring marriage.",
+)
+
+
+def varga_house(varga_lagna_sign: int, rasi: int) -> int:
+    """Which house a rasi holds in a varga, counted from the varga's lagna.
+
+    The positive counterpart to :func:`dasa_lagna` refusing a varga: §18.5
+    takes away the *progressed* lagna, not the chart's own one.
+
+    :param varga_lagna_sign: the varga's ascendant sign — **not** the lagna
+        :func:`varga_lagna` derives, which only says where the dasas begin.
+    """
+    reference = validate.in_range("varga_lagna_sign", varga_lagna_sign, 0, 11)
+    sign = validate.in_range("rasi", rasi, 0, 11)
+    return (sign - reference) % 12 + 1
+
+
+#: Example 72's rules for reading a navamsa Narayana dasa for marriage. The
+#: first reference point is the navamsa's own lagna; the rest count from the
+#: upapada, whose 1st, 3rd and 8th are read as a bhava's own birth, vitality
+#: and longevity, and whose 2nd and 7th are its marakas. Nothing in §18.4's
+#: sixteen reaches any of this, so it is a register of its own. See OI-122.
+NAVAMSA_MARRIAGE_DASA_RULES: tuple[dict, ...] = (
+    {"from": "lagna", "houses": (1,), "gives": "favorable for marriage",
+     "why": ("Lagna in navamsa shows self, from the point of view of dharma "
+             "and marital life.")},
+    {"from": "lagna", "houses": (6,),
+     "gives": "troubles in marriage and even a divorce", "why": None},
+    {"from": "UL", "houses": (1, 3, 8), "gives": "favorable for marriage",
+     "why": ("Because UL shows marriage, the 1st, 3rd and 8th houses from it "
+             "show its birth, vitality and life (longevity).")},
+    {"from": "UL", "houses": (2, 7),
+     "gives": "troubles in marriage and even a divorce",
+     "why": "The 2nd and 7th houses from it show its end."},
+)
+
+#: The qualification Example 72 attaches to both unfavourable readings, which
+#: keeps them from being read as predictions on their own.
+MARRIAGE_TROUBLE_NEEDS_CORROBORATION = (
+    "dasas of 6th house from lagna, dasas of the 2nd and 7th houses from UL "
+    "can bring troubles in marriage and even a divorce when the chart has "
+    "such indications"
 )
 
 #: §18.5's closing warning, and the reason :func:`dasa_lagna` refuses a varga.
