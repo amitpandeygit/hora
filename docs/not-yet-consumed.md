@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-19's prose (57)
+### Part 2 — the dasa systems map and chapters 16-19's prose (61)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -666,7 +666,9 @@ inconsistency is settled would be the wrong order.
 `MOOLA_DASA_WHEN_IT_IS_BETTER` · `SHOWS_MATERIAL_SUCCESS` ·
 `PARASARA_MOVEMENT_RULERS` · `LAKSHMI_SHOWS_PROSPERITY` ·
 `SUDASA_IS_KENDRADI_FROM_SREE_LAGNA` · `SUCCESS_READINGS` ·
-`WHY_AMK_ARGALA_GIVES_POWER` · `STRONGER_CO_LORD_IS_NOT_THE_LORD`
+`WHY_AMK_ARGALA_GIVES_POWER` · `STRONGER_CO_LORD_IS_NOT_THE_LORD` ·
+`SUDASA_IS_SUPERIOR` · `GATI_NAMES` · `MANDOOKA_DASA_MISATTRIBUTION` ·
+`MANDOOKA_DASA_IS_OF_RUDRAMSA`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -717,6 +719,10 @@ it — but it is the coverage line for the whole part, and
 | `SUCCESS_READINGS` | Chapter 19's only four reading rules, all from Example 76 — AK in the rasi, an unobstructed AmK argala, GL in the rasi, the lagna lord there. Every input computes (`chara_karakas`, `argalas_on_sign`, `special_lagna`); the layer that applies them does not exist |
 | `WHY_AMK_ARGALA_GIVES_POWER` | The reason behind the AmK rule. A layer that gives the verdict without it claims more than the book does — the argala shows the *company of advisors*, from which power is inferred |
 | `STRONGER_CO_LORD_IS_NOT_THE_LORD` | Example 76 says "lagna lord Mars" of a Scorpio lagna while the same chart's dasa length and arudha go to Ketu. Records that §15.5.1 answers only where a rule sends it, which is what D-4 assumed when it left the primary-lord table alone |
+| `SUDASA_IS_SUPERIOR` | §19.4 ranks Sudasa above this dasa for the matter both read. A layer weighing the two rasi dasas needs the ordering, and it is the book's; nothing computes a ranking today |
+| `GATI_NAMES` | The two movements §19.4 names. `kendraadi gati` is built and is `HOUSE_ORDER`; `mandooki gati` is defined only as "the 3rd/11th jump" plus a pointer to a Kalachakra discussion the book has not given, so it is recorded and not built |
+| `MANDOOKA_DASA_MISATTRIBUTION` | §19.4's correction of another author — the only place the book disputes a named dasa by attribution. A claim about naming, not a calculation, so it is stored whole |
+| `MANDOOKA_DASA_IS_OF_RUDRAMSA` | What the real Mandooka dasa is for — wars and death, read in D-11. The chart is in the varga registry; the dasa waits on mandooki gati, which waits on Kalachakra |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |

@@ -365,3 +365,52 @@ WHY_AMK_ARGALA_GIVES_POWER = (
 STRONGER_CO_LORD_IS_NOT_THE_LORD = (
     "Lagna lord Mars is in Sg and he connects lagna to GL."
 )
+
+
+# --------------------------------------------------------------------------
+# §19.4 Conclusion — the movement's name, and a dasa it is not
+# --------------------------------------------------------------------------
+
+#: §19.4 ranks this dasa against the one chapter 19 keeps pointing at. Both
+#: read material success and they are meant to be used together, but the
+#: ordering is the book's and a reading layer that weighs them needs it.
+SUDASA_IS_SUPERIOR = (
+    "It may be used in conjunction with Sudasa to predict material success. "
+    "However, Sudasa is a superior dasa."
+)
+
+#: The two movements §19.4 names and insists are different. The first is this
+#: chapter's; the second is **not implemented** — the book defines it by a
+#: name and a jump and points to a Kalachakra discussion it has not given, so
+#: building a twelve-sign walk from "3rd/11th" would be inventing one. Part 2's
+#: own map of the nine systems lists Kalachakra dasa among the five still to
+#: come, so the two absences are the same absence.
+GATI_NAMES: tuple[dict, ...] = (
+    {"name": "kendraadi gati", "movement": "quadrants, panapharas, apoklimas",
+     "used_by": "Lagna Kendradi Rasi Dasa", "built": True,
+     "defined_in": "§19.2"},
+    {"name": "mandooki gati", "movement": "the 3rd/11th jump",
+     "used_by": "Mandooka dasa", "built": False,
+     "defined_in": "Parasara's discussion of Kalachakra dasa"},
+)
+
+#: §19.4's correction of another author, kept verbatim. It is a claim about
+#: naming and attribution rather than a calculation, and it is the only place
+#: the book disputes someone else's dasa by name.
+MANDOOKA_DASA_MISATTRIBUTION = (
+    "A noted author who wrote a book on \"Mandooka dasa\" made some changes "
+    "to \"Lagna Kendradi Rasi Dasa\" and presented it as \"Mandooka dasa\". "
+    "However the quadrants-panapharas-apoklimas movement is called "
+    "\"kendraadi gati\" and certainly not mandooki gati. Mandooki gati was "
+    "clearly explained by Parasara in his discussion on Kalachakra dasa and "
+    "it is the 3rd/11th jump... The dasa presented by the gentleman in "
+    "question is certainly not Mandooka dasa. It is only a variation of the "
+    "dasa discussed in this chapter."
+)
+
+#: What the real Mandooka dasa is for. D-11 is in the varga registry, so the
+#: chart it wants exists; the dasa does not.
+MANDOOKA_DASA_IS_OF_RUDRAMSA = (
+    "Mandooka dasa is based on mandooki gati and Mandooka dasa of Rudramsa is "
+    "used for predicting the results of wars and death."
+)

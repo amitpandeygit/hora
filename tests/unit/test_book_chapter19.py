@@ -808,3 +808,103 @@ def test_chapter_19s_only_reading_rules_are_recorded_together():
     assert amk["gives"] == "political power"
     assert "advisors, ministers, secretaries or bureaucrats" in \
         WHY_AMK_ARGALA_GIVES_POWER
+
+
+# --------------------------------------------------------------------------
+# §19.4 Conclusion
+# --------------------------------------------------------------------------
+
+def test_sudasa_outranks_this_dasa_for_the_same_matter():
+    """"It may be used in conjunction with Sudasa to predict material success.
+    However, Sudasa is a superior dasa."
+
+    Chapter 19 points at Sudasa three times — §19.3 says it is this dasa from
+    Sree Lagna, §19.4 says it outranks this one for the very matter this one
+    is for. A layer weighing the two rasi dasas needs the ordering, and it is
+    the book's, not ours.
+    """
+    from hora.dasha.rasi.kendradi import (
+        SHOWS_MATERIAL_SUCCESS,
+        SUDASA_IS_KENDRADI_FROM_SREE_LAGNA,
+        SUDASA_IS_SUPERIOR,
+    )
+
+    assert "material success" in SHOWS_MATERIAL_SUCCESS
+    assert "in conjunction with Sudasa" in SUDASA_IS_SUPERIOR
+    assert "Sudasa is a superior dasa" in SUDASA_IS_SUPERIOR
+    assert "Sree Lagna" in SUDASA_IS_KENDRADI_FROM_SREE_LAGNA
+
+
+def test_the_two_gatis_are_named_and_only_one_is_built():
+    """"the quadrants-panapharas-apoklimas movement is called 'kendraadi
+    gati' and certainly not mandooki gati. Mandooki gati... is the 3rd/11th
+    jump."
+
+    This chapter's movement finally gets its name. The other is defined by a
+    jump and a pointer to a Kalachakra discussion the book has not given, so
+    it is recorded and not built — a twelve-sign walk cannot be derived from
+    "3rd/11th" without inventing one. A 3rd-step walk alone never reaches
+    twelve signs: stepping two at a time closes after six.
+    """
+    from hora.dasha.rasi.kendradi import GATI_NAMES, HOUSE_ORDER
+
+    by_name = {g["name"]: g for g in GATI_NAMES}
+    assert set(by_name) == {"kendraadi gati", "mandooki gati"}
+
+    kendraadi = by_name["kendraadi gati"]
+    assert kendraadi["built"] is True
+    assert kendraadi["movement"] == "quadrants, panapharas, apoklimas"
+    assert HOUSE_ORDER == (1, 4, 7, 10, 2, 5, 8, 11, 3, 6, 9, 12)
+
+    mandooki = by_name["mandooki gati"]
+    assert mandooki["built"] is False
+    assert mandooki["movement"] == "the 3rd/11th jump"
+    assert "Kalachakra" in mandooki["defined_in"]
+
+    # why it is not built: a repeated 3rd-house step closes after six signs
+    walk, sign = set(), 0
+    for _ in range(12):
+        walk.add(sign)
+        sign = (sign + 2) % 12
+    assert len(walk) == 6
+
+
+def test_mandooki_gati_waits_on_the_kalachakra_chapter():
+    """The book defines mandooki gati only by reference to its own Kalachakra
+    discussion, and Kalachakra dasa is one of the five Part 2 systems still to
+    come. So the two absences are the same absence.
+    """
+    from hora.core.constants.dasha import PART_2_DASA_SYSTEMS
+    from hora.dasha.rasi.kendradi import GATI_NAMES
+
+    unbuilt = {s["name"] for s in PART_2_DASA_SYSTEMS
+               if s["key"] is None and not s.get("module")}
+    assert "Kalachakra dasa" in unbuilt
+
+    mandooki = next(g for g in GATI_NAMES if g["name"] == "mandooki gati")
+    assert not mandooki["built"]
+    assert "Kalachakra" in mandooki["defined_in"]
+
+
+def test_the_mandooka_dasa_dispute_is_recorded_as_the_books_position():
+    """"The dasa presented by the gentleman in question is certainly not
+    Mandooka dasa. It is only a variation of the dasa discussed in this
+    chapter."
+
+    The only place the book disputes another author's dasa by name. It is a
+    claim about naming and attribution, not a calculation, so it is stored
+    whole rather than turned into a rule — and the real Mandooka dasa is named
+    with the chart it wants, which we do have.
+    """
+    from hora.charts.vargas import VARGA_REGISTRY
+    from hora.dasha.rasi.kendradi import (
+        MANDOOKA_DASA_IS_OF_RUDRAMSA,
+        MANDOOKA_DASA_MISATTRIBUTION,
+    )
+
+    assert "certainly not mandooki gati" in MANDOOKA_DASA_MISATTRIBUTION
+    assert "only a variation" in MANDOOKA_DASA_MISATTRIBUTION
+
+    assert "Rudramsa" in MANDOOKA_DASA_IS_OF_RUDRAMSA
+    assert "wars and death" in MANDOOKA_DASA_IS_OF_RUDRAMSA
+    assert VARGA_REGISTRY["D11"][1] == "Rudramsa"      # the chart exists
