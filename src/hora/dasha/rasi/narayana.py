@@ -1001,6 +1001,8 @@ def varga_lagna(
     natal_lagna: int,
     varga_signs: dict[int, int],
     lord: int | None = None,
+    *,
+    seed_house_number: int | None = None,
 ) -> dict:
     """§18.5's four steps: the rasi a varga's Narayana dasa treats as lagna.
 
@@ -1018,11 +1020,18 @@ def varga_lagna(
         Chart 26's D-9 seeds on Aquarius, where §15.5.1 gives Rahu and
         `RASI_LORD` gives Saturn, and the two put the varga lagna seven signs
         apart -- a different dasa sequence, not a different shade of one.
+    :param seed_house_number: a seed house other than §18.5's. §18.7 says the
+        seed is a choice, not a fixture — "we can compute more than one
+        Narayana dasa for each divisional chart", and a D-24 seeded from the
+        4th shows formal education where the default 12th shows learning as
+        evolution. Omitted, §18.5's rule applies.
     :raises NarayanaError: when a co-owned seed rasi is given no lord, or when
         the lord has no place in the varga.
     """
     lagna_index = validate.in_range("natal_lagna", natal_lagna, 0, 11)
-    house = seed_house(divisions)
+    default_house = seed_house(divisions)
+    house = (default_house if seed_house_number is None
+             else validate.in_range("seed_house_number", seed_house_number, 1, 12))
     rasi = (lagna_index + house - 1) % 12
     from hora.charts.colord import CO_LORDS
 
@@ -1042,6 +1051,8 @@ def varga_lagna(
     return {
         "divisions": int(divisions),
         "seed_house": house,
+        "default_seed_house": default_house,
+        "seed_is_default": house == default_house,
         "seed_rasi": rasi,
         "seed_rasi_name": str(RASI_NAMES[rasi]),
         "lord": ruler,
@@ -1249,3 +1260,54 @@ def solar_arc_instant(
     window = year_days / 12.0                      # a month either side
     return scan_for_crossing(sun_longitude_at, target,
                              estimate - window, estimate + window)
+
+# --------------------------------------------------------------------------
+# §18.7 Conclusion — the seed is a choice
+# --------------------------------------------------------------------------
+
+#: §18.7's closing point, and the one that changes an interface. §18.5 gives
+#: the seed house for D-n and reads like a fixture; §18.7 says it is only the
+#: default, and a second dasa on the same varga from a different seed answers
+#: a different question about the same matter.
+MORE_THAN_ONE_DASA_PER_VARGA = (
+    "In fact, we can compute more than one Narayana dasa for each divisional "
+    "chart... By using a different seed, we can examine the events related to "
+    "the chosen divisional chart from a different angle."
+)
+
+#: The distinction §18.7 draws, which no earlier section makes: a dasa on the
+#: default seed is **native-centric** even when its varga is about someone
+#: else. Reading the other person's own life needs a different seed.
+NATIVE_CENTRIC_VS_DIRECT = (
+    "Narayana dasa of D-12 seeded from the 12th lord is native-centric. It "
+    "shows events in a native's life that are related to parents. Even when "
+    "looking at the events in the lives of parents, it takes the native as "
+    "the reference. To see events in the lives of parents directly, we can "
+    "use different seeds."
+)
+
+#: The three seedings §18.7 names, default and alternate together. `varga`
+#: and `seed_house` say which chart and which house; `shows` is the reading,
+#: and `native_centric` records whose life the dasa is about.
+SEED_CHOICE_READINGS: tuple[dict, ...] = (
+    {"varga": "D12", "seed_house": 12, "is_default": True,
+     "native_centric": True,
+     "shows": "events in the native's life that are related to parents"},
+    {"varga": "D12", "seed_house": None, "is_default": False,
+     "native_centric": False,
+     "shows": "events in the lives of parents directly"},
+    {"varga": "D24", "seed_house": 12, "is_default": True,
+     "native_centric": True,
+     "shows": "learning from the point of view of one's evolution"},
+    {"varga": "D24", "seed_house": 4, "is_default": False,
+     "native_centric": True,
+     "shows": "formal education"},
+)
+
+#: How §18.7 rates the system, and what it asks of a reader.
+NARAYANA_IS_THE_MOST_IMPORTANT_PHALITA_DASA = (
+    "Narayana dasa may be said to be the most important phalita dasa. Its "
+    "versatility lies in the fact that it can be computed separately for each "
+    "divisional chart for precise timing of specific matters... Readers "
+    "should try to master this fantastic dasa system."
+)

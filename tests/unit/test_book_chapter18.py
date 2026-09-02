@@ -5199,3 +5199,166 @@ def test_the_section_names_pvrs_own_program_as_the_reference():
 
     assert SOLAR_ARC_REFERENCE_SOFTWARE.endswith("VedicAstrologer.org")
     assert "Then only correct results" in SOLAR_ARC_IS_REQUIRED_FOR_CORRECT_RESULTS
+
+
+# --------------------------------------------------------------------------
+# §18.7 Conclusion — the seed house is a choice, not a fixture.
+# --------------------------------------------------------------------------
+
+def test_a_varga_can_carry_more_than_one_narayana_dasa():
+    """"In fact, we can compute more than one Narayana dasa for each
+    divisional chart... One can use the 4th house (formal learning) as the
+    seed in D-24 Narayana dasa to see formal education."
+
+    §18.5 gives the seed house for D-n and reads like a fixture; §18.7 says it
+    is the default. `varga_lagna` takes `seed_house_number` for the rest, and
+    the result says which it used, so a second dasa on the same varga is a
+    parameter rather than a workaround.
+
+    Chart 23 shows the choice biting: the 12th from its Aquarius lagna is Cp,
+    whose lord Saturn puts the D-24 lagna in Pi; the 4th is Ta, whose lord
+    Venus puts it in Vi. Different lagna, different dasas, same chart.
+    """
+    from hora.charts.book import graha_longitudes, longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import seed_house, varga_lagna
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(23).items()}
+    varga_signs = {g: varga(lon, "D24").sign for g, lon in rasi.items()}
+    rasi_lagna = int(longitudes(23)["Asc"] // 30)
+
+    assert seed_house(24) == 12
+    by_default = varga_lagna(24, rasi_lagna, varga_signs)
+    assert by_default["seed_house"] == 12
+    assert by_default["seed_is_default"] is True
+    assert by_default["lord"] == int(Graha.SATURN)
+    assert by_default["lagna"] == R["Pisces"]
+
+    formal = varga_lagna(24, rasi_lagna, varga_signs, seed_house_number=4)
+    assert formal["seed_house"] == 4
+    assert formal["default_seed_house"] == 12
+    assert formal["seed_is_default"] is False
+    assert formal["seed_rasi"] == R["Taurus"]
+    assert formal["lord"] == int(Graha.VENUS)
+    assert formal["lagna"] == R["Virgo"] != by_default["lagna"]
+
+
+def _d24_order(number, seed_house_number):
+    """A chart's D-24 Narayana progression under one seeding."""
+    from hora.charts.book import graha_longitudes, longitudes
+    from hora.charts.vargas import varga
+    from hora.dasha.rasi.narayana import dasa_seed, progression, varga_lagna
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(number).items()}
+    tw = {g: varga(lon, "D24") for g, lon in rasi.items()}
+    varga_signs = {g: p.sign for g, p in tw.items()}
+    varga_longitudes = {g: p.longitude for g, p in tw.items()}
+
+    lagna_of_varga = varga_lagna(
+        24, int(longitudes(number)["Asc"] // 30), varga_signs,
+        seed_house_number=seed_house_number)["lagna"]
+    seed = dasa_seed(lagna_of_varga, varga_longitudes)
+    assert seed["seed"] in (lagna_of_varga, (lagna_of_varga + 6) % 12)
+    got = progression(seed["seed"],
+                      {g for g, s in varga_signs.items() if s == seed["seed"]})
+    assert len(set(got.signs)) == 12
+    return lagna_of_varga, got.signs
+
+
+def test_an_alternate_seed_gives_a_different_run_of_dasas():
+    """Only where the dasas begin moves; §18.2.1's comparison, the movement,
+    the direction and the lengths all follow as before. On Chart 26 the two
+    seedings put the D-24 lagna in Pi and Le, and the dasas diverge from the
+    first period.
+    """
+    by_default, order_default = _d24_order(26, None)
+    formal, order_formal = _d24_order(26, 4)
+
+    assert (by_default, formal) == (R["Pisces"], R["Leo"])
+    assert order_default[:4] != order_formal[:4]
+    assert [ABBR[s] for s in order_default[:4]] == ["Pi", "Sc", "Cn", "Ge"]
+    assert [ABBR[s] for s in order_formal[:4]] == ["Le", "Vi", "Li", "Sc"]
+
+
+def test_two_seedings_that_land_opposite_each_other_give_the_same_dasas():
+    """A consequence of §18.2.1 worth knowing before reading two dasas as
+    two answers. The seed is the stronger of the derived lagna and the 7th
+    from it -- so if an alternate seed lands on the 7th from the default's
+    lagna, the comparison sees the same pair, picks the same winner, and the
+    two dasas are identical.
+
+    Chart 23 is such a case: its D-24 lagna is Pi from the 12th house and Vi
+    from the 4th, and both run Pi first. A different seed is not always a
+    different angle.
+    """
+    by_default, order_default = _d24_order(23, None)
+    formal, order_formal = _d24_order(23, 4)
+
+    assert (formal - by_default) % 12 == 6            # opposite each other
+    assert order_default == order_formal
+
+
+def test_the_seed_house_number_is_validated_like_any_house():
+    from hora.charts.book import graha_longitudes, longitudes
+    from hora.charts.vargas import varga
+    from hora.core import validate
+    from hora.dasha.rasi.narayana import varga_lagna
+
+    rasi = {int(g): lon for g, lon in graha_longitudes(23).items()}
+    varga_signs = {g: varga(lon, "D24").sign for g, lon in rasi.items()}
+    rasi_lagna = int(longitudes(23)["Asc"] // 30)
+
+    for bad in (0, 13, -1):
+        with pytest.raises(validate.InputError):
+            varga_lagna(24, rasi_lagna, varga_signs, seed_house_number=bad)
+
+
+def test_a_default_seed_dasa_is_native_centric_even_when_its_varga_is_not():
+    """"Narayana dasa of D-12 seeded from the 12th lord is native-centric. It
+    shows events in a native's life that are related to parents. Even when
+    looking at the events in the lives of parents, it takes the native as the
+    reference. To see events in the lives of parents directly, we can use
+    different seeds."
+
+    A distinction no earlier section draws, and one a reading layer must not
+    lose: whose life the dasa is about is settled by the seed, not by the
+    varga. Recorded with the three seedings §18.7 names.
+    """
+    from hora.dasha.rasi.narayana import (
+        NATIVE_CENTRIC_VS_DIRECT,
+        SEED_CHOICE_READINGS,
+    )
+
+    assert "native-centric" in NATIVE_CENTRIC_VS_DIRECT
+    assert "different seeds" in NATIVE_CENTRIC_VS_DIRECT
+
+    d12 = [r for r in SEED_CHOICE_READINGS if r["varga"] == "D12"]
+    assert [r["is_default"] for r in d12] == [True, False]
+    assert [r["native_centric"] for r in d12] == [True, False]
+    assert d12[1]["seed_house"] is None          # the section names no house
+
+    d24 = {r["seed_house"]: r for r in SEED_CHOICE_READINGS
+           if r["varga"] == "D24"}
+    assert d24[12]["shows"] == "learning from the point of view of one's evolution"
+    assert d24[4]["shows"] == "formal education"
+    assert d24[4]["is_default"] is False
+
+
+def test_18_7_closes_the_chapter_on_what_the_system_is_for():
+    """"Narayana dasa may be said to be the most important phalita dasa. Its
+    versatility lies in the fact that it can be computed separately for each
+    divisional chart for precise timing of specific matters."
+
+    Which is what the chapter built: a progression, lengths, three levels of
+    sub-period and six more, a varga pipeline, and a seed that can be chosen.
+    """
+    from hora.dasha.rasi.narayana import (
+        MORE_THAN_ONE_DASA_PER_VARGA,
+        NARAYANA_IS_THE_MOST_IMPORTANT_PHALITA_DASA,
+    )
+
+    assert "most important phalita dasa" in NARAYANA_IS_THE_MOST_IMPORTANT_PHALITA_DASA
+    assert "master this fantastic dasa system" in \
+        NARAYANA_IS_THE_MOST_IMPORTANT_PHALITA_DASA
+    assert "more than one Narayana dasa" in MORE_THAN_ONE_DASA_PER_VARGA

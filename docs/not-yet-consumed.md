@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-18's prose (46)
+### Part 2 — the dasa systems map and chapters 16-18's prose (48)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -661,7 +661,8 @@ inconsistency is settled would be the wrong order.
 `ARUDHA_PADA_DASA_READINGS` · `ARUDHA_SHOWS_THE_APPEARANCE_OF_ITS_MATTER` ·
 `DASA_LEVEL_BY_EVENT_DURATION` · `CHOOSE_THE_DASA_LEVEL_BY_THE_EVENT` ·
 `MAHADASA_AND_ANTARDASA_COEXIST` · `SOLAR_ARC_IS_REQUIRED_FOR_CORRECT_RESULTS` ·
-`SOLAR_ARC_REFERENCE_SOFTWARE`
+`SOLAR_ARC_REFERENCE_SOFTWARE` · `SEED_CHOICE_READINGS` ·
+`NARAYANA_IS_THE_MOST_IMPORTANT_PHALITA_DASA`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -701,6 +702,8 @@ it — but it is the coverage line for the whole part, and
 | `MAHADASA_AND_ANTARDASA_COEXIST` | Example 75's demonstration that two levels can say opposite things at once and neither cancels the other — ten good years with one bad ten-month period inside them. A reading layer must not resolve them into one verdict |
 | `SOLAR_ARC_IS_REQUIRED_FOR_CORRECT_RESULTS` | §18.6's warning that only the solar-arc measure gives correct sub-periods. `sub_period_arc` and `solar_arc_instant` implement it; the sentence is why, and it is the one that withdrew D-58 |
 | `SOLAR_ARC_REFERENCE_SOFTWARE` | PVR's own free program, which divides a mahadasa to deha-antardasa level by the same measure. A tier-2 check we could run one day, and it names the inputs the division needs |
+| `SEED_CHOICE_READINGS` | §18.7's three named seedings and what each shows. `varga_lagna` takes the seed house, so all three compute; which to run for a question, and whether the answer is native-centric or direct, is the reading |
+| `NARAYANA_IS_THE_MOST_IMPORTANT_PHALITA_DASA` | §18.7's assessment of the system and its instruction to master it. Nothing computes from an assessment; it is here so the chapter's closing claim is on the record with the rest |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |
