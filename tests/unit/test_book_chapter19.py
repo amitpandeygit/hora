@@ -403,3 +403,255 @@ def test_sudasa_is_this_dasa_from_sree_lagna_and_chapter_5_already_said_so():
 
     params = list(inspect.signature(progression).parameters)
     assert params[:2] == ["seed", "lagna"]      # seed and lagna are separable
+
+
+# --------------------------------------------------------------------------
+# Example 76 — Ronald Reagan, Chart 34. The lengths and dates below are our
+# derivation, recorded before Table 41 was read.
+# --------------------------------------------------------------------------
+
+#: Our lengths, in progression order. Table 41 will confirm or contradict.
+EX76_LENGTHS = [("Ta", 9), ("Aq", 10), ("Sc", 11), ("Le", 7), ("Ar", 8),
+                ("Cp", 8), ("Li", 4), ("Cn", 3), ("Pi", 5), ("Sg", 10),
+                ("Vi", 9), ("Ge", 6)]
+
+
+def _chart_34():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(34).items()},
+            {int(g): sign for g, sign in graha_signs(34).items()},
+            lagna(34))
+
+
+def _ex76_lord(rasi, longitudes, signs):
+    """§15.5.1 with rule 5a's lengths supplied, as §19.2 rule 6 requires."""
+    from hora.charts.colord import CO_LORDS, stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    if rasi not in CO_LORDS:
+        return int(RASI_LORD[rasi])
+    years = {g: dasa_length(rasi, g, signs[g],
+                            sign_dignity(g, longitudes[g])).years
+             for g in CO_LORDS[rasi]}
+    got = stronger(rasi, longitudes, purpose="dasa", dasa_years=years)
+    return got.winner if got.winner is not None else int(RASI_LORD[rasi])
+
+
+def test_chart_34_is_chart_7_reprinted():
+    """The book gives Reagan a second number for chapter 19 without changing a
+    figure. Both entries carry the same twelve longitudes, and this pins them
+    equal so an edit to one cannot silently diverge from the other.
+    """
+    from hora.charts.book import chart, longitudes
+
+    assert longitudes(7) == longitudes(34)
+    assert chart(7)["birth"] == chart(34)["birth"]
+    assert chart(7)["chara_karakas"] == chart(34)["chara_karakas"]
+
+
+def test_chart_34s_drawn_arudha_lagna_needs_15_5_1():
+    """The diagram puts AL in Vi. Scorpio's lord goes to §15.5.1, which gives
+    Ketu at rule 2 — Jupiter conjoins him in Libra and his dispositor Venus
+    aspects from Aquarius, against Mercury's single conjunction with Mars.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+
+    longitudes, signs, lagna_sign = _chart_34()
+    chosen = stronger(R["Scorpio"], longitudes, purpose="arudha").winner
+    assert chosen == int(Graha.KETU)
+
+    got = arudha_pada(1, lagna_sign, signs, {R["Scorpio"]: chosen})
+    assert ABBR[got.sign] == chart(34)["drawn"]["AL"] == "Vi"
+
+
+def test_example_76_seed_is_taurus_by_jupiters_aspect():
+    """"Lagna is in Sc. Ta is stronger than Sc, as it has Jupiter's aspect.
+    So dasas start from Ta."
+
+    §19.2 rule 1 is §18.2.1's seed rule, so `dasa_seed` serves both. Rule 1
+    ties on nothing — neither rasi holds a graha — and rule 2 decides on the
+    single aspect the example names.
+    """
+    from hora.charts.rasi_strength import stronger
+    from hora.dasha.rasi.narayana import dasa_seed
+
+    longitudes, signs, lagna_sign = _chart_34()
+    assert lagna_sign == R["Scorpio"]
+    assert not [g for g, s in signs.items()
+                if s in (R["Scorpio"], R["Taurus"])]
+
+    verdict = stronger(R["Taurus"], R["Scorpio"], longitudes, purpose="phalita")
+    assert verdict.winner == R["Taurus"]
+    assert verdict.decided_by == "2"
+    assert "Taurus count 1 (Jupiter (Jupiter) aspects from Libra)" in verdict.reason
+    assert "Scorpio count 0" in verdict.reason
+
+    assert dasa_seed(lagna_sign, longitudes)["seed"] == R["Taurus"]
+
+
+def test_example_76_reads_the_direction_from_the_seed_and_it_cannot_matter():
+    """"Because Ta is an even rasi, we go anti-zodiacally."
+
+    §19.2 rule 2 says the direction comes from **lagna**; the example reads it
+    from the **seed**. Lagna is Scorpio and the seed is Taurus — and both are
+    even, so the two readings agree, exactly as they must. This is the book
+    itself taking the reading rule 2's wording does not, on a chart where it
+    could not be caught.
+    """
+    from hora.core.const import RASI_IS_ODD
+    from hora.dasha.rasi.kendradi import direction_of, progression
+
+    _longitudes, signs, lagna_sign = _chart_34()
+    seed = R["Taurus"]
+    assert not RASI_IS_ODD[lagna_sign]
+    assert not RASI_IS_ODD[seed]
+    assert direction_of(lagna_sign) == direction_of(seed) == "backward"
+
+    got = progression(seed, lagna_sign,
+                      {g for g, s in signs.items() if s == seed})
+    assert got.direction == "backward"
+    assert got.exception is None
+    assert [ABBR[s] for s in got.signs] == [
+        "Ta", "Aq", "Sc", "Le", "Ar", "Cp", "Li", "Cn", "Pi", "Sg", "Vi", "Ge"]
+
+
+def test_example_76_is_19_2s_own_worked_order():
+    """"Suppose lagna is in Ta and Ta is stronger than Sc..." — §19.2's second
+    illustration is this chart's order exactly, though the section reached it
+    from a Taurus lagna and the example reaches it from a Scorpio one seeded
+    on the 7th.
+    """
+    from hora.dasha.rasi.kendradi import progression
+
+    illustration = progression(R["Taurus"], R["Taurus"])
+    reagan = progression(R["Taurus"], R["Scorpio"])
+    assert illustration.signs == reagan.signs
+
+
+@pytest.mark.parametrize("abbr,years", EX76_LENGTHS)
+def test_example_76_lengths_our_derivation(abbr, years):
+    """§19.2 rule 6 sends lengths to §18.2.2 unchanged. Recorded before Table
+    41 was read, so a disagreement is a finding rather than a fixture to
+    adjust.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_34()
+    rasi = {v: k for k, v in enumerate(ABBR)}[abbr]
+    lord = _ex76_lord(rasi, longitudes, signs)
+    got = dasa_length(rasi, lord, signs[lord],
+                      sign_dignity(lord, longitudes[lord]))
+    assert got.years == years, got.why
+
+
+def test_example_76_scorpio_swings_the_whole_timeline_by_ten_years():
+    """The sharpest §15.5.1 decision in the book so far.
+
+    Scorpio's co-lords sit ten houses apart in the counting: Mars in Sg is one
+    house on and gives **1 year**, Ketu in Li is eleven and gives **11**.
+    §15.5.1 reaches Ketu at rule 2 — Jupiter conjoins him and his dispositor
+    Venus aspects from Aquarius, against Mercury's single conjunction with
+    Mars. Ten years ride on it: with Mars, every dasa after 1930 moves forward
+    a decade and Reagan's presidency falls in Virgo rather than Sagittarius.
+    """
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_34()
+    mars, ketu = int(Graha.MARS), int(Graha.KETU)
+
+    by_mars = dasa_length(R["Scorpio"], mars, signs[mars])
+    by_ketu = dasa_length(R["Scorpio"], ketu, signs[ketu])
+    assert (by_mars.years, by_ketu.years) == (1, 11)
+
+    got = stronger(R["Scorpio"], longitudes, purpose="dasa",
+                   dasa_years={mars: by_mars.years, ketu: by_ketu.years})
+    assert got.winner == ketu
+    assert got.decided_by == "2"            # decided before rule 5a is needed
+    assert "Ketu count 2" in got.reason
+    assert "dispositor (Venus) aspects from Aquarius" in got.reason
+
+
+def test_example_76_aquarius_is_rule_5as_second_firing_in_the_book():
+    """Both of Aquarius' co-lords are in Aries, so everything above rule 5
+    ties — same conjunctions, neither exalted, both in a movable rasi. Rule
+    5a takes the longer dasa: Rahu's 10 over Saturn's 9, Saturn losing a year
+    to his debilitation. Exercise 29 was the first time this rule fired.
+    """
+    from hora.charts.colord import stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_34()
+    saturn, rahu = int(Graha.SATURN), int(Graha.RAHU)
+    assert signs[saturn] == signs[rahu] == R["Aries"]
+    assert sign_dignity(saturn, longitudes[saturn]) == "debilitated"
+
+    by_saturn = dasa_length(R["Aquarius"], saturn, signs[saturn], "debilitated")
+    by_rahu = dasa_length(R["Aquarius"], rahu, signs[rahu])
+    assert (by_saturn.count, by_saturn.years) == (11, 9)     # 10, less a year
+    assert (by_rahu.count, by_rahu.years) == (11, 10)
+
+    got = stronger(R["Aquarius"], longitudes, purpose="dasa",
+                   dasa_years={saturn: by_saturn.years, rahu: by_rahu.years})
+    assert got.winner == rahu
+    assert got.decided_by == "5a"
+
+
+def test_example_76_dates_against_reagans_life():
+    """Our derivation, on §18.6's solar arc — every boundary falls near his
+    6 February birthday because that is his solar return.
+
+    | dasa | span | what falls in it |
+    |---|---|---|
+    | Libra | Feb 1964 - Feb 1968 | elected Governor Nov 1966, took office Jan 1967 |
+    | Sagittarius | Feb 1976 - Feb 1986 | elected Nov 1980, inaugurated Jan 1981, shot 30 March 1981 |
+    | Virgo | Feb 1986 - Feb 1995 | left office Jan 1989, Alzheimer's letter Nov 1994 |
+    """
+    from hora.charts.book import chart
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import Graha
+    from hora.core.ephemeris import get_ephemeris
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_jd, from_local
+    from hora.dasha.rasi.narayana import (
+        dasa_length,
+        solar_arc_instant,
+        sub_period_arc,
+    )
+
+    longitudes, signs, _lagna = _chart_34()
+    ephemeris = get_ephemeris(Settings(node_type=NodeType.MEAN))
+
+    def sun_at(jd: float) -> float:
+        return ephemeris.position(jd, int(Graha.SUN)).longitude
+
+    birth = from_local(**chart(34)["birth_data"]).jd_ut
+    spans, arc = {}, 0.0
+    for abbr, _years in EX76_LENGTHS:
+        rasi = {v: k for k, v in enumerate(ABBR)}[abbr]
+        lord = _ex76_lord(rasi, longitudes, signs)
+        years = dasa_length(rasi, lord, signs[lord],
+                            sign_dignity(lord, longitudes[lord])).years
+        opens = solar_arc_instant(birth, arc, sun_at)
+        arc += sub_period_arc(years, 0)
+        closes = solar_arc_instant(birth, arc, sun_at)
+        spans[abbr] = (from_jd(opens, utc_offset_hours=-6.0).local.date(),
+                       from_jd(closes, utc_offset_hours=-6.0).local.date())
+
+    assert spans["Ta"][0].year == 1911
+    assert (spans["Li"][0].year, spans["Li"][1].year) == (1964, 1968)
+    assert (spans["Sg"][0].year, spans["Sg"][1].year) == (1976, 1986)
+    assert (spans["Vi"][0].year, spans["Vi"][1].year) == (1986, 1995)
+    assert spans["Ge"][1].year == 2001
+    for opens, closes in spans.values():
+        assert opens.month == 2 and closes.month == 2   # his solar return

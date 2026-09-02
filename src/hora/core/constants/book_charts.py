@@ -424,6 +424,41 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    34: {
+        "title": "Ronald Reagan — Lagna Kendradi Rasi Dasa",
+        "birth": "February 6, 1911, 2:04 am (6:00 West), 89 W 47, 41 N 38",
+        "birth_data": {
+            "year": 1911, "month": 2, "day": 6, "hour": 2, "minute": 4,
+            "second": 0.0, "utc_offset_hours": -6.0,
+        },
+        "place": {"latitude": 41 + 38 / 60, "longitude": -(89 + 47 / 60)},
+        "longitudes": {
+            "Asc": "7 Sc 08", "Sun": "23 Cp 49", "Moon": "19 Ar 49",
+            "Mars": "11 Sg 19", "Merc": "28 Sg 49", "Jup": "21 Li 07",
+            "Ven": "10 Aq 56", "Sat": "8 Ar 12", "Rahu": "21 Ar 54",
+            "Ketu": "21 Li 54", "HL": "19 Le 41", "GL": "29 Sg 42",
+        },
+        "chara_karakas": {
+            "Merc": "AK", "Sun": "AmK", "Jup": "BK", "Moon": "MK",
+            "Mars": "PiK", "Ven": "PK", "Sat": "GK", "Rahu": "DK",
+        },
+        "drawn": {
+            "Sat": "Ar", "Moon": "Ar", "Rahu": "Ar", "Ven": "Aq", "Sun": "Cp",
+            "HL": "Le", "Merc": "Sg", "Mars": "Sg", "GL": "Sg", "Asc": "Sc",
+            "Ketu": "Li", "Jup": "Li", "AL": "Vi",
+        },
+        "events": {
+            "President of the United States": "January 1981 to January 1989",
+            "shot": "30 March 1981",
+            "died": "5 June 2004",
+        },
+        "first_seen": "chapter 19, Example 76",
+        "note": (
+            "Chart 7 re-printed. The book gives Reagan a second number for "
+            "chapter 19 without changing a figure, so both entries carry the "
+            "same twelve longitudes and a test pins them equal."
+        ),
+    },
     33: {
         "title": "Accident example — D-16 Narayana dasa",
         "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
