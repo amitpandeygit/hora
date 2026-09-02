@@ -637,7 +637,7 @@ inconsistency is settled would be the wrong order.
 
 ---
 
-### Part 2 — the dasa systems map and chapters 16-20's prose (68)
+### Part 2 — the dasa systems map and chapters 16-21's prose (69)
 
 `PART_2_DASA_SYSTEMS` · `DASA_USES_ARE_NOT_IN_THE_CLASSICS` ·
 `DEFERRED_TO_TAJAKA` · `VARIATIONS_ARE_OFTEN_IGNORED` · `DASA_FROM_LAGNA` ·
@@ -671,7 +671,7 @@ inconsistency is settled would be the wrong order.
 `MANDOOKA_DASA_IS_OF_RUDRAMSA` · `NAMES` · `SHOWS` ·
 `DIAGNOSTIC_CLAIMS` · `SEED_EXCEPTIONS_NOT_RESTATED` ·
 `CHECK_NARAYANA_ALONGSIDE` · `A5_SHOWS_ONES_FOLLOWING` ·
-`AL_IN_THE_DASA_RASI_GIVES_STATUS`
+`AL_IN_THE_DASA_RASI_GIVES_STATUS` · `SHOWS_SPIRITUAL_VISION`
 
 Part 2 opens by classifying dasa systems two ways and naming the nine it will
 teach. That is a roadmap rather than a calculation, so nothing computes from
@@ -733,6 +733,7 @@ it — but it is the coverage line for the whole part, and
 | `CHECK_NARAYANA_ALONGSIDE` | Example 78's rule that the two rasi dasas are read together, Narayana for power and Sudasa for prosperity. Both compute; a layer that runs one and reports it alone is doing what this forbids |
 | `A5_SHOWS_ONES_FOLLOWING` | A ninth arudha reading, on Exercise 30's principle — the 5th shows one's following, so A5 shows what the world judges it by. `arudha_pada` computes it; the reading layer does not exist |
 | `AL_IN_THE_DASA_RASI_GIVES_STATUS` | The step §20.3 leaves out. Its rules 3 and 4 read houses *from* AL and never the dasa rasi being AL, though rule 3's own premise gives it; Example 79 supplies it, and the register tags that row with a different source |
+| `SHOWS_SPIRITUAL_VISION` | §21.1's statement of what Drigdasa shows. It is the fourth rasi dasa's division of labour — Narayana general, Lagna Kendradi material success, Sudasa money and power, Drigdasa spiritual vision — and chapter 21 gives no interpretation section, so this sentence is all it says about reading one |
 | `TRIPOD_OF_LIFE` | §16.5.3's three reference points, their rings in the Sudarsana chakra, how fast each one's results turn over, and which dasa level each judges. Reading a chart from a moving reference point is the interpretation layer that does not exist yet; the yoga half of the same section **is** consumed, by `planetary_yogas.registry.dasa_level` |
 | `TRIPOD_PRINCIPLE` | The principle as Parasara stated it, kept with the data it explains |
 | `USE_THE_VARIATIONS` | §16.7's advice to prefer the variations over the plain reckoning. The variations are consumed; the advice to use them is a reading decision, not a calculation |

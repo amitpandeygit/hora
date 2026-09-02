@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 81 waiting on evidence · 2 parked**
+**5 waiting on Amit · 82 waiting on evidence · 2 parked**
 
 ---
 
@@ -637,6 +637,32 @@ chart.
 question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
+
+### OI-127 — §21.2's twelve Drigdasas are not twelve rasis for a dual lagna
+
+**Waiting on the book.** Its three groups are the 9th, 10th and 11th, each
+with the three signs it aspects. Those are consecutive houses, so one of each
+modality — and whether the groups then partition the zodiac turns on which
+modality leads:
+
+Rasi drishti excludes the adjacent sign. When the 9th is movable or dual the
+movable and fixed leaders are adjacent and keep each other out; when the 9th is
+**fixed** they are two apart, aspect each other, and both land twice. The 9th
+is fixed exactly for the four **dual lagnas**, a third of all charts:
+
+| lagna | twice | never |
+|---|---|---|
+| Gemini | Aquarius, Aries | Taurus, Capricorn |
+| Virgo | Cancer, Taurus | Aries, Leo |
+| Sagittarius | Leo, Libra | Cancer, Scorpio |
+| Pisces | Capricorn, Scorpio | Aquarius, Libra |
+
+**What we do:** build it as §21.2 reads and report the overlap. `progression`
+carries `covers_every_rasi`, `repeated` and `omitted`. Deduplicating would
+invent an order the section does not give; dropping a repeat would leave
+eleven dasas where it asks for twelve.
+
+**Closes when:** an example runs a dual lagna, or a later section says.
 
 ### OI-126 — §20.2 drops §19.2's Saturn and Ketu exceptions without saying so
 
@@ -1333,20 +1359,15 @@ Both worked examples read the **argala** as decisive. Neither count fits both:
 | Ex 36, Reagan | 1 v 3 → virodha | 1 v 0 → argala | argala — acting |
 
 **What both examples actually do is skip step 3.** They identify the argala and
-read it, weighing no obstruction, though both charts have one.
-
-So `dominant` implements a stated rule that **no worked example confirms**. It
-is returned because §10.7 states it, and should not be trusted until something
-validates it. The effective *counts* are returned as data; no
-`dominant_effective` verdict is offered, since that would be our judgement
-rather than PVR's.
-
-Where the book does give a verdict — "Sun's **unobstructed** argala on GL" —
-both counts agree, and "unobstructed" is the effective test applied to one
-argala rather than a tally.
-
-Related: OI-67 is the same question one level down, and step 4 is unavailable
-in both examples anyway.
+read it, weighing no obstruction, though both charts have one. So `dominant`
+implements a stated rule that **no worked example confirms**; it is returned
+because §10.7 states it and should not be trusted until something validates it.
+The effective *counts* are returned as data, but no `dominant_effective`
+verdict, since that would be our judgement rather than PVR's. Where the book
+does give a verdict — "Sun's **unobstructed** argala on GL" — both counts agree,
+and "unobstructed" is the effective test on one argala rather than a tally.
+Related: OI-67 is the same question one level down, and step 4 is unavailable in
+both examples anyway.
 
 **Closes when:** an example applies step 3 where the counts differ, or JHora's
 argala output settles it.
