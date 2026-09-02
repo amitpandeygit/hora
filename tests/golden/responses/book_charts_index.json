@@ -238,6 +238,13 @@
         "number": 35,
         "recomputable": true,
         "title": "Jayalalita \u2014 Sudasa"
+      },
+      {
+        "birth": "not given",
+        "first_seen": "chapter 21, Example 80",
+        "number": 36,
+        "recomputable": false,
+        "title": "A gentleman \u2014 Drigdasa"
       }
     ],
     "not_supplied": [

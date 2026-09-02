@@ -424,6 +424,34 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    36: {
+        "title": "A gentleman — Drigdasa",
+        "birth": "not given",
+        "longitudes": {
+            "Asc": "2 Li 08", "Sun": "9 Vi 06", "Moon": "9 Cp 39",
+            "Mars": "15 Vi 08", "Merc": "4 Li 18", "Jup": "16 Aq 49",
+            "Ven": "28 Le 23", "Sat": "24 Ge 15", "Rahu": "20 Sc 13",
+            "Ketu": "20 Ta 13", "HL": "28 Li 43", "GL": "13 Cp 15",
+        },
+        "chara_karakas": {
+            "Ven": "AK", "Sat": "AmK", "Jup": "BK", "Mars": "MK",
+            "Rahu": "PiK", "Moon": "PK", "Sun": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "drawn": {
+            "Ketu": "Ta", "AL": "Ge", "Sat": "Ge", "Jup": "Aq",
+            "GL": "Cp", "Moon": "Cp", "Ven": "Le", "Rahu": "Sc",
+            "Merc": "Li", "Asc": "Li", "HL": "Li", "Mars": "Vi", "Sun": "Vi",
+        },
+        "first_seen": "chapter 21, Example 80",
+        "note": (
+            "Not recomputable: the chart is printed with no birth line at "
+            "all, only the diagram and the longitudes. Example 80 spells out "
+            "the walk inside a Drigdasa group -- go round the zodiac from the "
+            "leader and pick up the signs that aspect it -- which section "
+            "21.2 leaves to be read."
+        ),
+    },
     35: {
         "title": "Jayalalita — Sudasa",
         "birth": "February 24, 1948, 2:36 pm (IST), 80 E 18, 13 N 05",

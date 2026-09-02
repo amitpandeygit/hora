@@ -44,6 +44,10 @@ SHOWS_SPIRITUAL_VISION = (
 
 #: §21.2's three group leaders, in order. Consecutive houses, which is what
 #: makes their modalities one of each — and what OI-127 turns on.
+#:
+#: Example 80 works all three on a Libra lagna: the 9th Gemini forward, the
+#: 10th Cancer and the 11th Leo backward, which is also the chapter's proof
+#: that one run carries more than one direction.
 GROUP_HOUSES: tuple[int, ...] = (9, 10, 11)
 
 #: §21.2's direction test. Back to odd-**footed**, which §18.2.1 and §18.2.2
@@ -76,11 +80,12 @@ def direction_of(leader_sign: int) -> str:
 def group_signs(leader_sign: int, direction: str) -> tuple[int, ...]:
     """A leader and the three signs it aspects, in dasa order.
 
-    The leader takes the first dasa; the three it aspects follow in zodiacal
-    order from it when forward, anti-zodiacal when backward. §21.2 says only
-    "forward or backward" and does not spell out the order within a group,
-    so this is the reading — the leader is where the group starts because the
-    section says dasas start from the 9th.
+    §21.2 says only "forward or backward"; Example 80 spells out the walk it
+    means — "go forward as Ge, Cn, Le, Vi, Li etc and find the signs that
+    aspect Ge. We get Ge, Vi, Sg and Pi." So: step round the zodiac from the
+    leader, forward or backward, and take the signs that aspect it in the
+    order met. The leader itself heads the group, which the example's own list
+    shows by starting with Ge.
     """
     from hora.charts.aspects import rasi_drishti
 
