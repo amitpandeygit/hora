@@ -430,6 +430,46 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    46: {
+        "title": "A male who married in Dec 1994 — Example 98",
+        "birth": "May 9, 1971, 9:22 am (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1971, "month": 5, "day": 9, "hour": 9, "minute": 22,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "18 Ge 07", "Sun": "24 Ar 26", "Moon": "9 Li 29",
+            "Mars": "9 Cp 14", "Merc": "0 Ar 58", "Jup": "9 Sc 53",
+            "Ven": "25 Pi 13", "Sat": "1 Ta 24", "Rahu": "25 Cp 42",
+            "Ketu": "25 Cn 42", "HL": "16 Le 16", "GL": "4 Aq 14",
+        },
+        "chara_karakas": {
+            "Ven": "AK", "Sun": "AmK", "Jup": "BK", "Moon": "MK",
+            "Mars": "PiK", "Rahu": "PK", "Sat": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "divisional": {
+            "D9": {
+                "Mars": "Pi", "Asc": "Pi", "Merc": "Ar",
+                "Ketu": "Aq", "Ven": "Aq", "Sat": "Cp",
+                "AL": "Sg", "Moon": "Sg", "GL": "Sc", "Sun": "Sc",
+                "Jup": "Vi", "HL": "Le", "Rahu": "Le",
+            },
+        },
+        "events": {
+            "the native got married": "December 1994",
+            "a love affair with the lady he was to marry": "Aq dasa, 1990-1994",
+        },
+        "first_seen": "chapter 24, Example 98",
+        "note": (
+            "The same native as Chart 44, to the printed arcminute -- same "
+            "birth data, same twelve longitudes, same eight chara karakas. "
+            "Chart 44 drew the rasi chart for a Pitri Shoola dasa; Chart 46 "
+            "draws the **navamsa**, which is what Example 98 reads. The rasi "
+            "positions are printed below both diagrams and are not redrawn."
+        ),
+    },
     45: {
         "title": "A lady — Exercise 33",
         "birth": "born in 1950",

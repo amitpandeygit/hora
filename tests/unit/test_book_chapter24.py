@@ -1625,3 +1625,268 @@ def test_no_other_gati_is_a_third_or_an_eleventh():
                 assert ordinal in (3, 11)
             else:
                 assert ordinal not in (3, 11)
+
+
+# ---------------------------------------------------------------------------
+# Example 98 — Chart 46, a male who married in Dec 1994
+# ---------------------------------------------------------------------------
+
+def _chart_46():
+    """Chart 46's rasi and navamsa positions, from the printed longitudes."""
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(46)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    return {
+        "printed": printed,
+        "rasi_lagna": int(printed["Asc"] // 30),
+        "rasi": {int(g): int(printed[n] // 30) for n, g in named.items()},
+        "d9_lagna": varga(printed["Asc"], "D9").sign,
+        "d9": {int(g): varga(printed[n], "D9").sign for n, g in named.items()},
+    }
+
+
+def test_chart_46_recomputes_within_an_arcminute():
+    """The fourth chart born at 81 E 12, 16 N 15, and the same native as the
+    third: every body inside one arcminute under the mean node.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(46)
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 46", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+
+    printed = longitudes(46)
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+
+
+def test_chart_46_is_chart_44s_native():
+    """Same birth data, same twelve longitudes, same eight chara karakas. One
+    prints the rasi chart, the other the navamsa.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.nakshatra.kalachakra import CHART_46_IS_CHART_44S_NATIVE
+
+    forty_four, forty_six = chart(44), chart(46)
+    assert forty_four["birth_data"] == forty_six["birth_data"]
+    assert forty_four["place"] == forty_six["place"]
+    assert forty_four["longitudes"] == forty_six["longitudes"]
+    assert forty_four["chara_karakas"] == forty_six["chara_karakas"]
+
+    assert "drawn" in forty_four and "divisional" in forty_six
+    assert "D9" in forty_six["divisional"]
+    assert "one native" in CHART_46_IS_CHART_44S_NATIVE
+
+
+def test_chart_46s_drawn_navamsa_reproduces_from_the_longitudes():
+    """All twelve placements in the printed navamsa, from the rasi longitudes
+    below the diagram and the D-9 rule alone.
+    """
+    from hora.charts.book import chart
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_ABBR
+
+    drawn = dict(chart(46)["divisional"]["D9"])
+    printed = chart(46)["longitudes"]
+    arudha = drawn.pop("AL")                     # not a longitude; below
+
+    assert len(drawn) == 12
+    for name, abbr in drawn.items():
+        got = str(RASI_ABBR[varga(_chart_46()["printed"][name], "D9").sign])
+        assert got == abbr, f"{name}: printed {abbr}, computed {got}"
+    assert set(drawn) == set(printed)
+    assert arudha == "Sg"
+
+
+def test_the_navamsa_arudha_lagna_needs_the_same_sign_exception():
+    """AL in the drawn navamsa is Sagittarius, and it gets there only through
+    §9.2's exception: Pisces' lord Jupiter is the 7th from it, the 7th from
+    Jupiter is Pisces again, and an arudha in its own house moves to the 10th.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_NAMES
+
+    chart = _chart_46()
+    al = arudha_pada(1, chart["d9_lagna"], chart["d9"])
+    assert str(RASI_NAMES[al.sign]) == "Sagittarius"
+    assert str(RASI_NAMES[chart["d9_lagna"]]) == "Pisces"
+
+
+def test_example_98s_first_two_reasons_are_the_navamsa_lagna_and_its_lord():
+    """"It has lagna in navamsa and its lord Jupiter is in the 7th house!
+    Naturally Pi and Vi are the front-runners for giving marriage."
+    """
+    from hora.core.const import RASI_LORD, RASI_NAMES, Graha
+    from hora.dasha.nakshatra.kalachakra import EXAMPLE_98_REASONS
+
+    chart = _chart_46()
+    lagna = chart["d9_lagna"]
+    assert str(RASI_NAMES[lagna]) == "Pisces"
+
+    lord = int(RASI_LORD[lagna])
+    assert lord == int(Graha.JUPITER)
+    seventh = (lagna + 6) % 12
+    assert chart["d9"][lord] == seventh
+    assert str(RASI_NAMES[seventh]) == "Virgo"
+
+    front_runners = [row["rasi"] for row in EXAMPLE_98_REASONS
+                     if row["gives"] == "marriage"]
+    assert front_runners == ["Pisces", "Virgo"]
+
+
+def test_pisces_is_the_second_from_venus_in_the_navamsa():
+    """"Pi is the 2nd from Venus. Venus symbolizes domestic happiness and
+    marital bliss. The 2nd from him in navamsa can show the sense of family
+    happiness."
+    """
+    from hora.core.const import RASI_NAMES, Graha
+    from hora.dasha.nakshatra.kalachakra import (
+        SECOND_FROM_VENUS_RULE,
+        VENUS_SYMBOLIZES,
+        second_from_venus,
+    )
+
+    chart = _chart_46()
+    venus = chart["d9"][int(Graha.VENUS)]
+    assert str(RASI_NAMES[venus]) == "Aquarius"
+    assert str(RASI_NAMES[second_from_venus(venus)]) == "Pisces"
+
+    assert VENUS_SYMBOLIZES == "domestic happiness and marital bliss"
+    assert "new person coming into the family" in SECOND_FROM_VENUS_RULE
+    assert second_from_venus(11) == 0            # it wraps
+
+
+def test_venus_is_exalted_in_pisces_and_owns_the_darapada():
+    """"In addition, one may note that exalted Venus occupies Pi in rasi chart
+    and he owns darapada, which is in Libra."  -- both at rasi level, and the
+    darapada needs the arudha of the 7th, not the 7th house.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import EXALTATION_RASI, RASI_LORD, RASI_NAMES, Graha
+
+    chart = _chart_46()
+    venus = int(Graha.VENUS)
+    assert str(RASI_NAMES[chart["rasi"][venus]]) == "Pisces"
+    assert int(EXALTATION_RASI[venus]) == chart["rasi"][venus]
+
+    darapada = arudha_pada(7, chart["rasi_lagna"], chart["rasi"])
+    assert str(RASI_NAMES[darapada.sign]) == "Libra"
+    assert int(RASI_LORD[darapada.sign]) == venus
+
+    seventh = (chart["rasi_lagna"] + 6) % 12     # Sagittarius, not the arudha
+    assert str(RASI_NAMES[seventh]) == "Sagittarius"
+
+
+def test_example_98s_kalachakra_dasas():
+    """"Readers can verify that the native had about 5 years of Sc dasa left at
+    birth and the next dasas are Sg, Cp, Aq, Pi, Sc, Li, Vi, Cn."
+
+    Moon at 9 Li 29 is Swaati's 1st pada, savya-1, paramayush 100. The eight
+    named dasas plus the one running make nine -- footnote 64's set exactly.
+    """
+    from hora.charts.book import longitudes
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_order,
+        first_dasa,
+        nine_from_birth,
+        pada_of,
+        pada_sequence,
+        paramayush,
+        sub_group_of,
+    )
+
+    moon = pada_of(longitudes(46)["Moon"])
+    assert (moon["nakshatra"], moon["group"], moon["pada"]) == (
+        15, "savya", 1)                          # Swaati
+    assert sub_group_of(15) == 1
+
+    nine = pada_sequence("savya", 1, 1)
+    assert [A[rasi] for rasi in nine] == [
+        "Ar", "Ta", "Ge", "Cn", "Le", "Vi", "Li", "Sc", "Sg"]
+    assert paramayush(nine) == 100
+
+    birth = first_dasa(nine, moon["elapsed_fraction"])
+    assert birth["rasi"] == "Scorpio"
+    assert birth["balance_years"] == pytest.approx(5.5)   # "about 5 years"
+    assert birth["position"] == 7
+
+    following = dasa_order(15, 1, 8, skip=birth["position"] + 1)
+    assert [A[row["sign"]] for row in following] == [
+        "Sg", "Cp", "Aq", "Pi", "Sc", "Li", "Vi", "Cn"]
+
+    displayed = nine_from_birth(15, 1, birth["position"])
+    assert (displayed["from_this_pada"], displayed["from_next_pada"]) == (2, 7)
+    assert len(displayed["dasas"]) == 9          # the eight, plus Scorpio
+
+
+def test_the_wedding_falls_in_pi_pi_and_the_affair_in_aquarius():
+    """"At the time of wedding, the native was running Pi-Pi." Aq dasa runs
+    from age 19.5 to 23.5 and Pi from 23.5, and Pi's own antardasa is the first
+    and a full year long.
+    """
+    from hora.dasha.nakshatra.kalachakra import antardasas, dasa_order
+
+    ages, age = {}, 5.5                          # Sc's balance at birth
+    for row in dasa_order(15, 1, 5, skip=8):     # Sg, Cp, Aq, Pi, Sc
+        ages[A[row["sign"]]] = (age, age + row["years"])
+        age += row["years"]
+    assert ages["Aq"] == (19.5, 23.5)
+    assert ages["Pi"] == (23.5, 33.5)
+
+    # born May 1971, so Aq spans late 1990 to 1994 and Pi opens in 1994
+    for year_days in (360.0, 365.25):
+        assert 1990 <= 1971 + (5 + 22 / 60) / 12 + 19.5 * year_days / 365.25
+        assert 1971 + 23.5 * year_days / 365.25 < 1995
+
+    pisces = antardasas(15, 11, 10.0)            # Pi at wheel position 11
+    assert A[pisces[0]["sign"]] == "Pi"          # antardasas start from it
+    assert pisces[0]["years"] == pytest.approx(1.0)
+    assert sum(row["share_years"] for row in pisces) == 100
+
+
+def test_aquarius_reached_him_at_the_navamsa_level_only():
+    """Venus is in Pisces in the rasi chart and Aquarius in the navamsa, so
+    Aquarius' dasa touched the inner self and Pisces' the physical.
+    """
+    from hora.core.const import RASI_NAMES, Graha
+    from hora.dasha.nakshatra.kalachakra import (
+        AQUARIUS_GAVE_ROMANCE_AND_PISCES_GAVE_MARRIAGE,
+        RASI_IS_PHYSICAL_NAVAMSA_IS_INNER,
+    )
+
+    chart = _chart_46()
+    venus = int(Graha.VENUS)
+    assert str(RASI_NAMES[chart["rasi"][venus]]) == "Pisces"
+    assert str(RASI_NAMES[chart["d9"][venus]]) == "Aquarius"
+
+    assert "physical level" in RASI_IS_PHYSICAL_NAVAMSA_IS_INNER
+    assert "inner self" in RASI_IS_PHYSICAL_NAVAMSA_IS_INNER
+    assert "1990-1994" in AQUARIUS_GAVE_ROMANCE_AND_PISCES_GAVE_MARRIAGE
+
+
+def test_example_98_dates_nothing_finely_enough_to_settle_oi_115():
+    """Both year lengths put Aq in 1990-1994 and the wedding in Pi-Pi."""
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_98_DOES_NOT_SEPARATE_THE_YEAR_LENGTHS,
+    )
+
+    for year_days in (360.0, 365.25):
+        aq_start = 19.5 * year_days
+        aq_end = 23.5 * year_days
+        pi_pi_end = aq_end + 1.0 * year_days
+        wedding = (1994 + 11.5 / 12 - 1971 - (5 + 9 / 31) / 12) * 365.25
+        assert aq_start < wedding                # Aq had opened
+        assert aq_end < wedding < pi_pi_end      # and Pi-Pi was running
+    assert "both year lengths" in EXAMPLE_98_DOES_NOT_SEPARATE_THE_YEAR_LENGTHS

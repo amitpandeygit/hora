@@ -1041,3 +1041,77 @@ PARASARA_LEAVES_FOUR_APASAVYA_LEAPS_UNADVISED = (
     "reach six. The four unadvised are all apasavya: Ge to Le, Cn to Vi, Sc "
     "to Pi and Ar to Sg."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 98 — why Pisces gave marriage
+# --------------------------------------------------------------------------
+
+#: **Finding.** Chart 46 is Chart 44's native printed again: same birth data,
+#: same twelve longitudes, same eight chara karakas. Chart 44 drew the rasi
+#: chart for a Pitri Shoola dasa; Chart 46 draws the navamsa, which is the
+#: chart Example 98 reads. Nothing recomputes differently.
+CHART_46_IS_CHART_44S_NATIVE = (
+    "Chart 46 and Chart 44 are one native, May 9 1971 at 81 E 12, 16 N 15. "
+    "Chart 44 prints the rasi diagram and Chart 46 the navamsa; the twelve "
+    "longitudes below both are identical."
+)
+
+#: The principle Example 98 turns on, and the reason one dasa gave a love
+#: affair and the next a marriage. Stated nowhere else in the chapter.
+RASI_IS_PHYSICAL_NAVAMSA_IS_INNER = (
+    "While rasi shows what exists at the physical level, navamsa shows the "
+    "inner self and the sense of connectedness."
+)
+
+#: Venus's significations as Example 98 uses them, and a rule §24.3.1 did not
+#: give: a *karaka-relative* house, counted in the navamsa.
+VENUS_SYMBOLIZES = "domestic happiness and marital bliss"
+
+SECOND_FROM_VENUS_RULE = (
+    "The 2nd from him in navamsa can show the sense of family happiness. It "
+    "can show a new person coming into the family."
+)
+
+
+def second_from_venus(venus_sign: int) -> int:
+    """The rasi Example 98's karaka rule points at, counted in the navamsa."""
+    return (validate.in_range("venus_sign", venus_sign, 0, 11) + 1) % 12
+
+
+#: Example 98's four reasons, in the order it gives them. ``chart`` is the
+#: chart each is read in, which is the point of the example: three of the four
+#: are navamsa readings and the third is not.
+EXAMPLE_98_REASONS: tuple[dict[str, str], ...] = (
+    {"rasi": "Pisces", "chart": "D9", "because": "it holds the navamsa lagna",
+     "gives": "marriage", "rule": "house"},
+    {"rasi": "Virgo", "chart": "D9",
+     "because": "it is the 7th and holds Jupiter, the navamsa lagna's lord",
+     "gives": "marriage", "rule": "house-and-lord"},
+    {"rasi": "Pisces", "chart": "D9", "because": "it is the 2nd from Venus",
+     "gives": "the sense of family happiness, a new person coming into the "
+              "family", "rule": "karaka"},
+    {"rasi": "Pisces", "chart": "D1",
+     "because": "exalted Venus occupies it and he owns the darapada in Libra",
+     "gives": "physical relationship and marital pleasures", "rule": "planet"},
+)
+
+#: The reading that separates the two dasas, and the one Example 98 exists to
+#: make: Venus sits in Aquarius in the navamsa and in Pisces in the rasi
+#: chart, so Aquarius's dasa reached him at the navamsa level only.
+AQUARIUS_GAVE_ROMANCE_AND_PISCES_GAVE_MARRIAGE = (
+    "Aq dasa can activate Venusian influence at navamsa level and give some "
+    "romance. During Aq dasa (1990-1994), this native had a love affair with "
+    "the lady he was to marry in December 1994."
+)
+
+#: **Finding.** Example 98 dates two events and separates neither year length.
+#: Aq dasa is 1990-1994 under savana and under 365.25 days alike, and the
+#: December 1994 wedding falls in Pi-Pi either way — Pi dasa opens in July 1994
+#: under savana and November 1994 under 365.25, and its first antardasa is a
+#: full year long. OI-115 gains nothing here.
+EXAMPLE_98_DOES_NOT_SEPARATE_THE_YEAR_LENGTHS = (
+    "Aq dasa spans 1990 to 1994 under both year lengths, and the wedding "
+    "falls inside the Pi-Pi antardasa under both. The example dates nothing "
+    "finely enough to choose."
+)
