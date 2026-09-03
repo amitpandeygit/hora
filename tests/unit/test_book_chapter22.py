@@ -7,9 +7,13 @@ chapter 14's marakas and Rudra rather than on anything in this chapter.
 """
 from __future__ import annotations
 
+import pathlib
+
 import pytest
 
 from hora.core.const import RASI_NAMES
+
+OPEN_ITEMS = pathlib.Path(__file__).resolve().parents[2] / "docs" / "open-items.md"
 
 R = {name: i for i, name in enumerate(RASI_NAMES)}
 ABBR = ["Ar", "Ta", "Ge", "Cn", "Le", "Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi"]
@@ -2596,3 +2600,120 @@ def test_the_answer_agrees_that_scorpio_was_the_methods_candidate():
     assert got["aspecting_names"] == (
         "Scorpio", "Aries", "Cancer", "Capricorn")
     assert got["strong_candidate_names"] == ("Scorpio",)
+
+
+# --------------------------------------------------------------------------
+# §22.3 Conclusion
+# --------------------------------------------------------------------------
+
+def test_22_3_claims_more_for_the_dasa_than_22_1_did():
+    """§22.1: "one of the most reliable dasa systems for the timing of
+    death". §22.3: "this dasa is the best for timing death."
+
+    The chapter opens with a comparative and closes with a superlative. Both
+    are stored — it says two things and neither is a slip.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        ONE_OF_THE_MOST_RELIABLE,
+        THIS_DASA_IS_THE_BEST_FOR_TIMING_DEATH,
+    )
+
+    assert "one of the most reliable" in ONE_OF_THE_MOST_RELIABLE
+    assert "is the best for timing death" in (
+        THIS_DASA_IS_THE_BEST_FOR_TIMING_DEATH)
+    assert "humble opinion" in THIS_DASA_IS_THE_BEST_FOR_TIMING_DEATH
+
+
+def test_the_trishoola_claim_keeps_its_hedge_in_both_places():
+    """"Usually death occurs in the dasa of a Trishoola rasi" in §22.2.2, and
+    "usually dasa of one of the three Trishoola rasis brings death" in §22.3.
+    The word survives the conclusion, and §22.2.2's rule 3 is the fallback it
+    implies.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        DEATH_READINGS,
+        USUALLY_A_TRISHOOLA_BRINGS_DEATH,
+    )
+
+    assert USUALLY_A_TRISHOOLA_BRINGS_DEATH.startswith("Usually")
+    assert DEATH_READINGS[1]["text"].startswith("Usually")
+    assert DEATH_READINGS[2]["text"].startswith("If Trishoolas don't")
+
+
+def test_the_chapter_declares_itself_incomplete_and_says_where():
+    """"However, many special cases, exceptions and special rules mentioned by
+    Maharshis were omited in this book. Timing of the antardasa of death
+    wasn't given due attention."
+
+    Two admissions, and each covers gaps we had already recorded. The printed
+    "omited" is kept as printed.
+    """
+    from hora.dasha.rasi.niryaana_shoola import CHAPTER_22_IS_KNOWINGLY_PARTIAL
+
+    assert "were omited in this book" in CHAPTER_22_IS_KNOWINGLY_PARTIAL
+    assert "wasn't given due attention" in CHAPTER_22_IS_KNOWINGLY_PARTIAL
+    assert "tip of an iceberg" in CHAPTER_22_IS_KNOWINGLY_PARTIAL
+    assert "omitted" not in CHAPTER_22_IS_KNOWINGLY_PARTIAL
+
+
+def test_the_admission_explains_four_open_items_and_closes_none():
+    """Each row names something we found before reading §22.3 and the clause
+    that accounts for it. Accounting for a missing rule does not supply it, so
+    every one of them stays open.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        CHAPTER_22_IS_KNOWINGLY_PARTIAL,
+        USUALLY_A_TRISHOOLA_BRINGS_DEATH,
+        WHAT_THE_ADMISSION_ACCOUNTS_FOR,
+    )
+
+    items = {row["item"] for row in WHAT_THE_ADMISSION_ACCOUNTS_FOR}
+    assert items == {"OI-134", "OI-133", "OI-136", "Exercise 31"}
+
+    section = (USUALLY_A_TRISHOOLA_BRINGS_DEATH + " "
+               + CHAPTER_22_IS_KNOWINGLY_PARTIAL)
+    for row in WHAT_THE_ADMISSION_ACCOUNTS_FOR:
+        stem = row["covered_by"].split("...")[-1].strip()
+        assert stem in section, row["item"]
+
+    open_items = (OPEN_ITEMS.read_text(encoding="utf-8")
+                  if OPEN_ITEMS.exists() else "")
+    for name in ("OI-134", "OI-133", "OI-136"):
+        assert f"### {name} " in open_items, name
+
+
+def test_the_scorpio_against_aries_miss_is_the_books_own_admission():
+    """Exercise 31's two principles pick Scorpio and the death came in Aries.
+    §22.3 says why: "Timing of the antardasa of death wasn't given due
+    attention." So the miss is the chapter describing itself, not a defect to
+    be reconciled — and no antardasa rule is invented to cover it.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        ANTARDASA_AT_DEATH_RULE,
+        CHAPTER_22_IS_KNOWINGLY_PARTIAL,
+        EXERCISE_31_READS_MARAKAS_AT_THE_ANTARDASA_LEVEL,
+        WHAT_THE_ADMISSION_ACCOUNTS_FOR,
+    )
+
+    row = next(r for r in WHAT_THE_ADMISSION_ACCOUNTS_FOR
+               if r["item"] == "Exercise 31")
+    assert "Scorpio" in row["is"] and "Aries" in row["is"]
+    assert row["covered_by"] in CHAPTER_22_IS_KNOWINGLY_PARTIAL
+
+    # The two principles stay exactly as §22.2.2 prints them.
+    assert "6th, 7th, 8th or 12th" in ANTARDASA_AT_DEATH_RULE
+    assert "maraka" in EXERCISE_31_READS_MARAKAS_AT_THE_ANTARDASA_LEVEL
+
+
+def test_chapter_22_is_finished_and_shoola_dasa_is_next():
+    """§22.3 ends the chapter. Seven of Part 2's nine are built; the next the
+    book teaches is the *other* Shoola dasa, which §22.1 went out of its way
+    to distinguish from this one.
+    """
+    from hora.core.constants.dasha import PART_2_DASA_SYSTEMS
+    from hora.dasha.rasi.niryaana_shoola import THE_NAME_IS_DISAMBIGUATED
+
+    missing = [s["name"] for s in PART_2_DASA_SYSTEMS
+               if s["key"] is None and not s.get("module")]
+    assert missing == ["Shoola dasa", "Kalachakra dasa"]
+    assert "We will learn it in another chapter" in THE_NAME_IS_DISAMBIGUATED

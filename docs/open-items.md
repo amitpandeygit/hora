@@ -681,7 +681,9 @@ twelfths of a seven-year dasa land 20 Nov 19:59; seven calendar months land
 under either.
 
 The **dasa** boundary is settled: "April 21" fixes the dasa year at 365.25
-days, against the calendar anniversary, savana and sidereal alike.
+days, against the calendar anniversary, savana and sidereal alike. §22.3
+concedes the layer — "timing of the antardasa of death wasn't given due
+attention".
 
 **What we do:** `antardasa_periods` divides into equal twelfths, §18.3's own
 division, and reports the day as computed.
@@ -691,9 +693,9 @@ division, and reports the day as computed.
 ### OI-134 — §14.3's Table 32 has a Saturn exception it never states
 
 **Waiting on the book.** §14.3 says "find the 8th house using Table 32 and
-**not** in the normal way", with no exception. Example 86, eight chapters
-later, takes one: "Because Saturn is in Cn, we take the 8th houses from Cn and
-Cp in the normal way, instead of using Table 32."
+**not** in the normal way", with no exception. Example 86 takes one: "Because
+Saturn is in Cn, we take the 8th houses from Cn and Cp in the normal way,
+instead of using Table 32."
 
 What it undoes is a *direction*. Footnote 50 counts the 8th anti-zodiacally
 from an even rasi, and Table 32's Cancer and Capricorn entries — Sagittarius
@@ -710,6 +712,9 @@ invoked, so occupying just any rasi is not the trigger.
 **What we do:** `rudra_eighth` keeps Table 32, and `rudra` reports the
 exception beside the affliction override — named, not applied, as OI-109 does.
 
+§22.3 accounts for it — "special cases, exceptions and special rules ... were
+omited in this book" — which explains the omission and closes nothing.
+
 **Closes when:** Chart 61 arrives, or a section states the trigger.
 
 ### OI-133 — which Trishoola when two of them fall in the range
@@ -723,10 +728,9 @@ Over all 432 (seed, Rudra, category) combinations: **324 give one, 72 give
 two, 36 give none**.
 
 **Chart 41 is the first to do it**, and it suggests the fix. Reading "comes in
-the range" as falling **wholly** inside it leaves exactly one in 396 of the 432
-and never two, keeps all four worked examples — each selected a Trishoola
-wholly inside — and on Chart 41 picks Virgo 63-72 out of a middle life, the
-dasa that killed at 65.
+the range" as falling **wholly** inside it leaves one in 396 of the 432 and
+never two, keeps all four worked examples, and on Chart 41 picks Virgo 63-72
+out of a middle life — the dasa that killed at 65.
 
 **What we do:** `select_trishoola` selects on the loose reading and reports
 `selected_wholly_in_range` beside it. Not substituted: it is a reading, and no

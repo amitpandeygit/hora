@@ -337,6 +337,58 @@ def progression(seed_sign: int,
 
 
 # --------------------------------------------------------------------------
+# §22.3 Conclusion
+# --------------------------------------------------------------------------
+
+#: §22.3's claim, and it is **stronger than §22.1's**. The introduction called
+#: this "one of the most reliable dasa systems for the timing of death"; the
+#: conclusion calls it the best. Both are kept: the chapter says two things and
+#: neither is a slip.
+THIS_DASA_IS_THE_BEST_FOR_TIMING_DEATH = (
+    "In this author's humble opinion, this dasa is the best for timing death."
+)
+
+#: §22.3's restatement of §22.2.2 rule 2, with the same hedge — "usually", not
+#: "always". Two of the chapter's five worked deaths needed something else.
+USUALLY_A_TRISHOOLA_BRINGS_DEATH = (
+    "Usually dasa of one of the three Trishoola rasis brings death."
+)
+
+#: **The chapter says it is incomplete, and says where.** This is not a gap we
+#: found; it is one the author declares. Note the printed "omited".
+CHAPTER_22_IS_KNOWINGLY_PARTIAL = (
+    "However, many special cases, exceptions and special rules mentioned by "
+    "Maharshis were omited in this book. Timing of the antardasa of death "
+    "wasn't given due attention. Readers should be aware that what is taught "
+    "here is only the tip of an iceberg. Further details are beyond the scope "
+    "of this book."
+)
+
+#: What §22.3's admission accounts for, entry by entry. It **explains** these;
+#: it closes none of them, because a rule that is admitted missing is still
+#: missing.
+WHAT_THE_ADMISSION_ACCOUNTS_FOR: tuple[dict, ...] = (
+    {"item": "OI-134",
+     "is": "§14.3's Table 32 Saturn exception, stated in no section",
+     "covered_by": "many special cases, exceptions and special rules ... "
+                   "were omited"},
+    {"item": "OI-133",
+     "is": "which Trishoola when two fall in one longevity range",
+     "covered_by": "Usually dasa of one of the three Trishoola rasis brings "
+                   "death"},
+    {"item": "Exercise 31",
+     "is": "the antardasa the two principles miss — they pick Scorpio and "
+           "the death came in Aries",
+     "covered_by": "Timing of the antardasa of death wasn't given due "
+                   "attention"},
+    {"item": "OI-136",
+     "is": "the antardasa boundary that is a day wide",
+     "covered_by": "Timing of the antardasa of death wasn't given due "
+                   "attention"},
+)
+
+
+# --------------------------------------------------------------------------
 # Dates
 # --------------------------------------------------------------------------
 
@@ -574,6 +626,10 @@ ANTARDASA_PRINCIPLES_CAN_FAIL = (
 #: from this lagna, so `maraka_readings` already returns Aries as one. The 8th
 #: lord is the extra: §14.2's marakas are the 2nd and 7th only, and the
 #: exercise counts Venus too.
+#:
+#: §22.3 then concedes the whole layer: "Timing of the antardasa of death
+#: wasn't given due attention." So the two principles missing this death is
+#: the chapter's own account of itself, not a defect to be reconciled.
 EXERCISE_31_READS_MARAKAS_AT_THE_ANTARDASA_LEVEL = (
     "However, the native died in Aries antardasa itself... due to the "
     "strength of Aries in rasi chart. Aries not only contains Rudra, but it "
