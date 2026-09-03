@@ -455,3 +455,223 @@ def test_the_fraction_and_the_sequence_length_are_both_checked():
         first_dasa(nine, 1.5)
     with pytest.raises(KalachakraError, match="nine rasis"):
         paramayush(nine[:8])
+
+
+# --------------------------------------------------------------------------
+# Example 95 — a Moon at 15 Ta 50, worked end to end.
+# --------------------------------------------------------------------------
+
+EX95_MOON = 30.0 + 15.0 + 50.0 / 60.0          # 15 Ta 50
+EX95_NINE = ("Vi", "Li", "Sc", "Pi", "Aq", "Cp", "Sg", "Sc", "Li")
+EX95_YEARS = (9, 16, 7, 10, 4, 4, 10, 7, 16)
+EX95_CUMULATIVE = (9, 25, 32, 42, 46, 50, 60, 67, 83)
+
+
+def test_example_95_step_1_the_moons_pada():
+    """"Moon is in Rohini 2nd pada, which runs from 13Ta20 to 16Ta40."
+
+    Rohini is nakshatra 4, so apasavya — and Table 46 is Apasavya-1, which is
+    where the example goes.
+    """
+    from hora.dasha.nakshatra.kalachakra import pada_of, sub_group_of
+
+    got = pada_of(EX95_MOON)
+    assert got["nakshatra"] == 4
+    assert got["group"] == "apasavya"
+    assert got["pada"] == 2
+    assert sub_group_of(4) == 1
+
+    # The pada's own bounds, as the example states them.
+    assert 40.0 + 3.0 + 20.0 / 60.0 == pytest.approx(13.0 + 20.0 / 60.0 + 30)
+    assert 43.0 + 20.0 / 60.0 < EX95_MOON < 46.0 + 40.0 / 60.0
+
+
+def test_example_95_step_1_the_nine_rasis_and_their_years():
+    """"From Table 46, we find that the 9 rasis associated with this nakshatra
+    pada are: Vi, Li, Sc, Pi, Aq, Cp, Sg, Sc, Li."
+
+    And Table 49's own two rows — the Table 48 lengths and their running sum,
+    ending at the paramayush of 83.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_years,
+        pada_sequence,
+        paramayush,
+    )
+
+    nine = pada_sequence("apasavya", 1, 2)
+    assert tuple(A[r] for r in nine) == EX95_NINE
+    assert tuple(dasa_years(r) for r in nine) == EX95_YEARS
+
+    running, cumulative = 0, []
+    for rasi in nine:
+        running += dasa_years(rasi)
+        cumulative.append(running)
+    assert tuple(cumulative) == EX95_CUMULATIVE
+    assert paramayush(nine) == 83 == EX95_CUMULATIVE[-1]
+
+
+def test_example_95_step_2_the_fraction_is_three_quarters():
+    """"The amount of the nakshatra pada traversed by Moon is 15°50' - 13°20'
+    = 2°30'. The fraction ... is (2°30')/(3°20') = 150'/200' = 0.75."
+    """
+    from hora.dasha.nakshatra.kalachakra import pada_of
+
+    assert pada_of(EX95_MOON)["elapsed_fraction"] == pytest.approx(0.75)
+    assert (2 * 60 + 30) / (3 * 60 + 20) == 0.75
+
+
+def test_example_95_step_3_scorpio_runs_at_birth_with_4_75_left():
+    """"0.75 x 83 = 62.25 years... 60 years were over by the end of Sg dasa
+    and 2.25 years of Sc dasa added to it makes it 62.25. So Sc dasa was
+    running at birth and 7 - 2.25 = 4.75 years of Sc dasa were remaining."
+    """
+    from hora.dasha.nakshatra.kalachakra import first_dasa, pada_sequence
+
+    nine = pada_sequence("apasavya", 1, 2)
+    got = first_dasa(nine, 0.75)
+
+    assert got["consumed_years"] == pytest.approx(62.25)
+    assert got["rasi"] == "Scorpio"
+    assert got["position"] == 7                 # the 8th of the nine
+    assert got["years"] == 7
+    assert got["elapsed_years"] == pytest.approx(2.25)
+    assert got["balance_years"] == pytest.approx(4.75)
+
+
+def test_example_95_the_dates_the_balance_gives():
+    """"By adding 4 years 9 months to the birthdate, we get the date on which
+    Sc dasa ends. Then Li dasa of 16 years will run till an age of 20 years 9
+    months."
+    """
+    from hora.dasha.nakshatra.kalachakra import dasa_years
+
+    balance = 7 - 2.25
+    assert balance == 4.75
+    assert balance * 12 == 57                    # 4 years 9 months
+    assert balance + dasa_years(R["Li"]) == 20.75
+    assert 20.75 * 12 == 249                     # 20 years 9 months
+
+
+def test_example_95_step_4_crosses_into_the_next_pada():
+    """"With Li dasa, we finish the nine rasis associated with the 2nd pada of
+    Rohini (Apasavya-1). So we go to the 3rd pada in the same table. The next
+    7 dasas will be Vi, Le, Cn, Ge, Ta, Ar, Sg."
+
+    Note the crossing stays in the **same** table: rule (4) sends you to the
+    other sub-group only after a nakshatra's *4th* pada.
+    """
+    from hora.dasha.nakshatra.kalachakra import dasa_order, pada_sequence
+
+    following = dasa_order(4, 2, 7, skip=9)
+    assert [row["rasi"][:2] for row in following] == [
+        "Vi", "Le", "Ca", "Ge", "Ta", "Ar", "Sa"]
+    assert [A[row["sign"]] for row in following] == [
+        "Vi", "Le", "Cn", "Ge", "Ta", "Ar", "Sg"]
+
+    # They are the opening of Table 46's third pada, same sub-group.
+    third = pada_sequence("apasavya", 1, 3)
+    assert [A[r] for r in third[:7]] == [A[row["sign"]] for row in following]
+
+
+def test_rule_4_is_one_walk_of_the_wheel():
+    """The rule reads as three cases and is one. A pada is nine consecutive
+    wheel positions; four padas are thirty-six, a wheel and a half, which
+    lands the next nakshatra on the other sub-group without being told to.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        RULE_4_IS_JUST_WALKING_THE_WHEEL,
+        SUB_GROUP_OFFSET,
+        dasa_order,
+        pada_sequence,
+        wheel,
+    )
+
+    ring = wheel("apasavya")
+    walk = dasa_order(4, 1, 40)
+    for step, row in enumerate(walk):
+        assert row["sign"] == ring[step % 24]
+
+    # Positions 0-8, 9-17, 18-26, 27-35 are the four padas; 36 is offset 12.
+    for pada in (1, 2, 3, 4):
+        start = (pada - 1) * 9
+        assert tuple(row["sign"] for row in walk[start:start + 9]) == (
+            pada_sequence("apasavya", 1, pada))
+    assert walk[36]["position"] == SUB_GROUP_OFFSET[2]
+    assert "repeating these 24-rasi sequences" in (
+        RULE_4_IS_JUST_WALKING_THE_WHEEL)
+
+
+def test_rule_5_shares_a_dasa_out_in_table_48_proportion():
+    """"We take 9 rasis starting from dasa rasi... We distribute the dasa
+    length among the 9 antardasas proportionally."
+
+    Example 95's Scorpio dasa is seven years, and the nine from Scorpio's
+    wheel position share it out in proportion to their own lengths — the
+    first antardasa being Scorpio itself.
+    """
+    from hora.dasha.nakshatra.kalachakra import antardasas, wheel_position
+
+    scorpio = wheel_position(4, 2) + 7          # the 8th of the pada's nine
+    got = antardasas(4, scorpio % 24, 7.0)
+
+    assert len(got) == 9
+    assert got[0]["rasi"] == "Scorpio"          # antardasas start from it
+    assert [A[row["sign"]] for row in got] == [
+        "Sc", "Li", "Vi", "Le", "Cn", "Ge", "Ta", "Ar", "Sg"]
+    assert sum(row["years"] for row in got) == pytest.approx(7.0)
+
+    total = sum(row["share_years"] for row in got)
+    for row in got:
+        assert row["years"] == pytest.approx(7.0 * row["share_years"] / total)
+
+
+def test_rule_5_runs_past_the_padas_end_without_being_told_to():
+    """"If we reach the end of the nine rasis corresponding to the nakshatra
+    pada when counting 9 rasis from dasa rasi, we proceed to the next
+    nakshatra pada as described in rule (4)."
+
+    Scorpio is the 8th of its pada, so seven of its nine antardasas fall in
+    the following pada — and the wheel supplies them with no special case.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        antardasas,
+        pada_sequence,
+        wheel_position,
+    )
+
+    pada = set(pada_sequence("apasavya", 1, 2))
+    scorpio = (wheel_position(4, 2) + 7) % 24
+    got = antardasas(4, scorpio, 7.0)
+
+    inside = [row for row in got if row["position"] in
+              range(wheel_position(4, 2), wheel_position(4, 2) + 9)]
+    assert len(inside) == 2                     # Scorpio and Libra
+    assert pada                                  # the pada is non-empty
+
+
+def test_example_95s_footnotes_have_not_been_read():
+    """Three footnotes hang off this example and none is on the pages read.
+    Recorded so their silence is not read as agreement.
+    """
+    from hora.dasha.nakshatra.kalachakra import EXAMPLE_95_FOOTNOTES_UNSEEN
+
+    assert "63, 64 and 65" in EXAMPLE_95_FOOTNOTES_UNSEEN
+    assert "None has been read" in EXAMPLE_95_FOOTNOTES_UNSEEN
+
+
+def test_dasa_order_and_antardasas_check_their_inputs():
+    from hora.dasha.nakshatra.kalachakra import (
+        KalachakraError,
+        antardasas,
+        dasa_order,
+    )
+
+    with pytest.raises(KalachakraError, match="count must be positive"):
+        dasa_order(4, 2, 0)
+    with pytest.raises(KalachakraError, match="skip cannot be negative"):
+        dasa_order(4, 2, 3, skip=-1)
+    with pytest.raises(KalachakraError, match="must be positive"):
+        antardasas(4, 0, 0.0)
+    with pytest.raises(KalachakraError, match="D-67"):
+        dasa_order(26, 1, 3)

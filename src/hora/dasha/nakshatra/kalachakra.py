@@ -383,3 +383,90 @@ def first_dasa(sequence: tuple[int, ...], elapsed_fraction: float) -> dict:
             }
         running += length
     raise AssertionError  # pragma: no cover - the loop always returns
+
+
+#: **Finding.** Rule (4) reads as three cases — next rasi, next pada, next
+#: nakshatra's first pada in the other sub-group — and it is one: **walk the
+#: 24-rasi wheel a step at a time, for ever**. A pada is nine consecutive
+#: positions, a nakshatra's four padas are thirty-six, and thirty-six is a
+#: whole wheel and a half, which lands the next nakshatra on the other
+#: sub-group by itself. §24.2 says as much in passing — "we find antardasas
+#: and dasas by repeating these 24-rasi sequences and going through them" —
+#: and then states the rule the long way.
+RULE_4_IS_JUST_WALKING_THE_WHEEL = (
+    "We find antardasas and dasas by repeating these 24-rasi sequences and "
+    "going through them."
+)
+
+#: Footnotes 63, 64 and 65 hang off Example 95 and are not on the pages read
+#: so far. Nothing here depends on them; recorded so their absence is not
+#: mistaken for their having said nothing.
+EXAMPLE_95_FOOTNOTES_UNSEEN = (
+    "Example 95 carries footnotes 63, 64 and 65 -- on the pada fraction, on "
+    "the seven dasas it lists, and on their lengths. None has been read."
+)
+
+
+def wheel_position(nakshatra: int, pada: int) -> int:
+    """Where a nakshatra pada starts on its group's wheel.
+
+    :raises KalachakraError: through :func:`sub_group_of` for a nakshatra no
+        table names.
+    """
+    validate.in_range("pada", pada, 1, 4)
+    sub = sub_group_of(nakshatra)
+    return (SUB_GROUP_OFFSET[sub] + (pada - 1) * 9) % 24
+
+
+def dasa_order(nakshatra: int, pada: int, count: int,
+               skip: int = 0) -> tuple[dict, ...]:
+    """§24.2 rule (4) — successive dasas from a nakshatra pada.
+
+    :param count: how many to return.
+    :param skip: how many to pass over first, for starting mid-pada at the
+        dasa running at birth.
+
+    One walk of the wheel covers all three of rule (4)'s cases; see
+    :data:`RULE_4_IS_JUST_WALKING_THE_WHEEL`.
+    """
+    if count < 1:
+        raise KalachakraError(f"count must be positive, got {count}")
+    if skip < 0:
+        raise KalachakraError(f"skip cannot be negative, got {skip}")
+    ring = wheel(group_of(nakshatra))
+    start = wheel_position(nakshatra, pada) + skip
+    return tuple({
+        "position": (start + step) % 24,
+        "sign": ring[(start + step) % 24],
+        "rasi": str(RASI_NAMES[ring[(start + step) % 24]]),
+        "years": dasa_years(ring[(start + step) % 24]),
+    } for step in range(count))
+
+
+def antardasas(nakshatra: int, wheel_index: int,
+               dasa_length_years: float) -> tuple[dict, ...]:
+    """§24.2 rule (5) — nine antardasas from the dasa rasi, proportionally.
+
+    :param wheel_index: the dasa's own position on its group's wheel.
+    :param dasa_length_years: the dasa's length, which the nine share out in
+        proportion to their own Table 48 lengths.
+
+    "If we reach the end of the nine rasis corresponding to the nakshatra pada
+    when counting 9 rasis from dasa rasi, we proceed to the next nakshatra
+    pada" — which the wheel does on its own.
+    """
+    ring = wheel(group_of(nakshatra))
+    start = validate.in_range("wheel_index", wheel_index, 0, 23)
+    length = float(dasa_length_years)
+    if length <= 0:
+        raise KalachakraError(
+            f"dasa_length_years must be positive, got {length}")
+
+    nine = [ring[(start + step) % 24] for step in range(9)]
+    total = sum(dasa_years(rasi) for rasi in nine)
+    return tuple({
+        "position": (start + step) % 24,
+        "sign": rasi, "rasi": str(RASI_NAMES[rasi]),
+        "share_years": dasa_years(rasi),
+        "years": length * dasa_years(rasi) / total,
+    } for step, rasi in enumerate(nine))
