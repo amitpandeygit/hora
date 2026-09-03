@@ -587,8 +587,8 @@ def test_a8_keeps_its_chapter_18_name_too():
 def test_21_3_applied_across_chart_36s_drigdasa():
     """The section on the chapter's own chart. Libra reaches three readings at
     once — it is lagna, so rules 3 and 4, and it holds the mantrapada — while
-    two of the twelve rasis reach none at all, which the section allows for by
-    naming only six references.
+    on §21.3's eight alone two of the twelve rasis reach none, which the
+    section allows for by naming only six references.
     """
     from hora.dasha.rasi.drigdasa import progression, spiritual_readings
 
@@ -599,15 +599,35 @@ def test_21_3_applied_across_chart_36s_drigdasa():
 
     reached = {}
     for sign in progression(points["lagna"]).signs:
-        rules = {r["rule"] for r in spiritual_readings(sign, **points)}
+        rules = {r["rule"] for r in spiritual_readings(sign, **points)
+                 if r["source"].startswith("\u00a721.3")}
         if rules:
             reached[ABBR[sign]] = rules
 
     assert reached["Li"] == {3, 4, 5}
     assert reached["Ar"] == {3}                    # the 7th, rule 3 only
     assert reached["Ge"] == {1}                    # the arudha lagna
-    assert reached["Le"] == {5, 6, 9}
+    assert reached["Le"] == {5, 6}
     assert set(reached) == set(EX80_ORDER) - {"Cn", "Cp"}
+
+
+def test_the_examples_rules_leave_no_rasi_of_chart_36_unread():
+    """The same chart with rules 9, 10 and 11 added: Cancer and Capricorn, the
+    two the section leaves blank, both take Ketu's argala, and every one of the
+    twelve reaches something. A reason to keep them, and a reason OI-129 is
+    open rather than decorative.
+    """
+    from hora.dasha.rasi.drigdasa import progression, spiritual_readings
+
+    points = _chart_36_points()
+    reached = {ABBR[sign]: {r["rule"]
+                            for r in spiritual_readings(sign, **points)}
+               for sign in progression(points["lagna"]).signs}
+
+    assert all(reached.values())
+    assert reached["Cn"] == {11}
+    assert reached["Cp"] == {11}
+    assert reached["Sg"] == {2, 10}
 
 
 # --------------------------------------------------------------------------
@@ -687,7 +707,6 @@ def test_the_ninth_reading_is_sourced_to_the_example_not_the_section():
     from hora.dasha.rasi.drigdasa import SPIRITUAL_READINGS, spiritual_readings
     from hora.dasha.rasi.sudasa import STATUS_FROM_ARUDHA_LAGNA
 
-    assert [r["rule"] for r in SPIRITUAL_READINGS] == list(range(1, 10))
     sources = {r["rule"]: r["source"] for r in SPIRITUAL_READINGS}
     assert all(sources[n] == f"\u00a721.3 rule {n}" for n in range(1, 9))
     assert sources[9] == "Example 81"
@@ -1016,3 +1035,302 @@ def test_chart_37s_lagna_dasa_is_the_one_rahu_leaves_unjudged():
     judged = spiritual_readings(R["Aquarius"], **points, rahu_favourable=False)
     rule_8 = next(r for r in judged if r["rule"] == 8)
     assert rule_8["gives"] == "a turn in the direction of materialism"
+
+
+# --------------------------------------------------------------------------
+# Example 83 — Sri Aurobindo, and two references §21.3 never lists.
+# --------------------------------------------------------------------------
+
+EX83_ORDER = ["Pi", "Sg", "Vi", "Ge", "Ar", "Le", "Sc", "Aq",
+              "Ta", "Cn", "Li", "Cp"]
+
+#: The three the example dates, and the years it gives for them.
+EX83_DATED = {"Sc": (1906, 1913), "Cn": (1918, 1925), "Li": (1925, 1935)}
+
+
+def _chart_38():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(38).items()},
+            {int(g): sign for g, sign in graha_signs(38).items()},
+            lagna(38))
+
+
+def _chart_38_points():
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.colord import stronger
+
+    longitudes, signs, lagna_sign = _chart_38()
+    overrides = {r: stronger(r, longitudes, purpose="arudha").winner
+                 for r in (7, 10)}
+    return {
+        "lagna": lagna_sign,
+        "arudha_lagna": arudha_pada(1, lagna_sign, signs, overrides).sign,
+        "mantrapada": arudha_pada(5, lagna_sign, signs, overrides).sign,
+        "mrityupada": arudha_pada(8, lagna_sign, signs, overrides).sign,
+        "signs": signs,
+    }
+
+
+def _chart_38_years():
+    """Every Drigdasa of Chart 38 as (start year, end year)."""
+    from hora.charts.colord import CO_LORDS, stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.drigdasa import progression
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, lagna_sign = _chart_38()
+    elapsed, spans = 0, {}
+    for rasi in progression(lagna_sign).signs:
+        if rasi in CO_LORDS:
+            years = {g: dasa_length(rasi, g, signs[g],
+                                    sign_dignity(g, longitudes[g])).years
+                     for g in CO_LORDS[rasi]}
+            lord = stronger(rasi, longitudes, purpose="dasa",
+                            dasa_years=years).winner
+        else:
+            lord = int(RASI_LORD[rasi])
+        length = dasa_length(rasi, lord, signs[lord],
+                             sign_dignity(lord, longitudes[lord])).years
+        spans[ABBR[rasi]] = (1872 + elapsed, 1872 + elapsed + length)
+        elapsed += length
+    return spans
+
+
+def test_chart_38_recomputes_on_a_local_time_offset():
+    """"5:17 am (5:53 East)" — Calcutta local time, not a zone. The only
+    non-round offset in the register, and every body still lands inside one
+    arcminute.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(38)
+    assert record["birth_data"]["utc_offset_hours"] == 5 + 53 / 60
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 38", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    printed = longitudes(38)
+
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+
+def test_chart_38_is_an_eleventh_vote_for_the_mean_node():
+    """OI-68. Rahu is 66' out under `true` — second only to Chart 24's 79',
+    and this is the earliest birth of the three widest, 1872.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(38)
+    printed = longitudes(38)["Rahu"]
+    errors = {}
+    for node in (NodeType.MEAN, NodeType.TRUE):
+        computed = compute_chart(
+            from_local(**record["birth_data"]),
+            Place(name="Chart 38", **record["place"]),
+            Settings(node_type=node))
+        errors[node] = abs(
+            computed.positions[int(Graha.RAHU)].longitude - printed) * 60
+
+    assert errors[NodeType.MEAN] < 1.0
+    assert errors[NodeType.TRUE] > 60.0
+
+
+def test_example_83s_groups_run_backward_forward_forward():
+    """Cancer lagna: the 9th is Pisces, even-footed, so that group alone runs
+    backward, and the 10th and 11th — Aries and Taurus — run forward. A third
+    pattern, after Chart 36's one-forward and Chart 37's three-forward.
+    """
+    from hora.dasha.rasi.drigdasa import progression
+
+    _longitudes, _signs, lagna_sign = _chart_38()
+    assert lagna_sign == R["Cancer"]
+
+    got = progression(lagna_sign)
+    assert [g.leader_name for g in got.groups] == ["Pisces", "Aries", "Taurus"]
+    assert [g.direction for g in got.groups] == [
+        "backward", "forward", "forward"]
+    assert [ABBR[s] for s in got.groups[0].signs] == ["Pi", "Sg", "Vi", "Ge"]
+    assert [ABBR[s] for s in got.groups[1].signs] == ["Ar", "Le", "Sc", "Aq"]
+    assert [ABBR[s] for s in got.groups[2].signs] == ["Ta", "Cn", "Li", "Cp"]
+    assert [ABBR[s] for s in got.signs] == EX83_ORDER
+    assert got.covers_every_rasi
+
+
+@pytest.mark.parametrize("abbr", sorted(EX83_DATED))
+def test_example_83s_three_dated_dasas(abbr):
+    """"During 1906-1913, he was running Scorpio's dasa"; "During 1918-1925,
+    he ran Cn dasa"; "Libra's dasa started in August 1925."
+
+    Three dates spread across the run, so they check the order and the lengths
+    of everything before them as well as their own.
+    """
+    start, _end = EX83_DATED[abbr]
+    assert _chart_38_years()[abbr][0] == start
+
+
+def test_libras_dasa_starts_in_the_birth_month():
+    """"Libra's dasa started in August 1925." Every Drigdasa here is a whole
+    number of years, so each one opens on the birth anniversary — August.
+    """
+    from hora.charts.book import chart
+
+    assert chart(38)["birth_data"]["month"] == 8
+    assert _chart_38_years()["Li"][0] == 1925
+    assert _chart_38_years()["Cn"][1] == 1925
+
+
+def test_example_83s_scorpio_needs_all_three_of_its_reasons():
+    """"Scorpio is the 7th house from AL; it aspects lagna; and, it contains
+    its lord Ketu."
+
+    One rule from §21.3 and two from the examples. Rule 2 cannot reach the
+    first of them: Scorpio is fixed, so it aspects Cancer, Capricorn and
+    Aries — not Taurus, where AL sits.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import Graha
+    from hora.dasha.rasi.drigdasa import spiritual_readings
+
+    points = _chart_38_points()
+    assert points["arudha_lagna"] == R["Taurus"]
+    assert points["signs"][int(Graha.KETU)] == R["Scorpio"]
+    assert R["Taurus"] not in rasi_drishti(R["Scorpio"])
+    assert R["Cancer"] in rasi_drishti(R["Scorpio"])
+
+    got = {r["rule"]: r for r in spiritual_readings(R["Scorpio"], **points)}
+    assert set(got) == {7, 9, 10}
+    assert got[10]["why"].endswith("the 7th from the arudha lagna Taurus")
+    assert got[9]["why"] == "Scorpio aspects lagna Cancer"
+    assert got[7]["why"] == "Ketu is in Scorpio"
+
+
+def test_the_book_calls_ketu_scorpios_lord():
+    """"it contains **its lord** Ketu." Scorpio's co-lordship, stated as
+    plainly here as §15.5.1 states it, and the reason rule 7 and rule 11 can
+    both point at the same graha on this chart.
+    """
+    from hora.charts.colord import CO_LORDS
+    from hora.core.const import Graha
+
+    assert int(Graha.KETU) in CO_LORDS[R["Scorpio"]]
+
+
+def test_example_83s_cancer_is_rule_3_and_rule_4_together():
+    """"As Cn contains lagna, its dasa brings true enlightenment and also
+    recognition. During lagna's dasa, a monk can become a chief of a
+    monastery."
+
+    The second sentence is rule 4's own printed example returned as a reading —
+    "A monk may, for example, become the Chief Pontiff of a monastery."
+    """
+    from hora.dasha.rasi.drigdasa import SPIRITUAL_READINGS, spiritual_readings
+
+    points = _chart_38_points()
+    got = {r["rule"]: r for r in spiritual_readings(R["Cancer"], **points)}
+    assert {3, 4} <= set(got)
+    assert got[3]["why"] == "Cancer is lagna"
+
+    rule_4 = next(r for r in SPIRITUAL_READINGS if r["rule"] == 4)
+    assert "Chief Pontiff of a monastery" in rule_4["text"]
+
+
+def test_example_83s_libra_is_the_mrityupada_and_ketus_argala():
+    """"Libra contains mrityupada and has the argala of Ketu."
+
+    Rule 6 and rule 11. Ketu is in Scorpio, the 2nd from Libra, and the 12th
+    that would obstruct it is Virgo, which is empty — so the argala stands
+    without a question attached.
+    """
+    from hora.charts.argala import argalas_on_sign, ketu_sign_of, occupants_from
+    from hora.core.const import Graha
+    from hora.dasha.rasi.drigdasa import spiritual_readings
+
+    points = _chart_38_points()
+    assert points["mrityupada"] == R["Libra"]
+
+    signs = points["signs"]
+    rows = argalas_on_sign(R["Libra"], occupants_from(signs),
+                           ketu_sign=ketu_sign_of(signs))
+    argala = next(r for r in rows
+                  if r.kind == "argala" and int(Graha.KETU) in r.grahas)
+    assert (argala.house, argala.argala_kind) == (2, "primary")
+    obstruction = next(r for r in rows
+                       if r.kind == "virodhargala" and r.house == 12)
+    assert obstruction.grahas == ()
+
+    got = {r["rule"]: r for r in spiritual_readings(R["Libra"], **points)}
+    assert {6, 11} <= set(got)
+    assert "unobstructed" in got[11]["why"]
+    assert "undecided" not in got[11]
+
+
+def test_rule_11_reports_an_obstructed_or_secondary_argala_as_undecided():
+    """§10.6 obstructs an argala from its paired house and §10.5 makes the
+    5th's a secondary one. Example 83 read an unobstructed primary, so neither
+    case is settled — Chart 38's own Cancer has the secondary kind and is
+    flagged rather than asserted. See OI-129.
+    """
+    from hora.dasha.rasi.drigdasa import spiritual_readings
+
+    points = _chart_38_points()
+    cancer = next(r for r in spiritual_readings(R["Cancer"], **points)
+                  if r["rule"] == 11)
+    assert "secondary" in cancer["why"]
+    assert "secondary argala" in cancer["undecided"]
+
+    leo = next(r for r in spiritual_readings(R["Leo"], **points)
+               if r["rule"] == 11)
+    assert "undecided" in leo
+
+
+def test_the_eleven_readings_and_where_each_came_from():
+    """Eight printed in §21.3, one from Example 81 and two from Example 83.
+    Three of the chapter's four examples read a reference the section never
+    lists, which is what OI-129 records.
+    """
+    from hora.dasha.rasi.drigdasa import (
+        EXAMPLE_83_ADDS_TWO_REFERENCES,
+        SPIRITUAL_READINGS,
+    )
+
+    sources = {r["rule"]: r["source"] for r in SPIRITUAL_READINGS}
+    assert [r["rule"] for r in SPIRITUAL_READINGS] == list(range(1, 12))
+    assert all(sources[n].startswith("\u00a721.3") for n in range(1, 9))
+    assert sources[9] == "Example 81"
+    assert sources[10] == sources[11] == "Example 83"
+
+    printed = {r["reads"] for r in SPIRITUAL_READINGS
+               if r["source"].startswith("\u00a721.3")}
+    assert printed == {"AL", "lagna", "A5", "A8", "Ketu", "Rahu"}
+    assert {r["reads"] for r in SPIRITUAL_READINGS} == printed
+
+    assert "AL and the 7th from it" in EXAMPLE_83_ADDS_TWO_REFERENCES
+
+
+def test_the_added_rules_read_the_same_six_references_differently():
+    """None of the three added rules brings in a *new* point — they reach
+    lagna, AL and Ketu by an aspect, by the 7th, and by argala. So §21.3's six
+    references hold; it is the ways of reaching them that the section does not
+    exhaust.
+    """
+    from hora.dasha.rasi.drigdasa import SPIRITUAL_READINGS
+
+    added = {r["rule"]: r for r in SPIRITUAL_READINGS
+             if not r["source"].startswith("\u00a721.3")}
+    assert {r["reads"] for r in added.values()} == {"lagna", "AL", "Ketu"}
+    assert "aspects" in added[9]["test"]
+    assert "7th from" in added[10]["test"]
+    assert "argala" in added[11]["test"]

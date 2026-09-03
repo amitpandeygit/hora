@@ -424,6 +424,48 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    38: {
+        "title": "Sri Aurobindo Ghose — Drigdasa",
+        "birth": "August 15, 1872, 5:17 am (5:53 East), 88 E 20, 22 N 30",
+        "birth_data": {
+            "year": 1872, "month": 8, "day": 15, "hour": 5, "minute": 17,
+            "second": 0.0, "utc_offset_hours": 5 + 53 / 60,
+        },
+        "place": {"latitude": 22.5, "longitude": 88 + 20 / 60},
+        "longitudes": {
+            "Asc": "25 Cn 09", "Sun": "0 Le 19", "Moon": "5 Sg 41",
+            "Mars": "5 Cn 23", "Merc": "23 Le 30", "Jup": "21 Cn 35",
+            "Ven": "8 Le 32", "Sat": "23 Sg 29", "Rahu": "16 Ta 37",
+            "Ketu": "16 Sc 37", "HL": "19 Cn 48", "GL": "5 Cn 28",
+        },
+        "chara_karakas": {
+            "Merc": "AK", "Sat": "AmK", "Jup": "BK", "Rahu": "MK",
+            "Ven": "PiK", "Moon": "PK", "Mars": "GK", "Sun": "DK",
+        },
+        "retrograde": ("Sat",),
+        "drawn": {
+            "AL": "Ta", "Rahu": "Ta",
+            "Mars": "Cn", "GL": "Cn", "Asc": "Cn", "HL": "Cn", "Jup": "Cn",
+            "Merc": "Le", "Sun": "Le", "Ven": "Le",
+            "Sat": "Sg", "Moon": "Sg", "Ketu": "Sc",
+        },
+        "events": {
+            "imprisoned by the British": "1908",
+            "released, withdrew from politics and started an aashram in "
+            "Pondicherry": "1910",
+            "the aashram grew and he became known": "early 1920s",
+            "left charge of the aashram to the Mother and retired into "
+            "seclusion for yogic sadhana": "1925",
+        },
+        "first_seen": "chapter 21, Example 83",
+        "note": (
+            "Born on a 5h53m offset -- Calcutta local time, not a zone -- so "
+            "the birth line is not one of the round offsets the other charts "
+            "use. Example 83 reads three of its Drigdasas, and two of them "
+            "need references section 21.3 never lists: the 7th from AL, and "
+            "Ketu's argala rather than Ketu's occupation."
+        ),
+    },
     37: {
         "title": "ISKCON devotee — Drigdasa",
         "birth": "January 26, 1971, 10:44 am (3:00 East), 24 E 01, 49 N 49",

@@ -180,14 +180,16 @@ def progression(lagna: int) -> Progression:
 # §21.3 Interpretation
 # --------------------------------------------------------------------------
 
-#: §21.3's eight readings, and a ninth from Example 81. Every reference
-#: computes — lagna, the arudha lagna, two arudha padas, and where the nodes
-#: sit — but two of the eight are conditional on something the section does not
-#: settle, and those conditions are carried rather than assumed away.
+#: §21.3's eight readings, and three more the examples add. Every reference
+#: computes — lagna, the arudha lagna, two arudha padas, Ketu's argala and
+#: where the nodes sit — but two of the eight are conditional on something the
+#: section does not settle, and those conditions are carried rather than
+#: assumed away.
 #:
-#: Each row says where it comes from. Eight are §21.3's own; rule 9 is the
-#: example's, and is the one thing in this chapter the printed list does not
-#: reach. See OI-128.
+#: Each row says where it comes from. Eight are §21.3's own; rule 9 is
+#: Example 81's and rules 10 and 11 are Example 83's. §21.3's list of
+#: references is open, not closed — three of the chapter's four examples read
+#: something it does not print. See OI-128 and OI-129.
 SPIRITUAL_READINGS: tuple[dict, ...] = (
     {"rule": 1, "source": "§21.3 rule 1",
      "reads": "AL", "test": "the dasa sign is the arudha lagna",
@@ -250,6 +252,25 @@ SPIRITUAL_READINGS: tuple[dict, ...] = (
      "text": ("Lagna and mantrapada are in Li and Ta aspects both. Because of "
               "these reasons, Ta dasa can bring internal progress and "
               "spiritual evolution.")},
+    # Example 83 again, and two more references §21.3 never lists. Its
+    # Scorpio dasa is read from the **7th from AL** -- Scorpio does not
+    # aspect Taurus, so rule 2 cannot reach it -- and its Libra dasa from
+    # Ketu's **argala**, where rule 7 reads only Ketu's occupation.
+    {"rule": 10, "source": "Example 83", "reads": "AL",
+     "test": "the dasa sign is the 7th from the arudha lagna",
+     "gives": ("external activities such as renunciation and moving to (or "
+               "starting) a monastery"), "needs": None,
+     "text": ("Scorpio is the 7th house from AL... AL and the 7th from it can "
+              "also play an important role in external activities such as "
+              "renunciation and moving to (or starting) a monastery.")},
+    {"rule": 11, "source": "Example 83", "reads": "Ketu",
+     "test": "the dasa sign has Ketu's argala",
+     "gives": ("seclusion for one's sadhana, rather than spreading religious "
+               "learning in the world"),
+     "needs": "that the argala is not obstructed",
+     "text": ("Libra contains mrityupada and has the argala of Ketu. No "
+              "wonder he wanted yogic sadhana in seclusion, rather than "
+              "spreading religious learning in the world.")},
 )
 
 #: Example 81's name for Ketu, one word for §21.3 rule 7's whole first
@@ -281,6 +302,15 @@ KETU_IS_THE_ONLY_LIBERATOR = (
 PARIVRAJA_YOGAS_NOT_BUILT = (
     "Dasa of arudha lagna can bring renunciation if there are parivraja yogas "
     "in the chart, indicating renunciation."
+)
+
+#: Example 83's two additions, stated in one sentence each. The first
+#: generalises rules 1 and 2 — "AL **and the 7th from it**" — and the second
+#: reaches Ketu by argala where rule 7 reads only his occupation. Neither
+#: reference appears in §21.3.
+EXAMPLE_83_ADDS_TWO_REFERENCES = (
+    "AL and the 7th from it can also play an important role in external "
+    "activities such as renunciation and moving to (or starting) a monastery."
 )
 
 #: §21.3 names A5 "mantrapada"; Example 78 read the same pada as showing one's
@@ -366,6 +396,9 @@ def spiritual_readings(
         add(5, f"{RASI_NAMES[sign]} {verb} the mantrapada {RASI_NAMES[a5]}")
     if sign == a8:
         add(6, f"{RASI_NAMES[sign]} holds the mrityupada")
+    if sign == (al + 6) % 12:
+        add(10, f"{RASI_NAMES[sign]} is the 7th from the arudha lagna "
+                f"{RASI_NAMES[al]}")
     if signs.get(int(Graha.KETU)) == sign:
         add(7, f"Ketu is in {RASI_NAMES[sign]}")
     if signs.get(int(Graha.RAHU)) == sign:
@@ -379,4 +412,59 @@ def spiritual_readings(
         else:
             add(8, why, undecided="whether Rahu is favorable, which §21.3 "
                                   "does not say how to settle")
+
+    ketu = _ketus_argala(sign, signs)
+    if ketu is not None:
+        why = f"Ketu in {RASI_NAMES[signs[int(Graha.KETU)]]} gives the "\
+              f"{_ordinal(ketu.house)} argala on {RASI_NAMES[sign]}"
+        obstructors = _obstructors(sign, signs, ketu.paired_house)
+        if obstructors:
+            add(11, f"{why}, obstructed from the "
+                    f"{_ordinal(ketu.paired_house)}",
+                undecided="whether an obstructed argala still gives the "
+                          "reading; Example 83's was unobstructed")
+        elif ketu.argala_kind == "secondary":
+            # §10.5 splits the four argala houses into three primary and the
+            # 5th secondary. Example 83's was the 2nd, a primary one, so a
+            # secondary argala is untested here.
+            add(11, f"{why}, unobstructed but secondary",
+                undecided="whether §10.5's secondary argala carries the "
+                          "reading; Example 83's was a primary one")
+        else:
+            add(11, f"{why}, unobstructed")
     return tuple(out)
+
+
+def _ordinal(house: int) -> str:
+    suffix = "th" if 4 <= house <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(
+        house % 10, "th")
+    return f"{house}{suffix}"
+
+
+def _ketus_argala(sign: int, signs: dict[int, int]):
+    """Ketu's argala on ``sign``, or None if he causes none.
+
+    Argala is §10.5's, so Ketu's own reversal of the counting direction
+    applies through :func:`hora.charts.argala.argalas_on_sign` unchanged.
+    """
+    from hora.charts.argala import argalas_on_sign, ketu_sign_of, occupants_from
+    from hora.core.const import Graha
+
+    if int(Graha.KETU) not in signs:
+        return None
+    occupants = occupants_from(signs)
+    for row in argalas_on_sign(sign, occupants, ketu_sign=ketu_sign_of(signs)):
+        if row.kind == "argala" and int(Graha.KETU) in row.grahas:
+            return row
+    return None
+
+
+def _obstructors(sign: int, signs: dict[int, int], house: int) -> tuple:
+    """The grahas in the house that obstructs an argala from ``house``."""
+    from hora.charts.argala import argalas_on_sign, ketu_sign_of, occupants_from
+
+    occupants = occupants_from(signs)
+    for row in argalas_on_sign(sign, occupants, ketu_sign=ketu_sign_of(signs)):
+        if row.kind == "virodhargala" and row.house == house:
+            return row.grahas
+    return ()

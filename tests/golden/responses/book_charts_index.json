@@ -252,6 +252,13 @@
         "number": 37,
         "recomputable": true,
         "title": "ISKCON devotee \u2014 Drigdasa"
+      },
+      {
+        "birth": "August 15, 1872, 5:17 am (5:53 East), 88 E 20, 22 N 30",
+        "first_seen": "chapter 21, Example 83",
+        "number": 38,
+        "recomputable": true,
+        "title": "Sri Aurobindo Ghose \u2014 Drigdasa"
       }
     ],
     "not_supplied": [
@@ -288,7 +295,8 @@
       33,
       34,
       35,
-      37
+      37,
+      38
     ]
   },
   "status": 200
