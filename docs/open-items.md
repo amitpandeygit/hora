@@ -683,15 +683,15 @@ is not said, and §23.4's two examples pull opposite ways:
 | Ex 89, Chart 8 | Aries | neither — consistent | both; the AK **is** Rudra, Jupiter is not |
 | Ex 90, Chart 39 | Capricorn | both — contradicts | neither — consistent |
 
-Rasi drishti breaks Example 90; graha drishti breaks 89, on Jupiter alone. So either "usually" is load-bearing, or criterion 1 is a tiebreaker
-among **several** candidates and in both examples the trine rule already left
-one — which the section's framing favours: "we have listed several rasis above.
-How do we choose one answer?"
+**Exercise 32 settles the rest.** Criterion 1 is not a tiebreaker never
+reached: its answer drops Aquarius — "it contains Jupiter who is also AK, so
+its dasa is unlikely to kill" — and moves to the 8th from AL. That shield
+*occupies* its rasi, so the aspect question is untouched.
 
 **What we do:** `select_dasa` reports each candidate's shields and never
 filters on them; `protected_by` keeps the hedge.
 
-**Closes when:** an example applies it to a list of more than one.
+**Closes when:** a shield **aspects** rather than occupies its rasi.
 
 ### OI-137 — §23.3's Rudra yoga names no planets and no aspect
 
@@ -702,7 +702,7 @@ further than the section says: both are fixed, so what aspects them is movable
 and each of the four reaches at least one — the yoga arises exactly when the
 **Moon is in a movable rasi**.
 
-Two things are unsaid: which planets the yoga is — the Moon alone, or the Moon
+Two things are unsaid: which planets the yoga is — the Moon alone or the Moon
 with the owner it aspected — and whether *their* aspect is rasi or graha
 drishti, the sentence saying "rasi aspect" for the Moon's and bare "aspected"
 for theirs.

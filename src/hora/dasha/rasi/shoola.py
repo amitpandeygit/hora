@@ -404,6 +404,20 @@ THE_EIGHTH_FROM_AL_IS_TABLE_32S = (
     "contains Rahu."
 )
 
+#: **Finding.** Exercise 32's answer names its seed's grounds as "the aspect
+#: of Sun, Mercury and its lord Mars". §15.5.2's rule 2 counts **Jupiter**,
+#: Mercury and the lord, and Jupiter does aspect Aries here — so the Sun
+#: stands where Jupiter should and Jupiter goes unmentioned.
+#:
+#: Nothing turns on it on this chart: Aries beats Libra under rule 2 as
+#: printed (3 to 1), under a plain count of every aspecting graha (5 to 3),
+#: and under §15.5.2's ayur adaptation, which leads with the luminaries. It
+#: would matter on a chart where the two lists part.
+THE_SEED_GROUNDS_NAME_THE_SUN_WHERE_RULE_2_NAMES_JUPITER = (
+    "The 7th house Aries is stronger as it has the aspect of Sun, Mercury and "
+    "its lord Mars."
+)
+
 #: Footnote 62, which turns Example 92's parenthesis into a general rule and
 #: names its three uses.
 FOOTNOTE_62 = (

@@ -1380,10 +1380,12 @@ def test_exercise_32_the_demoted_trishoola_rule_points_elsewhere():
     assert "less significant" in TRISHOOLA_IS_LESS_SIGNIFICANT_HERE
 
 
-def test_exercise_32_our_answer_with_its_dates():
-    """Capricorn dasa, 11 December 1996 to 11 December 2005 on the 365.25-day
-    year Exercise 31 fixed. Recorded whole so the book's answer can be checked
-    against it line by line.
+def test_exercise_32_answer_confirms_every_step():
+    """The answer, against what we derived before seeing it. Long life, the
+    Aries seed, the four dasas, the elimination of Aquarius by criterion 1 and
+    the move to Capricorn — every step matches. Capricorn dasa runs 11
+    December 1996 to 11 December 2005 on the 365.25-day year, and Frank
+    Sinatra died on 14 May 1998.
     """
     import swisseph as swe
 
@@ -1419,3 +1421,109 @@ def test_exercise_32_our_answer_with_its_dates():
     }
     assert answer["chosen"] in answer["reachable"]
     assert answer["chosen"] in answer["four_dasas"]
+
+    death = swe.julday(1998, 5, 14, 12.0)
+    assert capricorn["start_jd"] <= death < capricorn["end_jd"]
+    assert chart(43)["events"] == {
+        "died of a heart attack": "May 14, 1998, aged 82"}
+
+
+def test_the_answer_eliminates_aquarius_with_criterion_1():
+    """"Its dasa can give death. **However, it contains Jupiter who is also
+    AK. So its dasa is unlikely to kill.** We can try the 8th house from AL."
+
+    The first place either chapter applies criterion 1 to remove a candidate,
+    which closes half of OI-138: it is not a tiebreaker that never fires. Its
+    hedge survives too — "unlikely", not "cannot".
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import SELECTION_CRITERIA, protected_by
+
+    _longitudes, signs, _lagna, al = _chart(43)
+    assert al == R["Aquarius"]
+    assert signs[int(Graha.JUPITER)] == R["Aquarius"]
+
+    got = protected_by(R["Aquarius"], signs, int(Graha.JUPITER),
+                       rudra=int(Graha.VENUS))
+    assert got["protected"]
+    assert got["hedge"] == "usually"
+    assert "Usually" in SELECTION_CRITERIA[0]
+    # The shield occupies rather than aspects, so OI-138's other half stands.
+    assert {s["how"] for s in got["shields"]} == {"occupies"}
+
+
+def test_the_answer_reaches_capricorn_through_table_32_as_example_92_did():
+    """"From Table 32, we find that Cp is the 8th house from Aq. It is
+    afflicted by Rahu here (just as in Example 92)."
+
+    The answer links the two itself, which is the second use of footnote 62's
+    rule and the second time Rahu is what afflicts the house.
+    """
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+    from hora.dasha.rasi.shoola import death_rasis
+
+    _longitudes, signs, lagna_sign, al = _chart(43)
+    assert rudra_eighth(al) == R["Capricorn"]
+    assert ordinary_eighth(al) == R["Virgo"]
+
+    rows = {row["house_from_al"]: row
+            for row in death_rasis(al, signs, lagna=lagna_sign)}
+    assert rows[8]["rasi"] == "Capricorn"
+    assert rows[8]["by"] == "Table 32"
+    assert "Rahu" in rows[8]["occupied_by"]
+
+    # Example 92's chart did the same, from a different AL.
+    _l40, signs40, lagna40, al40 = _chart(40)
+    other = {row["house_from_al"]: row
+             for row in death_rasis(al40, signs40, lagna=lagna40)}
+    assert "Rahu" in other[8]["occupied_by"]
+    assert other[8]["by"] == "Table 32"
+
+
+def test_the_answers_seed_grounds_name_the_sun_where_rule_2_names_jupiter():
+    """"The 7th house Aries is stronger as it has the aspect of Sun, Mercury
+    and its lord Mars."
+
+    §15.5.2's rule 2 counts Jupiter, Mercury and the lord — and Jupiter does
+    aspect Aries from Aquarius, so it is the Sun standing in Jupiter's place
+    rather than an extra. Nothing turns on it here: Aries wins under rule 2 as
+    printed, under a plain count of every aspecting graha, and under the ayur
+    adaptation that leads with the luminaries.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.charts.rasi_strength import stronger
+    from hora.core.const import GRAHA_NAMES, Graha
+    from hora.dasha.rasi.shoola import (
+        THE_SEED_GROUNDS_NAME_THE_SUN_WHERE_RULE_2_NAMES_JUPITER,
+    )
+
+    longitudes, signs, _lagna, _al = _chart(43)
+    named = {int(Graha.SUN), int(Graha.MERCURY), int(Graha.MARS)}
+    aspecting = {g for g, place in signs.items()
+                 if R["Aries"] in rasi_drishti(place)}
+    assert named < aspecting
+    assert {str(GRAHA_NAMES[g]) for g in aspecting - named} == {"Moon",
+                                                               "Jupiter"}
+
+    verdict = stronger(R["Libra"], R["Aries"], longitudes, purpose="phalita")
+    assert verdict.winner == R["Aries"]
+    assert "Jupiter" in verdict.reason
+
+    libra = {g for g, place in signs.items()
+             if R["Libra"] in rasi_drishti(place)}
+    assert len(aspecting) > len(libra)          # 5 to 3, counting everything
+    assert "Sun, Mercury and its lord Mars" in (
+        THE_SEED_GROUNDS_NAME_THE_SUN_WHERE_RULE_2_NAMES_JUPITER)
+
+
+def test_the_answer_counts_the_year_of_death_the_way_90_and_91_do():
+    """"He died in his 83rd year" for a native aged 82 — the year in progress,
+    as Examples 90 and 91 count and Example 89 does not. Three to one now.
+    """
+    from hora.dasha.rasi.shoola import progression
+
+    run = progression(R["Aries"])
+    start, end = run.starts[9], run.starts[9] + run.years[9]
+    assert (start, end) == (81, 90)
+    for year in (82, 83):
+        assert start <= year < end

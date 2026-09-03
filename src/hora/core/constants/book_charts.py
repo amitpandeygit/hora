@@ -454,12 +454,14 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "HL": "Cn", "Ketu": "Cn", "Rahu": "Cp", "Mars": "Le",
             "Ven": "Sg", "Merc": "Sc", "Sun": "Sc", "Asc": "Li",
         },
+        "events": {"died of a heart attack": "May 14, 1998, aged 82"},
         "first_seen": "chapter 23, Exercise 32",
         "note": (
-            "Printed without a name or a death date -- the exercise asks the "
-            "reader to estimate the longevity category, list the four dasas "
-            "of that range and choose the one that killed. The only chart in "
-            "the register born west of the Atlantic with a 5-hour offset "
+            "Frank Sinatra, named only in the exercise's answer. The only "
+            "chart in either ayur chapter where section 23.3's criterion 1 "
+            "has work to do: the AK is Jupiter and it occupies the one trine "
+            "from AL inside the longevity range, so the answer moves to the "
+            "8th from AL. Born west of the Atlantic, the first such chart "
             "since Chart 12."
         ),
     },
