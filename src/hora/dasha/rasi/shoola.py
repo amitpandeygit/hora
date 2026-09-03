@@ -877,6 +877,17 @@ CHART_61_FROM_THE_EXAMPLES: tuple[str, ...] = (
     "AL is Leo, Sagittarius or Aries, and Leo holds AL's lord",
 )
 
+#: **Gap.** Exercise 33 asks for a rule §23.5 never states: "looking at the
+#: 3rd from sthira karaka for husband, guess whether the death was violent or
+#: peaceful." §23.3 calls the 3rd and 8th from AL the "houses of vitality", so
+#: the house is one the chapter knows — but reading it for the **manner** of a
+#: death rather than its timing appears only in the exercise, and no threshold
+#: is given for what counts as violent.
+THE_THIRD_FROM_THE_KARAKA_SHOWS_THE_MANNER = (
+    "Looking at the 3rd from sthira karaka for husband, guess whether the "
+    "death was violent or peaceful."
+)
+
 #: §8.3 is what §23.5's "we mentioned earlier" points back to.
 STHIRA_KARAKAS_WERE_PROMISED_FOR_DEATH = (
     "When predicting the death of spouse, we use Jupiter in female charts and "
@@ -1031,4 +1042,52 @@ def paired_sthira_karaka(relative: str, longitudes: dict[int, float],
                       + " and ".join(str(c["graha_name"])
                                      for c in candidates)
                       + " is stronger; §8.3 says only \"the stronger\""),
+    }
+
+
+def manner_of_death(sthira_karaka_sign: int, signs: dict[int, int],
+                    malefic: frozenset[int] | None = None) -> dict:
+    """Exercise 33's reading — the 3rd from a relative's sthira karaka.
+
+    :returns: the rasi, who occupies it, and which malefics reach it by each
+        drishti. No verdict: the exercise says "guess", and gives no threshold
+        for what makes a death violent. See
+        :data:`THE_THIRD_FROM_THE_KARAKA_SHOWS_THE_MANNER`.
+
+    The 3rd is counted the ordinary way. Footnote 62 sends only the **8th**
+    through Table 32, and §23.3's 3rd from AL is ordinary too.
+    """
+    from hora.charts.aspects import graha_aspects_sign, rasi_drishti
+    from hora.charts.maraka import MALEFICS
+    from hora.core.const import GRAHA_NAMES
+
+    karaka = validate.in_range("sthira_karaka_sign", sthira_karaka_sign, 0, 11)
+    third = (karaka + 2) % 12
+    evil = MALEFICS if malefic is None else malefic
+
+    occupants, by_rasi, by_graha = [], [], []
+    for graha, place in sorted(signs.items()):
+        name = str(GRAHA_NAMES[graha])
+        if place == third:
+            occupants.append(name)
+            continue
+        if third in rasi_drishti(place):
+            by_rasi.append(name)
+        if graha_aspects_sign(graha, place, third):
+            by_graha.append(name)
+
+    evil_names = {str(GRAHA_NAMES[g]) for g in evil}
+    return {
+        "sthira_karaka_rasi": str(RASI_NAMES[karaka]),
+        "third": third, "rasi": str(RASI_NAMES[third]),
+        "occupied_by": tuple(occupants),
+        "aspected_by_rasi_drishti": tuple(by_rasi),
+        "aspected_by_graha_drishti": tuple(by_graha),
+        "malefics": {
+            "occupying": tuple(n for n in occupants if n in evil_names),
+            "by_rasi_drishti": tuple(n for n in by_rasi if n in evil_names),
+            "by_graha_drishti": tuple(n for n in by_graha if n in evil_names),
+        },
+        "undecided": ("what makes a death violent rather than peaceful; the "
+                      "exercise says \"guess\" and names no threshold"),
     }

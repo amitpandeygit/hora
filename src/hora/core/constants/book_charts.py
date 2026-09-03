@@ -430,6 +430,25 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    45: {
+        "title": "A lady — Exercise 33",
+        "birth": "born in 1950",
+        "drawn": {
+            "Rahu": "Pi", "Moon": "Pi", "AL": "Aq",
+            "Jup": "Cp", "Sun": "Cp", "Ven": "Cp", "Sat": "Le",
+            "Merc": "Sg", "Asc": "Sg", "HL": "Sg",
+            "GL": "Li", "Ketu": "Vi", "Mars": "Vi",
+        },
+        "retrograde": ("Ven", "Sat", "Merc"),
+        "first_seen": "chapter 23, Exercise 33",
+        "note": (
+            "The first chart in the register printed with **no degrees at "
+            "all** -- only the two diagrams and the year. Nothing that needs "
+            "a longitude can be computed on it, which rules out section "
+            "15.5.2 below rule 1, the arudha padas' co-lord tiebreaks and "
+            "every varga. The exercise asks only for rasi-level work."
+        ),
+    },
     44: {
         "title": "Pitri Shoola Example — Example 93",
         "birth": "May 9, 1971, 9:22 am (IST), 81 E 12, 16 N 15",

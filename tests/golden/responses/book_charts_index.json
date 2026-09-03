@@ -301,6 +301,13 @@
         "number": 44,
         "recomputable": true,
         "title": "Pitri Shoola Example \u2014 Example 93"
+      },
+      {
+        "birth": "born in 1950",
+        "first_seen": "chapter 23, Exercise 33",
+        "number": 45,
+        "recomputable": false,
+        "title": "A lady \u2014 Exercise 33"
       }
     ],
     "not_supplied": [

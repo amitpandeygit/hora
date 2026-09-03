@@ -2163,3 +2163,197 @@ def test_example_94_dates_the_end_of_a_dasa_to_a_month():
     assert 1917 + 54 == 1971
     assert 1917 + 63 == 1980
     assert any("November 1917" in fact for fact in CHART_61_FROM_THE_EXAMPLES)
+
+
+# --------------------------------------------------------------------------
+# Exercise 33 — Chart 45, the first chart printed without any degrees.
+# --------------------------------------------------------------------------
+
+def test_chart_45_is_printed_as_a_diagram_with_no_degrees():
+    """"Consider the rasi chart of a lady born in 1950, given in Chart 45."
+
+    No longitudes anywhere — the first such chart in the register. `signs`
+    falls back to the transcribed boxes and `longitudes` refuses by name, so
+    nothing that needs a degree can silently take a sign instead.
+    """
+    from hora.charts.book import (
+        BookChartError,
+        chart,
+        has_longitudes,
+        longitudes,
+        signs,
+    )
+
+    assert not has_longitudes(45)
+    assert chart(45)["birth"] == "born in 1950"
+    assert "birth_data" not in chart(45)
+    with pytest.raises(BookChartError, match="no degrees"):
+        longitudes(45)
+    assert signs(45)["Asc"] == R["Sagittarius"]
+
+
+def test_chart_45s_drawn_arudha_lagna_reproduces():
+    """The one check the diagram can still make on itself: AL is drawn in
+    Aquarius and `arudha_pada` puts it there from the signs alone.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart, graha_signs, lagna, signs
+
+    assert chart(45)["drawn"]["AL"] == "Aq"
+    assert signs(45)["AL"] == R["Aquarius"]
+
+    computed = arudha_pada(1, lagna(45),
+                           {int(g): s for g, s in graha_signs(45).items()})
+    assert computed.sign == R["Aquarius"]
+
+
+def test_exercise_33_step_1_the_seed_is_lagna_on_rule_1_alone():
+    """The seed is the stronger of lagna and the 7th — Sagittarius against
+    Gemini. Rule 1 settles it without degrees: Mercury is in Sagittarius and
+    Gemini is empty, so the comparison never reaches a rule this chart cannot
+    answer.
+    """
+    from hora.charts.book import graha_signs, lagna
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import progression
+
+    lagna_sign = lagna(45)
+    signs = {int(g): s for g, s in graha_signs(45).items()}
+    assert lagna_sign == R["Sagittarius"]
+
+    in_lagna = [g for g, s in signs.items() if s == lagna_sign]
+    in_seventh = [g for g, s in signs.items() if s == R["Gemini"]]
+    assert in_lagna == [int(Graha.MERCURY)]
+    assert in_seventh == []
+
+    run = progression(lagna_sign)
+    assert [ABBR[s] for s in run.signs[:4]] == ["Sg", "Cp", "Aq", "Pi"]
+
+
+def test_exercise_33_step_2_the_husbands_karaka_is_jupiter():
+    """A lady's chart, so §8.3's spouse rule gives **Jupiter** — the same
+    reading Example 94 used on Indira Gandhi's chart.
+    """
+    from hora.charts.book import graha_signs
+    from hora.core.const import Graha
+    from hora.core.constants.karaka import STHIRA_KARAKA_OF_SPOUSE
+
+    assert STHIRA_KARAKA_OF_SPOUSE["female"] == Graha.JUPITER
+    signs = {int(g): s for g, s in graha_signs(45).items()}
+    assert signs[int(Graha.JUPITER)] == R["Capricorn"]
+
+
+def test_exercise_33_step_3_a7_needs_9_2s_exception():
+    """The 7th house is Gemini and its lord Mercury sits in Sagittarius, the
+    7th from Gemini — so the pada lands back on its own house and §9.2's
+    exception takes the 10th from there. A7 is **Pisces**.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import graha_signs, lagna
+
+    signs = {int(g): s for g, s in graha_signs(45).items()}
+    got = arudha_pada(7, lagna(45), signs)
+
+    assert got.before_exception == R["Gemini"]
+    assert got.exception_position == 1
+    assert got.sign == R["Pisces"]
+    assert (got.sign - R["Gemini"]) % 12 == 9      # the 10th from Gemini
+
+
+def test_exercise_33_step_4_six_dasas_can_kill_the_husband():
+    """"Identify the dasas that can give death to her husband" — plural, and
+    six is what §23.5's two references give: the trines from Jupiter are Cp,
+    Ta and Vi, and the trines from A7 are Pi, Cn and Sc.
+    """
+    from hora.charts.book import lagna
+    from hora.dasha.rasi.shoola import progression, relative_death_rasis
+
+    got = relative_death_rasis(R["Capricorn"], R["Pisces"])
+    assert got["names"]["from_sthira_karaka"] == (
+        "Capricorn", "Taurus", "Virgo")
+    assert got["names"]["from_arudha_pada"] == ("Pisces", "Cancer", "Scorpio")
+    assert len(got["all"]) == 6
+
+    run = progression(lagna(45))
+    spans = {ABBR[run.signs[i]]: (1950 + run.starts[i],
+                                  1950 + run.starts[i] + 9)
+             for i in range(12) if run.signs[i] in got["all"]}
+    assert spans == {
+        "Cp": (1959, 1968), "Pi": (1977, 1986), "Ta": (1995, 2004),
+        "Cn": (2013, 2022), "Vi": (2031, 2040), "Sc": (2049, 2058)}
+
+
+def test_23_5_offers_no_way_to_narrow_the_six():
+    """The plural in the exercise is the section's doing: §23.3's longevity
+    criterion applies to the native, and §23.5 gives a relative no equivalent.
+    """
+    from hora.dasha.rasi.shoola import (
+        NO_CRITERION_NARROWS_A_RELATIVES_TRINES,
+        SELECTION_CRITERIA,
+    )
+
+    assert "names no way to choose" in NO_CRITERION_NARROWS_A_RELATIVES_TRINES
+    assert "short/middle/long life" in SELECTION_CRITERIA[1]
+    assert "relative" not in SELECTION_CRITERIA[1]
+
+
+def test_exercise_33_step_5_the_third_from_jupiter_is_ringed_by_malefics():
+    """"Looking at the 3rd from sthira karaka for husband, guess whether the
+    death was violent or peaceful."
+
+    The 3rd from Capricorn is Pisces. **Rahu occupies it**, and **Mars and
+    Ketu aspect it by both drishtis**, so the reading does not depend on which
+    aspect the exercise means. The only benefic contact is a retrograde
+    Mercury. Three of the five natural malefics reach it.
+    """
+    from hora.charts.book import chart, graha_signs
+    from hora.dasha.rasi.shoola import manner_of_death
+
+    signs = {int(g): s for g, s in graha_signs(45).items()}
+    got = manner_of_death(R["Capricorn"], signs)
+
+    assert got["rasi"] == "Pisces"
+    assert got["occupied_by"] == ("Moon", "Rahu")
+    assert got["malefics"]["occupying"] == ("Rahu",)
+    assert got["malefics"]["by_rasi_drishti"] == ("Mars", "Ketu")
+    assert got["malefics"]["by_graha_drishti"] == ("Mars", "Ketu")
+
+    benefic = set(got["aspected_by_rasi_drishti"]) - {"Mars", "Ketu"}
+    assert benefic == {"Mercury"}
+    assert "Merc" in chart(45)["retrograde"]
+
+
+def test_the_manner_rule_is_the_exercises_and_not_23_5s():
+    """§23.3 knows the 3rd as a "house of vitality" from AL, but reading it
+    for the *manner* of a death appears only in Exercise 33 — and with no
+    threshold, which is why nothing here returns a verdict.
+    """
+    from hora.dasha.rasi.shoola import (
+        DEATH_HOUSES_FROM_AL,
+        RELATIVE_DEATH_RULE,
+        THE_THIRD_FROM_THE_KARAKA_SHOWS_THE_MANNER,
+        manner_of_death,
+    )
+
+    assert "violent or peaceful" in THE_THIRD_FROM_THE_KARAKA_SHOWS_THE_MANNER
+    assert "violent" not in RELATIVE_DEATH_RULE
+    vitality = next(row for row in DEATH_HOUSES_FROM_AL
+                    if row["houses"] == (3, 8))
+    assert vitality["name"] == "the houses of vitality from AL"
+
+    got = manner_of_death(R["Capricorn"], {0: R["Pisces"]})
+    assert "verdict" not in got
+    assert "names no threshold" in got["undecided"]
+
+
+def test_the_third_from_the_karaka_is_the_ordinary_third():
+    """Footnote 62 sends only the **8th** through Table 32, and §23.3's 3rd
+    from AL is ordinary — so this one is too. From Capricorn, Table 32 would
+    have given a different house entirely.
+    """
+    from hora.charts.maraka import rudra_eighth
+    from hora.dasha.rasi.shoola import manner_of_death
+
+    got = manner_of_death(R["Capricorn"], {})
+    assert got["third"] == (R["Capricorn"] + 2) % 12 == R["Pisces"]
+    assert rudra_eighth(R["Capricorn"]) == R["Gemini"]     # the 8th, not this

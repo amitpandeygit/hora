@@ -48,7 +48,7 @@ def test_the_register_holds_every_chart_supplied_so_far():
     assert numbers() == (
         1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
         20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-        35, 36, 37, 38, 39, 40, 41, 42, 43, 44)
+        35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45)
     assert CHARTS_NOT_SUPPLIED == (4,)
     assert 4 not in numbers()
 
@@ -61,24 +61,51 @@ def test_asking_for_chart_4_says_it_was_never_printed():
         chart(99)
 
 
+#: Charts the book printed as a diagram only, with no degrees anywhere.
+DIAGRAM_ONLY = (45,)
+
+
 @pytest.mark.parametrize("number", sorted(BOOK_CHARTS))
 def test_every_record_has_a_title_and_parsable_longitudes(number):
     record = chart(number)
     assert record["title"]
+    if number in DIAGRAM_ONLY:
+        assert not record.get("longitudes")
+        assert record["drawn"], "a degreeless chart must transcribe its boxes"
+        assert record.get("note"), f"Chart {number} must say why"
+        return
     assert record["longitudes"]
     parsed = longitudes(number)
     assert len(parsed) == len(record["longitudes"])
     assert all(0 <= value < 360 for value in parsed.values())
 
 
+def test_the_diagram_only_charts_are_the_ones_without_degrees():
+    """The book has printed exactly one chart with no longitudes at all.
+    `longitudes` refuses it by name and `signs` falls back to the diagram.
+    """
+    from hora.charts.book import has_longitudes
+
+    assert tuple(n for n in numbers() if not has_longitudes(n)) == DIAGRAM_ONLY
+    for number in DIAGRAM_ONLY:
+        with pytest.raises(BookChartError, match="no degrees"):
+            longitudes(number)
+        assert signs(number)
+
+
 @pytest.mark.parametrize("number", sorted(BOOK_CHARTS))
 def test_every_chart_prints_the_nine_grahas(number):
     """Some omit HL, GL or AL; none omits a graha."""
-    assert set(GRAHA_OF) <= set(chart(number)["longitudes"])
+    printed = chart(number).get("longitudes") or chart(number)["drawn"]
+    assert set(GRAHA_OF) <= set(printed)
 
 
 @pytest.mark.parametrize("number", sorted(BOOK_CHARTS))
 def test_every_charts_nodes_are_exactly_opposite(number):
+    if number in DIAGRAM_ONLY:
+        found = signs(number)
+        assert (found["Rahu"] - found["Ketu"]) % 12 == 6
+        return
     parsed = longitudes(number)
     assert abs((parsed["Rahu"] - parsed["Ketu"]) % 360 - 180) < 1e-9
 

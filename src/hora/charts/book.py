@@ -82,16 +82,39 @@ def chart(number: int) -> dict[str, Any]:
         f"{', '.join(str(n) for n in numbers())}")
 
 
+def has_longitudes(number: int) -> bool:
+    """Whether the book printed degrees for this chart, or only a diagram."""
+    return bool(chart(number).get("longitudes"))
+
+
 def longitudes(number: int) -> dict[str, float]:
-    """One chart's printed longitudes, parsed. Keys are the book's names."""
+    """One chart's printed longitudes, parsed. Keys are the book's names.
+
+    :raises BookChartError: for a chart the book printed as a diagram only.
+    """
+    record = chart(number)
+    if not record.get("longitudes"):
+        raise BookChartError(
+            f"Chart {number} is printed as a diagram with no degrees, so it "
+            f"has no longitudes. Use `signs({number})` for the rasis.")
     return {name: longitude(text)
-            for name, text in chart(number)["longitudes"].items()}
+            for name, text in record["longitudes"].items()}
 
 
 def signs(number: int) -> dict[str, int]:
-    """The sign each printed body occupies. 0 = Aries."""
-    return {name: int(value // 30)
-            for name, value in longitudes(number).items()}
+    """The sign each printed body occupies. 0 = Aries.
+
+    Falls back to the drawn diagram for a chart printed without degrees.
+    """
+    if has_longitudes(number):
+        return {name: int(value // 30)
+                for name, value in longitudes(number).items()}
+    drawn = chart(number).get("drawn")
+    if not drawn:
+        raise BookChartError(
+            f"Chart {number} prints neither longitudes nor a diagram")
+    index = {abbr: n for n, abbr in enumerate(RASI_ABBR)}
+    return {name: index[abbr] for name, abbr in drawn.items()}
 
 
 def graha_signs(number: int) -> dict[int, int]:
@@ -146,10 +169,10 @@ def describe(number: int) -> dict[str, Any]:
         "birth": record.get("birth"),
         "place": record.get("place"),
         "recomputable": is_recomputable(number),
-        "longitudes": dict(record["longitudes"]),
+        "longitudes": dict(record.get("longitudes", {})),
         "signs": {name: RASI_ABBR[sign] for name, sign in signs(number).items()},
-        "lagna": RASI_ABBR[lagna(number)] if "Asc" in record["longitudes"]
-        else None,
+        "lagna": (RASI_ABBR[lagna(number)]
+                  if "Asc" in signs(number) else None),
         "drawn": record.get("drawn"),
         "divisional": {code: dict(boxes)
                        for code, boxes in record.get("divisional", {}).items()},
