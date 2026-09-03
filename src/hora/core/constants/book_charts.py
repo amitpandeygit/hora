@@ -430,6 +430,40 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    41: {
+        "title": "A gentleman — Niryaana Shoola dasa",
+        "birth": "March 14, 1902, 11:48 am (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1902, "month": 3, "day": 14, "hour": 11, "minute": 48,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "1 Ge 51", "Sun": "0 Pi 15", "Moon": "25 Ar 02",
+            "Mars": "3 Pi 40", "Merc": "2 Aq 51", "Jup": "15 Cp 12",
+            "Ven": "25 Cp 53", "Sat": "2 Cp 57", "Rahu": "14 Li 10",
+            "Ketu": "14 Ar 10", "HL": "16 Le 09", "GL": "25 Ar 20",
+        },
+        "chara_karakas": {
+            "Ven": "AK", "Moon": "AmK", "Rahu": "BK", "Jup": "MK",
+            "Mars": "PiK", "Sat": "PK", "Merc": "GK", "Sun": "DK",
+        },
+        "drawn": {
+            "Mars": "Pi", "Sun": "Pi", "Ketu": "Ar", "Moon": "Ar", "GL": "Ar",
+            "Asc": "Ge", "Merc": "Aq",
+            "Ven": "Cp", "Jup": "Cp", "Sat": "Cp", "HL": "Le",
+            "AL": "Li", "Rahu": "Li",
+        },
+        "events": {"passed away": "1967, aged 65"},
+        "first_seen": "chapter 22, Example 88",
+        "note": (
+            "Born at the same place as Chart 40, 25 years earlier. The second "
+            "chart to run the Saturn exception, and the first whose Niryaana "
+            "Shoola seed is the 8th house rather than the 2nd. Footnote 61's "
+            "thumbrule -- any three consecutive dasas total 24 years -- is "
+            "stated on this example."
+        ),
+    },
     40: {
         "title": "A male — Niryaana Shoola dasa, the Saturn exception",
         "birth": "January 20, 1927, 12:30 pm (IST), 81 E 12, 16 N 15",

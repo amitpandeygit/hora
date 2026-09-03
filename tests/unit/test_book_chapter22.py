@@ -1842,3 +1842,295 @@ def test_chapter_22s_four_charts_and_what_each_settled():
     assert {8, 39, 40} <= set(numbers())
     assert all(is_recomputable(n) for n in (8, 39, 40))
     assert 61 not in numbers()
+
+
+# --------------------------------------------------------------------------
+# Example 88 — Chart 41, the Saturn exception again and footnote 61.
+# --------------------------------------------------------------------------
+
+EX88_ORDER = ["Cp", "Aq", "Pi", "Ar", "Ta", "Ge", "Cn", "Le", "Vi"]
+
+
+def _chart_41():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(41).items()},
+            {int(g): sign for g, sign in graha_signs(41).items()},
+            lagna(41))
+
+
+def _chart_41_run():
+    from hora.dasha.rasi.niryaana_shoola import progression
+
+    _longitudes, signs, _lagna = _chart_41()
+    occupants = {g for g, sign in signs.items() if sign == R["Capricorn"]}
+    return progression(R["Capricorn"], occupants)
+
+
+def test_chart_41_recomputes_and_is_a_fourteenth_vote_for_the_mean_node():
+    """Everything inside one arcminute, ascendant included — and Rahu is 98'
+    out under `true`, the widest margin in the register, past Chart 39's 96'.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(41)
+    place = Place(name="Chart 41", **record["place"])
+    printed = longitudes(41)
+
+    computed = compute_chart(from_local(**record["birth_data"]), place,
+                             Settings(node_type=NodeType.MEAN))
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+    true_node = compute_chart(from_local(**record["birth_data"]), place,
+                              Settings(node_type=NodeType.TRUE))
+    error = abs(true_node.positions[int(Graha.RAHU)].longitude
+                - printed["Rahu"]) * 60
+    assert error > 90.0
+
+
+def test_charts_40_and_41_share_a_birthplace():
+    """Same coordinates, twenty-five years apart. Worth pinning because the
+    two are the chapter's pair of Saturn-exception charts and a transposed
+    place would quietly break one of them.
+    """
+    from hora.charts.book import chart
+
+    assert chart(40)["place"] == chart(41)["place"]
+    assert chart(40)["birth_data"]["year"] - chart(41)["birth_data"][
+        "year"] == 25
+
+
+def test_example_88s_rudra_is_saturn_by_conjunctions():
+    """"The 8th lords from Ge and Sg are Saturn and Moon. Saturn is stronger
+    and becomes Rudra. Trishoola is in Ta, Vi and Cp."
+
+    Gemini and Sagittarius are both odd, so Table 32 and the ordinary count
+    agree again and OI-134 stays untouched. Saturn wins on cascade step 1 with
+    two companions in Capricorn against the Moon's one in Aries.
+    """
+    from hora.charts.maraka import ordinary_eighth, rudra, rudra_eighth
+
+    for sign in (R["Gemini"], R["Sagittarius"]):
+        assert rudra_eighth(sign) == ordinary_eighth(sign)
+    assert rudra_eighth(R["Gemini"]) == R["Capricorn"]
+    assert rudra_eighth(R["Sagittarius"]) == R["Cancer"]
+
+    longitudes, signs, lagna_sign = _chart_41()
+    assert lagna_sign == R["Gemini"]
+    body = rudra(lagna_sign, signs, longitudes)
+
+    assert body["candidates"] == ["Saturn", "Moon"]
+    assert body["rudra"] == "Saturn"
+    assert body["rudra_rasi"] == "Capricorn"
+    assert body["decided_by"] == 1
+    assert "Saturn conjoins 2 planets" in body["why"]
+    assert {t["rasi"] for t in body["trishoola"]} == {
+        "Capricorn", "Taurus", "Virgo"}
+
+
+def test_the_eighth_house_wins_the_seed_for_the_first_time():
+    """"The 8th house is stronger than the 2nd house and it starts dasas."
+
+    §15.5.2 rule 1 for the fifth time in the chapter, and the first time the
+    8th takes it — Capricorn holds three planets and Cancer none. The chapter
+    has now seeded from both halves of its own pair.
+    """
+    from hora.charts.rasi_strength import stronger
+
+    longitudes, _signs, lagna_sign = _chart_41()
+    verdict = stronger((lagna_sign + 1) % 12, (lagna_sign + 7) % 12,
+                       longitudes, purpose="phalita")
+
+    assert verdict.winner == R["Capricorn"]
+    assert verdict.decided_by == "1"
+    assert "Capricorn contains 3 planets" in verdict.reason
+
+
+def test_the_saturn_exception_fires_a_second_time():
+    """"As Cp is an even rasi, dasas normally go as Cp, Sg, Sc etc. Here they
+    go as Cp, Aq, Pi, Ar etc, due to Saturn's presence in Cp."
+
+    The second chart to run it, and the second time the module's plain output
+    is the sequence the example calls normal before overriding it.
+    """
+    from hora.dasha.rasi.niryaana_shoola import progression
+
+    plain = progression(R["Capricorn"])
+    assert plain.direction == "backward"
+    assert [ABBR[s] for s in plain.signs[:3]] == ["Cp", "Sg", "Sc"]
+
+    got = _chart_41_run()
+    assert got.direction == "forward"
+    assert got.exception == "Saturn"
+    assert [ABBR[s] for s in got.signs[:4]] == ["Cp", "Aq", "Pi", "Ar"]
+
+
+def test_saturn_shares_the_seed_here_where_he_had_it_alone_on_chart_40():
+    """Chart 40's Scorpio held Saturn only; Chart 41's Capricorn holds him
+    with Jupiter and Venus. The exception reads his presence, not his
+    solitude, and the pair of charts shows it.
+    """
+    from hora.core.const import Graha
+
+    _longitudes, signs, _lagna = _chart_41()
+    occupants = {g for g, sign in signs.items() if sign == R["Capricorn"]}
+    assert occupants == {int(Graha.JUPITER), int(Graha.VENUS),
+                         int(Graha.SATURN)}
+    assert _chart_41_run().exception == "Saturn"
+
+
+def test_virgo_dasa_starts_after_63_years_and_holds_the_death():
+    """"We can see that Vi dasa starts after 63 years (7+8+9+7+8+9+7+8). So Vi
+    dasa runs during March 1965-March 1974."
+
+    Born March 1902, died 1967 at 65 — inside it.
+    """
+    from hora.charts.book import chart
+
+    born = chart(41)["birth_data"]
+    assert (born["year"], born["month"]) == (1902, 3)
+
+    got = _chart_41_run()
+    assert [ABBR[s] for s in got.signs[:9]] == EX88_ORDER
+
+    index = got.signs.index(R["Virgo"])
+    assert sum(got.years[:index]) == 63 == 7 + 8 + 9 + 7 + 8 + 9 + 7 + 8
+    assert got.starts[index] == 63
+    assert got.years[index] == 9
+    assert born["year"] + 63 == 1965
+    assert born["year"] + 63 + 9 == 1974
+    assert got.starts[index] <= 65 < got.starts[index] + got.years[index]
+
+    # Vi is one of the three spikes, which is the whole of the example's claim.
+    assert R["Virgo"] in (R["Capricorn"], R["Taurus"], R["Virgo"])
+
+
+def test_footnote_61s_thumbrule_holds_for_every_block_of_three():
+    """"The sum of the first 3 dasas is always 24 years (7+8+9). The sum of
+    the next 3 dasas is also 24 years."
+
+    It holds because any three **consecutive** rasis are one movable, one
+    fixed and one dual, in either direction — so the block is 7+8+9 whatever
+    the seed is and whichever way the Saturn exception sends the run.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.niryaana_shoola import (
+        CONSECUTIVE_TRIPLE_YEARS,
+        THUMBRULE_FOOTNOTE_61,
+        progression,
+    )
+
+    assert CONSECUTIVE_TRIPLE_YEARS == 24 == 7 + 8 + 9
+    assert "always 24 years" in THUMBRULE_FOOTNOTE_61
+
+    for seed in range(12):
+        for occupants in (None, {int(Graha.SATURN)}):
+            got = progression(seed, occupants)
+            for start in range(10):
+                assert sum(got.years[start:start + 3]) == 24, (seed, start)
+
+
+def test_the_thumbrule_is_why_the_cycle_is_96_years():
+    """Four blocks of three, each 24. Stated here because the two constants
+    are otherwise two unrelated facts.
+    """
+    from hora.core.const import MODALITY_NAMES, RASI_MODALITY
+    from hora.dasha.rasi.niryaana_shoola import (
+        CONSECUTIVE_TRIPLE_YEARS,
+        cycle_years,
+    )
+
+    assert cycle_years() == 4 * CONSECUTIVE_TRIPLE_YEARS == 96
+
+    for start in range(12):
+        block = {str(MODALITY_NAMES[RASI_MODALITY[(start + n) % 12]])
+                 for n in range(3)}
+        assert block == {"chara", "sthira", "dwiswabhava"}
+
+
+def test_chart_41_is_the_first_with_two_trishoolas_in_one_range():
+    """OI-133, which Example 84's "only" left open. Capricorn 0-7, Taurus
+    31-39 and Virgo 63-72: a short life catches Capricorn *and* Taurus, and a
+    middle life catches Taurus *and* Virgo. The loose reading selects neither.
+    """
+    from hora.charts.maraka import rudra
+    from hora.dasha.rasi.niryaana_shoola import select_trishoola
+
+    longitudes, signs, lagna_sign = _chart_41()
+    rudra_sign = rudra(lagna_sign, signs, longitudes)["rudra_sign"]
+    run = _chart_41_run()
+
+    spans = {row["rasi"]: (row["starts"], row["ends"])
+             for row in select_trishoola(rudra_sign, run, "short")[
+                 "trishoolas"]}
+    assert spans == {"Capricorn": (0, 7), "Taurus": (31, 39),
+                     "Virgo": (63, 72)}
+
+    for category, both in (("short", {"Capricorn", "Taurus"}),
+                           ("middle", {"Taurus", "Virgo"})):
+        got = select_trishoola(rudra_sign, run, category)
+        assert {r["rasi"] for r in got["trishoolas"] if r["in_range"]} == both
+        assert got["selected"] is None
+        assert "2 of the three" in got["undecided"]
+
+
+def test_reading_the_range_strictly_resolves_every_such_case():
+    """OI-133's candidate fix. "Comes in the range" read as falling **wholly**
+    inside it leaves exactly one in 396 of the 432 combinations and never two,
+    where the loose reading leaves two on 72 of them. On Chart 41 it picks
+    Virgo 63-72 out of a middle life — the dasa that killed at 65.
+
+    Reported beside the loose reading, not substituted for it: no example
+    tests a Trishoola dasa straddling a boundary.
+    """
+    from collections import Counter
+
+    from hora.charts.maraka import rudra
+    from hora.dasha.rasi.niryaana_shoola import progression, select_trishoola
+
+    longitudes, signs, lagna_sign = _chart_41()
+    rudra_sign = rudra(lagna_sign, signs, longitudes)["rudra_sign"]
+    middle = select_trishoola(rudra_sign, _chart_41_run(), "middle")
+    assert middle["selected"] is None
+    assert middle["selected_wholly_in_range"]["rasi"] == "Virgo"
+    assert middle["selected_wholly_in_range"]["starts"] == 63
+
+    loose, strict = Counter(), Counter()
+    for seed in range(12):
+        run = progression(seed)
+        for rudra_rasi in range(12):
+            for category in ("short", "middle", "long"):
+                rows = select_trishoola(rudra_rasi, run, category)[
+                    "trishoolas"]
+                loose[sum(r["in_range"] for r in rows)] += 1
+                strict[sum(r["wholly_in_range"] for r in rows)] += 1
+
+    assert dict(loose) == {1: 324, 2: 72, 0: 36}
+    assert dict(strict) == {1: 396, 0: 36}
+
+
+def test_all_four_worked_trishoolas_are_wholly_inside_their_range():
+    """Which is why the strict reading costs nothing: every Trishoola the book
+    names sits entirely within its category's years.
+    """
+    from hora.dasha.rasi.niryaana_shoola import progression, select_trishoola
+
+    cases = [
+        (R["Gemini"], progression(R["Sagittarius"]), "middle", "Gemini"),
+        (R["Leo"], progression(R["Virgo"]), "middle", "Aries"),
+        (R["Capricorn"], progression(R["Scorpio"],
+                                     _chart_40_seed_occupants()), "short",
+         "Capricorn"),
+    ]
+    for rudra_sign, run, category, expected in cases:
+        got = select_trishoola(rudra_sign, run, category)
+        assert got["selected"]["rasi"] == expected
+        assert got["selected_wholly_in_range"] == got["selected"]

@@ -273,6 +273,13 @@
         "number": 40,
         "recomputable": true,
         "title": "A male \u2014 Niryaana Shoola dasa, the Saturn exception"
+      },
+      {
+        "birth": "March 14, 1902, 11:48 am (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 22, Example 88",
+        "number": 41,
+        "recomputable": true,
+        "title": "A gentleman \u2014 Niryaana Shoola dasa"
       }
     ],
     "not_supplied": [
@@ -312,7 +319,8 @@
       37,
       38,
       39,
-      40
+      40,
+      41
     ]
   },
   "status": 200

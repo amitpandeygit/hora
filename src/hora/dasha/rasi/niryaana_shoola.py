@@ -188,6 +188,20 @@ def dasa_years(rasi: int) -> int:
     return MODALITY_YEARS[str(MODALITY_NAMES[RASI_MODALITY[index]])]
 
 
+#: Footnote 61's thumbrule. It holds because any three **consecutive** rasis
+#: are one movable, one fixed and one dual, in either direction — so every
+#: block of three dasas is 7 + 8 + 9 whatever the seed and whatever the
+#: exception does to the direction. Four blocks make the 96-year cycle.
+THUMBRULE_FOOTNOTE_61 = (
+    "One thumbrule that can help in calculating Niryaana Shoola dasa is that "
+    "the sum of the first 3 dasas is always 24 years (7+8+9). The sum of the "
+    "next 3 dasas is also 24 years."
+)
+
+#: The thumbrule's constant.
+CONSECUTIVE_TRIPLE_YEARS = 24
+
+
 def cycle_years() -> int:
     """The whole twelve-dasa cycle, which is the same for every chart.
 
@@ -372,7 +386,10 @@ THE_TRISHOOLA_IS_THE_ONE_WHOSE_DASA_IS_IN_RANGE = (
 #: **Gap.** Example 84's "only" is doing work its rule does not guarantee. The
 #: three Trishoolas are four rasis apart, so in a run averaging eight years
 #: each their dasas are about thirty-two years apart, and every longevity range
-#: is thirty-six years wide. Two can land in one range. See OI-133.
+#: is thirty-six years wide. Two can land in one range — Chart 41 is the first
+#: to do it. Reading "comes in the range" as *wholly* inside it removes every
+#: such case and keeps all four worked examples, which is reported beside the
+#: loose reading rather than substituted for it. See OI-133.
 MORE_THAN_ONE_TRISHOOLA_CAN_FALL_IN_RANGE = (
     "Example 84 selects the Trishoola whose dasa falls in the longevity range "
     "and its chart had exactly one. The three Trishoolas are trines, so their "
@@ -566,11 +583,18 @@ def select_trishoola(rudra_sign: int, run: Progression,
 
     qualifying = [row for row in rows if row["in_range"]]
     chosen = qualifying[0] if len(qualifying) == 1 else None
+    wholly = [row for row in rows if row["wholly_in_range"]]
+    chosen_wholly = wholly[0] if len(wholly) == 1 else None
     return {
         "longevity": longevity,
         "range": (low, high),
         "trishoolas": tuple(rows),
         "selected": chosen,
+        #: The same choice read strictly — the dasa that falls **wholly**
+        #: inside the range. It agrees with every worked example and never
+        #: leaves two, where the loose reading leaves two on 72 of 432
+        #: combinations. Reported, not adopted: see OI-133.
+        "selected_wholly_in_range": chosen_wholly,
         "undecided": (
             None if chosen is not None else
             (f"{len(qualifying)} of the three Trishoolas have their dasa in "

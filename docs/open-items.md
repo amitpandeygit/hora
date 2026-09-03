@@ -18,7 +18,7 @@ implemented. Do not act on these, and do not re-raise them each session.
 | OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
-| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Twelve** charts now reproduce with mean and none with true; under `true` Chart 39's Rahu is **96'** out and Chart 24's **79'**, both a whole sign wrong |
+| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Fourteen** charts reproduce with mean and none with true; under `true` Chart 41's Rahu is **98'** out and Chart 39's **96'**, both a whole sign wrong |
 
 Listed in the order I would take them: OI-39 is the only unambiguous defect and
 the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
@@ -706,12 +706,18 @@ apart in a ninety-six year cycle while every range is thirty-six years wide.
 Over all 432 (seed, Rudra, category) combinations: **324 give one, 72 give
 two, 36 give none**.
 
-**What we do:** `select_trishoola` returns all three with their spans, selects
-only when exactly one qualifies, and says how many did otherwise. Rule 3's
-Rudra fallback covers the none case; nothing covers two.
+**Chart 41 is the first to do it**, and it suggests the fix. Reading "comes in
+the range" as falling **wholly** inside it leaves exactly one in 396 of the 432
+and never two, keeps all four worked examples — each selected a Trishoola
+wholly inside — and on Chart 41 picks Virgo 63-72 out of a middle life, the
+dasa that killed at 65.
 
-**Closes when:** an example has two Trishoolas in range, or a later section
-gives a tiebreak.
+**What we do:** `select_trishoola` selects on the loose reading and reports
+`selected_wholly_in_range` beside it. Not substituted: it is a reading, and no
+example tests a straddling dasa. **NEEDS YOU.**
+
+**Closes when:** you adopt the strict reading, or an example has a Trishoola
+dasa straddling a range boundary.
 
 ### OI-131 — §22.2.1's seed needs a comparison §15.5.2 will not make
 
@@ -1529,14 +1535,13 @@ both examples anyway.
 **Closes when:** an example applies step 3 where the counts differ, or JHora's
 argala output settles it.
 
-### OI-68 — Twelve charts all need the **mean** node; our default is `true`
+### OI-68 — Fourteen charts all need the **mean** node; our default is `true`
 
-Twelve charts print their own birth data, so all twelve can be recomputed
-rather than transcribed. All twelve reproduce every **graha** to within one
-arcminute — **only with the mean node**. Charts 13, 24, 25, 26, 37, 38 and 39
-are the sixth to twelfth; under `true`, **Chart 39's Rahu is 96' out**, the
-widest in the register, Chart 24's is 79' — both in a different sign from the
-drawn one — Chart 38's 66', Chart 37's 57' and Chart 25's 41'.
+Fourteen charts print their own birth data, so all can be recomputed rather
+than transcribed. All fourteen reproduce every **graha** to within one
+arcminute — **only with the mean node**. Charts 13 and 24 to 41 are the sixth
+to fourteenth; under `true` Chart 41's Rahu is **98'** out, Chart 39's 96' and
+Chart 24's 79' — all three a whole sign wrong — then 67', 66', 57' and 41'.
 
 | Chart | Rahu, mean | Rahu, true | printed |
 |---|---|---|---|
@@ -1550,17 +1555,15 @@ Thirty-nine, twelve, fifty-six, **seventy-seven** and nine arcminutes out under
 `true` for the five tabled. Every other body lands within one arcminute — the
 book's display rounding — except Chart 3's ascendant at 5.5' and Chart 39's at
 8.6', which are their birth minutes being rounded, not a node question. Chart 8
-separates nothing, and Chart 3's margin is the narrowest. The thirteen span 1542
-to 1971 and both hemispheres, and Chart 10 predates the Gregorian reform, so
-the agreement is not an artefact of one era or setup.
-This is the only hard evidence in the project about which convention the book
-uses, and it points against our default. Chart 1 cannot settle it: its JHora
+separates nothing. The fourteen span 1542 to 1971 and both hemispheres, and
+Chart 10 predates the Gregorian reform, so the agreement is not an artefact of
+one era or setup, and it points against our default. Chart 1 cannot settle it: its JHora
 output is still the empty stub of OI-1.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
 endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by the
-mean-node tests over charts 3, 6, 7, 10, 12, 13, 24, 25, 26, 37, 38, 39 and
-40 — grep
+mean-node tests over charts 3, 6, 7, 10, 12, 13, 24, 25, 26, 37, 38, 39, 40
+and 41 — grep
 `mean_node` — which assert the failure in both directions so it is not lost.
 
 **Closes when:** you decide, or a JHora run of Chart 1 settles it.
