@@ -1141,3 +1141,281 @@ def test_example_92s_dasa_survives_the_selection_machinery():
     assert gemini["starts"] == 18
     assert got["trines_from_al"] == () or "Gemini" not in [
         c["rasi"] for c in got["trines_from_al"]]
+
+
+# --------------------------------------------------------------------------
+# Footnote 62, which belongs to Example 92 and states a general rule.
+# --------------------------------------------------------------------------
+
+def test_footnote_62_names_three_uses_of_table_32s_eighth():
+    """"The 8th house for the purpose of Rudra, the principle of 3 pairs and
+    ayur dasa interpretation should be found from Table 32."
+
+    Two of the three we already had: §14.3 says it for Rudra outright and
+    §14.4's first pair takes it. The third is what Example 92 applies.
+    """
+    from hora.charts.maraka import three_pairs
+    from hora.core.constants.maraka import RUDRA_RULE, THREE_PAIRS
+    from hora.dasha.rasi.shoola import FOOTNOTE_62
+
+    assert "Rudra, the principle of 3 pairs and ayur dasa" in FOOTNOTE_62
+    assert "using Table 32" in RUDRA_RULE
+    assert "using Table 32" in THREE_PAIRS[0][1]
+
+    _longitudes, signs, lagna_sign, _al = _chart(43)
+    from hora.charts.book import signs as book_signs
+    got = three_pairs(lagna_sign, signs, book_signs(43)["HL"])
+    assert got["eighth_house"]["by"] == "Table 32"
+
+
+def test_footnote_62_does_not_reach_chapter_22s_antardasa_houses():
+    """Its third clause has a boundary and §22.2.2 draws it: "the 6th, 7th,
+    8th and 12th houses from Ta (i.e. Li, Sc, **Sg** and Ar)". Sagittarius is
+    the ordinary 8th from Taurus; Table 32 gives Gemini. So the footnote
+    governs an 8th read off a *reference point* — Rudra's, the three pairs',
+    AL's — not one counted from a dasa rasi.
+    """
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+    from hora.core.const import Graha
+    from hora.dasha.rasi.niryaana_shoola import (
+        ANTARDASA_EXAMPLE,
+        antardasa_candidates,
+    )
+    from hora.dasha.rasi.shoola import (
+        FOOTNOTE_62_DOES_NOT_REACH_22_2_2S_ANTARDASAS,
+    )
+
+    assert ordinary_eighth(R["Taurus"]) == R["Sagittarius"]
+    assert rudra_eighth(R["Taurus"]) == R["Gemini"]
+    assert "Li, Sc, Sg and Ar" in ANTARDASA_EXAMPLE
+
+    got = antardasa_candidates(R["Taurus"], {int(Graha.JUPITER): R["Leo"]})
+    assert got["eighth_name"] == "Sagittarius"
+    assert "ordinary 8th" in FOOTNOTE_62_DOES_NOT_REACH_22_2_2S_ANTARDASAS
+
+
+# --------------------------------------------------------------------------
+# Exercise 32 — Chart 43, solved before the book's answer.
+# --------------------------------------------------------------------------
+
+def test_chart_43_recomputes_and_is_a_sixteenth_vote_for_the_mean_node():
+    """Every body inside one arcminute — Jupiter at 1.00' is the book's own
+    rounding, as Chart 42's Sun was — and the ascendant to two seconds of arc.
+    Rahu is 86' out under `true`. The first chart since Chart 12 born west of
+    the Atlantic.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(43)
+    place = Place(name="Chart 43", **record["place"])
+    printed = longitudes(43)
+    assert record["birth_data"]["utc_offset_hours"] == -5.0
+
+    computed = compute_chart(from_local(**record["birth_data"]), place,
+                             Settings(node_type=NodeType.MEAN))
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.01, f"{name}: {error:.2f}'"
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 0.1
+
+    true_node = compute_chart(from_local(**record["birth_data"]), place,
+                              Settings(node_type=NodeType.TRUE))
+    assert abs(true_node.positions[int(Graha.RAHU)].longitude
+               - printed["Rahu"]) * 60 > 80.0
+
+
+def test_exercise_32_step_1_the_three_pairs_give_long_life():
+    """"Using the method of three pairs, estimate whether he has short or
+    middle or long life."
+
+    Lagna lord Venus and the 8th lord — Table 32 sends Libra to Taurus, whose
+    lord is also Venus — are both in Sagittarius, dual and dual, so middle.
+    Moon in fixed Aquarius with Saturn in dual Gemini gives long, and lagna
+    with HL, both movable, gives long. Two long dominate.
+    """
+    from hora.charts.book import signs as book_signs
+    from hora.charts.maraka import rudra_eighth, three_pairs
+
+    _longitudes, signs, lagna_sign, _al = _chart(43)
+    assert lagna_sign == R["Libra"]
+    assert rudra_eighth(R["Libra"]) == R["Taurus"]
+
+    got = three_pairs(lagna_sign, signs, book_signs(43)["HL"])
+    assert [p["category"] for p in got["pairs"]] == ["middle", "long", "long"]
+    assert got["category"] == "long"
+    assert tuple(got["range_years"]) == (72, 108)
+    assert got["eighth_house"]["lord_used"] == "Venus"
+
+
+def test_exercise_32_step_2_the_seventh_house_wins_the_seed():
+    """Rule 1 ties — both Libra and Aries are empty — and rule 2 decides three
+    to one: Jupiter reaches both from Aquarius, but Mercury reaches only
+    Aries, and Aries' lord Mars aspects it from Leo while Libra's lord Venus
+    does not reach Libra from Sagittarius.
+
+    The second seed in the two chapters to go to the 7th, after Example 91,
+    and the first that can be computed.
+    """
+    from hora.charts.rasi_strength import stronger
+    from hora.dasha.rasi.shoola import progression
+
+    longitudes, _signs, lagna_sign, _al = _chart(43)
+    verdict = stronger(lagna_sign, (lagna_sign + 6) % 12, longitudes,
+                       purpose="phalita")
+
+    assert verdict.rules[0].winner is None
+    assert verdict.winner == R["Aries"]
+    assert verdict.decided_by == "2"
+    assert "Libra count 1" in verdict.reason
+    assert "Aries count 3" in verdict.reason
+
+    run = progression(R["Aries"])
+    assert [ABBR[s] for s in run.signs[:4]] == ["Ar", "Ta", "Ge", "Cn"]
+
+
+def test_exercise_32_step_3_the_four_dasas_of_the_long_range():
+    """"Identify the four dasas in the estimated longevity range."
+
+    From Aries, positions 8 to 11 are Sagittarius, Capricorn, Aquarius and
+    Pisces, running 72-81, 81-90, 90-99 and 99-108.
+    """
+    from hora.dasha.rasi.shoola import longevity_block, progression
+
+    run = progression(R["Aries"])
+    block = longevity_block("long")
+    spans = [(ABBR[run.signs[p]], run.starts[p], run.starts[p] + 9)
+             for p in block["positions"]]
+    assert spans == [("Sg", 72, 81), ("Cp", 81, 90), ("Aq", 90, 99),
+                     ("Pi", 99, 108)]
+
+
+def test_exercise_32_step_4_two_of_the_four_are_reachable():
+    """"Consider the trines from AL and the 3rd and 8th houses (using Table
+    32)."
+
+    AL is Aquarius, so its trines are Aq, Ge and Li; the 3rd is Aries and
+    Table 32's 8th is Capricorn, where Rahu sits. Of the four long-life dasas
+    only **Aquarius** and **Capricorn** are reached, so the exercise leaves a
+    genuine choice.
+    """
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import select_dasa
+
+    _longitudes, signs, lagna_sign, al = _chart(43)
+    assert al == R["Aquarius"]
+    assert rudra_eighth(al) == R["Capricorn"]
+    assert ordinary_eighth(al) == R["Virgo"]
+    assert signs[int(Graha.RAHU)] == R["Capricorn"]
+
+    got = select_dasa(al, R["Aries"], "long", signs, lagna=lagna_sign)
+    reachable = [c["rasi"] for c in got["can_kill"]]
+    assert reachable == ["Capricorn", "Aquarius"]
+    assert [c["rasi"] for c in got["trines_from_al"]] == ["Aquarius"]
+    assert got["selected"]["rasi"] == "Aquarius"     # before criterion 1
+
+
+def test_exercise_32_step_5_criterion_1_is_finally_needed():
+    """"Think hard and choose the dasa that must have given death."
+
+    This is the first chart in either chapter where §23.3's criterion 1 has
+    work to do. The AK **is** Jupiter here, so its two shields are one planet,
+    and that planet occupies Aquarius — which criterion 1 says usually does
+    not kill. It is not Rudra (Venus is), so the exception does not rescue it.
+    Capricorn is reached by neither shield.
+
+    Our answer: **Capricorn**, the 8th from AL by Table 32, holding Rahu.
+    """
+    from hora.charts.book import GRAHA_OF, chart, graha_longitudes
+    from hora.charts.maraka import rudra
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import protected_by
+
+    _longitudes, signs, lagna_sign, _al = _chart(43)
+    longitudes = {int(g): lon for g, lon in graha_longitudes(43).items()}
+    karakas = chart(43)["chara_karakas"]
+    ak = int(GRAHA_OF[next(n for n, r in karakas.items() if r == "AK")])
+    assert ak == int(Graha.JUPITER)
+
+    body = rudra(lagna_sign, signs, longitudes)
+    assert body["rudra"] == "Venus"
+    assert body["rudra_rasi"] == "Sagittarius"
+
+    aquarius = protected_by(R["Aquarius"], signs, ak, rudra=int(Graha.VENUS))
+    assert aquarius["protected"]
+    assert {s["how"] for s in aquarius["shields"]} == {"occupies"}
+    assert aquarius["rudra_cancels"] == ()
+
+    capricorn = protected_by(R["Capricorn"], signs, ak, rudra=int(Graha.VENUS))
+    assert not capricorn["protected"]
+    assert capricorn["shields"] == ()
+
+
+def test_exercise_32_the_demoted_trishoola_rule_points_elsewhere():
+    """Rudra is Venus in Sagittarius, so the Trishoolas are Sg, Ar and Le —
+    and **Sagittarius** is in the long-life block, at 72-81. §23.3 demoted
+    that reading for Shoola dasa, and it reaches none of the AL rules, so the
+    two readings disagree on this chart and the section says which wins.
+    """
+    from hora.charts.book import graha_longitudes
+    from hora.charts.maraka import rudra
+    from hora.dasha.rasi.shoola import (
+        TRISHOOLA_IS_LESS_SIGNIFICANT_HERE,
+        death_rasis,
+    )
+
+    _longitudes, signs, lagna_sign, al = _chart(43)
+    longitudes = {int(g): lon for g, lon in graha_longitudes(43).items()}
+    body = rudra(lagna_sign, signs, longitudes)
+    spikes = {t["rasi"] for t in body["trishoola"]}
+    assert spikes == {"Sagittarius", "Aries", "Leo"}
+
+    reached = {row["rasi"] for row in death_rasis(al, signs, lagna=lagna_sign)}
+    assert "Sagittarius" not in reached
+    assert "less significant" in TRISHOOLA_IS_LESS_SIGNIFICANT_HERE
+
+
+def test_exercise_32_our_answer_with_its_dates():
+    """Capricorn dasa, 11 December 1996 to 11 December 2005 on the 365.25-day
+    year Exercise 31 fixed. Recorded whole so the book's answer can be checked
+    against it line by line.
+    """
+    import swisseph as swe
+
+    from hora.charts.book import chart
+    from hora.core.timeutil import from_local
+    from hora.dasha.rasi.shoola import dasa_periods
+
+    record = chart(43)
+    birth = from_local(**record["birth_data"])
+    offset = record["birth_data"]["utc_offset_hours"] / 24.0
+
+    def local(jd):
+        year, month, day, _hour = swe.revjul(jd + offset)
+        return (int(year), int(month), int(day))
+
+    rows = {row["rasi"]: row
+            for row in dasa_periods(R["Aries"], birth.jd_ut)}
+    capricorn = rows["Capricorn"]
+    assert capricorn["position"] == 9
+    assert local(capricorn["start_jd"]) == (1996, 12, 11)
+    assert local(capricorn["end_jd"]) == (2005, 12, 11)
+
+    answer = {
+        "longevity": ("long", (72, 108)),
+        "seed": ("Aries", "the 7th house, by §15.5.2 rule 2"),
+        "four_dasas": ("Sagittarius", "Capricorn", "Aquarius", "Pisces"),
+        "reachable": ("Capricorn", "Aquarius"),
+        "chosen": "Capricorn",
+        "why": ("the 8th from AL by Table 32, holding Rahu; Aquarius is a "
+                "trine from AL but is occupied by the AK Jupiter, which "
+                "criterion 1 shields and which is not Rudra"),
+        "dates": ("11 December 1996", "11 December 2005"),
+    }
+    assert answer["chosen"] in answer["reachable"]
+    assert answer["chosen"] in answer["four_dasas"]

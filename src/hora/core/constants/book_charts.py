@@ -430,6 +430,39 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    43: {
+        "title": "Shoola dasa exercise — Exercise 32",
+        "birth": "December 12, 1915, 3:19 am (5:00 West), 74 W 02, 40 N 45",
+        "birth_data": {
+            "year": 1915, "month": 12, "day": 12, "hour": 3, "minute": 19,
+            "second": 0.0, "utc_offset_hours": -5.0,
+        },
+        "place": {"latitude": 40 + 45 / 60, "longitude": -(74 + 2 / 60)},
+        "longitudes": {
+            "Asc": "9 Li 25", "Sun": "26 Sc 33", "Moon": "12 Aq 36",
+            "Mars": "4 Le 53", "Merc": "24 Sc 30", "Jup": "27 Aq 11",
+            "Ven": "19 Sg 15", "Sat": "22 Ge 10", "Rahu": "18 Cp 06",
+            "Ketu": "18 Cn 06", "HL": "29 Cn 46", "GL": "5 Aq 53",
+        },
+        "chara_karakas": {
+            "Jup": "AK", "Sun": "AmK", "Merc": "BK", "Sat": "MK",
+            "Ven": "PiK", "Moon": "PK", "Rahu": "GK", "Mars": "DK",
+        },
+        "retrograde": ("Sat",),
+        "drawn": {
+            "Sat": "Ge", "Jup": "Aq", "Moon": "Aq", "AL": "Aq", "GL": "Aq",
+            "HL": "Cn", "Ketu": "Cn", "Rahu": "Cp", "Mars": "Le",
+            "Ven": "Sg", "Merc": "Sc", "Sun": "Sc", "Asc": "Li",
+        },
+        "first_seen": "chapter 23, Exercise 32",
+        "note": (
+            "Printed without a name or a death date -- the exercise asks the "
+            "reader to estimate the longevity category, list the four dasas "
+            "of that range and choose the one that killed. The only chart in "
+            "the register born west of the Atlantic with a 5-hour offset "
+            "since Chart 12."
+        ),
+    },
     42: {
         "title": "Niryaana Shoola Exercise — Exercise 31",
         "birth": "April 20, 1889, 6:30 pm (1:00 East), 13 E 02, 48 N 15",

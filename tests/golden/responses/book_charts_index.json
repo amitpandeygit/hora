@@ -287,6 +287,13 @@
         "number": 42,
         "recomputable": true,
         "title": "Niryaana Shoola Exercise \u2014 Exercise 31"
+      },
+      {
+        "birth": "December 12, 1915, 3:19 am (5:00 West), 74 W 02, 40 N 45",
+        "first_seen": "chapter 23, Exercise 32",
+        "number": 43,
+        "recomputable": true,
+        "title": "Shoola dasa exercise \u2014 Exercise 32"
       }
     ],
     "not_supplied": [
@@ -328,7 +335,8 @@
       39,
       40,
       41,
-      42
+      42,
+      43
     ]
   },
   "status": 200

@@ -18,7 +18,7 @@ implemented. Do not act on these, and do not re-raise them each session.
 | OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
-| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Fifteen** charts reproduce with mean and none with true; under `true` Chart 41's Rahu is **98'** out and Chart 39's **96'**, both a whole sign wrong |
+| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Sixteen** charts reproduce with mean and none with true; under `true` Chart 41's Rahu is **98'** out and Chart 39's **96'**, both a whole sign wrong |
 
 Listed in the order I would take them: OI-39 is the only unambiguous defect and
 the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
@@ -1595,12 +1595,12 @@ both examples anyway.
 **Closes when:** an example applies step 3 where the counts differ, or JHora's
 argala output settles it.
 
-### OI-68 — Fifteen charts all need the **mean** node; our default is `true`
+### OI-68 — Sixteen charts all need the **mean** node; our default is `true`
 
-Fifteen charts print their own birth data, so all can be recomputed rather
-than transcribed. All fifteen reproduce every **graha** to within one arcminute
+Sixteen charts print their own birth data, so all can be recomputed rather
+than transcribed. All sixteen reproduce every **graha** to within one arcminute
 — **only with the mean node**, Chart 42's Sun at 1.02' aside. Charts 13 and 24
-to 42 are the sixth to fifteenth; under `true` Chart 41's Rahu is **98'** out, Chart 39's 96' and
+to 43 are the sixth to sixteenth; under `true` Chart 41's Rahu is **98'** out, Chart 39's 96' and
 Chart 24's 79' — all three a whole sign wrong — then 67', 66', 57' and 41'.
 
 | Chart | Rahu, mean | Rahu, true | printed |
@@ -1615,14 +1615,14 @@ Thirty-nine, twelve, fifty-six, **seventy-seven** and nine arcminutes out under
 `true` for the five tabled. Every other body lands within one arcminute — the
 book's display rounding — except Chart 3's ascendant at 5.5' and Chart 39's at
 8.6', which are their birth minutes being rounded, not a node question. Chart 8
-separates nothing. The fifteen span 1542 to 1971 and both hemispheres, and
+separates nothing. The sixteen span 1542 to 1971 and both hemispheres, and
 Chart 10 predates the Gregorian reform, so the agreement is not an artefact of
 one era or setup, and it points against our default. Chart 1 cannot settle it: its JHora
 output is still the empty stub of OI-1.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
 endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by the
-mean-node tests over charts 3, 6, 7, 10, 12, 13, 24 to 26 and 37 to 42 —
+mean-node tests over charts 3, 6, 7, 10, 12, 13, 24 to 26 and 37 to 43 —
 grep
 `mean_node` — which assert the failure in both directions so it is not lost.
 

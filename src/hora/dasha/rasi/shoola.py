@@ -404,6 +404,27 @@ THE_EIGHTH_FROM_AL_IS_TABLE_32S = (
     "contains Rahu."
 )
 
+#: Footnote 62, which turns Example 92's parenthesis into a general rule and
+#: names its three uses.
+FOOTNOTE_62 = (
+    "The 8th house for the purpose of Rudra, the principle of 3 pairs and "
+    "ayur dasa interpretation should be found from Table 32."
+)
+
+#: **Finding.** Footnote 62's third clause has a boundary, and §22.2.2 draws
+#: it itself. "Ayur dasa interpretation" reaches §23.3's 8th from AL, but not
+#: chapter 22's antardasa houses: its own illustration gives "the 6th, 7th,
+#: 8th and 12th houses from Ta" as "Li, Sc, Sg and Ar", and Sagittarius is the
+#: **ordinary** 8th from Taurus where Table 32 gives Gemini. So the footnote
+#: governs an 8th house read as a *reference point* — Rudra's, the three
+#: pairs', AL's — and not one counted off a dasa rasi.
+FOOTNOTE_62_DOES_NOT_REACH_22_2_2S_ANTARDASAS = (
+    "Section 22.2.2's own illustration counts the 8th from Taurus as "
+    "Sagittarius, which is the ordinary 8th; Table 32 gives Gemini for "
+    "Taurus. So footnote 62's \"ayur dasa interpretation\" does not reach the "
+    "antardasa houses counted from a dasa rasi."
+)
+
 #: **Finding.** Example 91 gives a reason §23.3 never lists — a killing rasi
 #: that "contains the lord of AL". §23.3's rules read the trines from AL and
 #: the 3rd and 8th from it; where AL's *lord* sits is a further strengthener
@@ -679,3 +700,23 @@ def select_dasa(arudha_lagna: int, seed_sign: int, longevity: str,
                 f"{RASI_NAMES[run.seed]}, "
                 f"{len(trines)} lie in the trines from {RASI_NAMES[al]}"),
     }
+
+
+def dasa_periods(seed_sign: int, birth_jd: float,
+                 gestation_months: int = HUMAN_GESTATION_MONTHS,
+                 *, year_days: float = 365.25) -> tuple[dict, ...]:
+    """The twelve dasas as julian-day spans rather than ages.
+
+    :param year_days: the dasa year, 365.25 by Exercise 31 — see
+        :data:`hora.dasha.rasi.niryaana_shoola.THE_DASA_YEAR_IS_NOT_THE_CALENDAR_ANNIVERSARY`.
+        No chapter 23 example prints a boundary to the day, so the measure is
+        carried over rather than confirmed here.
+    """
+    run = progression(seed_sign, gestation_months)
+    return tuple({
+        "position": position, "sign": sign, "rasi": str(RASI_NAMES[sign]),
+        "years": run.years[position],
+        "start_jd": birth_jd + start * year_days,
+        "end_jd": birth_jd + (start + run.years[position]) * year_days,
+    } for position, (sign, start) in enumerate(
+        zip(run.signs, run.starts, strict=True)))
