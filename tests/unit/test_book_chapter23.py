@@ -333,3 +333,336 @@ def test_shoola_is_the_only_rasi_dasa_with_no_direction_test():
 
     assert shoola.progression(R["Taurus"]).direction == "forward"
     assert shoola.progression(R["Aries"]).direction == "forward"
+
+
+# --------------------------------------------------------------------------
+# §23.3 Interpretation
+# --------------------------------------------------------------------------
+
+def _chart_42():
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+    from hora.charts.colord import stronger
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(42).items()}
+    signs = {int(g): sign for g, sign in graha_signs(42).items()}
+    lagna_sign = lagna(42)
+    overrides = {r: stronger(r, longitudes, purpose="arudha").winner
+                 for r in (7, 10)}
+    return signs, lagna_sign, arudha_pada(1, lagna_sign, signs,
+                                          overrides).sign
+
+
+def test_the_trishoola_reading_is_carried_then_demoted():
+    """§23.3 opens "like in Niryana Shoola dasa, dasa of a Trishoola rasi can
+    bring death" and a page later says that hit is "less significant" here.
+    Both sentences are the chapter's; the second is the one the Lesson keeps.
+    """
+    from hora.dasha.rasi.shoola import (
+        LESSON,
+        TRISHOOLA_ALSO_APPLIES,
+        TRISHOOLA_IS_LESS_SIGNIFICANT_HERE,
+    )
+
+    assert "can bring death" in TRISHOOLA_ALSO_APPLIES
+    assert "Niryana" in TRISHOOLA_ALSO_APPLIES          # the printed spelling
+    assert "less significant" in TRISHOOLA_IS_LESS_SIGNIFICANT_HERE
+    assert "Trishoola" not in LESSON.split("Shoola dasa is the reverse")[1]
+
+
+def test_the_lesson_states_the_two_systems_against_each_other():
+    """The boxed Lesson, which is the chapter's own summary: praana against
+    Shiva, Rudra's trines against AL's.
+    """
+    from hora.dasha.rasi.shoola import LESSON
+
+    praana, shiva = LESSON.split("Shoola dasa is the reverse.")
+    assert "motion of praana" in praana
+    assert "maraka rasis and the trines from Rudra" in praana
+    assert "motion of Shiva" in shiva
+    assert "trines from AL or the 3rd house from AL or the 8th house" in shiva
+    assert "primarily" in shiva                        # the hedge is kept
+
+
+def test_rudra_yoga_arises_exactly_when_the_moon_is_in_a_movable_rasi():
+    """"Because the 2nd and 8th rasis in the natural zodiac are owned by Mars
+    and Venus, rasi aspect on either of them by Moon generates Rudra yoga."
+
+    Taurus and Scorpio are fixed, so what aspects them is movable — and every
+    movable rasi reaches at least one. The section never says this; it falls
+    out of the rule.
+    """
+    from hora.core.const import MODALITY_NAMES, RASI_MODALITY
+    from hora.dasha.rasi.shoola import (
+        RUDRA_YOGA_IS_A_MOON_IN_A_MOVABLE_RASI,
+        rudra_yoga,
+    )
+
+    movable = {s for s in range(12)
+               if str(MODALITY_NAMES[RASI_MODALITY[s]]) == "chara"}
+    assert movable == {R["Aries"], R["Cancer"], R["Libra"], R["Capricorn"]}
+
+    applies = {s for s in range(12) if rudra_yoga(s)["applies"]}
+    assert applies == movable
+    assert "any movable rasi" in RUDRA_YOGA_IS_A_MOON_IN_A_MOVABLE_RASI
+
+
+@pytest.mark.parametrize("moon,reaches", [
+    ("Ar", ["Scorpio"]),
+    ("Cn", ["Taurus", "Scorpio"]),
+    ("Li", ["Taurus"]),
+    ("Cp", ["Taurus", "Scorpio"]),
+])
+def test_which_of_the_two_natural_houses_each_movable_moon_reaches(moon,
+                                                                   reaches):
+    """Cancer and Capricorn reach both; Aries reaches only Scorpio and Libra
+    only Taurus, each being adjacent to the one it misses.
+    """
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+    from hora.dasha.rasi.shoola import rudra_yoga
+
+    got = rudra_yoga(ABBR.index(moon))
+    assert [row["rasi"] for row in got["reaches"]] == reaches
+    for row in got["reaches"]:
+        assert row["owner"] == str(GRAHA_NAMES[int(RASI_LORD[row["sign"]])])
+    assert {row["owner"] for row in got["reaches"]} <= {"Venus", "Mars"}
+
+
+def test_rudra_yoga_names_no_planets_and_no_aspect():
+    """OI-137. "Rasis aspected by Rudra yoga planets can give death" — but the
+    section never says which planets the yoga is, nor whether their aspect is
+    the rasi one it named for the Moon or graha drishti.
+    """
+    from hora.dasha.rasi.shoola import (
+        RUDRA_YOGA_PLANETS_ARE_NOT_NAMED,
+        RUDRA_YOGA_RULE,
+        rudra_yoga,
+    )
+
+    assert "rasi aspect on either of them by Moon" in RUDRA_YOGA_RULE
+    assert "rasis aspected by Rudra yoga planets" in RUDRA_YOGA_RULE
+
+    fires = rudra_yoga(R["Cancer"])
+    assert fires["undecided"] == RUDRA_YOGA_PLANETS_ARE_NOT_NAMED
+    assert rudra_yoga(R["Taurus"])["undecided"] is None   # it does not arise
+
+
+def test_the_two_rules_are_the_authors_own_and_say_so():
+    """"This author found the following rules to hold true in many cases",
+    then a quotation. Not classical and not attributed to a maharshi — the
+    same shape as §22.2.1's antardasa suggestion.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        ANTARDASAS_ARE_THE_AUTHORS_SUGGESTION,
+    )
+    from hora.dasha.rasi.shoola import AUTHORS_RULES, AUTHORS_RULES_ARE_HIS_OWN
+
+    assert "This author found" in AUTHORS_RULES_ARE_HIS_OWN
+    assert "in many cases" in AUTHORS_RULES_ARE_HIS_OWN
+    assert "This author suggests" in ANTARDASAS_ARE_THE_AUTHORS_SUGGESTION
+    assert "AL or the trines from it" in AUTHORS_RULES
+
+
+def test_the_trines_from_al_are_unconditional_and_the_3rd_and_8th_are_not():
+    """"AL or the trines from it can give death. **If** malefics or marakas
+    occupy or aspect the 3rd from AL or the 8th from AL, those 2 houses can
+    give death."
+
+    Five houses in two groups, and only the second group carries a condition.
+    """
+    from hora.dasha.rasi.shoola import DEATH_HOUSES_FROM_AL, death_rasis
+
+    assert [row["houses"] for row in DEATH_HOUSES_FROM_AL] == [(1, 5, 9),
+                                                              (3, 8)]
+    assert DEATH_HOUSES_FROM_AL[0]["needs"] is None
+    assert "malefics or marakas" in DEATH_HOUSES_FROM_AL[1]["needs"]
+
+    got = death_rasis(R["Cancer"])
+    assert [row["house_from_al"] for row in got] == [1, 5, 9, 3, 8]
+    assert [ABBR[row["sign"]] for row in got] == ["Cn", "Sc", "Pi", "Vi", "Aq"]
+    for row in got[:3]:
+        assert row["applies"] is True
+    for row in got[3:]:
+        assert row["applies"] is None                  # no chart was given
+        assert "no chart given" in row["undecided"]
+
+
+def test_the_condition_reports_both_aspects_because_23_3_names_neither():
+    """§14.2 said "using graha drishti" outright when it meant it; §23.3 says
+    only "occupy or aspect". Occupants, graha drishti and rasi drishti are
+    returned separately and the row says the section does not choose.
+    """
+    from hora.dasha.rasi.shoola import death_rasis
+
+    signs, lagna_sign, al = _chart_42()
+    got = {row["house_from_al"]: row
+           for row in death_rasis(al, signs, lagna=lagna_sign)}
+
+    for house in (3, 8):
+        row = got[house]
+        assert set(row) >= {"occupied_by", "aspected_by_graha_drishti",
+                            "aspected_by_rasi_drishti"}
+        assert row["applies"] is True
+        assert "which aspect" in row["undecided"]
+
+
+def test_marakas_are_not_counted_unless_lagna_is_given():
+    """"Malefics **or marakas**" — and which grahas are marakas depends on
+    lagna, so without it the row says so rather than counting malefics alone
+    and calling the rule satisfied.
+    """
+    from hora.dasha.rasi.shoola import death_rasis
+
+    signs, _lagna, al = _chart_42()
+    without = {row["house_from_al"]: row for row in death_rasis(al, signs)}
+    assert "marakas were not computed" in without[3]["undecided"]
+
+
+def test_al_is_read_instead_of_lagna_and_23_3_says_why():
+    """"AL is involved instead of lagna, because our existence is a maya
+    (illusion) and what Lord Shiva destroys is the illusion of our existence."
+
+    The one place in Part 2 where a rule's *reference* is argued for rather
+    than stated, and it is the reason every reading here counts from AL.
+    """
+    from hora.dasha.rasi.shoola import DEATH_HOUSES_FROM_AL, WHY_AL_AND_NOT_LAGNA
+
+    assert "maya (illusion)" in WHY_AL_AND_NOT_LAGNA
+    assert "physical body (lagna) simply merges" in WHY_AL_AND_NOT_LAGNA
+    assert all("AL" in row["text"] for row in DEATH_HOUSES_FROM_AL)
+
+
+def test_23_3_re_describes_chapter_22s_seed_as_the_8th_from_the_self():
+    """"Lagna and 7th house both show the self of a person... Niryaana Shoola
+    dasa starts from the 8th house from one of them."
+
+    That makes §22.2.1's odd 2nd-and-8th pair chapter 18's lagna-and-7th pair
+    shifted by eight: the 8th from lagna is the 8th house and the 8th from the
+    7th is the 2nd. The two systems seed from the same two points.
+    """
+    from hora.dasha.rasi.niryaana_shoola import seed as niryaana_seed
+    from hora.dasha.rasi.shoola import (
+        NIRYAANA_SEEDS_FROM_THE_EIGHTH_OF_THE_SELF,
+    )
+    from hora.dasha.rasi.shoola import seed as shoola_seed
+
+    assert "8th house from one of them" in (
+        NIRYAANA_SEEDS_FROM_THE_EIGHTH_OF_THE_SELF)
+
+    for lagna in range(12):
+        ours = shoola_seed(lagna)
+        theirs = niryaana_seed(lagna)
+        assert (ours.lagna + 7) % 12 == theirs.eighth
+        assert (ours.seventh + 7) % 12 == theirs.second
+
+
+def test_the_theory_explains_chapter_22s_irregularity_and_this_ones_absence():
+    """"That is why it has an uneven motion... the lengths of dasas can be 7,
+    8 or 9 years... In Shoola dasa, however, the motion has a constant rate of
+    9 years per dasa and the order of dasas is always fixed."
+
+    §23.3 is the only place either chapter says *why* its computation rules
+    look the way they do, and it accounts for both at once.
+    """
+    from hora.dasha.rasi.niryaana_shoola import MODALITY_YEARS
+    from hora.dasha.rasi.shoola import THE_TWO_MOTIONS, cycle_years, dasa_years
+
+    assert "7, 8 or 9 years" in THE_TWO_MOTIONS
+    assert sorted(set(MODALITY_YEARS.values())) == [7, 8, 9]
+    assert "constant rate of 9 years per dasa" in THE_TWO_MOTIONS
+    assert dasa_years() == 9
+    assert "quartz crystal" in THE_TWO_MOTIONS
+    assert cycle_years() == 108
+
+
+def test_criterion_2_limits_the_answer_to_four_dasas():
+    """"The first 4 Shoola dasas (0-36 years) bring death to a person of the
+    short life category", and likewise the middle and last four.
+    """
+    from hora.core.constants.maraka import LONGEVITY_RANGES
+    from hora.dasha.rasi.shoola import ShoolaError, longevity_block
+
+    assert longevity_block("short")["positions"] == (0, 1, 2, 3)
+    assert longevity_block("middle")["positions"] == (4, 5, 6, 7)
+    assert longevity_block("long")["positions"] == (8, 9, 10, 11)
+
+    for category in LONGEVITY_RANGES:
+        got = longevity_block(category)
+        assert tuple(got["range"]) == tuple(LONGEVITY_RANGES[category])
+        assert len(got["positions"]) == 4
+
+    with pytest.raises(ShoolaError, match="longevity must be"):
+        longevity_block("very long")
+
+
+def test_the_blocks_fall_exactly_on_dasa_boundaries_where_chapter_22s_do_not():
+    """Four nines are thirty-six, so 0-36, 36-72 and 72-108 are dasa
+    boundaries and no Shoola dasa straddles a longevity range. Chapter 22's 7,
+    8 and 9 year dasas do straddle them, which is OI-133 — the flat length is
+    what makes criterion 2 exact here.
+    """
+    from hora.dasha.rasi.niryaana_shoola import progression as niryaana_run
+    from hora.dasha.rasi.shoola import (
+        THE_BLOCKS_PARTITION_THE_CYCLE_EXACTLY,
+        longevity_block,
+        progression,
+    )
+
+    run = progression(R["Aries"])
+    for category in ("short", "middle", "long"):
+        block = longevity_block(category)
+        low, high = block["range"]
+        spans = [(run.starts[p], run.starts[p] + run.years[p])
+                 for p in block["positions"]]
+        assert spans[0][0] == low and spans[-1][1] == high
+        assert all(low <= a and b <= high for a, b in spans)
+
+    # The same test on a Niryaana Shoola run finds dasas that straddle.
+    other = niryaana_run(R["Aries"])
+    straddling = [i for i, start in enumerate(other.starts)
+                  if start < 36 < start + other.years[i]]
+    assert straddling, "chapter 22's lengths do cut across 36"
+    assert "OI-133" in THE_BLOCKS_PARTITION_THE_CYCLE_EXACTLY
+
+
+def test_criterion_1_shields_a_rasi_unless_the_shield_is_rudra():
+    """"Usually a rasi occupied or aspected by AK or Jupiter does not kill a
+    native, unless that planet happens to be Rudra."
+
+    Chart 42 is the exception in one chart: Venus is the AK, occupies Aries,
+    and Venus is Rudra there — so the shield is cancelled by its own clause.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import SELECTION_CRITERIA, protected_by
+
+    signs, _lagna, _al = _chart_42()
+    ak = int(Graha.VENUS)
+
+    unshielded = protected_by(R["Aries"], signs, ak, rudra=ak)
+    assert not unshielded["protected"]
+    assert [s["role"] for s in unshielded["rudra_cancels"]] == ["AK"]
+
+    shielded = protected_by(R["Aries"], signs, ak, rudra=int(Graha.MARS))
+    assert shielded["protected"]
+    assert [s["how"] for s in shielded["shields"]] == ["occupies"]
+
+    assert "unless that planet happens to be Rudra" in SELECTION_CRITERIA[0]
+
+
+def test_criterion_1_keeps_its_hedge_and_its_missing_input():
+    """"Usually" is reported, not applied as a certainty — and without knowing
+    who Rudra is, a shield cannot be confirmed either.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import protected_by
+
+    signs, _lagna, _al = _chart_42()
+    got = protected_by(R["Aries"], signs, int(Graha.VENUS))
+    assert got["hedge"] == "usually"
+    assert "whether either shield is Rudra" in got["undecided"]
+
+    # A rasi neither reaches has nothing to decide. On Chart 42 the AK is in
+    # Aries and Jupiter in Sagittarius, and Taurus is outside both.
+    quiet = protected_by(R["Taurus"], signs, int(Graha.VENUS))
+    assert quiet["shields"] == () and not quiet["protected"]
+    assert quiet["undecided"] is None

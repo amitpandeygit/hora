@@ -283,3 +283,308 @@ def antardasa_progression(dasa_rasi: int, *, stronger_house: int | None = None,
                 f"{RASI_NAMES[(rasi + 6) % 12]} and run zodiacally, "
                 f"{months} months each"),
     }
+
+
+# --------------------------------------------------------------------------
+# §23.3 Interpretation
+# --------------------------------------------------------------------------
+
+#: §23.3's opening, which then spends a page qualifying itself. Note the
+#: printed "Niryana".
+TRISHOOLA_ALSO_APPLIES = (
+    "Like in Niryana Shoola dasa, dasa of a Trishoola rasi can bring death."
+)
+
+#: ...and the qualification. The Trishoola reading is **demoted** here, and the
+#: reason is the whole theory of §23.3: a fixed motion is not praana's motion.
+TRISHOOLA_IS_LESS_SIGNIFICANT_HERE = (
+    "So Shoola dasa rasi hitting Trishoola rasis is less significant than "
+    "Niryaana Shoola dasa rasi hitting Trishoola rasis."
+)
+
+#: §23.3's Rudra yoga, derived from the natural zodiac rather than the chart.
+RUDRA_YOGA_RULE = (
+    "Because the 2nd and 8th rasis in the natural zodiac are owned by Mars "
+    "and Venus, rasi aspect on either of them by Moon generates Rudra yoga "
+    "and rasis aspected by Rudra yoga planets can give death."
+)
+
+#: **Finding.** The condition reduces to one sentence the section does not
+#: write: Taurus and Scorpio are both fixed, so the rasis aspecting them are
+#: movable, and every movable rasi aspects at least one of the two. **Rudra
+#: yoga arises exactly when the Moon is in a movable rasi** — a third of all
+#: charts. Cancer and Capricorn reach both; Aries reaches only Scorpio and
+#: Libra only Taurus.
+RUDRA_YOGA_IS_A_MOON_IN_A_MOVABLE_RASI = (
+    "The natural 2nd and 8th are Taurus and Scorpio, both fixed, so the rasis "
+    "that aspect them are movable — and each of the four movable rasis "
+    "aspects at least one. Section 23.3's condition is therefore satisfied by "
+    "a Moon in any movable rasi and by no other Moon."
+)
+
+#: **Gap.** Two things the sentence leaves open, and no example in the chapter
+#: settles either. See OI-137.
+RUDRA_YOGA_PLANETS_ARE_NOT_NAMED = (
+    "Section 23.3 says the aspect \"generates Rudra yoga\" and that \"rasis "
+    "aspected by Rudra yoga planets can give death\", without saying which "
+    "planets the yoga consists of — the Moon alone, or the Moon with the "
+    "owner it aspected — and without saying whether their aspect on those "
+    "rasis is rasi drishti or graha drishti."
+)
+
+#: §23.3's own rules, and it says whose they are. Not classical, not attributed
+#: to any maharshi — "this author found the following rules to hold true in
+#: many cases", and then a quotation.
+AUTHORS_RULES = (
+    "AL or the trines from it can give death. If malefics or marakas occupy "
+    "or aspect the 3rd from AL or the 8th from AL, those 2 houses can give "
+    "death."
+)
+
+AUTHORS_RULES_ARE_HIS_OWN = (
+    "This author found the following rules to hold true in many cases."
+)
+
+#: §23.3's account of what the two systems are, which is also its account of
+#: why chapter 22's rules are irregular and this chapter's are not.
+THE_TWO_MOTIONS = (
+    "Niryaana Shoola dasa essentially shows the progress of the 8th house. It "
+    "shows the motion of praana (life). That is why it has an uneven motion. "
+    "It goes forward in some charts and backward in some charts. Also the "
+    "lengths of dasas can be 7, 8 or 9 years. All this shows that different "
+    "people have different motion of praana. ... In Shoola dasa, however, the "
+    "motion has a constant rate of 9 years per dasa and the order of dasas is "
+    "always fixed. This fixed motion is like the motion of a quartz crystal. "
+    "It is not the motion of praana and it must be a universal motion. It is "
+    "suggested that Shoola dasas show the force of Lord Shiva."
+)
+
+#: **Finding.** §23.3 re-describes chapter 22's seed and the description is
+#: worth more than the rule: "Lagna and 7th house both show the self of a
+#: person... Niryaana Shoola dasa starts from the 8th house from one of them."
+#:
+#: The 8th from lagna is the 8th house and the 8th from the 7th is the **2nd**,
+#: so §22.2.1's odd-looking 2nd-and-8th pair is chapter 18's lagna-and-7th
+#: pair shifted by eight. The two systems seed from the same two points, one
+#: directly and one through the 8th.
+NIRYAANA_SEEDS_FROM_THE_EIGHTH_OF_THE_SELF = (
+    "Lagna and 7th house both show the self of a person. They stand for the "
+    "invisible and visible selves. Niryaana Shoola dasa starts from the 8th "
+    "house from one of them."
+)
+
+#: Why the readings hang on the arudha lagna rather than on lagna.
+WHY_AL_AND_NOT_LAGNA = (
+    "AL is involved instead of lagna, because our existence is a maya "
+    "(illusion) and what Lord Shiva destroys is the illusion of our "
+    "existence. The physical body (lagna) simply merges with the material "
+    "universe, when burnt or buried, and the perceived self or the maya of "
+    "existence (AL) is what is completely destroyed by Lord Shiva."
+)
+
+#: §23.3's boxed Lesson, which states the two systems against each other.
+LESSON = (
+    "Niryaana Shoola dasa shows the motion of praana (life). Death occurs "
+    "when praana hits maraka rasis and the trines from Rudra (Trishoola "
+    "rasis). Shoola dasa is the reverse. It shows the motion of Shiva. Death "
+    "occurs primarily when Shiva's motion hits the trines from AL or the 3rd "
+    "house from AL or the 8th house from AL."
+)
+
+#: The houses §23.3 reads from AL, and how each is qualified.
+DEATH_HOUSES_FROM_AL: tuple[dict, ...] = (
+    {"houses": (1, 5, 9), "name": "the trines from AL", "needs": None,
+     "text": "AL or the trines from it can give death."},
+    {"houses": (3, 8), "name": "the houses of vitality from AL",
+     "needs": "malefics or marakas occupying or aspecting them",
+     "text": ("If malefics or marakas occupy or aspect the 3rd from AL or "
+              "the 8th from AL, those 2 houses can give death.")},
+)
+
+#: §23.3's two criteria for choosing one rasi from the list it has built.
+SELECTION_CRITERIA: tuple[str, ...] = (
+    ("Usually a rasi occupied or aspected by AK or Jupiter does not kill a "
+     "native, unless that planet happens to be Rudra."),
+    ("Based on whether the native is of short/middle/long life, we are "
+     "limited to just 4 dasas. The first 4 Shoola dasas (0-36 years) bring "
+     "death to a person of the short life category. The middle 4 Shoola "
+     "dasas (36-72 years) bring death to a person of the middle life "
+     "category. The last 4 Shoola dasas (72-108 years) bring death to a "
+     "person of the long life category."),
+)
+
+#: **Finding.** Criterion 2 is exact here and cannot be, in chapter 22. Four
+#: dasas of nine years are thirty-six, so the three longevity ranges fall on
+#: dasa boundaries and every dasa lies wholly inside one block. Chapter 22's
+#: 7/8/9 lengths cut across the ranges instead, which is OI-133.
+THE_BLOCKS_PARTITION_THE_CYCLE_EXACTLY = (
+    "Four dasas of nine years are thirty-six, so 0-36, 36-72 and 72-108 fall "
+    "exactly on Shoola dasa boundaries and no dasa straddles a longevity "
+    "range. Niryaana Shoola dasa's 7, 8 and 9 year dasas do straddle them, "
+    "which is what OI-133 is about."
+)
+
+
+def rudra_yoga(moon_sign: int) -> dict:
+    """§23.3's Rudra yoga, from the Moon's rasi alone.
+
+    :returns: whether the yoga arises, which of Taurus and Scorpio the Moon's
+        rasi aspects, their owners, and what §23.3 leaves unsaid.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    index = validate.in_range("moon_sign", moon_sign, 0, 11)
+    natural = {1: "the natural 2nd", 7: "the natural 8th"}
+    reached = tuple(sign for sign in natural if sign in rasi_drishti(index))
+
+    return {
+        "moon_sign": index,
+        "moon_rasi": str(RASI_NAMES[index]),
+        "applies": bool(reached),
+        "reaches": tuple({
+            "sign": sign, "rasi": str(RASI_NAMES[sign]),
+            "which": natural[sign],
+            "owner": str(GRAHA_NAMES[int(RASI_LORD[sign])]),
+        } for sign in reached),
+        "undecided": (None if not reached else
+                      RUDRA_YOGA_PLANETS_ARE_NOT_NAMED),
+        "why": (f"{RASI_NAMES[index]} aspects "
+                f"{' and '.join(str(RASI_NAMES[s]) for s in reached)}"
+                if reached else
+                f"{RASI_NAMES[index]} aspects neither Taurus nor Scorpio"),
+    }
+
+
+def death_rasis(arudha_lagna: int, signs: dict[int, int] | None = None,
+                lagna: int | None = None,
+                malefic: frozenset[int] | None = None) -> tuple[dict, ...]:
+    """§23.3's rasis that can bring death, read from the arudha lagna.
+
+    :param arudha_lagna: AL's rasi.
+    :param signs: rasi per graha, needed for the 3rd and 8th condition.
+    :param lagna: needed to know which grahas are marakas, by §14.2.
+    :param malefic: which grahas count as malefic; the natural set by default.
+
+    The trines are unconditional. The 3rd and 8th need "malefics or marakas
+    occupy or aspect" them, and §23.3 does not say which aspect — both are
+    reported, and the row stays undecided when the caller gave no chart.
+    """
+    from hora.charts.aspects import graha_aspects_sign, rasi_drishti
+    from hora.charts.maraka import MALEFICS, marakas
+    from hora.core.const import GRAHA_NAMES
+
+    al = validate.in_range("arudha_lagna", arudha_lagna, 0, 11)
+    evil = MALEFICS if malefic is None else malefic
+    maraka_grahas: set[int] = set()
+    if lagna is not None:
+        found = marakas(validate.in_range("lagna", lagna, 0, 11), signs)
+        maraka_grahas = {m["graha"] for m in found["maraka_grahas"]}
+
+    out: list[dict] = []
+    for row in DEATH_HOUSES_FROM_AL:
+        for house in row["houses"]:
+            rasi = (al + house - 1) % 12
+            entry = {
+                "house_from_al": house, "sign": rasi,
+                "rasi": str(RASI_NAMES[rasi]), "group": row["name"],
+                "needs": row["needs"],
+            }
+            if row["needs"] is None:
+                entry["applies"] = True
+            elif signs is None:
+                entry["applies"] = None
+                entry["undecided"] = (
+                    "whether malefics or marakas reach it; no chart given")
+            else:
+                occupy, by_graha, by_rasi = [], [], []
+                for graha, place in sorted(signs.items()):
+                    if graha not in evil and graha not in maraka_grahas:
+                        continue
+                    label = str(GRAHA_NAMES[graha])
+                    if place == rasi:
+                        occupy.append(label)
+                    else:
+                        if graha_aspects_sign(graha, place, rasi):
+                            by_graha.append(label)
+                        if rasi in rasi_drishti(place):
+                            by_rasi.append(label)
+                entry.update(occupied_by=tuple(occupy),
+                             aspected_by_graha_drishti=tuple(by_graha),
+                             aspected_by_rasi_drishti=tuple(by_rasi))
+                entry["applies"] = bool(occupy or by_graha or by_rasi)
+                if by_graha or by_rasi:
+                    entry["undecided"] = (
+                        "which aspect §23.3 means; it says only \"aspect\"")
+                if lagna is None:
+                    entry["undecided"] = (
+                        "marakas were not computed; pass lagna")
+            out.append(entry)
+    return tuple(out)
+
+
+def longevity_block(longevity: str) -> dict:
+    """§23.3 criterion 2 — which four of the twelve dasas can kill.
+
+    Exact, unlike chapter 22's: four nine-year dasas are thirty-six years, so
+    the blocks fall on dasa boundaries. See
+    :data:`THE_BLOCKS_PARTITION_THE_CYCLE_EXACTLY`.
+    """
+    from hora.core.constants.maraka import LONGEVITY_RANGES
+
+    if longevity not in LONGEVITY_RANGES:
+        raise ShoolaError(
+            f"longevity must be one of {tuple(LONGEVITY_RANGES)}, "
+            f"got {longevity!r}")
+    order = ("short", "middle", "long")
+    block = order.index(longevity)
+    low, high = LONGEVITY_RANGES[longevity]
+    return {
+        "longevity": longevity,
+        "range": (low, high),
+        "positions": tuple(range(block * 4, block * 4 + 4)),
+        "which": ("first", "middle", "last")[block],
+    }
+
+
+def protected_by(rasi: int, signs: dict[int, int], atma_karaka: int,
+                 rudra: int | None = None) -> dict:
+    """§23.3 criterion 1 — whether AK or Jupiter shields a rasi from killing.
+
+    :param rudra: the graha that is Rudra, if known. The criterion's own
+        exception: a shield that *is* Rudra does not shield.
+
+    "Usually" is the section's word and is not applied as a certainty; the
+    reasons are returned and the caller decides.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import GRAHA_NAMES, Graha
+
+    index = validate.in_range("rasi", rasi, 0, 11)
+    ak = validate.in_range("atma_karaka", int(atma_karaka), 0, 8)
+
+    shields: list[dict] = []
+    for graha, role in ((ak, "AK"), (int(Graha.JUPITER), "Jupiter")):
+        place = signs.get(graha)
+        if place is None:
+            continue
+        how = ("occupies" if place == index
+               else "aspects" if index in rasi_drishti(place) else None)
+        if how is None:
+            continue
+        shields.append({
+            "graha": graha, "graha_name": str(GRAHA_NAMES[graha]),
+            "role": role, "how": how,
+            "is_rudra": rudra is not None and int(rudra) == graha,
+        })
+
+    active = [s for s in shields if not s["is_rudra"]]
+    return {
+        "rasi": str(RASI_NAMES[index]),
+        "shields": tuple(shields),
+        "protected": bool(active),
+        "rudra_cancels": tuple(s for s in shields if s["is_rudra"]),
+        "hedge": "usually",
+        "undecided": (None if rudra is not None or not shields else
+                      "whether either shield is Rudra; pass rudra"),
+    }

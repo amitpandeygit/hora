@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 91 waiting on evidence · 2 parked**
+**5 waiting on Amit · 92 waiting on evidence · 2 parked**
 
 ---
 
@@ -671,6 +671,26 @@ is not changed on our own judgement — it flips a longevity verdict.
 
 **Closes when:** you decide, or a section states which co-lord a longevity 8th
 house takes.
+
+### OI-137 — §23.3's Rudra yoga names no planets and no aspect
+
+**Waiting on the book.** "Because the 2nd and 8th rasis in the natural zodiac
+are owned by Mars and Venus, rasi aspect on either of them by Moon generates
+Rudra yoga and rasis aspected by Rudra yoga planets can give death."
+
+The **condition** reduces further than the section says: Taurus and Scorpio
+are fixed, so the rasis aspecting them are movable and each of the four reaches
+at least one — the yoga arises exactly when the **Moon is in a movable rasi**.
+
+Two things are unsaid. Which planets are "Rudra yoga planets" — the Moon alone,
+or the Moon with the owner it aspected? And is *their* aspect rasi drishti or
+graha drishti? The sentence says "rasi aspect" for the Moon's and bare
+"aspected" for theirs.
+
+**What we do:** `rudra_yoga` returns whether it arises and what it reaches, and
+reports both questions unanswered rather than naming a planet set.
+
+**Closes when:** an example applies it.
 
 ### OI-136 — a rasi dasa's antardasa boundary is a day wide
 
