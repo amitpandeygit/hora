@@ -870,3 +870,150 @@ def test_dasa_order_and_antardasas_check_their_inputs():
         antardasas(4, 0, 0.0)
     with pytest.raises(KalachakraError, match="D-67"):
         dasa_order(26, 1, 3)
+
+
+# ---------------------------------------------------------------------------
+# Exercise 34 — Moon at 5Aq50, Dhanishtha 4th pada
+# ---------------------------------------------------------------------------
+
+def test_exercise_34_finds_dhanishtha_4th_pada():
+    """"Moon at 5Aq50 is in Dhanishtha 4th pada, which runs from 3Aq20 to
+    6Aq40."
+    """
+    from hora.core.constants.nakshatra import NAKSHATRA_SPAN, PADA_SPAN
+    from hora.dasha.nakshatra.kalachakra import pada_of, sub_group_of
+
+    got = pada_of(300.0 + 5.0 + 50.0 / 60.0)
+    assert got["nakshatra"] == 23                # Dhanishtha
+    assert got["group"] == "apasavya"
+    assert got["pada"] == 4
+    assert sub_group_of(23) == 2                 # Table 47
+
+    start = 22 * NAKSHATRA_SPAN + 3 * PADA_SPAN
+    assert start == pytest.approx(303.0 + 1.0 / 3.0)          # 3Aq20
+    assert start + PADA_SPAN == pytest.approx(306.0 + 2.0 / 3.0)   # 6Aq40
+
+
+def test_exercise_34_reproduces_table_52():
+    """"From Table 47, we find that the 9 rasis associated with this nakshatra
+    pada are: Sg, Sc, Li, Vi, Le, Cn, Ge, Ta, Ar."
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_years,
+        pada_sequence,
+        paramayush,
+    )
+
+    nine = pada_sequence("apasavya", 2, 4)
+    assert [A[rasi] for rasi in nine] == [
+        "Sg", "Sc", "Li", "Vi", "Le", "Cn", "Ge", "Ta", "Ar"]
+
+    years = [dasa_years(rasi) for rasi in nine]
+    assert years == [10, 7, 16, 9, 5, 21, 9, 16, 7]
+
+    cumulative, running = [], 0
+    for span in years:
+        running += span
+        cumulative.append(running)
+    assert cumulative == [10, 17, 33, 42, 47, 68, 77, 93, 100]
+    assert paramayush(nine) == 100               # the longest of the sixteen
+
+
+def test_exercise_34_gemini_runs_at_birth_with_2_years_left():
+    """"0.75 x 100 = 75 years. ... 68 years were over by the end of Cn dasa and
+    7 years of Ge dasa added to it makes it 75 years. So Ge dasa was running at
+    birth and 9 - 7 = 2 years of Ge dasa were remaining at birth."
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    moon = pada_of(300.0 + 5.0 + 50.0 / 60.0)
+    assert moon["elapsed_fraction"] == pytest.approx(150.0 / 200.0)
+
+    got = first_dasa(pada_sequence("apasavya", 2, 4), moon["elapsed_fraction"])
+    assert got["consumed_years"] == pytest.approx(75.0)
+    assert got["rasi"] == "Gemini"
+    assert got["position"] == 6
+    assert got["years"] == 9
+    assert got["elapsed_years"] == pytest.approx(7.0)
+    assert got["balance_years"] == pytest.approx(2.0)
+
+
+def test_exercise_34_crosses_from_apasavya_2_to_apasavya_1():
+    """"With Ar dasa, we finish the nine rasis associated with the 4th pada of
+    Dhanishtha (Apasavya-2). So we go to the 1st pada of Apasavya-1 nakshatras
+    (Table 46). The next 7 dasas will be Sg, Cp, Aq, Pi, Ar, Ta, Ge."
+
+    The crossing Example 96 made in the savya group, made here in the apasavya
+    group and in the other direction -- sub-group 2 to sub-group 1, over the
+    wheel's own end. Still one walk.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_order,
+        pada_sequence,
+        wheel_position,
+    )
+
+    assert wheel_position(23, 4) == 15           # positions 15 to 23
+    got = dasa_order(23, 4, 7, skip=9)
+    assert [A[row["sign"]] for row in got] == [
+        "Sg", "Cp", "Aq", "Pi", "Ar", "Ta", "Ge"]
+    assert [row["position"] for row in got] == list(range(7))
+
+    assert wheel_position(4, 1) == 0             # Rohini, Apasavya-1
+    assert [A[rasi] for rasi in pada_sequence("apasavya", 1, 1)][:7] == [
+        A[row["sign"]] for row in got]
+
+
+def test_exercise_34_reproduces_every_age_in_the_answer():
+    """The answer's ten rows, in years of age, from the balance at birth and
+    Table 48 alone.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_order,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    moon = pada_of(300.0 + 5.0 + 50.0 / 60.0)
+    birth = first_dasa(pada_sequence("apasavya", 2, 4), moon["elapsed_fraction"])
+    walk = dasa_order(23, 4, 10, skip=birth["position"])
+
+    rows, age = [], 0.0
+    for position, row in enumerate(walk):
+        span = birth["balance_years"] if position == 0 else float(row["years"])
+        rows.append((A[row["sign"]], round(span), round(age), round(age + span)))
+        age += span
+
+    assert rows == [
+        ("Ge", 2, 0, 2), ("Ta", 16, 2, 18), ("Ar", 7, 18, 25),
+        ("Sg", 10, 25, 35), ("Cp", 4, 35, 39), ("Aq", 4, 39, 43),
+        ("Pi", 10, 43, 53), ("Ar", 7, 53, 60), ("Ta", 16, 60, 76),
+        ("Ge", 9, 76, 85),
+    ]
+
+
+def test_exercise_34_prints_a_tenth_dasa_footnote_64_does_not_allow():
+    """Gemini sits 7th of its pada, leaving three, so footnote 64 gives six
+    from the next pada and nine in all. The answer prints seven and ten. D-68.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        EXERCISE_34_PRINTS_A_TENTH_DASA,
+        dasa_order,
+        nine_from_birth,
+    )
+
+    by_the_rule = nine_from_birth(23, 4, 6)
+    assert (by_the_rule["from_this_pada"], by_the_rule["from_next_pada"]) == (3, 6)
+    assert len(by_the_rule["dasas"]) == 9
+    assert A[by_the_rule["dasas"][-1]["sign"]] == "Ta"        # age 76, not 85
+
+    printed = dasa_order(23, 4, 10, skip=6)
+    assert printed[:9] == by_the_rule["dasas"]                # the ten hold the
+    assert A[printed[9]["sign"]] == "Ge"                      # nine unchanged
+    assert len({row["sign"] for row in printed}) == 7         # only 7 distinct
+    assert "ten dasas" in EXERCISE_34_PRINTS_A_TENTH_DASA

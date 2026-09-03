@@ -2158,3 +2158,32 @@ Uttarabhadrapada raise rather than guess a sub-group.
 **Closes when:** an example runs an Uttarabhadrapada Moon, or a later printing
 completes the tables.
 
+
+## D-68 · Exercise 34 prints ten dasas where footnote 64's rule gives nine
+
+**Status: FINDING — presentational; every dasa printed is correct.**
+
+Footnote 64 states the convention the worked examples display by: "Parasara
+suggested taking the dasas of nine rasis starting from the rasi whose dasa is
+running at birth." The number taken from the following pada is then the birth
+dasa's own 0-based position in its own pada.
+
+| | birth dasa | position | left in its pada | next-pada count |
+|---|---|---|---|---|
+| Example 95 | Scorpio | 7 | 2 | 7 printed, 7 by the rule |
+| Example 96 | Pisces | 8 | 1 | 8 printed, 8 by the rule |
+| Exercise 34 | Gemini | 6 | 3 | **7 printed, 6 by the rule** |
+
+Exercise 34 lists ten dasas — Ge, Ta, Ar, Sg, Cp, Aq, Pi, Ar, Ta, Ge, to age
+85 — where footnote 64 would stop at nine, after Ta at age 76. No other reading
+of "nine rasis" reaches ten: the ten hold only seven distinct rasis.
+
+Nothing computed is wrong. The tenth row is the next rasi on the wheel with its
+Table 48 length, and its ages follow. Only the count departs from the stated
+convention.
+
+**What we do:** `nine_from_birth` implements footnote 64, which is the only
+stated rule, and the wheel walk behind it is unbounded — `dasa_order` returns
+as many dasas as asked for, so a caller wanting Exercise 34's ten gets them.
+
+**Closes when:** a later example fixes the count either way.

@@ -418,17 +418,30 @@ FOOTNOTE_65 = (
     "nakshatra dasa."
 )
 
-#: **Finding.** Footnote 64 gives the rule behind a count neither example
-#: states: a worked Kalachakra dasa is displayed as **nine** rasis beginning
-#: with the one running at birth, so the number taken from the following pada
-#: is exactly the dasa's own 0-based position in its pada. Example 95's Sc sits
-#: 8th, leaving Sc and Li, and lists 7; Example 96's Pi sits 9th, leaving Pi
-#: alone, and lists 8. It is a display convention, not a boundary: the wheel
-#: runs on past nine either way.
+#: **Finding.** Footnote 64 gives the rule behind a count no worked example
+#: states: a Kalachakra dasa is displayed as **nine** rasis beginning with the
+#: one running at birth, so the number taken from the following pada is the
+#: dasa's own 0-based position in its pada. Example 95's Sc sits 8th, leaving
+#: Sc and Li, and lists 7; Example 96's Pi sits 9th, leaving Pi alone, and
+#: lists 8. It is a display convention, not a boundary: the wheel runs on past
+#: nine either way, and Exercise 34 does — see
+#: :data:`EXERCISE_34_PRINTS_A_TENTH_DASA`.
 THE_LISTED_COUNT_IS_NINE_LESS_WHAT_THE_PADA_STILL_HOLDS = (
     "The dasas an example lists after the one running at birth number nine "
     "less the rasis that pada still holds, counting the running dasa itself. "
     "Position 7 of 0-8 lists seven, position 8 lists eight."
+)
+
+#: **Book defect.** Exercise 34's Gemini sits 7th of its pada, leaving three,
+#: so footnote 64 gives six from the next pada and nine in all. The answer
+#: prints **seven and ten**, running to age 85 where the rule stops at 76.
+#: Nothing printed is wrong -- the tenth is the next rasi on the wheel with its
+#: Table 48 length -- and no other reading of "nine rasis" reaches ten, the ten
+#: holding only seven distinct rasis. See D-68.
+EXERCISE_34_PRINTS_A_TENTH_DASA = (
+    "Exercise 34 lists ten dasas from birth where footnote 64's nine-rasi "
+    "convention gives nine. The count departs from the convention; the dasas "
+    "themselves are the wheel's own next ten."
 )
 
 #: **Finding.** Example 96 converts a balance of 8.6 years to "8 years 7
