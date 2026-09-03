@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 92 waiting on evidence · 2 parked**
+**5 waiting on Amit · 93 waiting on evidence · 2 parked**
 
 ---
 
@@ -672,23 +672,43 @@ is not changed on our own judgement — it flips a longevity verdict.
 **Closes when:** you decide, or a section states which co-lord a longevity 8th
 house takes.
 
+### OI-138 — §23.3's criterion 1 survives neither aspect reading
+
+**Waiting on the book.** "Usually a rasi occupied or aspected by AK or Jupiter
+does not kill a native, unless that planet happens to be Rudra." Which aspect
+is not said, and §23.4's two examples pull opposite ways:
+
+| | killed | by rasi drishti | by graha drishti |
+|---|---|---|---|
+| Ex 89, Chart 8 | Aries | neither — consistent | both; the AK **is** Rudra, Jupiter is not |
+| Ex 90, Chart 39 | Capricorn | both — contradicts | neither — consistent |
+
+Rasi drishti breaks Example 90; graha drishti breaks 89, on Jupiter alone. So either "usually" is load-bearing, or criterion 1 is a tiebreaker
+among **several** candidates and in both examples the trine rule already left
+one — which the section's framing favours: "we have listed several rasis above.
+How do we choose one answer?"
+
+**What we do:** `select_dasa` reports each candidate's shields and never
+filters on them; `protected_by` keeps the hedge.
+
+**Closes when:** an example applies it to a list of more than one.
+
 ### OI-137 — §23.3's Rudra yoga names no planets and no aspect
 
-**Waiting on the book.** "Because the 2nd and 8th rasis in the natural zodiac
-are owned by Mars and Venus, rasi aspect on either of them by Moon generates
-Rudra yoga and rasis aspected by Rudra yoga planets can give death."
+**Waiting on the book.** "Rasi aspect on either of them by Moon generates
+Rudra yoga and rasis aspected by Rudra yoga planets can give death", the two
+being the natural 2nd and 8th, Taurus and Scorpio. The **condition** reduces
+further than the section says: both are fixed, so what aspects them is movable
+and each of the four reaches at least one — the yoga arises exactly when the
+**Moon is in a movable rasi**.
 
-The **condition** reduces further than the section says: Taurus and Scorpio
-are fixed, so the rasis aspecting them are movable and each of the four reaches
-at least one — the yoga arises exactly when the **Moon is in a movable rasi**.
-
-Two things are unsaid. Which planets are "Rudra yoga planets" — the Moon alone,
-or the Moon with the owner it aspected? And is *their* aspect rasi drishti or
-graha drishti? The sentence says "rasi aspect" for the Moon's and bare
-"aspected" for theirs.
+Two things are unsaid: which planets the yoga is — the Moon alone, or the Moon
+with the owner it aspected — and whether *their* aspect is rasi or graha
+drishti, the sentence saying "rasi aspect" for the Moon's and bare "aspected"
+for theirs.
 
 **What we do:** `rudra_yoga` returns whether it arises and what it reaches, and
-reports both questions unanswered rather than naming a planet set.
+reports both questions unanswered.
 
 **Closes when:** an example applies it.
 

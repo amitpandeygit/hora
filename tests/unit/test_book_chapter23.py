@@ -666,3 +666,283 @@ def test_criterion_1_keeps_its_hedge_and_its_missing_input():
     quiet = protected_by(R["Taurus"], signs, int(Graha.VENUS))
     assert quiet["shields"] == () and not quiet["protected"]
     assert quiet["undecided"] is None
+
+
+# --------------------------------------------------------------------------
+# §23.4 Examples 89 and 90 — the same two charts chapter 22 already read.
+# --------------------------------------------------------------------------
+
+def _chart(number):
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+    from hora.charts.colord import stronger
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(number).items()}
+    signs = {int(g): sign for g, sign in graha_signs(number).items()}
+    lagna_sign = lagna(number)
+    overrides = {r: stronger(r, longitudes, purpose="arudha").winner
+                 for r in (7, 10)}
+    return longitudes, signs, lagna_sign, arudha_pada(
+        1, lagna_sign, signs, overrides).sign
+
+
+@pytest.mark.parametrize("number,seed,order", [
+    (8, "Sc", ["Sc", "Sg", "Cp", "Aq"]),
+    (39, "Le", ["Le", "Vi", "Li", "Sc"]),
+])
+def test_both_examples_seed_from_lagna_and_the_cascade_agrees(number, seed,
+                                                              order):
+    """"Lagna is stronger and dasas start from Sc"; "...from Le."
+
+    Neither shows its working, but §15.5.2's cascade reaches both on rule 1 —
+    Scorpio holds three planets to Taurus's one, Leo five to Aquarius's none.
+    Two more agreements for OI-131, on the pair chapter 18 also uses.
+    """
+    from hora.charts.rasi_strength import stronger
+    from hora.dasha.rasi.shoola import progression
+
+    longitudes, _signs, lagna_sign, _al = _chart(number)
+    assert ABBR[lagna_sign] == seed
+
+    verdict = stronger(lagna_sign, (lagna_sign + 6) % 12, longitudes,
+                       purpose="phalita")
+    assert verdict.winner == lagna_sign
+    assert verdict.decided_by == "1"
+
+    got = progression(lagna_sign)
+    assert [ABBR[s] for s in got.signs[:4]] == order
+
+
+@pytest.mark.parametrize("number,killer", [(8, "Ar"), (39, "Cp")])
+def test_the_sixth_dasa_runs_45_to_54_and_holds_the_death(number, killer):
+    """"First 5 dasas are over after 45 years... From his 45th year, the 6th
+    dasa was running."
+
+    Five nines are forty-five on every chart, which is the point of a flat
+    length — the arithmetic does not depend on the nativity at all.
+    """
+    from hora.dasha.rasi.shoola import progression
+
+    _longitudes, _signs, lagna_sign, _al = _chart(number)
+    got = progression(lagna_sign)
+
+    assert sum(got.years[:5]) == 45
+    assert got.starts[5] == 45
+    assert got.starts[5] + got.years[5] == 54
+    assert ABBR[got.signs[5]] == killer
+
+
+@pytest.mark.parametrize("number,age", [(8, 50), (39, 46)])
+def test_both_deaths_fall_in_that_sixth_dasa(number, age):
+    """Chart 8's native died at 50 and Chart 39's at 46, and 45-54 holds
+    both — which is why one dasa answers two charts here.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.rasi.shoola import progression
+
+    _longitudes, _signs, lagna_sign, _al = _chart(number)
+    got = progression(lagna_sign)
+    assert got.starts[5] <= age < got.starts[5] + got.years[5]
+    assert str(age) in " ".join(chart(number)["events"].values())
+
+
+def test_the_two_examples_count_the_year_of_death_differently():
+    """"The native died in the 50th year" for a native aged 50, and "died in
+    his 47th year" for one aged 46. One example counts completed years and the
+    other the year in progress.
+
+    It changes nothing — 45-54 holds 46, 47, 50 and 51 alike — but the two
+    sentences are not using "Nth year" the same way.
+    """
+    from hora.dasha.rasi.shoola import progression
+
+    _longitudes, _signs, lagna_sign, _al = _chart(8)
+    sixth = progression(lagna_sign)
+    start, end = sixth.starts[5], sixth.starts[5] + sixth.years[5]
+    for year in (46, 47, 50, 51):
+        assert start <= year < end
+
+
+def test_example_89_selects_aries_as_the_only_trine_in_the_block():
+    """"One can see that Ar is a trine from AL. It is the only trine in the
+    middle life range."
+
+    Chart 8's AL is Leo, so the trines are Ar, Le and Sg; the middle block is
+    Pi, Ar, Ta, Ge; and Aries is the intersection. Exercise 23 computed the
+    middle category, so this example needs no assumption.
+    """
+    from hora.charts.book import signs as book_signs
+    from hora.charts.maraka import three_pairs
+    from hora.dasha.rasi.shoola import select_dasa
+
+    _longitudes, signs, lagna_sign, al = _chart(8)
+    assert ABBR[al] == "Le"
+    assert three_pairs(lagna_sign, signs, book_signs(8)["HL"])[
+        "category"] == "middle"
+
+    got = select_dasa(al, lagna_sign, "middle", signs, lagna=lagna_sign)
+    assert [c["rasi"] for c in got["candidates"]] == [
+        "Pisces", "Aries", "Taurus", "Gemini"]
+    assert [c["rasi"] for c in got["trines_from_al"]] == ["Aries"]
+    assert got["selected"]["rasi"] == "Aries"
+    assert got["selected"]["position"] == 5           # the 6th dasa
+    assert got["selected"]["starts"] == 45
+
+
+def test_example_90_selects_capricorn_the_same_way():
+    """"One can see that Cp is the only trine from AL in the middle life
+    range."
+
+    Chart 39's AL is Taurus, so the trines are Ta, Vi and Cp; the middle block
+    is Sg, Cp, Aq, Pi; and Capricorn is the intersection — the 6th dasa again.
+    """
+    from hora.dasha.rasi.shoola import select_dasa
+
+    _longitudes, signs, lagna_sign, al = _chart(39)
+    assert ABBR[al] == "Ta"
+
+    got = select_dasa(al, lagna_sign, "middle", signs, lagna=lagna_sign)
+    assert [c["rasi"] for c in got["candidates"]] == [
+        "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+    assert [c["rasi"] for c in got["trines_from_al"]] == ["Capricorn"]
+    assert got["selected"]["rasi"] == "Capricorn"
+    assert got["selected"]["position"] == 5
+
+
+def test_example_90_needs_a_category_14_4_does_not_give():
+    """D-65. Example 90 says "the middle life range" and §14.4's three pairs
+    give **short** on Chart 39 — two fixed+fixed pairs against one fixed+dual,
+    with a 40-year paramaayush against a death at 46.
+
+    The category is not a shade here: it picks the four candidates, and under
+    short the only trine from AL is **Virgo**, ages 9-18.
+    """
+    from hora.charts.book import signs as book_signs
+    from hora.charts.maraka import three_pairs
+    from hora.dasha.rasi.shoola import select_dasa
+
+    _longitudes, signs, lagna_sign, al = _chart(39)
+    computed = three_pairs(lagna_sign, signs, book_signs(39)["HL"])
+    assert computed["category"] == "short"
+    assert [p["category"] for p in computed["pairs"]] == [
+        "short", "long", "short"]
+
+    short = select_dasa(al, lagna_sign, "short", signs, lagna=lagna_sign)
+    assert [c["rasi"] for c in short["candidates"]] == [
+        "Leo", "Virgo", "Libra", "Scorpio"]
+    assert short["selected"]["rasi"] == "Virgo"
+    assert short["selected"]["starts"] == 9
+    assert short["selected"]["rasi"] != "Capricorn"
+
+
+def test_the_ordinary_eighth_does_not_rescue_the_category():
+    """D-65 again, from the other side. The first pair uses Table 32's 8th;
+    the ordinary 8th from Leo is Pisces, whose lord Jupiter is also in Leo, so
+    the pair stays fixed+fixed and the verdict stays short.
+    """
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+    from hora.core.const import MODALITY_NAMES, RASI_LORD, RASI_MODALITY
+
+    _longitudes, signs, _lagna, _al = _chart(39)
+    assert rudra_eighth(R["Leo"]) == R["Cancer"]
+    assert ordinary_eighth(R["Leo"]) == R["Pisces"]
+
+    for eighth in (R["Cancer"], R["Pisces"]):
+        lord = int(RASI_LORD[eighth])
+        assert signs[lord] == R["Leo"]
+        assert str(MODALITY_NAMES[RASI_MODALITY[signs[lord]]]) == "sthira"
+
+
+def test_the_two_examples_take_the_category_as_given():
+    """Neither derives it — Example 89's happens to match §14.4 and Example
+    90's does not. `select_dasa` therefore takes it as an argument rather than
+    computing it, which is what keeps D-65 visible instead of resolving it
+    one way silently.
+    """
+    from hora.dasha.rasi.shoola import select_dasa
+
+    _longitudes, signs, lagna_sign, al = _chart(39)
+    picks = {category: select_dasa(al, lagna_sign, category, signs,
+                                   lagna=lagna_sign)["selected"]["rasi"]
+             for category in ("short", "middle")}
+    assert picks == {"short": "Virgo", "middle": "Capricorn"}
+
+
+def _ak_of(number):
+    from hora.charts.book import GRAHA_OF, chart
+
+    karakas = chart(number)["chara_karakas"]
+    return int(GRAHA_OF[next(name for name, role in karakas.items()
+                             if role == "AK")])
+
+
+def test_criterion_1_survives_neither_aspect_reading():
+    """OI-138. "Usually a rasi occupied or aspected by AK or Jupiter does not
+    kill a native", and §23.3 never says which aspect. The two examples pull
+    opposite ways on their own killing dasas.
+    """
+    from hora.charts.aspects import graha_aspects_sign, rasi_drishti
+    from hora.core.const import Graha
+
+    reach = {}
+    for number, killer in ((8, R["Aries"]), (39, R["Capricorn"])):
+        _longitudes, signs, _lagna, _al = _chart(number)
+        shields = (_ak_of(number), int(Graha.JUPITER))
+        reach[number] = {
+            "rasi": [g for g in shields
+                     if killer in rasi_drishti(signs[g])],
+            "graha": [g for g in shields
+                      if graha_aspects_sign(g, signs[g], killer)],
+        }
+
+    assert reach[8]["rasi"] == []            # Example 89 needs this
+    assert len(reach[8]["graha"]) == 2       # ...and graha drishti breaks it
+    assert len(reach[39]["rasi"]) == 2       # Example 90 is broken by this
+    assert reach[39]["graha"] == []          # ...and needs graha drishti
+
+
+def test_chart_8_is_the_one_place_the_ak_is_rudra():
+    """Criterion 1's own exception, "unless that planet happens to be Rudra",
+    fires on Chart 8: Exercise 23 made Mercury Rudra and Mercury is also its
+    AK. It rescues half of Example 89 under graha drishti — but Jupiter is not
+    Rudra and still reaches Aries, so the reading stays broken.
+    """
+    from hora.charts.book import graha_longitudes, lagna
+    from hora.charts.maraka import rudra
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import protected_by
+
+    _longitudes, signs, _lagna, _al = _chart(8)
+    longitudes = {int(g): lon for g, lon in graha_longitudes(8).items()}
+    body = rudra(lagna(8), signs, longitudes)
+
+    assert body["rudra"] == "Mercury"
+    assert _ak_of(8) == int(Graha.MERCURY)
+
+    got = protected_by(R["Aries"], signs, _ak_of(8), rudra=int(Graha.MERCURY))
+    assert [s["is_rudra"] for s in got["shields"]] == []   # rasi drishti misses
+    assert not got["protected"]
+
+
+def test_criterion_1_is_never_reached_in_either_example():
+    """§23.3 frames both criteria as ways to choose from a list — "we have
+    listed several rasis above. How do we choose one answer from the list?"
+
+    In both examples the trine rule leaves exactly one candidate inside the
+    longevity block, so there is no list to choose from and criterion 1 never
+    has to fire. `select_dasa` reports the shields and filters on none.
+    """
+    from hora.dasha.rasi.shoola import SELECTION_CRITERIA, select_dasa
+
+    for number in (8, 39):
+        _longitudes, signs, lagna_sign, al = _chart(number)
+        got = select_dasa(al, lagna_sign, "middle", signs, lagna=lagna_sign,
+                          atma_karaka=_ak_of(number))
+        assert len(got["trines_from_al"]) == 1, number
+        assert got["selected"] is not None
+        # Shields are reported on every candidate and filter none out.
+        assert all("protection" in c for c in got["candidates"])
+        assert got["selected"]["rasi"] in [c["rasi"] for c in
+                                           got["can_kill"]]
+
+    assert len(SELECTION_CRITERIA) == 2

@@ -588,3 +588,63 @@ def protected_by(rasi: int, signs: dict[int, int], atma_karaka: int,
         "undecided": (None if rudra is not None or not shields else
                       "whether either shield is Rudra; pass rudra"),
     }
+
+
+def select_dasa(arudha_lagna: int, seed_sign: int, longevity: str,
+                signs: dict[int, int] | None = None,
+                lagna: int | None = None,
+                *, atma_karaka: int | None = None,
+                rudra: int | None = None) -> dict:
+    """§23.3's two criteria applied together — the dasas that can kill.
+
+    Criterion 2 first: only the four dasas of the longevity block are
+    candidates. Then §23.3's own rules, which rank them — the trines from AL
+    are unconditional and the 3rd and 8th from AL need malefics or marakas.
+    Criterion 1 is applied last and only as a report, since its own word is
+    "usually".
+
+    :param longevity: the category, from
+        :func:`hora.charts.maraka.three_pairs` or from the caller. Examples 89
+        and 90 both take it as given, and on Chart 39 the two disagree — see
+        D-65.
+    """
+    al = validate.in_range("arudha_lagna", arudha_lagna, 0, 11)
+    block = longevity_block(longevity)
+    run = progression(validate.in_range("seed_sign", seed_sign, 0, 11))
+    reachable = {row["sign"]: row
+                 for row in death_rasis(al, signs, lagna=lagna)}
+
+    candidates = []
+    for position in block["positions"]:
+        rasi = run.signs[position]
+        row = reachable.get(rasi)
+        entry = {
+            "position": position, "sign": rasi,
+            "rasi": str(RASI_NAMES[rasi]),
+            "starts": run.starts[position],
+            "ends": run.starts[position] + run.years[position],
+            "reads": None if row is None else row["group"],
+            "house_from_al": None if row is None else row["house_from_al"],
+            "can_kill": row is not None and row.get("applies") is not False,
+        }
+        if row is not None and row.get("undecided"):
+            entry["undecided"] = row["undecided"]
+        if signs is not None and atma_karaka is not None:
+            entry["protection"] = protected_by(rasi, signs, atma_karaka, rudra)
+        candidates.append(entry)
+
+    killers = [c for c in candidates if c["can_kill"]]
+    trines = [c for c in killers if c["house_from_al"] in (1, 5, 9)]
+    return {
+        "longevity": longevity,
+        "block": block,
+        "candidates": tuple(candidates),
+        "can_kill": tuple(killers),
+        "trines_from_al": tuple(trines),
+        #: The answer when the trines alone leave one, which is how both of
+        #: §23.4's examples reach theirs.
+        "selected": trines[0] if len(trines) == 1 else None,
+        "why": (f"of the four {longevity}-life dasas from "
+                f"{RASI_NAMES[run.seed]}, "
+                f"{len(trines)} lie in the trines from {RASI_NAMES[al]}"),
+    }

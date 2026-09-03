@@ -2042,3 +2042,42 @@ the death of October 1984 is inside it, which the full sequence gives.
 **What we do:** nothing. `progression` walks the zodiac, so it produces Libra
 in both places without a special case.
 
+---
+
+## D-65 · Example 90 needs a middle life that §14.4's method does not give
+
+**Status: NEEDS YOU — it selects a different dasa, not a different shade.**
+
+§23.3's criterion 2 narrows the answer to four dasas by longevity category, so
+the category decides which four. Example 90 says of Chart 39:
+
+> "One can see that Cp is the only trine from AL in the **middle life range**."
+
+§14.4's three pairs on that chart give **short**:
+
+| pair | rasis | modalities | gives |
+|---|---|---|---|
+| lagna lord and 8th lord | Leo, Leo | fixed, fixed | short |
+| Moon and Saturn | Leo, Gemini | fixed, dual | long |
+| lagna and Horalagna | Leo, Leo | fixed, fixed | short |
+
+Two short dominate one long, and Table 34's paramaayush for that split is **40
+years**. Rajiv Gandhi died at 46. Taking the ordinary 8th instead of Table 32's
+changes nothing — Jupiter is in Leo too, so the first pair stays fixed+fixed.
+
+The consequence is the whole answer. Under **middle** the four candidates are
+Sg, Cp, Aq, Pi and Capricorn is the only trine from AL — the example's result,
+and the dasa the death fell in. Under **short** they are Le, Vi, Li, Sc, and
+the only trine is **Virgo**, ages 9-18.
+
+This is the second ayur chart where the method and the outcome part: Chart 41
+computes long and the native died at 65. Chart 8 agrees — Exercise 23 computes
+middle and Example 89 uses middle.
+
+**What we do:** nothing automatic. `select_dasa` takes the category as an
+argument rather than computing it, so a caller can pass either, and
+`three_pairs` is unchanged — it reproduces §14.4 exactly, which is what makes
+the disagreement visible.
+
+**Closes when:** you decide, or a later section revises the three pairs.
+
