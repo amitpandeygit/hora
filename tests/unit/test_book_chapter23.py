@@ -1527,3 +1527,230 @@ def test_the_answer_counts_the_year_of_death_the_way_90_and_91_do():
     assert (start, end) == (81, 90)
     for year in (82, 83):
         assert start <= year < end
+
+
+# --------------------------------------------------------------------------
+# §23.5 Death of near relatives
+# --------------------------------------------------------------------------
+
+def test_23_5_widens_the_scope_a_second_time():
+    """"Shoola dasa shows Shiva's punishment. It shows misfortune, suffering
+    and death."
+
+    §23.1 gave death, diseases, suffering and death of relatives; §23.5 adds
+    misfortune and names the whole thing Shiva's punishment.
+    """
+    from hora.dasha.rasi.shoola import SHIVAS_PUNISHMENT, SHOWS
+
+    assert "misfortune" in SHIVAS_PUNISHMENT
+    assert "misfortune" not in SHOWS
+    assert "Shiva's punishment" in SHIVAS_PUNISHMENT
+    assert "death of near relatives can also be timed" in SHIVAS_PUNISHMENT
+
+
+def test_the_relative_seed_rule_is_23_2s_with_a_different_house():
+    """"We treat the house that shows him/her as lagna... Shoola dasa starts
+    from the stronger of that rasi and the 7th from it."
+
+    §23.2's own rule is this one with the 1st house, which is why Dara Shoola
+    dasa turns out to be the ordinary dasa.
+    """
+    from hora.dasha.rasi.shoola import (
+        RELATIVE_DASAS,
+        RELATIVE_SEED_RULE,
+        SEED_RULE,
+    )
+
+    assert "the stronger of that rasi and the 7th from it" in (
+        RELATIVE_SEED_RULE)
+    assert SEED_RULE == "Find the stronger of lagna and the 7th house."
+
+    for row in RELATIVE_DASAS:
+        first, second = row["pair"]
+        assert (second - first) % 12 == 6, row["name"]
+        assert row["house"] == first
+
+
+@pytest.mark.parametrize("name,means,pair", [
+    ("Pitri Shoola dasa", "father", (9, 3)),
+    ("Bhratri Shoola dasa", "brother", (3, 9)),
+    ("Matri Shoola dasa", "mother", (4, 10)),
+    ("Dara Shoola dasa", "wife", (7, 1)),
+    ("Putra Shoola dasa", "son", (5, 11)),
+])
+def test_the_five_named_variants(name, means, pair):
+    """§23.5's five, each with the house that shows the relative and the 7th
+    from it. Named in Sanskrit with the gloss the section gives.
+    """
+    from hora.dasha.rasi.shoola import RELATIVE_DASAS, relative_dasa
+
+    row = next(r for r in RELATIVE_DASAS if r["name"] == name)
+    assert row["means"] == means
+    assert row["pair"] == pair
+
+    got = relative_dasa(name, R["Leo"])
+    assert set(got["candidates"]) == set(pair)
+    assert got["seed"] is None                # the comparison is OI-131's
+    assert "see OI-131" in got["undecided"]
+
+
+def test_pitri_and_bhratri_are_the_same_dasa_read_two_ways():
+    """"Pitri Shoola dasa... starts from the stronger of 9th and 3rd houses"
+    and "Bhratri Shoola dasa also starts from the stronger of 3rd and 9th
+    houses".
+
+    "Stronger of" is symmetric, so the two are one run. §23.5 prints them as
+    separate entries and never says so; only the reading differs — the
+    father's death against a younger sibling's.
+    """
+    from hora.dasha.rasi.shoola import (
+        PITRI_AND_BHRATRI_ARE_ONE_DASA,
+        relative_dasa,
+    )
+
+    for lagna in range(12):
+        for house in (3, 9):
+            pitri = relative_dasa("Pitri Shoola dasa", lagna,
+                                  stronger_house=house)
+            bhratri = relative_dasa("Bhratri Shoola dasa", lagna,
+                                    stronger_house=house)
+            assert pitri["seed"] == bhratri["seed"]
+            assert pitri["run"].signs == bhratri["run"].signs
+
+    assert "the same rasi and so the same twelve dasas" in (
+        PITRI_AND_BHRATRI_ARE_ONE_DASA)
+
+
+def test_dara_shoola_dasa_is_the_ordinary_one_and_the_book_says_so():
+    """"(this dasa will be identical to the native's normal Shoola dasa)."
+
+    The 7th and 1st are §23.2's own pair, so the wife's dasa and the native's
+    are the same twelve periods.
+    """
+    from hora.dasha.rasi.shoola import (
+        DARA_IS_THE_ORDINARY_SHOOLA_DASA,
+        progression,
+        relative_dasa,
+        seed,
+    )
+
+    assert "identical to the native's normal Shoola dasa" in (
+        DARA_IS_THE_ORDINARY_SHOOLA_DASA)
+
+    for lagna in range(12):
+        for house, sign in ((1, lagna), (7, (lagna + 6) % 12)):
+            dara = relative_dasa("Dara Shoola dasa", lagna,
+                                 stronger_house=house)
+            ordinary = seed(lagna, stronger_house=house)
+            assert dara["seed"] == ordinary.sign == sign
+            assert dara["run"].signs == progression(sign).signs
+
+
+def test_five_names_are_four_dasas():
+    """The two identities together: Pitri and Bhratri share a pair, and Dara
+    shares §23.2's. So §23.5's five names cover four distinct runs.
+    """
+    from hora.dasha.rasi.shoola import RELATIVE_DASAS
+
+    pairs = {tuple(sorted(row["pair"])) for row in RELATIVE_DASAS}
+    assert len(RELATIVE_DASAS) == 5
+    assert pairs == {(1, 7), (3, 9), (4, 10), (5, 11)}
+    assert len(pairs) == 4
+
+
+def test_two_house_pairs_are_left_unnamed_and_matris_use_unstated():
+    """Six pairs exist and §23.5 names four — nothing for the 2nd/8th or the
+    6th/12th. And Matri Shoola dasa is the only variant with no "it shows..."
+    clause; its use is left to its name.
+    """
+    from hora.dasha.rasi.shoola import (
+        RELATIVE_DASAS,
+        THE_UNNAMED_PAIRS_AND_THE_UNSTATED_USE,
+    )
+
+    every_pair = {tuple(sorted((h, (h + 5) % 12 + 1))) for h in range(1, 13)}
+    named = {tuple(sorted(row["pair"])) for row in RELATIVE_DASAS}
+    assert len(every_pair) == 6
+    assert every_pair - named == {(2, 8), (6, 12)}
+
+    without = [row["name"] for row in RELATIVE_DASAS if row["shows"] is None]
+    assert without == ["Matri Shoola dasa"]
+    assert "no stated reading" in THE_UNNAMED_PAIRS_AND_THE_UNSTATED_USE
+
+
+def test_an_unknown_variant_or_house_is_refused():
+    from hora.dasha.rasi.shoola import ShoolaError, relative_dasa
+
+    with pytest.raises(ShoolaError, match="unknown variant"):
+        relative_dasa("Guru Shoola dasa", R["Leo"])
+    with pytest.raises(ShoolaError, match="must be one of"):
+        relative_dasa("Matri Shoola dasa", R["Leo"], stronger_house=1)
+
+
+def test_a_relative_is_read_from_the_sthira_karaka_not_from_al():
+    """"When Shiva's force strikes trines from sthira karaka of father,
+    father's death can take place. Trines from the corresponding arudha pada
+    can also give death."
+
+    Two references and both are trines. §23.3's 3rd and 8th houses do not
+    appear for a relative, and AL is replaced by the karaka.
+    """
+    from hora.dasha.rasi.shoola import (
+        DEATH_HOUSES_FROM_AL,
+        RELATIVE_DEATH_RULE,
+        relative_death_rasis,
+    )
+
+    assert "sthira karaka" in RELATIVE_DEATH_RULE
+    assert "arudha pada" in RELATIVE_DEATH_RULE
+    assert "3rd" not in RELATIVE_DEATH_RULE and "8th" not in (
+        RELATIVE_DEATH_RULE)
+    assert (3, 8) in [row["houses"] for row in DEATH_HOUSES_FROM_AL]
+
+    got = relative_death_rasis(R["Aries"], R["Taurus"])
+    assert got["names"]["from_sthira_karaka"] == (
+        "Aries", "Leo", "Sagittarius")
+    assert got["names"]["from_arudha_pada"] == ("Taurus", "Virgo", "Capricorn")
+    assert len(got["all"]) == 6
+    assert got["undecided"] is None
+
+
+def test_the_arudha_pada_is_reported_missing_rather_than_dropped():
+    """Half the rule needs a pada the caller may not have settled — the 3/9
+    pair is shared by two variants, so "the corresponding arudha pada" is not
+    self-evident there.
+    """
+    from hora.dasha.rasi.shoola import relative_death_rasis
+
+    got = relative_death_rasis(R["Aries"])
+    assert got["from_arudha_pada"] == ()
+    assert "corresponding arudha pada was not given" in got["undecided"]
+    assert got["all"] == tuple(sorted(got["from_sthira_karaka"]))
+
+
+def test_23_5_points_back_to_8_3_for_the_karakas():
+    """"We mentioned earlier that sthira karakas are useful in timing death."
+
+    §8.3 said it, and said more than §23.5 recalls — which graha to take for a
+    spouse depends on the native's sex. Father and mother are each a *pair*
+    there, so those two readings need a strength comparison of their own.
+    """
+    from hora.core.constants.karaka import (
+        STHIRA_KARAKA_OF_SPOUSE,
+        STHIRA_KARAKAS,
+    )
+    from hora.dasha.rasi.shoola import (
+        RELATIVE_DASAS,
+        STHIRA_KARAKAS_WERE_PROMISED_FOR_DEATH,
+    )
+
+    assert "death of spouse" in STHIRA_KARAKAS_WERE_PROMISED_FOR_DEATH
+    assert set(STHIRA_KARAKA_OF_SPOUSE) == {"male", "female"}
+
+    by_relative = {row["relative"]: row for row in STHIRA_KARAKAS}
+    for row in RELATIVE_DASAS:
+        assert row["sthira_karaka"] in by_relative, row["name"]
+
+    assert by_relative["father"]["rule"] == "stronger"
+    assert by_relative["mother"]["rule"] == "stronger"
+    assert len(by_relative["father"]["grahas"]) == 2

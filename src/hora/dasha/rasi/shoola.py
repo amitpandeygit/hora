@@ -734,3 +734,178 @@ def dasa_periods(seed_sign: int, birth_jd: float,
         "end_jd": birth_jd + (start + run.years[position]) * year_days,
     } for position, (sign, start) in enumerate(
         zip(run.signs, run.starts, strict=True)))
+
+
+# --------------------------------------------------------------------------
+# §23.5 Death of near relatives
+# --------------------------------------------------------------------------
+
+#: §23.5's framing, and it widens §23.1's list again — "misfortune" is new.
+SHIVAS_PUNISHMENT = (
+    "Shoola dasa shows Shiva's punishment. It shows misfortune, suffering and "
+    "death. Using it, death of near relatives can also be timed."
+)
+
+#: The generalisation. §23.2's own seed is this rule with the 1st house.
+RELATIVE_SEED_RULE = (
+    "For each relative, we treat the house that shows him/her as lagna and "
+    "find Shoola dasa based on it. Shoola dasa starts from the stronger of "
+    "that rasi and the 7th from it."
+)
+
+#: §23.5's five named variants, in the order it gives them. ``house`` is the
+#: house that shows the relative and ``pair`` is it with the 7th from it.
+RELATIVE_DASAS: tuple[dict, ...] = (
+    {"name": "Pitri Shoola dasa", "means": "father", "house": 9,
+     "pair": (9, 3), "sthira_karaka": "father",
+     "shows": "the timing of father's death"},
+    {"name": "Bhratri Shoola dasa", "means": "brother", "house": 3,
+     "pair": (3, 9),
+     "sthira_karaka": ("younger siblings, brother-in-law and sister-in-law "
+                       "(spouses of siblings)"),
+     "shows": "the death of younger siblings"},
+    {"name": "Matri Shoola dasa", "means": "mother", "house": 4,
+     "pair": (4, 10), "sthira_karaka": "mother", "shows": None},
+    {"name": "Dara Shoola dasa", "means": "wife", "house": 7,
+     "pair": (7, 1),
+     "sthira_karaka": ("wife, father-in-law, mother-in-law & maternal "
+                       "grandparents"),
+     "shows": "the death of wife"},
+    {"name": "Putra Shoola dasa", "means": "son", "house": 5,
+     "pair": (5, 11),
+     "sthira_karaka": ("husband, sons, paternal grandparents and other "
+                       "paternal relatives (uncles and aunts)"),
+     "shows": "the death of a child"},
+)
+
+#: **Finding.** Five names, four dasas. Pitri and Bhratri are given the *same*
+#: pair — "the stronger of 9th and 3rd" and "the stronger of 3rd and 9th" —
+#: and "stronger of" is symmetric, so they are one run read two ways. §23.5
+#: prints them as separate entries without saying so.
+PITRI_AND_BHRATRI_ARE_ONE_DASA = (
+    "Pitri Shoola dasa starts from the stronger of 9th and 3rd houses and "
+    "Bhratri Shoola dasa also starts from the stronger of 3rd and 9th "
+    "houses, which is the same rasi and so the same twelve dasas. Only the "
+    "reading differs: the father's death against a younger sibling's."
+)
+
+#: And the book says the other identity itself.
+DARA_IS_THE_ORDINARY_SHOOLA_DASA = (
+    "Dara Shoola dasa (dara = wife) starts from the stronger of 7th and 1st "
+    "houses and it shows the death of wife (this dasa will be identical to "
+    "the native's normal Shoola dasa)."
+)
+
+#: **Gap.** Six house pairs exist and §23.5 names four. Nothing is given for
+#: the 2nd/8th or the 6th/12th, and Matri Shoola dasa is the one variant given
+#: no "it shows..." clause — its use is left to its name.
+THE_UNNAMED_PAIRS_AND_THE_UNSTATED_USE = (
+    "Section 23.5 names four of the six house pairs — 1/7, 3/9, 4/10 and "
+    "5/11 — and gives no variant for 2/8 or 6/12. Matri Shoola dasa is also "
+    "the only one of the five with no stated reading; the other four each say "
+    "what they show."
+)
+
+#: §23.5's reading for a relative, which is **not** §23.3's reading for the
+#: native: no 3rd or 8th house, and the reference is the relative's sthira
+#: karaka rather than AL.
+RELATIVE_DEATH_RULE = (
+    "Sthira karaka of father represents father in a chart, for the purpose of "
+    "matters controlled by Shiva (i.e. suffering and death). Pitri Shoola "
+    "dasa shows the motion of Shiva's force for the father. When Shiva's "
+    "force strikes trines from sthira karaka of father, father's death can "
+    "take place. Trines from the corresponding arudha pada can also give "
+    "death."
+)
+
+#: §8.3 is what §23.5's "we mentioned earlier" points back to.
+STHIRA_KARAKAS_WERE_PROMISED_FOR_DEATH = (
+    "When predicting the death of spouse, we use Jupiter in female charts and "
+    "Venus in male charts."
+)
+
+
+def _ordinal(house: int) -> str:
+    suffix = "th" if 4 <= house <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(
+        house % 10, "th")
+    return f"{house}{suffix}"
+
+
+def relative_dasa(name: str, lagna: int, *,
+                  stronger_house: int | None = None) -> dict:
+    """One of §23.5's named variants — its pair, and its run once settled.
+
+    :param name: a name from :data:`RELATIVE_DASAS`.
+    :param stronger_house: whichever of the pair the caller has settled. The
+        comparison is refused for the same reason :func:`seed` refuses it.
+    """
+    rows = {row["name"]: row for row in RELATIVE_DASAS}
+    if name not in rows:
+        raise ShoolaError(
+            f"unknown variant {name!r}; expected one of {tuple(rows)}")
+    row = rows[name]
+    index = validate.in_range("lagna", lagna, 0, 11)
+    signs = {house: (index + house - 1) % 12 for house in row["pair"]}
+
+    if stronger_house is None:
+        chosen = None
+    elif stronger_house not in signs:
+        raise ShoolaError(
+            f"stronger_house must be one of {row['pair']} for {name}, "
+            f"got {stronger_house!r}")
+    else:
+        chosen = signs[stronger_house]
+
+    return {
+        "name": name, "means": row["means"], "shows": row["shows"],
+        "house": row["house"], "pair": row["pair"],
+        "candidates": {house: {"house": house, "sign": sign,
+                               "rasi": str(RASI_NAMES[sign])}
+                       for house, sign in signs.items()},
+        "seed": chosen,
+        "seed_rasi": None if chosen is None else str(RASI_NAMES[chosen]),
+        "run": None if chosen is None else progression(chosen),
+        "undecided": (None if chosen is not None else
+                      f"which of the {_ordinal(row['pair'][0])} and "
+                      f"{_ordinal(row['pair'][1])} is stronger; see OI-131"),
+    }
+
+
+def relative_death_rasis(sthira_karaka_sign: int,
+                         arudha_pada_sign: int | None = None) -> dict:
+    """§23.5's rasis that can kill a relative — trines from two references.
+
+    :param sthira_karaka_sign: the rasi the relative's sthira karaka occupies.
+        For father and mother §8.3 gives a *pair* of grahas and asks for the
+        stronger, so the caller settles that too.
+    :param arudha_pada_sign: the arudha pada of the house that shows the
+        relative. §23.5 says only "the corresponding arudha pada", which is
+        unambiguous for 4/10, 7/1 and 5/11 but not for the 3/9 pair that Pitri
+        and Bhratri share — see :data:`PITRI_AND_BHRATRI_ARE_ONE_DASA`.
+
+    §23.3's 3rd and 8th houses do not appear here: for a relative §23.5 gives
+    trines and nothing else.
+    """
+    karaka = validate.in_range("sthira_karaka_sign", sthira_karaka_sign, 0, 11)
+    from_karaka = tuple((karaka + step) % 12 for step in (0, 4, 8))
+
+    from_pada: tuple[int, ...] = ()
+    undecided: str | None = (
+        "the corresponding arudha pada was not given; §23.5 reads trines "
+        "from it as well")
+    if arudha_pada_sign is not None:
+        pada = validate.in_range("arudha_pada_sign", arudha_pada_sign, 0, 11)
+        from_pada = tuple((pada + step) % 12 for step in (0, 4, 8))
+        undecided = None
+
+    def named(signs: tuple[int, ...]) -> tuple[str, ...]:
+        return tuple(str(RASI_NAMES[sign]) for sign in signs)
+
+    return {
+        "from_sthira_karaka": from_karaka,
+        "from_arudha_pada": from_pada,
+        "names": {"from_sthira_karaka": named(from_karaka),
+                  "from_arudha_pada": named(from_pada)},
+        "all": tuple(sorted(set(from_karaka) | set(from_pada))),
+        "undecided": undecided,
+    }
