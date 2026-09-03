@@ -2134,3 +2134,252 @@ def test_all_four_worked_trishoolas_are_wholly_inside_their_range():
         got = select_trishoola(rudra_sign, run, category)
         assert got["selected"]["rasi"] == expected
         assert got["selected_wholly_in_range"] == got["selected"]
+
+
+# --------------------------------------------------------------------------
+# Exercise 31 — Chart 42, solved before the book's answer.
+# --------------------------------------------------------------------------
+
+#: The twelve dasas the exercise's chart produces, and the ages they open at.
+EX31_RUN = [("Sc", 8, 0), ("Li", 7, 8), ("Vi", 9, 15), ("Le", 8, 24),
+            ("Cn", 7, 32), ("Ge", 9, 39), ("Ta", 8, 48), ("Ar", 7, 56),
+            ("Pi", 9, 63), ("Aq", 8, 72), ("Cp", 7, 80), ("Sg", 9, 87)]
+
+
+def _chart_42():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(42).items()},
+            {int(g): sign for g, sign in graha_signs(42).items()},
+            lagna(42))
+
+
+def test_chart_42_recomputes_and_is_a_fifteenth_vote_for_the_mean_node():
+    """Every body inside one arcminute bar the Sun at 1.02', which is the
+    book's own arcminute rounding rather than a disagreement. Rahu is 58' out
+    under `true`.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(42)
+    place = Place(name="Chart 42", **record["place"])
+    printed = longitudes(42)
+
+    computed = compute_chart(from_local(**record["birth_data"]), place,
+                             Settings(node_type=NodeType.MEAN))
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.1, f"{name}: {error:.2f}'"
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+    true_node = compute_chart(from_local(**record["birth_data"]), place,
+                              Settings(node_type=NodeType.TRUE))
+    assert abs(true_node.positions[int(Graha.RAHU)].longitude
+               - printed["Rahu"]) * 60 > 50.0
+
+
+def test_exercise_31_step_1_the_three_pairs_all_disagree():
+    """"Using the method of three pairs, estimate his longevity category."
+
+    The only chart in the register whose three pairs give three different
+    answers, which is the case §14.4 breaks with a preferred pair: the Moon is
+    in neither lagna nor the 7th, so lagna and Horalagna decide — **middle
+    life, 36-72**.
+    """
+    from hora.charts.book import signs as book_signs
+    from hora.charts.maraka import three_pairs
+    from hora.core.const import Graha
+
+    _longitudes, signs, lagna_sign = _chart_42()
+    assert lagna_sign == R["Libra"]
+
+    got = three_pairs(lagna_sign, signs, book_signs(42)["HL"])
+    assert [p["category"] for p in got["pairs"]] == ["long", "short", "middle"]
+    assert len({p["category"] for p in got["pairs"]}) == 3
+
+    assert signs[int(Graha.MOON)] not in (lagna_sign, (lagna_sign + 6) % 12)
+    assert "prefers lagna and Horalagna" in got["reason"]
+    assert got["category"] == "middle"
+    assert tuple(got["range_years"]) == (36, 72)
+
+
+def test_exercise_31_step_2_rudra_is_in_aries_whichever_co_lord_is_taken():
+    """Rudra is the stronger of the 8th lords from Libra and Aries — Venus,
+    and Scorpio's, which OI-135 leaves open. Venus and Mars both sit in Aries,
+    and so does Ketu's alternative, so the **rasi** is Aries either way and
+    the Trishoolas are Ar, Le and Sg. OI-135 does not bite here.
+    """
+    from hora.charts.maraka import rudra, rudra_eighth
+    from hora.core.const import Graha
+
+    longitudes, signs, lagna_sign = _chart_42()
+    assert rudra_eighth(R["Libra"]) == R["Taurus"]
+    assert rudra_eighth(R["Aries"]) == R["Scorpio"]
+
+    default = rudra(lagna_sign, signs, longitudes)
+    with_ketu = rudra(lagna_sign, signs, longitudes,
+                      {R["Scorpio"]: int(Graha.KETU)})
+
+    assert default["candidates"] == ["Venus", "Mars"]
+    assert with_ketu["candidates"] == ["Venus", "Ketu"]
+    assert default["rudra_rasi"] == with_ketu["rudra_rasi"] == "Aries"
+    for body in (default, with_ketu):
+        assert {t["rasi"] for t in body["trishoola"]} == {
+            "Aries", "Leo", "Sagittarius"}
+
+
+def test_exercise_31_step_3_the_seed_is_scorpio_by_rule_2():
+    """Both candidates are empty of planets, so rule 1 ties for the first time
+    in the chapter and rule 2 decides: Mercury and Scorpio's co-lord Mars both
+    aspect it from Aries, and nothing reaches Taurus. No Saturn in the seed,
+    so the run is the plain backward one an even rasi gives.
+    """
+    from hora.charts.rasi_strength import stronger
+    from hora.dasha.rasi.niryaana_shoola import progression
+
+    longitudes, signs, lagna_sign = _chart_42()
+    verdict = stronger((lagna_sign + 1) % 12, (lagna_sign + 7) % 12,
+                       longitudes, purpose="phalita")
+
+    assert verdict.rules[0].winner is None            # rule 1 ties
+    assert verdict.winner == R["Scorpio"]
+    assert verdict.decided_by == "2"
+    assert "co-lord (Mars) aspects from Aries" in verdict.reason
+
+    occupants = {g for g, sign in signs.items() if sign == R["Scorpio"]}
+    assert occupants == set()
+    got = progression(R["Scorpio"], occupants)
+    assert got.direction == "backward"
+    assert got.exception is None
+    assert [(ABBR[s], y, start) for s, y, start in
+            zip(got.signs, got.years, got.starts)] == EX31_RUN
+
+
+def test_exercise_31_step_4_aries_is_the_trishoola_in_the_middle_range():
+    """"Then identify the dasa of a Trishoola rasi falling in that longevity
+    category."
+
+    Leo runs 24-32 and Sagittarius 87-96; only Aries at 56-63 lies in 36-72,
+    and it lies wholly inside, so the loose and strict readings of OI-133
+    agree. Born 20 April 1889, that dasa is **20 April 1945 to 20 April 1952**.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.rasi.niryaana_shoola import progression, select_trishoola
+
+    born = chart(42)["birth_data"]
+    assert (born["year"], born["month"], born["day"]) == (1889, 4, 20)
+
+    run = progression(R["Scorpio"])
+    got = select_trishoola(R["Aries"], run, "middle")
+    spans = {row["rasi"]: (row["starts"], row["ends"])
+             for row in got["trishoolas"]}
+    assert spans == {"Aries": (56, 63), "Leo": (24, 32),
+                     "Sagittarius": (87, 96)}
+
+    assert got["selected"]["rasi"] == "Aries"
+    assert got["selected_wholly_in_range"] == got["selected"]
+    assert born["year"] + 56 == 1945
+    assert born["year"] + 63 == 1952
+
+
+def test_exercise_31_step_5_the_antardasas_of_aries():
+    """§18.3 by way of §22.2.1's borrowing. Aries beats Libra on rule 1 with
+    four planets to none, its lord Mars is in Aries itself, and Aries is odd —
+    so the antardasas start there and run forward, seven months each.
+    """
+    from hora.charts.rasi_strength import stronger
+    from hora.dasha.rasi.narayana import antardasas
+
+    longitudes, _signs, _lagna = _chart_42()
+    verdict = stronger(R["Aries"], R["Libra"], longitudes, purpose="phalita")
+    assert verdict.winner == R["Aries"]
+    assert "Aries contains 4 planets" in verdict.reason
+
+    got = antardasas(R["Aries"], 7, longitudes)
+    assert got.seed == got.start == R["Aries"]
+    assert got.direction == "forward"
+    assert got.months_each == 7
+    assert [ABBR[s] for s in got.signs[:3]] == ["Ar", "Ta", "Ge"]
+    assert got.signs[7] == R["Scorpio"]          # the 8th
+
+
+def test_exercise_31_step_6_which_antardasa_the_principles_point_to():
+    """"Try to guess the antardasa of death."
+
+    §22.2.2's two principles pick **Scorpio** and nothing else: it is the 8th
+    from Aries, and it is where the 8th lord sits in navamsa — Mars and Ketu
+    both land in Scorpio there, so OI-135 does not bite here either. That is
+    the section's "strong candidate", the 8th antardasa, **20 May 1949 to
+    20 December 1949**.
+    """
+    from hora.charts.book import longitudes as book_longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+    from hora.dasha.rasi.niryaana_shoola import antardasa_candidates
+
+    printed = book_longitudes(42)
+    for name in ("Mars", "Ketu"):
+        assert varga(printed[name], "D9").sign == R["Scorpio"], name
+
+    for lord in (int(Graha.MARS), int(Graha.KETU)):
+        got = antardasa_candidates(R["Aries"], {lord: R["Scorpio"]},
+                                   eighth_lord=lord)
+        assert got["eighth_name"] == "Scorpio"
+        assert got["from_dasa_rasi_names"] == (
+            "Virgo", "Libra", "Scorpio", "Pisces")
+        assert got["aspecting_names"] == (
+            "Scorpio", "Aries", "Cancer", "Capricorn")
+        assert got["strong_candidate_names"] == ("Scorpio",)
+
+    opens = 1945 * 12 + 3 + 7 * 7      # April 1945 zero-based, plus seven
+    assert divmod(opens, 12) == (1949, 4)          # May 1949
+    assert divmod(opens + 7, 12) == (1949, 11)     # December 1949
+
+
+def test_exercise_31_the_first_antardasa_meets_the_second_principle_only():
+    """The other candidate worth naming. Aries itself is not the 6th, 7th, 8th
+    or 12th from Aries, but it **does** aspect Scorpio, so it satisfies the
+    second principle alone — the shape Example 85's Taurus had. It is the
+    antardasa the dasa opens with, 20 April to 20 November 1945.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.niryaana_shoola import antardasa_candidates
+
+    got = antardasa_candidates(R["Aries"], {int(Graha.MARS): R["Scorpio"]},
+                               eighth_lord=int(Graha.MARS))
+    assert R["Aries"] not in got["from_dasa_rasi"]
+    assert R["Aries"] in got["aspecting_the_navamsa_rasi"]
+
+    opens = 1945 * 12 + 3
+    assert divmod(opens, 12) == (1945, 3)          # April 1945
+    assert divmod(opens + 7, 12) == (1945, 10)     # November 1945
+
+
+def test_exercise_31_is_answered_before_the_books_answer_arrives():
+    """The whole derivation in one place, so a later answer can be checked
+    against it line by line rather than re-derived.
+    """
+    from hora.charts.book import chart
+
+    # The book prints no death date for this chart; the exercise asks for one.
+    assert "events" not in chart(42)
+    answer = {
+        "longevity": ("middle", (36, 72)),
+        "rudra_rasi": "Aries",
+        "trishoolas": ("Aries", "Leo", "Sagittarius"),
+        "seed": "Scorpio",
+        "direction": "backward",
+        "dasa": ("Aries", "20 April 1945", "20 April 1952"),
+        "antardasa_by_both_principles": (
+            "Scorpio", "20 May 1949", "20 December 1949"),
+        "antardasa_by_the_second_only": (
+            "Aries", "20 April 1945", "20 November 1945"),
+    }
+    assert answer["dasa"][0] in answer["trishoolas"]
+    assert answer["antardasa_by_both_principles"][0] not in answer[
+        "trishoolas"]

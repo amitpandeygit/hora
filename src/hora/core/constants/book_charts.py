@@ -430,6 +430,40 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    42: {
+        "title": "Niryaana Shoola Exercise — Exercise 31",
+        "birth": "April 20, 1889, 6:30 pm (1:00 East), 13 E 02, 48 N 15",
+        "birth_data": {
+            "year": 1889, "month": 4, "day": 20, "hour": 18, "minute": 30,
+            "second": 0.0, "utc_offset_hours": 1.0,
+        },
+        "place": {"latitude": 48 + 15 / 60, "longitude": 13 + 2 / 60},
+        "longitudes": {
+            "Asc": "2 Li 56", "Sun": "8 Ar 29", "Moon": "14 Sg 14",
+            "Mars": "24 Ar 04", "Merc": "3 Ar 21", "Jup": "15 Sg 56",
+            "Ven": "24 Ar 23", "Sat": "21 Cn 09", "Rahu": "23 Ge 45",
+            "Ketu": "23 Sg 45", "HL": "16 Ta 57", "GL": "15 Cp 27",
+        },
+        "chara_karakas": {
+            "Ven": "AK", "Mars": "AmK", "Sat": "BK", "Jup": "MK",
+            "Moon": "PiK", "Sun": "PK", "Rahu": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Ven",),
+        "drawn": {
+            "Mars": "Ar", "Sun": "Ar", "Ven": "Ar", "Merc": "Ar",
+            "HL": "Ta", "Rahu": "Ge", "AL": "Cn", "Sat": "Cn",
+            "GL": "Cp", "Jup": "Sg", "Moon": "Sg", "Ketu": "Sg",
+            "Asc": "Li",
+        },
+        "first_seen": "chapter 22, Exercise 31",
+        "note": (
+            "Printed without a name or a death date -- the exercise asks the "
+            "reader to derive both the longevity category and the dasa and "
+            "antardasa of death, and to give dates. The only chart in the "
+            "register whose three longevity pairs all disagree, which is the "
+            "case section 14.4 breaks with its preferred pair."
+        ),
+    },
     41: {
         "title": "A gentleman — Niryaana Shoola dasa",
         "birth": "March 14, 1902, 11:48 am (IST), 81 E 12, 16 N 15",

@@ -280,6 +280,13 @@
         "number": 41,
         "recomputable": true,
         "title": "A gentleman \u2014 Niryaana Shoola dasa"
+      },
+      {
+        "birth": "April 20, 1889, 6:30 pm (1:00 East), 13 E 02, 48 N 15",
+        "first_seen": "chapter 22, Exercise 31",
+        "number": 42,
+        "recomputable": true,
+        "title": "Niryaana Shoola Exercise \u2014 Exercise 31"
       }
     ],
     "not_supplied": [
@@ -320,7 +327,8 @@
       38,
       39,
       40,
-      41
+      41,
+      42
     ]
   },
   "status": 200
