@@ -398,6 +398,44 @@ RULE_4_IS_JUST_WALKING_THE_WHEEL = (
     "going through them."
 )
 
+#: Example 97 states it outright, for dasas and antardasas together, and names
+#: the only difference between them — where the walk starts.
+EXAMPLE_97_SAYS_THE_WHEEL_IS_THE_WHOLE_MACHINERY = (
+    "One can notice that dasa sequences and antardasa sequences all come from "
+    "the two 24-rasi sequences given in Kalachakra (see Table 43). In the "
+    "cases of dasas, the starting point in the 24-rasi sequence is determined "
+    "by the nakshatra pada of Moon and the portion elapsed in it. In the case "
+    "of antardasas, the starting point is based on dasa rasi."
+)
+
+#: Footnote 66, on the dasa running at birth: its antardasas are laid out over
+#: the **whole** dasa, not over the balance, so the earliest of them fall
+#: before birth. See :func:`first_antardasa`.
+FOOTNOTE_66 = (
+    "However, we see from Example 95 that 2.25 years of Sc dasa were over "
+    "before birth. So some of these antardasas may be over before birth."
+)
+
+#: **Finding.** Footnote 66 settles a question §24.2's rule (5) leaves open —
+#: whether the first dasa's antardasas divide its full length or the balance
+#: remaining at birth. They divide the full length, and the answer is visible
+#: only because the book says some of them are already over.
+THE_FIRST_DASAS_ANTARDASAS_DIVIDE_ITS_WHOLE_LENGTH = (
+    "The dasa running at birth has its nine antardasas laid out across the "
+    "whole dasa, so those falling in the elapsed part are over before birth. "
+    "They are not a proportional division of the balance."
+)
+
+#: **Caution.** Le dasa's nine antardasas sum to 86, which is also an apasavya
+#: paramayush, and that is a coincidence of where they start. Nine consecutive
+#: wheel positions sum to 72, 83, 85, 86, 88, 97 or 100; only the nine that
+#: begin a pada are guaranteed to be a paramayush.
+NINE_CONSECUTIVE_IS_NOT_ALWAYS_A_PARAMAYUSH = (
+    "Nine consecutive rasis of a wheel total 72, 83, 85, 86, 88, 97 or 100 "
+    "years depending on where they start. Only pada-aligned nines give the "
+    "four paramayush figures."
+)
+
 #: Footnote 63, which supplies the denominator both examples divide by.
 FOOTNOTE_63 = "The complete length of each nakshatra pada is 3\u00b020'."
 
@@ -489,6 +527,42 @@ def dasa_order(nakshatra: int, pada: int, count: int,
         "rasi": str(RASI_NAMES[ring[(start + step) % 24]]),
         "years": dasa_years(ring[(start + step) % 24]),
     } for step in range(count))
+
+
+def first_antardasa(rows: tuple[dict, ...], elapsed_years: float) -> dict:
+    """Footnote 66 — which antardasa of the dasa running at birth is itself
+    running, once the elapsed part of that dasa is taken off.
+
+    :param rows: :func:`antardasas` for the dasa, laid out over its **whole**
+        length; see :data:`THE_FIRST_DASAS_ANTARDASAS_DIVIDE_ITS_WHOLE_LENGTH`.
+    :param elapsed_years: the part of the dasa over before birth, which
+        :func:`first_dasa` reports as ``elapsed_years``.
+    """
+    if not rows:
+        raise KalachakraError("antardasas cannot be empty")
+    elapsed = float(elapsed_years)
+    if elapsed < 0:
+        raise KalachakraError(
+            f"elapsed_years cannot be negative, got {elapsed}")
+    total = sum(float(row["years"]) for row in rows)
+    if elapsed > total:
+        raise KalachakraError(
+            f"elapsed_years {elapsed} exceeds the dasa's {total}")
+
+    running = 0.0
+    for position, row in enumerate(rows):
+        length = float(row["years"])
+        if elapsed < running + length or position == len(rows) - 1:
+            return {
+                "index": position,
+                "over_before_birth": position,
+                "sign": row["sign"], "rasi": row["rasi"],
+                "years": length,
+                "elapsed_years": elapsed - running,
+                "balance_years": running + length - elapsed,
+            }
+        running += length
+    raise AssertionError  # pragma: no cover - the loop always returns
 
 
 def nine_from_birth(nakshatra: int, pada: int, position: int) -> dict:

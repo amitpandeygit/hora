@@ -1017,3 +1017,159 @@ def test_exercise_34_prints_a_tenth_dasa_footnote_64_does_not_allow():
     assert A[printed[9]["sign"]] == "Ge"                      # nine unchanged
     assert len({row["sign"] for row in printed}) == 7         # only 7 distinct
     assert "ten dasas" in EXERCISE_34_PRINTS_A_TENTH_DASA
+
+
+# ---------------------------------------------------------------------------
+# Example 97 — antardasa sequences in Example 95's first four dasas
+# ---------------------------------------------------------------------------
+
+#: The four sequences the example prints, in its own order.
+EXAMPLE_97 = (
+    (16, "Sc", ["Sc", "Li", "Vi", "Le", "Cn", "Ge", "Ta", "Ar", "Sg"]),
+    (17, "Li", ["Li", "Vi", "Le", "Cn", "Ge", "Ta", "Ar", "Sg", "Cp"]),
+    (18, "Vi", ["Vi", "Le", "Cn", "Ge", "Ta", "Ar", "Sg", "Cp", "Aq"]),
+    (19, "Le", ["Le", "Cn", "Ge", "Ta", "Ar", "Sg", "Cp", "Aq", "Pi"]),
+)
+
+
+@pytest.mark.parametrize(("index", "dasa", "expected"), EXAMPLE_97)
+def test_example_97_antardasa_sequences(index, dasa, expected):
+    """"Antardasas in Li dasa (2nd dasa) go as Li, Vi, Le, Cn, Ge, Ta, Ar, Sg,
+    Cp" -- and so for the 1st, 3rd and 4th. Each is nine steps of the apasavya
+    wheel from the dasa rasi's own position.
+    """
+    from hora.dasha.nakshatra.kalachakra import antardasas, dasa_order
+
+    got = antardasas(4, index, 1.0)
+    assert [A[row["sign"]] for row in got] == expected
+    assert A[got[0]["sign"]] == dasa            # they start from the dasa rasi
+
+    # and that position is where Example 95's dasa walk puts this dasa
+    order = dasa_order(4, 2, 4, skip=7)
+    assert order[index - 16]["position"] == index
+    assert A[order[index - 16]["sign"]] == dasa
+
+
+def test_example_97_the_first_dasas_nine_end_the_pada_then_continue():
+    """"After Sc, we have Li and the 9 rasis corresponding to the 2nd pada end
+    there (see Table 46). So the next 7 rasis should be taken from the 9 rasis
+    corresponding to the next pada, i.e. 3rd pada."
+    """
+    from hora.dasha.nakshatra.kalachakra import antardasas, wheel_position
+
+    got = antardasas(4, 16, 7.0)
+    second = [(wheel_position(4, 2) + step) % 24 for step in range(9)]
+    third = [(wheel_position(4, 3) + step) % 24 for step in range(9)]
+
+    assert [row["position"] for row in got][:2] == [16, 17]
+    assert second[-2:] == [16, 17]                # Sc and Li end the 2nd pada
+    assert all(row["position"] in third for row in got[2:])
+    assert len(got[2:]) == 7                      # "the next 7 rasis"
+    assert third[:7] == [row["position"] for row in got[2:]]
+
+
+def test_example_97_le_dasa_is_divided_into_86_parts():
+    """"By adding the dasa lengths of these 9 rasis (see Table 48), we get 86
+    years. So we divide Le dasa of 5 years into 86 parts and give 5 parts to Le
+    antardasa, 21 parts to Cn antardasa, 9 parts to Ge antardasa and so on."
+    """
+    from hora.dasha.nakshatra.kalachakra import antardasas
+
+    got = antardasas(4, 19, 5.0)
+    assert sum(row["share_years"] for row in got) == 86
+    assert [row["share_years"] for row in got] == [5, 21, 9, 16, 7, 10, 4, 4, 10]
+
+    assert got[0]["years"] == pytest.approx(5.0 * 5 / 86)
+    assert got[1]["years"] == pytest.approx(5.0 * 21 / 86)
+    assert got[2]["years"] == pytest.approx(5.0 * 9 / 86)
+    assert sum(row["years"] for row in got) == pytest.approx(5.0)
+
+
+def test_le_dasas_86_is_a_coincidence_not_a_paramayush():
+    """Nine consecutive wheel positions do not always total a paramayush. Only
+    the nine that begin a pada do.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        NINE_CONSECUTIVE_IS_NOT_ALWAYS_A_PARAMAYUSH,
+        dasa_years,
+        wheel,
+    )
+
+    totals = {
+        sum(dasa_years(wheel(group)[(start + step) % 24]) for step in range(9))
+        for group in ("savya", "apasavya") for start in range(24)
+    }
+    assert totals == {72, 83, 85, 86, 88, 97, 100}
+    assert not totals <= {100, 85, 83, 86}
+    assert "coincidence" not in NINE_CONSECUTIVE_IS_NOT_ALWAYS_A_PARAMAYUSH
+
+
+def test_example_97_states_the_finding_the_wheel_is_the_whole_machinery():
+    """The book says outright what rule (4) only implied, and names the one
+    difference between the dasa walk and the antardasa walk.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_97_SAYS_THE_WHEEL_IS_THE_WHOLE_MACHINERY as SAID,
+    )
+
+    assert "all come from the two 24-rasi sequences" in SAID
+    assert "the starting point is based on dasa rasi" in SAID
+
+
+def test_footnote_66_puts_three_antardasas_before_birth():
+    """"2.25 years of Sc dasa were over before birth. So some of these
+    antardasas may be over before birth."
+
+    Sc, Li and Vi are over by 2.24 years, so Le is running at birth -- with a
+    hundredth of a year gone. The margin is a hundredth of a year, which is
+    what makes it a check on the arithmetic rather than a restatement.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        FOOTNOTE_66,
+        THE_FIRST_DASAS_ANTARDASAS_DIVIDE_ITS_WHOLE_LENGTH,
+        antardasas,
+        first_antardasa,
+    )
+
+    rows = antardasas(4, 16, 7.0)
+    assert sum(row["years"] for row in rows[:3]) == pytest.approx(2.24)
+
+    got = first_antardasa(rows, 2.25)
+    assert got["over_before_birth"] == 3
+    assert got["rasi"] == "Leo"
+    assert got["elapsed_years"] == pytest.approx(0.01)
+    assert got["balance_years"] == pytest.approx(0.34)
+
+    assert "over before birth" in FOOTNOTE_66
+    assert "whole dasa" in THE_FIRST_DASAS_ANTARDASAS_DIVIDE_ITS_WHOLE_LENGTH
+
+
+def test_the_antardasas_divide_the_whole_dasa_not_the_balance():
+    """Example 95 leaves 4.75 years of Sc dasa at birth. Dividing 4.75 among
+    the nine would give a different Leo antardasa; footnote 66 rules it out by
+    saying antardasas are already over.
+    """
+    from hora.dasha.nakshatra.kalachakra import antardasas
+
+    whole = antardasas(4, 16, 7.0)
+    balance = antardasas(4, 16, 4.75)
+    assert sum(row["years"] for row in whole) == pytest.approx(7.0)
+    assert sum(row["years"] for row in balance) == pytest.approx(4.75)
+    assert whole[3]["years"] != pytest.approx(balance[3]["years"])
+
+
+def test_first_antardasa_checks_its_inputs():
+    from hora.dasha.nakshatra.kalachakra import (
+        KalachakraError,
+        antardasas,
+        first_antardasa,
+    )
+
+    rows = antardasas(4, 16, 7.0)
+    with pytest.raises(KalachakraError, match="cannot be empty"):
+        first_antardasa((), 1.0)
+    with pytest.raises(KalachakraError, match="cannot be negative"):
+        first_antardasa(rows, -0.1)
+    with pytest.raises(KalachakraError, match="exceeds"):
+        first_antardasa(rows, 7.5)
+    assert first_antardasa(rows, 7.0)["index"] == 8      # the last one
