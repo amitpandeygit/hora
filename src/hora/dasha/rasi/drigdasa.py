@@ -180,54 +180,92 @@ def progression(lagna: int) -> Progression:
 # §21.3 Interpretation
 # --------------------------------------------------------------------------
 
-#: §21.3's eight readings. Every reference computes — lagna, the arudha lagna,
-#: two arudha padas, and where the nodes sit — but two of the eight are
-#: conditional on something the section does not settle, and those conditions
-#: are carried rather than assumed away.
+#: §21.3's eight readings, and a ninth from Example 81. Every reference
+#: computes — lagna, the arudha lagna, two arudha padas, and where the nodes
+#: sit — but two of the eight are conditional on something the section does not
+#: settle, and those conditions are carried rather than assumed away.
+#:
+#: Each row says where it comes from. Eight are §21.3's own; rule 9 is the
+#: example's, and is the one thing in this chapter the printed list does not
+#: reach. See OI-128.
 SPIRITUAL_READINGS: tuple[dict, ...] = (
-    {"rule": 1, "reads": "AL", "test": "the dasa sign is the arudha lagna",
+    {"rule": 1, "source": "§21.3 rule 1",
+     "reads": "AL", "test": "the dasa sign is the arudha lagna",
      "gives": "renunciation", "needs": "parivraja yogas in the chart",
      "text": ("Dasa of arudha lagna can bring renunciation if there are "
               "parivraja yogas in the chart, indicating renunciation.")},
-    {"rule": 2, "reads": "AL", "test": "the dasa sign aspects the arudha lagna",
+    {"rule": 2, "source": "§21.3 rule 2",
+     "reads": "AL", "test": "the dasa sign aspects the arudha lagna",
      "gives": "external activities important for one's spiritual evolution",
      "needs": None,
      "text": ("Dasas of signs aspecting arudha lagna can bring external "
               "activities that are important for one's spiritual evolution.")},
-    {"rule": 3, "reads": "lagna",
+    {"rule": 3, "source": "§21.3 rule 3",
+     "reads": "lagna",
      "test": "the dasa sign is lagna or the 7th from it",
      "gives": "internal awakening and self-realization", "needs": None,
      "text": ("Dasa of lagna and the 7th house can bring internal awakening "
               "and self-realization.")},
-    {"rule": 4, "reads": "lagna", "test": "the dasa sign is lagna",
+    {"rule": 4, "source": "§21.3 rule 4",
+     "reads": "lagna", "test": "the dasa sign is lagna",
      "gives": "fame and power related to spreading spiritual knowledge",
      "needs": None,
      "text": ("Dasa of lagna can also bring fame and power related to "
               "spreading spiritual knowledge. A monk may, for example, become "
               "the Chief Pontiff of a monastery.")},
-    {"rule": 5, "reads": "A5",
+    {"rule": 5, "source": "§21.3 rule 5",
+     "reads": "A5",
      "test": "the dasa sign holds or aspects the mantrapada",
      "gives": "a religious initiation or sadhana of a mantra", "needs": None,
      "text": ("Dasas of signs containing or aspecting mantrapada (A5, arudha "
               "pada of the 5th house) can bring a religious initiation or "
               "sadhana (rigorous practice) of a mantra.")},
-    {"rule": 6, "reads": "A8", "test": "the dasa sign holds the mrityupada",
+    {"rule": 6, "source": "§21.3 rule 6",
+     "reads": "A8", "test": "the dasa sign holds the mrityupada",
      "gives": "yogic sadhana; it can activate Kundalini sakti", "needs": None,
      "text": ("Dasa of the sign containing mrityupada (A8, arudha pada of 8th "
               "house) can bring yogic sadhana. It can activate Kundalini "
               "sakti.")},
-    {"rule": 7, "reads": "Ketu", "test": "the dasa sign holds Ketu",
+    {"rule": 7, "source": "§21.3 rule 7",
+     "reads": "Ketu", "test": "the dasa sign holds Ketu",
      "gives": "spiritual activities that take one towards liberation",
      "needs": None,
      "text": ("Ketu is the significator of moksha (final liberation). Dasa of "
               "the sign containing Ketu can bring spiritual activities that "
               "take one towards liberation.")},
-    {"rule": 8, "reads": "Rahu", "test": "the dasa sign holds Rahu",
+    {"rule": 8, "source": "§21.3 rule 8",
+     "reads": "Rahu", "test": "the dasa sign holds Rahu",
      "gives": "progress after internal turmoil, or a turn to materialism",
      "needs": "whether Rahu is favorable",
      "text": ("Dasa of the sign containing Rahu can create progress after "
               "internal turmoil if Rahu is favorable. If Rahu is unfavorable, "
               "it can take the native in the direction of materialism.")},
+    # Not one of §21.3's eight. Example 81 reads a sign that *aspects*
+    # lagna and gets rule 3's result from it, which rule 3 as printed does not
+    # reach. Kept separate and sourced rather than folded into rule 3, the way
+    # chapter 20's STATUS_FROM_ARUDHA_LAGNA rows carry theirs. See OI-128.
+    {"rule": 9, "source": "Example 81", "reads": "lagna",
+     "test": "the dasa sign aspects lagna",
+     "gives": "internal progress and spiritual evolution", "needs": None,
+     "text": ("Lagna and mantrapada are in Li and Ta aspects both. Because of "
+              "these reasons, Ta dasa can bring internal progress and "
+              "spiritual evolution.")},
+)
+
+#: Example 81's name for Ketu, one word for §21.3 rule 7's whole first
+#: sentence. Not a new claim — the same significatorship, named.
+MOKSHAKARAKA_KETU = "Ta has mokshakaraka Ketu in it."
+
+#: §21.3 rule 3 reads the dasa **of** lagna and of the 7th. Example 81 reads a
+#: sign that merely **aspects** lagna and takes rule 3's result from it — Ta
+#: aspects Li, and Ta dasa "can bring internal progress and spiritual
+#: evolution". Rules 2 and 5 already extend to aspecting signs, so the habit is
+#: the chapter's; rule 3 was printed without it. Carried as rule 9, sourced to
+#: the example. See OI-128 for how far the extension reaches.
+EXAMPLE_81_READS_A_SIGN_ASPECTING_LAGNA = (
+    "Lagna and mantrapada are in Li and Ta aspects both. Because of these "
+    "reasons, Ta dasa can bring internal progress and spiritual evolution. It "
+    "can make the native learn and use mantras."
 )
 
 #: §21.3 rule 7's claim, which is stronger than the rule it justifies and is
@@ -268,7 +306,10 @@ def spiritual_readings(
     parivraja_yogas: bool | None = None,
     rahu_favourable: bool | None = None,
 ) -> tuple[dict, ...]:
-    """Which of §21.3's eight readings a Drigdasa sign reaches.
+    """Which of the nine readings a Drigdasa sign reaches.
+
+    Eight are §21.3's. Rule 9 — a sign aspecting lagna — is Example 81's, and
+    every returned reading names its source.
 
     :param mantrapada: A5's rasi, from :func:`hora.charts.arudha.arudha_pada`.
     :param mrityupada: A8's rasi. Both may need §15.5.1 for a co-owned house,
@@ -297,8 +338,8 @@ def spiritual_readings(
 
     def add(rule: int, why: str, *, undecided: str | None = None,
             gives: str | None = None) -> None:
-        entry = {"rule": rule, "gives": gives or by_rule[rule]["gives"],
-                 "why": why}
+        entry = {"rule": rule, "source": by_rule[rule]["source"],
+                 "gives": gives or by_rule[rule]["gives"], "why": why}
         if undecided:
             entry["undecided"] = undecided
         out.append(entry)
@@ -318,6 +359,8 @@ def spiritual_readings(
                + ("lagna" if sign == lagna_index else "the 7th from lagna"))
     if sign == lagna_index:
         add(4, f"{RASI_NAMES[sign]} is lagna")
+    if lagna_index in rasi_drishti(sign):
+        add(9, f"{RASI_NAMES[sign]} aspects lagna {RASI_NAMES[lagna_index]}")
     if sign == a5 or a5 in rasi_drishti(sign):
         verb = "holds" if sign == a5 else "aspects"
         add(5, f"{RASI_NAMES[sign]} {verb} the mantrapada {RASI_NAMES[a5]}")

@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 82 waiting on evidence · 2 parked**
+**5 waiting on Amit · 83 waiting on evidence · 2 parked**
 
 ---
 
@@ -637,6 +637,23 @@ chart.
 question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
+
+### OI-128 — how far §21.3's aspect extension reaches
+
+**Waiting on the book.** §21.3 prints rule 2 as *signs aspecting* the arudha
+lagna and rule 5 as signs *containing or aspecting* the mantrapada; rules 3, 4
+and 6 are printed with no aspect clause. Example 81 then takes rule 3's result
+— internal progress — from Taurus, which only **aspects** lagna. So the
+extension is live for rule 3 without being printed there. Whether it also
+reaches rule 4 (fame from spreading spiritual knowledge) and rule 6 (the
+mrityupada, "containing" only) is unsaid.
+
+**What we do:** carry Example 81's as rule 9, sourced to the example, and leave
+4 and 6 as printed. Folding it into rule 3 would hide that the section and the
+example differ; extending 4 and 6 would be a guess.
+
+**Closes when:** an example runs a sign aspecting lagna or the mrityupada
+without containing it.
 
 ### OI-127 — §21.2's twelve Drigdasas are not twelve rasis for a dual lagna
 

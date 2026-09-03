@@ -414,12 +414,13 @@ def test_the_eight_readings_and_which_two_are_conditional():
     """
     from hora.dasha.rasi.drigdasa import SPIRITUAL_READINGS
 
-    assert [r["rule"] for r in SPIRITUAL_READINGS] == list(range(1, 9))
-    assert {r["reads"] for r in SPIRITUAL_READINGS} == {
+    section = [r for r in SPIRITUAL_READINGS
+               if r["source"].startswith("\u00a721.3")]
+    assert [r["rule"] for r in section] == list(range(1, 9))
+    assert {r["reads"] for r in section} == {
         "AL", "lagna", "A5", "A8", "Ketu", "Rahu"}
 
-    conditional = {r["rule"]: r["needs"] for r in SPIRITUAL_READINGS
-                   if r["needs"]}
+    conditional = {r["rule"]: r["needs"] for r in section if r["needs"]}
     assert set(conditional) == {1, 8}
     assert "parivraja yogas" in conditional[1]
     assert "favorable" in conditional[8]
@@ -605,5 +606,143 @@ def test_21_3_applied_across_chart_36s_drigdasa():
     assert reached["Li"] == {3, 4, 5}
     assert reached["Ar"] == {3}                    # the 7th, rule 3 only
     assert reached["Ge"] == {1}                    # the arudha lagna
-    assert reached["Le"] == {5, 6}
+    assert reached["Le"] == {5, 6, 9}
     assert set(reached) == set(EX80_ORDER) - {"Cn", "Cp"}
+
+
+# --------------------------------------------------------------------------
+# Example 81 — the same chart's Taurus dasa, and a reading §21.3 never printed.
+# --------------------------------------------------------------------------
+
+def test_example_81_taurus_runs_24_to_27_from_example_80s_own_table():
+    """"Let us analyze Ta dasa that comes during 24-27 years of age."
+
+    The example gives no dates, only the ages, and they are a check on
+    everything Example 80 built: run the twelve lengths along the twelve-dasa
+    order and Taurus must open at 24 and close at 27. That is §21.2's walk,
+    its three directions and all twelve §18.2.2 lengths confirmed at once by a
+    number the chapter states independently.
+    """
+    from hora.dasha.rasi.drigdasa import progression
+
+    elapsed = 0
+    spans = {}
+    for sign in progression(R["Libra"]).signs:
+        length = EX80_LENGTHS[ABBR[sign]]
+        spans[ABBR[sign]] = (elapsed, elapsed + length)
+        elapsed += length
+
+    assert spans["Ta"] == (24, 27)
+    assert elapsed == 78
+
+
+def test_example_81s_three_reasons_all_fire():
+    """"Ta has mokshakaraka Ketu in it. Lagna and mantrapada are in Li and Ta
+    aspects both."
+
+    Three reasons for one dasa, and they land on three different rules —
+    Ketu's placement, an aspect on the mantrapada, and an aspect on lagna.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.drigdasa import MOKSHAKARAKA_KETU, spiritual_readings
+
+    points = _chart_36_points()
+    assert points["signs"][int(Graha.KETU)] == R["Taurus"]
+    assert points["lagna"] == points["mantrapada"] == R["Libra"]
+
+    got = {r["rule"]: r for r in spiritual_readings(R["Taurus"], **points)}
+    assert set(got) == {5, 7, 9}
+    assert got[7]["why"] == "Ketu is in Taurus"
+    assert got[5]["why"] == "Taurus aspects the mantrapada Libra"
+    assert got[9]["why"] == "Taurus aspects lagna Libra"
+    assert "mokshakaraka" in MOKSHAKARAKA_KETU
+
+
+def test_example_81_reads_a_sign_that_only_aspects_lagna():
+    """§21.3 rule 3 is "Dasa of lagna **and the 7th house**". Taurus is
+    neither — it is the 8th from Libra, and it does not aspect Aries either.
+    The example takes rule 3's result from an aspect on lagna alone, which the
+    printed rule does not reach. See OI-128.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.dasha.rasi.drigdasa import (
+        EXAMPLE_81_READS_A_SIGN_ASPECTING_LAGNA,
+        SPIRITUAL_READINGS,
+    )
+
+    assert R["Taurus"] not in (R["Libra"], R["Aries"])
+    assert R["Aries"] not in rasi_drishti(R["Taurus"])
+    assert R["Libra"] in rasi_drishti(R["Taurus"])
+
+    rule_3 = next(r for r in SPIRITUAL_READINGS if r["rule"] == 3)
+    assert rule_3["test"] == "the dasa sign is lagna or the 7th from it"
+    assert "internal progress" in EXAMPLE_81_READS_A_SIGN_ASPECTING_LAGNA
+
+
+def test_the_ninth_reading_is_sourced_to_the_example_not_the_section():
+    """Eight rules are §21.3's; the ninth is Example 81's. Kept apart and
+    labelled rather than folded into rule 3, the way chapter 20's
+    STATUS_FROM_ARUDHA_LAGNA rows carry their source.
+    """
+    from hora.dasha.rasi.drigdasa import SPIRITUAL_READINGS, spiritual_readings
+    from hora.dasha.rasi.sudasa import STATUS_FROM_ARUDHA_LAGNA
+
+    assert [r["rule"] for r in SPIRITUAL_READINGS] == list(range(1, 10))
+    sources = {r["rule"]: r["source"] for r in SPIRITUAL_READINGS}
+    assert all(sources[n] == f"\u00a721.3 rule {n}" for n in range(1, 9))
+    assert sources[9] == "Example 81"
+
+    points = _chart_36_points()
+    got = spiritual_readings(R["Taurus"], **points)
+    assert {r["source"] for r in got} == {
+        "\u00a721.3 rule 5", "\u00a721.3 rule 7", "Example 81"}
+
+    assert all("source" in row for row in STATUS_FROM_ARUDHA_LAGNA)
+
+
+def test_the_aspect_extension_is_the_chapters_habit_but_not_in_every_rule():
+    """Rule 2 extends to signs aspecting AL and rule 5 to signs "containing or
+    aspecting" the mantrapada, so reading an aspect is the chapter's own way.
+    Rules 3, 4 and 6 are printed without it, and Example 81 supplies it for
+    lagna only — leaving 4 and 6 open. See OI-128.
+    """
+    from hora.dasha.rasi.drigdasa import SPIRITUAL_READINGS
+
+    by_rule = {r["rule"]: r["test"] for r in SPIRITUAL_READINGS}
+    assert "aspects" in by_rule[2]
+    assert "aspects" in by_rule[5]
+    assert "aspects" in by_rule[9]
+    for rule in (3, 4, 6):
+        assert "aspect" not in by_rule[rule]
+
+
+def test_lagna_itself_does_not_pick_up_the_ninth_reading():
+    """A sign never aspects itself under rasi drishti, so Libra reaches rules
+    3 and 4 and not 9. The ninth adds signs the printed rules miss; it does
+    not double-count the ones they catch.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.dasha.rasi.drigdasa import spiritual_readings
+
+    points = _chart_36_points()
+    assert R["Libra"] not in rasi_drishti(R["Libra"])
+    rules = {r["rule"] for r in spiritual_readings(R["Libra"], **points)}
+    assert rules == {3, 4, 5}
+
+
+def test_example_81s_two_stated_outcomes_come_from_the_rules_that_fire():
+    """"Ta dasa can bring internal progress and spiritual evolution. It can
+    make the native learn and use mantras."
+
+    Two sentences, three rules: the first is rule 9's wording joined to rule
+    7's liberation, the second is rule 5's mantra.
+    """
+    from hora.dasha.rasi.drigdasa import spiritual_readings
+
+    points = _chart_36_points()
+    gives = {r["rule"]: r["gives"]
+             for r in spiritual_readings(R["Taurus"], **points)}
+
+    assert gives[9] == "internal progress and spiritual evolution"
+    assert "liberation" in gives[7]
+    assert "mantra" in gives[5]
