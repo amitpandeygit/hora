@@ -869,17 +869,41 @@ def test_the_two_gatis_are_named_and_only_one_is_built():
     assert len(walk) == 6
 
 
-def test_mandooki_gati_waits_on_the_kalachakra_chapter():
-    """The book defines mandooki gati only by reference to its own Kalachakra
-    discussion, and Kalachakra dasa is one of the five Part 2 systems still to
-    come. So the two absences are the same absence.
+def test_mandooki_gati_is_not_in_the_kalachakra_chapter_after_all():
+    """§19.4 sends mandooki gati to "Parasara's discussion on Kalachakra dasa"
+    and calls it "the 3rd/11th jump". Chapter 24 has now been built, and the
+    jump is not its movement: §24.2's wheels step by the **2nd and the 12th**,
+    a rasi at a time, with a handful of odd joins where the mirrored half
+    begins.
+
+    So §19.4's reference is to Parasara rather than to anything §24.1 or
+    §24.2 reproduces, and mandooki gati stays unbuilt — for a sharper reason
+    than before.
     """
+    from collections import Counter
+
     from hora.core.constants.dasha import PART_2_DASA_SYSTEMS
+    from hora.dasha.nakshatra.kalachakra import wheel
     from hora.dasha.rasi.kendradi import GATI_NAMES
 
-    unbuilt = {s["name"] for s in PART_2_DASA_SYSTEMS
-               if s["key"] is None and not s.get("module")}
-    assert "Kalachakra dasa" in unbuilt
+    built = {s["name"] for s in PART_2_DASA_SYSTEMS if s.get("module")}
+    assert "Kalachakra dasa" in built
+
+    steps = {}
+    for group in ("savya", "apasavya"):
+        ring = wheel(group)
+        steps[group] = Counter(((ring[(i + 1) % 24] - ring[i]) % 12) + 1
+                               for i in range(24))
+
+    assert steps["savya"] == {2: 12, 12: 8, 11: 2, 5: 1, 9: 1}
+    assert steps["apasavya"] == {12: 12, 2: 8, 3: 2, 5: 1, 9: 1}
+    # Twenty of twenty-four steps are a single rasi either way, and neither
+    # wheel is a 3rd/11th movement: savya never steps a 3rd and apasavya
+    # never an 11th.
+    for group in steps:
+        assert steps[group][2] + steps[group][12] == 20
+    assert steps["savya"][3] == 0
+    assert steps["apasavya"][11] == 0
 
     mandooki = next(g for g in GATI_NAMES if g["name"] == "mandooki gati")
     assert not mandooki["built"]

@@ -2126,3 +2126,35 @@ both exceptions turn on rule 2 or later.
 **Closes when:** you decide, or §15.5.2's ayur rule 2 is stated in a form that
 can be computed.
 
+---
+
+## D-67 · §24.2's savya sub-groups lose a nakshatra between them
+
+**Status: FINDING — recorded; nothing can be computed for the missing one.**
+
+Table 42 puts **fifteen** nakshatras in the savya group: 1-3, 7-9, 13-15,
+19-21 and 25-27. Tables 44 and 45 then name **fourteen** between them —
+Table 44 nine, Table 45 five — and **Uttarabhadrapada (26)** is in neither.
+
+| table | nakshatras named | count |
+|---|---|---|
+| 44 · Savya-1 | 1, 3, 7, 9, 13, 15, 19, 21, 25 | 9 |
+| 45 · Savya-2 | 2, 8, 14, 20, **27** | 5 |
+| | | **14 of 15** |
+
+The apasavya tables are complete: Table 46 names four and Table 47 eight, and
+4 + 8 = 12.
+
+Four of the five savya triples split as "1st and 3rd in Savya-1, 2nd in
+Savya-2". The fifth has 25 in Savya-1 and 27 in Savya-2, which fits neither —
+so the likeliest slip is a single substitution, Revati printed in Table 45
+where Uttarabhadrapada belongs, leaving Revati out of Table 44. That is a
+reconstruction, not the book, and which sub-group Uttarabhadrapada takes is
+OI-139.
+
+**What we do:** hold the four lists exactly as printed, and let a Moon in
+Uttarabhadrapada raise rather than guess a sub-group.
+
+**Closes when:** an example runs an Uttarabhadrapada Moon, or a later printing
+completes the tables.
+

@@ -51,10 +51,10 @@ def test_vimsottari_and_ashtottari_are_ordered_oppositely():
     assert by_name["Ashtottari dasa"]["purpose"] == "ayur/phalita"
 
 
-def test_eight_of_the_nine_are_built():
-    """This is the coverage line for Part 2 and should fail — loudly — as each
-    one lands. A nakshatra system is built when its `key` is in the service's
-    registry; a rasi dasa when it names a `module` that imports.
+def test_all_nine_of_part_2_are_built():
+    """The coverage line for Part 2, and it is now complete. A nakshatra
+    system counts as built when its `key` is in the service's registry or it
+    names a `module` that imports; a rasi dasa when it names a module.
     """
     import importlib
 
@@ -65,15 +65,31 @@ def test_eight_of_the_nine_are_built():
         elif system.get("module"):
             importlib.import_module(system["module"])
             built.add(system["name"])
-    assert built == {"Vimsottari dasa", "Ashtottari dasa", "Narayana dasa",
-                     "Lagna Kendradi Rasi dasa", "Sudasa", "Drigdasa",
-                     "Niryaana Shoola dasa", "Shoola dasa"}
+
+    assert built == {s["name"] for s in PART_2_DASA_SYSTEMS}
+    assert len(built) == 9
 
     missing = [s["name"] for s in PART_2_DASA_SYSTEMS
                if s["key"] is None and not s.get("module")]
-    assert missing == ["Kalachakra dasa"]     # the last, and a nakshatra one
-    assert all(s["kind"] == "rasi" or s["key"] for s in PART_2_DASA_SYSTEMS
-               if s["name"] != "Kalachakra dasa")
+    assert missing == []
+
+
+def test_kalachakra_is_the_one_nakshatra_dasa_with_a_module_of_its_own():
+    """The other two nakshatra systems are proportional-year dasas the service
+    registry handles. Kalachakra's periods are rasis chosen by the Moon's
+    pada, so it has nothing in common with them and lives on its own.
+    """
+    by_name = {s["name"]: s for s in PART_2_DASA_SYSTEMS}
+    nakshatra = [s for s in PART_2_DASA_SYSTEMS if s["kind"] == "nakshatra"]
+
+    assert {s["name"] for s in nakshatra} == {
+        "Vimsottari dasa", "Ashtottari dasa", "Kalachakra dasa"}
+    assert by_name["Kalachakra dasa"]["key"] is None
+    assert by_name["Kalachakra dasa"]["module"] == (
+        "hora.dasha.nakshatra.kalachakra")
+    for name in ("Vimsottari dasa", "Ashtottari dasa"):
+        assert by_name[name]["key"] in NAKSHATRA_DASHA_SYSTEMS
+        assert by_name[name].get("module") is None
 
 
 def test_the_two_shoola_dasas_stay_two_systems():

@@ -53,7 +53,8 @@ PART_2_DASA_SYSTEMS: tuple[dict, ...] = (
     {"name": "Shoola dasa", "kind": "rasi", "purpose": "ayur", "key": None,
      "module": "hora.dasha.rasi.shoola"},
     {"name": "Kalachakra dasa", "kind": "nakshatra",
-     "purpose": "phalita", "key": None},
+     "purpose": "phalita", "key": None,
+     "module": "hora.dasha.nakshatra.kalachakra"},
 )
 
 #: Named in Part 2 but deliberately deferred by it.

@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 93 waiting on evidence · 2 parked**
+**5 waiting on Amit · 94 waiting on evidence · 2 parked**
 
 ---
 
@@ -672,6 +672,28 @@ is not changed on our own judgement — it flips a longevity verdict.
 **Closes when:** you decide, or a section states which co-lord a longevity 8th
 house takes.
 
+### OI-139 — §24.2's two groups are sub-divided on different patterns
+
+**Waiting on the book.** A nakshatra's sub-group fixes its four 9-rasi
+sequences, so it decides the whole dasa — and the two groups are sub-divided
+on different patterns:
+
+| group | sub-group 1 | sub-group 2 |
+|---|---|---|
+| savya | 1st **and 3rd** of each triple | 2nd |
+| apasavya | 1st only | 2nd **and 3rd** |
+
+The wheel explains sub-group 1 at offset 0 and sub-group 2 at offset 12 and
+every pada sequence follows, but no offset rule produces both memberships. It
+matters for the **3rd of each apasavya triple** — nakshatras 6, 12, 18 and 24,
+about one chart in seven — whose sequences differ entirely between the two
+readings. D-67 sits inside this: Uttarabhadrapada is in neither savya table.
+
+**What we do:** hold `PRINTED_SUB_GROUPS` as printed; refuse the unlisted one.
+
+**Closes when:** an example runs a Moon in an apasavya triple's 3rd nakshatra,
+or in Uttarabhadrapada.
+
 ### OI-138 — §23.3's criterion 1 survives neither aspect reading
 
 **Waiting on the book.** "Usually a rasi occupied or aspected by AK or Jupiter
@@ -684,9 +706,9 @@ is not said, and §23.4's two examples pull opposite ways:
 | Ex 90, Chart 39 | Capricorn | both — contradicts | neither — consistent |
 
 **Exercise 32 settles the rest.** Criterion 1 is not a tiebreaker never
-reached: its answer drops Aquarius — "it contains Jupiter who is also AK, so
-its dasa is unlikely to kill" — and moves to the 8th from AL. That shield
-*occupies* its rasi, so the aspect question is untouched.
+reached: its answer drops Aquarius — "it contains Jupiter who is also AK" —
+and moves to the 8th from AL. That shield *occupies* its rasi, so the aspect
+question is untouched.
 
 **What we do:** `select_dasa` reports each candidate's shields and never
 filters on them; `protected_by` keeps the hedge.
@@ -702,10 +724,9 @@ further than the section says: both are fixed, so what aspects them is movable
 and each of the four reaches at least one — the yoga arises exactly when the
 **Moon is in a movable rasi**.
 
-Two things are unsaid: which planets the yoga is — the Moon alone or the Moon
-with the owner it aspected — and whether *their* aspect is rasi or graha
-drishti, the sentence saying "rasi aspect" for the Moon's and bare "aspected"
-for theirs.
+Two things are unsaid: which planets the yoga is — the Moon alone or with the
+owner it aspected — and whether *their* aspect is rasi or graha drishti, the
+sentence saying "rasi aspect" for the Moon's and bare "aspected" for theirs.
 
 **What we do:** `rudra_yoga` returns whether it arises and what it reaches, and
 reports both questions unanswered.
@@ -718,9 +739,8 @@ reports both questions unanswered.
 boundary given to the day: Aries, "April 21, 1945-Nov 21, 1945". Seven equal
 twelfths of a seven-year dasa land 20 Nov 19:59; seven calendar months land 21
 Nov — four hours apart, so rounding gives the book's date under either. §22.3
-concedes the layer: "timing of the antardasa of death wasn't given due
-attention". The **dasa** boundary is settled — "April 21" fixes the dasa year
-at 365.25 days, against the calendar anniversary, savana and sidereal alike.
+concedes the layer. The **dasa** boundary is settled: "April 21" fixes the
+dasa year at 365.25 days, against calendar, savana and sidereal alike.
 
 **What we do:** `antardasa_periods` divides into equal twelfths, §18.3's own
 division, and reports the day as computed.
