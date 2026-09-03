@@ -2360,26 +2360,239 @@ def test_exercise_31_the_first_antardasa_meets_the_second_principle_only():
     assert divmod(opens + 7, 12) == (1945, 10)     # November 1945
 
 
-def test_exercise_31_is_answered_before_the_books_answer_arrives():
-    """The whole derivation in one place, so a later answer can be checked
-    against it line by line rather than re-derived.
+# -- Exercise 31's answer ---------------------------------------------------
+
+def test_exercise_31s_answer_confirms_every_step_but_the_antardasa():
+    """The answer, against what we derived before seeing it.
+
+    Longevity, Rudra, the Trishoolas, the seed, the direction and the dasa all
+    match. The antardasa does not: we backed Scorpio, which the answer agrees
+    is "the strongest candidate", and it then says the death fell in Aries for
+    a reason outside §22.2.2's two principles.
     """
     from hora.charts.book import chart
 
-    # The book prints no death date for this chart; the exercise asks for one.
-    assert "events" not in chart(42)
-    answer = {
-        "longevity": ("middle", (36, 72)),
-        "rudra_rasi": "Aries",
+    assert chart(42)["events"] == {
+        "committed suicide": "April 30, 1945, aged 56"}
+
+    ours = {
+        "longevity": "middle", "rudra_rasi": "Aries",
         "trishoolas": ("Aries", "Leo", "Sagittarius"),
-        "seed": "Scorpio",
-        "direction": "backward",
-        "dasa": ("Aries", "20 April 1945", "20 April 1952"),
-        "antardasa_by_both_principles": (
-            "Scorpio", "20 May 1949", "20 December 1949"),
-        "antardasa_by_the_second_only": (
-            "Aries", "20 April 1945", "20 November 1945"),
+        "seed": "Scorpio", "direction": "backward", "dasa": "Aries",
+        "antardasa": "Scorpio",
     }
-    assert answer["dasa"][0] in answer["trishoolas"]
-    assert answer["antardasa_by_both_principles"][0] not in answer[
-        "trishoolas"]
+    book = dict(ours, antardasa="Aries")
+    assert {k: v for k, v in ours.items() if k != "antardasa"} == {
+        k: v for k, v in book.items() if k != "antardasa"}
+    assert ours["antardasa"] != book["antardasa"]
+
+
+def test_the_answer_states_the_three_way_tiebreak_we_had_implemented():
+    """"When there is a three-way tie, we use the Moon-Saturn pair if Moon is
+    in lagna or 7th. That is not the case here. So we use the lagna and
+    horalagna pair."
+
+    Chapter 14 gave that rule and Exercise 31 is the first chart to need it.
+    Our reason string says the same thing.
+    """
+    from hora.charts.book import signs as book_signs
+    from hora.charts.maraka import three_pairs
+    from hora.core.constants.maraka import THREE_PAIRS_TIEBREAK_RULE
+
+    _longitudes, signs, lagna_sign = _chart_42()
+    got = three_pairs(lagna_sign, signs, book_signs(42)["HL"])
+    assert got["category"] == "middle"
+    assert "prefers lagna and Horalagna" in got["reason"]
+    assert "Moon" in THREE_PAIRS_TIEBREAK_RULE
+
+
+def test_the_answer_takes_mars_not_ketu_as_the_second_rudra_candidate():
+    """"The 8th lord, Venus, and 8th lord from 7th, Mars, are in Aries."
+
+    Scorpio's co-lordship is OI-135's question and the answer does not raise
+    it — it names Mars. §15.5.1 agrees here, and in any case both sit in
+    Aries, which is all the Trishoolas need.
+    """
+    from hora.charts.colord import stronger as stronger_co_lord
+    from hora.charts.maraka import rudra
+    from hora.core.const import Graha
+
+    longitudes, signs, lagna_sign = _chart_42()
+    assert stronger_co_lord(R["Scorpio"], longitudes,
+                            purpose="arudha").winner == int(Graha.MARS)
+
+    body = rudra(lagna_sign, signs, longitudes)
+    assert body["candidates"] == ["Venus", "Mars"]
+    assert signs[int(Graha.VENUS)] == signs[int(Graha.MARS)] == R["Aries"]
+    assert body["rudra_rasi"] == "Aries"
+
+
+def test_the_answer_works_the_dasa_start_with_footnote_61s_thumbrule():
+    """"Ar dasa starts after 56 years (56=24+24+8; 24 years for Sc, Li and Vi;
+    24 years for Le, Cn and Ge; 8 years for Ta)."
+
+    The thumbrule used rather than stated — two blocks of three and one
+    remainder, which is how it is meant to save the arithmetic.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        CONSECUTIVE_TRIPLE_YEARS,
+        progression,
+    )
+
+    got = progression(R["Scorpio"])
+    assert sum(got.years[0:3]) == CONSECUTIVE_TRIPLE_YEARS == 24
+    assert sum(got.years[3:6]) == 24
+    assert got.years[6] == 8                       # Taurus, the remainder
+    assert 24 + 24 + 8 == 56 == got.starts[got.signs.index(R["Aries"])]
+
+
+def test_the_dasa_year_is_365_25_days_not_the_calendar_anniversary():
+    """"So Ar dasa starts on April 21, 1945." Born 20 April 1889 at 18:30, so
+    the 56th anniversary is the **20th**. Only a fixed 365.25-day year lands
+    on the 21st — and it reproduces the birth time to the minute. Our sidereal
+    default gives the 22nd, and savana lands more than eight months early.
+    """
+    import swisseph as swe
+
+    from hora.charts.book import chart
+    from hora.core.constants.timespan import (
+        SAVANA_YEAR_DAYS,
+        SIDEREAL_YEAR_DAYS,
+    )
+    from hora.core.timeutil import from_local
+    from hora.dasha.rasi.niryaana_shoola import (
+        THE_DASA_YEAR_IS_NOT_THE_CALENDAR_ANNIVERSARY,
+        dasa_periods,
+    )
+
+    record = chart(42)
+    birth = from_local(**record["birth_data"])
+    offset = record["birth_data"]["utc_offset_hours"] / 24.0
+
+    def local(jd):
+        year, month, day, hour = swe.revjul(jd + offset)
+        return (int(year), int(month), int(day), int(hour))
+
+    aries = next(row for row in dasa_periods(R["Scorpio"], birth.jd_ut)
+                 if row["rasi"] == "Aries")
+    assert local(aries["start_jd"])[:3] == (1945, 4, 21)
+    assert local(aries["start_jd"])[3] == 18            # the birth hour
+    assert local(aries["end_jd"])[:3] == (1952, 4, 21)
+
+    assert local(birth.jd_ut + 56 * SIDEREAL_YEAR_DAYS)[:3] == (1945, 4, 22)
+    assert local(birth.jd_ut + 56 * SAVANA_YEAR_DAYS)[:2] == (1944, 7)
+
+    assert "April 21, 1945" in THE_DASA_YEAR_IS_NOT_THE_CALENDAR_ANNIVERSARY
+
+
+def test_the_death_falls_in_the_first_antardasa():
+    """"the native died in Aries antardasa itself (April 21, 1945-Nov 21,
+    1945)" and history puts the suicide on 30 April 1945 — nine days in.
+    """
+    import swisseph as swe
+
+    from hora.charts.book import chart
+    from hora.core.timeutil import from_local
+    from hora.dasha.rasi.narayana import antardasas
+    from hora.dasha.rasi.niryaana_shoola import (
+        antardasa_periods,
+        dasa_periods,
+    )
+
+    record = chart(42)
+    birth = from_local(**record["birth_data"])
+    longitudes, _signs, _lagna = _chart_42()
+
+    aries = next(row for row in dasa_periods(R["Scorpio"], birth.jd_ut)
+                 if row["rasi"] == "Aries")
+    order = antardasas(R["Aries"], 7, longitudes).signs
+    periods = antardasa_periods(aries, order)
+
+    assert periods[0]["rasi"] == "Aries"
+    death = swe.julday(1945, 4, 30, 12.0)
+    assert periods[0]["start_jd"] <= death < periods[0]["end_jd"]
+    assert periods[7]["rasi"] == "Scorpio"           # our answer, not reached
+    assert death < periods[7]["start_jd"]
+
+
+def test_the_antardasa_boundary_cannot_be_pinned_to_the_day():
+    """OI-136. Equal twelfths put the first antardasa's end at 20 November
+    19:59; seven calendar months put it at 21 November, which is what the
+    answer prints. Four hours apart, so either rounds to it.
+    """
+    import swisseph as swe
+
+    from hora.charts.book import chart
+    from hora.core.timeutil import from_local
+    from hora.dasha.rasi.narayana import antardasas
+    from hora.dasha.rasi.niryaana_shoola import (
+        ANTARDASA_BOUNDARY_IS_A_DAY_UNDECIDED,
+        antardasa_periods,
+        dasa_periods,
+    )
+
+    record = chart(42)
+    birth = from_local(**record["birth_data"])
+    longitudes, _signs, _lagna = _chart_42()
+    aries = next(row for row in dasa_periods(R["Scorpio"], birth.jd_ut)
+                 if row["rasi"] == "Aries")
+    order = antardasas(R["Aries"], 7, longitudes).signs
+
+    end = antardasa_periods(aries, order)[0]["end_jd"]
+    offset = record["birth_data"]["utc_offset_hours"] / 24.0
+    year, month, day, hour = swe.revjul(end + offset)
+    assert (int(year), int(month), int(day)) == (1945, 11, 20)
+    assert int(hour) == 19
+    assert 24 - hour < 5                    # within four hours of the 21st
+
+    assert "Nov 21, 1945" in ANTARDASA_BOUNDARY_IS_A_DAY_UNDECIDED
+
+
+def test_the_answer_reads_marakas_at_the_antardasa_level():
+    """"Aries not only contains Rudra, but it is also the 7th house and it
+    contains 2nd, 7th and 8th lords. It is a strong maraka sthana."
+
+    §22.2.2 gives rule 1 for **dasas** and two other principles for
+    antardasas. The answer reaches back to rule 1 one level down, and adds
+    Rudra's own rasi, which the section names only through the Trishoolas.
+    `maraka_readings` already returns Aries as a maraka sthana holding Mars.
+    """
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.rasi.niryaana_shoola import (
+        EXERCISE_31_READS_MARAKAS_AT_THE_ANTARDASA_LEVEL,
+        maraka_readings,
+    )
+
+    _longitudes, signs, lagna_sign = _chart_42()
+    got = maraka_readings(R["Aries"], lagna_sign, signs)
+
+    assert got["is_maraka_sthana"] == (7,)          # Aries is the 7th
+    assert got["applies"]
+    holders = {entry["graha_name"] for entry in got["holds_maraka_grahas"]}
+    assert "Mars" in holders
+
+    for house in (2, 7, 8):
+        lord = int(RASI_LORD[(lagna_sign + house - 1) % 12])
+        assert signs[lord] == R["Aries"], house
+    assert signs[int(Graha.VENUS)] == R["Aries"]    # the 8th lord, not a maraka
+
+    assert "strong maraka sthana" in (
+        EXERCISE_31_READS_MARAKAS_AT_THE_ANTARDASA_LEVEL)
+
+
+def test_the_answer_agrees_that_scorpio_was_the_methods_candidate():
+    """"Of these, Sc is the strongest candidate as it is also the 8th from
+    dasa rasi Aries."
+
+    So the two principles were applied correctly and simply did not pick the
+    antardasa that killed — which is why the exercise says "antardasa is tough
+    to guess" rather than giving a rule.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.niryaana_shoola import antardasa_candidates
+
+    got = antardasa_candidates(R["Aries"], {int(Graha.MARS): R["Scorpio"]},
+                               eighth_lord=int(Graha.MARS))
+    assert got["aspecting_names"] == (
+        "Scorpio", "Aries", "Cancer", "Capricorn")
+    assert got["strong_candidate_names"] == ("Scorpio",)

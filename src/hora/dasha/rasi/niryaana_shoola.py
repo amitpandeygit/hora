@@ -337,6 +337,90 @@ def progression(seed_sign: int,
 
 
 # --------------------------------------------------------------------------
+# Dates
+# --------------------------------------------------------------------------
+
+#: **Finding.** Exercise 31 is the only place the book prints a Niryaana Shoola
+#: boundary to the day, and it settles the year measure. The native is born
+#: 20 April 1889 at 18:30 and Aries dasa opens after 56 years; the answer says
+#: **"April 21, 1945"**, not the 20th:
+#:
+#: ===================== ================== ==========
+#: measure               days per year      gives
+#: ===================== ================== ==========
+#: calendar anniversary  --                 20 April
+#: savana (§16.2)        360                Nov 1944
+#: sidereal (our default) 365.2564          22 April
+#: **civil**             **365.25**         **21 April, 18:29**
+#: ===================== ================== ==========
+#:
+#: 365.25 lands on the day *and* reproduces the 18:30 birth time to the
+#: minute. A Gregorian 365.2425 also gives 21 April, so the two cannot be
+#: parted over 56 years — they differ by three quarters of a day across the
+#: whole 96-year cycle. OI-115's savana question is scoped to nakshatra dasas
+#: and is untouched by this.
+THE_DASA_YEAR_IS_NOT_THE_CALENDAR_ANNIVERSARY = (
+    "So Ar dasa starts on April 21, 1945 and runs for 7 years."
+)
+
+
+def dasa_periods(seed_sign: int, birth_jd: float,
+                 seed_occupants: set[int] | None = None,
+                 *, year_days: float = 365.25) -> tuple[dict, ...]:
+    """The twelve dasas as julian-day spans rather than ages.
+
+    :param birth_jd: the birth instant's ``jd_ut``.
+    :param year_days: the dasa year. 365.25 by Exercise 31 — see
+        :data:`THE_DASA_YEAR_IS_NOT_THE_CALENDAR_ANNIVERSARY`. Exposed because
+        it is a measure, not a law, and the evidence is one printed date.
+    """
+    run = progression(seed_sign, seed_occupants)
+    out = []
+    for sign, years, start in zip(run.signs, run.years, run.starts,
+                                  strict=True):
+        out.append({
+            "sign": sign, "rasi": str(RASI_NAMES[sign]), "years": years,
+            "start_jd": birth_jd + start * year_days,
+            "end_jd": birth_jd + (start + years) * year_days,
+        })
+    return tuple(out)
+
+
+#: **Gap.** The antardasa boundary cannot be pinned the way the dasa one was.
+#: Exercise 31's Aries antardasa is printed "April 21, 1945-Nov 21, 1945".
+#: Stepping seven equal twelfths of a seven-year dasa lands 20 November at
+#: 19:59; stepping seven calendar months lands 21 November. Both round to the
+#: book's date and no other printed antardasa in the chapter gives a day. See
+#: OI-136.
+ANTARDASA_BOUNDARY_IS_A_DAY_UNDECIDED = (
+    "However, the native died in Aries antardasa itself (April 21, "
+    "1945-Nov 21, 1945)."
+)
+
+
+def antardasa_periods(dasa: dict, antardasa_signs: tuple[int, ...],
+                      *, year_days: float = 365.25) -> tuple[dict, ...]:
+    """One dasa's twelve antardasas as julian-day spans, in equal twelfths.
+
+    :param dasa: one row of :func:`dasa_periods`.
+    :param antardasa_signs: their order, from
+        :func:`hora.dasha.rasi.narayana.antardasas`.
+
+    Equal twelfths, which is §18.3's own division. See
+    :data:`ANTARDASA_BOUNDARY_IS_A_DAY_UNDECIDED` for the day this cannot fix.
+    """
+    if len(antardasa_signs) != 12:
+        raise NiryaanaShoolaError(
+            f"expected 12 antardasa signs, got {len(antardasa_signs)}")
+    span = dasa["years"] * year_days / 12.0
+    return tuple({
+        "sign": sign, "rasi": str(RASI_NAMES[sign]),
+        "start_jd": dasa["start_jd"] + index * span,
+        "end_jd": dasa["start_jd"] + (index + 1) * span,
+    } for index, sign in enumerate(antardasa_signs))
+
+
+# --------------------------------------------------------------------------
 # §22.2.2 Interpretation
 # --------------------------------------------------------------------------
 
@@ -475,6 +559,26 @@ PRINTED_SEQUENCES_DROP_LIBRA = (
 ANTARDASA_PRINCIPLES_CAN_FAIL = (
     "Antardasa at the time of death does not follow the principles explained "
     "here, but dasa follows the Trishoola principle."
+)
+
+
+#: **Finding.** §22.2.2 gives two antardasa principles and Exercise 31's answer
+#: uses neither for the antardasa that actually killed. It reaches back to
+#: rule 1 — the marakas — and applies it one level down, and it adds Rudra's
+#: own rasi, which the section names only through the Trishoolas:
+#:
+#: "Aries not only contains Rudra, but it is also the 7th house and it
+#: contains 2nd, 7th and 8th lords. It is a strong maraka sthana."
+#:
+#: The 7th is a maraka sthana by §14.2 and Mars owns both the 2nd and the 7th
+#: from this lagna, so `maraka_readings` already returns Aries as one. The 8th
+#: lord is the extra: §14.2's marakas are the 2nd and 7th only, and the
+#: exercise counts Venus too.
+EXERCISE_31_READS_MARAKAS_AT_THE_ANTARDASA_LEVEL = (
+    "However, the native died in Aries antardasa itself... due to the "
+    "strength of Aries in rasi chart. Aries not only contains Rudra, but it "
+    "is also the 7th house and it contains 2nd, 7th and 8th lords. It is a "
+    "strong maraka sthana."
 )
 
 

@@ -455,13 +455,14 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "GL": "Cp", "Jup": "Sg", "Moon": "Sg", "Ketu": "Sg",
             "Asc": "Li",
         },
+        "events": {"committed suicide": "April 30, 1945, aged 56"},
         "first_seen": "chapter 22, Exercise 31",
         "note": (
-            "Printed without a name or a death date -- the exercise asks the "
-            "reader to derive both the longevity category and the dasa and "
-            "antardasa of death, and to give dates. The only chart in the "
-            "register whose three longevity pairs all disagree, which is the "
-            "case section 14.4 breaks with its preferred pair."
+            "Adolf Hitler, named only in the exercise's answer. The only "
+            "chart in the register whose three longevity pairs all disagree, "
+            "which is the case section 14.4 breaks with its preferred pair -- "
+            "and the only place the book prints a dasa boundary to the day, "
+            "which is what fixes the dasa year at 365.25 days."
         ),
     },
     41: {

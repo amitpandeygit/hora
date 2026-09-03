@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 90 waiting on evidence · 2 parked**
+**5 waiting on Amit · 91 waiting on evidence · 2 parked**
 
 ---
 
@@ -671,6 +671,22 @@ is not changed on our own judgement — it flips a longevity verdict.
 
 **Closes when:** you decide, or a section states which co-lord a longevity 8th
 house takes.
+
+### OI-136 — a rasi dasa's antardasa boundary is a day wide
+
+**Waiting on the book.** Exercise 31 prints chapter 22's only antardasa
+boundary given to the day: Aries, "April 21, 1945-Nov 21, 1945". Seven equal
+twelfths of a seven-year dasa land 20 Nov 19:59; seven calendar months land
+21 Nov. Four hours apart, so rounding to the nearest day gives the book's date
+under either.
+
+The **dasa** boundary is settled: "April 21" fixes the dasa year at 365.25
+days, against the calendar anniversary, savana and sidereal alike.
+
+**What we do:** `antardasa_periods` divides into equal twelfths, §18.3's own
+division, and reports the day as computed.
+
+**Closes when:** an example prints two antardasa boundaries to the day.
 
 ### OI-134 — §14.3's Table 32 has a Saturn exception it never states
 
