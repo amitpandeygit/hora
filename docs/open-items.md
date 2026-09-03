@@ -18,7 +18,7 @@ implemented. Do not act on these, and do not re-raise them each session.
 | OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
-| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Eleven** charts now reproduce with mean and none with true; under `true` Chart 24's Rahu is **79'** out, a whole sign wrong, Chart 38's **66'** and Chart 37's **57'** |
+| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Twelve** charts now reproduce with mean and none with true; under `true` Chart 39's Rahu is **96'** out and Chart 24's **79'**, both a whole sign wrong |
 
 Listed in the order I would take them: OI-39 is the only unambiguous defect and
 the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
@@ -663,8 +663,10 @@ luminaries, and adds that "aspect of all other planets is equally important"
 without saying how to weigh them, so `rasi_strength.stronger` refuses
 `purpose="ayur"` and this seed cannot be computed from the text.
 
-**Example 84 makes it worse, not better**: it seeds Chart 8 from Sagittarius,
-and the cascade gives Gemini — under every reading of rule 2, and decided by
+**Example 85 narrows it**: its seed is decided by §15.5.2 **rule 1**, "as it is
+occupied by a planet (Mars)", which our cascade reproduces. So the cascade is
+the instrument; only the ayur weights for rule 2 are unstated. **Example 84
+still contradicts it** — Sagittarius against the cascade's Gemini, decided by
 rule 6, which the ayur note does not touch. See D-62.
 
 **What we do:** `seed` returns both candidates with the reason it is open, and
@@ -1469,13 +1471,14 @@ both examples anyway.
 **Closes when:** an example applies step 3 where the counts differ, or JHora's
 argala output settles it.
 
-### OI-68 — Eleven charts all need the **mean** node; our default is `true`
+### OI-68 — Twelve charts all need the **mean** node; our default is `true`
 
-Eleven charts print their own birth data, so all eleven can be recomputed
-rather than transcribed. All eleven reproduce every body to within one
-arcminute — **only with the mean node**. Charts 13, 24, 25, 26, 37 and 38 are
-the sixth to eleventh; under `true`, Chart 24's Rahu is 79' out, in a different
-sign from the drawn one, Chart 38's is 66', Chart 37's 57' and Chart 25's 41'.
+Twelve charts print their own birth data, so all twelve can be recomputed
+rather than transcribed. All twelve reproduce every **graha** to within one
+arcminute — **only with the mean node**. Charts 13, 24, 25, 26, 37, 38 and 39
+are the sixth to twelfth; under `true`, **Chart 39's Rahu is 96' out**, the
+widest in the register, Chart 24's is 79' — both in a different sign from the
+drawn one — Chart 38's 66', Chart 37's 57' and Chart 25's 41'.
 
 | Chart | Rahu, mean | Rahu, true | printed |
 |---|---|---|---|
@@ -1487,10 +1490,10 @@ sign from the drawn one, Chart 38's is 66', Chart 37's 57' and Chart 25's 41'.
 
 Thirty-nine, twelve, fifty-six, **seventy-seven** and nine arcminutes out under
 `true` for the five tabled. Every other body lands within one arcminute — the
-book's display rounding — except Chart 3's ascendant at 5.5', which is its
-birth minute being rounded, not a node question. Chart 8 separates nothing, and
+book's display rounding — except two ascendants — Chart 3's at 5.5' and Chart 39's at 8.6' — which are
+their birth minutes being rounded, not a node question. Chart 8 separates nothing, and
 Chart 3's margin is the narrowest, the nodes having been close in December
-1926. The eleven span 1542 to 1971 and both hemispheres, and Chart 10 predates
+1926. The twelve span 1542 to 1971 and both hemispheres, and Chart 10 predates
 the Gregorian reform, so the agreement is not an artefact of one era or setup.
 This is the only hard evidence in the project about which convention the book
 uses, and it points against our default. Chart 1 cannot settle it: its JHora
@@ -1498,7 +1501,7 @@ output is still the empty stub of OI-1.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
 endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by the
-mean-node tests over charts 3, 6, 7, 10, 12, 13, 24, 25, 26, 37 and 38 — grep
+mean-node tests over charts 3, 6, 7, 10, 12, 13, 24, 25, 26, 37, 38 and 39 — grep
 `mean_node` — which assert the failure in both directions so it is not lost.
 
 **Closes when:** you decide, or a JHora run of Chart 1 settles it.

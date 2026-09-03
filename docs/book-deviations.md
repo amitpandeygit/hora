@@ -1959,14 +1959,26 @@ the twelve backward — Ge, Ta, Ar, Pi, Aq, Cp, Sg... — and the native's death
 50 falls in **Sagittarius** dasa, which is not a Trishoola. The example's own
 reasoning fails entirely under the cascade's answer.
 
+**Example 85 makes this sharper, not softer.** Chapter 22's other worked seed
+uses §15.5.2 and says which rule:
+
+> "The 2nd house is stronger than the 8th house, **as it is occupied by a
+> planet (Mars)**."
+
+That is rule 1 word for word, and our cascade returns Virgo by rule 1 with the
+same count. So the cascade *is* the instrument this chapter reaches for — which
+leaves Example 84 as the same instrument giving a different answer, not as
+evidence of some other method. Example 85 also uses the cascade twice more, for
+its antardasa seed, and both agree with us to the reason given.
+
 **What we do:** nothing automatic. `seed` reports both candidates and takes the
 caller's decision; it does not run any cascade, which OI-131 already required
-for a different reason. This entry records that the one worked example we have
-disagrees with the cascade rather than confirming it.
+for a different reason. Two of the chapter's three seed comparisons confirm the
+cascade exactly; the third contradicts it.
 
 **Closes when:** you decide, or a later section says what strength test an ayur
 dasa's seed uses — §15.5.2's ayur note is about rule 2 only, and rule 2 is not
-what is deciding here.
+what is deciding in Example 84.
 
 ---
 

@@ -259,6 +259,13 @@
         "number": 38,
         "recomputable": true,
         "title": "Sri Aurobindo Ghose \u2014 Drigdasa"
+      },
+      {
+        "birth": "August 20, 1944, 7:11 am (IST), 72 E 49, 18 N 58",
+        "first_seen": "chapter 22, Example 85",
+        "number": 39,
+        "recomputable": true,
+        "title": "Rajiv Gandhi \u2014 Niryaana Shoola dasa"
       }
     ],
     "not_supplied": [
@@ -296,7 +303,8 @@
       34,
       35,
       37,
-      38
+      38,
+      39
     ]
   },
   "status": 200

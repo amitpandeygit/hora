@@ -430,6 +430,40 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    39: {
+        "title": "Rajiv Gandhi — Niryaana Shoola dasa",
+        "birth": "August 20, 1944, 7:11 am (IST), 72 E 49, 18 N 58",
+        "birth_data": {
+            "year": 1944, "month": 8, "day": 20, "hour": 7, "minute": 11,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 18 + 58 / 60, "longitude": 72 + 49 / 60},
+        "longitudes": {
+            "Asc": "14 Le 44", "Sun": "3 Le 49", "Moon": "17 Le 09",
+            "Mars": "1 Vi 12", "Merc": "28 Le 34", "Jup": "12 Le 12",
+            "Ven": "18 Le 40", "Sat": "14 Ge 13", "Rahu": "2 Cn 48",
+            "Ketu": "2 Cp 48", "HL": "29 Le 06", "GL": "7 Li 04",
+        },
+        "chara_karakas": {
+            "Merc": "AK", "Rahu": "AmK", "Ven": "BK", "Moon": "MK",
+            "Sat": "PiK", "Jup": "PK", "Sun": "GK", "Mars": "DK",
+        },
+        "drawn": {
+            "AL": "Ta", "Sat": "Ge", "Rahu": "Cn", "Ketu": "Cp",
+            "Sun": "Le", "Ven": "Le", "Jup": "Le", "Asc": "Le",
+            "Merc": "Le", "HL": "Le", "Moon": "Le",
+            "GL": "Li", "Mars": "Vi",
+        },
+        "events": {"assassinated": "May 1991, aged 46"},
+        "first_seen": "chapter 22, Example 85",
+        "note": (
+            "Seven of the thirteen points printed fall in Leo -- the ascendant, "
+            "five grahas and the Horalagna. Example 85 is the one place the "
+            "book shows its working for a Niryaana Shoola seed, and it uses "
+            "section 15.5.2 rule 1: the 2nd is stronger because a planet "
+            "occupies it."
+        ),
+    },
     38: {
         "title": "Sri Aurobindo Ghose — Drigdasa",
         "birth": "August 15, 1872, 5:17 am (5:53 East), 88 E 20, 22 N 30",
