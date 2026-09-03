@@ -440,13 +440,15 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "GL": "Li", "Ketu": "Vi", "Mars": "Vi",
         },
         "retrograde": ("Ven", "Sat", "Merc"),
+        "events": {"her husband died in a road accident": "2000"},
         "first_seen": "chapter 23, Exercise 33",
         "note": (
             "The first chart in the register printed with **no degrees at "
             "all** -- only the two diagrams and the year. Nothing that needs "
             "a longitude can be computed on it, which rules out section "
             "15.5.2 below rule 1, the arudha padas' co-lord tiebreaks and "
-            "every varga. The exercise asks only for rasi-level work."
+            "every varga. The exercise asks only for rasi-level work, and its "
+            "seed is settled by rule 1."
         ),
     },
     44: {

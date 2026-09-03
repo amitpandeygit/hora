@@ -830,11 +830,29 @@ PITRI_PADA_IS_A9 = (
 #: the karaka stay three. Example 93 has all three — Aries at 18-27, Leo at
 #: 54-63 and Sagittarius at 90-99 — and simply reports which one held the
 #: death.
+#:
+#: Exercise 33's answer narrows anyway, and not by a rule: "of these, Cp dasa
+#: comes too early" — Capricorn runs from the lady's 9th year to her 18th, too
+#: early for a husband to be lost. Plausibility about the relative's age is
+#: what the section leaves the reader to supply.
 NO_CRITERION_NARROWS_A_RELATIVES_TRINES = (
     "Section 23.3's second criterion limits the native's death to the four "
     "dasas of his longevity range. Section 23.5 gives no equivalent for a "
     "relative, and names no way to choose among the three trines from the "
-    "sthira karaka."
+    "sthira karaka. Exercise 33's answer chooses by plausibility instead: "
+    "\"of these, Cp dasa comes too early\"."
+)
+
+#: **Finding.** §23.5 gives two references — "trines from sthira karaka" and
+#: "trines from the corresponding arudha pada can **also** give death" — and
+#: the second never adds a rasi in any worked case. Example 93's A9 fell in a
+#: trine of the karaka, so its trines were "the same"; Example 94 reads three
+#: relatives and mentions no pada at all; and Exercise 33's answer lists only
+#: "Cp, Ta and Vi", the karaka's trines, where the pada would have added Pi,
+#: Cn and Sc.
+THE_ARUDHA_PADA_HALF_IS_NEVER_DECISIVE = (
+    "Sthira karaka of husband is Jupiter and he is in Cp. So death can occur "
+    "in Cp, Ta and Vi."
 )
 
 #: **Gap.** §8.3 says only "the stronger" of the father's two candidates, and

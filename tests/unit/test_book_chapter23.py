@@ -2357,3 +2357,119 @@ def test_the_third_from_the_karaka_is_the_ordinary_third():
     got = manner_of_death(R["Capricorn"], {})
     assert got["third"] == (R["Capricorn"] + 2) % 12 == R["Pisces"]
     assert rudra_eighth(R["Capricorn"]) == R["Gemini"]     # the 8th, not this
+
+
+# -- Exercise 33's answer ---------------------------------------------------
+
+def test_exercise_33s_answer_gives_the_same_run_year_for_year():
+    """"Shoola dasa starts from Sg and goes thus - Sg: 1950-1959, Cp:
+    1959-1968, Aq: 1968-1977, Pi: 1977-1986, Ar: 1986-1995, Ta: 1995-2004, Ge:
+    2004-2013."
+
+    Seven dasas dated, and all seven match.
+    """
+    from hora.charts.book import lagna
+    from hora.dasha.rasi.shoola import progression
+
+    printed = [("Sg", 1950), ("Cp", 1959), ("Aq", 1968), ("Pi", 1977),
+               ("Ar", 1986), ("Ta", 1995), ("Ge", 2004)]
+    run = progression(lagna(45))
+    for index, (abbr, year) in enumerate(printed):
+        assert ABBR[run.signs[index]] == abbr
+        assert 1950 + run.starts[index] == year
+        assert 1950 + run.starts[index] + 9 == year + 9
+
+
+def test_the_answer_lists_only_the_karakas_trines():
+    """"Sthira karaka of husband is Jupiter and he is in Cp. So death can
+    occur in Cp, Ta and Vi."
+
+    Three, not six. We listed the arudha pada's trines too, which §23.5's own
+    sentence licenses — "trines from the corresponding arudha pada can **also**
+    give death" — and which the answer does not use.
+    """
+    from hora.dasha.rasi.shoola import (
+        THE_ARUDHA_PADA_HALF_IS_NEVER_DECISIVE,
+        relative_death_rasis,
+    )
+
+    got = relative_death_rasis(R["Capricorn"], R["Pisces"])
+    assert got["names"]["from_sthira_karaka"] == (
+        "Capricorn", "Taurus", "Virgo")
+    assert set(got["names"]["from_arudha_pada"]) == {
+        "Pisces", "Cancer", "Scorpio"}
+    assert "Cp, Ta and Vi" in THE_ARUDHA_PADA_HALF_IS_NEVER_DECISIVE
+
+
+def test_the_pada_half_never_adds_a_rasi_in_any_worked_case():
+    """Example 93's A9 sat in a trine of the karaka, so its trines were "the
+    same"; Example 94 reads three relatives and names no pada; Exercise 33's
+    answer lists the karaka's three alone. The reference is stated in §23.5
+    and never decisive.
+    """
+    from hora.dasha.rasi.shoola import (
+        PITRI_PADA_IS_A9,
+        RELATIVE_DEATH_RULE,
+        relative_death_rasis,
+    )
+
+    # Example 93: Venus in Sagittarius, A9 in Sagittarius — one set.
+    ex93 = relative_death_rasis(R["Sagittarius"], R["Sagittarius"])
+    assert len(ex93["all"]) == 3
+    assert "in Sg" in PITRI_PADA_IS_A9
+
+    # Exercise 33: two different sets, and the answer takes only the first.
+    ex33 = relative_death_rasis(R["Capricorn"], R["Pisces"])
+    assert len(ex33["all"]) == 6
+    assert "can also give death" in RELATIVE_DEATH_RULE
+
+
+def test_the_answer_narrows_by_plausibility_not_by_a_rule():
+    """"Of these, Cp dasa comes too early. Most likely candidate is Ta dasa
+    (1995-2004)."
+
+    Capricorn runs from her 9th year to her 18th — too early to have lost a
+    husband. §23.5 states no criterion for this; the answer supplies ordinary
+    plausibility about the relative's age.
+    """
+    from hora.charts.book import lagna
+    from hora.dasha.rasi.shoola import (
+        NO_CRITERION_NARROWS_A_RELATIVES_TRINES,
+        progression,
+    )
+
+    run = progression(lagna(45))
+    ages = {ABBR[run.signs[i]]: (run.starts[i], run.starts[i] + 9)
+            for i in range(12)}
+    assert ages["Cp"] == (9, 18)
+    assert ages["Ta"] == (45, 54)
+    assert ages["Vi"] == (81, 90)
+    assert "comes too early" in NO_CRITERION_NARROWS_A_RELATIVES_TRINES
+
+
+def test_the_answer_confirms_the_manner_and_the_death():
+    """"The 3rd from him is Pi, occupied by Moon and Rahu. Mars also aspects
+    it. So the death is likely to be violent." And: "Husband of this lady
+    passed away in a road accident in 2000."
+
+    Our reading found the same, and one malefic more — Ketu aspects Pisces
+    too, by both drishtis, which the answer does not mention.
+    """
+    from hora.charts.book import chart, graha_signs
+    from hora.dasha.rasi.shoola import manner_of_death, progression
+
+    signs = {int(g): s for g, s in graha_signs(45).items()}
+    got = manner_of_death(R["Capricorn"], signs)
+
+    assert got["rasi"] == "Pisces"
+    assert got["occupied_by"] == ("Moon", "Rahu")
+    assert "Mars" in got["malefics"]["by_rasi_drishti"]
+    assert "Ketu" in got["malefics"]["by_rasi_drishti"]      # the answer's extra
+    assert "Ketu" in got["malefics"]["by_graha_drishti"]
+
+    assert chart(45)["events"] == {
+        "her husband died in a road accident": "2000"}
+
+    run = progression(R["Sagittarius"])
+    taurus = next(i for i in range(12) if ABBR[run.signs[i]] == "Ta")
+    assert 1950 + run.starts[taurus] <= 2000 < 1950 + run.starts[taurus] + 9
