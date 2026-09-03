@@ -837,6 +837,46 @@ NO_CRITERION_NARROWS_A_RELATIVES_TRINES = (
     "sthira karaka."
 )
 
+#: **Gap.** §8.3 says only "the stronger" of the father's two candidates, and
+#: the chapter's two worked comparisons cite different things. Example 93:
+#: "exalted Sun joins Mercury and Jupiter aspects him, so Sun is stronger than
+#: Venus." Example 94: "Sthira karaka of father is Venus here, **as he is in a
+#: dual rasi**" — which is §15.5.2 rule 5's modality ranking applied to the
+#: rasis two *grahas* occupy, where Example 93 used conjunction and aspect.
+#: Neither example says what the full test is.
+THE_FATHER_KARAKA_CRITERIA_DIFFER = (
+    "Sthira karaka of father is Venus here, as he is in a dual rasi."
+)
+
+#: **Finding.** §8.3 gives Jupiter as the sthira karaka of both husband and
+#: children, so Dara and Putra Shoola dasas read the *same* trines from the
+#: *same* graha — on different runs. Example 94 shows what that buys: Jupiter
+#: sits in Taurus, and Taurus is the 5th dasa of the Dara run and the 7th of
+#: the Putra run, so one rasi and one karaka time two deaths eighteen years
+#: apart.
+ONE_KARAKA_TIMES_TWO_RELATIVES = (
+    "Jupiter is sthira karaka of husband... Jupiter is also sthira karaka of "
+    "children... Jupiter is in Ta and Ta dasa runs from 1917 + 36 = 1953... "
+    "Jupiter is in Ta and Ta dasa runs from 1917 + 54 = 1971."
+)
+
+#: What Examples 86, 91 and 94 state about Chart 61 between them. The chart is
+#: printed in a later chapter; this is everything the book has said about it so
+#: far, and the list to check it against when it arrives.
+CHART_61_FROM_THE_EXAMPLES: tuple[str, ...] = (
+    ("lagna is Cancer — Example 86 takes the 8th houses from Cn and Cp, and "
+     "Example 91 calls Cp the 7th house"),
+    ("born in November 1917 — Example 94 works from 1917 and ends a dasa in "
+     "November 1980"),
+    "Saturn is in Cancer, which triggers Example 86's Table 32 exception",
+    "Rahu is in Sagittarius and debilitated there, and becomes Rudra",
+    "Venus is in Sagittarius — Example 94's trines from him are Sg, Ar, Le",
+    "Jupiter is in Taurus — Example 94 says so twice",
+    ("the 9th house Pisces is stronger than the 3rd, the 7th Capricorn "
+     "stronger than lagna, and the 5th Scorpio stronger than the 11th"),
+    "AL is Leo, Sagittarius or Aries, and Leo holds AL's lord",
+)
+
 #: §8.3 is what §23.5's "we mentioned earlier" points back to.
 STHIRA_KARAKAS_WERE_PROMISED_FOR_DEATH = (
     "When predicting the death of spouse, we use Jupiter in female charts and "

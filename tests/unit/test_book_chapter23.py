@@ -1983,3 +1983,183 @@ def test_23_5_leaves_a_relatives_three_trines_unnarrowed():
              for i in range(12) if run.signs[i] in trines}
     assert spans == {"Ar": (18, 27), "Le": (54, 63), "Sg": (90, 99)}
     assert "names no way to choose" in NO_CRITERION_NARROWS_A_RELATIVES_TRINES
+
+
+# --------------------------------------------------------------------------
+# Example 94 — three relatives on one chart, still unprinted.
+# --------------------------------------------------------------------------
+
+#: Each relative's variant, the house that wins its pair, and the killing dasa
+#: the example dates.
+EX94 = [
+    ("Pitri Shoola dasa", 9, "Pi", "Le", 45, 1962, 1971, "May 1964"),
+    ("Dara Shoola dasa", 7, "Cp", "Ta", 36, 1953, 1962, "1960"),
+    ("Putra Shoola dasa", 5, "Sc", "Ta", 54, 1971, 1980, "June 1980"),
+]
+
+
+@pytest.mark.parametrize("name,house,seed,killer,after,start,end,death", EX94)
+def test_example_94s_three_runs(name, house, seed, killer, after, start, end,
+                                death):
+    """"Pitri Shoola dasa starts from Pi (9th house) and goes as Pi, Ar, Ta,
+    Ge etc... Dara Shoola dasa starts from Cp... Putra Shoola dasa starts from
+    Sc (5th house and stronger than Ta)."
+
+    Three variants on one lagna, and every figure the example gives falls out
+    of the arithmetic alone — the chart itself is printed in a later chapter.
+    """
+    from hora.dasha.rasi.shoola import relative_dasa
+
+    got = relative_dasa(name, R["Cancer"], stronger_house=house)
+    assert ABBR[got["seed"]] == seed
+
+    run = got["run"]
+    position = [ABBR[s] for s in run.signs].index(killer)
+    assert run.starts[position] == after
+    assert 1917 + after == start
+    assert 1917 + after + 9 == end
+
+    # The dasa opens and closes on the birth month, November, so a death in
+    # the closing year is inside it whenever it falls before November.
+    death_year = int(death.split()[-1])
+    assert start <= death_year <= end
+
+
+@pytest.mark.parametrize("name,house", [(n, h) for n, h, *_ in EX94])
+def test_all_three_seeds_go_to_the_relatives_own_house(name, house):
+    """Pisces the 9th over the 3rd, Capricorn the 7th over the 1st, Scorpio
+    the 5th over the 11th — on this chart the house that *shows* the relative
+    wins every time, which is not something §23.5 promises.
+    """
+    from hora.dasha.rasi.shoola import RELATIVE_DASAS
+
+    row = next(r for r in RELATIVE_DASAS if r["name"] == name)
+    assert row["house"] == house == row["pair"][0]
+
+
+def test_example_94_confirms_dara_is_the_ordinary_shoola_dasa():
+    """Example 91 said "the 7th house Cp is stronger and dasas start from Cp"
+    for the native's own Shoola dasa; Example 94 says "Dara Shoola dasa starts
+    from Cp". Same seed, same twelve periods — the identity §23.5 asserts,
+    demonstrated by the book's own two examples on one chart.
+    """
+    from hora.dasha.rasi.shoola import (
+        DARA_IS_THE_ORDINARY_SHOOLA_DASA,
+        progression,
+        relative_dasa,
+        seed,
+    )
+
+    dara = relative_dasa("Dara Shoola dasa", R["Cancer"], stronger_house=7)
+    ordinary = seed(R["Cancer"], stronger_house=7)
+    assert dara["seed"] == ordinary.sign == R["Capricorn"]
+    assert dara["run"].signs == progression(R["Capricorn"]).signs
+    assert "identical to the native's normal Shoola dasa" in (
+        DARA_IS_THE_ORDINARY_SHOOLA_DASA)
+
+
+def test_one_karaka_times_two_relatives_from_two_runs():
+    """"Jupiter is sthira karaka of husband... Jupiter is also sthira karaka
+    of children."
+
+    §8.3 gives Jupiter both roles, so Dara and Putra read the same trines from
+    the same graha. Jupiter is in Taurus, which is the **5th** dasa of the
+    Dara run and the **7th** of the Putra run — one rasi and one karaka
+    timing two deaths eighteen years apart.
+    """
+    from hora.core.constants.karaka import STHIRA_KARAKAS
+    from hora.dasha.rasi.shoola import (
+        ONE_KARAKA_TIMES_TWO_RELATIVES,
+        relative_dasa,
+    )
+
+    jupiter_row = next(row for row in STHIRA_KARAKAS
+                       if "husband, sons" in str(row["relative"]))
+    assert jupiter_row["rule"] == "fixed"
+
+    spans = {}
+    for name, house in (("Dara Shoola dasa", 7), ("Putra Shoola dasa", 5)):
+        run = relative_dasa(name, R["Cancer"], stronger_house=house)["run"]
+        position = [ABBR[s] for s in run.signs].index("Ta")
+        spans[name] = (position + 1, 1917 + run.starts[position])
+
+    assert spans["Dara Shoola dasa"] == (5, 1953)
+    assert spans["Putra Shoola dasa"] == (7, 1971)
+    assert spans["Putra Shoola dasa"][1] - spans["Dara Shoola dasa"][1] == 18
+    assert "1953" in ONE_KARAKA_TIMES_TWO_RELATIVES
+
+
+def test_the_husband_karaka_is_the_sex_dependent_one_from_8_3():
+    """§8.3: "When predicting the death of spouse, we use Jupiter in female
+    charts and Venus in male charts." Indira Gandhi's chart takes Jupiter, so
+    Example 94 exercises that rule rather than the plain table entry.
+    """
+    from hora.core.const import Graha
+    from hora.core.constants.karaka import (
+        STHIRA_KARAKA_OF_SPOUSE,
+        STHIRA_KARAKA_OF_SPOUSE_NOTE,
+    )
+
+    assert STHIRA_KARAKA_OF_SPOUSE["female"] == Graha.JUPITER
+    assert STHIRA_KARAKA_OF_SPOUSE["male"] == Graha.VENUS
+    assert "some scholars" in STHIRA_KARAKA_OF_SPOUSE_NOTE
+
+
+def test_the_two_father_karaka_comparisons_cite_different_things():
+    """Example 93: "exalted Sun joins Mercury and Jupiter aspects him."
+    Example 94: "Venus here, **as he is in a dual rasi**."
+
+    §8.3 says only "the stronger", and its two worked cases reach for
+    different criteria — conjunction and aspect in one, the modality of the
+    occupied rasi in the other.
+    """
+    from hora.charts.book import graha_longitudes, graha_signs
+    from hora.core.const import MODALITY_NAMES, RASI_MODALITY
+    from hora.dasha.rasi.shoola import (
+        THE_FATHER_KARAKA_CRITERIA_DIFFER,
+        paired_sthira_karaka,
+    )
+
+    assert "dual rasi" in THE_FATHER_KARAKA_CRITERIA_DIFFER
+
+    # Example 93's grounds, which say nothing about modality.
+    longitudes = {int(g): lon for g, lon in graha_longitudes(44).items()}
+    signs = {int(g): sign for g, sign in graha_signs(44).items()}
+    got = paired_sthira_karaka("father", longitudes, signs)
+    sun, venus = got["candidates"]
+    assert str(MODALITY_NAMES[RASI_MODALITY[sun["sign"]]]) == "chara"
+    assert str(MODALITY_NAMES[RASI_MODALITY[venus["sign"]]]) == "dwiswabhava"
+    # Example 94's criterion would have picked Venus on Chart 44 too.
+    assert sun["joins"] and not venus["joins"]
+
+
+def test_what_the_examples_have_established_about_chart_61():
+    """Three examples now read a chart the book prints far later. This is
+    everything they state about it, and the list to check the chart against
+    when it lands.
+    """
+    from hora.charts.book import numbers
+    from hora.dasha.rasi.shoola import CHART_61_FROM_THE_EXAMPLES
+
+    assert 61 not in numbers()
+    assert len(CHART_61_FROM_THE_EXAMPLES) == 8
+    joined = " | ".join(CHART_61_FROM_THE_EXAMPLES)
+    for fact in ("lagna is Cancer", "November 1917", "Saturn is in Cancer",
+                 "Rahu is in Sagittarius", "Venus is in Sagittarius",
+                 "Jupiter is in Taurus"):
+        assert fact in joined
+
+
+def test_example_94_dates_the_end_of_a_dasa_to_a_month():
+    """"It ends in November 1980." The Putra run's Taurus opens at 54 years
+    and closes at 63, and a November close is a November birth — which is the
+    only month Chart 61 has been given.
+    """
+    from hora.dasha.rasi.shoola import CHART_61_FROM_THE_EXAMPLES, progression
+
+    run = progression(R["Scorpio"])
+    position = [ABBR[s] for s in run.signs].index("Ta")
+    assert (run.starts[position], run.starts[position] + 9) == (54, 63)
+    assert 1917 + 54 == 1971
+    assert 1917 + 63 == 1980
+    assert any("November 1917" in fact for fact in CHART_61_FROM_THE_EXAMPLES)
