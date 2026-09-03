@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 87 waiting on evidence · 2 parked**
+**5 waiting on Amit · 88 waiting on evidence · 2 parked**
 
 ---
 
@@ -638,6 +638,28 @@ question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
 
+### OI-134 — §14.3's Table 32 has a Saturn exception it never states
+
+**Waiting on the book.** §14.3 says "find the 8th house using Table 32 and
+**not** in the normal way", with no exception. Example 86, eight chapters
+later, takes one: "Because Saturn is in Cn, we take the 8th houses from Cn and
+Cp in the normal way, instead of using Table 32."
+
+What it undoes is a *direction*. Footnote 50 counts the 8th anti-zodiacally
+from an even rasi, and Table 32's Cancer and Capricorn entries — Sagittarius
+and Gemini — are exactly that, where the normal count gives Aquarius and Leo.
+So Saturn reverses the count, as he reverses a Narayana dasa's direction in
+§18.2.1.
+
+What triggers it is not said: Saturn **occupies** one reference rasi here and
+**owns** the other, and the example flips both. Nor can Example 86 be
+recomputed — Chart 61 is printed in a later chapter.
+
+**What we do:** `rudra_eighth` keeps Table 32, and `rudra` reports the
+exception beside the affliction override — named, not applied, as OI-109 does.
+
+**Closes when:** Chart 61 arrives, or a section states the trigger.
+
 ### OI-133 — which Trishoola when two of them fall in the range
 
 **Waiting on the book.** Example 84 selects the Trishoola whose dasa falls in
@@ -648,9 +670,9 @@ apart in a ninety-six year cycle while every range is thirty-six years wide.
 Over all 432 (seed, Rudra, category) combinations: **324 give one, 72 give
 two, 36 give none**.
 
-**What we do:** `select_trishoola` returns all three with their spans and the
-range test, selects only when exactly one qualifies, and says how many did
-otherwise. Rule 3's Rudra fallback covers the none case; nothing covers two.
+**What we do:** `select_trishoola` returns all three with their spans, selects
+only when exactly one qualifies, and says how many did otherwise. Rule 3's
+Rudra fallback covers the none case; nothing covers two.
 
 **Closes when:** an example has two Trishoolas in range, or a later section
 gives a tiebreak.
@@ -1490,11 +1512,11 @@ drawn one — Chart 38's 66', Chart 37's 57' and Chart 25's 41'.
 
 Thirty-nine, twelve, fifty-six, **seventy-seven** and nine arcminutes out under
 `true` for the five tabled. Every other body lands within one arcminute — the
-book's display rounding — except two ascendants — Chart 3's at 5.5' and Chart 39's at 8.6' — which are
-their birth minutes being rounded, not a node question. Chart 8 separates nothing, and
-Chart 3's margin is the narrowest, the nodes having been close in December
-1926. The twelve span 1542 to 1971 and both hemispheres, and Chart 10 predates
-the Gregorian reform, so the agreement is not an artefact of one era or setup.
+book's display rounding — except Chart 3's ascendant at 5.5' and Chart 39's at
+8.6', which are their birth minutes being rounded, not a node question. Chart 8
+separates nothing, and Chart 3's margin is the narrowest. The twelve span 1542
+to 1971 and both hemispheres, and Chart 10 predates the Gregorian reform, so
+the agreement is not an artefact of one era or setup.
 This is the only hard evidence in the project about which convention the book
 uses, and it points against our default. Chart 1 cannot settle it: its JHora
 output is still the empty stub of OI-1.

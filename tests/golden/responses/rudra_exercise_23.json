@@ -25,6 +25,7 @@
       "A planet aspected by many planets (rasi aspect) is stronger.",
       "Finally, a planet which is more advanced in its rasi is stronger."
     ],
+    "table_32_exception": "Because Saturn is in Cn, we take the 8th houses from Cn and Cp in the normal way, instead of using Table 32.",
     "trishoola": [
       {
         "rasi": "Libra",

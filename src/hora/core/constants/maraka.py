@@ -234,6 +234,29 @@ RUDRA_RULE = (
     "afflicted, it can also become Rudra."
 )
 
+#: **Gap.** §14.3 says "find the 8th house using Table 32 and not in the normal
+#: way", with no exception. Example 86, eight chapters later, takes one:
+RUDRA_TABLE_32_SATURN_EXCEPTION = (
+    "Because Saturn is in Cn, we take the 8th houses from Cn and Cp in the "
+    "normal way, instead of using Table 32."
+)
+
+#: **Finding.** What that exception undoes is a *direction*. Footnote 50 counts
+#: the 8th zodiacally from an odd rasi and anti-zodiacally from an even one,
+#: and Cancer and Capricorn are both even: Table 32 sends them to Sagittarius
+#: and Gemini, which are their anti-zodiacal 8ths, while "the normal way"
+#: gives Aquarius and Leo. So the exception reverses footnote 50's count back
+#: to zodiacal — the same thing §18.2.1's Saturn exception does to a Narayana
+#: dasa's direction. What it does not say is what triggers it: Saturn occupies
+#: one of the two reference rasis here and owns the other. See OI-134.
+TABLE_32_EXCEPTION_REVERSES_THE_COUNT = (
+    "Table 32's entries for Cancer and Capricorn are their anti-zodiacal 8th "
+    "houses, which is footnote 50's rule for an even rasi. Example 86's \"the "
+    "normal way\" is the zodiacal count, giving Aquarius and Leo. The two "
+    "routes give different Rudra candidates on every chart with those "
+    "references, so the exception is not a refinement."
+)
+
 #: §14.3's strength cascade for Rudra, in the order it gives them.
 RUDRA_STRENGTH_CASCADE: tuple[str, ...] = (
     "We say that a planet is stronger if it conjoins more planets.",

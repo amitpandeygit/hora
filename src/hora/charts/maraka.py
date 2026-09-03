@@ -33,6 +33,7 @@ from hora.core.const import (
     RASI_MODALITY,
     RASI_NAMES,
     RUDRA_AFFLICTION_RULE,
+    RUDRA_TABLE_32_SATURN_EXCEPTION,
     TABLE_32_EIGHTH,
     TABLE_33_LONGEVITY,
     TABLE_34_PARAMAAYUSH,
@@ -726,4 +727,5 @@ def rudra(lagna: int, graha_signs: dict[int, int],
              for s in trishoola_rasis(positions[winner])]),
         "weaker_is_debilitated": debilitated,
         "affliction_override": RUDRA_AFFLICTION_RULE,
+        "table_32_exception": RUDRA_TABLE_32_SATURN_EXCEPTION,
     }

@@ -97,9 +97,11 @@ from hora.core.const import (
     RUDRA_MYTHOLOGY,
     RUDRA_RULE,
     RUDRA_STRENGTH_CASCADE,
+    RUDRA_TABLE_32_SATURN_EXCEPTION,
     SIXTH_IS_THE_ANTIZODIACAL_EIGHTH,
     TABLE_32_CONSTRUCTION,
     TABLE_32_EIGHTH,
+    TABLE_32_EXCEPTION_REVERSES_THE_COUNT,
     TABLE_33_PRINTED,
     TABLE_34_FACTORS,
     TABLE_34_PARAMAAYUSH,
@@ -230,6 +232,9 @@ def section_14_3() -> dict:
         "strength_cascade": list(RUDRA_STRENGTH_CASCADE),
         "affliction_rule": RUDRA_AFFLICTION_RULE,
         "affliction_malefics": list(RUDRA_AFFLICTION_MALEFICS),
+        "table_32_saturn_exception": RUDRA_TABLE_32_SATURN_EXCEPTION,
+        "table_32_exception_reverses_the_count": (
+            TABLE_32_EXCEPTION_REVERSES_THE_COUNT),
         "trishoola_rule": TRISHOOLA_RULE,
         "maheswara_rule": MAHESWARA_RULE,
         "maheswara_uses_the_ordinary_eighth":

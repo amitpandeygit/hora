@@ -2015,3 +2015,30 @@ The computed sign merely admits Scorpio alongside it.
 caller, so a caller passing the computed D-9 gets the wider set and still gets
 Capricorn.
 
+---
+
+## D-64 · Example 86 drops Libra from both of its printed sequences
+
+**Status: FINDING — recorded, nothing changes.** The example's own prose and
+arithmetic both restore it.
+
+Two lists, and Libra is missing from each:
+
+| printed | should be |
+|---|---|
+| "Dasas go as Le, Vi, **Sc**, Sg *etc*" | Le, Vi, **Li**, Sc, Sg |
+| "Antardasas ... go as Le, Vi, **Le**, Sc *etc*" | Le, Vi, **Li**, Sc |
+
+Neither can be a variant rule. §22.2.1 says the twelve rasis are covered
+zodiacally, and Libra sits between Virgo and Scorpio; the second list repeats
+Le, which no zodiacal walk does. And the example then contradicts its own list
+four lines later: "Jan 1984-Aug 1984 is the third antardasa of **Li**."
+
+The dasa list is settled the same way, by its own dates. With Libra the ninth
+dasa Aries opens at 9+8+7+9+... = 65 years; without it Aries is the eighth and
+opens at 58. The example says Aries runs seven years to November 1989 and that
+the death of October 1984 is inside it, which the full sequence gives.
+
+**What we do:** nothing. `progression` walks the zodiac, so it produces Libra
+in both places without a special case.
+

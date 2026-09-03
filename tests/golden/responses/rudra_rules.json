@@ -68,6 +68,8 @@
       "Vi": "Aq"
     },
     "table_32_construction": "Eight of Table 32's twelve entries follow footnote 50's stated rule \u2014 the 8th counted zodiacally from an odd rasi and anti-zodiacally from an even one. The four that do not are exactly Taurus, Leo, Scorpio and Aquarius, the fixed rasis, which identifies them as footnote 50's Shiva rasis. Shiva's motion is deferred to the Narayana Dasa chapter, so the table is held as data and checked against the part of the rule the footnote does state.",
+    "table_32_exception_reverses_the_count": "Table 32's entries for Cancer and Capricorn are their anti-zodiacal 8th houses, which is footnote 50's rule for an even rasi. Example 86's \"the normal way\" is the zodiacal count, giving Aquarius and Leo. The two routes give different Rudra candidates on every chart with those references, so the exception is not a refinement.",
+    "table_32_saturn_exception": "Because Saturn is in Cn, we take the 8th houses from Cn and Cp in the normal way, instead of using Table 32.",
     "trishoola_rule": "The three trines from the rasi occupied by Rudra in rasi chart represent the three spikes of Shiva's Trishoola/trident. They are called Trishoola rasis. Depending on whether a native has short life or middle life or long life, one of the three Trishoola rasis kills the native during its Shoola dasa."
   },
   "status": 200

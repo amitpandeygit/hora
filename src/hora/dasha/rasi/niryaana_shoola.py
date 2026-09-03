@@ -359,6 +359,37 @@ ASPECTING_INCLUDES_THE_RASI_ITSELF = (
 )
 
 
+#: **Pending.** Example 86 reads Indira Gandhi's chart, and prints it eight
+#: chapters later — "given in Chart 61 (in a later chapter)". Nothing on this
+#: list can be checked until it arrives; everything else the example says is
+#: checked without it, from the lengths and the dates alone.
+EXAMPLE_86_AWAITS_CHART_61: tuple[str, ...] = (
+    "that Saturn is in Cancer, which triggers the Table 32 exception",
+    ("that the 8th lord from Cancer is Rahu rather than Saturn, which "
+     "§15.5.1 must settle for Aquarius"),
+    ("that Rahu is debilitated, which needs his rasi — the example's own "
+     "reasoning requires it to be Sagittarius, where the book's Table 6 "
+     "debilitates him and the Taurus/Scorpio convention does not"),
+    ("that both candidates 'join another planet', which is cascade step 1 "
+     "tying"),
+    ("that the 2nd house holds a planet and the 8th is empty, which is "
+     "§15.5.2 rule 1 and decides the seed"),
+    "that Mars is in Leo, which the antardasas start from",
+    "that Ketu is in Capricorn in navamsa",
+)
+
+#: **Book defect.** Example 86 prints two rasi sequences and Libra is missing
+#: from both — "Le, Vi, Sc, Sg" for the dasas and "Le, Vi, Le, Sc" for the
+#: antardasas. Neither can be read as a variant rule: §22.2.1 says the twelve
+#: run zodiacally and Libra is between Virgo and Scorpio, and the example's own
+#: prose then names "the third antardasa of Li". See D-64.
+PRINTED_SEQUENCES_DROP_LIBRA = (
+    "Dasas go as Le, Vi, Sc, Sg etc. ... Antardasas start from Mars in Le and "
+    "go as Le, Vi, Le, Sc etc. ... Jan 1984-Aug 1984 is the third antardasa "
+    "of Li."
+)
+
+
 def maraka_readings(dasa_rasi: int, lagna: int,
                     signs: dict[int, int] | None = None) -> dict:
     """Rule 1 — whether a dasa rasi is or holds a maraka.

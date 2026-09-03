@@ -1239,3 +1239,292 @@ def test_chapter_22s_two_deaths_use_the_two_principles_differently():
     assert R["Capricorn"] in ex84["strong_candidates"]
     assert R["Taurus"] not in ex85["strong_candidates"]
     assert R["Taurus"] in ex85["aspecting_the_navamsa_rasi"]
+
+
+# --------------------------------------------------------------------------
+# Example 86 — Indira Gandhi, whose chart the book prints eight chapters later.
+# --------------------------------------------------------------------------
+
+#: The nine dasas the example's dates require, from a Leo seed running forward.
+EX86_ORDER = ["Le", "Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi", "Ar"]
+
+#: Its four dated antardasas of Aries, seven months each.
+EX86_ANTARDASAS = [("Le", 1982, 11), ("Vi", 1983, 6), ("Li", 1984, 1),
+                   ("Sc", 1984, 8)]
+
+
+def test_chart_61_has_not_been_supplied_yet():
+    """"Chart 61 (in a later chapter)". The coverage line for Example 86:
+    everything on `EXAMPLE_86_AWAITS_CHART_61` waits on it, and this fails
+    loudly when the chart lands so the list gets worked through.
+    """
+    from hora.charts.book import BookChartError, chart, numbers
+    from hora.dasha.rasi.niryaana_shoola import EXAMPLE_86_AWAITS_CHART_61
+
+    assert 61 not in numbers()
+    assert max(numbers()) == 39
+    with pytest.raises(BookChartError, match="there is no Chart"):
+        chart(61)
+
+    assert len(EXAMPLE_86_AWAITS_CHART_61) == 7
+    assert any("Saturn is in Cancer" in item
+               for item in EXAMPLE_86_AWAITS_CHART_61)
+
+
+def test_example_86_reveals_a_table_32_exception_14_3_never_states():
+    """"Because Saturn is in Cn, we take the 8th houses from Cn and Cp in the
+    normal way, instead of using Table 32."
+
+    §14.3 says the opposite with no exception — "find the 8th house using
+    Table 32 and **not** in the normal way". See OI-134.
+    """
+    from hora.core.constants.maraka import (
+        RUDRA_RULE,
+        RUDRA_TABLE_32_SATURN_EXCEPTION,
+    )
+
+    assert "not in the normal way" in RUDRA_RULE
+    assert "Table 32" in RUDRA_RULE
+    assert "in the normal way, instead of using Table 32" in (
+        RUDRA_TABLE_32_SATURN_EXCEPTION)
+    assert "Because Saturn is in Cn" in RUDRA_TABLE_32_SATURN_EXCEPTION
+
+
+def test_what_the_exception_undoes_is_footnote_50s_direction():
+    """Cancer and Capricorn are even rasis, so footnote 50 counts their 8th
+    anti-zodiacally — which is exactly what Table 32 holds for them. "The
+    normal way" is the zodiacal count. So Saturn reverses the direction here,
+    as §18.2.1's exception reverses a Narayana dasa's.
+    """
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+    from hora.core.const import RASI_IS_ODD
+    from hora.core.constants.maraka import TABLE_32_EXCEPTION_REVERSES_THE_COUNT
+
+    for sign in (R["Cancer"], R["Capricorn"]):
+        assert not RASI_IS_ODD[sign]
+        assert rudra_eighth(sign) == (sign - 7) % 12       # anti-zodiacal
+        assert ordinary_eighth(sign) == (sign + 7) % 12    # zodiacal
+
+    assert rudra_eighth(R["Cancer"]) == R["Sagittarius"]
+    assert ordinary_eighth(R["Cancer"]) == R["Aquarius"]
+    assert rudra_eighth(R["Capricorn"]) == R["Gemini"]
+    assert ordinary_eighth(R["Capricorn"]) == R["Leo"]
+    assert "anti-zodiacal 8th" in TABLE_32_EXCEPTION_REVERSES_THE_COUNT
+
+
+def test_the_two_routes_give_different_rudra_candidates():
+    """Why OI-134 is not a refinement. Table 32 would make the candidates the
+    lords of Sagittarius and Gemini; the normal count makes them the lords of
+    Aquarius and Leo — and the example names Rahu and the Sun, which are
+    Aquarius's co-lord and Leo's lord.
+    """
+    from hora.charts.colord import CO_LORDS
+    from hora.core.const import GRAHA_NAMES, RASI_LORD, Graha
+
+    by_table = {str(GRAHA_NAMES[int(RASI_LORD[s])])
+                for s in (R["Sagittarius"], R["Gemini"])}
+    assert by_table == {"Jupiter", "Mercury"}
+
+    assert set(CO_LORDS[R["Aquarius"]]) == {int(Graha.SATURN), int(Graha.RAHU)}
+    assert int(RASI_LORD[R["Leo"]]) == int(Graha.SUN)
+
+
+def test_rudra_reports_the_exception_beside_the_affliction_override():
+    """Both are rules §14.3's neighbourhood states and we do not apply — the
+    affliction override because "malefics **like**" leaves its list open
+    (OI-109), this one because its trigger is unsaid (OI-134). Reported, so a
+    caller is never told a Rudra is settled when a stated rule was skipped.
+    """
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+    from hora.charts.maraka import rudra
+
+    signs = {int(g): sign for g, sign in graha_signs(39).items()}
+    longitudes = {int(g): lon for g, lon in graha_longitudes(39).items()}
+    body = rudra(lagna(39), signs, longitudes)
+
+    assert "Because Saturn is in Cn" in body["table_32_exception"]
+    assert "malefics like" in body["affliction_override"]
+    assert body["rudra"] == "Moon"
+
+
+def test_example_86s_reasoning_needs_the_books_own_node_exaltations():
+    """"The 8th lord Rahu is debilitated... So Trishoola is in the trines from
+    Sg."
+
+    Rudra is Rahu and his rasi is Sagittarius, so the example calls Rahu
+    debilitated **in Sagittarius**. Table 6 does; the Taurus/Scorpio
+    convention many texts use makes him neither. Independent confirmation of
+    D-4 from eight chapters away, and the first place the book *reasons* from
+    it rather than tabulating it. See OI-14.
+    """
+    from hora.charts.maraka import trishoola_rasis
+    from hora.core.const import DEBILITATION_RASI, EXALTATION_RASI, Graha
+
+    assert DEBILITATION_RASI[int(Graha.RAHU)] == R["Sagittarius"]
+    assert EXALTATION_RASI[int(Graha.RAHU)] == R["Gemini"]
+    assert DEBILITATION_RASI[int(Graha.RAHU)] not in (R["Taurus"],
+                                                      R["Scorpio"])
+    assert set(trishoola_rasis(R["Sagittarius"])) == {
+        R["Sagittarius"], R["Aries"], R["Leo"]}
+
+
+def test_a_debilitated_candidate_is_preferred_which_oi_109_had_no_example_for():
+    """"But debilitated 8th lord is a better candidate for being Rudra."
+
+    §14.3's override says the weaker planet takes over if it is "debilitated
+    or in an inimical sign **and** conjoined/aspected by malefics like Mars,
+    Saturn, Rahu and Ketu". Example 86 prefers the debilitated candidate but
+    never mentions the affliction half, and the malefic it would need cannot
+    be checked without Chart 61 — so this is evidence for OI-109, not its
+    close.
+    """
+    from hora.core.constants.maraka import (
+        RUDRA_AFFLICTION_MALEFICS,
+        RUDRA_AFFLICTION_RULE,
+    )
+    from hora.dasha.rasi.niryaana_shoola import EXAMPLE_86_AWAITS_CHART_61
+
+    assert "debilitated or in an inimical sign and" in RUDRA_AFFLICTION_RULE
+    assert "Sun" not in RUDRA_AFFLICTION_MALEFICS
+    assert any("join another planet" in item
+               for item in EXAMPLE_86_AWAITS_CHART_61)
+
+
+def test_the_seed_is_15_5_2_rule_1_for_the_third_time_in_the_chapter():
+    """"Because the 2nd house with a planet is stronger than the empty 8th
+    house, dasas start from the 2nd house."
+
+    Word for word Example 85's reason, on a different chart. Two of the
+    chapter's three worked seeds use rule 1 and agree with the cascade;
+    Example 84 is the one that does not (D-62).
+    """
+    from hora.charts.rasi_strength import stronger
+
+    verdict = stronger(R["Leo"], R["Pisces"],
+                       {}, purpose="phalita")
+    assert verdict.rules[0].rule == "1"
+    assert "contains" in verdict.rules[0].description
+
+
+def test_the_printed_dasa_list_drops_libra_and_its_own_dates_restore_it():
+    """"Dasas go as Le, Vi, **Sc**, Sg etc" — Libra is missing, and the walk is
+    zodiacal, so it cannot be. D-64. The example's dates settle it: Aries has
+    to be the ninth dasa, opening at 65 years, for a seven-year Aries dasa to
+    contain October 1984 while running to November 1989.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        PRINTED_SEQUENCES_DROP_LIBRA,
+        progression,
+    )
+
+    got = progression(R["Leo"])
+    assert got.direction == "forward"
+    assert [ABBR[s] for s in got.signs[:9]] == EX86_ORDER
+    assert ABBR[got.signs[2]] == "Li"
+
+    index = got.signs.index(R["Aries"])
+    assert index == 8
+    assert got.starts[index] == 65
+    assert got.years[index] == 7
+    assert 1917 + got.starts[index] == 1982        # "Nov 1982-Nov 1989"
+    assert 1917 + got.starts[index] + got.years[index] == 1989
+
+    assert "Le, Vi, Sc, Sg" in PRINTED_SEQUENCES_DROP_LIBRA
+
+
+def test_dropping_libra_would_move_aries_seven_years_earlier():
+    """Why the dates settle D-64 rather than merely fitting it. Without Libra,
+    Aries would be the eighth dasa and open at 58 — 1975, not 1982.
+    """
+    from hora.dasha.rasi.niryaana_shoola import dasa_years
+
+    as_printed = ["Le", "Vi", "Sc", "Sg", "Cp", "Aq", "Pi"]
+    elapsed = sum(dasa_years(ABBR.index(a)) for a in as_printed)
+    assert elapsed == 58
+    assert 1917 + elapsed != 1982
+
+
+def test_the_printed_antardasa_list_repeats_leo_which_no_walk_does():
+    """"Antardasas start from Mars in Le and go as Le, Vi, **Le**, Sc etc."
+
+    A zodiacal walk never repeats, and the example's own prose names the third
+    antardasa "of Li" four lines later. D-64's second half.
+    """
+    from hora.dasha.rasi.niryaana_shoola import PRINTED_SEQUENCES_DROP_LIBRA
+
+    assert "Le, Vi, Le, Sc" in PRINTED_SEQUENCES_DROP_LIBRA
+    assert "the third antardasa of Li" in PRINTED_SEQUENCES_DROP_LIBRA
+
+    walk = [(R["Leo"] + step) % 12 for step in range(4)]
+    assert [ABBR[s] for s in walk] == ["Le", "Vi", "Li", "Sc"]
+    assert len(set(walk)) == 4
+
+
+def test_the_antardasa_seed_is_aries_by_the_mirror_of_example_85s_reason():
+    """"Ar is stronger than Li, as its lord Mars aspects it."
+
+    Example 85 gave the same comparison the other way — "Li is stronger as its
+    lord Venus aspects it". Same rule 2, same clause, opposite winner, because
+    on that chart Venus reached Libra and here Mars reaches Aries.
+    """
+    from hora.charts.rasi_strength import PURPOSE_ADAPTATIONS
+
+    assert "the rasi's lord" in PURPOSE_ADAPTATIONS["phalita"]["rule_2_planets"]
+
+    longitudes, _signs, _lagna = _chart_39()
+    from hora.charts.rasi_strength import stronger
+    other_way = stronger(R["Aries"], R["Libra"], longitudes, purpose="phalita")
+    assert other_way.winner == R["Libra"]
+    assert "lord (Venus) aspects from Leo" in other_way.reason
+
+
+@pytest.mark.parametrize("abbr,year,month", EX86_ANTARDASAS)
+def test_example_86s_four_dated_antardasas(abbr, year, month):
+    """"Nov 1982-June 1983 is the first antardasa of Le. June 1983-Jan 1984 is
+    the second antardasa of Vi. Jan 1984-Aug 1984 is the third antardasa of
+    Li. The fourth antardasa of Sc runs during Aug 1984-Mar 1985."
+
+    Seven months each from November 1982, walking zodiacally from Leo — Libra
+    included, which is where the printed list went wrong.
+    """
+    position = EX86_ORDER.index(abbr) if abbr in EX86_ORDER else None
+    assert position is not None
+
+    opens = 1982 * 12 + 10 + position * 7        # November 1982, zero-based
+    assert divmod(opens, 12) == (year, month - 1)
+
+
+def test_the_fourth_antardasa_holds_the_assassination():
+    """"The fourth antardasa of Sc runs during Aug 1984-Mar 1985. This is the
+    one that brought death." She was assassinated on 31 October 1984.
+    """
+    opens = 1982 * 12 + 10 + 3 * 7               # the fourth, from Nov 1982
+    death = 1984 * 12 + 9                         # October 1984
+
+    assert divmod(opens, 12) == (1984, 7)         # August 1984
+    assert opens <= death < opens + 7
+    assert divmod(opens + 7, 12) == (1985, 2)     # March 1985
+
+
+def test_scorpio_meets_both_principles_as_the_example_says():
+    """"Sc is the 8th from dasa rasi Ar. So the first antardasa principle we
+    described is correct. Ketu owns the 8th from Ar and he is in Cp in
+    navamsa. Sc aspects Cp and the second principle is also satisfied."
+
+    Chapter 22's third reading of the antardasa rule, and the only one where
+    the section's own "strong candidate" is the antardasa that ran — Example
+    84's Capricorn met both but was one of three, and Example 85's Taurus met
+    only the second.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import Graha
+    from hora.dasha.rasi.niryaana_shoola import antardasa_candidates
+
+    got = antardasa_candidates(R["Aries"], {int(Graha.KETU): R["Capricorn"]},
+                               eighth_lord=int(Graha.KETU))
+
+    assert got["eighth"] == R["Scorpio"]
+    assert R["Scorpio"] in got["from_dasa_rasi"]
+    assert R["Capricorn"] in rasi_drishti(R["Scorpio"])
+    assert R["Scorpio"] in got["aspecting_the_navamsa_rasi"]
+    assert got["strong_candidate_names"] == ("Scorpio",)
