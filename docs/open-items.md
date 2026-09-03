@@ -18,7 +18,7 @@ implemented. Do not act on these, and do not re-raise them each session.
 | OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
-| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Nine** charts now reproduce with mean and none with true; Chart 24's Rahu is **79'** out, a whole sign wrong |
+| OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Ten** charts now reproduce with mean and none with true; Chart 24's Rahu is **79'** out under `true`, a whole sign wrong, and Chart 37's **57'** |
 
 Listed in the order I would take them: OI-39 is the only unambiguous defect and
 the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
@@ -1389,13 +1389,13 @@ both examples anyway.
 **Closes when:** an example applies step 3 where the counts differ, or JHora's
 argala output settles it.
 
-### OI-68 — Nine charts all need the **mean** node; our default is `true`
+### OI-68 — Ten charts all need the **mean** node; our default is `true`
 
-Nine charts print their own birth data, so all nine can be recomputed rather
-than transcribed. All nine reproduce every body to within one arcminute —
-**only with the mean node**. Charts 13, 24, 25 and 26 are the sixth to ninth;
-under `true`, Chart 24's Rahu is 79' out, in a different sign from the drawn
-one, and Chart 25's is 41'.
+Ten charts print their own birth data, so all ten can be recomputed rather
+than transcribed. All ten reproduce every body to within one arcminute —
+**only with the mean node**. Charts 13, 24, 25, 26 and 37 are the sixth to
+tenth; under `true`, Chart 24's Rahu is 79' out, in a different sign from the
+drawn one, Chart 37's is 57' and Chart 25's 41'.
 
 | Chart | Rahu, mean | Rahu, true | printed |
 |---|---|---|---|
@@ -1410,7 +1410,7 @@ Thirty-nine, twelve, fifty-six, **seventy-seven** and nine arcminutes out under
 book's display rounding — except Chart 3's ascendant at 5.5', which is its
 birth minute being rounded, not a node question. Chart 8 separates nothing, and
 Chart 3's margin is the narrowest, the nodes having been close in December
-1926. The nine span 1542 to 1971 and both hemispheres, and Chart 10 predates
+1926. The ten span 1542 to 1971 and both hemispheres, and Chart 10 predates
 the Gregorian reform, so the agreement is not an artefact of one era or setup.
 This is the only hard evidence in the project about which convention the book
 uses, and it points against our default. Chart 1 cannot settle it: its JHora
@@ -1418,7 +1418,7 @@ output is still the empty stub of OI-1.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
 endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by the
-mean-node tests over charts 3, 6, 7, 10, 12, 13, 24, 25 and 26 — grep
+mean-node tests over charts 3, 6, 7, 10, 12, 13, 24, 25, 26 and 37 — grep
 `mean_node` — which assert the failure in both directions so it is not lost.
 
 **Closes when:** you decide, or a JHora run of Chart 1 settles it.

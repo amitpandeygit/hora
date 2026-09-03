@@ -746,3 +746,273 @@ def test_example_81s_two_stated_outcomes_come_from_the_rules_that_fire():
     assert gives[9] == "internal progress and spiritual evolution"
     assert "liberation" in gives[7]
     assert "mantra" in gives[5]
+
+
+# --------------------------------------------------------------------------
+# Example 82 — Chart 37, three forward groups, and rule 3's other half.
+# --------------------------------------------------------------------------
+
+EX82_ORDER = ["Li", "Aq", "Ta", "Le", "Sc", "Cp", "Ar", "Cn",
+              "Sg", "Pi", "Ge", "Vi"]
+
+#: Only four are printed — the example stops once it reaches Leo.
+EX82_LENGTHS = {"Li": 1, "Aq": 9, "Ta": 6, "Le": 7}
+
+
+def _chart_37():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(37).items()},
+            {int(g): sign for g, sign in graha_signs(37).items()},
+            lagna(37))
+
+
+def _chart_37_points():
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.colord import stronger
+
+    longitudes, signs, lagna_sign = _chart_37()
+    overrides = {r: stronger(r, longitudes, purpose="arudha").winner
+                 for r in (7, 10)}
+    return {
+        "lagna": lagna_sign,
+        "arudha_lagna": arudha_pada(1, lagna_sign, signs, overrides).sign,
+        "mantrapada": arudha_pada(5, lagna_sign, signs, overrides).sign,
+        "mrityupada": arudha_pada(8, lagna_sign, signs, overrides).sign,
+        "signs": signs,
+    }
+
+
+def test_chart_37_recomputes_from_its_own_birth_data():
+    """Unlike Chart 36 this one prints a full birth line, so the whole example
+    stands on Swiss Ephemeris rather than on a transcription. Every graha and
+    the ascendant land inside one arcminute.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(37)
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 37", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    printed = longitudes(37)
+
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+
+def test_chart_37_is_a_tenth_vote_for_the_mean_node():
+    """OI-68 again, and the second-widest margin in the register — Rahu is
+    57' out under `true`, against Chart 24's 79'. Ten charts now, none of them
+    favouring our default.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(37)
+    printed = longitudes(37)["Rahu"]
+    errors = {}
+    for node in (NodeType.MEAN, NodeType.TRUE):
+        computed = compute_chart(
+            from_local(**record["birth_data"]),
+            Place(name="Chart 37", **record["place"]),
+            Settings(node_type=node))
+        errors[node] = abs(
+            computed.positions[int(Graha.RAHU)].longitude - printed) * 60
+
+    assert errors[NodeType.MEAN] < 1.0
+    assert errors[NodeType.TRUE] > 50.0
+
+
+def test_chart_37s_arudha_lagna_reproduces_the_drawn_diagram():
+    """AL is the one thing in the diagram with no longitude behind it, so the
+    chart-wide diagram test skips it. Chart 37 draws it in Gemini and
+    `arudha_pada` puts it there.
+    """
+    from hora.charts.book import chart
+
+    assert chart(37)["drawn"]["AL"] == "Ge"
+    assert _chart_37_points()["arudha_lagna"] == R["Gemini"]
+
+
+def test_example_82s_three_groups_all_run_forward():
+    """"The 9th house is in Li. It is an odd-footed sign... The 10th house is
+    in Sc. It is an odd-footed sign... The 11th house is in Sg. It is an
+    odd-footed sign."
+
+    The opposite extreme from Chart 36, which ran one group forward and two
+    backward. Three forward is possible because the 9th, 10th and 11th from
+    Aquarius are Libra, Scorpio and Sagittarius — three consecutive
+    odd-footed signs.
+    """
+    from hora.core.const import RASI_IS_ODD_FOOTED
+    from hora.dasha.rasi.drigdasa import progression
+
+    _longitudes, _signs, lagna_sign = _chart_37()
+    assert lagna_sign == R["Aquarius"]
+
+    got = progression(lagna_sign)
+    assert [g.leader_name for g in got.groups] == [
+        "Libra", "Scorpio", "Sagittarius"]
+    assert all(RASI_IS_ODD_FOOTED[g.leader] for g in got.groups)
+    assert [g.direction for g in got.groups] == ["forward"] * 3
+
+    assert [g.direction for g in progression(R["Libra"]).groups] == [
+        "forward", "backward", "backward"]
+
+
+def test_chart_37_separates_the_two_sign_classifications():
+    """Scorpio is odd-**footed** but an even **sign**. Chapter 19's rule would
+    send the 10th group backward here and chapter 21's sends it forward, so
+    this chart alone shows the two classifications are not interchangeable —
+    which is why §19.2 and §20.2 both printed a NOTE against confusing them.
+    """
+    from hora.dasha.rasi import kendradi
+    from hora.dasha.rasi.drigdasa import direction_of, group_signs
+
+    assert direction_of(R["Scorpio"]) == "forward"
+    assert kendradi.direction_of(R["Scorpio"]) == "backward"
+
+    forward = group_signs(R["Scorpio"], "forward")
+    backward = group_signs(R["Scorpio"], "backward")
+    assert [ABBR[s] for s in forward] == ["Sc", "Cp", "Ar", "Cn"]
+    assert [ABBR[s] for s in backward] == ["Sc", "Cn", "Ar", "Cp"]
+
+
+def test_example_82_full_order():
+    """"So dasas go as Li, Aq, Ta, Le, Sc, Cp, Ar, Cn, Sg, Pi, Ge, Vi."
+
+    Aquarius is fixed, so its 9th is movable Libra and the three groups
+    partition the zodiac — OI-127's overlap needs a *dual* lagna.
+    """
+    from hora.core.const import MODALITY_NAMES, RASI_MODALITY
+    from hora.dasha.rasi.drigdasa import progression
+
+    got = progression(R["Aquarius"])
+    assert [ABBR[s] for s in got.signs] == EX82_ORDER
+    assert got.covers_every_rasi
+    assert not got.repeated and not got.omitted
+    assert str(MODALITY_NAMES[RASI_MODALITY[R["Libra"]]]) == "chara"
+
+
+@pytest.mark.parametrize("abbr", sorted(EX82_LENGTHS))
+def test_example_82_lengths(abbr):
+    """"Lengths of dasas are found as in Narayana dasa." Four are printed;
+    the example stops at Leo because that is the dasa it reads.
+    """
+    from hora.charts.colord import CO_LORDS, stronger
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import RASI_LORD
+    from hora.dasha.rasi.narayana import dasa_length
+
+    longitudes, signs, _lagna = _chart_37()
+    rasi = {v: k for k, v in enumerate(ABBR)}[abbr]
+    if rasi in CO_LORDS:
+        years = {g: dasa_length(rasi, g, signs[g],
+                                sign_dignity(g, longitudes[g])).years
+                 for g in CO_LORDS[rasi]}
+        lord = stronger(rasi, longitudes, purpose="dasa",
+                        dasa_years=years).winner
+    else:
+        lord = int(RASI_LORD[rasi])
+    got = dasa_length(rasi, lord, signs[lord],
+                      sign_dignity(lord, longitudes[lord]))
+    assert got.years == EX82_LENGTHS[abbr], got.why
+
+
+def test_example_82_leo_runs_jan_1987_to_jan_1994():
+    """"Leo dasa runs during Jan 1987-Jan 1994."
+
+    Born January 1971. Li 1 + Aq 9 + Ta 6 = 16 whole years to January 1987,
+    and Leo's 7 carry it to January 1994 — the four printed lengths and the
+    order confirmed together by dates the example states separately.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.rasi.drigdasa import progression
+
+    assert chart(37)["birth_data"]["year"] == 1971
+    assert chart(37)["birth_data"]["month"] == 1
+
+    elapsed = 0
+    for sign in progression(R["Aquarius"]).signs:
+        if ABBR[sign] == "Le":
+            break
+        elapsed += EX82_LENGTHS[ABBR[sign]]
+
+    assert elapsed == 16
+    assert 1971 + elapsed == 1987
+    assert 1987 + EX82_LENGTHS["Le"] == 1994
+
+
+def test_the_1990_move_to_a_monastery_falls_inside_leo_dasa():
+    """"He was introduced to ISKCON and moved to a monastery in 1990."
+
+    The event the example is written around, and it lands inside the dasa the
+    example reads rather than beside it.
+    """
+    from hora.charts.book import chart
+
+    events = chart(37)["events"]
+    assert list(events.values()) == ["1990"]
+    assert "monastery" in next(iter(events))
+
+    year = int(next(iter(events.values())))
+    start = chart(37)["birth_data"]["year"] + 16
+    assert start <= year < start + EX82_LENGTHS["Le"]
+
+
+def test_example_82_reads_rule_3s_other_half_and_rule_7():
+    """"Leo is the 7th from lagna and it contains Ketu. It can give spiritual
+    awakening."
+
+    Two reasons, and between them they finish rule 3: Example 81 reached its
+    result through the aspect extension, Chart 36's Libra through being lagna
+    itself, and this is the printed "and the 7th house" branch. Ketu is rule
+    7, whose sentence is the chapter's sharpest.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.drigdasa import (
+        KETU_IS_THE_ONLY_LIBERATOR,
+        spiritual_readings,
+    )
+
+    points = _chart_37_points()
+    assert points["signs"][int(Graha.KETU)] == R["Leo"]
+    assert (points["lagna"] + 6) % 12 == R["Leo"]
+
+    got = {r["rule"]: r for r in spiritual_readings(R["Leo"], **points)}
+    assert set(got) == {3, 7}
+    assert got[3]["why"] == "Leo is the 7th from lagna"
+    assert got[7]["why"] == "Ketu is in Leo"
+    assert "awakening" in got[3]["gives"]
+    assert "only planet" in KETU_IS_THE_ONLY_LIBERATOR
+
+
+def test_chart_37s_lagna_dasa_is_the_one_rahu_leaves_unjudged():
+    """Rahu sits in Aquarius, which is also lagna, so its dasa reaches rules 3
+    and 4 outright and rule 8 only conditionally. §21.3 does not say what makes
+    Rahu favorable, so both branches are reported — and this is the dasa that
+    ran 1972-1980, which the example does not read.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.drigdasa import spiritual_readings
+
+    points = _chart_37_points()
+    assert points["signs"][int(Graha.RAHU)] == R["Aquarius"]
+
+    got = {r["rule"]: r for r in spiritual_readings(R["Aquarius"], **points)}
+    assert set(got) == {3, 4, 8}
+    assert "favorable" in got[8]["undecided"]
+
+    judged = spiritual_readings(R["Aquarius"], **points, rahu_favourable=False)
+    rule_8 = next(r for r in judged if r["rule"] == 8)
+    assert rule_8["gives"] == "a turn in the direction of materialism"

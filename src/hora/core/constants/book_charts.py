@@ -424,6 +424,44 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    37: {
+        "title": "ISKCON devotee — Drigdasa",
+        "birth": "January 26, 1971, 10:44 am (3:00 East), 24 E 01, 49 N 49",
+        "birth_data": {
+            "year": 1971, "month": 1, "day": 26, "hour": 10, "minute": 44,
+            "second": 0.0, "utc_offset_hours": 3.0,
+        },
+        "place": {"latitude": 49 + 49 / 60, "longitude": 24 + 1 / 60},
+        "longitudes": {
+            "Asc": "25 Aq 20", "Sun": "12 Cp 15", "Moon": "3 Cp 34",
+            "Mars": "8 Sc 36", "Merc": "19 Sg 08", "Jup": "8 Sc 28",
+            "Ven": "25 Sc 29", "Sat": "22 Ar 18", "Rahu": "1 Aq 09",
+            "Ketu": "1 Le 09", "HL": "29 Aq 20", "GL": "10 Ta 04",
+        },
+        "chara_karakas": {
+            "Rahu": "AK", "Ven": "AmK", "Sat": "BK", "Merc": "MK",
+            "Sun": "PiK", "Mars": "PK", "Jup": "GK", "Moon": "DK",
+        },
+        "drawn": {
+            "Sat": "Ar", "GL": "Ta", "AL": "Ge",
+            "Rahu": "Aq", "Asc": "Aq", "HL": "Aq",
+            "Moon": "Cp", "Sun": "Cp", "Ketu": "Le",
+            "Merc": "Sg", "Jup": "Sc", "Mars": "Sc", "Ven": "Sc",
+        },
+        "events": {
+            "left mathematics at a Russian university, wandered in the "
+            "forests, found ISKCON and moved to a monastery": "1990",
+        },
+        "first_seen": "chapter 21, Example 82",
+        "note": (
+            "The Drigdasa chart whose three group leaders are all "
+            "odd-footed, so all three groups run forward -- the opposite "
+            "extreme from Chart 36, which runs one forward and two backward. "
+            "Aquarius lagna puts the 9th in movable Libra, so the groups "
+            "cover the zodiac and OI-127's overlap does not arise. No "
+            "retrogression is marked on any graha."
+        ),
+    },
     36: {
         "title": "A gentleman — Drigdasa",
         "birth": "not given",

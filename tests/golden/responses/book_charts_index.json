@@ -245,6 +245,13 @@
         "number": 36,
         "recomputable": false,
         "title": "A gentleman \u2014 Drigdasa"
+      },
+      {
+        "birth": "January 26, 1971, 10:44 am (3:00 East), 24 E 01, 49 N 49",
+        "first_seen": "chapter 21, Example 82",
+        "number": 37,
+        "recomputable": true,
+        "title": "ISKCON devotee \u2014 Drigdasa"
       }
     ],
     "not_supplied": [
@@ -280,7 +287,8 @@
       32,
       33,
       34,
-      35
+      35,
+      37
     ]
   },
   "status": 200
