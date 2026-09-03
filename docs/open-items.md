@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 84 waiting on evidence · 2 parked**
+**5 waiting on Amit · 87 waiting on evidence · 2 parked**
 
 ---
 
@@ -637,6 +637,60 @@ chart.
 question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
+
+### OI-132 — which Trishoola rasi each longevity category takes
+
+**Waiting on the book.** §14.3 and §22.2.2 both make the longevity category
+(short, middle, long) choose one of the three Trishoola rasis, and neither says
+which takes which. No worked example in either section pairs them.
+
+The three are ordered — Rudra's own rasi, its 5th, its 9th — so the obvious
+mapping is short/middle/long onto that order, and it is only obvious.
+
+**What we do:** `trishoola_readings` reports whether the dasa rasi is a
+Trishoola and which of the three it is, carries the category through, and does
+not select. A caller that wants one rasi has to say which.
+
+**Closes when:** an example dies in a named Trishoola with a stated category.
+
+### OI-131 — §22.2.1's seed needs a comparison §15.5.2 will not make
+
+**Waiting on the book.** Niryaana Shoola dasa starts from "the stronger of the
+2nd and 8th houses". §15.5.2's own warning names **ayur dasas** as a purpose
+whose rule 2 reads the luminaries instead of Jupiter, Mercury and the lord, and
+adds that "aspect of all other planets is equally important" — without saying
+how to weigh them. `rasi_strength.stronger` therefore refuses
+`purpose="ayur"`, so this dasa's seed cannot be computed from the text.
+
+This is the first system that actually needs that purpose; the refusal was
+theoretical until now.
+
+**What we do:** `seed` returns both candidate rasis with the reason it is open,
+and accepts `stronger_house=2` or `8` from a caller who has settled it.
+Running the phalita cascade instead would answer a different question with the
+same shape, which is worse than answering none.
+
+**Closes when:** an example computes it, or §15.5.2's ayur weights are stated.
+
+### OI-130 — which rasi §22.2.2's Rudra fallback names
+
+**Waiting on the book.** "If Trishoolas don't bring death, the rasi containing
+Rudra in the 12th house can bring death." Two readings survive, and the section
+gives no example:
+
+| reading | can it be a Trishoola? |
+|---|---|
+| the 12th **from** the rasi containing Rudra | never — the 12th is not a trine |
+| the 12th house **from lagna** | sometimes, chart by chart |
+
+A third — Rudra's own rasi when it falls in the 12th house — is ruled out by the
+rule's own premise, not by preference: Rudra's rasi is the first Trishoola, so
+"if Trishoolas don't bring death" has already excluded it.
+
+**What we do:** `rudra_fallback` returns both surviving readings with the
+Trishoola test applied to each, and names the ruled-out one with why.
+
+**Closes when:** an example names the rasi.
 
 ### OI-129 — §21.3's six references are not all the chapter uses
 

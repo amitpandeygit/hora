@@ -51,7 +51,7 @@ def test_vimsottari_and_ashtottari_are_ordered_oppositely():
     assert by_name["Ashtottari dasa"]["purpose"] == "ayur/phalita"
 
 
-def test_six_of_the_nine_are_built():
+def test_seven_of_the_nine_are_built():
     """This is the coverage line for Part 2 and should fail — loudly — as each
     one lands. A nakshatra system is built when its `key` is in the service's
     registry; a rasi dasa when it names a `module` that imports.
@@ -66,13 +66,32 @@ def test_six_of_the_nine_are_built():
             importlib.import_module(system["module"])
             built.add(system["name"])
     assert built == {"Vimsottari dasa", "Ashtottari dasa", "Narayana dasa",
-                     "Lagna Kendradi Rasi dasa", "Sudasa", "Drigdasa"}
+                     "Lagna Kendradi Rasi dasa", "Sudasa", "Drigdasa",
+                     "Niryaana Shoola dasa"}
 
     missing = [s["name"] for s in PART_2_DASA_SYSTEMS
                if s["key"] is None and not s.get("module")]
-    assert len(missing) == 3
+    assert len(missing) == 2
     assert "Kalachakra dasa" in missing      # a nakshatra dasa we do not have
-    assert missing[0] == "Niryaana Shoola dasa"   # the next the book teaches
+    assert missing[0] == "Shoola dasa"        # the next the book teaches
+
+
+def test_the_two_shoola_dasas_stay_two_systems():
+    """§22.1 disambiguates the name because "some scholars use the name Shoola
+    dasa to denote a different dasa". Part 2's map lists both, and only the
+    Niryaana one is built.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        NAMES,
+        THE_NAME_IS_DISAMBIGUATED,
+    )
+
+    by_name = {s["name"]: s for s in PART_2_DASA_SYSTEMS}
+    assert by_name["Niryaana Shoola dasa"]["purpose"] == "ayur"
+    assert by_name["Shoola dasa"]["purpose"] == "ayur"
+    assert by_name["Shoola dasa"].get("module") is None
+    assert NAMES == ("Shoola dasa", "Niryaana Shoola dasa")
+    assert "Parasara simply called it" in THE_NAME_IS_DISAMBIGUATED
 
 
 def test_the_engine_carries_nakshatra_systems_part_2_never_names():
