@@ -50,7 +50,8 @@ PART_2_DASA_SYSTEMS: tuple[dict, ...] = (
     {"name": "Niryaana Shoola dasa", "kind": "rasi",
      "purpose": "ayur", "key": None,
      "module": "hora.dasha.rasi.niryaana_shoola"},
-    {"name": "Shoola dasa", "kind": "rasi", "purpose": "ayur", "key": None},
+    {"name": "Shoola dasa", "kind": "rasi", "purpose": "ayur", "key": None,
+     "module": "hora.dasha.rasi.shoola"},
     {"name": "Kalachakra dasa", "kind": "nakshatra",
      "purpose": "phalita", "key": None},
 )

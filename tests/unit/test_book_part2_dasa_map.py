@@ -51,7 +51,7 @@ def test_vimsottari_and_ashtottari_are_ordered_oppositely():
     assert by_name["Ashtottari dasa"]["purpose"] == "ayur/phalita"
 
 
-def test_seven_of_the_nine_are_built():
+def test_eight_of_the_nine_are_built():
     """This is the coverage line for Part 2 and should fail — loudly — as each
     one lands. A nakshatra system is built when its `key` is in the service's
     registry; a rasi dasa when it names a `module` that imports.
@@ -67,13 +67,13 @@ def test_seven_of_the_nine_are_built():
             built.add(system["name"])
     assert built == {"Vimsottari dasa", "Ashtottari dasa", "Narayana dasa",
                      "Lagna Kendradi Rasi dasa", "Sudasa", "Drigdasa",
-                     "Niryaana Shoola dasa"}
+                     "Niryaana Shoola dasa", "Shoola dasa"}
 
     missing = [s["name"] for s in PART_2_DASA_SYSTEMS
                if s["key"] is None and not s.get("module")]
-    assert len(missing) == 2
-    assert "Kalachakra dasa" in missing      # a nakshatra dasa we do not have
-    assert missing[0] == "Shoola dasa"        # the next the book teaches
+    assert missing == ["Kalachakra dasa"]     # the last, and a nakshatra one
+    assert all(s["kind"] == "rasi" or s["key"] for s in PART_2_DASA_SYSTEMS
+               if s["name"] != "Kalachakra dasa")
 
 
 def test_the_two_shoola_dasas_stay_two_systems():
@@ -89,7 +89,9 @@ def test_the_two_shoola_dasas_stay_two_systems():
     by_name = {s["name"]: s for s in PART_2_DASA_SYSTEMS}
     assert by_name["Niryaana Shoola dasa"]["purpose"] == "ayur"
     assert by_name["Shoola dasa"]["purpose"] == "ayur"
-    assert by_name["Shoola dasa"].get("module") is None
+    assert by_name["Shoola dasa"]["module"] == "hora.dasha.rasi.shoola"
+    assert by_name["Niryaana Shoola dasa"]["module"] != (
+        by_name["Shoola dasa"]["module"])
     assert NAMES == ("Shoola dasa", "Niryaana Shoola dasa")
     assert "Parasara simply called it" in THE_NAME_IS_DISAMBIGUATED
 

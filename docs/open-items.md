@@ -676,14 +676,11 @@ house takes.
 
 **Waiting on the book.** Exercise 31 prints chapter 22's only antardasa
 boundary given to the day: Aries, "April 21, 1945-Nov 21, 1945". Seven equal
-twelfths of a seven-year dasa land 20 Nov 19:59; seven calendar months land
-21 Nov. Four hours apart, so rounding to the nearest day gives the book's date
-under either.
-
-The **dasa** boundary is settled: "April 21" fixes the dasa year at 365.25
-days, against the calendar anniversary, savana and sidereal alike. §22.3
-concedes the layer — "timing of the antardasa of death wasn't given due
-attention".
+twelfths of a seven-year dasa land 20 Nov 19:59; seven calendar months land 21
+Nov — four hours apart, so rounding gives the book's date under either. §22.3
+concedes the layer: "timing of the antardasa of death wasn't given due
+attention". The **dasa** boundary is settled — "April 21" fixes the dasa year
+at 365.25 days, against the calendar anniversary, savana and sidereal alike.
 
 **What we do:** `antardasa_periods` divides into equal twelfths, §18.3's own
 division, and reports the day as computed.
@@ -712,8 +709,8 @@ invoked, so occupying just any rasi is not the trigger.
 **What we do:** `rudra_eighth` keeps Table 32, and `rudra` reports the
 exception beside the affliction override — named, not applied, as OI-109 does.
 
-§22.3 accounts for it — "special cases, exceptions and special rules ... were
-omited in this book" — which explains the omission and closes nothing.
+§22.3 accounts for the omission — "special cases, exceptions and special rules
+... were omited in this book" — and closes nothing.
 
 **Closes when:** Chart 61 arrives, or a section states the trigger.
 
@@ -727,35 +724,38 @@ apart in a ninety-six year cycle while every range is thirty-six years wide.
 Over all 432 (seed, Rudra, category) combinations: **324 give one, 72 give
 two, 36 give none**.
 
-**Chart 41 is the first to do it**, and it suggests the fix. Reading "comes in
-the range" as falling **wholly** inside it leaves one in 396 of the 432 and
-never two, keeps all four worked examples, and on Chart 41 picks Virgo 63-72
-out of a middle life — the dasa that killed at 65.
+**Chart 41 is the first to do it**, and suggests the fix: reading "comes in the
+range" as falling **wholly** inside it leaves one in 396 of the 432 and never
+two, keeps all four worked examples, and on Chart 41 picks Virgo 63-72 out of a
+middle life — the dasa that killed at 65.
 
 **What we do:** `select_trishoola` selects on the loose reading and reports
-`selected_wholly_in_range` beside it. Not substituted: it is a reading, and no
-example tests a straddling dasa. **NEEDS YOU.**
+`selected_wholly_in_range` beside it. Not substituted: no example tests a
+straddling dasa. **NEEDS YOU.**
 
 **Closes when:** you adopt the strict reading, or an example has a Trishoola
 dasa straddling a range boundary.
 
-### OI-131 — §22.2.1's seed needs a comparison §15.5.2 will not make
+### OI-131 — the ayur seeds need a comparison §15.5.2 will not make
 
-**Waiting on the book.** The seed is "the stronger of the 2nd and 8th houses".
+**Waiting on the book.** Niryaana Shoola dasa seeds from "the stronger of the
+2nd and 8th houses" and **Shoola dasa** from the stronger of lagna and the 7th.
 §15.5.2's warning names **ayur dasas** as a purpose whose rule 2 reads the
 luminaries, and adds that "aspect of all other planets is equally important"
 without saying how to weigh them, so `rasi_strength.stronger` refuses
-`purpose="ayur"` and this seed cannot be computed from the text.
+`purpose="ayur"` and neither seed can be computed from the text. Narayana dasa
+shares chapter 23's pair and *is* phalita, so a shared pair is not a shared
+comparison.
 
-**Example 85 narrows it**: its seed is decided by §15.5.2 **rule 1**, "as it is
-occupied by a planet (Mars)", which our cascade reproduces. So the cascade is
-the instrument; only the ayur weights for rule 2 are unstated. **Example 84
-still contradicts it** — Sagittarius against the cascade's Gemini, decided by
-rule 6, which the ayur note does not touch. See D-62.
+**Example 85 narrows it**: its seed is decided by §15.5.2 **rule 1**, which
+our cascade reproduces, so the cascade is the instrument and only rule 2's ayur
+weights are unstated. **Example 84 still contradicts it** — Sagittarius against
+the cascade's Gemini, decided by rule 6, which the ayur note does not touch.
+See D-62.
 
-**What we do:** `seed` returns both candidates with the reason it is open, and
-accepts `stronger_house=2` or `8`. The phalita cascade would answer a different
-question with the same shape, which is worse than answering none.
+**What we do:** both `seed` functions return their candidates with the reason
+they are open and accept the caller's choice. The phalita cascade would answer
+a different question with the same shape, worse than answering none.
 
 **Closes when:** an example computes it, or §15.5.2's ayur weights are stated.
 

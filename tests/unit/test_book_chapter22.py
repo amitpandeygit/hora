@@ -2705,15 +2705,18 @@ def test_the_scorpio_against_aries_miss_is_the_books_own_admission():
     assert "maraka" in EXERCISE_31_READS_MARAKAS_AT_THE_ANTARDASA_LEVEL
 
 
-def test_chapter_22_is_finished_and_shoola_dasa_is_next():
-    """§22.3 ends the chapter. Seven of Part 2's nine are built; the next the
-    book teaches is the *other* Shoola dasa, which §22.1 went out of its way
-    to distinguish from this one.
+def test_chapter_22_is_finished_and_chapter_23_took_the_other_name():
+    """§22.3 ends the chapter, and §22.1's "we will learn it in another
+    chapter" is chapter 23. Both Shoola dasas are now built and only
+    Kalachakra remains of Part 2's nine.
     """
     from hora.core.constants.dasha import PART_2_DASA_SYSTEMS
     from hora.dasha.rasi.niryaana_shoola import THE_NAME_IS_DISAMBIGUATED
 
     missing = [s["name"] for s in PART_2_DASA_SYSTEMS
                if s["key"] is None and not s.get("module")]
-    assert missing == ["Shoola dasa", "Kalachakra dasa"]
+    assert missing == ["Kalachakra dasa"]
     assert "We will learn it in another chapter" in THE_NAME_IS_DISAMBIGUATED
+
+    by_name = {s["name"]: s for s in PART_2_DASA_SYSTEMS}
+    assert by_name["Shoola dasa"]["module"] == "hora.dasha.rasi.shoola"
