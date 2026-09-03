@@ -430,6 +430,41 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    40: {
+        "title": "A male — Niryaana Shoola dasa, the Saturn exception",
+        "birth": "January 20, 1927, 12:30 pm (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1927, "month": 1, "day": 20, "hour": 12, "minute": 30,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "19 Ar 04", "Sun": "6 Cp 24", "Moon": "3 Le 03",
+            "Mars": "21 Ar 56", "Merc": "0 Cp 59", "Jup": "7 Aq 34",
+            "Ven": "20 Cp 43", "Sat": "12 Sc 15", "Rahu": "13 Ge 07",
+            "Ketu": "13 Sg 07", "HL": "2 Cn 18", "GL": "26 Pi 32",
+        },
+        "chara_karakas": {
+            "Mars": "AK", "Ven": "AmK", "Rahu": "BK", "Sat": "MK",
+            "Jup": "PiK", "Sun": "PK", "Moon": "GK", "Merc": "DK",
+        },
+        "drawn": {
+            "GL": "Pi", "Mars": "Ar", "Asc": "Ar", "Rahu": "Ge",
+            "Jup": "Aq", "HL": "Cn",
+            "Merc": "Cp", "Sun": "Cp", "AL": "Cp", "Ven": "Cp",
+            "Moon": "Le", "Ketu": "Sg", "Sat": "Sc",
+        },
+        "events": {"expired": "towards the end of 1949, aged 22"},
+        "first_seen": "chapter 22, Example 87",
+        "note": (
+            "The chart that names the \"Saturn exception\" for Niryaana Shoola "
+            "dasa, which section 22.2.1 never states: Saturn in the seed rasi "
+            "Scorpio sends the run forward where an even rasi would send it "
+            "back. Example 87 also contrasts the three Trishoolas outright -- "
+            "death in Cp \"and not in Ta or Vi dasa\" -- which is the clearest "
+            "statement of the rule closed OI-132 records."
+        ),
+    },
     39: {
         "title": "Rajiv Gandhi — Niryaana Shoola dasa",
         "birth": "August 20, 1944, 7:11 am (IST), 72 E 49, 18 N 58",

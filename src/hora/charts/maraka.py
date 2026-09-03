@@ -18,6 +18,7 @@ from hora.charts.aspects import graha_aspects_sign, rasi_drishti
 from hora.core import validate
 from hora.core.const import (
     ADDITIONAL_MARAKA_TARGETS,
+    CO_OWNED_EIGHTH_LORD_IS_UNSETTLED,
     DEBILITATION_RASI,
     EIGHTH_LORD_GROUPS,
     EXALTATION_RASI,
@@ -441,14 +442,17 @@ def _pair(name: str, members: tuple[str, str], signs: tuple[int, int]) -> Pair:
     )
 
 
-def three_pairs(lagna: int, graha_signs: dict[int, int],
-                hl_sign: int) -> dict:
+def three_pairs(lagna: int, graha_signs: dict[int, int], hl_sign: int,
+                overrides: dict[int, int] | None = None) -> dict:
     """§14.4's method, end to end.
 
     :param lagna: the lagna's rasi.
     :param graha_signs: graha id -> rasi. The lagna lord, the 8th lord by
         Table 32, the Moon and Saturn must all be present.
     :param hl_sign: Horalagna's rasi.
+    :param overrides: rasi -> the lord to use for it, for a co-owned 8th
+        house. Without one the first co-lord is taken and the answer says so;
+        Example 87 shows the choice can flip the whole category. See OI-135.
     """
     index = validate.in_range("lagna", lagna, 0, 11)
     validate.in_range("hl_sign", hl_sign, 0, 11)
@@ -459,7 +463,7 @@ def three_pairs(lagna: int, graha_signs: dict[int, int],
     lagna_lord = int(RASI_LORD[index])
     eighth_sign = rudra_eighth(index)
     eighth_lords = _lords_of(eighth_sign)
-    eighth_lord = eighth_lords[0]
+    eighth_lord = _chosen_lord(eighth_sign, eighth_lords, overrides)
 
     needed = {
         "the lagna lord": lagna_lord,
@@ -525,6 +529,10 @@ def three_pairs(lagna: int, graha_signs: dict[int, int],
             "by": "Table 32",
             "lords": [str(GRAHA_NAMES[g]) for g in eighth_lords],
             "lord_used": str(GRAHA_NAMES[eighth_lord]),
+            "lord_was_chosen": len(eighth_lords) > 1,
+            "co_lord_note": (
+                CO_OWNED_EIGHTH_LORD_IS_UNSETTLED
+                if len(eighth_lords) > 1 else None),
         },
         "pairs": [
             {"name": p.name, "members": list(p.members),
@@ -667,8 +675,23 @@ def _cascade_step(first: int, second: int, positions: dict[int, int],
         f"{GRAHA_NAMES[winner]} is more advanced")
 
 
+def _chosen_lord(sign: int, lords: tuple[int, ...],
+                 overrides: dict[int, int] | None) -> int:
+    """The lord to use for a rasi, honouring a caller's choice for a co-owned
+    one. Without a choice the first co-lord is taken, as before."""
+    if overrides and sign in overrides:
+        chosen = int(overrides[sign])
+        if chosen not in lords:
+            raise MarakaError(
+                f"{GRAHA_NAMES[chosen]} does not own {RASI_NAMES[sign]}; its "
+                f"lords are {', '.join(str(GRAHA_NAMES[g]) for g in lords)}")
+        return chosen
+    return lords[0]
+
+
 def rudra(lagna: int, graha_signs: dict[int, int],
-          graha_longitudes: dict[int, float] | None = None) -> dict:
+          graha_longitudes: dict[int, float] | None = None,
+          overrides: dict[int, int] | None = None) -> dict:
     """§14.3's Rudra, run through the strength cascade.
 
     The affliction override — the weaker planet taking over if it is
@@ -676,13 +699,20 @@ def rudra(lagna: int, graha_signs: dict[int, int],
     Saturn, Rahu and Ketu" — is not applied, because "like" leaves that list
     open. Whether the weaker candidate is debilitated is reported so a caller
     can apply it. See docs/open-items.md OI-109.
+
+    :param overrides: rasi -> the lord to use, for a co-owned 8th house.
+        Examples 85 and 87 both name Ketu for Scorpio; without an override the
+        first co-lord is taken. See OI-135.
     """
     base = rudra_candidates(lagna)
     positions = {int(g): int(s) for g, s in graha_signs.items()}
     for graha, place in positions.items():
         validate.in_range(f"graha {graha} sign", place, 0, 11)
 
-    first, second = base.from_lagna[1], base.from_seventh[1]
+    first = _chosen_lord(base.from_lagna[0], _lords_of(base.from_lagna[0]),
+                         overrides)
+    second = _chosen_lord(base.from_seventh[0],
+                          _lords_of(base.from_seventh[0]), overrides)
     if first == second:
         return {
             "candidates": [str(GRAHA_NAMES[first])],

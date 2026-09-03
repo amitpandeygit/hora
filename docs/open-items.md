@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 88 waiting on evidence · 2 parked**
+**5 waiting on Amit · 90 waiting on evidence · 2 parked**
 
 ---
 
@@ -638,6 +638,40 @@ question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
 
+### OI-136 — whether Niryaana Shoola has a Ketu exception too
+
+**Waiting on the book.** §18.2.1 and §19.2 give the Saturn exception and a Ketu
+one as a pair — Saturn makes the order forward, Ketu reverses it. §22.2.1
+states neither, and Example 87 supplies only Saturn's, naming it in quotes as
+something already known.
+
+**What we do:** apply Saturn's, which the example works; report Ketu in the
+seed as unsettled rather than reversing on chapter 19's authority. Example 87's
+even seed cannot say whether "Saturn" means forward or means reversed either —
+the absolute form is used because that is how the book states this exception
+both other times.
+
+**Closes when:** an example seeds from a rasi holding Ketu, or an odd one
+holding Saturn.
+
+### OI-135 — which co-lord owns a co-owned 8th house, for Rudra and §14.4
+
+**Waiting on the book.** §14.3's Rudra and §14.4's first pair both read "the
+8th lord", and that house can be Scorpio or Aquarius. Neither says which of the
+two lords to take.
+
+Examples 85 and 87 both call **Ketu** the 8th lord of Scorpio. §15.5.1's
+cascade agrees on Example 85's chart and gives **Mars** on Example 87's — where
+the choice decides everything: Mars makes the first pair long life, Ketu makes
+it short, and only short life selects the Capricorn dasa the native died in.
+
+**What we do:** `rudra` and `three_pairs` take an `overrides` map, and without
+one keep the first co-lord as before, reporting `lord_was_chosen`. The default
+is not changed on our own judgement — it flips a longevity verdict.
+
+**Closes when:** you decide, or a section states which co-lord a longevity 8th
+house takes.
+
 ### OI-134 — §14.3's Table 32 has a Saturn exception it never states
 
 **Waiting on the book.** §14.3 says "find the 8th house using Table 32 and
@@ -652,8 +686,10 @@ So Saturn reverses the count, as he reverses a Narayana dasa's direction in
 §18.2.1.
 
 What triggers it is not said: Saturn **occupies** one reference rasi here and
-**owns** the other, and the example flips both. Nor can Example 86 be
-recomputed — Chart 61 is printed in a later chapter.
+**owns** the other, and the example flips both; Chart 61 is printed in a later
+chapter, so Example 86 cannot be recomputed. Example 87 narrows it: there
+Saturn sits in the Table 32 8th house itself and the exception is **not**
+invoked, so occupying just any rasi is not the trigger.
 
 **What we do:** `rudra_eighth` keeps Table 32, and `rudra` reports the
 exception beside the affliction override — named, not applied, as OI-109 does.
@@ -1514,7 +1550,7 @@ Thirty-nine, twelve, fifty-six, **seventy-seven** and nine arcminutes out under
 `true` for the five tabled. Every other body lands within one arcminute — the
 book's display rounding — except Chart 3's ascendant at 5.5' and Chart 39's at
 8.6', which are their birth minutes being rounded, not a node question. Chart 8
-separates nothing, and Chart 3's margin is the narrowest. The twelve span 1542
+separates nothing, and Chart 3's margin is the narrowest. The thirteen span 1542
 to 1971 and both hemispheres, and Chart 10 predates the Gregorian reform, so
 the agreement is not an artefact of one era or setup.
 This is the only hard evidence in the project about which convention the book
@@ -1523,7 +1559,8 @@ output is still the empty stub of OI-1.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
 endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by the
-mean-node tests over charts 3, 6, 7, 10, 12, 13, 24, 25, 26, 37, 38 and 39 — grep
+mean-node tests over charts 3, 6, 7, 10, 12, 13, 24, 25, 26, 37, 38, 39 and
+40 — grep
 `mean_node` — which assert the failure in both directions so it is not lost.
 
 **Closes when:** you decide, or a JHora run of Chart 1 settles it.

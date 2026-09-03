@@ -266,6 +266,13 @@
         "number": 39,
         "recomputable": true,
         "title": "Rajiv Gandhi \u2014 Niryaana Shoola dasa"
+      },
+      {
+        "birth": "January 20, 1927, 12:30 pm (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 22, Example 87",
+        "number": 40,
+        "recomputable": true,
+        "title": "A male \u2014 Niryaana Shoola dasa, the Saturn exception"
       }
     ],
     "not_supplied": [
@@ -304,7 +311,8 @@
       35,
       37,
       38,
-      39
+      39,
+      40
     ]
   },
   "status": 200

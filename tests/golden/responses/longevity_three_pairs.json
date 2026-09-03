@@ -3,7 +3,9 @@
     "category": "long",
     "eighth_house": {
       "by": "Table 32",
+      "co_lord_note": null,
       "lord_used": "Moon",
+      "lord_was_chosen": false,
       "lords": [
         "Moon"
       ],

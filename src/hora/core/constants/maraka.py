@@ -257,6 +257,18 @@ TABLE_32_EXCEPTION_REVERSES_THE_COUNT = (
     "references, so the exception is not a refinement."
 )
 
+#: **Gap.** Neither §14.3 nor §14.4 says which co-lord owns a co-owned 8th
+#: house. Examples 85 and 87 both call Ketu the 8th lord of Scorpio, and in
+#: Example 87 §15.5.1's cascade says Mars — and the choice decides the whole
+#: longevity category there, so it is not cosmetic. See OI-135.
+CO_OWNED_EIGHTH_LORD_IS_UNSETTLED = (
+    "The 8th house for Rudra and for section 14.4's first pair can be Scorpio "
+    "or Aquarius, which have two lords. Neither section says which to take. "
+    "Examples 85 and 87 both name Ketu for Scorpio; section 15.5.1's cascade "
+    "gives Mars on Example 87's chart, and taking Mars there turns its short "
+    "life into a long one."
+)
+
 #: §14.3's strength cascade for Rudra, in the order it gives them.
 RUDRA_STRENGTH_CASCADE: tuple[str, ...] = (
     "We say that a planet is stronger if it conjoins more planets.",

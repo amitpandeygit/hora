@@ -130,14 +130,52 @@ ANTARDASAS_ARE_THE_AUTHORS_SUGGESTION = (
 )
 
 
-def direction_of(seed_sign: int) -> str:
+#: **Gap.** §22.2.1 gives the direction as odd/even sign and nothing else.
+#: Example 87 applies one more, and names it as a thing already known:
+SATURN_EXCEPTION_NAMED_IN_EXAMPLE_87 = (
+    "Sc is an even rasi and normally dasas should go as Sc, Li, Vi etc. "
+    "However, Saturn occupies Sc and the \"Saturn exception\" applies. So "
+    "dasas go as Sc, Sg, Cp etc."
+)
+
+#: The exception as §18.2.1 and §19.2 state it, which is the form applied
+#: here: Saturn in the seed makes the order **forward**, not "reversed".
+#: Example 87's seed is even, so it cannot part the two readings on its own —
+#: but the book states the absolute form both other times it gives this rule.
+SATURN_MAKES_THE_ORDER_FORWARD = (
+    "If Saturn is in the stronger of lagna and 7th, dasa order is forward."
+)
+
+#: **Gap.** §18.2.1 and §19.2 pair the Saturn exception with a Ketu one —
+#: "If Ketu is in the stronger of lagna and 7th, dasa order is reversed."
+#: §22.2.1 states neither, and Example 87 names only Saturn's. See OI-136.
+KETU_EXCEPTION_IS_NOT_ATTESTED_HERE = (
+    "Chapters 18 and 19 give the Saturn exception and a Ketu one together. "
+    "Section 22.2.1 gives neither, and Example 87 names only the Saturn one, "
+    "in quotes, as something already known. Whether Ketu in the seed reverses "
+    "a Niryaana Shoola run is untested."
+)
+
+
+def direction_of(seed_sign: int,
+                 seed_occupants: set[int] | None = None) -> str:
     """The run's direction, from the seed rasi being an odd or even **sign**.
 
     Not the odd-footed test §18.2.1 and §21.2 use; they disagree on Taurus,
     Leo, Scorpio and Aquarius.
+
+    :param seed_occupants: grahas in the seed rasi. Supply them for Example
+        87's "Saturn exception", which §22.2.1 never states: Saturn there
+        makes the order forward. Omitted, the exception cannot fire and the
+        plain odd/even answer is given.
     """
+    from hora.core.const import Graha
+
     index = validate.in_range("seed_sign", seed_sign, 0, 11)
-    return "forward" if RASI_IS_ODD[index] else "backward"
+    plain = "forward" if RASI_IS_ODD[index] else "backward"
+    if seed_occupants and int(Graha.SATURN) in seed_occupants:
+        return "forward"
+    return plain
 
 
 def dasa_years(rasi: int) -> int:
@@ -226,6 +264,10 @@ class Progression:
     seed: int
     seed_name: str
     direction: str
+    #: "Saturn" when Example 87's exception changed the direction, else None.
+    exception: str | None
+    #: Set when the run reads a graha the chapter does not rule on.
+    undecided: str | None
     signs: tuple[int, ...]
     sign_names: tuple[str, ...]
     years: tuple[int, ...]
@@ -234,15 +276,26 @@ class Progression:
     why: str
 
 
-def progression(seed_sign: int) -> Progression:
+def progression(seed_sign: int,
+                seed_occupants: set[int] | None = None) -> Progression:
     """§22.2.1's twelve dasas from a seed rasi.
 
     One plain run of twelve, unlike chapter 21's three groups — "cover the 12
     rasis" is said of each direction, so the run is always all twelve distinct
     rasis and OI-127 has no analogue here.
+
+    :param seed_occupants: grahas in the seed rasi, for Example 87's Saturn
+        exception. Ketu is reported, not applied — see OI-136.
     """
+    from hora.core.const import Graha
+
     index = validate.in_range("seed_sign", seed_sign, 0, 11)
-    direction = direction_of(index)
+    plain = "forward" if RASI_IS_ODD[index] else "backward"
+    direction = direction_of(index, seed_occupants)
+    occupants = seed_occupants or set()
+    exception = ("Saturn" if int(Graha.SATURN) in occupants else None)
+    undecided = (KETU_EXCEPTION_IS_NOT_ATTESTED_HERE
+                 if int(Graha.KETU) in occupants else None)
     step = 1 if direction == "forward" else -1
     signs = tuple((index + step * offset) % 12 for offset in range(12))
     years = tuple(dasa_years(sign) for sign in signs)
@@ -252,13 +305,21 @@ def progression(seed_sign: int) -> Progression:
         starts.append(elapsed)
         elapsed += length
 
+    why = (f"{RASI_NAMES[index]} is an "
+           f"{'odd' if RASI_IS_ODD[index] else 'even'} sign, so the twelve "
+           f"rasis run {plain}")
+    if exception and direction != plain:
+        why += " — but Saturn is in it, and Example 87's exception makes the "\
+               "order forward"
+    elif exception:
+        why += " — Saturn is in it, and Example 87's exception makes the "\
+               "order forward, which it already is"
+
     return Progression(
         seed=index, seed_name=str(RASI_NAMES[index]), direction=direction,
+        exception=exception, undecided=undecided,
         signs=signs, sign_names=tuple(str(RASI_NAMES[s]) for s in signs),
-        years=years, starts=tuple(starts),
-        why=(f"{RASI_NAMES[index]} is an "
-             f"{'odd' if RASI_IS_ODD[index] else 'even'} sign, so the twelve "
-             f"rasis run {direction}"))
+        years=years, starts=tuple(starts), why=why)
 
 
 # --------------------------------------------------------------------------
@@ -387,6 +448,16 @@ PRINTED_SEQUENCES_DROP_LIBRA = (
     "Dasas go as Le, Vi, Sc, Sg etc. ... Antardasas start from Mars in Le and "
     "go as Le, Vi, Le, Sc etc. ... Jan 1984-Aug 1984 is the third antardasa "
     "of Li."
+)
+
+
+#: **Finding.** Example 87 states a negative outright, which no other example
+#: in the chapter does: its antardasa at death satisfies neither of §22.2.2's
+#: two principles. So "can bring death" is the whole of that rule's claim, and
+#: a layer that treats the two principles as necessary would be wrong here.
+ANTARDASA_PRINCIPLES_CAN_FAIL = (
+    "Antardasa at the time of death does not follow the principles explained "
+    "here, but dasa follows the Trishoola principle."
 )
 
 

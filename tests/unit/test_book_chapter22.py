@@ -1262,7 +1262,7 @@ def test_chart_61_has_not_been_supplied_yet():
     from hora.dasha.rasi.niryaana_shoola import EXAMPLE_86_AWAITS_CHART_61
 
     assert 61 not in numbers()
-    assert max(numbers()) == 39
+    assert max(numbers()) < 61
     with pytest.raises(BookChartError, match="there is no Chart"):
         chart(61)
 
@@ -1528,3 +1528,317 @@ def test_scorpio_meets_both_principles_as_the_example_says():
     assert R["Capricorn"] in rasi_drishti(R["Scorpio"])
     assert R["Scorpio"] in got["aspecting_the_navamsa_rasi"]
     assert got["strong_candidate_names"] == ("Scorpio",)
+
+
+# --------------------------------------------------------------------------
+# Example 87 — Chart 40, and the "Saturn exception" §22.2.1 never states.
+# --------------------------------------------------------------------------
+
+EX87_DASAS = [("Sc", 8, 1927, 1935), ("Sg", 9, 1935, 1944),
+              ("Cp", 7, 1944, 1951)]
+
+
+def _chart_40():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(40).items()},
+            {int(g): sign for g, sign in graha_signs(40).items()},
+            lagna(40))
+
+
+def _chart_40_seed_occupants():
+    _longitudes, signs, _lagna = _chart_40()
+    return {g for g, sign in signs.items() if sign == R["Scorpio"]}
+
+
+def test_chart_40_recomputes_including_its_ascendant():
+    """Every graha and the ascendant inside one arcminute — the cleanest of
+    the chapter's three recomputable charts.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(40)
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 40", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    printed = longitudes(40)
+
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+
+def test_chart_40_is_a_thirteenth_vote_for_the_mean_node():
+    """OI-68. Rahu 67' out under `true`, 0.1' under `mean`."""
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(40)
+    printed = longitudes(40)["Rahu"]
+    errors = {}
+    for node in (NodeType.MEAN, NodeType.TRUE):
+        computed = compute_chart(
+            from_local(**record["birth_data"]),
+            Place(name="Chart 40", **record["place"]), Settings(node_type=node))
+        errors[node] = abs(
+            computed.positions[int(Graha.RAHU)].longitude - printed) * 60
+
+    assert errors[NodeType.MEAN] < 1.0
+    assert errors[NodeType.TRUE] > 60.0
+
+
+def test_example_87_names_a_saturn_exception_22_2_1_never_states():
+    """"Sc is an even rasi and normally dasas should go as Sc, Li, Vi etc.
+    However, Saturn occupies Sc and the "Saturn exception" applies. So dasas
+    go as Sc, Sg, Cp etc."
+
+    §22.2.1 gives the direction as odd/even sign and nothing else. Note what
+    the module returns without the seed's occupants: Sc, Li, Vi — the very
+    sequence the example calls "normal" before overriding it.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        DIRECTION_RULE,
+        SATURN_EXCEPTION_NAMED_IN_EXAMPLE_87,
+        progression,
+    )
+
+    assert "Saturn" not in DIRECTION_RULE
+    assert '"Saturn exception"' in SATURN_EXCEPTION_NAMED_IN_EXAMPLE_87
+
+    plain = progression(R["Scorpio"])
+    assert plain.direction == "backward"
+    assert [ABBR[s] for s in plain.signs[:3]] == ["Sc", "Li", "Vi"]
+    assert plain.exception is None
+
+    with_saturn = progression(R["Scorpio"], _chart_40_seed_occupants())
+    assert with_saturn.direction == "forward"
+    assert with_saturn.exception == "Saturn"
+    assert [ABBR[s] for s in with_saturn.signs[:3]] == ["Sc", "Sg", "Cp"]
+    assert "Example 87's exception makes the order forward" in with_saturn.why
+
+
+def test_saturn_is_the_only_graha_in_the_seed():
+    """The exception fires on Saturn's presence, so it matters that nothing
+    else is there to confuse it — and that the seed's single planet is also
+    what made Scorpio the seed in the first place.
+    """
+    from hora.core.const import Graha
+
+    occupants = _chart_40_seed_occupants()
+    assert occupants == {int(Graha.SATURN)}
+
+
+def test_the_exception_is_applied_in_the_absolute_form_the_book_states():
+    """§18.2.1 and §19.2 both say "dasa order is forward", not "is reversed".
+    Example 87's seed is even, so it cannot part the two readings — the
+    absolute form is used because that is how the book states this exception
+    both other times. See OI-136.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.kendradi import EXCEPTIONS
+    from hora.dasha.rasi.niryaana_shoola import (
+        SATURN_MAKES_THE_ORDER_FORWARD,
+        direction_of,
+    )
+
+    saturn = next(e for e in EXCEPTIONS if e["graha"] == "Saturn")
+    assert saturn["gives"] == "forward"
+    assert saturn["text"] == SATURN_MAKES_THE_ORDER_FORWARD
+
+    # An odd seed is where the two readings would differ; nothing tests it yet.
+    assert direction_of(R["Aries"], {int(Graha.SATURN)}) == "forward"
+    assert direction_of(R["Aries"]) == "forward"
+
+
+def test_ketu_in_the_seed_is_reported_not_applied():
+    """Chapters 18 and 19 pair the Saturn exception with a Ketu one. §22.2.1
+    states neither and Example 87 supplies only Saturn's, so a seed holding
+    Ketu is flagged rather than reversed on chapter 19's authority. OI-136.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.kendradi import EXCEPTIONS
+    from hora.dasha.rasi.niryaana_shoola import (
+        KETU_EXCEPTION_IS_NOT_ATTESTED_HERE,
+        progression,
+    )
+
+    ketu = next(e for e in EXCEPTIONS if e["graha"] == "Ketu")
+    assert ketu["gives"] == "reversed"
+
+    got = progression(R["Scorpio"], {int(Graha.KETU)})
+    assert got.direction == "backward"            # unchanged
+    assert got.exception is None
+    assert got.undecided == KETU_EXCEPTION_IS_NOT_ATTESTED_HERE
+
+
+@pytest.mark.parametrize("abbr,years,start,end", EX87_DASAS)
+def test_example_87s_three_dated_dasas(abbr, years, start, end):
+    """"Sc dasa of 8 years ran during 1927-1935. Sg dasa of 9 years ran during
+    1935-1944. Cp dasa of 7 years ran during 1944-1951 and it brought death."
+    """
+    from hora.charts.book import chart
+    from hora.dasha.rasi.niryaana_shoola import progression
+
+    born = chart(40)["birth_data"]["year"]
+    assert born == 1927
+
+    got = progression(R["Scorpio"], _chart_40_seed_occupants())
+    index = got.signs.index(ABBR.index(abbr))
+    assert got.years[index] == years
+    assert born + got.starts[index] == start
+    assert born + got.starts[index] + got.years[index] == end
+
+
+def test_the_seed_is_15_5_2_rule_1_for_the_fourth_time():
+    """"Niryaana Shoola dasa starts from the stronger of Ta and Sc. Sc is
+    stronger as it has one planet."
+
+    Rule 1 again, and the chapter's fourth worked seed. Three of the four use
+    rule 1 and agree with the cascade; Example 84 is still the exception.
+    """
+    from hora.charts.rasi_strength import stronger
+
+    longitudes, _signs, lagna_sign = _chart_40()
+    assert lagna_sign == R["Aries"]
+
+    verdict = stronger((lagna_sign + 1) % 12, (lagna_sign + 7) % 12,
+                       longitudes, purpose="phalita")
+    assert verdict.winner == R["Scorpio"]
+    assert verdict.decided_by == "1"
+    assert "Scorpio contains 1 planet" in verdict.reason
+
+
+def test_example_87s_rudra_is_venus_and_its_candidates_name_ketu():
+    """"The 8th lords from Ar and Li are Ketu and Venus. Venus is stronger
+    than Ketu. So Venus is Rudra. He is in Cp and so Ta, Vi and Cp form
+    Trishoola."
+
+    Table 32 and the ordinary count agree for Aries and Libra — both odd — so
+    this chart cannot part them, which is why OI-134 is untouched here. Venus
+    wins on cascade step 1 whichever co-lord Scorpio contributes.
+    """
+    from hora.charts.maraka import ordinary_eighth, rudra, rudra_eighth
+    from hora.core.const import Graha
+
+    for sign in (R["Aries"], R["Libra"]):
+        assert rudra_eighth(sign) == ordinary_eighth(sign)
+    assert rudra_eighth(R["Aries"]) == R["Scorpio"]
+    assert rudra_eighth(R["Libra"]) == R["Taurus"]
+
+    longitudes, signs, lagna_sign = _chart_40()
+    with_ketu = rudra(lagna_sign, signs, longitudes,
+                      {R["Scorpio"]: int(Graha.KETU)})
+    assert with_ketu["candidates"] == ["Ketu", "Venus"]
+    assert with_ketu["rudra"] == "Venus"
+    assert with_ketu["rudra_rasi"] == "Capricorn"
+    assert {t["rasi"] for t in with_ketu["trishoola"]} == {
+        "Capricorn", "Taurus", "Virgo"}
+
+    default = rudra(lagna_sign, signs, longitudes)
+    assert default["candidates"] == ["Mars", "Venus"]
+    assert default["rudra"] == "Venus"          # the same Rudra either way
+
+
+def test_the_co_lord_choice_flips_the_longevity_category():
+    """OI-135, and why it is not cosmetic. §14.4's first pair is "lagna and
+    8th lord": Mars in Aries with Mars in Aries is movable+movable and gives
+    long life; Mars with Ketu in Sagittarius is movable+dual and gives short.
+    Only the second matches the book — "lagna and 8th lord show short life" —
+    and only short life selects the dasa the native died in.
+    """
+    from hora.charts.book import signs as book_signs
+    from hora.charts.maraka import three_pairs
+    from hora.core.const import Graha
+
+    _longitudes, signs, lagna_sign = _chart_40()
+    hl = book_signs(40)["HL"]
+
+    default = three_pairs(lagna_sign, signs, hl)
+    assert default["eighth_house"]["lord_used"] == "Mars"
+    assert default["eighth_house"]["lord_was_chosen"] is True
+    assert "Examples 85 and 87" in default["eighth_house"]["co_lord_note"]
+    assert default["category"] == "long"
+
+    as_printed = three_pairs(lagna_sign, signs, hl,
+                             {R["Scorpio"]: int(Graha.KETU)})
+    assert as_printed["eighth_house"]["lord_used"] == "Ketu"
+    assert [p["category"] for p in as_printed["pairs"]] == [
+        "short", "short", "long"]
+    assert as_printed["category"] == "short"
+
+
+def test_short_life_is_what_picks_capricorn_over_taurus_and_virgo():
+    """"That is why death came in Cp dasa and not in Ta or Vi dasa."
+
+    The book contrasts all three spikes outright — the clearest statement of
+    closed OI-132's rule anywhere, and the third chart to confirm it. Of
+    Capricorn 17-24, Taurus 48-56 and Virgo 80-89, only Capricorn falls in the
+    0-36 a short life gives, and the native died at 22.
+    """
+    from hora.core.constants.maraka import LONGEVITY_RANGES
+    from hora.dasha.rasi.niryaana_shoola import progression, select_trishoola
+
+    assert LONGEVITY_RANGES["short"] == (0, 36)
+    run = progression(R["Scorpio"], _chart_40_seed_occupants())
+    got = select_trishoola(R["Capricorn"], run, "short")
+
+    spans = {row["rasi"]: (row["starts"], row["ends"])
+             for row in got["trishoolas"]}
+    assert spans == {"Capricorn": (17, 24), "Taurus": (48, 56),
+                     "Virgo": (80, 89)}
+    assert got["selected"]["rasi"] == "Capricorn"
+    assert got["undecided"] is None
+    assert got["selected"]["starts"] <= 22 < got["selected"]["ends"]
+
+
+def test_a_long_life_would_have_selected_virgo_instead():
+    """Why the co-lord choice and the longevity category are one question. Had
+    the first pair been read with Mars, the category would be long life, and
+    the rule would name Virgo at 80-89 — a dasa this native never reached.
+    """
+    from hora.dasha.rasi.niryaana_shoola import progression, select_trishoola
+
+    run = progression(R["Scorpio"], _chart_40_seed_occupants())
+    long_life = select_trishoola(R["Capricorn"], run, "long")
+    assert long_life["selected"]["rasi"] == "Virgo"
+    assert long_life["selected"]["starts"] == 80
+
+
+def test_example_87_states_a_negative_no_other_example_does():
+    """"Antardasa at the time of death does not follow the principles
+    explained here, but dasa follows the Trishoola principle."
+
+    So §22.2.2's two antardasa principles are not necessary conditions — "can
+    bring death" is the whole of that claim. Examples 84, 85 and 86 each had
+    at least one of them; this one has neither, and the author says so.
+    """
+    from hora.dasha.rasi.niryaana_shoola import (
+        ANTARDASA_AT_DEATH_RULE,
+        ANTARDASA_PRINCIPLES_CAN_FAIL,
+    )
+
+    assert "does not follow the principles" in ANTARDASA_PRINCIPLES_CAN_FAIL
+    assert "dasa follows the Trishoola principle" in (
+        ANTARDASA_PRINCIPLES_CAN_FAIL)
+    assert "can be" in ANTARDASA_AT_DEATH_RULE
+
+
+def test_chapter_22s_four_charts_and_what_each_settled():
+    """The chapter end to end: one chart it cannot reach, and three it can.
+    Chart 8 is the seed that contradicts the cascade, Chart 39 the one that
+    shows the working, Chart 40 the one that adds a rule §22.2.1 omits.
+    """
+    from hora.charts.book import is_recomputable, numbers
+
+    assert {8, 39, 40} <= set(numbers())
+    assert all(is_recomputable(n) for n in (8, 39, 40))
+    assert 61 not in numbers()
