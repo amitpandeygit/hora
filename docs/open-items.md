@@ -638,37 +638,38 @@ question has never been live; `stronger` reads the longitudes it is given.
 
 **Closes when:** a varga example ties past rule 5, or one states which chart.
 
-### OI-132 — which Trishoola rasi each longevity category takes
+### OI-133 — which Trishoola when two of them fall in the range
 
-**Waiting on the book.** §14.3 and §22.2.2 both make the longevity category
-(short, middle, long) choose one of the three Trishoola rasis, and neither says
-which takes which. No worked example in either section pairs them.
+**Waiting on the book.** Example 84 selects the Trishoola whose dasa falls in
+the longevity range and its chart had exactly one — "Ge is the **only**
+Trishoola rasi whose dasa comes in the middle life range". That "only" is not
+guaranteed: the three are trines, so their dasas sit about thirty-two years
+apart in a ninety-six year cycle while every range is thirty-six years wide.
+Over all 432 (seed, Rudra, category) combinations: **324 give one, 72 give
+two, 36 give none**.
 
-The three are ordered — Rudra's own rasi, its 5th, its 9th — so the obvious
-mapping is short/middle/long onto that order, and it is only obvious.
+**What we do:** `select_trishoola` returns all three with their spans and the
+range test, selects only when exactly one qualifies, and says how many did
+otherwise. Rule 3's Rudra fallback covers the none case; nothing covers two.
 
-**What we do:** `trishoola_readings` reports whether the dasa rasi is a
-Trishoola and which of the three it is, carries the category through, and does
-not select. A caller that wants one rasi has to say which.
-
-**Closes when:** an example dies in a named Trishoola with a stated category.
+**Closes when:** an example has two Trishoolas in range, or a later section
+gives a tiebreak.
 
 ### OI-131 — §22.2.1's seed needs a comparison §15.5.2 will not make
 
-**Waiting on the book.** Niryaana Shoola dasa starts from "the stronger of the
-2nd and 8th houses". §15.5.2's own warning names **ayur dasas** as a purpose
-whose rule 2 reads the luminaries instead of Jupiter, Mercury and the lord, and
-adds that "aspect of all other planets is equally important" — without saying
-how to weigh them. `rasi_strength.stronger` therefore refuses
-`purpose="ayur"`, so this dasa's seed cannot be computed from the text.
+**Waiting on the book.** The seed is "the stronger of the 2nd and 8th houses".
+§15.5.2's warning names **ayur dasas** as a purpose whose rule 2 reads the
+luminaries, and adds that "aspect of all other planets is equally important"
+without saying how to weigh them, so `rasi_strength.stronger` refuses
+`purpose="ayur"` and this seed cannot be computed from the text.
 
-This is the first system that actually needs that purpose; the refusal was
-theoretical until now.
+**Example 84 makes it worse, not better**: it seeds Chart 8 from Sagittarius,
+and the cascade gives Gemini — under every reading of rule 2, and decided by
+rule 6, which the ayur note does not touch. See D-62.
 
-**What we do:** `seed` returns both candidate rasis with the reason it is open,
-and accepts `stronger_house=2` or `8` from a caller who has settled it.
-Running the phalita cascade instead would answer a different question with the
-same shape, which is worse than answering none.
+**What we do:** `seed` returns both candidates with the reason it is open, and
+accepts `stronger_house=2` or `8`. The phalita cascade would answer a different
+question with the same shape, which is worse than answering none.
 
 **Closes when:** an example computes it, or §15.5.2's ayur weights are stated.
 

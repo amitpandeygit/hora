@@ -173,8 +173,14 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "Merc": "AK", "Mars": "AmK", "Ven": "BK", "Jup": "MK",
             "Moon": "PiK", "Sun": "PK", "Sat": "GK", "Rahu": "DK",
         },
+        "events": {"died": "July 1997, aged 50"},
         "first_seen": "chapter 10",
-        "note": "Neutral on OI-68: it does not separate the node conventions.",
+        "note": (
+            "Neutral on OI-68: it does not separate the node conventions. "
+            "The chart the book returns to most -- chapter 10's argala "
+            "exercise, Exercise 23's Rudra and longevity, chapter 20's Sudasa "
+            "seed for OI-126, and Example 84, which times its death."
+        ),
     },
     9: {
         "title": "Rasi — Chatrapati Shivaji",

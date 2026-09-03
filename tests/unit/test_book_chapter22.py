@@ -334,12 +334,13 @@ def test_rule_2_is_the_other_half_of_14_3s_sentence():
     assert "Trishoola rasi" in DEATH_READINGS[1]["text"]
 
 
-def test_which_trishoola_the_longevity_category_takes_is_never_said():
-    """Both sections make the category choose and neither says which takes
-    which. The category is carried through and not used. See OI-132.
+def test_whether_a_dasa_rasi_is_a_trishoola_is_separate_from_which_one():
+    """§22.2.2 asks two things of the Trishoolas — is this dasa rasi one of
+    them, and which of the three the longevity category takes. The first needs
+    only Rudra; the second needs the dasa spans, so it lives in
+    `select_trishoola`. Example 84 settled the second; see OI-132 (closed).
     """
     from hora.dasha.rasi.niryaana_shoola import (
-        WHICH_TRISHOOLA_IS_NOT_MAPPED,
         NiryaanaShoolaError,
         trishoola_readings,
     )
@@ -349,7 +350,6 @@ def test_which_trishoola_the_longevity_category_takes_is_never_said():
     assert got["trishoola_names"] == ("Aries", "Leo", "Sagittarius")
     assert got["applies"] and got["position"] == 1
     assert got["longevity"] == "middle"
-    assert got["undecided"] == WHICH_TRISHOOLA_IS_NOT_MAPPED
 
     outside = trishoola_readings(R["Taurus"], R["Aries"])
     assert not outside["applies"] and outside["position"] is None
@@ -542,3 +542,354 @@ def test_a_missing_navamsa_position_is_named_not_silently_dropped():
 
     with pytest.raises(NiryaanaShoolaError, match="Jupiter"):
         antardasa_candidates(R["Taurus"], {})
+
+
+# --------------------------------------------------------------------------
+# Example 84 — Chart 8, the only worked Niryaana Shoola dasa.
+# --------------------------------------------------------------------------
+
+EX84_ORDER = ["Sg", "Cp", "Aq", "Pi", "Ar", "Ta", "Ge"]
+EX84_YEARS = [9, 7, 8, 9, 7, 8, 9]
+
+
+def _chart_8():
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(8).items()},
+            {int(g): sign for g, sign in graha_signs(8).items()},
+            lagna(8))
+
+
+def _chart_8_rudra():
+    from hora.charts.maraka import rudra
+
+    longitudes, signs, lagna_sign = _chart_8()
+    return rudra(lagna_sign, signs, longitudes)
+
+
+def test_example_84s_seed_pair_is_sagittarius_and_gemini():
+    """"We have to find the stronger of 2nd (Sg) and 8th (Ge)." Chart 8's
+    lagna is Scorpio, so the pair is exactly those two.
+    """
+    from hora.dasha.rasi.niryaana_shoola import seed
+
+    _longitudes, _signs, lagna_sign = _chart_8()
+    assert lagna_sign == R["Scorpio"]
+
+    got = seed(lagna_sign)
+    assert (got.second_name, got.eighth_name) == ("Sagittarius", "Gemini")
+    assert got.sign is None          # OI-131: not ours to decide
+
+
+def test_15_5_2s_cascade_picks_the_other_one():
+    """D-62. "Sg is stronger", says the example, with no working shown.
+    §15.5.2's cascade ties on rules 1 to 5 and decides for **Gemini** on rule
+    6 — the same rule Exercise 23 used on these same two lords to make Mercury
+    Rudra, "as he is more advanced in his rasi".
+    """
+    from hora.charts.rasi_strength import stronger
+
+    longitudes, _signs, lagna_sign = _chart_8()
+    verdict = stronger((lagna_sign + 1) % 12, (lagna_sign + 7) % 12,
+                       longitudes, purpose="phalita")
+
+    assert verdict.winner == R["Gemini"]
+    assert verdict.decided_by == "6"
+    assert [r.winner for r in verdict.rules[:5]] == [None] * 5
+    assert "Mercury advanced 28" in verdict.reason
+
+
+def test_the_ayur_reading_of_rule_2_does_not_rescue_sagittarius():
+    """D-62 again, from the other side. §15.5.2's ayur note changes rule 2 to
+    the luminaries. Neither luminary occupies or aspects either rasi, so rule
+    2 ties there too — and read as *graha* drishti instead, the two grahas
+    that reach anything reach **Gemini**. Every route we can compute agrees
+    against the example.
+    """
+    from hora.charts.aspects import graha_aspects_sign, rasi_drishti
+    from hora.core.const import Graha
+
+    _longitudes, signs, _lagna = _chart_8()
+    luminaries = (int(Graha.SUN), int(Graha.MOON))
+
+    for target in (R["Sagittarius"], R["Gemini"]):
+        assert not [g for g in luminaries
+                    if signs[g] == target or target in rasi_drishti(signs[g])]
+
+    reaching = {
+        target: [g for g, place in signs.items()
+                 if graha_aspects_sign(g, place, target)]
+        for target in (R["Sagittarius"], R["Gemini"])
+    }
+    assert reaching[R["Sagittarius"]] == []
+    assert {int(Graha.MARS), int(Graha.JUPITER)} == set(reaching[R["Gemini"]])
+
+
+def test_the_cascades_seed_would_break_the_examples_own_reasoning():
+    """Why D-62 is NEEDS YOU rather than a footnote. Both candidates are odd,
+    so the direction survives the swap and only the starting rasi moves — and
+    that is enough: seeding from Gemini puts the native's death at 50 in
+    **Sagittarius** dasa, which is not one of his Trishoolas, so §22.2.2's
+    main reading would have nothing to say about the death it is explaining.
+    """
+    from hora.dasha.rasi.niryaana_shoola import direction_of, progression
+
+    assert direction_of(R["Gemini"]) == direction_of(R["Sagittarius"])
+
+    counterfactual = progression(R["Gemini"])
+    at_50 = [ABBR[s] for s, start, years in zip(
+        counterfactual.signs, counterfactual.starts, counterfactual.years)
+        if start <= 50 < start + years]
+    assert at_50 == ["Sg"]
+
+    trishoolas = {t["rasi"] for t in _chart_8_rudra()["trishoola"]}
+    assert "Sagittarius" not in trishoolas
+    assert "Gemini" in trishoolas
+
+
+@pytest.mark.parametrize("position", range(7))
+def test_example_84s_printed_sequence_and_lengths(position):
+    """"So dasas start from Sg and go as Sg (9 years), Cp (7 years), Aq (8
+    years), Pi (9 years), Ar (7 years), Ta (8 years), Ge (9 years) etc."
+
+    Sagittarius is odd, so forward; the lengths are the modality rule and
+    nothing else.
+    """
+    from hora.dasha.rasi.niryaana_shoola import progression
+
+    got = progression(R["Sagittarius"])
+    assert got.direction == "forward"
+    assert ABBR[got.signs[position]] == EX84_ORDER[position]
+    assert got.years[position] == EX84_YEARS[position]
+
+
+def test_gemini_dasa_starts_at_48_and_runs_to_57():
+    """"It may be seen that Ge dasa starts after 9+7+8+9+7+8 = 48 years. It
+    runs till the age of 57 years. The native died at an age of 50 years."
+
+    Both the sum the example spells out and the age it puts the death in.
+    """
+    from hora.dasha.rasi.niryaana_shoola import progression
+
+    got = progression(R["Sagittarius"])
+    index = got.signs.index(R["Gemini"])
+    assert sum(EX84_YEARS[:6]) == 48
+    assert got.starts[index] == 48
+    assert got.starts[index] + got.years[index] == 57
+    assert got.starts[index] <= 50 < got.starts[index] + got.years[index]
+
+
+def test_example_84_settles_how_the_longevity_category_chooses():
+    """"Ge is the only Trishoola rasi whose dasa comes in the middle life
+    range (36-72 years)."
+
+    Closed OI-132, and it shows the question had the wrong shape: the category
+    owns no position among the three. It names a range of years, and the
+    Trishoola whose *dasa* falls in it is the one — so the answer depends on
+    the seed.
+    """
+    from hora.core.constants.maraka import LONGEVITY_RANGES
+    from hora.dasha.rasi.niryaana_shoola import (
+        THE_TRISHOOLA_IS_THE_ONE_WHOSE_DASA_IS_IN_RANGE,
+        progression,
+        select_trishoola,
+    )
+
+    body = _chart_8_rudra()
+    assert {t["rasi"] for t in body["trishoola"]} == {
+        "Gemini", "Libra", "Aquarius"}
+
+    assert LONGEVITY_RANGES["middle"] == (36, 72)
+    got = select_trishoola(body["rudra_sign"], progression(R["Sagittarius"]),
+                           "middle")
+
+    spans = {row["rasi"]: (row["starts"], row["ends"])
+             for row in got["trishoolas"]}
+    assert spans == {"Aquarius": (16, 24), "Gemini": (48, 57),
+                     "Libra": (81, 88)}
+    assert [row["rasi"] for row in got["trishoolas"] if row["in_range"]] == [
+        "Gemini"]
+    assert got["selected"]["rasi"] == "Gemini"
+    assert got["undecided"] is None
+    assert "only Trishoola" in THE_TRISHOOLA_IS_THE_ONE_WHOSE_DASA_IS_IN_RANGE
+
+
+def test_exercise_23s_middle_life_is_what_selects_gemini():
+    """The category is not asserted by Example 84 — it was computed in
+    Exercise 23, and chapter 14's three-pairs method already gives it. Feeding
+    the wrong category picks a different spike or none.
+    """
+    from hora.dasha.rasi.niryaana_shoola import progression, select_trishoola
+
+    body = _chart_8_rudra()
+    run = progression(R["Sagittarius"])
+
+    short = select_trishoola(body["rudra_sign"], run, "short")
+    assert short["selected"]["rasi"] == "Aquarius"      # 16-24, inside 0-36
+
+    long_life = select_trishoola(body["rudra_sign"], run, "long")
+    assert long_life["selected"]["rasi"] == "Libra"     # 81-88, inside 72-108
+
+
+def test_two_trishoolas_can_land_in_one_range():
+    """OI-133. Example 84's "only" is not guaranteed: the three are trines, so
+    their dasas are about thirty-two years apart in a ninety-six year cycle,
+    and every range is thirty-six years wide. A quarter of all combinations do
+    not resolve.
+    """
+    from collections import Counter
+
+    from hora.dasha.rasi.niryaana_shoola import (
+        MORE_THAN_ONE_TRISHOOLA_CAN_FALL_IN_RANGE,
+        progression,
+        select_trishoola,
+    )
+
+    tally = Counter()
+    for seed_sign in range(12):
+        run = progression(seed_sign)
+        for rudra_sign in range(12):
+            for category in ("short", "middle", "long"):
+                got = select_trishoola(rudra_sign, run, category)
+                tally[sum(r["in_range"] for r in got["trishoolas"])] += 1
+
+    assert dict(tally) == {1: 324, 2: 72, 0: 36}
+    assert sum(tally.values()) == 432
+
+    run = progression(R["Sagittarius"])
+    ambiguous = next(
+        select_trishoola(rudra_sign, run, cat)
+        for rudra_sign in range(12) for cat in ("short", "middle", "long")
+        if sum(r["in_range"]
+               for r in select_trishoola(rudra_sign, run, cat)["trishoolas"])
+        == 2)
+    assert ambiguous["selected"] is None
+    assert "OI-133" in ambiguous["undecided"]
+    assert "thirty-six years wide" in MORE_THAN_ONE_TRISHOOLA_CAN_FALL_IN_RANGE
+
+
+def test_gemini_dasa_runs_dec_1994_to_dec_2003():
+    """"Ge dasa ran during Dec 1994-Dec 2003." Chart 8 is born 2 December
+    1946, and the dasas are whole years, so each opens on the birth month.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.rasi.niryaana_shoola import progression
+
+    born = chart(8)["birth_data"]
+    assert (born["year"], born["month"]) == (1946, 12)
+
+    got = progression(R["Sagittarius"])
+    index = got.signs.index(R["Gemini"])
+    assert born["year"] + got.starts[index] == 1994
+    assert born["year"] + got.starts[index] + got.years[index] == 2003
+    assert chart(8)["events"]["died"] == "July 1997, aged 50"
+
+
+def test_the_antardasas_are_nine_months_each_by_narayanas_rule():
+    """"each antardasa is of 9 months". §18.3 gives each antardasa a length in
+    dasa months equal to the dasa's length in years, and Gemini's dasa is 9
+    years — so the borrowed rule reproduces the example's figure.
+    """
+    from hora.dasha.rasi.narayana import antardasas
+
+    longitudes, _signs, _lagna = _chart_8()
+    got = antardasas(R["Gemini"], 9, longitudes)
+    assert got.months_each == 9
+    assert len(got.signs) == 12
+    assert got.months_each * 12 == 9 * 12    # the whole dasa, in months
+
+
+def test_the_antardasas_start_from_libra_and_run_forward():
+    """"Antardasas in Ge dasa start from Li and go as Li, Sc, Sg, Cp etc. The
+    4th antardasa is Cp."
+
+    §18.3's rule reproduces it: the seed is the stronger of Gemini and the 7th
+    from it, its lord sits in Libra, and Libra is odd so the run is forward.
+    """
+    from hora.dasha.rasi.narayana import antardasas
+
+    longitudes, _signs, _lagna = _chart_8()
+    got = antardasas(R["Gemini"], 9, longitudes)
+
+    assert got.start == R["Libra"]
+    assert got.direction == "forward"
+    assert [ABBR[s] for s in got.signs[:4]] == ["Li", "Sc", "Sg", "Cp"]
+    assert got.signs[3] == R["Capricorn"]
+
+
+def test_july_1997_falls_in_the_fourth_antardasa():
+    """"When he died in July 1997, the 4th antardasa was running."
+
+    Three nine-month antardasas from December 1994 end in March 1997, so the
+    4th runs March to December. §18.6's solar-arc measure would open it in
+    late February instead — both put July inside it, so this example does not
+    part them.
+    """
+    born_months = 1994 * 12 + 11              # December 1994, zero-based
+    fourth_opens = born_months + 3 * 9
+    fourth_closes = fourth_opens + 9
+    death = 1997 * 12 + 6                      # July 1997
+
+    assert divmod(fourth_opens, 12) == (1997, 2)      # March 1997
+    assert fourth_opens <= death < fourth_closes
+    assert divmod(fourth_closes, 12) == (1997, 11)    # December 1997
+
+
+def test_capricorn_meets_both_antardasa_principles():
+    """"Cp is the 8th house from Ge and Cp aspects Le, which contains Saturn
+    in navamsa. Saturn is the 8th lord from dasa rasi."
+
+    Both of §22.2.2's principles on one rasi, which is what the section calls
+    a strong candidate — and the example's own conclusion, "Ge-Cp antardasa
+    brought death". Asserted on the example's stated Leo; D-63 is that the
+    navamsa is Scorpio, and the next test shows Capricorn qualifies either way.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.rasi.niryaana_shoola import antardasa_candidates
+
+    got = antardasa_candidates(R["Gemini"], {int(Graha.SATURN): R["Leo"]})
+
+    assert got["eighth_name"] == "Capricorn"
+    assert got["eighth_lord_name"] == "Saturn"
+    assert R["Capricorn"] in got["from_dasa_rasi"]
+    assert R["Capricorn"] in got["aspecting_the_navamsa_rasi"]
+    assert R["Capricorn"] in got["strong_candidates"]
+    assert "Saturn" in got["why"] and "Leo" in got["why"]
+
+
+def test_chart_8s_saturn_is_in_scorpio_in_navamsa_not_leo():
+    """D-63. Saturn is printed at 15 Cn 39. Cancer is movable, so its navamsas
+    run from Cancer, and 15°39' is the fifth of them — **Scorpio**. The
+    example says Leo, which is the rasi §22.2.2's own generic illustration
+    used two paragraphs earlier.
+    """
+    from hora.charts.book import longitudes as book_longitudes
+    from hora.charts.vargas import varga
+
+    printed = book_longitudes(8)
+    assert printed["Sat"] == 3 * 30 + 15 + 39 / 60
+    got = varga(printed["Sat"], "D9")
+    assert got.sign == R["Scorpio"]
+    assert got.amsa_index == 4          # the fifth navamsa of Cancer
+
+
+def test_the_conclusion_survives_the_navamsa_slip():
+    """Why D-63 is a slip and not a wrong reading: Capricorn is movable, so it
+    aspects Taurus, Leo **and Scorpio**. It reaches the navamsa rasi under
+    either sign, and stays a strong candidate — the computed Scorpio simply
+    admits a second one alongside it.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import Graha
+    from hora.dasha.rasi.niryaana_shoola import antardasa_candidates
+
+    assert set(rasi_drishti(R["Capricorn"])) == {
+        R["Taurus"], R["Leo"], R["Scorpio"]}
+
+    printed = antardasa_candidates(R["Gemini"], {int(Graha.SATURN): R["Leo"]})
+    computed = antardasa_candidates(R["Gemini"],
+                                    {int(Graha.SATURN): R["Scorpio"]})
+
+    assert printed["strong_candidate_names"] == ("Capricorn",)
+    assert set(computed["strong_candidate_names"]) == {"Scorpio", "Capricorn"}
+    assert printed["from_dasa_rasi"] == computed["from_dasa_rasi"]

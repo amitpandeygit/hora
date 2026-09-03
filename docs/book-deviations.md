@@ -1922,3 +1922,84 @@ not lost, only the verdict differs.
 
 **Closes when:** you decide whether a partial §11.7.3 #1 with AK and PK in the
 1st or 5th should be reported present, or a later section restates the yoga.
+
+---
+
+## D-62 · Example 84's seed is the rasi §15.5.2's cascade rejects
+
+**Status: NEEDS YOU — it decides the whole dasa sequence, not one period.**
+
+§22.2.1 seeds Niryaana Shoola dasa from "the stronger of the 2nd and 8th
+houses". Example 84 applies it to Chart 8 and states the answer without showing
+any working:
+
+> "We have to find the stronger of 2nd (Sg) and 8th (Ge). **Sg is stronger.**"
+
+§15.5.2's cascade, run on those two rasis, gives **Gemini** — and it is not
+close. Rules 1 to 5 tie, and every route we can compute for rule 2 ties with
+them:
+
+| rule | Sagittarius | Gemini |
+|---|---|---|
+| 1 · occupants | 0 | 0 |
+| 2 · phalita (Jup/Merc/lord) | 0 | 0 |
+| 2 · ayur (luminaries), rasi drishti | 0 | 0 |
+| 2 · ayur, read as graha drishti | 0 | **Mars, Jupiter** |
+| 3 · exalted graha | none | none |
+| 4 · lord's oddity | same | same |
+| 5 · modality | dual | dual |
+| 6 · lord's advancement | Jupiter 21°27' | **Mercury 28°09'** |
+
+Rule 6 is the only rule that decides, and it decides for Gemini. It is also the
+rule **Exercise 23 used on these same two planets**, to make Mercury Rudra:
+"Mercury is stronger, as he is more advanced in his rasi."
+
+The consequence is not a shade. Gemini is an even sign, so seeding from it runs
+the twelve backward — Ge, Ta, Ar, Pi, Aq, Cp, Sg... — and the native's death at
+50 falls in **Sagittarius** dasa, which is not a Trishoola. The example's own
+reasoning fails entirely under the cascade's answer.
+
+**What we do:** nothing automatic. `seed` reports both candidates and takes the
+caller's decision; it does not run any cascade, which OI-131 already required
+for a different reason. This entry records that the one worked example we have
+disagrees with the cascade rather than confirming it.
+
+**Closes when:** you decide, or a later section says what strength test an ayur
+dasa's seed uses — §15.5.2's ayur note is about rule 2 only, and rule 2 is not
+what is deciding here.
+
+---
+
+## D-63 · Example 84 puts Saturn in Leo in navamsa; the D-9 gives Scorpio
+
+**Status: FINDING — recorded, nothing changes.** The reading it supports holds
+under both signs.
+
+Example 84's last step reads §22.2.2's second antardasa principle on Chart 8:
+
+> "Cp aspects **Le**, which contains Saturns in navamsa. Saturn is the 8th lord
+> from dasa rasi."
+
+Saturn is printed at **15 Cn 39**. Cancer is movable, so its navamsas run from
+Cancer itself, and 15°39' falls in the fifth — Cn, Le, Vi, Li, **Sc**. Our D-9
+gives Scorpio, amsa index 4.
+
+Leo is almost certainly carried over from §22.2.2's own generic illustration
+two paragraphs earlier, which also ends in Leo: "Suppose dasa rasi at death is
+Ta and **Jupiter is in Le in navamsa**."
+
+**It changes nothing.** Capricorn is movable, so it aspects Taurus, Leo *and*
+Scorpio — it reaches the navamsa rasi either way:
+
+| Saturn's navamsa | rasis aspecting it | strong candidates |
+|---|---|---|
+| Leo, as printed | Le, Ar, Li, Cp | **Cp** |
+| Scorpio, computed | Sc, Ar, Cn, Cp | Sc, **Cp** |
+
+Capricorn is a strong candidate under both, which is the example's conclusion.
+The computed sign merely admits Scorpio alongside it.
+
+**What we do:** nothing. `antardasa_candidates` takes the navamsa rasi from the
+caller, so a caller passing the computed D-9 gets the wider set and still gets
+Capricorn.
+

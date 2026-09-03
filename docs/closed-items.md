@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-5](#oi-5) | Upagrahas |
+| [OI-132](#oi-132) | which Trishoola rasi each longevity category takes |
 | [OI-123](#oi-123) | what a varga's houses are counted from |
 | [OI-121](#oi-121) | §18.2.2's exceptions could give 13 years or none |
 | [OI-101](#oi-101) | "sodhya pindas" were named but not defined |
@@ -1825,3 +1826,22 @@ The second facet closes with it: Example 71's "the 9th house from dasa rasi"
 for an antardasa is §18.4's own rule, which counts from the dasa rasi without
 calling it lagna, so §18.5's warning does not reach it.
 
+## OI-132 — which Trishoola rasi each longevity category takes
+
+**Closed by Example 84**, which shows the question was the wrong shape. The
+category does **not** own a position among the three:
+
+> "We found in Exercise 23 that Ge, Li and Aq form Trishoola and the native has
+> middle life. Ge is the only Trishoola rasi whose dasa comes in the middle
+> life range (36-72 years)."
+
+It names a *range of years*, and the Trishoola whose **dasa falls in that
+range** is the one. So the answer depends on the seed, and two charts with the
+same Rudra can select different spikes — which no fixed mapping of
+short/middle/long onto Rudra's rasi, its 5th and its 9th could ever do.
+
+On Chart 8 the three spans are Aquarius 16-24, Gemini 48-57 and Libra 81-88.
+Only Gemini meets 36-72, and the native died at 50, inside it.
+
+`select_trishoola` applies it. The residual — what to do when two Trishoolas
+land in one range, which a quarter of combinations produce — is OI-133.

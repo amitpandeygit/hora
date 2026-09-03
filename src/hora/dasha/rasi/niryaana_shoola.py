@@ -277,7 +277,8 @@ DEATH_READINGS: tuple[dict, ...] = (
     {"rule": 2, "reads": "Trishoola",
      "test": "the dasa rasi is the Trishoola rasi its longevity category "
              "selects",
-     "needs": "the longevity category, and which Trishoola each maps to",
+     "needs": "the longevity category and the chart's dasa spans; Example 84 "
+              "selects the Trishoola whose dasa falls in the range",
      "text": ("Usually death occurs in the dasa of a Trishoola rasi. There "
               "are three Trishoola rasis and we can identify the correct rasi "
               "based on the longevity category (short, middle or long life).")},
@@ -297,14 +298,26 @@ TRISHOOLA_WAS_PROMISED_IN_14_3 = (
     "Shoola dasa."
 )
 
-#: **Gap.** §14.3 and §22.2.2 both say the longevity category picks one of the
-#: three Trishoolas, and neither says which category takes which. The three are
-#: ordered — Rudra's own rasi, its 5th and its 9th — so the obvious mapping is
-#: that order, but "obvious" is not the book. See OI-132.
-WHICH_TRISHOOLA_IS_NOT_MAPPED = (
-    "Section 14.3 and section 22.2.2 both make the longevity category choose "
-    "among the three Trishoola rasis. Neither says which category chooses "
-    "which, and no worked example in either section pairs them."
+#: Example 84 settles how the category chooses. It is **not** a mapping of
+#: short/middle/long onto the three positions: it is whichever Trishoola's
+#: *dasa* falls inside the range the category names. So the answer depends on
+#: the seed, and the same three Trishoolas can select differently on two charts.
+THE_TRISHOOLA_IS_THE_ONE_WHOSE_DASA_IS_IN_RANGE = (
+    "We found in Exercise 23 that Ge, Li and Aq form Trishoola and the native "
+    "has middle life. Ge is the only Trishoola rasi whose dasa comes in the "
+    "middle life range (36-72 years)."
+)
+
+#: **Gap.** Example 84's "only" is doing work its rule does not guarantee. The
+#: three Trishoolas are four rasis apart, so in a run averaging eight years
+#: each their dasas are about thirty-two years apart, and every longevity range
+#: is thirty-six years wide. Two can land in one range. See OI-133.
+MORE_THAN_ONE_TRISHOOLA_CAN_FALL_IN_RANGE = (
+    "Example 84 selects the Trishoola whose dasa falls in the longevity range "
+    "and its chart had exactly one. The three Trishoolas are trines, so their "
+    "dasas are roughly thirty-two years apart in a ninety-six year cycle, "
+    "while each longevity range is thirty-six years wide. Nothing in section "
+    "22.2.2 or section 14.3 says which to take when two qualify."
 )
 
 #: **Gap.** Rule 3's sentence has more than one defensible reading. See
@@ -386,9 +399,9 @@ def trishoola_readings(dasa_rasi: int, rudra_sign: int,
 
     :param rudra_sign: the rasi Rudra occupies, from
         :func:`hora.charts.maraka.rudra`.
-    :param longevity: "short", "middle" or "long". Recorded, not used: neither
-        §14.3 nor §22.2.2 says which category takes which Trishoola. See
-        OI-132.
+    :param longevity: "short", "middle" or "long". Recorded here; the
+        selection among the three needs the dasa spans as well, so it lives in
+        :func:`select_trishoola`.
     """
     from hora.charts.maraka import trishoola_rasis
 
@@ -408,7 +421,59 @@ def trishoola_readings(dasa_rasi: int, rudra_sign: int,
         "applies": rasi in three,
         "position": three.index(rasi) if rasi in three else None,
         "longevity": longevity,
-        "undecided": (WHICH_TRISHOOLA_IS_NOT_MAPPED if rasi in three else None),
+    }
+
+
+def select_trishoola(rudra_sign: int, run: Progression,
+                     longevity: str) -> dict:
+    """Which of the three Trishoolas the longevity category selects.
+
+    Example 84's rule, and it is not the mapping it looks like: the category
+    does not own a position among the three. It names a range of years, and
+    the Trishoola whose **dasa falls in that range** is the one — "Ge is the
+    only Trishoola rasi whose dasa comes in the middle life range (36-72
+    years)". The answer therefore depends on the seed, so two charts with the
+    same Rudra can select different spikes.
+
+    :param run: the chart's :func:`progression`, which supplies the spans.
+    :returns: every Trishoola with its span and whether it overlaps the range,
+        the selection when exactly one does, and ``undecided`` otherwise. See
+        OI-133 for why more than one can.
+    """
+    from hora.charts.maraka import trishoola_rasis
+    from hora.core.constants.maraka import LONGEVITY_RANGES
+
+    validate.in_range("rudra_sign", rudra_sign, 0, 11)
+    if longevity not in LONGEVITY_RANGES:
+        raise NiryaanaShoolaError(
+            f"longevity must be one of {tuple(LONGEVITY_RANGES)}, "
+            f"got {longevity!r}")
+    low, high = LONGEVITY_RANGES[longevity]
+
+    spans = {sign: (run.starts[i], run.starts[i] + run.years[i])
+             for i, sign in enumerate(run.signs)}
+    rows = []
+    for sign in trishoola_rasis(rudra_sign):
+        start, end = spans[sign]
+        rows.append({
+            "sign": sign, "rasi": str(RASI_NAMES[sign]),
+            "starts": start, "ends": end,
+            "in_range": start < high and end > low,
+            "wholly_in_range": start >= low and end <= high,
+        })
+
+    qualifying = [row for row in rows if row["in_range"]]
+    chosen = qualifying[0] if len(qualifying) == 1 else None
+    return {
+        "longevity": longevity,
+        "range": (low, high),
+        "trishoolas": tuple(rows),
+        "selected": chosen,
+        "undecided": (
+            None if chosen is not None else
+            (f"{len(qualifying)} of the three Trishoolas have their dasa in "
+             f"the {longevity}-life range; §22.2.2 says which to take only "
+             f"when there is one. See OI-133")),
     }
 
 
