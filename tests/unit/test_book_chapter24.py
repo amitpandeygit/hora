@@ -1173,3 +1173,455 @@ def test_first_antardasa_checks_its_inputs():
     with pytest.raises(KalachakraError, match="exceeds"):
         first_antardasa(rows, 7.5)
     assert first_antardasa(rows, 7.0)["index"] == 8      # the last one
+
+
+# ---------------------------------------------------------------------------
+# §24.3.1 Interpretation — basics
+# ---------------------------------------------------------------------------
+
+def test_the_basics_read_across_the_vargas():
+    """§24.3.1's six illustrations each name a different divisional chart, and
+    that is the point of the section: a rasi's dasa gives the results of the
+    house and planets it holds *in whichever varga is being read*.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        BASICS_EXAMPLES,
+        HOUSE_AND_PLANETS_RULE,
+        LORD_RULE,
+        NATURAL_RESULTS_RULE,
+    )
+
+    assert "natural results of the rasi" in NATURAL_RESULTS_RULE
+    assert "the house and planets in that rasi" in HOUSE_AND_PLANETS_RULE
+    assert "results of its lord" in LORD_RULE
+
+    vargas = [row["varga"] for row in BASICS_EXAMPLES]
+    assert vargas == ["D7", "D6", "D24", "D10", "D10", "D7"]
+    assert {row["rule"] for row in BASICS_EXAMPLES} == {
+        "house", "house-and-planet", "lord"}
+
+    lord = [row for row in BASICS_EXAMPLES if row["rule"] == "lord"]
+    assert len(lord) == 1                        # "If Mars is in the 5th house
+    assert lord[0]["gives"] == "children"        # in D-7, Aries dasa may give"
+
+
+def test_the_eighth_from_al_here_has_no_table_32_pointer():
+    """§23.3's "8th from AL" was Table 32's because Example 92 said so.
+    §24.3.1's is unqualified, so it is the ordinary 8th. OI-140.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        BASICS_EXAMPLES,
+        THE_EIGHTH_FROM_AL_HERE_IS_UNQUALIFIED,
+    )
+    from hora.dasha.rasi.shoola import THE_EIGHTH_FROM_AL_IS_TABLE_32S
+
+    row = [r for r in BASICS_EXAMPLES if r["holds"] == "the 8th from AL"]
+    assert len(row) == 1
+    assert row[0]["varga"] == "D10"
+    assert "Table 32" in THE_EIGHTH_FROM_AL_IS_TABLE_32S      # §23.3's
+    assert "no reference to Table 32" in THE_EIGHTH_FROM_AL_HERE_IS_UNQUALIFIED
+
+
+def test_sav_readings_are_held_per_varga_with_their_threshold():
+    """"Usually dasas of rasis with 30 or more rekhas in D-10 SAV bring the
+    best phases in one's career and dasas of rasis with 30 or more rekhas in
+    D-24 SAV bring the best periods for learning."
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        KEEP_SAV_OF_VARIOUS_VARGAS,
+        SAV_STRONG_REKHAS,
+        SAV_THRESHOLD_READINGS,
+    )
+
+    assert SAV_STRONG_REKHAS == 30
+    assert [row["varga"] for row in SAV_THRESHOLD_READINGS] == ["D10", "D24"]
+    assert all(row["rekhas"] == 30 for row in SAV_THRESHOLD_READINGS)
+    assert all(row["hedge"] == "usually" for row in SAV_THRESHOLD_READINGS)
+    assert "various divisional charts" in KEEP_SAV_OF_VARIOUS_VARGAS
+
+
+# ---------------------------------------------------------------------------
+# §24.3.2 Deha and Jeeva rasis
+# ---------------------------------------------------------------------------
+
+def test_deha_and_jeeva_come_from_the_dasas_not_the_table():
+    """"In Example 95, the first dasa is Sc and the ninth dasa is Sg. Since
+    Rohini is an apasavya nakshatra, Sc becomes jeeva rasi and Sg becomes deha
+    rasi. In Example 96, the first dasa is Pi and the ninth dasa is Ar. Since
+    Punarvasu is a savya nakshatra, Pi becomes deha rasi and Ar becomes jeeva
+    rasi."
+    """
+    from hora.dasha.nakshatra.kalachakra import deha_and_jeeva_at_birth
+
+    got = deha_and_jeeva_at_birth(4, 2, 7)               # Example 95
+    assert (got["jeeva_rasi"], got["deha_rasi"]) == ("Scorpio", "Sagittarius")
+    assert (A[got["first_dasa"]], A[got["ninth_dasa"]]) == ("Sc", "Sg")
+    assert got["from_the_table"] is False
+
+    got = deha_and_jeeva_at_birth(7, 4, 8)               # Example 96
+    assert (got["deha_rasi"], got["jeeva_rasi"]) == ("Pisces", "Aries")
+    assert (A[got["first_dasa"]], A[got["ninth_dasa"]]) == ("Pi", "Ar")
+    assert got["from_the_table"] is False
+
+
+def test_the_printed_tables_hold_only_for_birth_at_the_pada_start():
+    """"However, these hold for one born at the beginning of the nakshatra
+    pada." At position 0 the general rule and the tables agree, everywhere in
+    all sixteen padas; at any other position they need not.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        PRINTED_SUB_GROUPS,
+        TABLE_DEHA_AND_JEEVA_ASSUME_BIRTH_AT_THE_PADA_START,
+        deha_and_jeeva,
+        deha_and_jeeva_at_birth,
+        pada_sequence,
+    )
+
+    assert "beginning of the nakshatra pada" in (
+        TABLE_DEHA_AND_JEEVA_ASSUME_BIRTH_AT_THE_PADA_START)
+
+    for group in ("savya", "apasavya"):
+        for sub in (1, 2):
+            nakshatra = PRINTED_SUB_GROUPS[f"{group}-{sub}"][0]
+            for pada in (1, 2, 3, 4):
+                table = deha_and_jeeva(group, pada_sequence(group, sub, pada))
+                born = deha_and_jeeva_at_birth(nakshatra, pada, 0)
+                assert born["from_the_table"] is True
+                assert (born["deha"], born["jeeva"]) == (
+                    table["deha"], table["jeeva"])
+
+    # Example 95 is the counter-case: Rohini 2nd pada's table says Libra and
+    # Virgo; born three-quarters of the way in, it is Sagittarius and Scorpio.
+    table = deha_and_jeeva("apasavya", pada_sequence("apasavya", 1, 2))
+    assert (table["deha_rasi"], table["jeeva_rasi"]) == ("Libra", "Virgo")
+    born = deha_and_jeeva_at_birth(4, 2, 7)
+    assert (born["deha_rasi"], born["jeeva_rasi"]) != (
+        table["deha_rasi"], table["jeeva_rasi"])
+
+
+def test_footnote_64s_nine_is_what_defines_deha_and_jeeva():
+    """The nine-rasi set is not a printing habit: §24.3.2 takes deha and jeeva
+    from its two ends, so the ninth dasa is the one that matters. Exercise 34's
+    tenth changes nothing.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        deha_and_jeeva_at_birth,
+        nine_from_birth,
+    )
+
+    nine = nine_from_birth(23, 4, 6)["dasas"]
+    got = deha_and_jeeva_at_birth(23, 4, 6)
+    assert got["first_dasa"] == nine[0]["sign"]
+    assert got["ninth_dasa"] == nine[-1]["sign"]
+    assert got["group"] == "apasavya"
+    assert (A[got["jeeva"]], A[got["deha"]]) == ("Ge", "Ta")
+
+
+@pytest.mark.parametrize(("rasi", "graha", "expected"), [
+    ("jeeva", "JUPITER", "one may exhibit a positive spirit and be cheerful"),
+    ("jeeva", "MERCURY", "one may exhibit a positive spirit and be cheerful"),
+    ("jeeva", "VENUS", "one may exhibit a positive spirit and be cheerful"),
+    ("jeeva", "MARS", "one may be without any enthusiasm"),
+    ("jeeva", "SUN", "one may be without any enthusiasm"),
+    ("jeeva", "SATURN", "one may be without any enthusiasm"),
+    ("jeeva", "RAHU", "one may be without any enthusiasm"),
+    ("deha", "MARS", "one may face accidents or death"),
+    ("deha", "SATURN", "one may face accidents or death"),
+])
+def test_transit_readings(rasi, graha, expected):
+    """§24.3.2's three filled cells, over every graha it names."""
+    from hora.core.const import Graha
+    from hora.dasha.nakshatra.kalachakra import transit_reading
+
+    got = transit_reading(rasi, getattr(Graha, graha))
+    assert got["reading"] == expected
+    assert got["undecided"] is None
+
+
+def test_benefics_in_the_deha_rasi_are_undecided_not_absent():
+    """The fourth cell is empty. The general line about benefics and malefics
+    would fill it; the section does not, and a blank is not a reading.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.nakshatra.kalachakra import (
+        BENEFICS_IN_THE_DEHA_RASI_HAVE_NO_READING,
+        transit_reading,
+    )
+
+    got = transit_reading("deha", Graha.JUPITER)
+    assert got["kind"] == "benefic"
+    assert got["reading"] is None
+    assert got["undecided"] == BENEFICS_IN_THE_DEHA_RASI_HAVE_NO_READING
+
+
+def test_ketu_and_the_moon_are_in_neither_list():
+    """§24.3.2 names Rahu and not Ketu, and neither the Moon nor the lagna.
+    Ketu is not added to the malefics here.
+    """
+    from hora.core.const import Graha
+    from hora.dasha.nakshatra.kalachakra import (
+        KETU_IS_NOT_IN_THE_TRANSIT_MALEFICS,
+        TRANSIT_BENEFICS,
+        TRANSIT_MALEFICS,
+        transit_reading,
+    )
+
+    assert int(Graha.RAHU) in TRANSIT_MALEFICS
+    assert int(Graha.KETU) not in TRANSIT_MALEFICS
+    assert int(Graha.MOON) not in TRANSIT_BENEFICS + TRANSIT_MALEFICS
+    assert "not added" in KETU_IS_NOT_IN_THE_TRANSIT_MALEFICS
+
+    for graha in (Graha.KETU, Graha.MOON):
+        got = transit_reading("jeeva", graha)
+        assert got["kind"] is None
+        assert "neither" in got["undecided"]
+
+
+def test_transit_reading_checks_its_rasi():
+    from hora.core.const import Graha
+    from hora.dasha.nakshatra.kalachakra import KalachakraError, transit_reading
+
+    with pytest.raises(KalachakraError, match="'deha' or 'jeeva'"):
+        transit_reading("lagna", Graha.SUN)
+
+
+# ---------------------------------------------------------------------------
+# §24.3.3 Gatis
+# ---------------------------------------------------------------------------
+
+def test_the_gatis_fall_out_of_the_wheel():
+    """§24.3.3 names the markati and mandooki rasis of both groups. None is
+    transcribed: a trinal step is a lion's leap, a two-rasi step a frog's, and
+    a single step against its half's direction a monkey's.
+    """
+    from hora.dasha.nakshatra.kalachakra import gati_rasis
+
+    savya = gati_rasis("savya")
+    assert [A[r] for r in savya["markati"]] == ["Le"]
+    assert [A[r] for r in savya["mandooki"]] == ["Cn", "Ge"]
+
+    apasavya = gati_rasis("apasavya")
+    assert [A[r] for r in apasavya["markati"]] == ["Cn"]
+    assert [A[r] for r in apasavya["mandooki"]] == ["Le", "Vi"]
+
+
+def test_the_leaps_are_exactly_the_ones_24_3_3_describes():
+    """Five irregular steps per wheel, and no others: two trinal leaps, one
+    reversal and two jumps.
+    """
+    from hora.dasha.nakshatra.kalachakra import transitions
+
+    seen = {}
+    for group in ("savya", "apasavya"):
+        rows = transitions(group)
+        assert len(rows) == 24
+        seen[group] = [(A[r["from"]], A[r["to"]], r["kind"], r["step"])
+                       for r in rows if r["kind"] != "regular"]
+
+    assert seen["savya"] == [
+        ("Pi", "Sc", "simhaavalokana", -4),
+        ("Vi", "Cn", "mandooki", -2),
+        ("Cn", "Le", "markati", 1),
+        ("Le", "Ge", "mandooki", -2),
+        ("Sg", "Ar", "simhaavalokana", 4),
+    ]
+    assert seen["apasavya"] == [
+        ("Ge", "Le", "mandooki", 2),
+        ("Le", "Cn", "markati", -1),
+        ("Cn", "Vi", "mandooki", 2),
+        ("Sc", "Pi", "simhaavalokana", 4),
+        ("Ar", "Sg", "simhaavalokana", -4),
+    ]
+
+
+def test_simhaavalokana_is_the_trinal_leap_both_ways():
+    """"A trinal leap (from Sg to Ar or vice versa; from Pi to Sc or vice
+    versa)." Each direction of each pair falls on a different wheel, which is
+    what "or vice versa" is doing.
+    """
+    from hora.dasha.nakshatra.kalachakra import transitions
+
+    pairs = {group: {(A[r["from"]], A[r["to"]]) for r in transitions(group)
+                     if r["kind"] == "simhaavalokana"}
+             for group in ("savya", "apasavya")}
+    assert pairs["savya"] == {("Pi", "Sc"), ("Sg", "Ar")}
+    assert pairs["apasavya"] == {("Sc", "Pi"), ("Ar", "Sg")}
+    assert pairs["savya"] == {(b, a) for a, b in pairs["apasavya"]}
+
+
+def test_the_gati_rasi_is_the_destination_of_the_leap():
+    """"The rasis whose dasas come after an irregular leap go by special
+    names." Vi-to-Cn names Cn, not Vi.
+    """
+    from hora.dasha.nakshatra.kalachakra import GATI_RULE, transitions
+
+    assert "come after an irregular leap" in GATI_RULE
+    jump = [r for r in transitions("savya")
+            if (A[r["from"]], A[r["to"]]) == ("Vi", "Cn")]
+    assert len(jump) == 1
+    assert A[jump[0]["to"]] == "Cn"              # the named rasi
+
+
+def test_the_quoted_runs_are_stretches_of_the_wheel():
+    """§24.3.3 quotes "Sc, Li, Vi, Cn, Le, Ge, Ta, Ar" for savya and "Ar, Ta,
+    Ge, Le, Cn, Vi, Li, Sc" for apasavya. Both are eight consecutive wheel
+    positions -- the mirrored halves, where the leaps live.
+    """
+    from hora.dasha.nakshatra.kalachakra import wheel
+
+    savya = [A[r] for r in wheel("savya")]
+    assert savya[12:20] == ["Sc", "Li", "Vi", "Cn", "Le", "Ge", "Ta", "Ar"]
+
+    apasavya = [A[r] for r in wheel("apasavya")]
+    assert apasavya[4:12] == ["Ar", "Ta", "Ge", "Le", "Cn", "Vi", "Li", "Sc"]
+
+
+def test_table_51_has_all_six_cells():
+    from hora.dasha.nakshatra.kalachakra import (
+        GATI_NAMES,
+        MANDOOKI_SAVYA_SINGLES_OUT_THE_LE_TO_GE_LEAP,
+        TABLE_51,
+        gati_results,
+    )
+
+    assert set(TABLE_51) == {(kind, group) for kind in GATI_NAMES
+                             for group in ("savya", "apasavya")}
+    assert "Death of father or elders" in gati_results(
+        "simhaavalokana", "apasavya")
+    assert "Loss of wealth" in gati_results("markati", "savya")
+    assert "Distress to wife" in gati_results("mandooki", "apasavya")
+
+    # the one cell that separates its two leaps
+    assert MANDOOKI_SAVYA_SINGLES_OUT_THE_LE_TO_GE_LEAP in gati_results(
+        "mandooki", "savya")
+    assert "Le-to-Ge" not in gati_results("mandooki", "apasavya")
+
+
+def test_gati_names_and_footnote_67():
+    from hora.dasha.nakshatra.kalachakra import (
+        FOOTNOTE_67,
+        GATI_DEFINITIONS,
+        GATI_NAMES,
+    )
+
+    assert GATI_NAMES["simhaavalokana"] == "lion's leap"
+    assert GATI_NAMES["markati"] == "monkey's leap"
+    assert GATI_NAMES["mandooki"] == "frog's leap"
+    assert "Temporary reversal" in GATI_DEFINITIONS["markati"]
+    assert "doesn't really mean a lion" in FOOTNOTE_67
+
+
+@pytest.mark.parametrize(("origin", "target", "prefer", "avoid"), [
+    ("Vi", "Cn", ("east", "north"), ()),
+    ("Le", "Ge", ("southwest",), ("east",)),
+    ("Cn", "Le", ("west",), ("south",)),
+    ("Pi", "Sc", (), ("north",)),
+    ("Sg", "Cp", (), ("north",)),
+    ("Sg", "Ar", (), ("all",)),
+    ("Sg", "Sc", ("all",), ()),
+    ("Le", "Cn", (), ("west",)),
+])
+def test_parasaras_seven_direction_rules(origin, target, prefer, avoid):
+    """The seven bullets, which cover eight transitions -- bullet 4 names two.
+    Two of the eight are normal movements, not leaps.
+    """
+    from hora.dasha.nakshatra.kalachakra import directions_for
+
+    got = directions_for(R[origin], R[target])
+    assert got["prefer"] == prefer
+    assert got["avoid"] == avoid
+    assert got["undecided"] is None
+    assert got["occurs_in"]                      # each really is on a wheel
+
+
+def test_the_two_normal_movements_are_not_leaps():
+    """"In the leap from Pi to Sc and in the normal movement from Sg to Cp" --
+    and "In the normal movement from Sg to Sc". Both are regular steps, so the
+    direction rules are keyed by the step and not by the gati.
+    """
+    from hora.dasha.nakshatra.kalachakra import transitions
+
+    kinds = {(A[r["from"]], A[r["to"]]): r["kind"]
+             for group in ("savya", "apasavya") for r in transitions(group)}
+    assert kinds[("Sg", "Cp")] == "regular"
+    assert kinds[("Sg", "Sc")] == "regular"
+    assert kinds[("Pi", "Sc")] == "simhaavalokana"
+
+
+def test_four_apasavya_leaps_get_no_direction_rule():
+    """Of the ten irregular steps across the two wheels, six are advised. The
+    four that are not are all apasavya.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        PARASARA_LEAVES_FOUR_APASAVYA_LEAPS_UNADVISED,
+        directions_for,
+        transitions,
+    )
+
+    unadvised = {
+        group: [(A[r["from"]], A[r["to"]]) for r in transitions(group)
+                if r["kind"] != "regular"
+                and directions_for(r["from"], r["to"])["undecided"] is not None]
+        for group in ("savya", "apasavya")
+    }
+    assert unadvised["savya"] == []
+    assert unadvised["apasavya"] == [
+        ("Ge", "Le"), ("Cn", "Vi"), ("Sc", "Pi"), ("Ar", "Sg")]
+    assert "all apasavya" in PARASARA_LEAVES_FOUR_APASAVYA_LEAPS_UNADVISED
+
+
+def test_directions_for_reports_a_transition_that_happens_on_neither_wheel():
+    """An opposition step occurs nowhere on either wheel, and that is a
+    different silence from a leap Parasara simply did not advise on.
+    """
+    from hora.dasha.nakshatra.kalachakra import directions_for
+
+    got = directions_for(R["Ar"], R["Li"])
+    assert got["occurs_in"] == ()
+    assert got["undecided"] == "this transition occurs on neither wheel"
+
+    got = directions_for(R["Ge"], R["Le"])
+    assert got["occurs_in"] == ("apasavya",)
+    assert "no direction rule" in got["undecided"]
+
+
+def test_mandooki_is_the_third_eleventh_jump_19_4_pointed_at():
+    """§19.4 called mandooki gati "the 3rd/11th jump" and sent the reader to
+    "Parasara's discussion on Kalachakra dasa" for it. §24.3.3 is that
+    discussion, and every frog's leap on either wheel is a 3rd or an 11th.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        MANDOOKI_IS_19_4S_THIRD_ELEVENTH_JUMP,
+        transitions,
+    )
+    from hora.dasha.rasi.kendradi import GATI_NAMES as KENDRADI_GATIS
+
+    named = [row for row in KENDRADI_GATIS if row["name"] == "mandooki gati"]
+    assert named[0]["movement"] == "the 3rd/11th jump"
+    assert named[0]["built"] is False             # the dasa, not the gati
+
+    def ordinal(origin, target):
+        return (target - origin) % 12 + 1
+
+    savya = [ordinal(r["from"], r["to"]) for r in transitions("savya")
+             if r["kind"] == "mandooki"]
+    apasavya = [ordinal(r["from"], r["to"]) for r in transitions("apasavya")
+                if r["kind"] == "mandooki"]
+    assert savya == [11, 11]
+    assert apasavya == [3, 3]
+    assert "11ths" in MANDOOKI_IS_19_4S_THIRD_ELEVENTH_JUMP
+
+
+def test_no_other_gati_is_a_third_or_an_eleventh():
+    """The 3rd/11th picks out the frog's leaps alone: the lion's are trines and
+    the monkey's a single sign, so §19.4's phrase is unambiguous.
+    """
+    from hora.dasha.nakshatra.kalachakra import transitions
+
+    for group in ("savya", "apasavya"):
+        for row in transitions(group):
+            ordinal = (row["to"] - row["from"]) % 12 + 1
+            if row["kind"] == "mandooki":
+                assert ordinal in (3, 11)
+            else:
+                assert ordinal not in (3, 11)

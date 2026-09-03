@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 94 waiting on evidence · 2 parked**
+**5 waiting on Amit · 95 waiting on evidence · 2 parked**
 
 ---
 
@@ -671,6 +671,22 @@ is not changed on our own judgement — it flips a longevity verdict.
 
 **Closes when:** you decide, or a section states which co-lord a longevity 8th
 house takes.
+
+### OI-140 — §24.3.1's "8th from AL" carries no Table 32 pointer
+
+**NEEDS YOU.** "Dasa of a rasi containing the 8th from AL in D-10 may give a
+fall in status at workplace." §23.3 used the same phrase and meant **Table
+32's** 8th — Example 92 said "see Table 32" outright. §24.3.1 says nothing.
+
+| reading | for it |
+|---|---|
+| ordinary 8th | what an unqualified "8th from" means everywhere else |
+| Table 32's | the only other place the book counts an 8th from AL |
+
+We take the ordinary 8th, and the reading records that it did. Nothing else in
+the chapter turns on it.
+
+**Closes when:** an example reads the 8th from AL under Kalachakra.
 
 ### OI-139 — §24.2's two groups are sub-divided on different patterns
 

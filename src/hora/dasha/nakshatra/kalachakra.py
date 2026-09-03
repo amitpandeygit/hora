@@ -17,7 +17,13 @@ are held as printed, and §24.2's savya lists are one nakshatra short — see
 from __future__ import annotations
 
 from hora.core import validate
-from hora.core.const import RASI_ABBR, RASI_LORD, RASI_NAMES, Graha
+from hora.core.const import (
+    GRAHA_NAMES,
+    RASI_ABBR,
+    RASI_LORD,
+    RASI_NAMES,
+    Graha,
+)
 
 
 class KalachakraError(validate.InputError):
@@ -611,3 +617,427 @@ def antardasas(nakshatra: int, wheel_index: int,
         "share_years": dasa_years(rasi),
         "years": length * dasa_years(rasi) / total,
     } for step, rasi in enumerate(nine))
+
+
+# --------------------------------------------------------------------------
+# §24.3.1 Interpretation — basics
+# --------------------------------------------------------------------------
+
+#: The first and weakest rule: the rasi's own nature.
+NATURAL_RESULTS_RULE = (
+    "Dasa of a rasi gives the natural results of the rasi. For example, dasa "
+    "of Pisces may give saattwik religious activities. Dasa of Aries may give "
+    "enterprise or quarrels or wounds."
+)
+
+#: The rule §24.3.1 itself calls more important, and the reason Kalachakra is
+#: read across the vargas rather than in the rasi chart alone.
+HOUSE_AND_PLANETS_RULE = (
+    "More importantly, dasa of a rasi gives the results of the house and "
+    "planets in that rasi."
+)
+
+#: And the third, which reads the lord wherever it sits.
+LORD_RULE = "Dasa of a rasi may also give the results of its lord."
+
+#: §24.3.1's own illustrations, each naming the divisional chart it reads in.
+#: ``holds`` is what the dasa rasi carries in that varga; ``gives`` is the
+#: result. Held as data because every one names a different varga, which is
+#: the point being made.
+BASICS_EXAMPLES: tuple[dict[str, str], ...] = (
+    {"rasi": "Aries", "varga": "D7", "holds": "the 5th house",
+     "gives": "children", "rule": "house"},
+    {"rasi": "Pisces", "varga": "D6", "holds": "the 8th house",
+     "gives": "diseases", "rule": "house"},
+    {"rasi": "Gemini", "varga": "D24", "holds": "lagna",
+     "gives": "all-round progress in the accumulation of knowledge",
+     "rule": "house"},
+    {"rasi": "Scorpio", "varga": "D10", "holds": "AL, with its lord Mars in it",
+     "gives": "good developments related to career and status",
+     "rule": "house-and-planet"},
+    {"rasi": "any", "varga": "D10", "holds": "the 8th from AL",
+     "gives": "a fall in status at workplace", "rule": "house"},
+    {"rasi": "Aries", "varga": "D7", "holds": "its lord Mars in the 5th house",
+     "gives": "children", "rule": "lord"},
+)
+
+#: **Gap.** §24.3.1's "the 8th from AL in D-10" carries no pointer to Table 32,
+#: where §23.3's did — Example 92 sent the reader there in as many words. Read
+#: as the ordinary 8th house from AL, which is what an unqualified "8th from"
+#: means everywhere else in the book. See OI-140.
+THE_EIGHTH_FROM_AL_HERE_IS_UNQUALIFIED = (
+    "§24.3.1 says \"the 8th from AL in D-10\" with no reference to Table 32, "
+    "unlike §23.3, which Example 92 sent to Table 32 explicitly. Taken as the "
+    "ordinary 8th."
+)
+
+#: §24.3.1's fourth rule, and the only one with a number in it.
+SAV_RULE = (
+    "Samudaaya Ashtakavarga (SAV) plays an important role in deciding the "
+    "results in a dasa. If a rasi has too many or too few rekhas in SAV of a "
+    "particular divisional chart, then its dasa may bring favorable or "
+    "unfavorable results, respectively, relating to the significations of that "
+    "house in that divisional chart."
+)
+
+#: "Usually dasas of rasis with 30 or more rekhas in D-10 SAV bring the best
+#: phases in one's career and dasas of rasis with 30 or more rekhas in D-24 SAV
+#: bring the best periods for learning."
+SAV_STRONG_REKHAS = 30
+
+SAV_THRESHOLD_READINGS: tuple[dict[str, str | int], ...] = (
+    {"varga": "D10", "rekhas": SAV_STRONG_REKHAS,
+     "reading": "the best phases in one's career", "hedge": "usually"},
+    {"varga": "D24", "rekhas": SAV_STRONG_REKHAS,
+     "reading": "the best periods for learning", "hedge": "usually"},
+)
+
+#: The section's closing instruction, which is why the readings above are held
+#: per-varga rather than folded into one.
+KEEP_SAV_OF_VARIOUS_VARGAS = (
+    "One should keep SAV of various divisional charts with one when "
+    "interpreting Kalachakra dasa."
+)
+
+
+# --------------------------------------------------------------------------
+# §24.3.2 Deha and Jeeva rasis, as the dasas give them
+# --------------------------------------------------------------------------
+
+#: §24.3.2's correction to Tables 44 to 47, and the reason footnote 64's
+#: nine-rasi set matters: its two ends *are* deha and jeeva.
+TABLE_DEHA_AND_JEEVA_ASSUME_BIRTH_AT_THE_PADA_START = (
+    "In Table 44-Table 47, we listed the deha and jeeva rasis of different "
+    "nakshatra padas. However, these hold for one born at the beginning of the "
+    "nakshatra pada. One can have different deha and jeeva rasis based on the "
+    "elapsed portion in the nakshatra pada."
+)
+
+#: §24.3.2's boxed rule, which is the general case.
+DEHA_AND_JEEVA_FROM_THE_DASAS = (
+    "Deha and jeeva rasis are simply the rasis of the first and the ninth "
+    "dasas in the case of one born in a savya nakshatra. In the case of one "
+    "born in an apasavya nakshatra, deha and jeeva rasis are the rasis of the "
+    "ninth and the first dasas."
+)
+
+
+def deha_and_jeeva_at_birth(nakshatra: int, pada: int, position: int) -> dict:
+    """§24.3.2 — deha and jeeva from the dasas actually run, not from the table.
+
+    :param position: the 0-based position within its pada of the dasa running
+        at birth, as :func:`first_dasa` reports it.
+
+    At ``position`` 0 this reduces to :func:`deha_and_jeeva` on the pada's own
+    nine, which is what Tables 44 to 47 print; anywhere else it does not.
+    """
+    nine = nine_from_birth(nakshatra, pada, position)["dasas"]
+    group = group_of(nakshatra)
+    first, ninth = nine[0]["sign"], nine[-1]["sign"]
+    deha, jeeva = (first, ninth) if group == "savya" else (ninth, first)
+    return {
+        "group": group,
+        "deha": deha, "deha_rasi": str(RASI_NAMES[deha]),
+        "jeeva": jeeva, "jeeva_rasi": str(RASI_NAMES[jeeva]),
+        "first_dasa": first, "ninth_dasa": ninth,
+        "from_the_table": position == 0,
+    }
+
+
+DEHA_SHOWS = "body"
+JEEVA_SHOWS = "the spirit"
+
+#: §24.3.2's transiting benefics, as it names them.
+TRANSIT_BENEFICS: tuple[int, ...] = (
+    int(Graha.JUPITER), int(Graha.MERCURY), int(Graha.VENUS))
+
+#: And its malefics. **Ketu is not among them.** Recorded as printed; the
+#: section names Rahu alone of the two nodes.
+TRANSIT_MALEFICS: tuple[int, ...] = (
+    int(Graha.MARS), int(Graha.SUN), int(Graha.SATURN), int(Graha.RAHU))
+
+KETU_IS_NOT_IN_THE_TRANSIT_MALEFICS = (
+    "§24.3.2 names Mars, Sun, Saturn and Rahu. Ketu is not in the list, and "
+    "is not added to it here."
+)
+
+#: The three readings §24.3.2 gives, keyed by which rasi is transited and by
+#: benefic or malefic. There are four such cells and the section fills three.
+TRANSIT_READINGS: tuple[dict[str, str], ...] = (
+    {"rasi": "jeeva", "grahas": "benefic",
+     "reading": "one may exhibit a positive spirit and be cheerful"},
+    {"rasi": "jeeva", "grahas": "malefic",
+     "reading": "one may be without any enthusiasm"},
+    {"rasi": "deha", "grahas": "malefic",
+     "reading": "one may face accidents or death"},
+)
+
+#: **Gap.** Benefics transiting the deha rasi have no reading. The general
+#: line — "Benefics and malefics transiting in them affect them positively and
+#: negatively (respectively)" — would supply one, but §24.3.2 does not, and
+#: the three it does give are specific in a way that line is not.
+BENEFICS_IN_THE_DEHA_RASI_HAVE_NO_READING = (
+    "§24.3.2 gives readings for benefics in jeeva, malefics in jeeva and "
+    "malefics in deha. Benefics in deha is the fourth cell and is empty."
+)
+
+
+def transit_reading(rasi: str, graha: int) -> dict:
+    """§24.3.2 — what a graha transiting the deha or jeeva rasi shows.
+
+    :param rasi: ``"deha"`` or ``"jeeva"``.
+
+    Returns ``undecided`` for a benefic in the deha rasi, which §24.3.2 leaves
+    empty, and for a graha it classes as neither — Ketu and the Moon.
+    """
+    if rasi not in ("deha", "jeeva"):
+        raise KalachakraError(
+            f"rasi must be 'deha' or 'jeeva', got {rasi!r}")
+    index = validate.in_range("graha", int(graha), 0, 8)
+
+    kind = ("benefic" if index in TRANSIT_BENEFICS else
+            "malefic" if index in TRANSIT_MALEFICS else None)
+    if kind is None:
+        return {
+            "rasi": rasi, "graha": index, "kind": None, "reading": None,
+            "undecided": (
+                f"§24.3.2 lists neither {GRAHA_NAMES[index]!s} among its "
+                f"benefics nor among its malefics"),
+        }
+    for row in TRANSIT_READINGS:
+        if row["rasi"] == rasi and row["grahas"] == kind:
+            return {"rasi": rasi, "graha": index, "kind": kind,
+                    "reading": row["reading"], "undecided": None}
+    return {
+        "rasi": rasi, "graha": index, "kind": kind, "reading": None,
+        "undecided": BENEFICS_IN_THE_DEHA_RASI_HAVE_NO_READING,
+    }
+
+
+# --------------------------------------------------------------------------
+# §24.3.3 Gatis — the special movements
+# --------------------------------------------------------------------------
+
+#: What a gati is, and which rasi carries its name.
+GATI_RULE = (
+    "We see that dasas progress in a regular fashion in Kalachakra dasa. We "
+    "either go as Ar, Ta, Ge etc or as Pi, Aq, Cp etc. However, some "
+    "irregularities can be found. The rasis whose dasas come after an "
+    "irregular leap go by special names and special results are attributed to "
+    "those dasas in classics."
+)
+
+GATI_NAMES: dict[str, str] = {
+    "simhaavalokana": "lion's leap",
+    "markati": "monkey's leap",
+    "mandooki": "frog's leap",
+}
+
+GATI_DEFINITIONS: dict[str, str] = {
+    "simhaavalokana": (
+        "A trinal leap (from Sg to Ar or vice versa; from Pi to Sc or vice "
+        "versa)."),
+    "markati": "Temporary reversal of the direction.",
+    "mandooki": "Leaving one rasi and jumping over it.",
+}
+
+#: Footnote 67, which corrects the translation the section itself gives.
+FOOTNOTE_67 = (
+    "Simhavalokana doesn't really mean a lion. It strictly means a lion's "
+    "view of the jungle from an elevated vantage point."
+)
+
+
+def _half_direction(ring: tuple[int, ...], half: int) -> int:
+    """Which way a wheel's half runs, from its own single-rasi steps."""
+    total = 0
+    for index in range(half * 12, half * 12 + 11):
+        step = (ring[index + 1] - ring[index]) % 12
+        if step == 1:
+            total += 1
+        elif step == 11:
+            total -= 1
+    return 1 if total > 0 else -1
+
+
+def transitions(group: str) -> tuple[dict, ...]:
+    """Every step of a group's wheel, classified as regular or as one of
+    §24.3.3's three gatis.
+
+    The gatis are read off the wheel rather than transcribed: a trinal step is
+    a lion's leap, a two-rasi step a frog's leap, and a single-rasi step
+    against its half's own direction a monkey's leap. The named rasi is the
+    step's destination — "the rasis whose dasas come after an irregular leap".
+    """
+    ring = wheel(group)
+    direction = {half: _half_direction(ring, half) for half in (0, 1)}
+    rows = []
+    for index in range(24):
+        origin, target = ring[index], ring[(index + 1) % 24]
+        step = (target - origin) % 12
+        if step in (4, 8):
+            kind = "simhaavalokana"
+        elif step in (2, 10):
+            kind = "mandooki"
+        elif step in (1, 11) and index % 12 != 11 and (
+                (1 if step == 1 else -1) != direction[index // 12]):
+            kind = "markati"
+        elif step in (1, 11):
+            kind = "regular"
+        else:  # pragma: no cover - no other step occurs on either wheel
+            raise KalachakraError(
+                f"unclassifiable step of {step} rasis in the {group} wheel")
+        rows.append({
+            "position": index, "next_position": (index + 1) % 24,
+            "from": origin, "from_rasi": str(RASI_NAMES[origin]),
+            "to": target, "to_rasi": str(RASI_NAMES[target]),
+            "step": step if step <= 6 else step - 12,
+            "kind": kind,
+        })
+    return tuple(rows)
+
+
+def gati_rasis(group: str) -> dict[str, tuple[int, ...]]:
+    """The rasis §24.3.3 names for each gati, in wheel order.
+
+    §24.3.3 names the markati and mandooki rasis of both groups outright; the
+    simhaavalokana rasis it gives only as leaps, one direction falling on each
+    wheel.
+    """
+    found: dict[str, list[int]] = {name: [] for name in GATI_NAMES}
+    for row in transitions(group):
+        if row["kind"] in found:
+            found[row["kind"]].append(int(row["to"]))
+    return {name: tuple(rasis) for name, rasis in found.items()}
+
+
+#: Table 51, keyed by gati and group.
+TABLE_51: dict[tuple[str, str], str] = {
+    ("simhaavalokana", "savya"): (
+        "Fear of animals, loss of friends, distress to near relations, fall "
+        "in dungeons, danger from poison and weapons, fall from a vehicle, "
+        "fever, destruction of house"),
+    ("simhaavalokana", "apasavya"): "Death of father or elders, loss of position",
+    ("markati", "savya"): (
+        "Loss of wealth, agriculture and animals, death of father or elders"),
+    ("markati", "apasavya"): (
+        "Danger from water, distress to father, loss of position, anger of "
+        "rulers, wandering in the forests"),
+    ("mandooki", "savya"): (
+        "Distress to relatives, elders and father, trouble from poison, "
+        "weapons, enemies, thieves. In Le-to-Ge leap, death of mother or, "
+        "death of native, trouble from rulers and diseases are possible."),
+    ("mandooki", "apasavya"): (
+        "Distress to wife, loss of children, fever, sickness and loss of "
+        "position"),
+}
+
+
+def gati_results(kind: str, group: str) -> str:
+    """One cell of Table 51."""
+    if (kind, group) not in TABLE_51:
+        raise KalachakraError(
+            f"no Table 51 entry for {kind!r} in the {group!r} group")
+    return TABLE_51[(kind, group)]
+
+
+#: **Finding.** §19.4 defined mandooki gati as "the 3rd/11th jump" and pointed
+#: forward to "Parasara's discussion on Kalachakra dasa" for it. This is that
+#: discussion, and the wheel bears the definition out exactly: every savya
+#: frog's leap is an **11th** and every apasavya one a **3rd**. The pointer is
+#: answered; Mandooka dasa itself is still only named, never constructed.
+MANDOOKI_IS_19_4S_THIRD_ELEVENTH_JUMP = (
+    "§19.4's \"the 3rd/11th jump\" is this: the savya wheel's two frog's "
+    "leaps, Vi to Cn and Le to Ge, are both 11ths, and the apasavya wheel's, "
+    "Ge to Le and Cn to Vi, are both 3rds."
+)
+
+#: **Finding.** Table 51's savya frog cell is the only one that separates its
+#: two leaps: the Le-to-Ge jump carries three results the Vi-to-Cn jump does
+#: not. Every other cell reads for the gati as a whole.
+MANDOOKI_SAVYA_SINGLES_OUT_THE_LE_TO_GE_LEAP = (
+    "In Le-to-Ge leap, death of mother or, death of native, trouble from "
+    "rulers and diseases are possible."
+)
+
+#: The scope Parasara's direction rules are given for, which is narrower than
+#: Table 51's results.
+DIRECTIONS_ARE_FOR_TRAVEL_AND_RELOCATION = (
+    "In addition, Parasara listed the directions to prefer and the directions "
+    "avoid, while travelling and relocating, during different leaps."
+)
+
+#: Parasara's seven direction rules, keyed by the transition they apply to.
+#: Two are for *normal* movements rather than leaps, which is why they are
+#: keyed by the step and not by the gati.
+PARASARA_DIRECTIONS: tuple[dict, ...] = (
+    {"from": "Vi", "to": "Cn", "prefer": ("east", "north"), "avoid": (),
+     "says": ("In the leap from Vi to Cn, east will give great results. One "
+              "can take up an auspicious journey in the northern direction.")},
+    {"from": "Le", "to": "Ge", "prefer": ("southwest",), "avoid": ("east",),
+     "says": ("In the leap from Le to Ge, east should be avoided. A journey "
+              "to the southwest will be fruitful.")},
+    {"from": "Cn", "to": "Le", "prefer": ("west",), "avoid": ("south",),
+     "says": ("In the leap from Cn to Le, a move in the southern direction "
+              "results in losses. West is favorable.")},
+    {"from": "Pi", "to": "Sc", "prefer": (), "avoid": ("north",),
+     "says": ("In the leap from Pi to Sc and in the normal movement from Sg "
+              "to Cp, there will be troubles in the northern direction.")},
+    {"from": "Sg", "to": "Cp", "prefer": (), "avoid": ("north",),
+     "says": ("In the leap from Pi to Sc and in the normal movement from Sg "
+              "to Cp, there will be troubles in the northern direction.")},
+    {"from": "Sg", "to": "Ar", "prefer": (), "avoid": ("all",),
+     "says": ("In the leap from Sg to Ar, journeys should be avoided, as they "
+              "may result in sickness, imprisonment or death.")},
+    {"from": "Sg", "to": "Sc", "prefer": ("all",), "avoid": (),
+     "says": ("In the normal movement from Sg to Sc, journeys will bring "
+              "comforts, wealth and sexual pleasures.")},
+    {"from": "Le", "to": "Cn", "prefer": (), "avoid": ("west",),
+     "says": "In the leap from Le to Cn, western direction should be avoided."},
+)
+
+
+def directions_for(origin: int, target: int) -> dict:
+    """Parasara's travel advice for one transition, if he gave any.
+
+    Returns ``undecided`` rather than silence for a transition that occurs on
+    a wheel and has no rule; see
+    :data:`PARASARA_LEAVES_FOUR_APASAVYA_LEAPS_UNADVISED`.
+    """
+    start = validate.in_range("origin", origin, 0, 11)
+    end = validate.in_range("target", target, 0, 11)
+    occurs = tuple(
+        group for group in ("savya", "apasavya")
+        for row in transitions(group)
+        if row["from"] == start and row["to"] == end)
+
+    for row in PARASARA_DIRECTIONS:
+        if (_RASI[row["from"]], _RASI[row["to"]]) == (start, end):
+            return {
+                "from_rasi": str(RASI_NAMES[start]),
+                "to_rasi": str(RASI_NAMES[end]),
+                "occurs_in": occurs,
+                "prefer": row["prefer"], "avoid": row["avoid"],
+                "says": row["says"], "undecided": None,
+            }
+    return {
+        "from_rasi": str(RASI_NAMES[start]),
+        "to_rasi": str(RASI_NAMES[end]),
+        "occurs_in": occurs,
+        "prefer": (), "avoid": (), "says": None,
+        "undecided": (
+            "§24.3.3 gives no direction rule for this transition"
+            if occurs else
+            "this transition occurs on neither wheel"),
+    }
+
+
+#: **Gap.** The seven rules cover five savya transitions and two apasavya
+#: ones, and leave four apasavya leaps unadvised — both frog's leaps, Ge to Le
+#: and Cn to Vi, and both lion's leaps, Sc to Pi and Ar to Sg. The savya wheel
+#: has every one of its five irregular steps covered.
+PARASARA_LEAVES_FOUR_APASAVYA_LEAPS_UNADVISED = (
+    "Of the ten irregular steps on the two wheels, Parasara's direction rules "
+    "reach six. The four unadvised are all apasavya: Ge to Le, Cn to Vi, Sc "
+    "to Pi and Ar to Sg."
+)

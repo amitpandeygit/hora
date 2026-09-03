@@ -380,18 +380,18 @@ SUDASA_IS_SUPERIOR = (
 )
 
 #: The two movements §19.4 names and insists are different. The first is this
-#: chapter's; the second is **not implemented** — the book defines it by a
-#: name and a jump and points to a Kalachakra discussion it has not given, so
-#: building a twelve-sign walk from "3rd/11th" would be inventing one. Part 2's
-#: own map of the nine systems lists Kalachakra dasa among the five still to
-#: come, so the two absences are the same absence.
+#: chapter's. The second's *definition* has since arrived — §24.3.3 gives
+#: Parasara's discussion, and `kalachakra.transitions` classifies every
+#: mandooki step, all of them 3rds or 11ths exactly as §19.4 said. **Mandooka
+#: dasa is still not built**: the book names it, says it is of Rudramsa and
+#: predicts wars and death, and never gives its seed, direction or lengths.
 GATI_NAMES: tuple[dict, ...] = (
     {"name": "kendraadi gati", "movement": "quadrants, panapharas, apoklimas",
      "used_by": "Lagna Kendradi Rasi Dasa", "built": True,
      "defined_in": "§19.2"},
     {"name": "mandooki gati", "movement": "the 3rd/11th jump",
      "used_by": "Mandooka dasa", "built": False,
-     "defined_in": "Parasara's discussion of Kalachakra dasa"},
+     "defined_in": "§24.3.3, Parasara's discussion of Kalachakra dasa"},
 )
 
 #: §19.4's correction of another author, kept verbatim. It is a claim about
