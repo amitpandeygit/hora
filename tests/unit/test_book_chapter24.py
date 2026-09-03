@@ -650,14 +650,209 @@ def test_rule_5_runs_past_the_padas_end_without_being_told_to():
     assert pada                                  # the pada is non-empty
 
 
-def test_example_95s_footnotes_have_not_been_read():
-    """Three footnotes hang off this example and none is on the pages read.
-    Recorded so their silence is not read as agreement.
+def test_footnote_63_is_the_denominator_both_examples_divide_by():
+    """"The complete length of each nakshatra pada is 3\u00b020'." Examples 95
+    and 96 both divide by 200 minutes without saying where it comes from.
     """
-    from hora.dasha.nakshatra.kalachakra import EXAMPLE_95_FOOTNOTES_UNSEEN
+    from hora.core.constants.nakshatra import PADA_SPAN
+    from hora.dasha.nakshatra.kalachakra import FOOTNOTE_63
 
-    assert "63, 64 and 65" in EXAMPLE_95_FOOTNOTES_UNSEEN
-    assert "None has been read" in EXAMPLE_95_FOOTNOTES_UNSEEN
+    assert "3\u00b020'" in FOOTNOTE_63
+    assert PADA_SPAN == pytest.approx(10.0 / 3.0)
+    assert PADA_SPAN * 60 == pytest.approx(200.0)
+
+
+def test_footnote_64_explains_a_count_neither_example_states():
+    """Parasara displays nine dasas starting from the one running at birth, so
+    the number taken from the next pada is the running dasa's own position.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        FOOTNOTE_64,
+        THE_LISTED_COUNT_IS_NINE_LESS_WHAT_THE_PADA_STILL_HOLDS,
+        nine_from_birth,
+    )
+
+    assert "nine rasis starting from the rasi" in FOOTNOTE_64
+    assert "seven" in THE_LISTED_COUNT_IS_NINE_LESS_WHAT_THE_PADA_STILL_HOLDS
+
+    # Example 95: Scorpio is 8th of Rohini's 2nd pada, so Sc and Li remain.
+    got = nine_from_birth(4, 2, 7)
+    assert (got["from_this_pada"], got["from_next_pada"]) == (2, 7)
+    assert [A[row["sign"]] for row in got["dasas"]] == [
+        "Sc", "Li", "Vi", "Le", "Cn", "Ge", "Ta", "Ar", "Sg"]
+
+    # Example 96: Pisces is 9th of Punarvasu's 4th pada, so Pi alone remains.
+    got = nine_from_birth(7, 4, 8)
+    assert (got["from_this_pada"], got["from_next_pada"]) == (1, 8)
+    assert [A[row["sign"]] for row in got["dasas"]] == [
+        "Pi", "Sc", "Li", "Vi", "Cn", "Le", "Ge", "Ta", "Ar"]
+
+
+def test_the_listed_count_is_a_display_convention_not_a_boundary():
+    """Nine is where the *printing* stops, not the walk. A tenth dasa follows
+    and it is simply the next rasi on the wheel.
+    """
+    from hora.dasha.nakshatra.kalachakra import dasa_order, nine_from_birth
+
+    nine = nine_from_birth(7, 4, 8)["dasas"]
+    ten = dasa_order(7, 4, 10, skip=8)
+    assert ten[:9] == nine
+    assert A[ten[9]["sign"]] == "Pi"             # savya-2 pada 1's ninth
+
+
+def test_footnote_65_is_16_2s_controversy_again_naming_kalachakra():
+    """It does not open a new question; it is fresh evidence for OI-115, whose
+    scope is nakshatra dasas and which Kalachakra is now stated to be.
+    """
+    from hora.dasha.nakshatra.kalachakra import FOOTNOTE_65
+
+    assert "prefers savana years with all nakshatra dasas" in FOOTNOTE_65
+    assert "Kalachakra dasa is a nakshatra dasa" in FOOTNOTE_65
+
+
+def test_nine_from_birth_checks_its_position():
+    from hora.core.validate import InputError
+    from hora.dasha.nakshatra.kalachakra import nine_from_birth
+
+    with pytest.raises(InputError, match="between 0 and 8"):
+        nine_from_birth(7, 4, 9)
+    with pytest.raises(InputError, match="between 0 and 8"):
+        nine_from_birth(7, 4, -1)
+
+
+# ---------------------------------------------------------------------------
+# Example 96 — Moon at 3Cn00, Punarvasu 4th pada
+# ---------------------------------------------------------------------------
+
+def test_example_96_finds_punarvasu_4th_pada():
+    """"Moon is in Punarvasu 4th pada, which runs from 0Cn00 to 3Cn20."
+    """
+    from hora.core.constants.nakshatra import NAKSHATRA_SPAN, PADA_SPAN
+    from hora.dasha.nakshatra.kalachakra import pada_of, sub_group_of
+
+    got = pada_of(3.0 + 90.0)
+    assert got["nakshatra"] == 7                 # Punarvasu
+    assert got["group"] == "savya"
+    assert got["pada"] == 4
+    assert sub_group_of(7) == 1                  # Table 44
+
+    start = 6 * NAKSHATRA_SPAN + 3 * PADA_SPAN
+    assert start == pytest.approx(90.0)          # 0Cn00
+    assert start + PADA_SPAN == pytest.approx(93.0 + 1.0 / 3.0)   # 3Cn20
+
+
+def test_example_96_reproduces_table_50():
+    """"From Table 44, we find that the 9 rasis associated with this nakshatra
+    pada are: Cn, Le, Vi, Li, Sc, Sg, Cp, Aq, Pi."
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_years,
+        pada_sequence,
+        paramayush,
+    )
+
+    nine = pada_sequence("savya", 1, 4)
+    assert [A[rasi] for rasi in nine] == [
+        "Cn", "Le", "Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi"]
+
+    years = [dasa_years(rasi) for rasi in nine]
+    assert years == [21, 5, 9, 16, 7, 10, 4, 4, 10]
+
+    cumulative, running = [], 0
+    for span in years:
+        running += span
+        cumulative.append(running)
+    assert cumulative == [21, 26, 35, 51, 58, 68, 72, 76, 86]
+    assert paramayush(nine) == 86
+
+
+def test_example_96_pisces_runs_at_birth_with_8_point_6_years_left():
+    """"The fraction of the pada traversed by Moon is (3\u00b00')/(3\u00b020')
+    = 180'/200' = 0.9. ... 0.9 x 86 = 77.4 years. ... So Pi dasa was running at
+    birth and 10 - 1.4 = 8.6 years of Pi dasa were remaining at birth."
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    moon = pada_of(93.0)
+    assert moon["elapsed_fraction"] == pytest.approx(180.0 / 200.0)
+
+    got = first_dasa(pada_sequence("savya", 1, 4), moon["elapsed_fraction"])
+    assert got["consumed_years"] == pytest.approx(77.4)
+    assert got["rasi"] == "Pisces"
+    assert got["position"] == 8                  # the last of the nine
+    assert got["years"] == 10
+    assert got["elapsed_years"] == pytest.approx(1.4)
+    assert got["balance_years"] == pytest.approx(8.6)
+
+
+def test_example_96s_months_and_days_do_not_separate_the_year_lengths():
+    """"By adding 8 years 7 months 6 days to the birthdate, we get the date on
+    which Pi dasa ends." The figure comes out the same under savana and under
+    365.25 days, so it is no evidence either way for OI-115.
+    """
+    from hora.core.const import SAVANA_YEAR_DAYS
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_96S_MONTHS_AND_DAYS_DECIDE_NOTHING,
+    )
+    from hora.dasha.rasi.sudasa import years_to_dasa_ymdh
+
+    assert years_to_dasa_ymdh(8.6)[:3] == (8, 7, 6)
+    assert "360-day year" in EXAMPLE_96S_MONTHS_AND_DAYS_DECIDE_NOTHING
+
+    for year_days in (SAVANA_YEAR_DAYS, 365.25):
+        days = 0.6 * year_days
+        month = year_days / 12.0
+        assert int(days // month) == 7
+        assert round(days - 7 * month) == 6
+
+
+def test_example_96_crosses_into_savya_2_by_walking_the_wheel():
+    """"With Pi dasa, we finish the nine rasis associated with the 4th pada of
+    Punarvasu (Savya-1). So we go to the 1st pada of Savya-2 nakshatras (Table
+    45). The next 8 dasas will be Sc, Li, Vi, Cn, Le, Ge, Ta, Ar."
+
+    Rule (4)'s hardest case, and the walk needs no help with it: the eight sit
+    at wheel positions 12 to 19, which is exactly where Savya-2's first pada
+    begins.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_order,
+        pada_sequence,
+        wheel_position,
+    )
+
+    got = dasa_order(7, 4, 8, skip=9)
+    assert [A[row["sign"]] for row in got] == [
+        "Sc", "Li", "Vi", "Cn", "Le", "Ge", "Ta", "Ar"]
+    assert [row["years"] for row in got] == [7, 16, 9, 21, 5, 9, 16, 7]
+
+    assert [row["position"] for row in got] == list(range(12, 20))
+    assert wheel_position(8, 1) == 12             # Pushyami, Savya-2
+    assert [A[rasi] for rasi in pada_sequence("savya", 2, 1)][:8] == [
+        A[row["sign"]] for row in got]
+
+
+def test_the_four_padas_of_a_nakshatra_land_on_the_other_sub_group():
+    """Thirty-six wheel steps is a wheel and a half, so a nakshatra's four
+    padas end exactly half a wheel on -- which is the other sub-group's offset.
+    Example 96 is the case in point; this asserts it for every savya nakshatra
+    a table names.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        PRINTED_SUB_GROUPS,
+        SUB_GROUP_OFFSET,
+        wheel_position,
+    )
+
+    for group in ("savya", "apasavya"):
+        for sub in (1, 2):
+            for nakshatra in PRINTED_SUB_GROUPS[f"{group}-{sub}"]:
+                after = (wheel_position(nakshatra, 4) + 9) % 24
+                assert after == SUB_GROUP_OFFSET[2 if sub == 1 else 1]
 
 
 def test_dasa_order_and_antardasas_check_their_inputs():

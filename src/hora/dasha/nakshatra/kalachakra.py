@@ -398,12 +398,47 @@ RULE_4_IS_JUST_WALKING_THE_WHEEL = (
     "going through them."
 )
 
-#: Footnotes 63, 64 and 65 hang off Example 95 and are not on the pages read
-#: so far. Nothing here depends on them; recorded so their absence is not
-#: mistaken for their having said nothing.
-EXAMPLE_95_FOOTNOTES_UNSEEN = (
-    "Example 95 carries footnotes 63, 64 and 65 -- on the pada fraction, on "
-    "the seven dasas it lists, and on their lengths. None has been read."
+#: Footnote 63, which supplies the denominator both examples divide by.
+FOOTNOTE_63 = "The complete length of each nakshatra pada is 3\u00b020'."
+
+#: Footnote 64 — why the examples list the number of dasas they do.
+FOOTNOTE_64 = (
+    "Parasara suggested taking the dasas of nine rasis starting from the rasi "
+    "whose dasa is running at birth. Sc dasa was running at birth and Sc and "
+    "Li dasas belong to the set of nine rasis associated with Rohini 2nd "
+    "pada. We already have 2 rasis. So we just need 7 rasis from the next "
+    "pada."
+)
+
+#: Footnote 65, which is §16.2's controversy again and settles it the same
+#: way, this time naming Kalachakra. Evidence for OI-115, not a new question.
+FOOTNOTE_65 = (
+    "We again have the issue of solar years vs savana years. This author "
+    "prefers savana years with all nakshatra dasas. Kalachakra dasa is a "
+    "nakshatra dasa."
+)
+
+#: **Finding.** Footnote 64 gives the rule behind a count neither example
+#: states: a worked Kalachakra dasa is displayed as **nine** rasis beginning
+#: with the one running at birth, so the number taken from the following pada
+#: is exactly the dasa's own 0-based position in its pada. Example 95's Sc sits
+#: 8th, leaving Sc and Li, and lists 7; Example 96's Pi sits 9th, leaving Pi
+#: alone, and lists 8. It is a display convention, not a boundary: the wheel
+#: runs on past nine either way.
+THE_LISTED_COUNT_IS_NINE_LESS_WHAT_THE_PADA_STILL_HOLDS = (
+    "The dasas an example lists after the one running at birth number nine "
+    "less the rasis that pada still holds, counting the running dasa itself. "
+    "Position 7 of 0-8 lists seven, position 8 lists eight."
+)
+
+#: **Finding.** Example 96 converts a balance of 8.6 years to "8 years 7
+#: months 6 days", and that conversion does **not** separate OI-115's year
+#: lengths. Savana gives 216 days exactly; 365.25 gives 219.15, which is 7
+#: months 6.09 days at that year's own twelfth. Both print the same. Only
+#: footnote 65's plain statement decides it.
+EXAMPLE_96S_MONTHS_AND_DAYS_DECIDE_NOTHING = (
+    "8.6 years prints as 8 years 7 months 6 days under a 360-day year and "
+    "under a 365.25-day year alike, months being a twelfth of whichever year."
 )
 
 
@@ -441,6 +476,25 @@ def dasa_order(nakshatra: int, pada: int, count: int,
         "rasi": str(RASI_NAMES[ring[(start + step) % 24]]),
         "years": dasa_years(ring[(start + step) % 24]),
     } for step in range(count))
+
+
+def nine_from_birth(nakshatra: int, pada: int, position: int) -> dict:
+    """Footnote 64 — the nine dasas an example displays, from birth onwards.
+
+    :param position: the 0-based position within its pada of the dasa running
+        at birth, as :func:`first_dasa` reports it.
+
+    "Parasara suggested taking the dasas of nine rasis starting from the rasi
+    whose dasa is running at birth." The split between the two padas is
+    reported because both examples state it; see
+    :data:`THE_LISTED_COUNT_IS_NINE_LESS_WHAT_THE_PADA_STILL_HOLDS`.
+    """
+    index = validate.in_range("position", position, 0, 8)
+    return {
+        "dasas": dasa_order(nakshatra, pada, 9, skip=index),
+        "from_this_pada": 9 - index,
+        "from_next_pada": index,
+    }
 
 
 def antardasas(nakshatra: int, wheel_index: int,

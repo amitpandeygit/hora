@@ -1083,21 +1083,21 @@ saham formula from another source.
 **NEEDS YOU. Every Vimsottari date in chapter 16 turns on it.** §16.2's
 controversy box settles its own question: "Savana years will be used with
 nakshatra dasas in all the calculations given in this book." Savana is 360 days;
-our default is sidereal, 365.2564.
+our default is sidereal, 365.2564. §24.2's footnote 65 says it again and names
+a system: "This author prefers savana years with all nakshatra dasas.
+Kalachakra dasa is a nakshatra dasa."
 
 | source | rank | says |
 |---|---|---|
 | JHora | 1 | sidereal — tier-2; PyJHora defaults to `TRUE_SIDEREAL_YEAR`, balance matched at 17y 11m 18d (parity 3) |
 | The book | 2 | savana, for every nakshatra dasa it computes |
 
-Precedence keeps JHora's default, but Example 53 settles what the book does,
-against dated events rather than its own units: Rahu dasa starts Nov 1993 under
-savana, Feb 1994 under sidereal, and Saturn runs the pratyantardasa at both
-childbirths only under savana — sidereal gives Jupiter, and the example's
-conclusion would not follow. Nothing changes until you say. **Scoped to
-nakshatra dasas**: §18.6 measures *rasi* dasa time by the Sun's arc, so a
-rasi-dasa year is a solar revolution and not 360 days. Whatever you decide here
-must not be carried across to `sub_period_arc`.
+Precedence keeps JHora's default, but Example 53 settles what the book does
+against dated events: Rahu dasa starts Nov 1993 under savana, Feb 1994 under
+sidereal, and Saturn runs the pratyantardasa at both childbirths only under
+savana. Nothing changes until you say. **Scoped to nakshatra dasas**: §18.6
+measures *rasi* dasa time by the Sun's arc, so a rasi-dasa year is a solar
+revolution, not 360 days — do not carry a decision here into `sub_period_arc`.
 
 **Closes when:** a JHora run settles parity 3, or you prefer the book's examples.
 
