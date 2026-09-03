@@ -479,7 +479,10 @@ def test_the_trines_from_al_are_unconditional_and_the_3rd_and_8th_are_not():
 
     got = death_rasis(R["Cancer"])
     assert [row["house_from_al"] for row in got] == [1, 5, 9, 3, 8]
-    assert [ABBR[row["sign"]] for row in got] == ["Cn", "Sc", "Pi", "Vi", "Aq"]
+    # The 8th is Table 32's, per Example 92 — Sagittarius, not Aquarius.
+    assert [ABBR[row["sign"]] for row in got] == ["Cn", "Sc", "Pi", "Vi", "Sg"]
+    assert got[-1]["by"] == "Table 32"
+    assert got[-1]["ordinary_eighth"] == "Aquarius"
     for row in got[:3]:
         assert row["applies"] is True
     for row in got[3:]:
@@ -946,3 +949,195 @@ def test_criterion_1_is_never_reached_in_either_example():
                                            got["can_kill"]]
 
     assert len(SELECTION_CRITERIA) == 2
+
+
+# --------------------------------------------------------------------------
+# Examples 91 and 92 — the 7th wins a seed, and Table 32 reaches the 8th.
+# --------------------------------------------------------------------------
+
+def test_example_91_is_the_first_seed_the_7th_house_wins():
+    """"The 7th house Cp is stronger and dasas start from Cp."
+
+    Every other worked seed in chapters 22 and 23 goes to lagna or to the 2nd
+    — this is the only one that goes to the 7th. It also confirms Example 86's
+    lagna: the 7th being Capricorn makes lagna Cancer, which is what Example
+    86's "8th houses from Cn and Cp" needs.
+    """
+    from hora.dasha.rasi.niryaana_shoola import EXAMPLE_86_AWAITS_CHART_61
+    from hora.dasha.rasi.shoola import progression, seed
+
+    got = seed(R["Cancer"], stronger_house=7)
+    assert got.sign == R["Capricorn"]
+    assert "the 7th" in got.why
+
+    run = progression(R["Capricorn"])
+    assert [ABBR[s] for s in run.signs[:4]] == ["Cp", "Aq", "Pi", "Ar"]
+    assert any("7th house Capricorn is stronger" in item
+               for item in EXAMPLE_86_AWAITS_CHART_61)
+
+
+def test_example_91s_eighth_dasa_is_leo_and_holds_her_67th_year():
+    """"First 7 dasas are over after 63 years... So the 8th dasa of Le killed
+    the native", who "died in her 67th year".
+
+    Seven nines are sixty-three on any chart, and the 8th from Capricorn is
+    Leo. Indira Gandhi was 66 at her death, so her 67th year — the same
+    year-in-progress count Example 90 used and Example 89 did not.
+    """
+    from hora.dasha.rasi.shoola import progression
+
+    run = progression(R["Capricorn"])
+    assert sum(run.years[:7]) == 63
+    assert ABBR[run.signs[7]] == "Le"
+    assert run.starts[7] == 63
+    assert run.starts[7] + run.years[7] == 72
+    assert run.starts[7] <= 66 < run.starts[7] + run.years[7]
+
+
+def test_example_91_adds_a_reason_23_3_never_lists():
+    """"Le is a trine from AL **and it contains the lord of AL**."
+
+    §23.3's rules read the trines from AL and the 3rd and 8th from it. Where
+    AL's own lord sits is a further strengthener the section does not mention,
+    and this is the only place it is used.
+    """
+    from hora.dasha.rasi.shoola import (
+        AL_LORD_IN_THE_RASI_STRENGTHENS_IT,
+        AUTHORS_RULES,
+        DEATH_HOUSES_FROM_AL,
+    )
+
+    assert "contains the lord of AL" in AL_LORD_IN_THE_RASI_STRENGTHENS_IT
+    assert "lord" not in AUTHORS_RULES
+    assert not any("lord" in row["text"] for row in DEATH_HOUSES_FROM_AL)
+
+
+def test_example_92_seeds_from_lagna_and_the_cascade_agrees():
+    """"Lagna is stronger and dasas start from Ar. They go as Ar, Ta, Ge, Cn
+    etc."
+
+    Aries holds one planet and Libra none, so §15.5.2 reaches it on rule 1 —
+    a third agreement for OI-131 in this chapter.
+    """
+    from hora.charts.rasi_strength import stronger
+    from hora.dasha.rasi.shoola import progression
+
+    longitudes, _signs, lagna_sign, _al = _chart(40)
+    assert lagna_sign == R["Aries"]
+
+    verdict = stronger(lagna_sign, (lagna_sign + 6) % 12, longitudes,
+                       purpose="phalita")
+    assert verdict.winner == R["Aries"]
+    assert verdict.decided_by == "1"
+    assert "Aries contains 1 planet; Libra contains 0" in verdict.reason
+
+    run = progression(lagna_sign)
+    assert [ABBR[s] for s in run.signs[:4]] == ["Ar", "Ta", "Ge", "Cn"]
+
+
+def test_example_92s_third_dasa_is_gemini_and_holds_the_death():
+    """"First 2 dasas are over after 18 years. The native died in the 23rd
+    year. From his 18th year, the 3rd dasa was running."
+
+    Gemini runs 18-27 and the native died at 22, towards the end of 1949.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.rasi.shoola import progression
+
+    run = progression(R["Aries"])
+    assert sum(run.years[:2]) == 18
+    assert ABBR[run.signs[2]] == "Ge"
+    assert (run.starts[2], run.starts[2] + run.years[2]) == (18, 27)
+    assert run.starts[2] <= 22 < run.starts[2] + run.years[2]
+    assert "aged 22" in chart(40)["events"]["expired"]
+
+
+def test_example_92_settles_which_eighth_from_al_23_3_means():
+    """"Ge is the 8th house from AL **(see Table 32)** and it contains Rahu."
+
+    §23.3 says only "the 8th from AL". Chart 40's AL is Capricorn: Table 32
+    sends it to Gemini and the ordinary count to Leo — and Gemini is where
+    Rahu sits. Under the ordinary 8th the example has no reason at all, since
+    Gemini is not a trine from Capricorn either.
+    """
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import (
+        THE_EIGHTH_FROM_AL_IS_TABLE_32S,
+        death_rasis,
+    )
+
+    _longitudes, signs, _lagna, al = _chart(40)
+    assert al == R["Capricorn"]
+    assert rudra_eighth(al) == R["Gemini"]
+    assert ordinary_eighth(al) == R["Leo"]
+    assert signs[int(Graha.RAHU)] == R["Gemini"]
+
+    trines = {(al + k) % 12 for k in (0, 4, 8)}
+    assert R["Gemini"] not in trines
+
+    rows = {row["house_from_al"]: row for row in death_rasis(al)}
+    assert rows[8]["rasi"] == "Gemini"
+    assert rows[8]["by"] == "Table 32"
+    assert rows[8]["ordinary_eighth"] == "Leo"
+    assert "(see Table 32)" in THE_EIGHTH_FROM_AL_IS_TABLE_32S
+
+
+def test_the_third_from_al_stays_the_ordinary_count():
+    """Table 32 is titled for the 8th alone and no example reads a 3rd, so
+    the other house of vitality is counted the usual way.
+    """
+    from hora.dasha.rasi.shoola import death_rasis
+
+    rows = {row["house_from_al"]: row for row in death_rasis(R["Capricorn"])}
+    assert rows[3]["sign"] == (R["Capricorn"] + 2) % 12
+    assert "by" not in rows[3]
+
+
+def test_example_92s_gemini_is_reached_only_by_the_8th_rule():
+    """Gemini is not a trine from Capricorn, so §23.3's unconditional rule
+    misses it entirely — the conditional one carries the whole reading, and
+    Rahu is what satisfies it. "Ge is afflicted and it is the house of
+    longevity of material self."
+    """
+    from hora.dasha.rasi.shoola import death_rasis
+
+    _longitudes, signs, lagna_sign, al = _chart(40)
+    rows = {row["sign"]: row for row in death_rasis(al, signs,
+                                                    lagna=lagna_sign)}
+
+    gemini = rows[R["Gemini"]]
+    assert gemini["house_from_al"] == 8
+    assert gemini["group"] == "the houses of vitality from AL"
+    assert gemini["applies"] is True
+    assert "Rahu" in gemini["occupied_by"]
+
+
+def test_example_92s_dasa_survives_the_selection_machinery():
+    """The chart end to end: Example 87 computed short life for this native,
+    the short block is the first four dasas, and Gemini is the third of them
+    — reached by the 8th-from-AL rule rather than by a trine.
+
+    Unlike Example 90's chart, the category here does agree with §14.4 once
+    OI-135's co-lord is settled the way Example 87 settles it.
+    """
+    from hora.charts.book import signs as book_signs
+    from hora.charts.maraka import three_pairs
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import select_dasa
+
+    _longitudes, signs, lagna_sign, al = _chart(40)
+    # Example 87 printed its own three pairs and they need Ketu for Scorpio,
+    # which is OI-135; the default lord gives long life instead.
+    as_printed = three_pairs(lagna_sign, signs, book_signs(40)["HL"],
+                             {R["Scorpio"]: int(Graha.KETU)})
+    assert as_printed["category"] == "short"
+
+    got = select_dasa(al, lagna_sign, "short", signs, lagna=lagna_sign)
+    assert [c["rasi"] for c in got["candidates"]] == [
+        "Aries", "Taurus", "Gemini", "Cancer"]
+    gemini = got["candidates"][2]
+    assert gemini["can_kill"] and gemini["house_from_al"] == 8
+    assert gemini["starts"] == 18
+    assert got["trines_from_al"] == () or "Gemini" not in [
+        c["rasi"] for c in got["trines_from_al"]]

@@ -1270,9 +1270,12 @@ def test_chart_61_has_not_been_supplied_yet():
     with pytest.raises(BookChartError, match="there is no Chart"):
         chart(61)
 
-    assert len(EXAMPLE_86_AWAITS_CHART_61) == 7
+    assert len(EXAMPLE_86_AWAITS_CHART_61) == 9
     assert any("Saturn is in Cancer" in item
                for item in EXAMPLE_86_AWAITS_CHART_61)
+    # Example 91 reads the same chart with chapter 23's dasa, so its claims
+    # wait on the same page.
+    assert any("Example 91" in item for item in EXAMPLE_86_AWAITS_CHART_61)
 
 
 def test_example_86_reveals_a_table_32_exception_14_3_never_states():

@@ -590,6 +590,11 @@ EXAMPLE_86_AWAITS_CHART_61: tuple[str, ...] = (
      "§15.5.2 rule 1 and decides the seed"),
     "that Mars is in Leo, which the antardasas start from",
     "that Ketu is in Capricorn in navamsa",
+    # Example 91 reads the same chart with chapter 23's Shoola dasa.
+    ("that the 7th house Capricorn is stronger than lagna, which Example 91 "
+     "needs and which no other example in either chapter gives to the 7th"),
+    ("that AL is Leo, Sagittarius or Aries, so that Leo is a trine from it, "
+     "and that Leo holds AL's lord"),
 )
 
 #: **Book defect.** Example 86 prints two rasi sequences and Libra is missing

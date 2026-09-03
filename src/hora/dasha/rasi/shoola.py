@@ -391,6 +391,27 @@ LESSON = (
     "house from AL or the 8th house from AL."
 )
 
+#: **Finding.** §23.3 says "the 8th from AL" with no qualification, and
+#: Example 92 says which 8th it means: "Ge is the 8th house from AL (see Table
+#: 32)". Chart 40's AL is Capricorn, whose Table 32 8th is Gemini and whose
+#: ordinary 8th is Leo — and Gemini is where Rahu sits and is not a trine from
+#: AL, so under the ordinary 8th the example's only reason disappears.
+#:
+#: The 3rd from AL stays the ordinary one: Table 32 is titled for the 8th
+#: alone, and no example reads a 3rd.
+THE_EIGHTH_FROM_AL_IS_TABLE_32S = (
+    "One can see that Ge is the 8th house from AL (see Table 32) and it "
+    "contains Rahu."
+)
+
+#: **Finding.** Example 91 gives a reason §23.3 never lists — a killing rasi
+#: that "contains the lord of AL". §23.3's rules read the trines from AL and
+#: the 3rd and 8th from it; where AL's *lord* sits is a further strengthener
+#: the section does not mention.
+AL_LORD_IN_THE_RASI_STRENGTHENS_IT = (
+    "One can see that Le is a trine from AL and it contains the lord of AL."
+)
+
 #: The houses §23.3 reads from AL, and how each is qualified.
 DEATH_HOUSES_FROM_AL: tuple[dict, ...] = (
     {"houses": (1, 5, 9), "name": "the trines from AL", "needs": None,
@@ -469,6 +490,9 @@ def death_rasis(arudha_lagna: int, signs: dict[int, int] | None = None,
     The trines are unconditional. The 3rd and 8th need "malefics or marakas
     occupy or aspect" them, and §23.3 does not say which aspect — both are
     reported, and the row stays undecided when the caller gave no chart.
+
+    The **8th** is Table 32's, which Example 92 states outright; the ordinary
+    8th is reported beside it. See :data:`THE_EIGHTH_FROM_AL_IS_TABLE_32S`.
     """
     from hora.charts.aspects import graha_aspects_sign, rasi_drishti
     from hora.charts.maraka import MALEFICS, marakas
@@ -481,15 +505,22 @@ def death_rasis(arudha_lagna: int, signs: dict[int, int] | None = None,
         found = marakas(validate.in_range("lagna", lagna, 0, 11), signs)
         maraka_grahas = {m["graha"] for m in found["maraka_grahas"]}
 
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+
     out: list[dict] = []
     for row in DEATH_HOUSES_FROM_AL:
         for house in row["houses"]:
-            rasi = (al + house - 1) % 12
+            # Example 92 reads the 8th from AL through Table 32, and says so.
+            rasi = rudra_eighth(al) if house == 8 else (al + house - 1) % 12
             entry = {
                 "house_from_al": house, "sign": rasi,
                 "rasi": str(RASI_NAMES[rasi]), "group": row["name"],
                 "needs": row["needs"],
             }
+            if house == 8:
+                entry["by"] = "Table 32"
+                entry["ordinary_eighth"] = str(
+                    RASI_NAMES[ordinary_eighth(al)])
             if row["needs"] is None:
                 entry["applies"] = True
             elif signs is None:
