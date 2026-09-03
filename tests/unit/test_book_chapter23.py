@@ -1754,3 +1754,232 @@ def test_23_5_points_back_to_8_3_for_the_karakas():
     assert by_relative["father"]["rule"] == "stronger"
     assert by_relative["mother"]["rule"] == "stronger"
     assert len(by_relative["father"]["grahas"]) == 2
+
+
+# --------------------------------------------------------------------------
+# Example 93 — the only worked Pitri Shoola dasa.
+# --------------------------------------------------------------------------
+
+def test_chart_44_recomputes_and_is_the_narrowest_mean_node_margin():
+    """Every body inside one arcminute. Rahu is only 9' out under `true` here
+    — still mean by an order of magnitude, but the narrowest separating margin
+    in the register, the nodes having been near-coincident in May 1971.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(44)
+    place = Place(name="Chart 44", **record["place"])
+    printed = longitudes(44)
+
+    computed = compute_chart(from_local(**record["birth_data"]), place,
+                             Settings(node_type=NodeType.MEAN))
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+
+    true_node = compute_chart(from_local(**record["birth_data"]), place,
+                              Settings(node_type=NodeType.TRUE))
+    error = abs(true_node.positions[int(Graha.RAHU)].longitude
+                - printed["Rahu"]) * 60
+    assert 5.0 < error < 15.0
+
+
+def test_three_charts_now_share_the_same_birthplace():
+    """Charts 40, 41 and 44 are all 81 E 12, 16 N 15 — worth pinning, since a
+    transposed coordinate would break three examples at once.
+    """
+    from hora.charts.book import chart
+
+    places = {n: chart(n)["place"] for n in (40, 41, 44)}
+    assert places[40] == places[41] == places[44]
+
+
+def test_example_93_settles_the_father_karaka_with_8_3s_pair():
+    """"Exalted Sun joins Mercury and Jupiter aspects him. So Sun is stronger
+    than Venus. He becomes sthira pitri karaka."
+
+    All three grounds check out — the Sun is exalted in Aries, Mercury is with
+    him, and Jupiter's Scorpio rasi-aspects Aries. What the example does not
+    say is that **Venus is exalted too**, in Pisces; the Sun wins on the other
+    two, not on dignity.
+    """
+    from hora.charts.book import graha_longitudes, graha_signs
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import paired_sthira_karaka
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(44).items()}
+    signs = {int(g): sign for g, sign in graha_signs(44).items()}
+    got = paired_sthira_karaka("father", longitudes, signs)
+
+    sun, venus = got["candidates"]
+    assert sun["graha_name"] == "Sun" and venus["graha_name"] == "Venus"
+    assert sun["dignity"] == venus["dignity"] == "exalted"
+    assert sun["joins"] == ("Mercury",)
+    assert sun["rasi_aspected_by"] == ("Jupiter",)
+    assert venus["joins"] == () and venus["rasi_aspected_by"] == ()
+    assert got["undecided"].startswith("which of Sun and Venus")
+
+    settled = paired_sthira_karaka("father", longitudes, signs,
+                                   stronger=int(Graha.SUN))
+    assert settled["karaka"]["rasi"] == "Aries"
+    assert settled["undecided"] is None
+
+
+def test_a_single_karaka_relative_is_refused_by_the_pair_helper():
+    """§8.3 gives a pair only for father and mother; the rest are fixed."""
+    from hora.charts.book import graha_longitudes, graha_signs
+    from hora.dasha.rasi.shoola import ShoolaError, paired_sthira_karaka
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(44).items()}
+    signs = {int(g): sign for g, sign in graha_signs(44).items()}
+    with pytest.raises(ShoolaError, match="single sthira karaka"):
+        paired_sthira_karaka("wife", longitudes, signs)
+
+
+def test_example_93_names_a9_as_the_corresponding_arudha_pada():
+    """"Pitri pada (A9, arudha pada of 9th house) is in Sg."
+
+    That settles what "the corresponding arudha pada" means for a variant
+    whose pair holds two houses: the **9th**, which shows the father, not the
+    3rd that Pitri Shoola dasa's pair also contains.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+    from hora.charts.colord import stronger
+    from hora.dasha.rasi.shoola import PITRI_PADA_IS_A9, RELATIVE_DASAS
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(44).items()}
+    signs = {int(g): sign for g, sign in graha_signs(44).items()}
+    lagna_sign = lagna(44)
+    overrides = {r: stronger(r, longitudes, purpose="arudha").winner
+                 for r in (7, 10)}
+
+    assert lagna_sign == R["Gemini"]
+    assert arudha_pada(9, lagna_sign, signs, overrides).sign == (
+        R["Sagittarius"])
+    assert "A9, arudha pada of 9th house" in PITRI_PADA_IS_A9
+
+    pitri = next(r for r in RELATIVE_DASAS if r["name"] == "Pitri Shoola dasa")
+    assert pitri["house"] == 9
+    assert 3 in pitri["pair"]              # the other half, and not the pada
+
+
+def test_example_93s_two_references_give_the_same_three_rasis():
+    """"Death can occur in trines from him, i.e. Ar, Le and Sg. ... Trines
+    from it are the same."
+
+    The Sun is in Aries and A9 in Sagittarius, which are trines of each other,
+    so both halves of §23.5's reading land on one set.
+    """
+    from hora.charts.book import graha_signs
+    from hora.core.const import Graha
+    from hora.dasha.rasi.shoola import relative_death_rasis
+
+    signs = {int(g): sign for g, sign in graha_signs(44).items()}
+    assert signs[int(Graha.SUN)] == R["Aries"]
+
+    got = relative_death_rasis(R["Aries"], R["Sagittarius"])
+    assert set(got["names"]["from_sthira_karaka"]) == {
+        "Aries", "Leo", "Sagittarius"}
+    assert set(got["names"]["from_arudha_pada"]) == set(
+        got["names"]["from_sthira_karaka"])
+    assert len(got["all"]) == 3
+    assert got["undecided"] is None
+
+
+def test_example_93s_dates_come_out_of_an_aquarius_seed():
+    """"Dasa of Aq runs during 1971-1980. Dasa of Pi runs during 1980-1989.
+    Dasa of Ar runs during 1989-1998."
+
+    Born May 1971, nine years each, always zodiacal — and the father died in
+    the second half of 1995, inside Aries.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.rasi.shoola import progression, relative_dasa
+
+    got = relative_dasa("Pitri Shoola dasa", R["Gemini"], stronger_house=9)
+    assert got["seed_rasi"] == "Aquarius"
+
+    run = progression(R["Aquarius"])
+    assert [ABBR[s] for s in run.signs[:3]] == ["Aq", "Pi", "Ar"]
+    born = chart(44)["birth_data"]["year"]
+    assert [(born + run.starts[i], born + run.starts[i] + 9)
+            for i in range(3)] == [(1971, 1980), (1980, 1989), (1989, 1998)]
+    assert run.starts[2] <= 1995 - born < run.starts[2] + 9
+
+
+def test_the_cascade_seeds_the_other_house_and_the_reading_collapses():
+    """D-66. Example 93 reaches §15.5.2 **rule 4** — "its lord Rahu is in a
+    rasi with a different oddity" — but **rule 2 comes first and decides**:
+    Mercury reaches both from Aries, and Leo's lord the Sun reaches Leo while
+    Aquarius' lord Rahu, in adjacent Capricorn, does not reach Aquarius.
+
+    Seeding from Leo puts the father's death in **Libra**, which is a trine
+    from neither the karaka nor A9 — so the example would have nothing to say.
+    """
+    from hora.charts.book import graha_longitudes
+    from hora.charts.rasi_strength import stronger
+    from hora.dasha.rasi.shoola import progression
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(44).items()}
+    verdict = stronger(R["Aquarius"], R["Leo"], longitudes, purpose="phalita")
+
+    assert verdict.winner == R["Leo"]
+    assert verdict.decided_by == "2"
+    assert "Aquarius count 1" in verdict.reason
+    assert "Leo count 2" in verdict.reason
+
+    # The cascade stops at rule 2, so rule 4 is never evaluated at all.
+    assert [r.rule for r in verdict.rules] == ["1", "2"]
+
+    counterfactual = progression(R["Leo"])
+    at_24 = [ABBR[s] for s, start in zip(counterfactual.signs,
+                                         counterfactual.starts, strict=True)
+             if start <= 24 < start + 9]
+    assert at_24 == ["Li"]
+    assert R["Libra"] not in {(R["Aries"] + k) % 12 for k in (0, 4, 8)}
+
+
+def test_rule_4_would_favour_aquarius_under_either_co_lord():
+    """The book's own reason holds whichever way OI-135 goes: Saturn is in
+    Taurus and Rahu in Capricorn, both even against an odd Aquarius, while
+    Leo's lord the Sun is in odd Aries. So D-66 is about the cascade's order,
+    not about which lord Aquarius has.
+    """
+    from hora.charts.book import graha_longitudes, graha_signs
+    from hora.charts.colord import stronger as stronger_co_lord
+    from hora.core.const import RASI_IS_ODD, Graha
+
+    longitudes = {int(g): lon for g, lon in graha_longitudes(44).items()}
+    signs = {int(g): sign for g, sign in graha_signs(44).items()}
+
+    assert stronger_co_lord(R["Aquarius"], longitudes,
+                            purpose="arudha").winner == int(Graha.RAHU)
+    assert RASI_IS_ODD[R["Aquarius"]]
+    for lord in (int(Graha.SATURN), int(Graha.RAHU)):
+        assert not RASI_IS_ODD[signs[lord]]
+    assert RASI_IS_ODD[signs[int(Graha.SUN)]]          # Leo's lord, same odd
+
+
+def test_23_5_leaves_a_relatives_three_trines_unnarrowed():
+    """§23.3 cuts the native's answer to four dasas by longevity category;
+    §23.5 gives a relative no equivalent. Example 93's three trines run at
+    18-27, 54-63 and 90-99, and it simply reports which held the death.
+    """
+    from hora.dasha.rasi.shoola import (
+        NO_CRITERION_NARROWS_A_RELATIVES_TRINES,
+        progression,
+        relative_death_rasis,
+    )
+
+    run = progression(R["Aquarius"])
+    trines = relative_death_rasis(R["Aries"], R["Sagittarius"])["all"]
+    spans = {ABBR[run.signs[i]]: (run.starts[i], run.starts[i] + 9)
+             for i in range(12) if run.signs[i] in trines}
+    assert spans == {"Ar": (18, 27), "Le": (54, 63), "Sg": (90, 99)}
+    assert "names no way to choose" in NO_CRITERION_NARROWS_A_RELATIVES_TRINES

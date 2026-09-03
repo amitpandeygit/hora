@@ -2081,3 +2081,48 @@ the disagreement visible.
 
 **Closes when:** you decide, or a later section revises the three pairs.
 
+---
+
+## D-66 · Example 93's seed uses §15.5.2 rule 4 while rule 2 is decisive
+
+**Status: NEEDS YOU — it decides the whole run, and it is the second seed of
+its kind.**
+
+Pitri Shoola dasa on Chart 44 starts from the stronger of the 9th and 3rd,
+Aquarius and Leo. Example 93 gives its grounds:
+
+> "Among Aq and Le, **Aq is stronger as its lord Rahu is in a rasi with a
+> different oddity**."
+
+That is §15.5.2 **rule 4**, and rule 4 does favour Aquarius — under either
+co-lord, since Saturn sits in Taurus and Rahu in Capricorn, both even against
+an odd Aquarius. But **rule 2 comes first and is not a tie**:
+
+| rule | Aquarius | Leo |
+|---|---|---|
+| 1 · occupants | 0 | 0 |
+| 2 · Jupiter, Mercury, the lord | Mercury only — **1** | Mercury and lord Sun — **2** |
+| 4 · lord's oddity | Rahu in Capricorn, different | Sun in Aries, same |
+
+So the cascade decides for **Leo** at rule 2 and never reaches rule 4.
+
+The run then differs from the first dasa onward. From Aquarius: Aq 1971-1980,
+Pi 1980-1989, **Ar 1989-1998** — and the father died in the second half of
+1995, in an Aries that holds the sthira karaka and is a trine from A9. From
+Leo: Le 1971-1980, Vi 1980-1989, **Li 1989-1998** — and Libra is a trine from
+neither the karaka nor A9, so the example would have no reading at all.
+
+This is the same shape as D-62, one step earlier in the cascade: there the
+book's answer contradicted rule 6 after rules 1 to 5 tied; here it reaches
+rule 4 past a rule 2 that had already decided. Both seeds are for **ayur**
+dasas, whose §15.5.2 adaptation OI-131 records as uncomputable — and rule 2 is
+exactly the rule that adaptation changes.
+
+**What we do:** nothing automatic. `relative_dasa` takes the stronger house as
+an argument, as `seed` does. Recorded so the pattern is visible: of chapter 22
+and 23's seven worked seeds, five agree with the cascade and two do not, and
+both exceptions turn on rule 2 or later.
+
+**Closes when:** you decide, or §15.5.2's ayur rule 2 is stated in a form that
+can be computed.
+

@@ -294,6 +294,13 @@
         "number": 43,
         "recomputable": true,
         "title": "Shoola dasa exercise \u2014 Exercise 32"
+      },
+      {
+        "birth": "May 9, 1971, 9:22 am (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 23, Example 93",
+        "number": 44,
+        "recomputable": true,
+        "title": "Pitri Shoola Example \u2014 Example 93"
       }
     ],
     "not_supplied": [
@@ -336,7 +343,8 @@
       40,
       41,
       42,
-      43
+      43,
+      44
     ]
   },
   "status": 200

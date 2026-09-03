@@ -430,6 +430,40 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    44: {
+        "title": "Pitri Shoola Example — Example 93",
+        "birth": "May 9, 1971, 9:22 am (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1971, "month": 5, "day": 9, "hour": 9, "minute": 22,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "18 Ge 07", "Sun": "24 Ar 26", "Moon": "9 Li 29",
+            "Mars": "9 Cp 14", "Merc": "0 Ar 58", "Jup": "9 Sc 53",
+            "Ven": "25 Pi 13", "Sat": "1 Ta 24", "Rahu": "25 Cp 42",
+            "Ketu": "25 Cn 42", "HL": "16 Le 16", "GL": "4 Aq 14",
+        },
+        "chara_karakas": {
+            "Ven": "AK", "Sun": "AmK", "Jup": "BK", "Moon": "MK",
+            "Mars": "PiK", "Rahu": "PK", "Sat": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "drawn": {
+            "Ven": "Pi", "Merc": "Ar", "Sun": "Ar", "Sat": "Ta", "Asc": "Ge",
+            "AL": "Aq", "GL": "Aq", "Ketu": "Cn",
+            "Rahu": "Cp", "Mars": "Cp", "HL": "Le",
+            "Jup": "Sc", "Moon": "Li",
+        },
+        "events": {"the native's father died": "second half of 1995"},
+        "first_seen": "chapter 23, Example 93",
+        "note": (
+            "The third chart born at 81 E 12, 16 N 15, after Charts 40 and "
+            "41. The only worked Pitri Shoola dasa: it dates a relative's "
+            "death rather than the native's, so no longevity category is "
+            "computed and the three trines are not narrowed."
+        ),
+    },
     43: {
         "title": "Shoola dasa exercise — Exercise 32",
         "birth": "December 12, 1915, 3:19 am (5:00 West), 74 W 02, 40 N 45",

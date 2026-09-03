@@ -818,6 +818,25 @@ RELATIVE_DEATH_RULE = (
     "death."
 )
 
+#: Example 93's name for A9, and its confirmation of what "the corresponding
+#: arudha pada" means: the arudha of the house that shows the relative, the 9th
+#: for a father — not the 3rd, which Pitri Shoola dasa's own pair also holds.
+PITRI_PADA_IS_A9 = (
+    "Pitri pada (A9, arudha pada of 9th house) is in Sg."
+)
+
+#: **Gap.** §23.3 narrows the native's own answer to four dasas by longevity
+#: category. §23.5 gives no analogue for a relative, so its three trines from
+#: the karaka stay three. Example 93 has all three — Aries at 18-27, Leo at
+#: 54-63 and Sagittarius at 90-99 — and simply reports which one held the
+#: death.
+NO_CRITERION_NARROWS_A_RELATIVES_TRINES = (
+    "Section 23.3's second criterion limits the native's death to the four "
+    "dasas of his longevity range. Section 23.5 gives no equivalent for a "
+    "relative, and names no way to choose among the three trines from the "
+    "sthira karaka."
+)
+
 #: §8.3 is what §23.5's "we mentioned earlier" points back to.
 STHIRA_KARAKAS_WERE_PROMISED_FOR_DEATH = (
     "When predicting the death of spouse, we use Jupiter in female charts and "
@@ -908,4 +927,68 @@ def relative_death_rasis(sthira_karaka_sign: int,
                   "from_arudha_pada": named(from_pada)},
         "all": tuple(sorted(set(from_karaka) | set(from_pada))),
         "undecided": undecided,
+    }
+
+
+def paired_sthira_karaka(relative: str, longitudes: dict[int, float],
+                         signs: dict[int, int], *,
+                         stronger: int | None = None) -> dict:
+    """§8.3's father and mother karakas, which are a *pair* and need a winner.
+
+    :param relative: "father" or "mother".
+    :param stronger: the graha the caller has settled on.
+
+    §8.3 says only "the stronger". Example 93 shows what that looks like in
+    practice — "exalted Sun joins Mercury and Jupiter aspects him, so Sun is
+    stronger than Venus" — so the facts it cites are reported for each
+    candidate and the choice is left open.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.charts.dignity import sign_dignity
+    from hora.core.const import GRAHA_NAMES
+    from hora.core.constants.karaka import STHIRA_KARAKAS
+
+    rows = {row["relative"]: row for row in STHIRA_KARAKAS
+            if row["rule"] == "stronger"}
+    if relative not in rows:
+        raise ShoolaError(
+            f"{relative!r} has a single sthira karaka; §8.3 gives a pair for "
+            f"{' and '.join(sorted(rows))}")
+
+    candidates = []
+    for graha in rows[relative]["grahas"]:
+        index = int(graha)
+        if index not in signs or index not in longitudes:
+            raise ShoolaError(f"no position given for {GRAHA_NAMES[index]}")
+        place = signs[index]
+        candidates.append({
+            "graha": index, "graha_name": str(GRAHA_NAMES[index]),
+            "sign": place, "rasi": str(RASI_NAMES[place]),
+            "dignity": sign_dignity(index, longitudes[index]),
+            "joins": tuple(str(GRAHA_NAMES[o]) for o, s in sorted(signs.items())
+                           if s == place and o != index),
+            "rasi_aspected_by": tuple(
+                str(GRAHA_NAMES[o]) for o, s in sorted(signs.items())
+                if o != index and place in rasi_drishti(s)),
+        })
+
+    chosen = None
+    if stronger is not None:
+        chosen = next((c for c in candidates if c["graha"] == int(stronger)),
+                      None)
+        if chosen is None:
+            raise ShoolaError(
+                f"{GRAHA_NAMES[int(stronger)]} is not one of "
+                f"{relative}'s two candidates")
+
+    return {
+        "relative": relative,
+        "candidates": tuple(candidates),
+        "karaka": chosen,
+        "note": rows[relative]["note"],
+        "undecided": (None if chosen is not None else
+                      "which of "
+                      + " and ".join(str(c["graha_name"])
+                                     for c in candidates)
+                      + " is stronger; §8.3 says only \"the stronger\""),
     }
