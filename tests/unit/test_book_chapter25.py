@@ -7,6 +7,8 @@ cannot be called finished early.
 """
 from __future__ import annotations
 
+import re
+
 import pytest
 
 from hora.core.const import RASI_ABBR
@@ -159,7 +161,7 @@ def test_the_seven_promised_tables_are_tracked_against_what_is_built():
     supplied = {str(GRAHA_NAMES[graha]) for graha in STANDARD_RESULTS}
     assert registered == supplied, (
         f"registered {registered} but built {supplied}")
-    assert registered == {"Sun", "Moon"}         # Tables 53 and 54
+    assert registered == {"Sun", "Moon", "Mars"}  # Tables 53 to 55
 
 
 def test_part_3s_opening_gave_no_roadmap_but_25_2_does():
@@ -292,8 +294,8 @@ def test_an_unsupplied_table_raises_and_names_the_graha():
     from hora.core.const import Graha
     from hora.transits.gochara import GocharaError, good_houses, transit_result
 
-    for graha in (Graha.MARS, Graha.MERCURY, Graha.JUPITER,
-                  Graha.VENUS, Graha.SATURN, Graha.RAHU, Graha.KETU):
+    for graha in (Graha.MERCURY, Graha.JUPITER, Graha.VENUS,
+                  Graha.SATURN, Graha.RAHU, Graha.KETU):
         with pytest.raises(GocharaError, match="have not been supplied"):
             transit_result(graha, 1)
         with pytest.raises(GocharaError, match="have not been supplied"):
@@ -310,7 +312,7 @@ def test_read_transits_reports_what_is_missing_rather_than_dropping_it():
     moon = R["Le"] * 30 + 15.0                   # janma rasi Leo
     got = read_transits(moon, {
         int(Graha.SUN): R["Li"] * 30 + 1.0,      # the 3rd from Leo
-        int(Graha.MARS): R["Pi"] * 30 + 1.0,     # the 8th
+        int(Graha.SATURN): R["Pi"] * 30 + 1.0,   # the 8th
     })
     assert len(got) == 2
 
@@ -319,10 +321,10 @@ def test_read_transits_reports_what_is_missing_rather_than_dropping_it():
     assert sun["results"] == "Wealth, good health, victory"
     assert sun["undecided"] is None
 
-    mars = next(row for row in got if row["graha"] == int(Graha.MARS))
-    assert mars["house"] == 8                    # the house is known
-    assert mars["snapshot"] is None              # the verdict is not
-    assert "have not been supplied" in mars["undecided"]
+    saturn = next(row for row in got if row["graha"] == int(Graha.SATURN))
+    assert saturn["house"] == 8                  # the house is known
+    assert saturn["snapshot"] is None            # the verdict is not
+    assert "have not been supplied" in saturn["undecided"]
 
 
 def test_the_suns_own_transit_of_a_real_chart():
@@ -454,7 +456,7 @@ def test_agreement_needs_both_tables_supplied():
 
     assert agreement(Graha.SUN, Graha.SUN)["differ"] == ()
     with pytest.raises(GocharaError, match="have not been supplied"):
-        agreement(Graha.SUN, Graha.MARS)
+        agreement(Graha.SUN, Graha.JUPITER)
 
 
 def test_read_transits_now_verdicts_two_grahas():
@@ -465,11 +467,142 @@ def test_read_transits_now_verdicts_two_grahas():
     got = {row["graha"]: row for row in read_transits(moon, {
         int(Graha.SUN): R["Li"] * 30 + 1.0,      # the 3rd
         int(Graha.MOON): R["Le"] * 30 + 20.0,    # the 1st
-        int(Graha.MARS): R["Pi"] * 30 + 1.0,     # the 8th, still unsupplied
+        int(Graha.JUPITER): R["Pi"] * 30 + 1.0,  # the 8th, still unsupplied
     })}
 
     assert got[int(Graha.SUN)]["snapshot"] == "Good"
     assert got[int(Graha.MOON)]["house"] == 1
     assert got[int(Graha.MOON)]["snapshot"] == "Good"
     assert got[int(Graha.MOON)]["results"] == "Comfort, good spirits"
-    assert got[int(Graha.MARS)]["undecided"] is not None
+    assert got[int(Graha.JUPITER)]["undecided"] is not None
+
+
+# ---------------------------------------------------------------------------
+# Table 55 — Mars's transit from janma rasi
+# ---------------------------------------------------------------------------
+
+#: Table 55 exactly as printed, House / Snapshot / Typical results.
+PRINTED_TABLE_55 = (
+    (1, "Bad", "Troubles, bodily afflictions"),
+    (2, "Bad", "Accidents, losses, thefts, quarrels"),
+    (3, "Good", "Gains, power, wealth"),
+    (4, "Bad", "Stomach problems, fevers, bad health"),
+    (5, "Bad", "Troubles from enemies, trouble with children"),
+    (6, "Good", "Success over enemies, wealth, success, well-being"),
+    (7, "Bad", "Quarrels, marital troubles, eye problems"),
+    (8, "Bad", "Worries, accidents, bad name, losses"),
+    (9, "Bad", "Losses, insults, illness"),
+    (10, "Bad", "Change of place, unexpected wealth"),
+    (11, "Good", "Authority,  gains, good name"),
+    (12, "Bad", "Expenses, quarrels with wife, diseases"),
+)
+
+
+@pytest.mark.parametrize(("house", "snapshot", "results"), PRINTED_TABLE_55)
+def test_table_55_row_by_row(house, snapshot, results):
+    from hora.core.const import Graha
+    from hora.transits.gochara import transit_result
+
+    got = transit_result(Graha.MARS, house)
+    assert got["house"] == house
+    assert got["snapshot"] == snapshot
+    assert got["results"] == results
+    assert got["graha_name"] == "Mars"
+
+
+def test_table_55_is_the_harshest_so_far():
+    """Three Good houses against the Sun's four and the Moon's six."""
+    from hora.core.const import Graha
+    from hora.transits.gochara import TABLE_55_MARS, good_houses
+
+    assert len(TABLE_55_MARS) == 12
+    assert [row["house"] for row in TABLE_55_MARS] == list(range(1, 13))
+    assert good_houses(Graha.MARS) == (3, 6, 11)
+    assert [len(good_houses(g)) for g in
+            (Graha.MARS, Graha.SUN, Graha.MOON)] == [3, 4, 6]
+
+
+def test_mars_in_the_tenth_is_marked_bad_and_reads_good():
+    """"Change of place, unexpected wealth" under a Bad snapshot. The only row
+    in the three tables whose results contradict their own verdict.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import (
+        MARS_IN_THE_TENTH_IS_MARKED_BAD_AND_READS_GOOD,
+        STANDARD_RESULTS,
+        transit_result,
+    )
+
+    got = transit_result(Graha.MARS, 10)
+    assert got["snapshot"] == "Bad"
+    assert "unexpected wealth" in str(got["results"])
+
+    # whole words only, and not when negated -- "discomfort" is not comfort
+    # and "bad health" is not health
+    benefits = {"wealth", "gains", "success", "authority", "prosperity",
+                "honors", "comfort", "comforts", "happiness", "respect",
+                "victory", "health", "well-being"}
+    negators = {"bad", "loss", "losses", "lack", "no"}
+
+    def has_a_benefit(results):
+        words = re.findall(r"[a-z-]+", str(results).lower())
+        return any(word in benefits and (index == 0
+                                         or words[index - 1] not in negators)
+                   for index, word in enumerate(words))
+
+    mixed = [(graha, row["house"])
+             for graha, rows in STANDARD_RESULTS.items() for row in rows
+             if row["snapshot"] == "Bad" and has_a_benefit(row["results"])]
+    assert mixed == [(int(Graha.MARS), 10)]
+
+    # the check is real: every Good row does contain one
+    good = [(graha, row["house"])
+            for graha, rows in STANDARD_RESULTS.items() for row in rows
+            if row["snapshot"] == "Good" and not has_a_benefit(row["results"])]
+    assert good == []
+    assert "No other Bad row" in MARS_IN_THE_TENTH_IS_MARKED_BAD_AND_READS_GOOD
+
+
+def test_the_three_tables_nest():
+    """Mars's Good houses sit inside the Sun's, which sit inside the Moon's,
+    and the steps between them are single houses.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import (
+        THE_TABLES_SO_FAR_NEST,
+        agreement,
+        good_houses,
+    )
+
+    mars = set(good_houses(Graha.MARS))
+    sun = set(good_houses(Graha.SUN))
+    moon = set(good_houses(Graha.MOON))
+    assert mars < sun < moon
+
+    assert sun - mars == {10}
+    assert moon - sun == {1, 7}
+    assert agreement(Graha.SUN, Graha.MARS)["differ"] == (10,)
+    assert agreement(Graha.MOON, Graha.MARS)["differ"] == (1, 7, 10)
+    assert "is inside" in THE_TABLES_SO_FAR_NEST
+
+
+def test_common_ground_across_every_supplied_table():
+    """Six houses are Bad in all three tables and three are Good in all three;
+    only the 1st, 7th and 10th vary. `tables` says how many were compared, so
+    "always" cannot be read as more than it is.
+    """
+    from hora.core.const import UPACHAYA, Graha
+    from hora.transits.gochara import common_ground
+
+    got = common_ground()
+    assert got["tables"] == 3
+    assert got["grahas"] == (int(Graha.SUN), int(Graha.MOON), int(Graha.MARS))
+    assert got["always_good"] == (3, 6, 11)
+    assert got["always_bad"] == (2, 4, 5, 8, 9, 12)
+    assert got["varies"] == (1, 7, 10)
+
+    assert len(got["always_good"]) + len(got["always_bad"]) + len(
+        got["varies"]) == 12
+    # the always-Good three are the upachayas less the 10th, which varies
+    assert set(got["always_good"]) == set(UPACHAYA) - {10}
+    assert 10 in got["varies"]

@@ -157,7 +157,7 @@ THE_TABLE_IS_NOT_THE_READING = (
 STANDARD_RESULT_TABLES: dict[int, dict[str, object]] = {
     53: {"for": "Sun", "built": True},
     54: {"for": "Moon", "built": True},
-    55: {"for": None, "built": False},
+    55: {"for": "Mars", "built": True},
     56: {"for": None, "built": False},
     57: {"for": None, "built": False},
     58: {"for": None, "built": False},
@@ -250,10 +250,63 @@ AGREEING_SNAPSHOTS_ARE_NOT_THE_SAME_RESULTS = (
 )
 
 
+# --------------------------------------------------------------------------
+# Table 55 — Mars's transit from janma rasi
+# --------------------------------------------------------------------------
+
+#: Table 55 exactly as printed, in house order.
+TABLE_55_MARS: tuple[dict[str, object], ...] = (
+    {"house": 1, "snapshot": "Bad", "results": "Troubles, bodily afflictions"},
+    {"house": 2, "snapshot": "Bad",
+     "results": "Accidents, losses, thefts, quarrels"},
+    {"house": 3, "snapshot": "Good", "results": "Gains, power, wealth"},
+    {"house": 4, "snapshot": "Bad",
+     "results": "Stomach problems, fevers, bad health"},
+    {"house": 5, "snapshot": "Bad",
+     "results": "Troubles from enemies, trouble with children"},
+    {"house": 6, "snapshot": "Good",
+     "results": "Success over enemies, wealth, success, well-being"},
+    {"house": 7, "snapshot": "Bad",
+     "results": "Quarrels, marital troubles, eye problems"},
+    {"house": 8, "snapshot": "Bad",
+     "results": "Worries, accidents, bad name, losses"},
+    {"house": 9, "snapshot": "Bad", "results": "Losses, insults, illness"},
+    {"house": 10, "snapshot": "Bad",
+     "results": "Change of place, unexpected wealth"},
+    {"house": 11, "snapshot": "Good", "results": "Authority,  gains, good name"},
+    {"house": 12, "snapshot": "Bad",
+     "results": "Expenses, quarrels with wife, diseases"},
+)
+
+#: **Finding.** Mars in the 10th is the only row in the three tables so far
+#: whose results contradict its own snapshot: it is marked **Bad** and reads
+#: "Change of place, unexpected wealth". Every other Bad row is unmixed. Held
+#: as printed — the snapshot column is a one-word summary and "change of
+#: place" may be what it summarises, but the row is not self-consistent and a
+#: reader should be told rather than have it smoothed over.
+MARS_IN_THE_TENTH_IS_MARKED_BAD_AND_READS_GOOD = (
+    "Table 55 marks Mars in the 10th Bad and gives its typical results as "
+    "\"Change of place, unexpected wealth\". No other Bad row in Tables 53 to "
+    "55 contains a benefit."
+)
+
+#: **Finding.** The three tables so far nest: Mars's Good houses are a strict
+#: subset of the Sun's, which are a strict subset of the Moon's. Mars differs
+#: from the Sun on the **10th** alone and from the Moon on the 1st, 7th and
+#: 10th. So across the three, six houses are always Bad, three always Good,
+#: and only the 1st, 7th and 10th vary at all.
+THE_TABLES_SO_FAR_NEST = (
+    "Mars {3, 6, 11} is inside Sun {3, 6, 10, 11} is inside Moon "
+    "{1, 3, 6, 7, 10, 11}. The 3rd, 6th and 11th are Good in every table read "
+    "so far and the 2nd, 4th, 5th, 8th, 9th and 12th are Bad in every one."
+)
+
+
 #: Every supplied table, keyed by graha. Tables 54 to 59 join it as they come.
 STANDARD_RESULTS: dict[int, tuple[dict[str, object], ...]] = {
     int(Graha.SUN): TABLE_53_SUN,
     int(Graha.MOON): TABLE_54_MOON,
+    int(Graha.MARS): TABLE_55_MARS,
 }
 
 
@@ -347,4 +400,34 @@ def agreement(first: int, second: int) -> dict:
         "first": left, "first_name": str(GRAHA_NAMES[left]),
         "second": right, "second_name": str(GRAHA_NAMES[right]),
         "agree": tuple(agree), "differ": tuple(differ),
+    }
+
+
+def common_ground() -> dict:
+    """Which houses every supplied table agrees on, and which vary.
+
+    §25.2 prints one table per graha and never sets them side by side, so any
+    house that behaves the same way in all of them is a fact about the section
+    rather than about a graha. ``tables`` says how many were compared, because
+    "always" means only "in the tables supplied so far".
+    """
+    if not STANDARD_RESULTS:
+        raise GocharaError("no standard results have been supplied yet")
+
+    always_good, always_bad, varies = [], [], []
+    for house in range(1, 13):
+        verdicts = {rows[house - 1]["snapshot"]
+                    for rows in STANDARD_RESULTS.values()}
+        if verdicts == {"Good"}:
+            always_good.append(house)
+        elif verdicts == {"Bad"}:
+            always_bad.append(house)
+        else:
+            varies.append(house)
+    return {
+        "tables": len(STANDARD_RESULTS),
+        "grahas": tuple(sorted(STANDARD_RESULTS)),
+        "always_good": tuple(always_good),
+        "always_bad": tuple(always_bad),
+        "varies": tuple(varies),
     }

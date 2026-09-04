@@ -798,7 +798,7 @@ and the seven result tables arrive one at a time.
 | `THE_DASA_LORDS_TRANSIT_MATTERS_MOST` | A cross-link to Vimsottari, agreeing with §24.5's `DASA_SPECIALISATIONS`. No reading layer joins a dasa lord to a transit yet |
 | `THE_TABLES_ARE_REFERENCE_ONLY` · `THE_SUBJECT_COMES_FROM_NATAL_LORDSHIP` · `THE_TABLE_IS_NOT_THE_READING` | The caveat that governs Tables 53 to 59: the table gives the valence, natal lordship gives the subject. Cannot be consumed until a table exists to qualify |
 | `STANDARD_RESULT_TABLES` · `SEVEN_TABLES_ARE_PROMISED` | The roadmap for §25.2. Table 53 is in, 54 to 59 are not. A test fails if the register and `STANDARD_RESULTS` disagree |
-| `SNAPSHOTS` · `SUNS_GOOD_HOUSES_ARE_THE_UPACHAYAS` · `SUN_AND_MOON_DIFFER_ONLY_ON_THE_1_7_AXIS` · `AGREEING_SNAPSHOTS_ARE_NOT_THE_SAME_RESULTS` | The two verdicts the tables offer, and three findings about their structure that the book never states — it prints one table per graha and never compares them. `TABLE_53_SUN` and `TABLE_54_MOON` themselves **are** consumed, by `transit_result` and `agreement` |
+| `SNAPSHOTS` · `SUNS_GOOD_HOUSES_ARE_THE_UPACHAYAS` · `SUN_AND_MOON_DIFFER_ONLY_ON_THE_1_7_AXIS` · `AGREEING_SNAPSHOTS_ARE_NOT_THE_SAME_RESULTS` · `THE_TABLES_SO_FAR_NEST` · `MARS_IN_THE_TENTH_IS_MARKED_BAD_AND_READS_GOOD` | The two verdicts the tables offer, and three findings about their structure that the book never states — it prints one table per graha and never compares them. `TABLE_53_SUN` and `TABLE_54_MOON` themselves **are** consumed, by `transit_result` and `agreement` |
 
 ---
 
