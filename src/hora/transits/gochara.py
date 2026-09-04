@@ -161,7 +161,7 @@ STANDARD_RESULT_TABLES: dict[int, dict[str, object]] = {
     56: {"for": "Mercury", "built": True},
     57: {"for": "Jupiter", "built": True},
     58: {"for": "Venus", "built": True},
-    59: {"for": None, "built": False},
+    59: {"for": "Saturn", "built": True},
 }
 
 
@@ -301,6 +301,7 @@ MIXED_ROWS: tuple[dict[str, object], ...] = (
      "against_it": "Virtuous acts"},
     {"graha": "Venus", "house": 12, "snapshot": "Bad",
      "against_it": "New friends, money, pleasures, gains -- the whole row"},
+    {"graha": "Saturn", "house": 2, "snapshot": "Bad", "against_it": "wealth"},
 )
 
 #: **Finding, and its limit.** Tables 53 to 55 nest — Mars's Good houses are a
@@ -426,15 +427,15 @@ JUPITER_OVERTURNS_THREE_STANDING_AGREEMENTS = (
 #: shows it is a **pair**: the two great benefics against the rest.
 THE_TWO_BENEFICS_FORM_A_PAIR = (
     "Tables 57 and 58 agree with Tables 53, 54 and 56 on five houses each and "
-    "with Table 55 on six -- the same four numbers -- and with each other on "
-    "eight. No cross-group pair exceeds six."
+    "with Tables 55 and 59 on six -- the same five numbers -- and with each "
+    "other on eight. No cross-group pair exceeds six."
 )
 
 #: The grouping the agreement scores fall into, ours and not the book's.
 #: Mercury is a natural benefic and sits with the first group, so this is not
 #: the benefic/malefic split.
 TABLE_GROUPS: tuple[tuple[str, ...], ...] = (
-    ("Sun", "Moon", "Mars", "Mercury"),
+    ("Sun", "Moon", "Mars", "Mercury", "Saturn"),
     ("Jupiter", "Venus"),
 )
 
@@ -487,6 +488,81 @@ THE_TWELFTH_IS_BAD_EVERYWHERE_AND_READS_WELL_HERE = (
 )
 
 
+# --------------------------------------------------------------------------
+# Table 59 — Saturn's transit from janma rasi, and the nodes
+# --------------------------------------------------------------------------
+
+#: Table 59 exactly as printed, in house order.
+TABLE_59_SATURN: tuple[dict[str, object], ...] = (
+    {"house": 1, "snapshot": "Bad",
+     "results": "Fear of incarceration, worries, foreign trips"},
+    {"house": 2, "snapshot": "Bad",
+     "results": "Physical weakness, discomfort, wealth, unhappiness"},
+    {"house": 3, "snapshot": "Good",
+     "results": "Wealth, health, happiness, all-round success"},
+    {"house": 4, "snapshot": "Bad",
+     "results": "Stomach problems, wickedness, separation from family"},
+    {"house": 5, "snapshot": "Bad",
+     "results": "Separation from children, uneasiness, quarrels"},
+    {"house": 6, "snapshot": "Good",
+     "results": "Freedom from disease and enemies, success"},
+    {"house": 7, "snapshot": "Bad",
+     "results": "Wandering, quarrels with spouse, trouble from authorities"},
+    {"house": 8, "snapshot": "Bad",
+     "results": "Suffering, loss of status and balance, imprisonment"},
+    {"house": 9, "snapshot": "Bad",
+     "results": "Diseases, suffering, loss of status"},
+    {"house": 10, "snapshot": "Bad",
+     "results": "Loss of money, bad name, changes in career, laziness"},
+    {"house": 11, "snapshot": "Good", "results": "Wealth, success, gains"},
+    {"house": 12, "snapshot": "Bad",
+     "results": "Grief, misery, losses, ill-health, frustration"},
+)
+
+#: **Finding.** Tables 55 and 59 have **identical** snapshot columns — Mars and
+#: Saturn agree on all twelve houses, the only pair in the section to do so.
+#: Their typical results differ throughout, so it is the verdicts alone that
+#: coincide.
+MARS_AND_SATURN_HAVE_THE_SAME_VERDICTS = (
+    "Table 55 and Table 59 give the same Good or Bad in every one of the "
+    "twelve houses, and no other pair of tables agrees on more than eleven. "
+    "No house has the same typical results in both."
+)
+
+#: §25.2's closing sentence, which places the two grahas that get no table.
+RAHU_AND_KETU_HAVE_NO_TABLE_OF_THEIR_OWN = (
+    "Rahu's behavior is similar to that of Saturn's and Ketu's behavior to "
+    "Mars's."
+)
+
+#: The mapping that sentence gives. Read through
+#: :func:`transit_result`, which marks the result as an analogy rather than
+#: passing off Saturn's row as Rahu's.
+NODES_FOLLOW: dict[int, int] = {
+    int(Graha.RAHU): int(Graha.SATURN),
+    int(Graha.KETU): int(Graha.MARS),
+}
+
+#: **Finding.** Because Mars and Saturn share a verdict column, the analogy
+#: gives Rahu and Ketu the same Good houses as each other — the 3rd, 6th and
+#: 11th — and all four of the section's malefics end up with one set. The book
+#: does not point this out; it follows from the two facts side by side.
+THE_FOUR_MALEFICS_SHARE_ONE_GOOD_SET = (
+    "Mars, Saturn, and through §25.2's analogy Rahu and Ketu, are Good in the "
+    "3rd, 6th and 11th and Bad in the other nine."
+)
+
+#: **Gap.** "Similar" is not "identical", and §25.2 says nothing about where
+#: the nodes depart from their models. The typical results returned for a node
+#: are the model's own words, so they are marked with the graha they came from
+#: and the book's hedge rather than presented as the node's.
+SIMILAR_IS_NOT_IDENTICAL = (
+    "§25.2 gives the nodes no table and no list of differences. A node's "
+    "result here is its model's, carried across under the book's own word "
+    "\"similar\"."
+)
+
+
 #: Every supplied table, keyed by graha. Tables 54 to 59 join it as they come.
 STANDARD_RESULTS: dict[int, tuple[dict[str, object], ...]] = {
     int(Graha.SUN): TABLE_53_SUN,
@@ -495,6 +571,7 @@ STANDARD_RESULTS: dict[int, tuple[dict[str, object], ...]] = {
     int(Graha.MERCURY): TABLE_56_MERCURY,
     int(Graha.JUPITER): TABLE_57_JUPITER,
     int(Graha.VENUS): TABLE_58_VENUS,
+    int(Graha.SATURN): TABLE_59_SATURN,
 }
 
 
@@ -508,15 +585,19 @@ def transit_result(graha: int, house: int) -> dict:
     """
     index = validate.in_range("graha", int(graha), 0, 8)
     place = validate.in_range("house", house, 1, 12)
-    if index not in STANDARD_RESULTS:
+    source = NODES_FOLLOW.get(index, index)
+    if source not in STANDARD_RESULTS:
         raise GocharaError(
             f"§25.2's standard results for {GRAHA_NAMES[index]} have not been "
             f"supplied; Table 53 to Table 59 arrive one at a time")
-    row = STANDARD_RESULTS[index][place - 1]
+    row = STANDARD_RESULTS[source][place - 1]
     return {
         "graha": index, "graha_name": str(GRAHA_NAMES[index]),
         "house": place,
         "snapshot": row["snapshot"], "results": row["results"],
+        "from_graha": None if source == index else source,
+        "from_graha_name": None if source == index else str(GRAHA_NAMES[source]),
+        "analogy": None if source == index else "similar",
         "caveat": THE_TABLES_ARE_REFERENCE_ONLY,
     }
 
@@ -524,11 +605,12 @@ def transit_result(graha: int, house: int) -> dict:
 def good_houses(graha: int) -> tuple[int, ...]:
     """The houses a graha's table marks Good, in order."""
     index = validate.in_range("graha", int(graha), 0, 8)
-    if index not in STANDARD_RESULTS:
+    source = NODES_FOLLOW.get(index, index)
+    if source not in STANDARD_RESULTS:
         raise GocharaError(
             f"§25.2's standard results for {GRAHA_NAMES[index]} have not been "
             f"supplied")
-    return tuple(int(str(row["house"])) for row in STANDARD_RESULTS[index]
+    return tuple(int(str(row["house"])) for row in STANDARD_RESULTS[source]
                  if row["snapshot"] == "Good")
 
 
