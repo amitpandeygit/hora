@@ -1451,3 +1451,94 @@ THE_SAME_SIGN_EXCEPTION_KEEPS_FIRING = (
     "their sign through §9.2's exception, the lord being the 7th from its own "
     "house each time."
 )
+
+
+# --------------------------------------------------------------------------
+# Exercise 36 — the divorced lady, and the nakshatra no table names
+# --------------------------------------------------------------------------
+
+#: **The evidence that settles D-67 and OI-139.** Exercise 36's Moon is in
+#: **Uttarabhadrapada**, which Tables 44 and 45 between them do not name, and
+#: the exercise works its dasa anyway. Both stated events fall in **Sg dasa**,
+#: and only one sub-group puts them there:
+#:
+#: ===========  ==========================  =====================
+#: sub-group    Sg dasa runs at ages        Feb 1992 / late 1995
+#: ===========  ==========================  =====================
+#: savya-1      1.5 to 11.5                 both in Pisces dasa
+#: savya-2      19.5 to 29.5                **both in Sg dasa**
+#: ===========  ==========================  =====================
+#:
+#: The conclusion holds under the printed Moon and the ephemeris Moon alike,
+#: and under both of OI-115's year lengths — savya-1 is out by seventeen years
+#: however it is computed. It also confirms D-67's reconstruction, which
+#: predicted savya-2 from the pattern of the other four triples.
+#:
+#: **NEEDS YOU.** :func:`sub_group_of` still raises for 26. Making it return 2
+#: is a behaviour change and is not made here.
+UTTARABHADRAPADA_IS_SAVYA_2 = (
+    "Exercise 36's Moon is in Uttarabhadrapada's 1st pada. Under savya-2 its "
+    "Sg dasa runs from age 19.5 to 29.5, which holds both the marriage and "
+    "the divorce; under savya-1 Sg is over by age 11.5 and both events fall "
+    "in Pisces dasa. Nothing else in the exercise distinguishes them."
+)
+
+#: §24.3's upapada rules, given in full only in this exercise's answer. UL is
+#: the arudha of the 12th, and marriage is read from it rather than from the
+#: 7th house.
+UPAPADA_RULES: tuple[dict[str, object], ...] = (
+    {"house": 3, "from": "UL", "shows": "the start of a marriage"},
+    {"house": 2, "from": "UL", "shows": "the end of marriage"},
+    {"house": 7, "from": "UL", "shows": "the end of marriage"},
+    {"house": 6, "from": "lagna", "shows": "marital troubles and quarrels"},
+    {"house": 8, "from": "lagna", "shows": "marital troubles and quarrels"},
+)
+
+#: **Finding.** The exercise's premise is that Venus owns both of UL's maraka
+#: houses. UL is Aries in the rasi chart *and* in the navamsa, so the 2nd is
+#: Taurus and the 7th is Libra in both — Venus's two signs. That is why one
+#: dasa could give the marriage and its ending.
+VENUS_OWNS_BOTH_MARAKAS_OF_THE_UPAPADA = (
+    "Sg contains Venus, the significator of marriage. However, Venus also "
+    "owns the 2nd and 7th from upapada in rasi and navamsa."
+)
+
+#: The qualification §24.3.1's rekha threshold needed and did not carry: a high
+#: SAV count is not favourable in itself.
+EVIL_HOUSES_WHEN_STRONG_BRING_EVIL_RESULTS = (
+    "While the 7th house has only 22 rekhas, the 8th house has 30 rekhas and "
+    "so the 8th house is strong. Evil houses, when strong, only bring evil "
+    "results."
+)
+
+#: Exercise 36's five reasons for Gemini, in the order given. Every one is read
+#: in the **navamsa**, which the answer opens by choosing.
+EXERCISE_36_GEMINI_REASONS: tuple[str, ...] = (
+    "Ge contains A7 in navamsa and can show a relationship",
+    "it contains the 3rd from UL and can show the start of a marriage",
+    "it is the 7th house from Venus",
+    "it is the 4th house of harmony and bliss from lagna",
+    "its lord Mercury is exalted in the 7th house",
+    "Ge has 33 rekhas in SAV",
+)
+
+#: And the two for Libra, which is a maraka from two references at once.
+EXERCISE_36_LIBRA_REASONS: tuple[str, ...] = (
+    "Li is the 8th house from lagna",
+    "it is the 7th house from upapada, in navamsa and in rasi",
+    "it has 30 rekhas in the navamsa SAV, where the 7th house has only 22",
+)
+
+#: **Finding.** Exercise 36 points the *other* way on OI-115 from Examples 100
+#: and 101. Its two dates land in the named antardasas only under **365.25**
+#: days and only from the **printed** Moon: savana puts the February 1992
+#: wedding after Ge antardasa has closed, and the ephemeris Moon — which is
+#: 1.75' below the printed one here — misses the late-1995 divorce under both
+#: year lengths. Chart 50 does not reproduce within an arcminute, so its dates
+#: cannot be pinned the way Examples 100 and 101 were.
+EXERCISE_36_FAVOURS_THE_SOLAR_YEAR = (
+    "From the printed Moon, Ge antardasa runs to February 1992 under 365.25 "
+    "days and closes in September 1991 under savana, while Li antardasa "
+    "covers late 1995 under both. The stated Ge antardasa needs the solar "
+    "year."
+)

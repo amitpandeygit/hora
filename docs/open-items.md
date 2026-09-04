@@ -602,12 +602,10 @@ agree to within a second:
 Two quantities, two rates, two hemispheres, one number: HL and GL are right and
 the sunrise is not. Neither §5 definition is the book's — ours early both times,
 `disc_center` late both times, at no fixed fraction between (23% at 26 N, 53% at
-43 N). A toggle cannot fix it; it looks like a refraction or horizon-dip model
-diverging with latitude. Reach: upagrahas divide the day into eighths, so a
-50-second shift moves them by seconds of arc, and in a **divisional** chart it
-is not monotone — Chart 12's GL is a rasi out yet lands in the same D-10 sign
-(so Exercise 21's reading survives), while its HL agrees in the rasi chart yet
-is one sign out in the D-10. Neither direction may be assumed from the other.
+43 N), so a toggle cannot fix it; it looks like a refraction or horizon-dip
+model diverging with latitude. In a **divisional** chart the reach is not
+monotone — Chart 12's GL is a rasi out yet lands in the same D-10 sign, while
+its HL agrees in the rasi chart and is one sign out in the D-10.
 
 **Not changed** — neither available value is right, so there is nothing to
 switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
@@ -702,13 +700,19 @@ on different patterns:
 The wheel explains sub-group 1 at offset 0 and sub-group 2 at offset 12 and
 every pada sequence follows, but no offset rule produces both memberships. It
 matters for the **3rd of each apasavya triple** — nakshatras 6, 12, 18 and 24,
-about one chart in seven — whose sequences differ entirely between the two
-readings. D-67 sits inside this: Uttarabhadrapada is in neither savya table.
+about one chart in seven — whose sequences differ entirely between the readings.
 
-**What we do:** hold `PRINTED_SUB_GROUPS` as printed; refuse the unlisted one.
+**Half of it is now answered. NEEDS YOU.** Exercise 36's Moon is in
+**Uttarabhadrapada** (D-67's missing nakshatra) and its Sg dasa must hold a Feb
+1992 marriage and a late-1995 divorce. Under **savya-2** Sg runs from age 19.5
+to 29.5 and holds both; under savya-1 it is over by 11.5 and both fall in Pisces
+dasa — true under either Moon and either OI-115 year length, and what D-67's
+reconstruction predicted. Say the word and `sub_group_of` returns 2 for 26.
 
-**Closes when:** an example runs a Moon in an apasavya triple's 3rd nakshatra,
-or in Uttarabhadrapada.
+**What we do:** hold `PRINTED_SUB_GROUPS` as printed; still refuse 26.
+
+**Closes when:** you accept savya-2 for 26, and an example runs a Moon in an
+apasavya triple's 3rd nakshatra.
 
 ### OI-138 — §23.3's criterion 1 survives neither aspect reading
 
@@ -985,15 +989,13 @@ Exercises 28 and 30 fall outside them, and none is a matter of degree:
 The last is a different mechanism rather than a missing row — a fourth
 reference point in a section that already had three.
 
-**What we do:** each is its own named constant —
-`UNLISTED_DASA_LAGNA_READINGS`, `EXALTED_DUSTHANA_LORD_CONVERSE`,
-`KETU_IN_THE_ELEVENTH_IS_FOREIGN`, `MUNDANE_HOUSE_READINGS`,
-`ANTARDASA_ASPECT_RULE`, `NAVAMSA_MARRIAGE_DASA_RULES`,
+**What we do:** each is its own named constant — `UNLISTED_DASA_LAGNA_READINGS`,
+`EXALTED_DUSTHANA_LORD_CONVERSE`, `KETU_IN_THE_ELEVENTH_IS_FOREIGN`,
+`MUNDANE_HOUSE_READINGS`, `ANTARDASA_ASPECT_RULE`, `NAVAMSA_MARRIAGE_DASA_RULES`,
 `ANTARDASA_CANDIDATE_BY_CONTENTS`, `CAREER_DASA_READINGS`,
-`AFFLICTED_KARAKA_IN_THE_DASA_RASI` and `ARUDHA_PADA_DASA_READINGS`. Folding
-them into
-`PARASARA_DASA_PRINCIPLES` would put words in Parasara's mouth. No
-interpretation layer reads either set yet, so nothing is blocked.
+`AFFLICTED_KARAKA_IN_THE_DASA_RASI` and `ARUDHA_PADA_DASA_READINGS`. Folding them
+into `PARASARA_DASA_PRINCIPLES` would put words in Parasara's mouth, and no
+interpretation layer reads either set yet.
 
 **Closes when:** a later chapter states them, or you say the list may grow.
 
@@ -1113,7 +1115,11 @@ with all nakshatra dasas. Kalachakra dasa is a nakshatra dasa" — and Example
 1999-2003 under 365.25. The book says **September 1966** and **1998-2002**, and
 both survive the Moon's rounding. Examples 96, 98 and 99 separated nothing, and
 **Example 102 cannot** — its chart does not reproduce under our ayanamsa
-(D-69), and on the balance it states it would favour 365.25. Chapter 16's Example 53 agrees with 100 and 101 (Rahu dasa
+(D-69), and on the balance it states it would favour 365.25. **Exercise 36
+points the other way**: its two dates need 365.25 and the printed Moon, savana
+closing Ge antardasa four months before the wedding — but Chart 50 does not
+reproduce within an arcminute either. The two charts that contradict savana are
+exactly the two we cannot recompute. Chapter 16's Example 53 agrees with 100 and 101 (Rahu dasa
 Nov 1993 under savana, Feb 1994 under sidereal). Precedence still keeps JHora's
 default; nothing changes until you say. **Scoped to nakshatra dasas** — §18.6
 measures *rasi* dasa time by the Sun's arc; do not carry a decision here into
@@ -1436,13 +1442,12 @@ Taken literally, **Gola and Yuga can never be present**. Proved exhaustively:
 | Gola | 1 distinct sign | 0 of 144 sign × lagna combinations |
 | Yuga | 2 distinct signs | 0 of 792 sign-pair × lagna combinations |
 
-The reason is structural. Every set of one or two signs fits inside some
-seven-consecutive-sign window — the shorter arc between any two signs is at most
-six — and §11.5.3's five run-yogas (Naukaa, Koota, Chatra, Chaapa, Ardha
-Chandra) cover all twelve windows, so one always applies and supersedes. One
-sign is also one modality, so an Aasraya yoga applies too. Three signs *can*
-escape every window (40 of 220 triples do), which is why Soola survives —
-rarely, in about 16% of three-sign charts.
+The reason is structural. Any one or two signs fit inside some
+seven-consecutive-sign window — the shorter arc between two signs is at most
+six — and §11.5.3's five run-yogas cover all twelve windows, so one always
+supersedes; one sign is also one modality, so an Aasraya yoga applies too.
+Three signs *can* escape every window (40 of 220 triples), which is why Soola
+survives, in about 16% of three-sign charts.
 
 **We implement the rule as stated**, so both yogas are defined, transcribed and
 permanently absent. Their verdicts say so: the reason names the count *and* the
@@ -1569,15 +1574,13 @@ response lists `grahas_considered` so the choice is visible in the output and
 not only in the request.
 
 **§11.5 sharpens it three ways.** §11.5.1's Aasraya yogas say "**all the
-planets**", so two extra grahas must agree — though it can never make the yoga
-impossible, the nodes being always six signs apart and so always the same
-modality. §11.5.2's Dala yogas say "natural benefics/malefics" instead, which
-§3.2.2 settles, and their own Sarpa example is built from Mars, **Rahu and
-Ketu** — so the flag governs the phrase "a planet" only. And §11.5.3's preamble
-is the closest the book comes to an answer: "Rahu and Ketu are **not counted as
-planets by many authors**" — matching our default, but attribution rather than
-a ruling, and scoped to the Aakriti twenty. The default is the conservative one
-— it under-reports — but it *is* a choice, and it is not PVR's.
+planets**", so two extra grahas must agree — though never fatally, the nodes
+being always six signs apart and so the same modality. §11.5.2's Dala yogas say
+"natural benefics/malefics", and their own Sarpa example uses Mars, **Rahu and
+Ketu** — so the flag governs the phrase "a planet" only. §11.5.3's preamble is
+the closest to an answer: "Rahu and Ketu are **not counted as planets by many
+authors**" — matching our default, but attribution rather than a ruling, and
+scoped to the Aakriti twenty. The default under-reports, and it is not PVR's.
 
 **Closes when:** JHora's yoga output settles it, or a later chapter uses a node
 to form one of these.
@@ -1767,14 +1770,12 @@ Two further §10.4 claims are recorded and equally uncomputed:
 - **Nature.** Grahas sharing a rasi share their rasi-drishti *targets* but not
   the nature of the influence — the priest and his movie-loving brother reach
   the same neighbours and do opposite things there. Nothing computes nature.
-- **Scope.** Graha drishti is "greater influence"; rasi drishti is "limited
-  influence on the neighbors". Comparative, never numeric. `ASPECT_SOURCE`
-  keeps it as prose and a test asserts no number is exposed — quantifying it
-  would put our judgement inside PVR's rule.
+- **Scope.** Graha drishti is "greater influence", rasi drishti "limited
+  influence on the neighbors" — comparative, never numeric. `ASPECT_SOURCE`
+  keeps it as prose and a test asserts no number is exposed.
 
-This matters most for interpretation, which is where the temptation to invent a
-weight will come from. The response carries `influence_caveat` so a caller
-cannot read an aspect as an outcome.
+The response carries `influence_caveat` so a caller cannot read an aspect as an
+outcome.
 
 **Closes when:** a later chapter gives a rule for whether an aspect succeeds —
 benefic/malefic nature of the aspected graha, strength, or argala — or you
@@ -1859,12 +1860,11 @@ instance: the book capitalises every relative, we store lowercase, and the
 check is satisfied.
 
 The flattening exists because PDF extraction inserts line breaks and
-hyphenation, but only whitespace and soft hyphens genuinely need normalising —
-case and punctuation survive extraction fine. Proposed: a second, stricter
-comparison collapsing those only, run alongside. Not written, because the check
-is PDF-gated and cannot be run here to see what it flags. The docstring states
-the real guarantee and
-`test_the_verbatim_check_is_case_and_punctuation_insensitive` pins the weakness.
+hyphenation, but only whitespace and soft hyphens need normalising — case and
+punctuation survive extraction fine. Proposed: a second, stricter comparison
+collapsing those only. Not written, because the check is PDF-gated and cannot
+be run here. `test_the_verbatim_check_is_case_and_punctuation_insensitive`
+pins the weakness.
 
 **Run 2026-08-27: all 109 fidelity checks pass** — weaker than it sounds, since
 the comparison sees neither known discrepancy and would pass either way.

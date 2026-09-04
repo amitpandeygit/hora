@@ -3229,3 +3229,283 @@ def test_the_li_li_antardasa_is_the_first_of_libras_nine():
 
     assert chart(48)["events"]["the native's mother died"] == (
         "not dated; in Li-Li antardasa")
+
+
+# ---------------------------------------------------------------------------
+# Exercise 36 — Chart 50, and the nakshatra no table names
+# ---------------------------------------------------------------------------
+
+def _chart_50(code):
+    """Chart 50 in one chart, co-lords resolved by §15.5.1."""
+    from hora.charts.book import longitudes
+    from hora.charts.colord import stronger
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(50)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    references = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars",
+                  "Merc": "Mercury", "Jup": "Jupiter", "Ven": "Venus",
+                  "Sat": "Saturn", "Asc": "Lagna"}
+
+    def sign_of(longitude):
+        return (int(longitude // 30) if code == "D1"
+                else varga(longitude, code).sign)
+
+    signs = {int(g): sign_of(printed[n]) for n, g in named.items()}
+    return {
+        "lagna": sign_of(printed["Asc"]),
+        "signs": signs,
+        "references": {ref: sign_of(printed[n])
+                       for n, ref in references.items()},
+        "co_lords": {rasi: stronger(rasi, {g: s * 30.0
+                                           for g, s in signs.items()}).winner
+                     for rasi in (7, 10)},
+    }
+
+
+def test_chart_50s_two_diagrams_reproduce_but_the_ephemeris_does_not():
+    """Every drawn box follows from the printed longitudes, and yet the
+    ephemeris sits 0.8' to 1.75' below every printed body -- Chart 49's
+    signature, and outside the arcminute every other chart meets.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_ABBR
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(50)
+    printed = longitudes(50)
+
+    for name, abbr in record["drawn"].items():
+        if name == "AL":
+            continue
+        assert str(RASI_ABBR[int(printed[name] // 30)]) == abbr, name
+    navamsa = dict(record["divisional"]["D9"])
+    navamsa.pop("AL")
+    for name, abbr in navamsa.items():
+        assert str(RASI_ABBR[varga(printed[name], "D9").sign]) == abbr, name
+
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 50", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    gaps = [(computed.positions[int(graha)].longitude - printed[name]) * 60
+            for name, graha in GRAHA_OF.items()]
+    assert all(-1.8 < gap < -0.8 for gap in gaps), gaps      # all below, all one-sided
+
+
+def test_the_upapada_is_aries_in_both_charts_so_venus_owns_both_marakas():
+    """"Venus also owns the 2nd and 7th from upapada in rasi and navamsa."
+    UL is the arudha of the 12th, and it lands on Aries either way -- so the
+    2nd is Taurus and the 7th is Libra, Venus's own two signs.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.nakshatra.kalachakra import (
+        VENUS_OWNS_BOTH_MARAKAS_OF_THE_UPAPADA,
+    )
+
+    for code in ("D1", "D9"):
+        chart = _chart_50(code)
+        ul = arudha_pada(12, chart["lagna"], chart["signs"],
+                         chart["co_lords"]).sign
+        assert A[ul] == "Ar", code
+        assert A[(ul + 1) % 12] == "Ta"
+        assert A[(ul + 6) % 12] == "Li"
+        assert int(RASI_LORD[(ul + 1) % 12]) == int(Graha.VENUS)
+        assert int(RASI_LORD[(ul + 6) % 12]) == int(Graha.VENUS)
+
+    assert "2nd and 7th from upapada" in VENUS_OWNS_BOTH_MARAKAS_OF_THE_UPAPADA
+
+
+def test_the_navamsa_upapada_needs_aquariuss_co_lord_resolved():
+    """The navamsa 12th is Aquarius, so §15.5.1 has to choose between Saturn
+    and Rahu before UL exists. Saturn wins and gives Aries; Rahu would give
+    Sagittarius and break the exercise's premise.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import Graha
+
+    chart = _chart_50("D9")
+    assert A[(chart["lagna"] + 11) % 12] == "Aq"
+    assert chart["co_lords"][10] == int(Graha.SATURN)
+
+    saturn = arudha_pada(12, chart["lagna"], chart["signs"],
+                         {10: int(Graha.SATURN)}).sign
+    rahu = arudha_pada(12, chart["lagna"], chart["signs"],
+                       {10: int(Graha.RAHU)}).sign
+    assert A[saturn] == "Ar"
+    assert A[rahu] == "Sg"
+
+
+def test_exercise_36s_six_reasons_for_gemini():
+    """"Ge contains A7 in navamsa ... the 3rd from UL ... the 7th house from
+    Venus ... the 4th house of harmony and bliss from lagna. Its lord Mercury
+    is exalted in the 7th house. Ge has 33 rekhas in SAV."
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.ashtakavarga import sarvashtakavarga
+    from hora.core.const import EXALTATION_RASI, RASI_LORD, Graha
+    from hora.dasha.nakshatra.kalachakra import EXERCISE_36_GEMINI_REASONS
+
+    chart = _chart_50("D9")
+    lagna, signs = chart["lagna"], chart["signs"]
+    assert A[lagna] == "Pi"
+
+    gemini = R["Ge"]
+    a7 = arudha_pada(7, lagna, signs, chart["co_lords"]).sign
+    ul = arudha_pada(12, lagna, signs, chart["co_lords"]).sign
+    venus = signs[int(Graha.VENUS)]
+
+    assert a7 == gemini                          # contains A7
+    assert (ul + 2) % 12 == gemini               # the 3rd from UL
+    assert (venus + 6) % 12 == gemini            # the 7th from Venus
+    assert (lagna + 3) % 12 == gemini            # the 4th from lagna
+
+    mercury = int(Graha.MERCURY)
+    assert int(RASI_LORD[gemini]) == mercury
+    assert signs[mercury] == int(EXALTATION_RASI[mercury])
+    assert signs[mercury] == (lagna + 6) % 12    # exalted in the 7th
+
+    sav = sarvashtakavarga(chart["references"])
+    assert sav["rekhas"][gemini] == 33
+    assert sav["rekhas"][(lagna + 6) % 12] == 22    # the weak 7th house
+    assert len(EXERCISE_36_GEMINI_REASONS) == 6
+
+
+def test_exercise_36s_reasons_for_libra_and_the_evil_house_rule():
+    """"Li is the 8th house from lagna and the 7th house from upapada. It is
+    the 7th house from upapada in rasi also. In navamsa, it has 30 rekhas."
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.ashtakavarga import sarvashtakavarga
+    from hora.dasha.nakshatra.kalachakra import (
+        EVIL_HOUSES_WHEN_STRONG_BRING_EVIL_RESULTS,
+        SAV_STRONG_REKHAS,
+        UPAPADA_RULES,
+    )
+
+    chart = _chart_50("D9")
+    libra = R["Li"]
+    assert (chart["lagna"] + 7) % 12 == libra    # the 8th from lagna
+
+    for code in ("D9", "D1"):
+        one = _chart_50(code)
+        ul = arudha_pada(12, one["lagna"], one["signs"],
+                         one["co_lords"]).sign
+        assert (ul + 6) % 12 == libra, code      # the 7th from UL in both
+
+    sav = sarvashtakavarga(chart["references"])
+    assert sav["rekhas"][libra] == 30 >= SAV_STRONG_REKHAS
+    assert sav["rekhas"][(chart["lagna"] + 6) % 12] == 22
+
+    assert "Evil houses, when strong" in EVIL_HOUSES_WHEN_STRONG_BRING_EVIL_RESULTS
+    assert [(row["house"], row["from"]) for row in UPAPADA_RULES] == [
+        (3, "UL"), (2, "UL"), (7, "UL"), (6, "lagna"), (8, "lagna")]
+
+
+def test_uttarabhadrapada_is_still_refused_and_the_exercise_says_savya_2():
+    """D-67's missing nakshatra, run at last. Both events fall in Sg dasa only
+    under savya-2; savya-1 closes Sg at age 11.5 and puts them in Pisces dasa.
+    True under either Moon. `sub_group_of` still raises -- OI-139, NEEDS YOU.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        SUB_GROUP_OFFSET,
+        UTTARABHADRAPADA_IS_SAVYA_2,
+        KalachakraError,
+        dasa_years,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+        sub_group_of,
+        wheel,
+    )
+
+    record = chart(50)
+    ephemeris = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 50", **record["place"]),
+        Settings(node_type=NodeType.MEAN)
+    ).positions[int(Graha.MOON)].longitude
+
+    for moon in (longitudes(50)["Moon"], ephemeris):
+        where = pada_of(moon)
+        assert (where["nakshatra"], where["group"], where["pada"]) == (
+            26, "savya", 1)                      # Uttarabhadrapada
+
+    with pytest.raises(KalachakraError, match="D-67"):
+        sub_group_of(26)                         # unchanged
+
+    def sagittarius_ages(sub, moon):
+        nine = pada_sequence("savya", sub, 1)
+        birth = first_dasa(nine, pada_of(moon)["elapsed_fraction"])
+        ring, age = wheel("savya"), 0.0
+        for step in range(9):
+            index = (SUB_GROUP_OFFSET[sub] + birth["position"] + step) % 24
+            span = (birth["balance_years"] if step == 0
+                    else dasa_years(ring[index]))
+            if A[ring[index]] == "Sg" and step:
+                return (age, age + span)
+            age += span
+        raise AssertionError("no Sagittarius dasa found")
+
+    for moon in (longitudes(50)["Moon"], ephemeris):
+        opens, closes = sagittarius_ages(2, moon)
+        assert opens < 23.7 and 27.5 < closes    # the marriage and the divorce
+        opens, closes = sagittarius_ages(1, moon)
+        assert closes < 13                       # seventeen years too early
+
+    assert "savya-2" in UTTARABHADRAPADA_IS_SAVYA_2
+
+
+def test_exercise_36s_antardasas_need_the_solar_year():
+    """"Married in Ge antardasa in Feb 1992 and divorced in Li antardasa in
+    late 1995."  From the printed Moon both land only under 365.25 days:
+    savana closes Ge antardasa in September 1991.
+    """
+    import swisseph as swe
+
+    from hora.charts.book import chart, longitudes
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        EXERCISE_36_FAVOURS_THE_SOLAR_YEAR,
+        antardasas,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    birth = from_local(**chart(50)["birth_data"]).jd_ut
+    nine = pada_sequence("savya", 2, 1)
+    balance = first_dasa(
+        nine, pada_of(longitudes(50)["Moon"])["elapsed_fraction"]
+    )["balance_years"]
+    sagittarius = balance + 10 + 4 + 4           # Ar's balance, Pi, Aq, Cp
+    inner = antardasas(2, 23, 10.0)              # Sg at wheel position 23
+
+    def covers(rasi, year, month, year_days):
+        opened = birth + sagittarius * year_days
+        for row in inner:
+            span = row["years"] * year_days
+            if A[row["sign"]] == rasi:
+                start, end = swe.revjul(opened), swe.revjul(opened + span)
+                return (start[0], start[1]) <= (year, month) <= (end[0], end[1])
+            opened += span
+        raise AssertionError(rasi)
+
+    assert covers("Ge", 1992, 2, 365.25)         # the marriage
+    assert covers("Li", 1995, 11, 365.25)        # the divorce
+    assert not covers("Ge", 1992, 2, 360.0)      # savana closes Ge too early
+    assert covers("Li", 1995, 11, 360.0)
+
+    assert "needs the solar year" in EXERCISE_36_FAVOURS_THE_SOLAR_YEAR

@@ -437,6 +437,51 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    50: {
+        "title": "Divorced Lady — Exercise 36",
+        "birth": "May 21, 1968, 11:05 pm (IST), 78 E 10, 18 N 40",
+        "birth_data": {
+            "year": 1968, "month": 5, "day": 21, "hour": 23, "minute": 5,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 18 + 40 / 60, "longitude": 78 + 10 / 60},
+        "longitudes": {
+            "Asc": "8 Cp 44", "Sun": "7 Ta 19", "Moon": "6 Pi 17",
+            "Mars": "15 Ta 48", "Merc": "29 Ta 41", "Jup": "3 Le 45",
+            "Ven": "29 Ar 17", "Sat": "27 Pi 33", "Rahu": "23 Pi 06",
+            "Ketu": "23 Vi 06", "HL": "18 Li 01", "GL": "20 Sg 06",
+        },
+        "chara_karakas": {
+            "Merc": "AK", "Ven": "AmK", "Sat": "BK", "Jup": "DK",
+            "Moon": "GK", "Mars": "MK", "Sun": "PiK", "Rahu": "PK",
+        },
+        "drawn": {
+            "Sat": "Pi", "Moon": "Pi", "Rahu": "Pi", "Ven": "Ar",
+            "Mars": "Ta", "Sun": "Ta", "Merc": "Ta", "AL": "Ta",
+            "Jup": "Le", "Ketu": "Vi", "HL": "Li", "GL": "Sg", "Asc": "Cp",
+        },
+        "divisional": {
+            "D9": {
+                "Sun": "Pi", "Asc": "Pi", "HL": "Pi", "Sat": "Pi",
+                "Jup": "Ta", "Mars": "Ta", "AL": "Cn", "Ketu": "Cn",
+                "Moon": "Le", "Merc": "Vi", "GL": "Li", "Ven": "Sg",
+                "Rahu": "Cp",
+            },
+        },
+        "events": {
+            "the lady married": "February 1992",
+            "the lady divorced": "late 1995",
+        },
+        "first_seen": "chapter 24, Exercise 36",
+        "note": (
+            "Both diagrams reproduce from the printed longitudes, but the "
+            "ephemeris sits **0.8' to 1.75' below** every printed body -- the "
+            "same signature as Chart 49 and outside the arcminute every other "
+            "chart meets. Its Moon is in **Uttarabhadrapada**, the nakshatra "
+            "D-67 says no savya sub-group table names, and the exercise's own "
+            "dasa settles which table it belongs to: see OI-139."
+        ),
+    },
     49: {
         "title": "ISKCON devotee, D-20 — Example 102",
         "birth": "January 26, 1971, 10:43 am (3:00 East), 24 E 01, 49 N 49",

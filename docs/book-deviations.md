@@ -2152,10 +2152,23 @@ where Uttarabhadrapada belongs, leaving Revati out of Table 44. That is a
 reconstruction, not the book, and which sub-group Uttarabhadrapada takes is
 OI-139.
 
-**What we do:** hold the four lists exactly as printed, and let a Moon in
-Uttarabhadrapada raise rather than guess a sub-group.
+**Exercise 36 answers it.** Its Moon *is* in Uttarabhadrapada, and its Sg dasa
+has to hold a February 1992 marriage and a late-1995 divorce. Under **savya-2**
+Sg runs from age 19.5 to 29.5 and holds both; under savya-1 Sg is over by age
+11.5 and both events fall in Pisces dasa instead. The conclusion survives the
+printed Moon, the ephemeris Moon and both OI-115 year lengths — savya-1 is
+seventeen years out however it is computed. The reconstruction above predicted
+exactly this.
 
-**Closes when:** an example runs an Uttarabhadrapada Moon, or a later printing
+It settles **26 only**. Whether Revati then moves to Table 44, as the
+substitution reading implies, or Table 45 simply holds six nakshatras, no
+example has yet touched.
+
+**What we do:** hold the four lists exactly as printed and let a Moon in
+Uttarabhadrapada keep raising, because promoting the deduction to code is a
+behaviour change. See OI-139.
+
+**Closes when:** the sub-group is accepted for 26, or a later printing
 completes the tables.
 
 
