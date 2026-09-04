@@ -1079,3 +1079,192 @@ def test_25_2_is_finished():
     for graha in range(9):
         assert transit_result(graha, 11)["snapshot"] == "Good"
         assert transit_result(graha, 12)["snapshot"] == "Bad"
+
+
+# ---------------------------------------------------------------------------
+# Example 103 — Chart 52, a transit chart against a Gemini janma rasi
+# ---------------------------------------------------------------------------
+
+def test_chart_52_is_a_transit_chart_with_no_birth_data():
+    """The register's first. A date and a diagram; nobody's nativity, so no
+    time, no place and no degrees.
+    """
+    from hora.charts.book import chart, has_longitudes, signs
+
+    record = chart(52)
+    assert record["kind"] == "transit"
+    assert "birth_data" not in record and "place" not in record
+    assert not has_longitudes(52)
+    assert signs(52)["Merc"] == R["Ge"]
+
+
+def test_chart_52s_grahas_reproduce_for_any_time_that_day():
+    """All nine, at every hour of 7 June 1999 -- the Moon included, which
+    stays in Aquarius the whole day. That is what lets a chart with no time
+    still be checked.
+    """
+    from hora.charts.book import signs
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    drawn = signs(52)
+
+    for hour in (0, 6, 12, 18, 23):
+        computed = compute_chart(
+            from_local(year=1999, month=6, day=7, hour=hour, minute=0,
+                       second=0.0, utc_offset_hours=5.5),
+            Place(name="assumed", latitude=17.0, longitude=78.0),
+            Settings(node_type=NodeType.MEAN))
+        for name, graha in named.items():
+            got = int(computed.positions[int(graha)].longitude // 30)
+            assert got == drawn[name], f"{name} at {hour}:00"
+
+
+def test_the_drawn_ascendant_and_special_lagnas_pin_the_unstated_time():
+    """Asc, AL, HL and GL need a moment and a place. At an assumed 17 N 78 E
+    all four land together only in a narrow early-afternoon window -- so the
+    diagram is internally consistent, and our HL and GL reach it, which OI-103
+    gave reason to doubt.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import signs
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.special_lagna import all_special_lagnas
+    from hora.charts.upagraha import birth_period
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    drawn = signs(52)
+    settings = Settings(node_type=NodeType.MEAN)
+    place = Place(name="assumed", latitude=17.0, longitude=78.0)
+
+    def matches(hour, minute):
+        instant = from_local(year=1999, month=6, day=7, hour=hour,
+                             minute=minute, second=0.0, utc_offset_hours=5.5)
+        computed = compute_chart(instant, place, settings)
+        if computed.lagna_rasi != drawn["Asc"]:
+            return False
+        period = birth_period(computed.instant.jd_ut, place.latitude,
+                              place.longitude, place.altitude, settings)
+        lagnas = all_special_lagnas(
+            sunrise_jd=period.sunrise_jd, jd_ut=computed.instant.jd_ut,
+            lagna_longitude=computed.lagna_longitude,
+            moon_longitude=computed.positions[Graha.MOON].longitude,
+            settings=settings)
+        by_name = {v.abbreviation: int(v.longitude // 30)
+                   for v in lagnas.values()}
+        occupied = {int(g): int(computed.positions[int(g)].longitude // 30)
+                    for g in list(Graha)[:9]}
+        arudha = arudha_pada(1, computed.lagna_rasi, occupied).sign
+        return (by_name["HL"] == drawn["HL"] and by_name["GL"] == drawn["GL"]
+                and arudha == drawn["AL"])
+
+    assert matches(14, 25)                       # inside the window
+    assert not matches(12, 0)                    # Ascendant not yet Virgo
+    assert not matches(16, 0)                    # long past it
+
+
+def test_example_103s_three_readings_come_out_of_the_tables():
+    """"Janma rasi is Ge."  Jupiter and Saturn in the 11th, the Sun in the
+    12th, Mercury in the 1st -- each verdict is the printed table's.
+    """
+    from hora.charts.book import signs
+    from hora.core.const import Graha
+    from hora.transits.gochara import (
+        EXAMPLE_103_READINGS,
+        house_from_janma,
+        transit_result,
+    )
+
+    janma = R["Ge"] * 30 + 15.0                  # Moon in Gemini
+    drawn = signs(52)
+
+    def house_of(name):
+        return house_from_janma(janma, drawn[name] * 30 + 15.0)["house"]
+
+    assert house_of("Jup") == house_of("Sat") == 11
+    assert house_of("Sun") == 12
+    assert house_of("Merc") == 1
+
+    assert transit_result(Graha.JUPITER, 11)["snapshot"] == "Good"
+    assert transit_result(Graha.SATURN, 11)["snapshot"] == "Good"
+    assert "gains" in str(transit_result(Graha.SATURN, 11)["results"]).lower()
+
+    sun = transit_result(Graha.SUN, 12)
+    assert sun["snapshot"] == "Bad"
+    assert sun["results"] == "Expenditure, losses"
+
+    mercury = transit_result(Graha.MERCURY, 1)
+    assert mercury["snapshot"] == "Bad"
+    assert mercury["results"] == "Quarrels, imprisonment, losses, poor advice"
+
+    assert [row["house"] for row in EXAMPLE_103_READINGS] == [11, 12, 1]
+
+
+def test_the_subject_now_comes_from_three_things_not_one():
+    """§25.2 illustrated the subject with lordship alone. Example 103 uses
+    houses ruled, houses occupied and karakatva -- and karakatva is not natal
+    at all, being the same in every chart.
+    """
+    from hora.transits.gochara import (
+        EXAMPLE_103_KARAKATVAS,
+        THE_SUBJECT_COMES_FROM_NATAL_LORDSHIP,
+        THE_SUBJECT_COMES_FROM_THREE_THINGS,
+    )
+
+    assert "ruled and occupied" in THE_SUBJECT_COMES_FROM_THREE_THINGS
+    assert "signifies" in THE_SUBJECT_COMES_FROM_THREE_THINGS
+
+    # §25.2's own illustration used lordship and nothing else
+    assert all("natal_lordship" in row
+               for row in THE_SUBJECT_COMES_FROM_NATAL_LORDSHIP)
+
+    assert [row["graha"] for row in EXAMPLE_103_KARAKATVAS] == [
+        "Jupiter", "Saturn", "Sun"]
+    for row in EXAMPLE_103_KARAKATVAS:
+        assert row["signifies"]
+
+
+def test_dignity_in_the_transited_sign_softens_the_verdict():
+    """Mercury in janma rasi draws Table 56's harshest row, and the example
+    sets it aside because Mercury is in its own sign. The first rule in the
+    chapter that changes the substance rather than the subject.
+    """
+    from hora.core.const import RASI_LORD, Graha
+    from hora.transits.gochara import (
+        DIGNITY_IN_THE_TRANSITED_SIGN_SOFTENS_THE_RESULT,
+        transit_result,
+    )
+
+    row = transit_result(Graha.MERCURY, 1)
+    assert str(row["results"]).lower() in (
+        DIGNITY_IN_THE_TRANSITED_SIGN_SOFTENS_THE_RESULT.lower())
+
+    # and the dignity the example invokes is real: Gemini is Mercury's own
+    assert int(RASI_LORD[R["Ge"]]) == int(Graha.MERCURY)
+    assert "own house" in DIGNITY_IN_THE_TRANSITED_SIGN_SOFTENS_THE_RESULT
+    assert "intellectual debates" in (
+        DIGNITY_IN_THE_TRANSITED_SIGN_SOFTENS_THE_RESULT)
+
+
+def test_25_2_closes_by_pointing_past_the_moon():
+    """"There are natal references other than Moon, though Moon is the most
+    important."  §25.1 promised several reference points; this is the first
+    acknowledgement that Moon was only the first.
+    """
+    from hora.transits.gochara import (
+        ADAPT_THEM_INTELLIGENTLY,
+        CORRELATION_IS_THE_METHOD,
+        THERE_ARE_OTHER_NATAL_REFERENCES,
+    )
+
+    assert "several reference points" in CORRELATION_IS_THE_METHOD
+    assert "other than Moon" in THERE_ARE_OTHER_NATAL_REFERENCES
+    assert "most important natal reference" in THERE_ARE_OTHER_NATAL_REFERENCES
+    assert "adapt them intelligently" in ADAPT_THEM_INTELLIGENTLY

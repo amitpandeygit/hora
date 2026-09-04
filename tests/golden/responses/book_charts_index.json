@@ -350,6 +350,13 @@
         "number": 51,
         "recomputable": true,
         "title": "Bill Cosby, D-10 \u2014 Exercise 37"
+      },
+      {
+        "birth": "June 7, 1999 \u2014 a transit chart; no time and no place given",
+        "first_seen": "chapter 25, Example 103",
+        "number": 52,
+        "recomputable": false,
+        "title": "Transit chart, June 7 1999 \u2014 Example 103"
       }
     ],
     "not_supplied": [

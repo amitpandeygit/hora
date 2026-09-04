@@ -437,6 +437,29 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    52: {
+        "title": "Transit chart, June 7 1999 — Example 103",
+        "birth": "June 7, 1999 — a transit chart; no time and no place given",
+        "kind": "transit",
+        "drawn": {
+            "GL": "Pi", "Sat": "Ar", "Jup": "Ar", "Sun": "Ta", "Merc": "Ge",
+            "Rahu": "Cn", "Ven": "Cn", "Asc": "Vi", "Mars": "Li", "AL": "Sg",
+            "Ketu": "Cp", "HL": "Aq", "Moon": "Aq",
+        },
+        "first_seen": "chapter 25, Example 103",
+        "note": (
+            "The register's first **transit** chart: a date and a diagram, no "
+            "birth data, because it is nobody's nativity. All nine grahas "
+            "reproduce for **any** time on 7 June 1999 -- the Moon included, "
+            "which stays in Aquarius the whole day. The Ascendant, AL, HL and "
+            "GL need a moment and a place, and the diagram pins them: at 17 N "
+            "78 E all four land together only between about **14:14 and "
+            "14:37 IST**. The place is our assumption, so the window is "
+            "indicative; what it shows is that the four are mutually "
+            "consistent and that our HL and GL reach them, which OI-103 gave "
+            "reason to doubt."
+        ),
+    },
     51: {
         "title": "Bill Cosby, D-10 — Exercise 37",
         "birth": "July 12, 1937, 12:30 am (5:00 West), 75 W 10, 39 N 57",

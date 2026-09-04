@@ -701,3 +701,66 @@ def common_ground() -> dict:
         "always_bad": tuple(always_bad),
         "varies": tuple(varies),
     }
+
+
+# --------------------------------------------------------------------------
+# Example 103 — a transit chart read against a Gemini janma rasi
+# --------------------------------------------------------------------------
+
+#: **Finding.** §25.2 said the subject of a transit comes from "what they
+#: stand for in the natal chart" and illustrated it with lordship alone.
+#: Example 103 uses **three** sources, and one of them is not natal at all:
+#: the houses a graha *rules*, the houses it *occupies*, and its **karakatva**
+#: — its natural signification, which is the same for every chart.
+THE_SUBJECT_COMES_FROM_THREE_THINGS = (
+    "The native may have gains in the matters signified by the houses ruled "
+    "and occupied by Jupiter and Saturn in natal rasi chart and natal "
+    "divisional charts. Because Jupiter signifies children and tradition and "
+    "Saturn signifies livelihood, the gains may also be related to children, "
+    "traditional cermemonies, livelihood etc."
+)
+
+#: The karakatvas Example 103 leans on, as it gives them.
+EXAMPLE_103_KARAKATVAS: tuple[dict[str, str], ...] = (
+    {"graha": "Jupiter", "signifies": "children and tradition"},
+    {"graha": "Saturn", "signifies": "livelihood"},
+    {"graha": "Sun", "signifies": "authorities and health"},
+)
+
+#: **Finding.** Example 103 also lets the table's verdict be **softened**,
+#: which no earlier rule allowed. Mercury in janma rasi draws Table 56's
+#: harshest row, and the example sets it aside because Mercury is in its own
+#: sign: the transiting graha's dignity **in the sign it is transiting**
+#: changes the reading. §25.2's caveat gave the subject; this changes the
+#: substance.
+DIGNITY_IN_THE_TRANSITED_SIGN_SOFTENS_THE_RESULT = (
+    "Mercury is in janma rasi (Ge). This suggests \"quarrels, imprisonment, "
+    "losses, poor advice\". However, Mercury is strong being in own house "
+    "(intellectual Gemini). So the results may be intellectual debates and "
+    "arguments."
+)
+
+#: Example 103's three worked readings, in the order it gives them.
+EXAMPLE_103_READINGS: tuple[dict[str, object], ...] = (
+    {"grahas": ("Jupiter", "Saturn"), "rasi": "Aries", "house": 11,
+     "snapshot": "Good", "reading": "gains"},
+    {"grahas": ("Sun",), "rasi": "Taurus", "house": 12, "snapshot": "Bad",
+     "reading": "expenditure and losses"},
+    {"grahas": ("Mercury",), "rasi": "Gemini", "house": 1, "snapshot": "Bad",
+     "reading": "intellectual debates and arguments"},
+)
+
+#: §25.2's closing instruction, and the plainest statement of what the seven
+#: tables are for.
+ADAPT_THEM_INTELLIGENTLY = (
+    "In this manner, we can analyze transits of all the planets. We can use "
+    "the results given in literature, but we should adapt them intelligently "
+    "to the chart at hand. We should understand what each planet stands for "
+    "in a chart."
+)
+
+#: The forward pointer that closes §25.2 and opens the rest of the chapter.
+THERE_ARE_OTHER_NATAL_REFERENCES = (
+    "In addition, there are natal references other than Moon, though Moon is "
+    "the most important natal reference when interpreting transits."
+)
