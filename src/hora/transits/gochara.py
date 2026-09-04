@@ -159,7 +159,7 @@ STANDARD_RESULT_TABLES: dict[int, dict[str, object]] = {
     54: {"for": "Moon", "built": True},
     55: {"for": "Mars", "built": True},
     56: {"for": "Mercury", "built": True},
-    57: {"for": None, "built": False},
+    57: {"for": "Jupiter", "built": True},
     58: {"for": None, "built": False},
     59: {"for": None, "built": False},
 }
@@ -342,12 +342,13 @@ MERCURY_ALTERNATES_FOR_TEN_HOUSES = (
     "-- which is what every other table gives them too."
 )
 
-#: **Finding.** The 11th is Good and the 12th Bad in all four tables read so
-#: far. They are the only two houses no table has yet disagreed about.
+#: **Finding.** The 11th is Good and the 12th Bad in every table read so far,
+#: and after five tables they are the **only** two houses left that no table
+#: has disagreed about. The 6th survived four tables and fell to Jupiter; the
+#: 5th and 9th survived four and fell to the same table.
 THE_11TH_AND_12TH_HAVE_NOT_VARIED = (
-    "Across Tables 53 to 56 the 11th is Good four times and the 12th Bad four "
-    "times. Every other house has at least one table against it, except the "
-    "6th, Good four times, and the 5th and 9th, Bad four times."
+    "Across Tables 53 to 57 the 11th is Good five times and the 12th Bad five "
+    "times. Every other house now has at least one table against it."
 )
 
 #: **Book defect.** Table 56's 12th row lists "disease" twice: "Disease,
@@ -360,12 +361,67 @@ THE_TWELFTH_ROW_REPEATS_A_WORD = (
 )
 
 
+# --------------------------------------------------------------------------
+# Table 57 — Jupiter's transit from janma rasi
+# --------------------------------------------------------------------------
+
+#: Table 57 exactly as printed, in house order. The 1st row's mid-sentence
+#: capital in "Wandering" is the book's and is kept.
+TABLE_57_JUPITER: tuple[dict[str, object], ...] = (
+    {"house": 1, "snapshot": "Bad",
+     "results": "Loss of money and intelligence, Wandering"},
+    {"house": 2, "snapshot": "Good",
+     "results": "Happiness, domestic harmony, success"},
+    {"house": 3, "snapshot": "Bad",
+     "results": "Obstacles, loss of position, travels"},
+    {"house": 4, "snapshot": "Bad", "results": "Troubles, defeat, losses"},
+    {"house": 5, "snapshot": "Good",
+     "results": "Childbirth, intelligence, prosperity, wealth"},
+    {"house": 6, "snapshot": "Bad",
+     "results": "Mental uneasiness, enemies, worries"},
+    {"house": 7, "snapshot": "Good",
+     "results": "Health, happiness, erotic pleasures, sense of well-being"},
+    {"house": 8, "snapshot": "Bad",
+     "results": "Disease, imprisonment, illness, grief"},
+    {"house": 9, "snapshot": "Good",
+     "results": "Success, wealth, childbirth, religiousness"},
+    {"house": 10, "snapshot": "Bad",
+     "results": "Loss of position and money, ill-health, wandering"},
+    {"house": 11, "snapshot": "Good",
+     "results": "Recovery of health and position, happiness"},
+    {"house": 12, "snapshot": "Bad",
+     "results": "Fall from grace, misconduct, grief"},
+)
+
+#: **Finding.** Jupiter is the first table to call the **6th** Bad and the
+#: first to call the **5th and 9th** Good. Those three were the section's
+#: longest-standing agreements — the 6th Good in four tables, the 5th and 9th
+#: Bad in four — and one table overturns all three. After it, only the 11th
+#: and the 12th remain undisputed.
+JUPITER_OVERTURNS_THREE_STANDING_AGREEMENTS = (
+    "Table 57 is the first to call the 6th Bad and the first to call the 5th "
+    "and 9th Good. All three had held across Tables 53 to 56."
+)
+
+#: **Finding.** Jupiter is the section's outlier. It agrees with the Sun, the
+#: Moon and Mercury on five houses of twelve each and with Mars on six, while
+#: every pair among the other four agrees on six to eleven. On the upachayas
+#: it is the Sun's near-opposite: the Sun is Good in all four, Jupiter in the
+#: 11th only.
+JUPITER_IS_THE_OUTLIER_TABLE = (
+    "Table 57 agrees with each of Tables 53, 54 and 56 on five houses of "
+    "twelve and with Table 55 on six. Every pair among the other four agrees "
+    "on at least six, and Tables 53 and 55 agree on eleven."
+)
+
+
 #: Every supplied table, keyed by graha. Tables 54 to 59 join it as they come.
 STANDARD_RESULTS: dict[int, tuple[dict[str, object], ...]] = {
     int(Graha.SUN): TABLE_53_SUN,
     int(Graha.MOON): TABLE_54_MOON,
     int(Graha.MARS): TABLE_55_MARS,
     int(Graha.MERCURY): TABLE_56_MERCURY,
+    int(Graha.JUPITER): TABLE_57_JUPITER,
 }
 
 
