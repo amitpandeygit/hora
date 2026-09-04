@@ -57,6 +57,70 @@ PART_2_DASA_SYSTEMS: tuple[dict, ...] = (
      "module": "hora.dasha.nakshatra.kalachakra"},
 )
 
+#: §24.5's boxed ranking, and the only place Part 2 says which of its nine
+#: matter most. Three of the nine are named, each with what it specialises in.
+THE_THREE_MOST_IMPORTANT_PHALITA_DASAS = (
+    "Narayana dasa specializes in showing what happens in one's life; "
+    "Vimsottari dasa specializes in showing how one's mind views what happens "
+    "in one's life; and, Kalachakra dasa specializes in showing how one "
+    "relates to what happens in one's life and how connected one feels. These "
+    "three are the most important of all general purpose phalita dasas."
+)
+
+#: The same three as data, with what §24.5 says each is built on and what it
+#: therefore shows. ``rank`` is the box's own order.
+DASA_SPECIALISATIONS: tuple[dict[str, str | int], ...] = (
+    {"rank": 1, "name": "Narayana dasa", "built_on": "the progress of lagna",
+     "shows": "what happens in one's life",
+     "focus": "the real happenings and the direction taken by one's life"},
+    {"rank": 2, "name": "Vimsottari dasa",
+     "built_on": "the nakshatra of Moon",
+     "shows": "how one's mind views what happens in one's life",
+     "focus": "the state of the native's mind as time progresses"},
+    {"rank": 3, "name": "Kalachakra dasa", "built_on": "Moon's navamsa",
+     "shows": "how one relates to what happens in one's life and how "
+              "connected one feels",
+     "focus": "the state of the inner self and the sense of connectedness"},
+)
+
+#: §24.5's methodological rule, and the reason the three above are not
+#: alternatives to one another.
+DASAS_ARE_NOT_INTERCHANGEABLE = (
+    "It is illogical to use 10 different dasas interchangably. Mixing up "
+    "various dasas without knowing the subtle differences between them "
+    "results in vague explanations."
+)
+
+#: The sentence §24.5 sets in bold, and the whole argument in one line.
+DIFFERENT_ANGLES_ON_THE_SAME_EVENT = (
+    "Even when different dasas show the same event, they show it from "
+    "different angles and focus on different aspects of the same event."
+)
+
+#: Why there are so many systems at all — §24.5's answer to a question the
+#: part opened with and never answered until here.
+WHY_THE_MAHARSHIS_DESCRIBED_HUNDREDS = (
+    "Without appreciating this, one cannot understand why maharshis described "
+    "tens, if not hundreds, of dasa systems."
+)
+
+#: §24.5's closing image, and the shape of any reading layer built on these
+#: nine: not a choice between systems but several views of one thing.
+DASAS_ARE_VANTAGE_POINTS = (
+    "Different dasas do not provide different alternatives that can be used "
+    "interchangeably to understand what happens in one's life, but they "
+    "provide different angles - or vantage points - to view the same "
+    "kaleidoscope that life is."
+)
+
+#: The first question §24.5 says to ask of any dasa, and the one Part 2's
+#: ``purpose`` column answers for each of the nine.
+THE_FIRST_QUESTION_TO_ASK_OF_A_DASA = (
+    "When we learn a new dasa, the first question we should ask is \"when "
+    "should it be applied and what results should be seen in it\"."
+)
+
+
 #: Named in Part 2 but deliberately deferred by it.
 DEFERRED_TO_TAJAKA = (
     "Sudarsana Chakra dasa is one of the most important dasas mentioned by "
@@ -82,6 +146,12 @@ DASHA_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "ASHTOTTARI_HAS_NO_KETU",
     "ASHTOTTARI_ANTARDASA_RULE",
     "ASHTOTTARI_CAVEAT",
+    "THE_THREE_MOST_IMPORTANT_PHALITA_DASAS",
+    "DASAS_ARE_NOT_INTERCHANGEABLE",
+    "DIFFERENT_ANGLES_ON_THE_SAME_EVENT",
+    "WHY_THE_MAHARSHIS_DESCRIBED_HUNDREDS",
+    "DASAS_ARE_VANTAGE_POINTS",
+    "THE_FIRST_QUESTION_TO_ASK_OF_A_DASA",
 )
 
 

@@ -752,10 +752,21 @@ it — but it is the coverage line for the whole part, and
 `PARASARA_DASA_PRINCIPLES` · `NATAL_REFERENCE_READINGS` ·
 `DASA_THIRDS` · `ANTARDASA_RESULT_RULE` | §17.1's reason for reading Ashtottari through the chara karakas. That Ketu has no dasa **is** consumed, in `ASHTOTTARI.order`; this is the inference drawn from it |
 
-**Two of the nine are built** — Vimsottari and Ashtottari, both nakshatra
-dasas. The remaining seven are six rasi dasas (Narayana, Lagna Kendradi Rasi,
-Sudasa, Drigdasa, Niryaana Shoola, Shoola) and one nakshatra dasa
-(Kalachakra). `dasha/rasi/` does not exist.
+**All nine are built** — Vimsottari, Ashtottari and Kalachakra as nakshatra
+dasas, and Narayana, Lagna Kendradi Rasi, Sudasa, Drigdasa, Niryaana Shoola and
+Shoola as rasi dasas. (This paragraph read "two of the nine" until §24.5 closed
+Part 2.)
+
+§24.5's own additions to this register:
+
+| constant | why it is not consumed |
+|---|---|
+| `THE_THREE_MOST_IMPORTANT_PHALITA_DASAS` · `DASA_SPECIALISATIONS` | §24.5's ranking of Narayana, Vimsottari and Kalachakra, and what each specialises in. A reading layer that combined the nine would use it; none exists, and the ranking changes no calculation |
+| `DASAS_ARE_NOT_INTERCHANGEABLE` · `DIFFERENT_ANGLES_ON_THE_SAME_EVENT` · `DASAS_ARE_VANTAGE_POINTS` · `WHY_THE_MAHARSHIS_DESCRIBED_HUNDREDS` · `THE_FIRST_QUESTION_TO_ASK_OF_A_DASA` | §24.5's methodology. It governs how the nine are *used*, which is the layer above this one |
+| `kalachakra.THREE_DASAS_ON_ONE_EVENT` | §24.5's political-leader illustration — the only place the book shows three dasas disagreeing. Needs all three engines pointed at one chart, which nothing yet does |
+| `kalachakra.FOOTNOTE_68` · `kalachakra.DASAS_AND_TAJAKA_SPLIT_BY_HORIZON` | Tajaka annual and monthly charts carry the one-to-two-week predictions. Nothing of Tajaka has been read |
+| `kalachakra.PVRS_FAVOURITE_DASA` · `kalachakra.THE_COMPUTATION_IS_CONTROVERSIAL` | Provenance. The second matters for D-67 and OI-139 — chapter 24 is PVR's chosen recension of BPHS, so a defect in its tables may be his source's |
+| `kalachakra.APPLIES_TO_EVERYONE` · `kalachakra.REJECTED_APPLICABILITY_TEST` | A restriction the book **rejects**. Consumed as an absence: no applicability gate exists in the module, and a test asserts none |
 
 ---
 

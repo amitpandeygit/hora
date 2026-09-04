@@ -3723,3 +3723,225 @@ def test_three_charts_share_an_ayanamsa_the_other_forty_do_not():
     for number, mean in means.items():
         if number not in odd:
             assert 0.25 < mean < 0.8             # truncation, nothing else
+
+
+# ---------------------------------------------------------------------------
+# §24.5 Conclusion
+# ---------------------------------------------------------------------------
+
+def test_the_box_ranks_three_of_part_2s_nine():
+    """"These three are the most important of all general purpose phalita
+    dasas."  The only place Part 2 says which of its nine matter most.
+    """
+    from hora.core.const import (
+        DASA_SPECIALISATIONS,
+        PART_2_DASA_SYSTEMS,
+        THE_THREE_MOST_IMPORTANT_PHALITA_DASAS,
+    )
+
+    named = [row["name"] for row in DASA_SPECIALISATIONS]
+    assert named == ["Narayana dasa", "Vimsottari dasa", "Kalachakra dasa"]
+    assert [row["rank"] for row in DASA_SPECIALISATIONS] == [1, 2, 3]
+
+    listed = {row["name"] for row in PART_2_DASA_SYSTEMS}
+    assert set(named) <= listed                  # all three are of the nine
+    assert len(listed) == 9
+
+    for row in DASA_SPECIALISATIONS:
+        assert row["shows"] in THE_THREE_MOST_IMPORTANT_PHALITA_DASAS
+    assert "most important of all general purpose phalita dasas" in (
+        THE_THREE_MOST_IMPORTANT_PHALITA_DASAS)
+
+
+def test_the_three_are_phalita_and_two_of_them_are_not_ayur():
+    """"General purpose phalita" excludes the two ayur dasas and the two
+    fortune-specific ones. Part 2's own purpose column agrees.
+    """
+    from hora.core.const import DASA_SPECIALISATIONS, PART_2_DASA_SYSTEMS
+
+    purpose = {row["name"]: row["purpose"] for row in PART_2_DASA_SYSTEMS}
+    for row in DASA_SPECIALISATIONS:
+        assert "phalita" in purpose[str(row["name"])]
+
+    assert purpose["Narayana dasa"] == "phalita - general"
+    assert purpose["Kalachakra dasa"] == "phalita"
+    assert purpose["Vimsottari dasa"] == "phalita/ayur"
+    # and the ones the box leaves out
+    assert purpose["Shoola dasa"] == purpose["Niryaana Shoola dasa"] == "ayur"
+    assert "material fortune" in purpose["Sudasa"]
+
+
+def test_what_each_of_the_three_is_built_on():
+    """"Vimsottari dasa is based on the nakshatra of Moon ... Narayana dasa
+    shows the progress of lagna ... Kalachakra dasa depends on Moon's navamsa."
+    """
+    from hora.core.const import DASA_SPECIALISATIONS
+
+    built_on = {row["name"]: row["built_on"] for row in DASA_SPECIALISATIONS}
+    assert built_on["Vimsottari dasa"] == "the nakshatra of Moon"
+    assert built_on["Narayana dasa"] == "the progress of lagna"
+    assert built_on["Kalachakra dasa"] == "Moon's navamsa"
+
+
+def test_a_pada_is_a_navamsa():
+    """§24.5 calls Kalachakra's input "Moon's navamsa" where §24.2 called it a
+    nakshatra pada. They are one partition: 108 divisions of 3°20' from
+    0° Aries either way, and the nth pada is the nth navamsa.
+    """
+    from hora.charts.vargas import varga
+    from hora.core.constants.nakshatra import NAKSHATRA_SPAN, PADA_SPAN
+    from hora.dasha.nakshatra.kalachakra import A_PADA_IS_A_NAVAMSA, pada_of
+
+    assert PADA_SPAN == pytest.approx(30.0 / 9.0)
+    assert 27 * 4 == 12 * 9 == 108
+
+    for step in range(108):
+        longitude = step * PADA_SPAN + PADA_SPAN / 2      # mid-division
+        where = pada_of(longitude)
+        pada_index = (where["nakshatra"] - 1) * 4 + where["pada"] - 1
+        navamsa = varga(longitude, "D9")
+        navamsa_index = int(longitude // 30) * 9 + navamsa.amsa_index
+        assert pada_index == step
+        assert navamsa_index == step              # the same division, counted twice
+    assert NAKSHATRA_SPAN / 4 == pytest.approx(30 / 9)
+    assert "one partition" in A_PADA_IS_A_NAVAMSA
+
+
+def test_the_moons_navamsa_sign_is_what_the_pada_sequence_starts_from():
+    """The identity, checked where it matters: Example 95's Moon at 15 Ta 50
+    is Rohini's 2nd pada, and that pada is the zodiac's 14th navamsa.
+    """
+    from hora.charts.vargas import varga
+    from hora.dasha.nakshatra.kalachakra import pada_of
+
+    moon = 45.8333333
+    where = pada_of(moon)
+    assert (where["nakshatra"], where["pada"]) == (4, 2)
+    pada_index = (where["nakshatra"] - 1) * 4 + where["pada"] - 1
+    assert pada_index == 13                       # the 14th, 0-based
+
+    navamsa = varga(moon, "D9")
+    assert int(moon // 30) * 9 + navamsa.amsa_index == pada_index
+    assert navamsa.amsa_index == 4                # the 5th amsa of Taurus
+
+
+def test_kalachakra_applies_to_everyone_and_has_no_gate():
+    """"Some authors suggested that Kalachakra dasa applies only when Moon is
+    stronger in navamsa chart than in rasi chart. However, this author opines
+    that Kalachakra dasa is applicable to all people."
+
+    Consumed as an absence: nothing in the module tests applicability.
+    """
+    import inspect
+
+    from hora.dasha.nakshatra import kalachakra
+    from hora.dasha.nakshatra.kalachakra import (
+        APPLIES_TO_EVERYONE,
+        REJECTED_APPLICABILITY_TEST,
+        pada_of,
+    )
+
+    assert "applicable to all people" in APPLIES_TO_EVERYONE
+    assert "not applied" in REJECTED_APPLICABILITY_TEST
+
+    names = [name for name in dir(kalachakra)
+             if callable(getattr(kalachakra, name)) and not name.startswith("_")]
+    assert not [name for name in names if "applic" in name.lower()]
+
+    signature = inspect.signature(pada_of)
+    assert list(signature.parameters) == ["moon_longitude"]   # nothing else
+
+
+def test_the_computation_is_controversial_and_that_reaches_d67():
+    """"There are many controversies regarding its computation. This book
+    follows the approach that this author found the most acceptable."
+
+    So chapter 24's tables are PVR's recension, which is what our precedence
+    keeps -- and a defect in them may be his source's, not the print's.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        SAVYA_SUB_GROUPS_LOSE_A_NAKSHATRA,
+        THE_COMPUTATION_IS_CONTROVERSIAL,
+        UTTARABHADRAPADA_IS_SAVYA_2,
+    )
+
+    assert "many controversies" in THE_COMPUTATION_IS_CONTROVERSIAL
+    assert "Brihat Parasara Hora Sastram" in THE_COMPUTATION_IS_CONTROVERSIAL
+    assert SAVYA_SUB_GROUPS_LOSE_A_NAKSHATRA
+    assert UTTARABHADRAPADA_IS_SAVYA_2
+
+
+def test_footnote_68_splits_the_work_by_horizon():
+    """"A significant percentage his successful short-term predictions
+    (focussing on a period of one or two weeks) were made using Tajaka annual
+    and monthly charts."  Kept with the book's missing "of".
+    """
+    from hora.core.const import DEFERRED_TO_TAJAKA
+    from hora.dasha.nakshatra.kalachakra import (
+        DASAS_AND_TAJAKA_SPLIT_BY_HORIZON,
+        FOOTNOTE_68,
+        PVRS_FAVOURITE_DASA,
+    )
+
+    assert "percentage his successful" in FOOTNOTE_68      # the book's typo
+    assert "one or two weeks" in FOOTNOTE_68
+    assert "long-range life-phase" in PVRS_FAVOURITE_DASA
+    assert "never by horizon" in DASAS_AND_TAJAKA_SPLIT_BY_HORIZON
+    assert "Tajaka Analysis" in DEFERRED_TO_TAJAKA         # the part is known
+
+
+def test_parasaras_praise_and_pvrs_favourite_are_two_claims():
+    """§24.1 recorded Parasara's; §24.5 adds the author's own, which no other
+    dasa in Part 2 receives.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        PARASARA_VERSE_MEANS,
+        PVRS_FAVOURITE_DASA,
+    )
+
+    assert "most respectable of all dasa systems" in PARASARA_VERSE_MEANS
+    assert "his favorite dasa" in PVRS_FAVOURITE_DASA
+
+
+def test_24_5s_methodology_is_held_whole():
+    from hora.core.const import (
+        DASAS_ARE_NOT_INTERCHANGEABLE,
+        DASAS_ARE_VANTAGE_POINTS,
+        DIFFERENT_ANGLES_ON_THE_SAME_EVENT,
+        THE_FIRST_QUESTION_TO_ASK_OF_A_DASA,
+        WHY_THE_MAHARSHIS_DESCRIBED_HUNDREDS,
+    )
+
+    assert "interchangably" in DASAS_ARE_NOT_INTERCHANGEABLE   # the book's typo
+    assert "different angles and focus on different aspects" in (
+        DIFFERENT_ANGLES_ON_THE_SAME_EVENT)
+    assert "tens, if not hundreds" in WHY_THE_MAHARSHIS_DESCRIBED_HUNDREDS
+    assert "kaleidoscope" in DASAS_ARE_VANTAGE_POINTS
+    assert "when should it be applied" in THE_FIRST_QUESTION_TO_ASK_OF_A_DASA
+
+
+def test_three_dasas_can_disagree_on_one_event():
+    """§24.5's political leader is the only place the book shows the systems
+    pulling apart rather than confirming each other.
+    """
+    from hora.dasha.nakshatra.kalachakra import THREE_DASAS_ON_ONE_EVENT
+
+    for phrase in ("D-10 Narayana dasa of a yogakaraka rasi",
+                   "Vimsottari dasa of Sun",
+                   "he may feel a void",
+                   "keep his inner self engaged"):
+        assert phrase in THREE_DASAS_ON_ONE_EVENT
+
+
+def test_chapter_24_is_complete_and_part_2_with_it():
+    """Kalachakra is the ninth of Part 2's nine, and §24.5 ends the part."""
+    from hora.core.const import PART_2_DASA_SYSTEMS
+    from hora.dasha.nakshatra.kalachakra import CHAPTER_24_IS_COMPLETE
+
+    assert len(PART_2_DASA_SYSTEMS) == 9
+    assert PART_2_DASA_SYSTEMS[-1]["name"] == "Kalachakra dasa"
+    for system in PART_2_DASA_SYSTEMS:
+        assert system.get("module") or system.get("key")
+
+    for item in ("D-67", "OI-139", "D-68", "D-69", "D-70", "OI-115"):
+        assert item in CHAPTER_24_IS_COMPLETE

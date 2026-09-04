@@ -1593,3 +1593,106 @@ EXERCISE_37_DOES_NOT_SEPARATE_THE_YEAR_LENGTHS = (
     "Cn dasa opens in 1964 under both year lengths and closes in 1985 under "
     "both. \"1964-1984\" is a loose label for a twenty-one-year dasa."
 )
+
+
+# --------------------------------------------------------------------------
+# §24.5 Conclusion
+# --------------------------------------------------------------------------
+
+#: §24.5's opening, and PVR's own place in it. Parasara's praise was recorded
+#: at §24.1; this adds the author's, which no other dasa in Part 2 gets.
+PVRS_FAVOURITE_DASA = (
+    "A significant percentage of this author's successful long-range "
+    "life-phase predictions were made using Kalachakra dasa and that is his "
+    "favorite dasa."
+)
+
+#: **Important.** §24.5 says outright that chapter 24 is *a* recension, not
+#: *the* one. Everything the chapter's tables contain — including D-67's
+#: missing nakshatra and OI-139's inconsistent sub-groups — is PVR's chosen
+#: reading of BPHS, so a defect in them may be his source's rather than the
+#: print's, and our precedence keeps his version either way.
+THE_COMPUTATION_IS_CONTROVERSIAL = (
+    "There are many controversies regarding its computation. This book "
+    "follows the approach that this author found the most acceptable based on "
+    "his study of \"Brihat Parasara Hora Sastram\" and his practical "
+    "researches."
+)
+
+#: Footnote 68, which names the tool §24.5 does *not* use Kalachakra for.
+#: Tajaka is a later part of the book and nothing of it has been read.
+FOOTNOTE_68 = (
+    "And, a significant percentage his successful short-term predictions "
+    "(focussing on a period of one or two weeks) were made using Tajaka "
+    "annual and monthly charts."
+)
+
+#: **Finding.** Footnote 68 divides the labour by *horizon*, which no earlier
+#: section did: Kalachakra for long-range life phases, Tajaka annual and
+#: monthly charts for one or two weeks. Part 2 has classified its nine by
+#: kind and by purpose and never by timescale. Nothing of Tajaka has been
+#: read, so this is recorded and not built.
+DASAS_AND_TAJAKA_SPLIT_BY_HORIZON = (
+    "Kalachakra dasa carries the long-range life-phase predictions and Tajaka "
+    "annual and monthly charts the one-to-two-week ones. Part 2 classifies "
+    "its nine systems by kind and purpose, never by horizon."
+)
+
+#: **A restriction the book rejects.** Some authors gate Kalachakra on the
+#: Moon being stronger in the navamsa than in the rasi chart. PVR does not,
+#: and says why. :func:`pada_of` therefore takes any Moon and no applicability
+#: test exists in this module — deliberately.
+APPLIES_TO_EVERYONE = (
+    "Some authors suggested that Kalachakra dasa applies only when Moon is "
+    "stronger in navamsa chart than in rasi chart. However, this author "
+    "opines that Kalachakra dasa is applicable to all people, as Parasara did "
+    "not impose any conditions on its applicability and went to the extent of "
+    "calling it \"the most respectable dasa\"."
+)
+
+REJECTED_APPLICABILITY_TEST = (
+    "Moon stronger in navamsa than in rasi -- not applied; see "
+    "APPLIES_TO_EVERYONE."
+)
+
+#: §24.5's reason the dasa reads the inner self, and the identity behind it.
+KALACHAKRA_DEPENDS_ON_MOONS_NAVAMSA = (
+    "Kalachakra dasa depends on Moon's navamsa. Navamsa shows one's adherence "
+    "of dharma or duty and throws light on the inner self. So the focus in "
+    "Kalachakra dasa is state of the inner self and the sense of "
+    "connectedness in one's mind."
+)
+
+#: **Finding.** "Moon's navamsa" and "Moon's nakshatra pada" are the same
+#: thing, and §24.5 is the first place the book uses the navamsa name for it.
+#: A pada is 3°20' and so is a navamsa; 27 × 4 and 12 × 9 are both 108; and
+#: both partitions start at 0° Aries. So the *n*th pada of the zodiac **is**
+#: its *n*th navamsa, and §24.2's whole procedure can be read as "find the
+#: Moon's navamsa" without changing a figure.
+A_PADA_IS_A_NAVAMSA = (
+    "The zodiac's 108 nakshatra padas and its 108 navamsas are one partition: "
+    "both are 3°20' wide, both begin at 0° Aries, and the nth pada is "
+    "the nth navamsa."
+)
+
+#: §24.5's worked illustration of three dasas on one event, kept because it is
+#: the only place the book shows them disagreeing rather than agreeing.
+THREE_DASAS_ON_ONE_EVENT = (
+    "A political leader may be running D-10 Narayana dasa of a yogakaraka "
+    "rasi and he may land political power. He may be running the Vimsottari "
+    "dasa of Sun who may be exalted in D-10 and so he may be feeling "
+    "powerful. However, if Kalachakra dasa of a weak and afflicted house in "
+    "D-10 runs at the same time, his inner self may not feel connected with "
+    "the events in his career and he may feel a void. On the other hand, if "
+    "Kalachakra dasa rasi is strong and occupied by benefics in D-10, then "
+    "one may be successfully involved in activities that keep his inner self "
+    "engaged."
+)
+
+#: Chapter 24 as read: §24.1 to §24.5 entire, nine examples, three exercises
+#: and two charts of its own. What it leaves open is registered, not silent.
+CHAPTER_24_IS_COMPLETE = (
+    "§24.1 to §24.5, Examples 95 to 102 and Exercises 34 to 37. Open: D-67 "
+    "and OI-139 (Uttarabhadrapada's sub-group, deduced but not adopted), "
+    "D-68, D-69, D-70 and OI-115's split evidence."
+)
