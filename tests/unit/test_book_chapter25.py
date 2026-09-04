@@ -1588,6 +1588,13 @@ def test_example_104s_four_reference_points():
 
     assert [row["at"] for row in EXAMPLE_104_REFERENCE_POINTS] == [
         "Virgo", "Cancer", "Leo", "1 Cp"]
+
+    # "Venus is the significator of marriage" is §8's naisargika karaka of the
+    # 7th, so the example is invoking a rule and not asserting one
+    from hora.core.const import NAISARGIKA_KARAKA
+    seventh_karaka = NAISARGIKA_KARAKA[7]
+    assert int(seventh_karaka["graha"]) == int(Graha.VENUS)
+    assert "marital bliss" in str(seventh_karaka["signifies"])
     assert "give marriage" in INFLUENCE_THESE_AND_THEY_CAN_GIVE_MARRIAGE
 
 
@@ -2102,3 +2109,100 @@ def test_interaction_2_is_described_and_never_worked():
     for row in EXAMPLE_105_HITS:
         assert row["in"] in ("Pi", "Aq", "Ar", "Cp")
     assert "No example" in INTERACTION_2_IS_NEVER_WORKED
+
+
+# ---------------------------------------------------------------------------
+# Example 106 — Chart 55, not yet supplied
+# ---------------------------------------------------------------------------
+
+def test_chart_55_is_cited_and_not_printed():
+    """Example 106 reads it and the section does not print it. It joins Chart
+    4 and Chart 61 in the not-supplied list, which refuses it by name.
+    """
+    from hora.charts.book import BookChartError, chart, numbers
+    from hora.core.const import CHARTS_NOT_SUPPLIED
+
+    assert 55 in CHARTS_NOT_SUPPLIED
+    assert 55 not in numbers()
+    with pytest.raises(BookChartError, match="never been printed"):
+        chart(55)
+
+
+def test_the_d7_lagna_follows_from_the_one_house_the_example_names():
+    """"The 5th house shows children. It is Vi here."  Virgo as the 5th fixes
+    the D-7 lagna at Taurus, which the example never states.
+    """
+    from hora.transits.gochara import D7_SHOWS, EXAMPLE_106_AWAITS_CHART_55
+
+    taurus = R["Ta"]
+    assert A[(taurus + 4) % 12] == "Vi"
+    # and no other lagna puts Virgo in the 5th
+    assert [sign for sign in range(12)
+            if A[(sign + 4) % 12] == "Vi"] == [taurus]
+
+    assert "children and happiness" in D7_SHOWS
+    assert any("lagna is Taurus" in line
+               for line in EXAMPLE_106_AWAITS_CHART_55)
+
+
+def test_mercury_is_both_lord_and_exalted_occupant_of_the_d7_fifth():
+    """Virgo is the D-7's 5th house, Mercury lords it, and Mercury is exalted
+    there -- so one graha carries two claims on the house and Jupiter the
+    karaka a third from the same rasi.
+    """
+    from hora.core.const import (
+        EXALTATION_RASI,
+        NAISARGIKA_KARAKA,
+        RASI_LORD,
+        Graha,
+    )
+    from hora.transits.gochara import (
+        MERCURY_IS_BOTH_LORD_AND_OCCUPANT_OF_THE_D7_FIFTH,
+    )
+
+    virgo = R["Vi"]
+    assert int(RASI_LORD[virgo]) == int(Graha.MERCURY)
+    assert int(EXALTATION_RASI[int(Graha.MERCURY)]) == virgo
+    assert "stands in it exalted" in (
+        MERCURY_IS_BOTH_LORD_AND_OCCUPANT_OF_THE_D7_FIFTH)
+
+    # "Jupiter, the significator of children" is §8's naisargika karaka of
+    # the 5th, not a claim local to this example
+    fifth = NAISARGIKA_KARAKA[5]
+    assert int(fifth["graha"]) == int(Graha.JUPITER)
+    assert fifth["signifies"] == "Children"
+
+
+def test_example_106_is_interaction_one_with_a_third_varga():
+    """D-1 in Example 104, D-9 in 105, D-7 in 106 -- and the transit side is
+    the rasi chart every time. Interaction (2) is still never worked.
+    """
+    from hora.transits.gochara import (
+        A_THIRD_VARGA_AND_STILL_INTERACTION_ONE,
+        EXAMPLE_106_READING,
+        INTERACTION_2_IS_NEVER_WORKED,
+        THE_TWO_IMPORTANT_INTERACTIONS,
+    )
+
+    assert "rasi chart transit" in EXAMPLE_106_READING
+    assert "D-7" in A_THIRD_VARGA_AND_STILL_INTERACTION_ONE
+    assert "interaction (1)" in A_THIRD_VARGA_AND_STILL_INTERACTION_ONE
+    assert "No example" in INTERACTION_2_IS_NEVER_WORKED
+
+    assert THE_TWO_IMPORTANT_INTERACTIONS[0]["transit"] == (
+        "the transit rasi chart")
+
+
+def test_the_checklist_for_chart_55_is_complete_enough_to_check_it():
+    """Six statements, enough to verify the chart against its own example when
+    it arrives rather than merely transcribe it.
+    """
+    from hora.transits.gochara import EXAMPLE_106_AWAITS_CHART_55
+
+    lines = EXAMPLE_106_AWAITS_CHART_55
+    assert len(lines) == 6
+    joined = " ".join(lines)
+    for claim in ("D-7 lagna is Taurus", "Jupiter and Mercury both occupy",
+                  "exalted", "5th lord", "Transit rasi chart",
+                  "gave a child"):
+        assert claim in joined, claim

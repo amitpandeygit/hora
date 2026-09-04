@@ -17,9 +17,11 @@ from __future__ import annotations
 
 from typing import Any
 
-#: Chart 4 has never appeared in any section read so far, and nothing has
-#: cited it. Chart 1's JHora output is still the empty stub of OI-1.
-CHARTS_NOT_SUPPLIED = (4,)
+#: Charts cited by a section we have read but not printed there. Chart 4 has
+#: never appeared and nothing cites it; Chart 55 is cited by Example 106 and
+#: Chart 61 by Examples 86, 91 and 94, both promised in sections still to
+#: come. Chart 1's JHora output is still the empty stub of OI-1.
+CHARTS_NOT_SUPPLIED = (4, 55, 61)
 
 #: number -> record. Keys used across records:
 #:   title, birth, birth_data, place, longitudes, drawn, chara_karakas,

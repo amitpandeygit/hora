@@ -1263,12 +1263,18 @@ def test_chart_61_has_not_been_supplied_yet():
     loudly when the chart lands so the list gets worked through.
     """
     from hora.charts.book import BookChartError, chart, numbers
+    from hora.core.const import CHARTS_NOT_SUPPLIED
     from hora.dasha.rasi.niryaana_shoola import EXAMPLE_86_AWAITS_CHART_61
 
     assert 61 not in numbers()
     assert max(numbers()) < 61
-    with pytest.raises(BookChartError, match="there is no Chart"):
+    # cited by the book and not yet printed, which is a different refusal
+    # from a number the book never mentions
+    assert 61 in CHARTS_NOT_SUPPLIED
+    with pytest.raises(BookChartError, match="never been printed"):
         chart(61)
+    with pytest.raises(BookChartError, match="there is no Chart"):
+        chart(99)
 
     assert len(EXAMPLE_86_AWAITS_CHART_61) == 9
     assert any("Saturn is in Cancer" in item

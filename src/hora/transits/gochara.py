@@ -1220,3 +1220,52 @@ INTERACTION_2_IS_NEVER_WORKED = (
     "chart against the natal rasi chart, which is the half §25.4 says "
     "fine-tunes the timing."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 106 — a birth read from the natal D-7; Chart 55 not yet supplied
+# --------------------------------------------------------------------------
+
+#: What the D-7 is read for, stated here rather than in §25.4's own text.
+D7_SHOWS = "D-7 shows children and happiness from them."
+
+#: **Chart 55 has not been printed.** Everything Example 106 states about it,
+#: so the chart can be checked against its own example when it arrives rather
+#: than merely transcribed.
+EXAMPLE_106_AWAITS_CHART_55: tuple[str, ...] = (
+    ("The natal D-7 of a gentleman, and the transit rasi chart at the birth "
+     "of his daughter."),
+    "The 5th house of the D-7 is Virgo, so the D-7 lagna is Taurus.",
+    ("Natal D-7: Jupiter and Mercury both occupy Virgo, and Mercury is "
+     "exalted there."),
+    ("Mercury is therefore both the 5th lord of the D-7 and an occupant of "
+     "the 5th house."),
+    "Transit rasi chart at the birth: Jupiter and Mercury are both in Virgo.",
+    ("So the D-7's 5th lord and the karaka of children both transited the "
+     "D-7's 5th house, and that gave a child."),
+)
+
+#: The reading itself, in the book's words.
+EXAMPLE_106_READING = (
+    "So 5th lord in D-7 and significator of children activated the 5th house "
+    "of D-7 in their rasi chart transit and that gave a child."
+)
+
+#: **Finding.** Example 106 is §25.4's interaction (1) a third time — a
+#: transit rasi position against a natal divisional chart — and the third
+#: different varga: D-9 in Example 105, and now D-7. Interaction (2) is still
+#: never worked.
+A_THIRD_VARGA_AND_STILL_INTERACTION_ONE = (
+    "Examples 104, 105 and 106 read a transit rasi chart against the natal "
+    "rasi chart, the natal D-9 and the natal D-7 in turn. All three are "
+    "interaction (1)."
+)
+
+#: **Finding.** What makes Example 106's hit tight is a coincidence the text
+#: does not name: Mercury is the D-7's 5th **lord** and also **occupies** its
+#: 5th house, so one graha carries two of the three claims on that house, and
+#: Jupiter the karaka carries the third from the same rasi.
+MERCURY_IS_BOTH_LORD_AND_OCCUPANT_OF_THE_D7_FIFTH = (
+    "Virgo is the D-7's 5th house, Mercury lords it, and Mercury stands in "
+    "it exalted. Jupiter, the karaka of children, stands there too."
+)

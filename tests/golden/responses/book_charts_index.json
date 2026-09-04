@@ -374,7 +374,9 @@
       }
     ],
     "not_supplied": [
-      4
+      4,
+      55,
+      61
     ],
     "not_supplied_note": "Chart 4 has never appeared in any section read so far, and nothing has cited it.",
     "note": "A chart with birth data is recomputed from its own birth line and so checks the ephemeris. One without is a transcription only, and its record says why.",
