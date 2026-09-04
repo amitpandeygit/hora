@@ -4165,3 +4165,192 @@ def test_saturn_was_in_revati_when_she_died():
 
     assert "Revathi star in Pisces" in EXAMPLE_111_OUTCOME
     assert "thirteen months" in THE_REVATI_TRANSIT_WINDOW_IS_THIRTEEN_MONTHS
+
+
+# --------------------------------------------------------------------------
+# Example 112 — Chart 24 again, two runs converging on one star
+# --------------------------------------------------------------------------
+
+def _chart_24_reference_signs():
+    from hora.charts.book import longitudes
+
+    printed = longitudes(24)
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Merc": "Mercury",
+             "Jup": "Jupiter", "Ven": "Venus", "Sat": "Saturn",
+             "Asc": "Lagna"}
+    return {ref: int(printed[name] // 30) for name, ref in named.items()}
+
+
+def test_example_112s_two_bavs_and_two_pindas_reproduce():
+    """Moon's BAV and Saturn's, all twelve values each, and both sodhya
+    pindas through the whole §12.7 pipeline.
+    """
+    from hora.charts.ashtakavarga import (
+        bhinnashtakavarga,
+        ekaadhipatya_sodhana,
+        sodhya_pinda,
+        trikona_sodhana,
+    )
+    from hora.charts.book import chart
+
+    signs = _chart_24_reference_signs()
+    planets = {name: sign for name, sign in signs.items() if name != "Lagna"}
+    printed = chart(24)["ashtakavarga"]["rasi"]
+    pindas = chart(24)["sodhya_pindas"]
+
+    assert printed["Moon"] == (4, 3, 4, 4, 6, 3, 1, 5, 5, 4, 4, 6)
+    assert printed["Saturn"] == (3, 3, 4, 4, 7, 2, 1, 3, 2, 4, 3, 3)
+    for owner, expected in (("Moon", 122), ("Saturn", 145)):
+        bav = bhinnashtakavarga(owner, signs)
+        assert bav.rekhas == printed[owner], owner
+        trikona = trikona_sodhana(owner, bav.rekhas)
+        soav = ekaadhipatya_sodhana(owner, trikona.after,
+                                    set(planets.values()))
+        assert sodhya_pinda(owner, soav.after, planets).sodhya_pinda == (
+            expected)
+        assert pindas[owner] == expected
+
+
+def test_both_of_example_112s_runs_land_on_krittika():
+    """"6 x 122 = 732 ... remainder of 3. The 3rd star is Krittika" and
+    "3 x 145 = 435 ... a remainder of 3. That again shows Krittika star."
+    """
+    from hora.charts.book import chart
+    from hora.transits.gochara import EXAMPLE_112_RUNS, sodhya_timing
+
+    signs = _chart_24_reference_signs()
+    printed = chart(24)["ashtakavarga"]["rasi"]
+    for planet, house, rekhas, pinda, product, star in EXAMPLE_112_RUNS:
+        got = sodhya_timing(planet, house, planet_sign=signs[planet],
+                            bav_rekhas=printed[planet], pinda=pinda)
+        assert got["house_rasi"] == "Pisces", planet
+        assert got["rekhas"] == rekhas
+        assert got["product"] == product
+        assert got["nakshatra"]["remainder"] == 3
+        assert got["nakshatra"]["nakshatra"] == star
+    assert [run[4] // 27 for run in EXAMPLE_112_RUNS] == [27, 16]
+
+
+def test_neither_of_example_112s_pairings_is_in_table_61():
+    """The Moon on the 1st where the table gives the 4th, Saturn on the 6th
+    where it gives the 8th. "Any house from any planet", demonstrated.
+    """
+    from hora.charts.book import chart
+    from hora.transits.gochara import (
+        EXAMPLE_112_RUNS,
+        EXAMPLE_112_USES_TWO_PAIRINGS_OUTSIDE_TABLE_61,
+        TABLE_61_TIMING,
+        sodhya_timing,
+    )
+
+    signs = _chart_24_reference_signs()
+    printed = chart(24)["ashtakavarga"]["rasi"]
+    for planet, house, _rekhas, pinda, _product, _star in EXAMPLE_112_RUNS:
+        got = sodhya_timing(planet, house, planet_sign=signs[planet],
+                            bav_rekhas=printed[planet], pinda=pinda)
+        assert got["in_table_61"] is False, planet
+        assert got["table_61_house"] == TABLE_61_TIMING[planet][0]
+        assert got["table_61_house"] != house
+    assert TABLE_61_TIMING["Moon"][0] == 4
+    assert TABLE_61_TIMING["Saturn"][0] == 8
+    assert "neither run is a table row" in (
+        EXAMPLE_112_USES_TWO_PAIRINGS_OUTSIDE_TABLE_61)
+
+
+def test_the_matter_crosses_the_planets_significations_with_the_houses():
+    """"Saturn shows sorrows, suffering and fears. The 6th house shows
+    litigation." Both halves are the book's, from two different sections.
+    """
+    from hora.transits.gochara import (
+        SODHYA_TIMING_MATTERS,
+        THE_FIRST_HOUSE_FROM_THE_MOON_IS_THE_MENTAL_STATE,
+        THE_MATTER_IS_THE_PLANET_CROSSED_WITH_THE_HOUSE,
+    )
+
+    assert "sorrows" in SODHYA_TIMING_MATTERS["Saturn"]
+    assert "fears" in SODHYA_TIMING_MATTERS["Saturn"]
+    assert "happiness" in SODHYA_TIMING_MATTERS["Moon"]
+    assert "mind" in SODHYA_TIMING_MATTERS["Moon"]
+
+    assert "sorrows and setbacks in litigation" in (
+        THE_MATTER_IS_THE_PLANET_CROSSED_WITH_THE_HOUSE)
+    assert "mental state and happiness" in (
+        THE_FIRST_HOUSE_FROM_THE_MOON_IS_THE_MENTAL_STATE)
+
+
+def test_litigation_is_not_in_the_sixth_houses_printed_significations():
+    """The planet half of the cross is §25.6's own list. The house half is
+    not: §7.2 never says litigation, and getting there from "enemies" is our
+    inference, not the book's. Same shape as OI-55; nothing is added.
+    """
+    from hora.core.const import HOUSE_SIGNIFICATIONS
+    from hora.transits.gochara import (
+        LITIGATION_IS_NOT_IN_THE_SIXTH_HOUSES_PRINTED_LIST,
+    )
+
+    sixth = str(HOUSE_SIGNIFICATIONS[6]).lower()
+    assert "litigation" not in sixth
+    assert "enemies" in sixth
+    assert not any("litigation" in str(HOUSE_SIGNIFICATIONS[h]).lower()
+                   for h in range(1, 13))
+    assert "an inference the book does not make" in (
+        LITIGATION_IS_NOT_IN_THE_SIXTH_HOUSES_PRINTED_LIST)
+
+
+def test_krittikas_printed_span_matches_the_division_we_compute_in():
+    """"Krittika (26 Ar 40 - 10 Ta 00)" -- the only place §25.6 gives its
+    output in degrees, so the only check that the numbering lines up.
+    """
+    from hora.transits.gochara import KRITTIKA_SPAN_AS_PRINTED
+
+    span = 360.0 / 27
+    start, end = 2 * span, 3 * span
+    assert start == 26 + 40 / 60                 # 26 Ar 40
+    assert end == 30 + 10                        # 10 Ta 00
+    assert KRITTIKA_SPAN_AS_PRINTED == "26 Ar 40 - 10 Ta 00"
+
+
+def test_saturn_and_jupiter_were_both_in_krittika_at_the_ruling():
+    """"Despite Jupiter's simultaneous transit." They were about a degree
+    apart -- this is the May 2000 conjunction -- and the example reads the
+    outcome from Saturn.
+    """
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.gochara import (
+        EXAMPLE_112_OUTCOME,
+        SATURN_PREVAILS_OVER_A_SIMULTANEOUS_JUPITER,
+    )
+
+    computed = compute_chart(
+        from_local(2000, 6, 7, 12, 0, 0.0, utc_offset_hours=-7.0),
+        Place(name="Seattle", latitude=47 + 36 / 60,
+              longitude=-(122 + 20 / 60)),
+        Settings(node_type=NodeType.MEAN))
+    saturn = computed.positions[int(Graha.SATURN)].longitude
+    jupiter = computed.positions[int(Graha.JUPITER)].longitude
+    span = 360.0 / 27
+    assert int(saturn // span) == int(jupiter // span) == 2
+    assert str(NAKSHATRA_NAMES[int(saturn // span)]) == "Krittika"
+    assert abs(saturn - jupiter) < 2.0
+
+    assert "roughly a degree apart" in (
+        SATURN_PREVAILS_OVER_A_SIMULTANEOUS_JUPITER)
+    assert "unfavorable ruling" in EXAMPLE_112_OUTCOME
+
+
+def test_two_independent_runs_agreeing_is_read_as_corroboration():
+    from hora.transits.gochara import (
+        EXAMPLE_112_RUNS,
+        TWO_RUNS_CONVERGING_IS_TREATED_AS_CORROBORATION,
+    )
+
+    planets = {run[0] for run in EXAMPLE_112_RUNS}
+    houses = {run[1] for run in EXAMPLE_112_RUNS}
+    products = {run[4] for run in EXAMPLE_112_RUNS}
+    stars = {run[5] for run in EXAMPLE_112_RUNS}
+    assert len(planets) == len(houses) == len(products) == 2
+    assert len(stars) == 1
+    assert "the same star" in TWO_RUNS_CONVERGING_IS_TREATED_AS_CORROBORATION

@@ -1850,12 +1850,26 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "HL": "Sg", "Rahu": "Sc", "Ven": "Li", "Sun": "Li", "GL": "Li",
             "Sat": "Li", "Merc": "Vi", "Mars": "Vi", "AL": "Vi",
         },
+        "ashtakavarga": {
+            "rasi": {
+                "Moon": (4, 3, 4, 4, 6, 3, 1, 5, 5, 4, 4, 6),
+                "Saturn": (3, 3, 4, 4, 7, 2, 1, 3, 2, 4, 3, 3),
+            },
+        },
+        "sodhya_pindas": {"Moon": 122, "Saturn": 145},
+        "events": {
+            "a US judge ruled Microsoft a monopoly and ordered a breakup":
+                "June 2000 — the month is printed, not the day",
+        },
         "first_seen": "chapter 18, Example 68",
         "note": (
             "The first lagna-seeded chart in chapter 18, so the first on "
             "which section 18.4's dasa lagna is the dasa rasi itself. Its "
             "Virgo dasa settles OI-121: Mercury is exalted in his own Virgo, "
-            "so exceptions 1 and 2 meet, and the book prints 12 years, not 13."
+            "so exceptions 1 and 2 meet, and the book prints 12 years, not "
+            "13. Example 112 returns to it for section 25.6 and prints the "
+            "BAVs and sodhya pindas of the Moon and Saturn; all four "
+            "reproduce."
         ),
     },
     23: {

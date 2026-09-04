@@ -957,6 +957,21 @@ resolving to Revati and Pisces — so what follows is prose and findings.
 | `THE_ZERO_CASE_IS_THE_ONE_WHERE_BOTH_HALVES_AGREE` | Ours: Revati lies wholly inside Pisces, so the nakshatra and rasi readings cannot diverge here. A test checks the containment |
 | `THE_REVATI_TRANSIT_WINDOW_IS_THIRTEEN_MONTHS` | Ours: how wide the window the technique names actually is, measured from the ephemeris |
 
+### Chapter 25 — Example 112 (9)
+
+`transits/gochara.py`. The example's arithmetic **is** consumed — two BAVs,
+two sodhya pindas through §12.7, and both products landing on Krittika — so
+what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `THE_MATTER_IS_THE_PLANET_CROSSED_WITH_THE_HOUSE` · `THE_FIRST_HOUSE_FROM_THE_MOON_IS_THE_MENTAL_STATE` · `EXAMPLE_112_OUTCOME` | The example verbatim. `sodhya_timing` serves the planet's matters; it does not compose the sentence |
+| `EXAMPLE_112_USES_TWO_PAIRINGS_OUTSIDE_TABLE_61` | Ours: neither run is a Table 61 row, which is the demonstration that the table is a shortlist. `in_table_61` reports it per call |
+| `LITIGATION_IS_NOT_IN_THE_SIXTH_HOUSES_PRINTED_LIST` | Ours: a signification the example reads and §7.2's list does not carry. Recorded, never added — see OI-55 |
+| `TWO_RUNS_CONVERGING_IS_TREATED_AS_CORROBORATION` | Ours: the only place §25.6 says anything about combining two readings, and it is by example rather than by rule |
+| `EXAMPLE_112_RUNS` · `KRITTIKA_SPAN_AS_PRINTED` | Fixtures. The span is the only degree-level check that our nakshatra numbering matches the book's |
+| `SATURN_PREVAILS_OVER_A_SIMULTANEOUS_JUPITER` | Ours: measured from the ephemeris — the two were about a degree apart. It reads §25.6's "especially Saturn" as a precedence, which the book states as emphasis only |
+
 ---
 
 ## How to use this register

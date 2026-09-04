@@ -1982,3 +1982,90 @@ THE_REVATI_TRANSIT_WINDOW_IS_THIRTEEN_MONTHS = (
     "retrograde loop keeping him there for thirteen months. The technique "
     "names that window, not a day."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 112 — two runs on one chart, converging
+# --------------------------------------------------------------------------
+
+#: **Finding.** Example 112 is where "any house from any planet" stops being a
+#: claim. **Neither** of its two pairings is in Table 61: the Moon is read on
+#: the **1st** house where the table gives the 4th, and Saturn on the **6th**
+#: where the table gives the 8th. So the table really is a shortlist of
+#: Parasara's worked cases, and `sodhya_timing` is right to take any pair.
+EXAMPLE_112_USES_TWO_PAIRINGS_OUTSIDE_TABLE_61 = (
+    "The Moon is read on the 1st house from himself and Saturn on the 6th "
+    "from himself. Table 61 pairs the Moon with the 4th and Saturn with the "
+    "8th, so neither run is a table row."
+)
+
+#: **Finding.** The example states, for the first time, how the matter being
+#: timed is arrived at: the **planet's** significations are crossed with the
+#: **house's**. "Saturn shows sorrows, suffering and fears. The 6th house
+#: shows litigation. The 6th from Saturn can be used for sorrows and setbacks
+#: in litigation." §25.6 listed the planets' matters and never said the house
+#: contributed one of its own.
+THE_MATTER_IS_THE_PLANET_CROSSED_WITH_THE_HOUSE = (
+    "Saturn shows sorrows, suffering and fears. The 6th house shows "
+    "litigation. The 6th from Saturn can be used for sorrows and setbacks in "
+    "litigation."
+)
+
+#: **Finding.** The house half of that cross reaches a word §7.2's own list
+#: does not carry. "The 6th house shows litigation", and
+#: `HOUSE_SIGNIFICATIONS[6]` runs "enemies, service, servants, relatives,
+#: mental tension, injuries, health, diseases, agriculture, accidents, mental
+#: affliction, mother's younger brother, hips" — no litigation, and the
+#: nearest word, *enemies*, becomes litigation only by inference. Nothing is
+#: added to the table; this is the same shape as OI-55, one chapter further on.
+LITIGATION_IS_NOT_IN_THE_SIXTH_HOUSES_PRINTED_LIST = (
+    "Example 112 reads litigation from the 6th house. Section 7.2's list for "
+    "the 6th does not contain the word, and reaching it from \"enemies\" is "
+    "an inference the book does not make in writing."
+)
+
+#: The same construction on the other run, where the 1st house supplies the
+#: self and the Moon supplies the mind.
+THE_FIRST_HOUSE_FROM_THE_MOON_IS_THE_MENTAL_STATE = (
+    "So Saturn's transit in Krittika star can attack the 1st house from Moon "
+    "- the mental state and happiness."
+)
+
+#: **Finding.** The two runs are independent — different planet, different
+#: house, different rekha count, different pinda — and land on the same
+#: nakshatra. The example treats that convergence as corroboration ("That
+#: again shows Krittika star") rather than as a coincidence, which is the only
+#: place §25.6 says anything about combining two readings.
+TWO_RUNS_CONVERGING_IS_TREATED_AS_CORROBORATION = (
+    "6 x 122 = 732 gives remainder 3 and 3 x 145 = 435 gives remainder 3. "
+    "Two unrelated products, the same star, and the example reads the "
+    "agreement as strengthening the call."
+)
+
+#: Example 112's two runs: (planet, house, rekhas, pinda, product, nakshatra).
+EXAMPLE_112_RUNS: tuple[tuple[str, int, int, int, int, str], ...] = (
+    ("Moon", 1, 6, 122, 732, "Krittika"),
+    ("Saturn", 6, 3, 145, 435, "Krittika"),
+)
+
+#: Krittika's span as the example prints it — the only place §25.6's output is
+#: given in degrees, so the only check that the nakshatra numbering lines up
+#: with the zodiac we compute in.
+KRITTIKA_SPAN_AS_PRINTED = "26 Ar 40 - 10 Ta 00"
+
+#: **Finding.** "Despite Jupiter's simultaneous transit, Saturn's transit in
+#: Krittika star brought some troubles." On the day of the ruling the two were
+#: about **one degree apart**, both inside Krittika — this is the May 2000
+#: Jupiter-Saturn conjunction. §25.6 says benefics give good results and
+#: malefics bad, and adds that Saturn's transit is *especially* important; the
+#: example is that emphasis being cashed out, with the malefic reading
+#: prevailing over a benefic at the same degree.
+SATURN_PREVAILS_OVER_A_SIMULTANEOUS_JUPITER = (
+    "Saturn and Jupiter were both transiting Krittika when the ruling came, "
+    "roughly a degree apart. The example reads the outcome from Saturn and "
+    "notes Jupiter only to set him aside, which is what \"especially "
+    "Saturn's transit is important\" means in practice."
+)
+
+EXAMPLE_112_OUTCOME = (
+    "As a result, he suffered an unfavorable ruling from a US judge.")

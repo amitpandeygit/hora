@@ -239,13 +239,14 @@ D-16 and D-4. **It cannot reach D-12**: that signifies "parents", the 4th house
 "Mother", and *mother is a parent* is world knowledge neither table holds. The
 overlap returns `relative` — not wrong, not what PVR picked.
 
-**A pattern, not one case.** Three instances so far, all in chapter 7:
+**A pattern, not one case.** Four instances so far, three in chapter 7:
 
 | section | the book says | the tables say |
 |---|---|---|
 | §7.3 | 4th in D-12 shows **mother** | D-12 signifies "parents" |
 | §7.3.5 | 5th shows **memory**, **success in competition** | 5th lists neither |
 | §7.3.9 | 5th shows **progeny** | 5th lists "Children" |
+| §25.6, Ex 112 | 6th shows **litigation** | 6th lists "enemies", never the word |
 
 The book links matters to houses by meaning throughout, so any code matching
 significations literally keeps hitting this, and each miss looks like a bug
