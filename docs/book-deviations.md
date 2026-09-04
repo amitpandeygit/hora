@@ -2231,12 +2231,26 @@ Venus sits 1′ from an exact D-20 boundary — 25 Sc 30 is 17 × 1° 30′ — 
 ayanamsa alone decides its amsa. Example 102's own figures come out **only**
 from Chart 49's longitudes.
 
-**What we do:** register both as printed and compute Example 102 from Chart
-49's own longitudes. Chart 49 is flagged as not reproducing under our
-ayanamsa; a test asserts both facts so neither is forgotten.
+**It is three charts, not one.** Measured across every recomputable chart in
+the register — mean signed error against the printed longitudes, in arcminutes:
 
-**Closes when:** the ayanamsa gap is identified, or a later chart of this
-native settles which casting is intended.
+| charts | mean error | reading |
+|---|---|---|
+| the other **40**, 1542 to 1972 | **+0.28′ to +0.78′** | our value sits half an arcminute above a truncated print — exactly what truncation to the arcminute predicts |
+| **49, 50, 51** | **−1.31′, −1.42′, −1.41′** | 1.9′ the other way |
+
+The offset is uniform across each chart's nine bodies — no correlation with a
+graha's speed — so it is not a birth-time difference. It is an **ayanamsa about
+1.9′ smaller** than the one the rest of the book uses. No ayanamsa we support
+closes it: True Chitra moves every chart +0.92′, which is half the gap and
+spoils the other forty.
+
+**What we do:** register all three as printed and compute their examples from
+their own longitudes. Nothing is changed. Tests pin both the cluster's +0.5′
+truncation bias and the three charts' −1.4′.
+
+**Closes when:** the ayanamsa is identified, or a later chart of one of these
+natives settles which casting is intended.
 
 ## D-70 · Example 102's D-10 claim holds for A3 and not for the 3rd house
 

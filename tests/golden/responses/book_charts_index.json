@@ -343,6 +343,13 @@
         "number": 50,
         "recomputable": true,
         "title": "Divorced Lady \u2014 Exercise 36"
+      },
+      {
+        "birth": "July 12, 1937, 12:30 am (5:00 West), 75 W 10, 39 N 57",
+        "first_seen": "chapter 24, Exercise 37",
+        "number": 51,
+        "recomputable": true,
+        "title": "Bill Cosby, D-10 \u2014 Exercise 37"
       }
     ],
     "not_supplied": [
@@ -391,7 +398,8 @@
       47,
       48,
       49,
-      50
+      50,
+      51
     ]
   },
   "status": 200

@@ -3509,3 +3509,217 @@ def test_exercise_36s_antardasas_need_the_solar_year():
     assert covers("Li", 1995, 11, 360.0)
 
     assert "needs the solar year" in EXERCISE_36_FAVOURS_THE_SOLAR_YEAR
+
+
+# ---------------------------------------------------------------------------
+# Exercise 37 — Chart 51, Bill Cosby's D-10
+# ---------------------------------------------------------------------------
+
+def _chart_51():
+    """Chart 51's D-10, from the printed rasi longitudes."""
+    from hora.charts.book import longitudes
+    from hora.charts.colord import stronger
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(51)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    references = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars",
+                  "Merc": "Mercury", "Jup": "Jupiter", "Ven": "Venus",
+                  "Sat": "Saturn", "Asc": "Lagna"}
+    signs = {int(g): varga(printed[n], "D10").sign for n, g in named.items()}
+    return {
+        "lagna": varga(printed["Asc"], "D10").sign,
+        "signs": signs,
+        "references": {ref: varga(printed[n], "D10").sign
+                       for n, ref in references.items()},
+        "co_lords": {rasi: stronger(rasi, {g: s * 30.0
+                                           for g, s in signs.items()}).winner
+                     for rasi in (7, 10)},
+    }
+
+
+def test_chart_51s_drawn_d10_reproduces():
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_ABBR
+
+    drawn = dict(chart(51)["divisional"]["D10"])
+    drawn.pop("AL")
+    assert len(drawn) == 12
+    for name, abbr in drawn.items():
+        got = str(RASI_ABBR[varga(longitudes(51)[name], "D10").sign])
+        assert got == abbr, f"{name}: printed {abbr}, computed {got}"
+
+
+def test_exercise_37_reproduces_the_only_complete_sav_in_the_book():
+    """"Ar Ta Ge Cn Le Vi Li Sc Sg Cp Aq Pi / 24 28 21 38 34 21 26 26 37 31 25
+    26."  All twelve, and the only whole SAV the book prints.
+    """
+    from hora.charts.ashtakavarga import sarvashtakavarga
+    from hora.charts.book import chart
+    from hora.dasha.nakshatra.kalachakra import THE_ONLY_COMPLETE_SAV_IN_THE_BOOK
+
+    printed = [24, 28, 21, 38, 34, 21, 26, 26, 37, 31, 25, 26]
+    sav = sarvashtakavarga(_chart_51()["references"])
+    assert sav["rekhas"] == printed
+    assert sav["total"] == 337
+    assert chart(51)["sav"]["D10"] == {
+        A[sign]: printed[sign] for sign in range(12)}
+    assert "totalling 337" in THE_ONLY_COMPLETE_SAV_IN_THE_BOOK
+
+
+def test_exercise_37s_four_reasons_for_cancer():
+    """"Cn is the 10th from lagna. Its lord Moon is in the 5th from lagna.
+    Moreover, Cn contains AL and shows status in career."  And 38 rekhas.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.ashtakavarga import sarvashtakavarga, sav_grade
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.nakshatra.kalachakra import (
+        EXERCISE_37_CANCER_REASONS,
+        THIRTY_EIGHT_IS_EXCEEDINGLY_STRONG,
+    )
+
+    chart = _chart_51()
+    lagna, cancer = chart["lagna"], R["Cn"]
+    assert A[lagna] == "Li"
+    assert (lagna + 9) % 12 == cancer            # the 10th from lagna
+
+    moon = int(Graha.MOON)
+    assert int(RASI_LORD[cancer]) == moon
+    assert chart["signs"][moon] == (lagna + 4) % 12          # the 5th
+
+    al = arudha_pada(1, lagna, chart["signs"], chart["co_lords"]).sign
+    assert al == cancer                          # Cn contains AL
+
+    sav = sarvashtakavarga(chart["references"])
+    assert sav["rekhas"][cancer] == 38
+    assert sav["rekhas"][cancer] == max(sav["rekhas"])       # the maximum
+    assert sav_grade(38) == "strong"
+    assert "exceedingly strong" in THIRTY_EIGHT_IS_EXCEEDINGLY_STRONG
+    assert len(EXERCISE_37_CANCER_REASONS) == 4
+
+
+def test_venus_in_aries_is_the_tenth_from_al():
+    """"Venus in Aries in the 10th house from AL shows a dynamic entertainer."
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import Graha
+
+    chart = _chart_51()
+    al = arudha_pada(1, chart["lagna"], chart["signs"],
+                     chart["co_lords"]).sign
+    assert A[chart["signs"][int(Graha.VENUS)]] == "Ar"
+    assert (al + 9) % 12 == chart["signs"][int(Graha.VENUS)]
+
+
+def test_exercise_37s_kalachakra_dasas():
+    """"Ta dasa of about 13 years was left at birth. Then Ge dasa of 9 years,
+    Le dasa 5 years and Cn dasa of 21 years followed."
+
+    Moon at 19 Le 28 is Poorvaphalguni's 2nd pada, apasavya-2, paramayush 83 --
+    and Taurus sits at two of the nine positions, the birth dasa being the
+    second.
+    """
+    from hora.charts.book import longitudes
+    from hora.dasha.nakshatra.kalachakra import (
+        A_PADA_CAN_HOLD_A_RASI_TWICE,
+        dasa_order,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+        paramayush,
+        sub_group_of,
+    )
+
+    moon = pada_of(longitudes(51)["Moon"])
+    assert (moon["nakshatra"], moon["group"], moon["pada"]) == (
+        11, "apasavya", 2)                       # Poorvaphalguni
+    assert sub_group_of(11) == 2
+
+    nine = pada_sequence("apasavya", 2, 2)
+    assert [A[rasi] for rasi in nine] == [
+        "Ge", "Ta", "Ar", "Sg", "Cp", "Aq", "Pi", "Ar", "Ta"]
+    assert paramayush(nine) == 83
+    assert [A[rasi] for rasi in nine].count("Ta") == 2       # twice over
+    assert [A[rasi] for rasi in nine].count("Ar") == 2
+
+    birth = first_dasa(nine, moon["elapsed_fraction"])
+    assert birth["rasi"] == "Taurus"
+    assert birth["position"] == 8                # the second Taurus, not the first
+    assert birth["balance_years"] == pytest.approx(13.28)    # "about 13 years"
+
+    following = dasa_order(11, 2, 4, skip=birth["position"])
+    assert [(A[row["sign"]], row["years"]) for row in following] == [
+        ("Ta", 16), ("Ge", 9), ("Le", 5), ("Cn", 21)]
+
+    # taking the first Taurus instead would give a different sequence entirely
+    wrong = dasa_order(11, 2, 4, skip=1)
+    assert [A[row["sign"]] for row in wrong] != [
+        A[row["sign"]] for row in following]
+    assert "not a rasi in a set" in A_PADA_CAN_HOLD_A_RASI_TWICE
+
+
+def test_cancer_dasa_opens_in_1964_under_both_year_lengths():
+    """"Cn dasa ran during 1964-1984."  It opens in 1964 either way and closes
+    in 1985 either way, so the label is loose and settles nothing for OI-115.
+    """
+    import swisseph as swe
+
+    from hora.charts.book import chart, longitudes
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        EXERCISE_37_DOES_NOT_SEPARATE_THE_YEAR_LENGTHS,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    birth = from_local(**chart(51)["birth_data"]).jd_ut
+    nine = pada_sequence("apasavya", 2, 2)
+    balance = first_dasa(
+        nine, pada_of(longitudes(51)["Moon"])["elapsed_fraction"]
+    )["balance_years"]
+
+    for year_days in (360.0, 365.25):
+        opens = birth + (balance + 9 + 5) * year_days        # Ta, Ge, Le
+        assert swe.revjul(opens)[0] == 1964
+        assert swe.revjul(opens + 21 * year_days)[0] == 1985
+
+    assert "1964 under both" in EXERCISE_37_DOES_NOT_SEPARATE_THE_YEAR_LENGTHS
+
+
+def test_three_charts_share_an_ayanamsa_the_other_forty_do_not():
+    """Charts 49, 50 and 51 sit about 1.9' below every other chart in the
+    register. The other forty cluster at +0.28' to +0.78', which is the
+    half-arcminute bias truncation predicts. D-69.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes, numbers
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    means = {}
+    for number in numbers():
+        record = chart(number)
+        if "birth_data" not in record or "longitudes" not in record:
+            continue
+        computed = compute_chart(
+            from_local(**record["birth_data"]),
+            Place(name=str(number), **record["place"]),
+            Settings(node_type=NodeType.MEAN))
+        printed = longitudes(number)
+        errors = [(computed.positions[int(graha)].longitude - printed[name]) * 60
+                  for name, graha in GRAHA_OF.items()]
+        means[number] = sum(errors) / len(errors)
+
+    odd = {number for number, mean in means.items() if mean < 0}
+    assert odd == {49, 50, 51}
+    for number in odd:
+        assert -1.5 < means[number] < -1.2
+    for number, mean in means.items():
+        if number not in odd:
+            assert 0.25 < mean < 0.8             # truncation, nothing else

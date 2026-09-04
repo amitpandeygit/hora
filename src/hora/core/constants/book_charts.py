@@ -437,6 +437,51 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    51: {
+        "title": "Bill Cosby, D-10 — Exercise 37",
+        "birth": "July 12, 1937, 12:30 am (5:00 West), 75 W 10, 39 N 57",
+        "birth_data": {
+            "year": 1937, "month": 7, "day": 12, "hour": 0, "minute": 30,
+            "second": 0.0, "utc_offset_hours": -5.0,
+        },
+        "place": {"latitude": 39 + 57 / 60, "longitude": -(75 + 10 / 60)},
+        "longitudes": {
+            "Asc": "20 Ar 14", "Sun": "26 Ge 29", "Moon": "19 Le 28",
+            "Mars": "28 Li 00", "Merc": "0 Cn 57", "Jup": "29 Sg 51",
+            "Ven": "11 Ta 30", "Sat": "12 Pi 09", "Rahu": "20 Sc 24",
+            "Ketu": "20 Ta 24", "HL": "19 Aq 33", "GL": "10 Le 20",
+        },
+        "chara_karakas": {
+            "Jup": "AK", "Mars": "AmK", "Sun": "BK", "Merc": "DK",
+            "Rahu": "GK", "Moon": "MK", "Sat": "PiK", "Ven": "PK",
+        },
+        "retrograde": ("Jup",),
+        "divisional": {
+            "D10": {
+                "Sat": "Pi", "Merc": "Pi", "Ven": "Ar", "Ketu": "Cn",
+                "Mars": "Cn", "AL": "Cn", "HL": "Le", "Jup": "Vi",
+                "Asc": "Li", "GL": "Sc", "Rahu": "Cp", "Moon": "Aq",
+                "Sun": "Aq",
+            },
+        },
+        "sav": {
+            "D10": {"Ar": 24, "Ta": 28, "Ge": 21, "Cn": 38, "Le": 34,
+                    "Vi": 21, "Li": 26, "Sc": 26, "Sg": 37, "Cp": 31,
+                    "Aq": 25, "Pi": 26},
+        },
+        "events": {
+            "came to limelight in the TV serial \"I Spy\"": "1965",
+            "won the Emmy Award for best actor": "1966, 1967 and 1968",
+            "Cn dasa": "1964-1984",
+        },
+        "first_seen": "chapter 24, Exercise 37",
+        "note": (
+            "Bill Cosby, named in the answer. The only chart in the register "
+            "whose **whole** SAV is printed, all twelve signs, and every one "
+            "reproduces. Like Charts 49 and 50 it sits about 1.9' below the "
+            "ayanamsa the other forty charts share -- see D-69."
+        ),
+    },
     50: {
         "title": "Divorced Lady — Exercise 36",
         "birth": "May 21, 1968, 11:05 pm (IST), 78 E 10, 18 N 40",

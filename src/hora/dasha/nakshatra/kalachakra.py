@@ -1542,3 +1542,54 @@ EXERCISE_36_FAVOURS_THE_SOLAR_YEAR = (
     "covers late 1995 under both. The stated Ge antardasa needs the solar "
     "year."
 )
+
+
+# --------------------------------------------------------------------------
+# Exercise 37 — Bill Cosby's D-10
+# --------------------------------------------------------------------------
+
+#: The four reasons Exercise 37 gives for Cancer, all read in the D-10.
+EXERCISE_37_CANCER_REASONS: tuple[str, ...] = (
+    "Cn is the 10th from lagna",
+    "its lord Moon is in the 5th from lagna",
+    "Cn contains AL and shows status in career",
+    "in SAV, Cn has 38 rekhas -- exceedingly strong",
+)
+
+#: **Finding.** Exercise 37 is the only place the book prints a **whole** SAV,
+#: all twelve signs, and every one reproduces. It is therefore the strongest
+#: single check on the ashtakavarga engine in the book — twelve independent
+#: figures from one chart, summing to 337.
+THE_ONLY_COMPLETE_SAV_IN_THE_BOOK = (
+    "Ar 24, Ta 28, Ge 21, Cn 38, Le 34, Vi 21, Li 26, Sc 26, Sg 37, Cp 31, "
+    "Aq 25, Pi 26. Twelve figures, all reproduced, totalling 337."
+)
+
+#: The question the exercise actually asks, and the answer's own words for 38.
+#: §24.3.1 gave one threshold, 30; this reads a count well above it as more
+#: than merely strong.
+THIRTY_EIGHT_IS_EXCEEDINGLY_STRONG = (
+    "In SAV, Cn has 38 rekhas. That is exceedingly strong. With the rasi "
+    "containing AL having 38 rekhas in SAV, the status of this actor must be "
+    "high."
+)
+
+#: **Finding.** Taurus occupies two of this pada's nine positions and the
+#: balance at birth falls in the **second** of them, which is what puts Gemini,
+#: Leo and Cancer next rather than Aries, Sagittarius and Capricorn. Reading
+#: the nine as a set of rasis rather than as nine wheel positions would take
+#: the wrong Taurus and the whole dasa sequence would be wrong.
+A_PADA_CAN_HOLD_A_RASI_TWICE = (
+    "Poorvaphalguni's 2nd pada runs Ge, Ta, Ar, Sg, Cp, Aq, Pi, Ar, Ta -- "
+    "Taurus at positions 1 and 8, Aries at 2 and 7. The dasa running at birth "
+    "is a position in that walk, not a rasi in a set."
+)
+
+#: **Finding.** Exercise 37 does not separate OI-115's year lengths. From the
+#: printed Moon, Cn dasa opens June 1964 under savana and October 1964 under
+#: 365.25 — both "1964". Its stated close, 1984, fits neither: twenty-one years
+#: from mid-1964 is 1985 under any reckoning, so the label is loose.
+EXERCISE_37_DOES_NOT_SEPARATE_THE_YEAR_LENGTHS = (
+    "Cn dasa opens in 1964 under both year lengths and closes in 1985 under "
+    "both. \"1964-1984\" is a loose label for a twenty-one-year dasa."
+)
