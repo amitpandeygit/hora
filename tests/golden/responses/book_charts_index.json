@@ -427,6 +427,20 @@
         "number": 62,
         "recomputable": true,
         "title": "Princess Diana \u2014 Example 111"
+      },
+      {
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 25, Exercise 38",
+        "number": 63,
+        "recomputable": true,
+        "title": "Exercise 38 \u2014 natal D-4 against the transit rasi chart"
+      },
+      {
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 25, Exercise 38",
+        "number": 64,
+        "recomputable": true,
+        "title": "Exercise 38 \u2014 natal rasi chart against the transit D-4"
       }
     ],
     "not_supplied": [
@@ -486,7 +500,9 @@
       59,
       60,
       61,
-      62
+      62,
+      63,
+      64
     ]
   },
   "status": 200

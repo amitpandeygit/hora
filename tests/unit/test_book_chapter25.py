@@ -2715,7 +2715,7 @@ def test_interaction_2_is_worked_exactly_once():
     """
     from hora.transits.gochara import (
         INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES,
-        INTERACTION_2_IS_WORKED_ONCE,
+        INTERACTION_2_IS_WORKED_TWICE,
         THE_TWO_IMPORTANT_INTERACTIONS,
     )
 
@@ -2724,7 +2724,7 @@ def test_interaction_2_is_worked_exactly_once():
     assert second["transit"] == "a transit divisional chart"
     assert second["timing"] == "fine-tune"
 
-    assert "interaction (2)" in INTERACTION_2_IS_WORKED_ONCE
+    assert "interaction (2)" in INTERACTION_2_IS_WORKED_TWICE
     assert "All three are interaction (1)" in (
         INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES)
 
@@ -4442,14 +4442,234 @@ def test_chapter_25_is_complete():
 
     assert tuple(STANDARD_RESULT_TABLES) == (53, 54, 55, 56, 57, 58, 59)
     assert len(TABLE_61_TIMING) == 7
-    assert set(range(52, 63)) <= set(numbers())
-    for number in range(52, 63):
+    assert set(range(52, 65)) <= set(numbers())
+    for number in range(52, 65):
         assert "chapter 25" in chart(number)["first_seen"] or number in (
             24, 45, 52)
 
     assert "§25.1 to §25.7" in CHAPTER_25_IS_COMPLETE
     assert "Tables 53 to 61" in CHAPTER_25_IS_COMPLETE
     assert "Examples 103 to 112" in CHAPTER_25_IS_COMPLETE
-    assert "Charts 52 to 62" in CHAPTER_25_IS_COMPLETE
+    assert "Exercise 38" in CHAPTER_25_IS_COMPLETE
+    assert "Charts 52 to 64" in CHAPTER_25_IS_COMPLETE
     assert "OI-142" in CHAPTER_25_IS_COMPLETE
     assert "OI-143" in CHAPTER_25_IS_COMPLETE
+
+
+# --------------------------------------------------------------------------
+# Exercise 38 — Charts 63 and 64, both interactions on one event
+# --------------------------------------------------------------------------
+
+def test_charts_63_and_64_share_one_nativity_that_recomputes():
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.karaka import chara_karakas
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    assert longitudes(63) == longitudes(64)
+    assert chart(63)["birth_data"] == chart(64)["birth_data"]
+
+    record = chart(63)
+    computed = compute_chart(from_local(**record["birth_data"]),
+                             Place(name="Machilipatnam", **record["place"]),
+                             Settings(node_type=NodeType.MEAN))
+    printed = longitudes(63)
+    for name, graha in GRAHA_OF.items():
+        assert abs(computed.positions[int(graha)].longitude
+                   - printed[name]) * 60 < 1.0, name
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+    assert record["retrograde"] == ("Jup",)
+    assert {name for name, graha in GRAHA_OF.items()
+            if name not in ("Rahu", "Ketu")
+            and computed.positions[int(graha)].is_retrograde} == {"Jup"}
+
+    advancement = {int(graha): printed[name]
+                   for name, graha in GRAHA_OF.items() if name != "Ketu"}
+    assert {GRAHA_OF[n]: s for n, s in record["chara_karakas"].items()} == {
+        k.graha: k.symbol for k in chara_karakas(advancement)}
+
+
+def test_the_natal_d4_of_chart_63_maps_from_the_printed_longitudes():
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+
+    printed = longitudes(63)
+    for name, sign in chart(63)["divisional"]["D4"].items():
+        if name == "AL":
+            continue
+        assert A[varga(printed[name], "D4").sign] == sign, name
+
+
+def test_both_arudha_lagnas_of_exercise_38_come_out_as_drawn():
+    """Scorpio in the natal rasi chart, Aquarius in the natal D-4 — the
+    arudha taken inside each chart.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.vargas import varga
+
+    printed = longitudes(63)
+    planets = {name: graha for name, graha in GRAHA_OF.items()
+               if name not in ("Rahu", "Ketu")}
+
+    rasi = {int(g): int(printed[n] // 30) for n, g in planets.items()}
+    assert A[arudha_pada(1, int(printed["Asc"] // 30), rasi).sign] == (
+        chart(64)["drawn"]["AL"] == "Sc" and "Sc")
+
+    d4 = {int(g): varga(printed[n], "D4").sign for n, g in planets.items()}
+    assert A[arudha_pada(1, varga(printed["Asc"], "D4").sign, d4).sign] == (
+        chart(63)["divisional"]["D4"]["AL"] == "Aq" and "Aq")
+
+
+def test_the_transit_instant_reproduces_in_both_the_rasi_and_the_d4():
+    """One instant, two charts. Chart 63 draws its rasi signs and Chart 64
+    its D-4 signs, and 2:45 am on 16 August 1991 gives both.
+    """
+    from hora.charts.book import GRAHA_OF, chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.vargas import varga
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    block = chart(64)["transit"]
+    computed = compute_chart(from_local(**block["birth_data"]),
+                             Place(name="Machilipatnam", **block["place"]),
+                             Settings(node_type=NodeType.MEAN))
+
+    for name, sign in chart(63)["transit"]["drawn"].items():
+        longitude = computed.positions[int(GRAHA_OF[name])].longitude
+        assert A[int(longitude // 30)] == sign, ("rasi", name)
+    for name, sign in block["divisional"]["D4"].items():
+        longitude = computed.positions[int(GRAHA_OF[name])].longitude
+        assert A[varga(longitude, "D4").sign] == sign, ("D4", name)
+
+    assert set(block["retrograde"]) == {
+        name for name, graha in GRAHA_OF.items()
+        if name not in ("Rahu", "Ketu")
+        and computed.positions[int(graha)].is_retrograde}
+
+
+def test_only_the_divisional_half_of_the_transit_needs_a_time():
+    """Across all of 16 August 1991 no transit rasi sign changes, while the
+    Moon crosses three D-4 signs. That is why Chart 63 prints a date and
+    Chart 64 prints a date and a time.
+    """
+    from hora.charts.book import GRAHA_OF, chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.vargas import varga
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.gochara import WHY_ONLY_THE_DIVISIONAL_HALF_NEEDS_A_TIME
+
+    place = Place(name="Machilipatnam", **chart(64)["transit"]["place"])
+    settings = Settings(node_type=NodeType.MEAN)
+
+    def signs(hour):
+        computed = compute_chart(
+            from_local(1991, 8, 16, hour, 0, 0.0, utc_offset_hours=5.5),
+            place, settings)
+        longitudes = {name: computed.positions[int(graha)].longitude
+                      for name, graha in GRAHA_OF.items()}
+        return ({n: int(v // 30) for n, v in longitudes.items()},
+                {n: varga(v, "D4").sign for n, v in longitudes.items()})
+
+    base_rasi, base_d4 = signs(0)
+    rasi_moved, d4_moved = set(), set()
+    for hour in range(1, 24):
+        rasi, d4 = signs(hour)
+        rasi_moved |= {n for n in rasi if rasi[n] != base_rasi[n]}
+        d4_moved |= {n for n in d4 if d4[n] != base_d4[n]}
+
+    assert rasi_moved == set()
+    assert d4_moved == {"Moon"}
+    assert len({signs(h)[1]["Moon"] for h in range(24)}) == 3
+
+    assert chart(63)["transit"]["date"].startswith("August 16, 1991 — no time")
+    assert "2:45 am" in chart(64)["transit"]["date"]
+    assert "is a date" in WHY_ONLY_THE_DIVISIONAL_HALF_NEEDS_A_TIME
+
+
+def test_interaction_1s_reading_holds_against_chart_63():
+    """Lagna Sg in the natal D-4, the 9th from it Leo holding Rahu, and four
+    transiting planets in Leo, three of them owning something that matters.
+    """
+    from hora.charts.book import chart
+    from hora.core.const import RASI_LORD, Graha
+    from hora.transits.gochara import (
+        EXERCISE_38_INTERACTION_1,
+        RELEVANCE_IS_DRAWN_FROM_BOTH_CHARTS_AT_ONCE,
+        THE_HOUSE_AND_ITS_OCCUPANT_ARE_READ_TOGETHER,
+    )
+
+    d4 = chart(63)["divisional"]["D4"]
+    lagna = R[d4["Asc"]]
+    assert d4["Asc"] == "Sg"
+    assert A[(lagna + 8) % 12] == "Le" == d4["Rahu"]      # 9th holds Rahu
+    assert A[(lagna + 11) % 12] == "Sc"                   # 12th
+    assert RASI_LORD[lagna] == int(Graha.JUPITER)
+    assert RASI_LORD[(lagna + 11) % 12] == int(Graha.MARS)
+    assert RASI_LORD[R[chart(64)["drawn"]["Asc"]]] == int(Graha.MERCURY)
+
+    transit = chart(63)["transit"]["drawn"]
+    in_leo = [name for name, sign in transit.items() if sign == "Le"]
+    assert len(in_leo) == 4
+    assert {"Jup", "Merc", "Mars"} <= set(in_leo)
+    assert transit["Rahu"] == d4["Asc"] == "Sg"
+
+    assert len(EXERCISE_38_INTERACTION_1) == 7
+    assert "the two agreeing" in THE_HOUSE_AND_ITS_OCCUPANT_ARE_READ_TOGETHER
+    assert "Three lordships, two charts" in (
+        RELEVANCE_IS_DRAWN_FROM_BOTH_CHARTS_AT_ONCE)
+
+
+def test_interaction_2s_reading_holds_against_chart_64():
+    """Rahu in Vi in the transit D-4 on a Virgo natal lagna, Jupiter the 7th
+    lord sitting in the 12th, and two malefics in the 8th.
+    """
+    from hora.charts.book import chart
+    from hora.core.const import (
+        NATURAL_BENEFIC,
+        NATURAL_MALEFIC,
+        RASI_LORD,
+        Graha,
+    )
+    from hora.transits.gochara import EXERCISE_38_INTERACTION_2
+
+    natal = chart(64)["drawn"]
+    lagna = R[natal["Asc"]]
+    assert natal["Asc"] == "Vi"
+    transit_d4 = chart(64)["transit"]["divisional"]["D4"]
+
+    assert transit_d4["Rahu"] == "Vi"
+    assert RASI_LORD[(lagna + 6) % 12] == int(Graha.JUPITER)   # 7th lord
+    assert A[(lagna + 11) % 12] == "Le" == transit_d4["Jup"]    # 12th
+    assert A[(lagna + 7) % 12] == "Ar"                          # 8th
+    assert RASI_LORD[(lagna + 7) % 12] == int(Graha.MARS)
+    assert A[(lagna + 8) % 12] == "Ta" == transit_d4["Mars"]     # 9th
+
+    in_aries = [n for n, s in transit_d4.items() if s == "Ar"]
+    assert sorted(in_aries) == ["Sat", "Sun"]
+    named = {"Sat": Graha.SATURN, "Sun": Graha.SUN}
+    assert all(named[n] in NATURAL_MALEFIC for n in in_aries)
+    assert Graha.JUPITER in NATURAL_BENEFIC
+    assert len(EXERCISE_38_INTERACTION_2) == 5
+
+
+def test_interaction_2_is_now_worked_twice():
+    """Example 107 against a transit D-11, Exercise 38 against a transit D-4,
+    each paired with an interaction (1) chart on the same instant.
+    """
+    from hora.transits.gochara import (
+        INTERACTION_2_IS_WORKED_TWICE,
+        INTERACTION_2_SHOWS_FINER_AND_MOMENTARY_DETAILS,
+        THE_TWO_IMPORTANT_INTERACTIONS,
+    )
+
+    assert "Exercise 38" in INTERACTION_2_IS_WORKED_TWICE
+    assert "Example 107" in INTERACTION_2_IS_WORKED_TWICE
+    assert "Charts 56 and 57, then 63 and 64" in INTERACTION_2_IS_WORKED_TWICE
+    assert THE_TWO_IMPORTANT_INTERACTIONS[1]["timing"] == "fine-tune"
+    assert "finer and momentary" in (
+        INTERACTION_2_SHOWS_FINER_AND_MOMENTARY_DETAILS)

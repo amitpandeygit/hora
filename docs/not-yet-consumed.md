@@ -841,7 +841,7 @@ consumed; what follows is §25.4's prose, its provenance and its structure.
 | `THE_ASCENDANT_CARRIES_THE_BIRTH_TIMES_ROUNDING` | Ours, not the book's: a printed ascendant can sit 5' to 16' from ours while every graha agrees, because birth times are printed to the minute. A test checks it across the whole register; nothing reads the sentence |
 | `D11_IS_RUDRAMSA` · `EXAMPLE_107_NATAL_D11` · `EXAMPLE_107_TRANSIT_AGAINST_THE_D11` · `PLANETS_OF_LIFE_AND_DEATH` · `THE_LIFE_DEATH_SPLIT_IS_THE_MARAKA_HOUSES` | Example 107's D-11 reading and the life/death split it introduces. Every placement it asserts **is** reproduced; these hold the reasoning, and no layer yet sorts a chart's grahas into life and death |
 | `THE_THIRD_FROM_AL_SHOWS_THE_PLACE_OF_DEATH` · `THE_CRUEL_ASPECT_HERE_IS_RASI_DRISHTI` · `CAPRICORN_IS_CALLED_WATERY_HERE` | §25.4's place-of-death rule, and two findings about how it is applied. D-73 for the element |
-| `EXAMPLE_107_NATAL_RASI_POINTS` · `EXAMPLE_107_TRANSIT_D11_HITS` · `THE_KILLER_MEETS_THE_BODY` · `THE_TRANSIT_MOONS_AMSA_NEEDS_THE_UNROUNDED_POSITION` · `INTERACTION_2_IS_WORKED_ONCE` · `INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES` | The interaction (2) reading. Every placement **is** reproduced; these hold what it means |
+| `EXAMPLE_107_NATAL_RASI_POINTS` · `EXAMPLE_107_TRANSIT_D11_HITS` · `THE_KILLER_MEETS_THE_BODY` · `THE_TRANSIT_MOONS_AMSA_NEEDS_THE_UNROUNDED_POSITION` · `INTERACTION_2_IS_WORKED_TWICE` · `INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES` | The interaction (2) reading. Every placement **is** reproduced; these hold what it means |
 
 ### Chapter 25 — §25.5's transit ashtakavarga (10)
 
@@ -985,6 +985,21 @@ code.
 | `THE_TWO_INTERACTIONS_RESTATED` · `THE_CHAPTER_ALSO_GAVE_THREE_TECHNIQUES` | The conclusion restating §25.4 and listing the chapter's techniques |
 | `THE_CONCLUSION_INTRODUCES_NOTHING_NEW` | Ours: the audit that says so, recorded so a reader meeting the summary first does not hunt for a rule that is not there |
 | `CHAPTER_25_IS_COMPLETE` | The coverage line — sections, tables, examples, charts and what stays open |
+
+### Chapter 25 — Exercise 38 (8)
+
+`transits/gochara.py`. Both readings **are** checked — every house, lordship
+and placement the answer names is asserted against Charts 63 and 64, and both
+transit halves recompute from one instant — so what follows is prose and
+findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXERCISE_38` · `EXERCISE_38_ANSWER` | The exercise and its final answer, held for citation |
+| `EXERCISE_38_INTERACTION_1` · `EXERCISE_38_INTERACTION_2` | The two readings verbatim, seven claims and five. Tests check each against the charts; nothing composes the prose |
+| `INTERACTION_2_SHOWS_FINER_AND_MOMENTARY_DETAILS` | The exercise's closing line, and the only place the book says *momentary* |
+| `WHY_ONLY_THE_DIVISIONAL_HALF_NEEDS_A_TIME` | Ours: measured over the book's own day — no transit rasi sign moves, the Moon's D-4 moves twice. Explains why one half is dated and the other timed |
+| `THE_HOUSE_AND_ITS_OCCUPANT_ARE_READ_TOGETHER` · `RELEVANCE_IS_DRAWN_FROM_BOTH_CHARTS_AT_ONCE` | Ours: two reading habits the exercise uses and §25.4 never states — a rasi read by house *and* occupant, and relevance drawn from lordships in either chart |
 
 ---
 

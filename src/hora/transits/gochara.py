@@ -1217,7 +1217,7 @@ EXAMPLES_104_AND_105_SHARE_A_WEDDING_CHART = (
 #: — a transit rasi position against a natal chart, in the D-1, D-9 and D-7
 #: respectively. Through those three it looked as though the fine-tuning half
 #: was described and never demonstrated. **Example 107 demonstrates it**; see
-#: :data:`INTERACTION_2_IS_WORKED_ONCE`.
+#: :data:`INTERACTION_2_IS_WORKED_TWICE`.
 INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES = (
     "Examples 104, 105 and 106 each read a transit rasi position against a "
     "natal chart -- the rasi chart, the D-9 and the D-7 in turn. All three "
@@ -1409,10 +1409,12 @@ THE_TRANSIT_MOONS_AMSA_NEEDS_THE_UNROUNDED_POSITION = (
 #: the transit D-11, which is exactly that pairing. It is the only instance in
 #: the book, and it arrives in the same example as the interaction (1) reading
 #: it is meant to fine-tune.
-INTERACTION_2_IS_WORKED_ONCE = (
-    "Example 107 reads the natal rasi chart against the transit D-11, which "
-    "is §25.4's interaction (2). Charts 56 and 57 give the same nativity and "
-    "the same instant through both interactions, one after the other."
+INTERACTION_2_IS_WORKED_TWICE = (
+    "Example 107 reads the natal rasi chart against the transit D-11, and "
+    "Exercise 38 reads it against the transit D-4. Both are §25.4's "
+    "interaction (2), and each pairs with a chart doing interaction (1) on "
+    "the same nativity and the same instant -- Charts 56 and 57, then 63 "
+    "and 64."
 )
 
 
@@ -2125,8 +2127,103 @@ THE_CONCLUSION_INTRODUCES_NOTHING_NEW = (
 
 #: Chapter 25 end to end, and what it leaves open.
 CHAPTER_25_IS_COMPLETE = (
-    "§25.1 to §25.7, Tables 53 to 61, Examples 103 to 112 and Charts 52 to "
-    "62, checked against the printed pages 313 to 340. Open: OI-141 (the day "
-    "method's missing threshold) and D-40's wording, which Example 108 "
-    "settled on the arithmetic. Closed here: OI-142 and OI-143."
+    "§25.1 to §25.7, Tables 53 to 61, Examples 103 to 112, Exercise 38 and "
+    "Charts 52 to 64, checked against the printed pages 313 to 340. Open: "
+    "OI-141 (the day method's missing threshold) and D-40's wording, which "
+    "Example 108 settled on the arithmetic. Closed here: OI-142 and OI-143."
+)
+
+
+# --------------------------------------------------------------------------
+# Exercise 38 — the chapter's exercise, both interactions on one event
+# --------------------------------------------------------------------------
+
+EXERCISE_38 = (
+    "For a native born on 4th April 1970 at 5:50 pm (IST) at Machilipatnam, "
+    "India (81e12, 16n15), an important event related to D-4 happened on "
+    "16th August 1991. Try to guess it based on the interaction between "
+    "natal D-4 and transit rasi chart. Then analyze the interaction between "
+    "natal rasi chart and transit D-4 also.")
+
+EXERCISE_38_ANSWER = (
+    "The native left his motherland and landed in USA on that date.")
+
+#: Interaction (1)'s reading, in the order the answer gives it. Each entry is
+#: a claim about the natal D-4 that a test checks against Chart 63.
+EXERCISE_38_INTERACTION_1: tuple[str, ...] = (
+    ("Lagna is in Sg in natal D-4. The 9th house of fortune in a foreign "
+     "land is in Le and it contains Rahu, the significator of foreign "
+     "things. So Le stands for life in a foreign land in this D-4."),
+    ("Four planets occupy it in the transit rasi chart, including Jupiter, "
+     "Mercury and Mars."),
+    ("Jupiter owns lagna in natal D-4 and he shows the native from the point "
+     "of view of residence and fortune."),
+    ("Mercury owns lagna in natal rasi chart and he shows the physical self "
+     "of the native."),
+    ("Mars owns the 12th house in natal D-4 and he shows living in distant "
+     "places."),
+    ("All these planets activate Le in their rasi chart transit. So foreign "
+     "journey is a possibility."),
+    ("In addition, Rahu is in Sg in the transit rasi chart and Sg contains "
+     "lagna in natal D-4. So foreign influence on residence is fortified."),
+)
+
+#: Interaction (2)'s reading, likewise, against Chart 64.
+EXERCISE_38_INTERACTION_2: tuple[str, ...] = (
+    ("Lagna in Vi shows the nativity. Rahu in Vi in transit D-4 shows "
+     "foreign influence on Vi in the matter of residence. Since Vi "
+     "represents the nativity in natal lagna, this D-4 transit supports "
+     "going abroad."),
+    ("The 7th lord in the natal rasi chart is Jupiter and he is in Le in "
+     "D-4. Le is the 12th house in the natal rasi chart. This shows a long "
+     "trip."),
+    ("Aries (8th house) and Mars (8th lord) show changes in the natal rasi "
+     "chart. Taurus (9th house) shows flourishing in a foreign land."),
+    ("Aries contains two malefics and Mars occupies Taurus, in transit D-4."),
+    ("This shows the changes in residence and the temporary troubles of "
+     "adjusting to a foreign land."),
+)
+
+#: The exercise's own closing line, and the clearest statement of what
+#: interaction (2) buys — §25.4 said "fine-tune", §25.7 "fine timing", and
+#: this adds *momentary*.
+INTERACTION_2_SHOWS_FINER_AND_MOMENTARY_DETAILS = (
+    "Interaction between the natal rasi chart and transit divisional charts "
+    "shows finer and momentary details.")
+
+#: **Finding.** Exercise 38's two halves show why, on the book's own day.
+#: Across the whole of 16 August 1991 **not one** transit rasi sign changes,
+#: so Chart 63's rasi half is the same at every hour and needs no time. The
+#: transit D-4 does change: the Moon crosses three D-4 signs that day, at
+#: about 05:30 and 19:50 IST. That is why Chart 64's half carries a printed
+#: time and Chart 63's does not — the book's own asymmetry, and the coarse
+#: versus fine claim made concrete.
+WHY_ONLY_THE_DIVISIONAL_HALF_NEEDS_A_TIME = (
+    "No transit rasi sign changes anywhere in 16 August 1991, so the transit "
+    "rasi chart is a date. The Moon's D-4 sign changes twice that day, so "
+    "the transit D-4 is an instant. Chart 63 prints a date and Chart 64 "
+    "prints a date and a time."
+)
+
+#: **Finding.** The exercise reads a rasi in the natal D-4 by two routes at
+#: once and treats the agreement as reinforcement: Leo is the 9th from the
+#: D-4 lagna *and* holds Rahu, the significator of foreign things. Neither
+#: alone is given as sufficient — "**So** Le stands for life in a foreign
+#: land in this D-4" follows both.
+THE_HOUSE_AND_ITS_OCCUPANT_ARE_READ_TOGETHER = (
+    "Leo is the 9th house from the natal D-4 lagna, which is fortune in a "
+    "foreign land, and Leo holds Rahu, who signifies foreign things. The "
+    "reading rests on the two agreeing, not on either by itself."
+)
+
+#: **Finding.** Interaction (1)'s three activating planets are picked by
+#: **three different lordships in two different charts** — Jupiter owns the
+#: natal D-4 lagna, Mercury the natal *rasi* lagna, Mars the natal D-4's
+#: 12th. So a graha qualifies as relevant through any chart in play, not only
+#: through the varga being read. §25.4 never said which chart supplies the
+#: lordship.
+RELEVANCE_IS_DRAWN_FROM_BOTH_CHARTS_AT_ONCE = (
+    "Jupiter matters because he owns lagna in the natal D-4, Mercury because "
+    "he owns lagna in the natal rasi chart, and Mars because he owns the "
+    "12th in the natal D-4. Three lordships, two charts, one reading."
 )

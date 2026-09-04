@@ -2352,6 +2352,113 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "check that pipeline against a printed pinda."
         ),
     },
+    63: {
+        "title": "Exercise 38 — natal D-4 against the transit rasi chart",
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1970, "month": 4, "day": 4, "hour": 17, "minute": 50,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "14 Vi 52", "Sun": "20 Pi 52", "Moon": "28 Aq 35",
+            "Mars": "26 Ar 40", "Merc": "3 Ar 07", "Jup": "9 Li 45",
+            "Ven": "7 Ar 55", "Sat": "15 Ar 06", "Rahu": "16 Aq 53",
+            "Ketu": "16 Le 53", "HL": "15 Pi 42", "GL": "8 Vi 40",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Mars": "AmK", "Sun": "BK", "Jup": "PK",
+            "Sat": "MK", "Rahu": "PiK", "Ven": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "divisional": {
+            "D4": {
+                "Merc": "Ar", "Ketu": "Aq", "AL": "Aq", "Ven": "Cn",
+                "Jup": "Cp", "Mars": "Cp", "Rahu": "Le", "GL": "Sg",
+                "Asc": "Sg", "Moon": "Sc", "Sat": "Li", "HL": "Vi",
+                "Sun": "Vi",
+            },
+        },
+        "transit": {
+            "for": "the event of August 16, 1991",
+            "date": ("August 16, 1991 — no time printed on this half; "
+                     "Chart 64 gives 2:45 am (IST) for the same instant"),
+            "birth_data": {
+                "year": 1991, "month": 8, "day": 16, "hour": 2, "minute": 45,
+                "second": 0.0, "utc_offset_hours": 5.5,
+            },
+            "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+            "drawn": {
+                "Ketu": "Ge", "Sun": "Cn", "Sat": "Cp", "Merc": "Le",
+                "Mars": "Le", "Ven": "Le", "Jup": "Le", "Rahu": "Sg",
+                "Moon": "Li",
+            },
+            "retrograde": ("Sat", "Merc", "Ven"),
+        },
+        "events": {"he left India and landed in the USA": "August 16, 1991"},
+        "first_seen": "chapter 25, Exercise 38",
+        "note": (
+            "The chapter's exercise, and §25.4's interaction (1): a natal "
+            "**divisional** chart read against the **transit rasi** chart. "
+            "The natal half recomputes to 0.87' with the ascendant at 0.50', "
+            "all eight chara karakas match, and all twelve natal D-4 signs "
+            "map from the printed longitudes. Chart 64 is the same nativity "
+            "and the same instant through interaction (2)."
+        ),
+    },
+    64: {
+        "title": "Exercise 38 — natal rasi chart against the transit D-4",
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1970, "month": 4, "day": 4, "hour": 17, "minute": 50,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "14 Vi 52", "Sun": "20 Pi 52", "Moon": "28 Aq 35",
+            "Mars": "26 Ar 40", "Merc": "3 Ar 07", "Jup": "9 Li 45",
+            "Ven": "7 Ar 55", "Sat": "15 Ar 06", "Rahu": "16 Aq 53",
+            "Ketu": "16 Le 53", "HL": "15 Pi 42", "GL": "8 Vi 40",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Mars": "AmK", "Sun": "BK", "Jup": "PK",
+            "Sat": "MK", "Rahu": "PiK", "Ven": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "drawn": {
+            "HL": "Pi", "Sun": "Pi", "Merc": "Ar", "Mars": "Ar", "Sat": "Ar",
+            "Ven": "Ar", "Rahu": "Aq", "Moon": "Aq", "Ketu": "Le",
+            "AL": "Sc", "Jup": "Li", "GL": "Vi", "Asc": "Vi",
+        },
+        "transit": {
+            "for": "the event of August 16, 1991",
+            "date": "August 16, 1991, 2:45 am (IST), 81 E 12, 16 N 15",
+            "birth_data": {
+                "year": 1991, "month": 8, "day": 16, "hour": 2, "minute": 45,
+                "second": 0.0, "utc_offset_hours": 5.5,
+            },
+            "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+            "divisional": {
+                "D4": {
+                    "Ketu": "Pi", "Sat": "Ar", "Sun": "Ar", "Mars": "Ta",
+                    "Moon": "Cp", "Jup": "Le", "Ven": "Sc", "Merc": "Sc",
+                    "Rahu": "Vi",
+                },
+            },
+            "retrograde": ("Sat", "Merc", "Ven"),
+        },
+        "events": {"he left India and landed in the USA": "August 16, 1991"},
+        "first_seen": "chapter 25, Exercise 38",
+        "note": (
+            "The same nativity and instant as Chart 63, through §25.4's "
+            "interaction (2): the **natal rasi** chart against a **transit "
+            "divisional** chart. Every transit body reproduces in both the "
+            "rasi and the D-4, and all three printed retrogrades come out "
+            "retrograde. This half carries a **time** where Chart 63's does "
+            "not, and it has to: across August 16 no transit rasi sign "
+            "changes at all, while the Moon crosses three D-4 signs."
+        ),
+    },
 }
 
 
