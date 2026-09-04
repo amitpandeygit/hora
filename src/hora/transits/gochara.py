@@ -1789,15 +1789,17 @@ SODHYA_TIMING_CLOSING = (
     "readers will experiment with an open mind and share their findings with "
     "other astrologers.")
 
-#: **Gap.** The remainder rule is stated only for a non-zero remainder: 25
-#: gives the 25th nakshatra, 10 the 10th rasi. A product that is a multiple
-#: of 27 or of 12 leaves 0, and §25.6 never says what 0 means. It is reachable
-#: two ways — a house with **no** rekhas makes the product 0 outright, and an
-#: ordinary product can land on a multiple. See OI-143.
-THE_ZERO_REMAINDER_IS_NOT_DEFINED = (
-    "A remainder of 0 has no reading in section 25.6. It arises whenever the "
-    "house holds no rekhas, since the product is then 0, and whenever the "
-    "product is a multiple of 27 or 12."
+#: §25.6 states the remainder rule only for a non-zero remainder: 25 gives the
+#: 25th nakshatra, 10 the 10th rasi. **Example 111 supplies the rest** — 0 is
+#: "equivalent to 27" and "equivalent to 12" — which closed OI-143 in the
+#: direction already implemented. The zero is reachable two ways: a house with
+#: **no** rekhas makes the product 0 outright, and an ordinary product can
+#: land on a multiple.
+THE_ZERO_REMAINDER_MEANS_THE_LAST = (
+    "A remainder of 0 counts as the 27th nakshatra and the 12th rasi, which "
+    "Example 111 states outright. It arises whenever the house holds no "
+    "rekhas, since the product is then 0, and whenever the product is a "
+    "multiple of 27 or 12."
 )
 
 
@@ -1806,7 +1808,7 @@ def timing_nakshatra(product: int) -> dict:
 
     A remainder of 0 is **not** defined by the section. It is returned as the
     27th, the only reading that keeps the cycle closed, and flagged as ours —
-    see `THE_ZERO_REMAINDER_IS_NOT_DEFINED` and OI-143.
+    see `THE_ZERO_REMAINDER_MEANS_THE_LAST` and OI-143.
     """
     value = int(validate.non_negative("product", int(product)))
     remainder = value % 27
@@ -1822,7 +1824,7 @@ def timing_nakshatra(product: int) -> dict:
         "lord": str(GRAHA_NAMES[NAKSHATRA_LORD[ordinal - 1]]),
         "remainder_was_zero": remainder == 0,
         "zero_reading": (
-            None if remainder else THE_ZERO_REMAINDER_IS_NOT_DEFINED),
+            None if remainder else THE_ZERO_REMAINDER_MEANS_THE_LAST),
     }
 
 
@@ -1844,7 +1846,7 @@ def timing_rasi(product: int) -> dict:
         "rasi": str(RASI_NAMES[ordinal - 1]),
         "remainder_was_zero": remainder == 0,
         "zero_reading": (
-            None if remainder else THE_ZERO_REMAINDER_IS_NOT_DEFINED),
+            None if remainder else THE_ZERO_REMAINDER_MEANS_THE_LAST),
         "ranked_below_the_nakshatra": (
             "However, nakshatras are more important."),
     }
@@ -1917,3 +1919,66 @@ def sodhya_timing(planet: str, house: int, *, planet_sign: int,
             "transiting there give good or bad results respectively."),
         "caveat": SODHYA_TIMING_IS_OPEN_TO_RESEARCH,
     }
+
+
+# --------------------------------------------------------------------------
+# Example 111 — the zero remainder, answered by the book
+# --------------------------------------------------------------------------
+
+#: **The rule for a zero remainder, stated at last.** §25.6 gave the mapping
+#: only for non-zero remainders; Example 111 supplies the rest, and it is the
+#: reading `timing_nakshatra` and `timing_rasi` already return.
+EXAMPLE_111_DEFINES_THE_ZERO_REMAINDER = (
+    "Le has 0 rekhas in Saturn's BAV. Saturn's sodhya pinda is 203. The "
+    "product is 0. By dividing it with 27, we get 0 which is equivalent to "
+    "27. So we get Revathi star. By dividing 0 with 12, we get 0 which is "
+    "equivalent to 12. So we get Pisces.")
+
+#: **Finding.** The example reaches zero by the route §25.6's arithmetic makes
+#: unavoidable rather than by a multiple: the 8th house from Saturn simply has
+#: **no rekhas**, so the product is 0 whatever the pinda is. A planet with an
+#: empty house therefore always times to Revati and Pisces, for every native
+#: and every matter — the one output of §25.6 that carries no information
+#: about the chart it came from.
+AN_EMPTY_HOUSE_ALWAYS_TIMES_TO_REVATI = (
+    "When the chosen house holds no rekhas the product is 0 regardless of the "
+    "sodhya pinda, so the answer is Revati and Pisces on every chart. The "
+    "pinda drops out of the calculation entirely."
+)
+
+#: **Finding.** The zero case is the one remainder where the two halves cannot
+#: disagree. Revati is the last nakshatra and Pisces the last rasi, and Revati
+#: lies wholly inside Pisces — so "Revathi star in Pisces" names one span
+#: twice. §25.6 ranks the nakshatra above the rasi precisely because they can
+#: point elsewhere; here they cannot.
+THE_ZERO_CASE_IS_THE_ONE_WHERE_BOTH_HALVES_AGREE = (
+    "A remainder of 0 gives the 27th nakshatra and the 12th rasi. Revati "
+    "occupies the last 13º 20' of Pisces, so the nakshatra reading and the "
+    "rasi reading name the same stretch of the zodiac."
+)
+
+#: Example 111's inputs and answer, as printed.
+EXAMPLE_111 = {
+    "planet": "Saturn", "house": 8, "matter": "longevity",
+    "planet_sign": "Cp", "house_sign": "Le", "rekhas": 0, "pinda": 203,
+    "product": 0, "nakshatra": "Revati", "rasi": "Pisces",
+}
+
+#: Saturn's BAV as Example 111 prints it, Aries first.
+EXAMPLE_111_SATURN_BAV: tuple[int, ...] = (
+    3, 4, 6, 3, 0, 2, 2, 5, 4, 3, 2, 5)
+
+EXAMPLE_111_OUTCOME = (
+    "When Saturn was transiting in Revathi star in Pisces, she passed away.")
+
+#: **Finding.** The example names no date. Saturn was in Revati from **4
+#: April 1997 to 17 April 1998** — a thirteen-month stay, because his
+#: retrograde loop crosses the nakshatra three times — and the crash of 31
+#: August 1997 falls inside it. So the transit is confirmed, and the window it
+#: picks out is a year wide, which is the resolution §25.6's own warning is
+#: about.
+THE_REVATI_TRANSIT_WINDOW_IS_THIRTEEN_MONTHS = (
+    "Saturn entered Revati on 4 April 1997 and left on 17 April 1998, his "
+    "retrograde loop keeping him there for thirteen months. The technique "
+    "names that window, not a day."
+)

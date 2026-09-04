@@ -940,8 +940,22 @@ is prose, fixtures and findings.
 | `SODHYA_TIMING_MATTERS` · `TABLE_61_TIMING` | Data. `sodhya_timing` serves both beside its result; a test also shows each Table 61 area is one word of that planet's own longer list |
 | `TABLE_61_IS_A_SHORTLIST_NOT_THE_SCOPE` | The book's own note that any house from any planet is allowed, which is why the function takes any pair |
 | `ILLUSTRATION_INPUTS` · `ILLUSTRATION_WORKING` | §25.6's supposed case, held as an arithmetic fixture. It reads no chart, so it is not a chart record |
-| `THE_ZERO_REMAINDER_IS_NOT_DEFINED` | Ours: the gap OI-143 records. It **is** returned in `zero_reading` when the remainder is 0, and held here for the other path |
+| `THE_ZERO_REMAINDER_MEANS_THE_LAST` | The rule Example 111 supplied. It **is** returned in `zero_reading` when the remainder is 0 — OI-143, closed |
 | `SODHYA_TIMING_IS_OPEN_TO_RESEARCH` · `SODHYA_TIMING_OPEN_QUESTIONS` · `SODHYA_TIMING_CLOSING` | PVR's warning and his four unanswered questions. The warning **is** served on every result; the questions bound what the section can be built into |
+
+### Chapter 25 — Example 111 (5)
+
+`transits/gochara.py`. The example's arithmetic **is** consumed — Saturn's BAV,
+his sodhya pinda of 203 through the whole §12.7 pipeline, and the zero product
+resolving to Revati and Pisces — so what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_111_DEFINES_THE_ZERO_REMAINDER` · `EXAMPLE_111_OUTCOME` | The example verbatim. Its rule **is** implemented; these hold the wording |
+| `EXAMPLE_111` · `EXAMPLE_111_SATURN_BAV` | Fixtures, checked against what the engine derives from Chart 62 |
+| `AN_EMPTY_HOUSE_ALWAYS_TIMES_TO_REVATI` | Ours: with no rekhas the pinda drops out and every chart gives the same answer. A property of the rule, not a rule |
+| `THE_ZERO_CASE_IS_THE_ONE_WHERE_BOTH_HALVES_AGREE` | Ours: Revati lies wholly inside Pisces, so the nakshatra and rasi readings cannot diverge here. A test checks the containment |
+| `THE_REVATI_TRANSIT_WINDOW_IS_THIRTEEN_MONTHS` | Ours: how wide the window the technique names actually is, measured from the ephemeris |
 
 ---
 

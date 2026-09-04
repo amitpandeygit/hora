@@ -2292,6 +2292,52 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "which is what closed OI-142."
         ),
     },
+    62: {
+        "title": "Princess Diana — Example 111",
+        "birth": "July 1, 1961, 2:25 pm (1:00 East), 0 E 30, 52 N 50",
+        "birth_data": {
+            "year": 1961, "month": 7, "day": 1, "hour": 14, "minute": 25,
+            "second": 0.0, "utc_offset_hours": 1.0,
+        },
+        "place": {"latitude": 52 + 50 / 60, "longitude": 0 + 30 / 60},
+        "longitudes": {
+            "Asc": "28 Vi 17", "Sun": "16 Ge 08", "Moon": "28 Cp 27",
+            "Mars": "8 Le 12", "Merc": "9 Ge 59", "Jup": "11 Cp 48",
+            "Ven": "0 Ta 51", "Sat": "4 Cp 30", "Rahu": "6 Le 24",
+            "Ketu": "6 Aq 24", "HL": "8 Ar 15", "GL": "27 Ge 00",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Rahu": "AmK", "Sun": "BK", "Jup": "MK",
+            "Merc": "PiK", "Mars": "PK", "Sat": "GK", "Ven": "DK",
+        },
+        "retrograde": ("Merc", "Jup", "Sat"),
+        "drawn": {
+            "HL": "Ar", "Ven": "Ta", "Merc": "Ge", "Sun": "Ge", "GL": "Ge",
+            "Ketu": "Aq", "Jup": "Cp", "Moon": "Cp", "Sat": "Cp",
+            "Rahu": "Le", "Mars": "Le", "AL": "Sg", "Asc": "Vi",
+        },
+        "ashtakavarga": {
+            "rasi": {"Saturn": (3, 4, 6, 3, 0, 2, 2, 5, 4, 3, 2, 5)},
+        },
+        "sodhya_pindas": {"Saturn": 203},
+        "events": {
+            "she died in a car crash": "August 31, 1997 — the date is not "
+                                       "printed; the book says only that "
+                                       "Saturn was in Revathi then",
+        },
+        "first_seen": "chapter 25, Example 111",
+        "note": (
+            "The chart §25.6 works. Every graha recomputes within 0.67', all "
+            "three printed retrogrades come out retrograde and all eight "
+            "chara karakas match; the ascendant is 4.8' out on a birth time "
+            "given to the minute. Its value is the **timing**: Saturn's "
+            "printed BAV reproduces to all twelve values, and his sodhya "
+            "pinda of 203 reproduces through the whole §12.7 pipeline — "
+            "trikona sodhana, ekaadhipatya sodhana, then rasi pinda 129 plus "
+            "graha pinda 74. It is the first chart other than Chart 7 to "
+            "check that pipeline against a printed pinda."
+        ),
+    },
 }
 
 

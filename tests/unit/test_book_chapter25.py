@@ -3845,11 +3845,11 @@ def test_the_rasi_half_says_it_ranks_below_the_nakshatra():
 
 
 def test_a_zero_remainder_has_no_reading_in_the_book():
-    """§25.6 maps 25 to the 25th and 10 to the 10th, and never says what 0
-    means. We return the 27th and the 12th and say it is ours. OI-143.
+    """§25.6 maps 25 to the 25th and 10 to the 10th and stops there; Example
+    111 adds that 0 is equivalent to the 27th and the 12th. OI-143, closed.
     """
     from hora.transits.gochara import (
-        THE_ZERO_REMAINDER_IS_NOT_DEFINED,
+        THE_ZERO_REMAINDER_MEANS_THE_LAST,
         timing_nakshatra,
         timing_rasi,
     )
@@ -3859,7 +3859,7 @@ def test_a_zero_remainder_has_no_reading_in_the_book():
         assert got["remainder"] == 0
         assert got["remainder_was_zero"] is True
         assert got["ordinal"] == 27
-        assert got["zero_reading"] == THE_ZERO_REMAINDER_IS_NOT_DEFINED
+        assert got["zero_reading"] == THE_ZERO_REMAINDER_MEANS_THE_LAST
     for product in (0, 12, 420, 1248):
         got = timing_rasi(product)
         assert got["remainder"] == 0
@@ -3868,7 +3868,7 @@ def test_a_zero_remainder_has_no_reading_in_the_book():
 
     assert timing_nakshatra(430)["zero_reading"] is None
     assert timing_rasi(430)["zero_reading"] is None
-    assert "no reading in section 25.6" in THE_ZERO_REMAINDER_IS_NOT_DEFINED
+    assert "Example 111 states outright" in THE_ZERO_REMAINDER_MEANS_THE_LAST
 
 
 def test_table_61_runs_end_to_end_on_chart_7():
@@ -3971,3 +3971,197 @@ def test_sodhya_timing_checks_its_inputs():
     for bad in (-1, 27):
         with pytest.raises(InputError):
             companion_nakshatras(bad)
+
+
+# --------------------------------------------------------------------------
+# Example 111 — Chart 62, and the zero remainder the book finally defines
+# --------------------------------------------------------------------------
+
+def _chart_62_reference_signs():
+    from hora.charts.book import longitudes
+
+    printed = longitudes(62)
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Merc": "Mercury",
+             "Jup": "Jupiter", "Ven": "Venus", "Sat": "Saturn",
+             "Asc": "Lagna"}
+    return {ref: int(printed[name] // 30) for name, ref in named.items()}
+
+
+def test_chart_62_recomputes_with_its_retrogrades_and_karakas():
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.karaka import chara_karakas
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(62)
+    computed = compute_chart(from_local(**record["birth_data"]),
+                             Place(name="Diana", **record["place"]),
+                             Settings(node_type=NodeType.MEAN))
+    printed = longitudes(62)
+    for name, graha in GRAHA_OF.items():
+        assert abs(computed.positions[int(graha)].longitude
+                   - printed[name]) * 60 < 1.0, name
+
+    assert record["retrograde"] == ("Merc", "Jup", "Sat")
+    retrograde = {name for name, graha in GRAHA_OF.items()
+                  if name not in ("Rahu", "Ketu")
+                  and computed.positions[int(graha)].is_retrograde}
+    assert retrograde == set(record["retrograde"])
+
+    advancement = {int(graha): printed[name]
+                   for name, graha in GRAHA_OF.items() if name != "Ketu"}
+    got = {k.graha: k.symbol for k in chara_karakas(advancement)}
+    assert {GRAHA_OF[name]: symbol
+            for name, symbol in record["chara_karakas"].items()} == got
+
+
+def test_the_eighth_from_saturn_is_leo_and_saturns_bav_reproduces():
+    """"To see longevity, we should use the 8th house from Saturn and
+    Saturn's BAV. The 8th house from Saturn is Le." All twelve values.
+    """
+    from hora.charts.ashtakavarga import bhinnashtakavarga
+    from hora.charts.book import chart
+    from hora.transits.gochara import EXAMPLE_111, EXAMPLE_111_SATURN_BAV
+
+    signs = _chart_62_reference_signs()
+    assert A[signs["Saturn"]] == EXAMPLE_111["planet_sign"] == "Cp"
+    eighth = (signs["Saturn"] + 7) % 12
+    assert A[eighth] == EXAMPLE_111["house_sign"] == "Le"
+
+    bav = bhinnashtakavarga("Saturn", signs)
+    assert bav.rekhas == EXAMPLE_111_SATURN_BAV
+    assert bav.rekhas == chart(62)["ashtakavarga"]["rasi"]["Saturn"]
+    assert bav.total == 39
+    assert bav.rekhas[eighth] == 0
+
+
+def test_saturns_sodhya_pinda_of_203_reproduces_through_the_whole_pipeline():
+    """BAV, then trikona sodhana, then ekaadhipatya sodhana, then the pinda.
+    The first chart other than Chart 7 to check §12.7 against a printed value.
+    """
+    from hora.charts.ashtakavarga import (
+        bhinnashtakavarga,
+        ekaadhipatya_sodhana,
+        sodhya_pinda,
+        trikona_sodhana,
+    )
+    from hora.charts.book import chart
+    from hora.transits.gochara import EXAMPLE_111
+
+    signs = _chart_62_reference_signs()
+    planets = {name: sign for name, sign in signs.items() if name != "Lagna"}
+    bav = bhinnashtakavarga("Saturn", signs)
+    trikona = trikona_sodhana("Saturn", bav.rekhas)
+    soav = ekaadhipatya_sodhana("Saturn", trikona.after, set(planets.values()))
+    pinda = sodhya_pinda("Saturn", soav.after, planets)
+
+    assert pinda.sodhya_pinda == 203
+    assert pinda.sodhya_pinda == EXAMPLE_111["pinda"]
+    assert pinda.sodhya_pinda == chart(62)["sodhya_pindas"]["Saturn"]
+    assert (pinda.rasi_pinda, pinda.graha_pinda) == (129, 74)
+
+
+def test_example_111_defines_the_zero_remainder_and_it_is_what_we_return():
+    """"By dividing it with 27, we get 0 which is equivalent to 27 ... By
+    dividing 0 with 12, we get 0 which is equivalent to 12." OI-143 closed,
+    and closed in the direction already implemented.
+    """
+    from hora.transits.gochara import (
+        EXAMPLE_111,
+        EXAMPLE_111_DEFINES_THE_ZERO_REMAINDER,
+        EXAMPLE_111_SATURN_BAV,
+        sodhya_timing,
+    )
+
+    signs = _chart_62_reference_signs()
+    got = sodhya_timing("Saturn", 8, planet_sign=signs["Saturn"],
+                        bav_rekhas=EXAMPLE_111_SATURN_BAV, pinda=203)
+
+    assert got["house_rasi"] == "Leo"
+    assert got["rekhas"] == 0
+    assert got["product"] == 0
+    assert got["nakshatra"]["ordinal"] == 27
+    assert got["nakshatra"]["nakshatra"] == "Revati"
+    assert got["rasi"]["ordinal"] == 12
+    assert got["rasi"]["rasi"] == "Pisces"
+    assert got["nakshatra"]["remainder_was_zero"] is True
+    assert got["table_61_area"] == "Longevity"
+    assert got["in_table_61"] is True
+    assert "equivalent to 27" in EXAMPLE_111_DEFINES_THE_ZERO_REMAINDER
+    assert "equivalent to 12" in EXAMPLE_111_DEFINES_THE_ZERO_REMAINDER
+    assert EXAMPLE_111["nakshatra"] == "Revati"
+
+
+def test_an_empty_house_times_to_revati_whatever_the_pinda_is():
+    """The product is 0 for every pinda, so the pinda drops out. It is the one
+    §25.6 output that says nothing about the chart it came from.
+    """
+    from hora.transits.gochara import (
+        AN_EMPTY_HOUSE_ALWAYS_TIMES_TO_REVATI,
+        sodhya_timing,
+    )
+
+    bav = [0] * 12
+    for pinda in (0, 1, 86, 203, 1000):
+        for planet in ("Sun", "Moon", "Saturn"):
+            got = sodhya_timing(planet, 8, planet_sign=5, bav_rekhas=bav,
+                                pinda=pinda)
+            assert got["product"] == 0
+            assert got["nakshatra"]["nakshatra"] == "Revati"
+            assert got["rasi"]["rasi"] == "Pisces"
+    assert "pinda drops out" in AN_EMPTY_HOUSE_ALWAYS_TIMES_TO_REVATI
+
+
+def test_the_zero_case_is_the_one_where_both_halves_agree():
+    """Revati is the last nakshatra and lies wholly inside Pisces, so
+    "Revathi star in Pisces" names one span twice.
+    """
+    from hora.transits.gochara import (
+        THE_ZERO_CASE_IS_THE_ONE_WHERE_BOTH_HALVES_AGREE,
+        timing_nakshatra,
+        timing_rasi,
+    )
+
+    span = 360.0 / 27
+    revati_start, revati_end = 26 * span, 27 * span
+    pisces_start, pisces_end = 11 * 30.0, 12 * 30.0
+    assert pisces_start <= revati_start and revati_end <= pisces_end
+
+    assert timing_nakshatra(0)["nakshatra"] == "Revati"
+    assert timing_rasi(0)["rasi"] == "Pisces"
+    assert "same stretch of the zodiac" in (
+        THE_ZERO_CASE_IS_THE_ONE_WHERE_BOTH_HALVES_AGREE)
+
+
+def test_saturn_was_in_revati_when_she_died():
+    """The example gives no date. Saturn's stay in Revati is thirteen months
+    wide because of his retrograde loop, and the crash falls inside it.
+    """
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.gochara import (
+        EXAMPLE_111_OUTCOME,
+        THE_REVATI_TRANSIT_WINDOW_IS_THIRTEEN_MONTHS,
+    )
+
+    paris = Place(name="Paris", latitude=48 + 52 / 60, longitude=2 + 21 / 60)
+    settings = Settings(node_type=NodeType.MEAN)
+
+    def saturn_nakshatra(year, month, day):
+        computed = compute_chart(
+            from_local(year, month, day, 0, 25, 0.0, utc_offset_hours=2.0),
+            paris, settings)
+        longitude = computed.positions[int(Graha.SATURN)].longitude
+        return int(longitude // (360.0 / 27))
+
+    assert str(NAKSHATRA_NAMES[saturn_nakshatra(1997, 8, 31)]) == "Revati"
+    assert saturn_nakshatra(1997, 4, 30) == 26        # inside the window
+    assert saturn_nakshatra(1998, 3, 31) == 26
+    assert saturn_nakshatra(1997, 1, 31) != 26        # before it
+    assert saturn_nakshatra(1998, 6, 30) != 26        # after it
+
+    assert "Revathi star in Pisces" in EXAMPLE_111_OUTCOME
+    assert "thirteen months" in THE_REVATI_TRANSIT_WINDOW_IS_THIRTEEN_MONTHS

@@ -4,6 +4,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 
 | ID | Item |
 |---|---|
+| [OI-143](#oi-143) | §25.6 never said what a remainder of 0 meant |
 | [OI-142](#oi-142) | Chart 60's transit chart carried no date |
 | [OI-5](#oi-5) | Upagrahas |
 | [OI-132](#oi-132) | which Trishoola rasi each longevity category takes |
@@ -1864,3 +1865,24 @@ charts agree body by body.
 No time question survives it: Chart 60's transit diagram draws no ascendant, so
 the day is all it needs. `inferred_date` stays on the record, now corroborated
 rather than merely computed.
+
+
+## OI-143 — §25.6 never said what a remainder of 0 meant
+
+**Closed by Example 111**, on the next page, and closed in the direction
+already implemented:
+
+> "The product is 0. By dividing it with 27, we get 0 which is equivalent to
+> **27**. So we get Revathi star. By dividing 0 with 12, we get 0 which is
+> equivalent to **12**. So we get Pisces."
+
+`timing_nakshatra(0)` returned Revati and `timing_rasi(0)` returned Pisces
+before the example arrived, flagged as ours because the section had given the
+mapping only for non-zero remainders. The flag stays — `remainder_was_zero`
+is still reported, since a caller may want to know the product vanished — but
+`zero_reading` no longer says the reading is unsourced.
+
+The route in is the one that costs the most information: Example 111's 8th
+house from Saturn holds **no rekhas**, so the product is 0 whatever the pinda
+is, and every chart with an empty house times to Revati and Pisces. That is
+now a stated behaviour rather than a gap.

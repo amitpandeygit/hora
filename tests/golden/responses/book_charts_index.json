@@ -420,6 +420,13 @@
         "number": 61,
         "recomputable": true,
         "title": "Indira Gandhi, and the transit at her assassination \u2014 Example 110"
+      },
+      {
+        "birth": "July 1, 1961, 2:25 pm (1:00 East), 0 E 30, 52 N 50",
+        "first_seen": "chapter 25, Example 111",
+        "number": 62,
+        "recomputable": true,
+        "title": "Princess Diana \u2014 Example 111"
       }
     ],
     "not_supplied": [
@@ -478,7 +485,8 @@
       58,
       59,
       60,
-      61
+      61,
+      62
     ]
   },
   "status": 200
