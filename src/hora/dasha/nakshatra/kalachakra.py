@@ -325,7 +325,11 @@ PROCEDURE: tuple[str, ...] = (
      "the next nakshatra pada. After the nine rasis of the 4th pada of a "
      "nakshatra, we go to the nine rasis corresponding to the 1st pada of the "
      "next nakshatra (i.e. 1st pada of the constellations belonging to the "
-     "other sub-group in the same group)."),
+     "other sub-group in the same group). For example, after the nine rasis "
+     "of the 4th pada of Savya-1 constellations, we go to the nine rasis of "
+     "the 1st pada of Savya-2 constellations. After the nine rasis of the 4th "
+     "pada of Apasavya-2 constellations, we go to the nine rasis of the 1st "
+     "pada of Apasavya-1 constellations."),
     ("In each dasa, antardasas start from dasa rasi itself. After the first "
      "antardasa, we go to the next rasi. ... We take 9 rasis starting from "
      "dasa rasi and antardasas will belong to those rasis. We distribute the "
@@ -1692,7 +1696,115 @@ THREE_DASAS_ON_ONE_EVENT = (
 #: Chapter 24 as read: §24.1 to §24.5 entire, nine examples, three exercises
 #: and two charts of its own. What it leaves open is registered, not silent.
 CHAPTER_24_IS_COMPLETE = (
-    "§24.1 to §24.5, Examples 95 to 102 and Exercises 34 to 37. Open: D-67 "
-    "and OI-139 (Uttarabhadrapada's sub-group, deduced but not adopted), "
-    "D-68, D-69, D-70 and OI-115's split evidence."
+    "§24.1 to §24.6, Examples 95 to 102 and Exercises 34 to 37, checked "
+    "against the printed pages 289 to 312. Open: D-67 and OI-139 "
+    "(Uttarabhadrapada's sub-group, deduced but not adopted), D-68, D-69, "
+    "D-70, D-71 and OI-115's split evidence."
+)
+
+
+# --------------------------------------------------------------------------
+# §24.2's own prose, which the tables are only a convenience for
+# --------------------------------------------------------------------------
+
+#: How §24.2 says Parasara built the thing, before any table appears.
+PARASARA_DREW_TWO_SETS_OF_TWELVE = (
+    "Parasara taught that we can draw Kalachakra (wheel of Time) by drawing 2 "
+    "sets of 12 houses for savya and apasavya groups of nakshatras, then "
+    "repeating them and distributing them between nakshatras."
+)
+
+#: §24.2's three illustrations of Aswini's 1st pada, given *before* the
+#: numbered procedure. Each lists nine dasas in all, so **footnote 64's
+#: nine-rasi rule is in the main text**, four pages before the footnote.
+ASWINI_FIRST_PADA_ILLUSTRATIONS = (
+    "The dasa running at birth will be one of these 9 rasis and one will run "
+    "dasas of 9 rasis starting from that rasi. One born with Moon at the "
+    "beginning of the first pada of Aswini will run Ar dasa at birth and run "
+    "Ta, Ge, Cn, Le, Vi, Li, Sc and Sg dasas after it. One born with Moon in "
+    "the middle of the first pada of Awini may run Le dasa at birth and run "
+    "Vi, Li, Sc, Sg, Cp, Aq, Pi and Sc dasas after it. One born with Moon "
+    "towards the end of the first pada of Aswini may run Sg dasa at birth and "
+    "Cp, Aq, Pi, Sc, Li, Vi, Cn and Le dasas after it."
+)
+
+#: The same three as data — the fraction each describes, the dasa the book
+#: names, and the dasa the arithmetic gives.
+ASWINI_ILLUSTRATION_CASES: tuple[dict[str, object], ...] = (
+    {"where": "beginning", "fraction": 0.0, "book": "Ar", "computed": "Ar"},
+    {"where": "middle", "fraction": 0.5, "book": "Le", "computed": "Cn"},
+    {"where": "end", "fraction": 1.0, "book": "Sg", "computed": "Sg"},
+)
+
+#: **Book defect.** The middle case does not compute. Aswini's 1st pada has a
+#: paramayush of 100, so half of it is 50 years, which falls in **Cancer**
+#: (32 to 53); Leo does not open until 53. The eight dasas the passage then
+#: lists — Vi, Li, Sc, Sg, Cp, Aq, Pi, Sc — do follow **Leo**, so the sentence
+#: is internally consistent and it is the word "middle" that is loose: the
+#: fractions giving Leo are 0.53 to 0.58. Hedged with "may", and the beginning
+#: and end cases are exact. See D-71.
+THE_MIDDLE_OF_ASWINIS_FIRST_PADA_GIVES_CANCER = (
+    "Half of a 100-year paramayush is 50 years, which falls in Cancer's dasa "
+    "(32 to 53). Leo runs from 53 to 58, so \"the middle\" of the pada gives "
+    "Cancer and Leo needs a fraction between 0.53 and 0.58."
+)
+
+#: The wheel's wrap, and the sentence that makes rule (4) a walk rather than a
+#: table lookup.
+THE_WHEEL_WRAPS = (
+    "Like this, as we go from one nakshatra pada (constellation quarter) to "
+    "the next in the savya group, we move from one set of 9 rasis to the "
+    "next. When we reach the end of the 24 rasis, we go to the beginning."
+)
+
+#: And the nakshatra boundary, stated for Aswini and Bharani by name.
+BHARANI_CONTINUES_ASWINI = (
+    "At the end of the 4th quarter of Aswini, the 1st quarter of Bharani "
+    "starts and we do the same thing. We go to the next 9 rasis in the set of "
+    "24 rasis."
+)
+
+#: **Important.** §24.2 says the four pada tables exist only for readers who
+#: cannot run the wheel, and that the sub-groups exist only to lay those
+#: tables out. We derive Tables 44 to 47 from the wheel for exactly this
+#: reason — and it bears on OI-139, because a sub-group is a presentation
+#: device rather than a rule of the dasa.
+THE_TABLES_ARE_A_CONVENIENCE = (
+    "For the sake of those who do not understand the above logic well enough "
+    "to list the nine rasis associated with each nakshatra pada, they are "
+    "explicitly given in Table 44-Table 47. For the purpose of these tables, "
+    "we will divide savya and apasavya groups of nakshatras into two "
+    "sub-groups each."
+)
+
+#: §24.2's closing line on its own procedure, which is the same claim again.
+IT_MUST_BE_OBVIOUS_FROM_TABLE_43 = (
+    "All this may seem complicated to a casual reader, but it must be obvious "
+    "to anyone who clearly understood Kalachakra shown in Table 43 and "
+    "followed how Table 44-Table 47 are derived from it."
+)
+
+#: Example 95's two dated figures, which the first screenshot of it cropped.
+#: Both come out of the balance alone under §18.6's units — 4.75 years is
+#: 4 years 9 months, and 4.75 + 16 is 20 years 9 months.
+EXAMPLE_95_DATES_ITS_FIRST_TWO_DASAS = (
+    "By adding 4 years 9 months to the birthdate, we get the date on which Sc "
+    "dasa ends. Then Li dasa of 16 years will run till an age of 20 years 9 "
+    "months."
+)
+
+#: **Finding.** The savya sub-groups follow a rule the apasavya ones do not:
+#: within each triple of savya nakshatras the **1st and 3rd** take sub-group 1
+#: and the **2nd** takes sub-group 2. That rule reproduces Tables 44 and 45
+#: exactly **except that 26 and 27 are swapped** — it wants Uttarabhadrapada in
+#: savya-2, which Exercise 36 independently confirmed, and Revati in savya-1,
+#: where Table 44 is one name short. One substitution restores both the
+#: pattern and the count, 10 + 5 = 15. The apasavya group splits **1st to
+#: sub-group 1, 2nd and 3rd to sub-group 2**, differing from the savya rule on
+#: all four third-of-triple nakshatras. See D-67 and OI-139.
+THE_SAVYA_SUB_GROUPS_FOLLOW_A_TRIPLE_RULE = (
+    "Savya splits each triple 1st and 3rd to sub-group 1, 2nd to sub-group 2, "
+    "which gives the printed tables but for 26 and 27 being swapped. Apasavya "
+    "splits 1st to sub-group 1 and 2nd and 3rd to sub-group 2. No single rule "
+    "produces both."
 )

@@ -2164,6 +2164,26 @@ It settles **26 only**. Whether Revati then moves to Table 44, as the
 substitution reading implies, or Table 45 simply holds six nakshatras, no
 example has yet touched.
 
+**A second leg, from the tables themselves.** The savya group splits each
+triple **1st and 3rd to sub-group 1, 2nd to sub-group 2**. That rule reproduces
+Tables 44 and 45 exactly except that 26 and 27 are swapped:
+
+| | by the rule | as printed | difference |
+|---|---|---|---|
+| Savya-1 | 1, 3, 7, 9, 13, 15, 19, 21, 25, **27** | 1, 3, 7, 9, 13, 15, 19, 21, 25 | 27 missing |
+| Savya-2 | 2, 8, 14, 20, **26** | 2, 8, 14, 20, **27** | 26 for 27 |
+
+One substitution restores the pattern *and* the count — 10 + 5 = 15, all of
+Table 42's savya nakshatras. The rule's verdict on 26 is savya-2, which
+Exercise 36 confirmed independently.
+
+It is evidence and not proof, because the apasavya group splits on a **different
+rule** — 1st to sub-group 1, 2nd and 3rd to sub-group 2 — differing from the
+savya rule on all four third-of-triple nakshatras (6, 12, 18, 24). That
+disagreement is OI-139. §24.2 also says the sub-groups exist "for the purpose
+of these tables", so they are a layout of the wheel rather than a rule of the
+dasa, which is why a printing slip in them is plausible.
+
 **What we do:** hold the four lists exactly as printed and let a Moon in
 Uttarabhadrapada keep raising, because promoting the deduction to code is a
 behaviour change. See OI-139.
@@ -2280,3 +2300,37 @@ sound, plus an A3 that is strong in D-10 too.
 
 **Closes when:** a later printing corrects the figure or names a different
 third house.
+
+## D-71 · §24.2's "middle of the first pada of Aswini" gives Cancer, not Leo
+
+**Status: FINDING — the sentence is internally consistent; the word "middle"
+is not.**
+
+§24.2 illustrates its own procedure three times on Aswini's 1st pada, before
+the numbered rules. Two are exact and one is not.
+
+| Moon at the… | fraction | book says | computes to |
+|---|---|---|---|
+| beginning | 0.00 | Ar | **Ar** ✓ |
+| **middle** | 0.50 | Le | **Cn** |
+| end | 1.00 | Sg | **Sg** ✓ |
+
+Aswini's 1st pada is Ar, Ta, Ge, Cn, Le, Vi, Li, Sc, Sg with a paramayush of
+**100**, so the cumulative boundaries are 7, 23, 32, 53, 58, 67, 83, 90, 100.
+Half of 100 is 50, which falls inside **Cancer's** 32-to-53 band; Leo does not
+open until 53.
+
+The passage is not wrong about Leo — the eight dasas it then lists, Vi, Li, Sc,
+Sg, Cp, Aq, Pi, Sc, are exactly the eight that follow **Leo** on the wheel
+(positions 5 to 12). Cancer's eight would be Le, Vi, Li, Sc, Sg, Cp, Aq, Pi. So
+the arithmetic and the list agree with each other and disagree with the word
+"middle": the fractions that give Leo are **0.53 to 0.58**.
+
+The sentence is hedged — "may run Le dasa at birth" — where the beginning case
+is not ("**will** run Ar dasa").
+
+**What we do:** hold all three cases as printed in
+`ASWINI_ILLUSTRATION_CASES`, with the computed dasa beside the printed one, and
+assert the disagreement so it cannot be read as an engine error.
+
+**Closes when:** a later printing narrows "middle", or names Cancer.

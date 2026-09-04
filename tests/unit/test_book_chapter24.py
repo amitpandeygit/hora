@@ -3943,5 +3943,201 @@ def test_chapter_24_is_complete_and_part_2_with_it():
     for system in PART_2_DASA_SYSTEMS:
         assert system.get("module") or system.get("key")
 
-    for item in ("D-67", "OI-139", "D-68", "D-69", "D-70", "OI-115"):
+    for item in ("D-67", "OI-139", "D-68", "D-69", "D-70", "D-71", "OI-115"):
         assert item in CHAPTER_24_IS_COMPLETE
+    assert "289 to 312" in CHAPTER_24_IS_COMPLETE
+
+
+# ---------------------------------------------------------------------------
+# §24.2's prose — the wheel is the rule and the tables are a convenience
+# ---------------------------------------------------------------------------
+
+def test_the_three_aswini_illustrations_and_the_middle_one_that_does_not():
+    """§24.2 works its own procedure three times on Aswini's 1st pada before
+    the numbered rules. The beginning and end cases are exact; the middle one
+    computes to Cancer. D-71.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        ASWINI_FIRST_PADA_ILLUSTRATIONS,
+        ASWINI_ILLUSTRATION_CASES,
+        THE_MIDDLE_OF_ASWINIS_FIRST_PADA_GIVES_CANCER,
+        dasa_order,
+        first_dasa,
+        pada_sequence,
+        paramayush,
+    )
+
+    nine = pada_sequence("savya", 1, 1)
+    assert [A[rasi] for rasi in nine] == [
+        "Ar", "Ta", "Ge", "Cn", "Le", "Vi", "Li", "Sc", "Sg"]
+    assert paramayush(nine) == 100
+
+    for case in ASWINI_ILLUSTRATION_CASES:
+        got = first_dasa(nine, float(str(case["fraction"])))
+        assert A[got["sign"]] == case["computed"], case["where"]
+        if case["where"] == "middle":
+            assert case["book"] != case["computed"]
+            assert got["elapsed_years"] + got["balance_years"] == 21   # Cancer
+        else:
+            assert case["book"] == case["computed"]
+
+    # the eight it lists for the middle case follow Leo, not Cancer
+    leo = next(rasi for rasi in range(9) if A[nine[rasi]] == "Le")
+    after_leo = [A[row["sign"]] for row in dasa_order(1, 1, 8, skip=leo + 1)]
+    assert after_leo == ["Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi", "Sc"]
+    assert all(rasi in ASWINI_FIRST_PADA_ILLUSTRATIONS for rasi in after_leo)
+
+    after_cancer = [A[row["sign"]] for row in dasa_order(1, 1, 8, skip=4)]
+    assert after_cancer == ["Le", "Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi"]
+    assert after_cancer != after_leo
+    assert "between 0.53 and 0.58" in (
+        THE_MIDDLE_OF_ASWINIS_FIRST_PADA_GIVES_CANCER)
+
+
+def test_each_illustration_lists_nine_dasas_in_all():
+    """"One will run dasas of 9 rasis starting from that rasi."  Footnote 64's
+    rule is in §24.2's main text, four pages before the footnote.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        ASWINI_FIRST_PADA_ILLUSTRATIONS,
+        FOOTNOTE_64,
+        nine_from_birth,
+    )
+
+    assert "dasas of 9 rasis starting from that rasi" in (
+        ASWINI_FIRST_PADA_ILLUSTRATIONS)
+    assert "nine rasis starting from the rasi" in FOOTNOTE_64
+
+    for position, expected in ((0, ["Ta", "Ge", "Cn", "Le", "Vi", "Li", "Sc",
+                                    "Sg"]),
+                               (4, ["Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi",
+                                    "Sc"]),
+                               (8, ["Cp", "Aq", "Pi", "Sc", "Li", "Vi", "Cn",
+                                    "Le"])):
+        nine = nine_from_birth(1, 1, position)["dasas"]
+        assert len(nine) == 9
+        assert [A[row["sign"]] for row in nine][1:] == expected
+
+
+def test_rule_4_carries_its_own_two_worked_crossings():
+    """Rule (4) names both crossings, and they are the two the chapter goes on
+    to demonstrate -- Example 96 and Exercise 34.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        PROCEDURE,
+        SUB_GROUP_OFFSET,
+        wheel_position,
+    )
+
+    rule_4 = PROCEDURE[3]
+    assert "4th pada of Savya-1 constellations" in rule_4
+    assert "1st pada of Savya-2 constellations" in rule_4
+    assert "4th pada of Apasavya-2 constellations" in rule_4
+    assert "1st pada of Apasavya-1 constellations" in rule_4
+
+    # savya-1 pada 4 ends where savya-2 pada 1 begins
+    assert (wheel_position(7, 4) + 9) % 24 == SUB_GROUP_OFFSET[2]
+    # apasavya-2 pada 4 ends where apasavya-1 pada 1 begins
+    assert (wheel_position(23, 4) + 9) % 24 == SUB_GROUP_OFFSET[1]
+
+
+def test_24_2_says_the_tables_are_a_convenience_and_the_sub_groups_a_layout():
+    """"For the sake of those who do not understand the above logic well
+    enough... they are explicitly given in Table 44-Table 47. For the purpose
+    of these tables, we will divide savya and apasavya groups of nakshatras
+    into two sub-groups each."
+
+    Which is why we derive the tables and why a slip in the sub-groups is
+    plausible. OI-139.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        IT_MUST_BE_OBVIOUS_FROM_TABLE_43,
+        PARASARA_DREW_TWO_SETS_OF_TWELVE,
+        THE_TABLES_ARE_A_CONVENIENCE,
+        pada_sequence,
+    )
+
+    assert "For the purpose of these tables" in THE_TABLES_ARE_A_CONVENIENCE
+    assert "two sub-groups each" in THE_TABLES_ARE_A_CONVENIENCE
+    assert "derived from it" in IT_MUST_BE_OBVIOUS_FROM_TABLE_43
+    assert "2 sets of 12 houses" in PARASARA_DREW_TWO_SETS_OF_TWELVE
+
+    # and the claim holds: all sixteen come out of the wheel
+    assert len({pada_sequence(group, sub, pada)
+                for group in ("savya", "apasavya")
+                for sub in (1, 2) for pada in (1, 2, 3, 4)}) == 16
+
+
+def test_the_wheel_wraps_and_the_next_nakshatra_continues_it():
+    """"When we reach the end of the 24 rasis, we go to the beginning" and
+    "At the end of the 4th quarter of Aswini, the 1st quarter of Bharani
+    starts."  Aswini is savya-1 and Bharani savya-2, half a wheel on.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        BHARANI_CONTINUES_ASWINI,
+        SUB_GROUP_OFFSET,
+        THE_WHEEL_WRAPS,
+        sub_group_of,
+        wheel_position,
+    )
+
+    assert "we go to the beginning" in THE_WHEEL_WRAPS
+    assert "1st quarter of Bharani" in BHARANI_CONTINUES_ASWINI
+
+    assert sub_group_of(1) == 1 and sub_group_of(2) == 2
+    assert wheel_position(1, 1) == SUB_GROUP_OFFSET[1] == 0
+    assert (wheel_position(1, 4) + 9) % 24 == wheel_position(2, 1) == 12
+
+
+def test_example_95_dates_its_first_two_dasas():
+    """"By adding 4 years 9 months to the birthdate... Then Li dasa of 16 years
+    will run till an age of 20 years 9 months."  Both from the balance alone.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_95_DATES_ITS_FIRST_TWO_DASAS,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+    from hora.dasha.rasi.sudasa import years_to_dasa_ymdh
+
+    nine = pada_sequence("apasavya", 1, 2)
+    birth = first_dasa(nine, pada_of(45.8333333)["elapsed_fraction"])
+    assert birth["balance_years"] == pytest.approx(4.75)
+
+    assert years_to_dasa_ymdh(4.75)[:3] == (4, 9, 0)          # 4 years 9 months
+    assert years_to_dasa_ymdh(4.75 + 16)[:3] == (20, 9, 0)    # 20 years 9 months
+    assert "4 years 9 months" in EXAMPLE_95_DATES_ITS_FIRST_TWO_DASAS
+    assert "20 years 9 months" in EXAMPLE_95_DATES_ITS_FIRST_TWO_DASAS
+
+
+def test_the_savya_sub_groups_follow_a_triple_rule_the_apasavya_ones_do_not():
+    """Savya splits each triple 1st+3rd / 2nd, which gives the printed tables
+    but for 26 and 27 being swapped. Apasavya splits 1st / 2nd+3rd. D-67,
+    OI-139.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        PRINTED_SUB_GROUPS,
+        THE_SAVYA_SUB_GROUPS_FOLLOW_A_TRIPLE_RULE,
+    )
+
+    savya_triples = [(1, 2, 3), (7, 8, 9), (13, 14, 15), (19, 20, 21),
+                     (25, 26, 27)]
+    apasavya_triples = [(4, 5, 6), (10, 11, 12), (16, 17, 18), (22, 23, 24)]
+
+    def by_rule(triples):
+        first = {a for a, _b, _c in triples} | {c for _a, _b, c in triples}
+        return first, {b for _a, b, _c in triples}
+
+    sub1, sub2 = by_rule(savya_triples)
+    assert sub1 ^ set(PRINTED_SUB_GROUPS["savya-1"]) == {27}
+    assert sub2 ^ set(PRINTED_SUB_GROUPS["savya-2"]) == {26, 27}
+    assert 26 in sub2 and 27 in sub1              # the rule's verdict
+    assert len(sub1) + len(sub2) == 15            # all of Table 42's savya
+
+    sub1, sub2 = by_rule(apasavya_triples)
+    assert sub1 ^ set(PRINTED_SUB_GROUPS["apasavya-1"]) == {6, 12, 18, 24}
+    assert sub2 ^ set(PRINTED_SUB_GROUPS["apasavya-2"]) == {6, 12, 18, 24}
+
+    assert "No single rule produces both" in (
+        THE_SAVYA_SUB_GROUPS_FOLLOW_A_TRIPLE_RULE)
