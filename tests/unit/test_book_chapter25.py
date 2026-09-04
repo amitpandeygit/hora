@@ -2925,3 +2925,169 @@ def test_transit_strength_checks_its_inputs():
         transit_strength(bav_rekhas=9, sav_rekhas=30)
     with pytest.raises(InputError):
         transit_strength(bav_rekhas=4, sav_rekhas=57)
+
+
+# --------------------------------------------------------------------------
+# Example 108 — Charts 58 and 59, and the widest ashtakavarga check anywhere
+# --------------------------------------------------------------------------
+
+def _chart_58_d10_reference_signs():
+    """Vajpayee's D-10 reference signs, from Chart 58's printed longitudes."""
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+
+    printed = longitudes(58)
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Merc": "Mercury",
+             "Jup": "Jupiter", "Ven": "Venus", "Sat": "Saturn",
+             "Asc": "Lagna"}
+    return {ref: varga(printed[name], "D10").sign
+            for name, ref in named.items()}
+
+
+def test_example_108_prints_every_bhinnashtakavarga_and_all_reproduce():
+    """Ninety-six figures -- seven BAV rows of twelve and the SAV row. This is
+    the only complete ashtakavarga the book prints, so it is the widest single
+    check the engine gets.
+    """
+    from hora.charts.ashtakavarga import bhinnashtakavarga, sarvashtakavarga
+    from hora.charts.book import chart
+    from hora.transits.gochara import (
+        THE_ONLY_COMPLETE_ASHTAKAVARGA_IN_THE_BOOK,
+    )
+
+    printed = chart(58)["ashtakavarga"]["D10"]
+    signs = _chart_58_d10_reference_signs()
+
+    for owner in ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus",
+                  "Saturn"):
+        assert bhinnashtakavarga(owner, signs).rekhas == printed[owner], owner
+
+    assert tuple(sarvashtakavarga(signs)["rekhas"]) == printed["SAV"]
+    assert sum(printed["SAV"]) == 337
+    assert sum(sum(printed[o]) for o in
+               ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus",
+                "Saturn")) == 337
+    assert "ninety-six" in THE_ONLY_COMPLETE_ASHTAKAVARGA_IN_THE_BOOK
+
+
+def test_example_108_settles_d_40_by_counting_thirty_as_very_strong():
+    """"So 6 out of 7 planets are in rasis that are very strong in D-10 SAV."
+
+    Six needs Pisces at exactly 30 to count. Under §25.5.1's own "more than
+    30" the tally would be two, so the book's arithmetic reads the bound as
+    30 or more.
+    """
+    from hora.charts.book import chart
+    from hora.transits.gochara import (
+        EXAMPLE_108_COUNTS_THIRTY_AS_VERY_STRONG,
+        EXAMPLE_108_READING,
+    )
+
+    sav = chart(58)["ashtakavarga"]["D10"]["SAV"]
+    assert sav[R["Pi"]] == 30
+    assert sav[R["Cp"]] == 31
+    assert sav[R["Sc"]] == 35
+    assert sav[R["Aq"]] == 24
+
+    counted = [row for row in EXAMPLE_108_READING
+               if int(row["sav"]) >= 30]  # type: ignore[call-overload]
+    assert sum(len(row["grahas"]) for row in counted) == 6  # type: ignore[arg-type]
+
+    strict = [row for row in EXAMPLE_108_READING
+              if int(row["sav"]) > 30]  # type: ignore[call-overload]
+    assert sum(len(row["grahas"]) for row in strict) == 2  # type: ignore[arg-type]
+
+    assert "so 30 counts" in EXAMPLE_108_COUNTS_THIRTY_AS_VERY_STRONG
+
+
+def test_the_transiting_grahas_sit_where_example_108_says():
+    from hora.charts.book import chart
+    from hora.charts.book import longitude as book_longitude
+    from hora.transits.gochara import EXAMPLE_108_READING
+
+    signs = {name: int(book_longitude(value) // 30)
+             for name, value in chart(59)["longitudes"].items()}
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Mercury": "Merc",
+             "Jupiter": "Jup", "Venus": "Ven", "Saturn": "Sat"}
+    for row in EXAMPLE_108_READING:
+        for graha in row["grahas"]:  # type: ignore[attr-defined]
+            assert signs[named[graha]] == R[str(row["rasi"])], graha
+
+
+def test_too_weak_in_example_108_means_the_extreme_not_the_band():
+    """Mercury has 3 rekhas in Pisces -- §25.5 grades that bad -- and the
+    example still says none of the four is too weak.
+    """
+    from hora.charts.ashtakavarga import grade
+    from hora.charts.book import chart
+    from hora.transits.gochara import TOO_WEAK_MEANS_THE_EXTREME_NOT_THE_BAND
+
+    printed = chart(58)["ashtakavarga"]["D10"]
+    pisces = {owner: printed[owner][R["Pi"]]
+              for owner in ("Sun", "Mars", "Mercury", "Saturn")}
+    assert pisces == {"Sun": 4, "Mars": 4, "Mercury": 3, "Saturn": 4}
+    assert grade(3) != grade(5)
+    assert min(pisces.values()) > 1
+    assert "1-or-0 extreme" in TOO_WEAK_MEANS_THE_EXTREME_NOT_THE_BAND
+
+
+def test_jupiter_is_read_against_section_25_5_1s_own_precedence():
+    """Aquarius has 24 rekhas, under §25.5.1's 25, so the SAV dominates and
+    should decide against him. The example reads him strong anyway, on a
+    7-rekha BAV and his being the dasa lord.
+    """
+    from hora.charts.book import chart
+    from hora.transits.gochara import (
+        JUPITER_IS_CARRIED_BY_HIS_OWN_BAV,
+        THE_DOMINATION_RULE_IS_SET_ASIDE_FOR_JUPITER,
+        transit_strength,
+    )
+
+    printed = chart(58)["ashtakavarga"]["D10"]
+    assert printed["SAV"][R["Aq"]] == 24
+    assert printed["Jupiter"][R["Aq"]] == 7
+
+    verdict = transit_strength(bav_rekhas=7, sav_rekhas=24)
+    assert verdict["sav"]["dominant"] is True
+    assert verdict["decided_by"] == "SAV"
+    assert verdict["verdict"] != "favorable"
+
+    assert "7 rekhas" in JUPITER_IS_CARRIED_BY_HIS_OWN_BAV
+    assert "Vimsottari dasa lord" in JUPITER_IS_CARRIED_BY_HIS_OWN_BAV
+    assert "24" in THE_DOMINATION_RULE_IS_SET_ASIDE_FOR_JUPITER
+
+
+def test_venus_is_picked_out_by_the_natal_d_10_ghatika_lagna():
+    """"Venus is in Cp with 31 rekhas ... Venus is the lord of GL in natal
+    D-10 chart and he is an important planet for power and authority."
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_LORD, Graha
+    from hora.transits.gochara import EXAMPLE_108_READING
+
+    gl_d10 = varga(longitudes(58)["GL"], "D10").sign
+    assert gl_d10 == R["Li"]
+    assert RASI_LORD[gl_d10] == int(Graha.VENUS)
+
+    venus = next(row for row in EXAMPLE_108_READING
+                 if row["grahas"] == ("Venus",))
+    assert venus["bav"] == chart(58)["ashtakavarga"]["D10"]["Venus"][R["Cp"]]
+    assert "power and authority" in str(venus["note"])
+
+
+def test_charts_58_and_59_both_recompute():
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    settings = Settings(node_type=NodeType.MEAN)
+    for number, who in ((58, "Vajpayee"), (59, "transit")):
+        record = chart(number)
+        computed = compute_chart(from_local(**record["birth_data"]),
+                                 Place(name=who, **record["place"]), settings)
+        printed = longitudes(number)
+        for name, graha in GRAHA_OF.items():
+            assert abs(computed.positions[int(graha)].longitude
+                       - printed[name]) * 60 < 1.0, (number, name)

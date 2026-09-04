@@ -854,6 +854,20 @@ is the prose and the findings around them.
 | `BAV_TRANSIT_EXAMPLES` · `WHY_A_VARGA_BAV_READS_A_RASI_TRANSIT` | §25.5's two worked counts and its explanation of the varga case |
 | `SAV_DOMINATES_THE_BAVS` · `SAV_DOMINATES_BUT_THE_BAV_STILL_ORDERS` | The precedence rule chapter 12 never gave. `transit_strength` applies it; these hold the wording and the illustration |
 
+### Chapter 25 — Example 108's ashtakavarga reading (6)
+
+`transits/gochara.py`. The example's arithmetic **is** consumed — every one of
+its ninety-six figures recomputes, and the D-40 tally is checked both ways —
+so what follows is prose and findings around it.
+
+| constant | why it is not consumed |
+|---|---|
+| `THE_ONLY_COMPLETE_ASHTAKAVARGA_IN_THE_BOOK` | Ours: an observation about coverage, not a rule |
+| `EXAMPLE_108_COUNTS_THIRTY_AS_VERY_STRONG` | Ours: the evidence that settles D-40. Tests count the reading both ways; this holds why it matters |
+| `EXAMPLE_108_READING` · `EXAMPLE_108_CONCLUSION` | The example's own reading and verdict, held for citation |
+| `TOO_WEAK_MEANS_THE_EXTREME_NOT_THE_BAND` | Ours: a reading of one phrase, needed to keep the example consistent with §25.5's bands |
+| `JUPITER_IS_CARRIED_BY_HIS_OWN_BAV` · `THE_DOMINATION_RULE_IS_SET_ASIDE_FOR_JUPITER` | The example verbatim, and ours noting it goes against §25.5.1's own precedence. `transit_strength` still applies the rule as written |
+
 ---
 
 ## How to use this register

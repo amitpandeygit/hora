@@ -1570,3 +1570,78 @@ def transit_strength(bav_rekhas: int, sav_rekhas: int) -> dict:
         "verdict": sav_verdict if dominant else bav["verdict"],
         "note": SAV_DOMINATES_THE_BAVS,
     }
+
+
+# --------------------------------------------------------------------------
+# Example 108 — a whole transit chart weighed against a natal D-10 ashtakavarga
+# --------------------------------------------------------------------------
+
+#: **Finding.** Example 108 is the only place the book prints **every** BAV of
+#: a chart alongside its SAV — seven rows of twelve and a total row, ninety-six
+#: figures for one D-10. Everything before it printed an SAV alone or a few
+#: named counts, so this is the widest single check on the ashtakavarga engine
+#: anywhere in the text, and all ninety-six reproduce.
+THE_ONLY_COMPLETE_ASHTAKAVARGA_IN_THE_BOOK = (
+    "Example 108 prints all seven bhinnashtakavargas of Vajpayee's D-10 and "
+    "their samudaaya, ninety-six figures in one table."
+)
+
+#: **Finding.** The example settles §12.4's boundary from inside. It counts "6
+#: out of 7 planets ... in rasis that are very strong in D-10 SAV", and six is
+#: reached only by counting Pisces at **exactly 30**. Under §25.5.1's own "more
+#: than 30" the count would be two. See D-40.
+EXAMPLE_108_COUNTS_THIRTY_AS_VERY_STRONG = (
+    "Four grahas transit Pisces, whose D-10 SAV is 30, one Capricorn at 31 "
+    "and one Scorpio at 35. The example calls that six of seven in very "
+    "strong rasis, so 30 counts."
+)
+
+#: Example 108's reading, in the order it gives it.
+EXAMPLE_108_READING: tuple[dict[str, object], ...] = (
+    {"grahas": ("Sun", "Mars", "Mercury", "Saturn"), "rasi": "Pi",
+     "sav": 30, "note": "none of them is too weak in individual BAV"},
+    {"grahas": ("Venus",), "rasi": "Cp", "sav": 31, "bav": 6,
+     "note": "GL lord in natal D-10, an important planet for power and "
+             "authority"},
+    {"grahas": ("Moon",), "rasi": "Sc", "sav": 35, "note": None},
+    {"grahas": ("Jupiter",), "rasi": "Aq", "sav": 24, "bav": 7,
+     "note": "not strong in SAV but strong in his own BAV; the Vimsottari "
+             "dasa lord"},
+)
+
+#: **Finding.** "None of them is too weak in individual BAV" covers a Mercury
+#: with **3** rekhas in Pisces, which §25.5's own band calls bad results. The
+#: sentence is only consistent if "too weak" means §25.5's extreme — 1 or 0,
+#: "invariably very poor" — rather than the band. It is the extremes the
+#: example is ruling out, not the bad side.
+TOO_WEAK_MEANS_THE_EXTREME_NOT_THE_BAND = (
+    "Mercury has 3 rekhas in Pisces in his D-10 BAV, which §25.5 grades bad, "
+    "and Example 108 still says none of the four is too weak. \"Too weak\" "
+    "therefore means the 1-or-0 extreme."
+)
+
+#: Jupiter is the case §25.5.1's precedence rule was written for, and the
+#: example takes the BAV side of it: a rasi the SAV calls weak, carried by the
+#: transiting graha's own count.
+JUPITER_IS_CARRIED_BY_HIS_OWN_BAV = (
+    "Jupiter is in Aq. Though Aq is not strong in SAV, it is strong in "
+    "Jupiter's BAV. It has 7 rekhas in Jupiter's natal D-10 BAV. Jupiter's "
+    "strength is important, as he is the Vimsottari dasa lord."
+)
+
+#: **Finding.** Aquarius has 24 rekhas, which is **below** §25.5.1's 25, so the
+#: SAV is dominant there and by the section's own precedence should decide
+#: against Jupiter. The example reads it the other way, on the strength of a
+#: 7-rekha BAV and Jupiter being the dasa lord. So the domination rule is not
+#: absolute, and what overrides it here is stated as importance rather than as
+#: a count.
+THE_DOMINATION_RULE_IS_SET_ASIDE_FOR_JUPITER = (
+    "§25.5.1 makes the SAV dominant below 25 rekhas and Aquarius has 24. "
+    "Example 108 nonetheless reads Jupiter there as strong, because his own "
+    "BAV has 7 and he is the Vimsottari dasa lord."
+)
+
+EXAMPLE_108_CONCLUSION = (
+    "So, as per ashtakavarga, transits are very favorable to Sri Vajpayee's "
+    "career on March 19, 1998."
+)

@@ -1264,7 +1264,24 @@ more rekhas" as well, making it three to one — but it is the first time the
 bound has been written the other way, and it is recorded rather than smoothed
 over.
 
-**Closes when:** you confirm, or a later passage settles it differently.
+**Example 108 settles it on the book's own arithmetic, one page later.** It
+counts Vajpayee's transiting grahas against his D-10 SAV and concludes: "So **6
+out of 7 planets** are in rasis that are very strong in D-10 SAV."
+
+| graha | transit rasi | D-10 SAV |
+|---|---|---|
+| Sun, Mars, Mercury, Saturn | Pisces | **30** |
+| Venus | Capricorn | 31 |
+| Moon | Scorpio | 35 |
+| Jupiter | Aquarius | 24 |
+
+Six requires Pisces at **exactly 30** to count as very strong. Read "more than
+30" it would not, and the count would be two, not six. So the book's own
+worked example uses **30 or more**, and D-40 is answered from the source rather
+than by preference.
+
+**Closes when:** — closed by Example 108. Kept here because the wording still
+varies between sections and a reader may hit "more than 30" first.
 
 ## D-41 · §12.7.2's rule (3) does not cover an empty rasi of equal value
 

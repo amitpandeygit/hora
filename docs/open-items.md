@@ -579,37 +579,37 @@ into benefic or malefic and §3.2.2 gives the Moon no nature without one.
 
 ### OI-103 — our sunrise is early, and it moves Chart 12's ghati lagna a whole rasi
 
-Charts 3 and 12 print HL and GL **and** their own birth data. Neither reproduces.
+Charts 3, 12 and 58 print HL and GL **and** their own birth data. None
+reproduces.
 
 | | printed | ours | out by |
 |---|---|---|---|
-| Chart 3 HL | 13 Li 46 | 13 Li 55 | 9' |
-| Chart 3 GL | 21 Cn 25 | 21 Cn 49 | 24' |
-| Chart 12 HL | 11 Le 38 | 12 Le 03 | 25' |
-| Chart 12 GL | 29 Le 25 | **0 Vi 27** | 62' — **a different rasi** |
+| Chart 3 HL / GL | 13 Li 46 / 21 Cn 25 | 13 Li 55 / 21 Cn 49 | 9' / 24' |
+| Chart 12 HL / GL | 11 Le 38 / 29 Le 25 | 12 Le 03 / **0 Vi 27** | 25' / 62' — **a different rasi** |
+| Chart 58 HL / GL | 13 Li 43 / 21 Cn 18 | 13 Li 56 / 21 Cn 52 | 13' / 34' |
 
 Not the birth time and not the formulae. HL advances 0.5°/minute from sunrise
-and GL 1.25°/minute, so each error implies a sunrise shift — and the two always
-agree to within a second:
+and GL 1.25°/minute, so each error implies a sunrise shift, and within each
+chart the two agree to within a second: +18.4s/+19.1s (Chart 3), +49.5s/+49.3s
+(Chart 12), +26.6s/+26.9s (Chart 58). Under `disc_center` they agree too, at
+−62s, −43s and −34s. HL and GL are right and the sunrise is not. Neither §5
+definition is the book's — ours early every time, `disc_center` late every
+time, at no fixed fraction between (23% at 26 N, 53% at 43 N), so a toggle
+cannot fix it; it looks like a refraction or horizon-dip model diverging with
+latitude. In a **divisional** chart the reach is not monotone: Chart 12's GL is
+a rasi out yet lands in the same D-10 sign, while its HL agrees in the rasi
+chart and is one sign out in the D-10.
 
-| chart | sunrise mode | implied by HL | implied by GL |
-|---|---|---|---|
-| 3 | disc_upper_limb (ours) | +18.4s | +19.1s |
-| 3 | disc_center | −62.1s | −61.5s |
-| 12 | disc_upper_limb (ours) | +49.5s | +49.3s |
-| 12 | disc_center | −43.3s | −43.6s |
+**Chart 58 reprints Chart 3** at 26 N **13** rather than 26 N 14. Every graha
+and the ascendant are identical; only HL and GL move, by −3' and −7'. So the
+book's two castings sit **8s apart** in implied sunrise for **1'** of latitude
+while ours moves **2.2s the other way** — the gap varies with latitude faster
+than our model, and in the opposite sense.
 
-Two quantities, two rates, two hemispheres, one number: HL and GL are right and
-the sunrise is not. Neither §5 definition is the book's — ours early both times,
-`disc_center` late both times, at no fixed fraction between (23% at 26 N, 53% at
-43 N), so a toggle cannot fix it; it looks like a refraction or horizon-dip
-model diverging with latitude. In a **divisional** chart the reach is not
-monotone — Chart 12's GL is a rasi out yet lands in the same D-10 sign, while
-its HL agrees in the rasi chart and is one sign out in the D-10.
+**Not changed** — neither available value is right. Pinned by the
+`..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec
+1926 at 78 E 10 / 26 N 13 and 26 N 14, or a later section states the model.
 
-**Not changed** — neither available value is right, so there is nothing to
-switch to. Pinned by the `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec 1926 at 78 E 10 / 26 N 14
-and 16 Aug 1958 at 83 W 53 / 43 N 36, or a later section states the model.
 
 ### OI-124 — which chart §15.5.2's advancement rule reads, in a varga dasa
 

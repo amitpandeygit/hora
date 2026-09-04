@@ -452,6 +452,88 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    58: {
+        "title": "A.B. Vajpayee, D-10 and its ashtakavarga — Example 108",
+        "birth": "December 25, 1926, 5:12 am (IST), 78 E 10, 26 N 13",
+        "birth_data": {
+            "year": 1926, "month": 12, "day": 25, "hour": 5, "minute": 12,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 26 + 13 / 60, "longitude": 78 + 10 / 60},
+        "longitudes": {
+            "Asc": "14 Sc 18", "Sun": "9 Sg 35", "Moon": "15 Le 28",
+            "Mars": "13 Ar 39", "Merc": "20 Sc 59", "Jup": "2 Aq 05",
+            "Ven": "17 Sg 42", "Sat": "9 Sc 41", "Rahu": "14 Ge 30",
+            "Ketu": "14 Sg 30", "HL": "13 Li 43", "GL": "21 Cn 18",
+        },
+        "chara_karakas": {
+            "Merc": "AK", "Ven": "AmK", "Rahu": "BK", "Moon": "MK",
+            "Mars": "PiK", "Sat": "PK", "Sun": "GK", "Jup": "DK",
+        },
+        "divisional": {
+            "D10": {
+                "Sun": "Pi", "Ketu": "Ar", "Ven": "Ta", "HL": "Aq",
+                "Jup": "Aq", "Merc": "Cp", "Moon": "Cp", "Mars": "Le",
+                "AL": "Vi", "Rahu": "Li", "Sat": "Li", "GL": "Li",
+                "Asc": "Sc",
+            },
+        },
+        "ashtakavarga": {
+            "D10": {
+                "Sun": (5, 3, 6, 2, 3, 4, 7, 6, 3, 3, 2, 4),
+                "Moon": (2, 4, 2, 3, 6, 6, 4, 4, 4, 6, 3, 5),
+                "Mars": (3, 4, 4, 3, 4, 2, 2, 5, 3, 4, 1, 4),
+                "Mercury": (4, 4, 6, 4, 6, 5, 3, 6, 4, 5, 4, 3),
+                "Jupiter": (4, 6, 4, 2, 3, 8, 3, 6, 4, 3, 7, 6),
+                "Venus": (2, 4, 6, 4, 3, 5, 3, 5, 5, 6, 5, 4),
+                "Saturn": (3, 1, 5, 2, 3, 3, 4, 3, 5, 4, 2, 4),
+                "SAV": (23, 26, 33, 20, 28, 33, 26, 35, 28, 31, 24, 30),
+            },
+        },
+        "events": {"became India's Prime Minister": "March 19, 1998"},
+        "first_seen": "chapter 25, Example 108",
+        "note": (
+            "Chart 3's nativity reprinted, with the latitude given as 26 N "
+            "**13** rather than 26 N 14. Every graha and the ascendant are "
+            "identical to the printed arcminute; only HL and GL differ, by 3' "
+            "and 7' — see OI-103, which this second casting sharpens. Its "
+            "value is the **ashtakavarga**: the only place the book prints "
+            "all seven BAVs and the SAV of one chart, and all 96 figures "
+            "reproduce."
+        ),
+    },
+    59: {
+        "title": "Vajpayee's swearing-in transit — Example 108",
+        "birth": "March 19, 1998, 9:32 am (IST), 77 E 12, 28 N 36",
+        "kind": "transit",
+        "birth_data": {
+            "year": 1998, "month": 3, "day": 19, "hour": 9, "minute": 32,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 28 + 36 / 60, "longitude": 77 + 12 / 60},
+        "longitudes": {
+            "Asc": "4 Ta 01", "Sun": "4 Pi 31", "Moon": "9 Sc 46",
+            "Mars": "17 Pi 20", "Merc": "22 Pi 53", "Jup": "16 Aq 23",
+            "Ven": "18 Cp 21", "Sat": "26 Pi 21", "Rahu": "15 Le 48",
+            "Ketu": "15 Aq 48", "HL": "6 Ge 27", "GL": "24 Li 33",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Merc": "AmK", "Ven": "BK", "Sun": "DK",
+            "Moon": "GK", "Mars": "MK", "Jup": "PiK", "Rahu": "PK",
+        },
+        "drawn": {
+            "Mars": "Pi", "Sun": "Pi", "Sat": "Pi", "Merc": "Pi",
+            "Asc": "Ta", "HL": "Ge", "Ketu": "Aq", "Jup": "Aq",
+            "Ven": "Cp", "Rahu": "Le", "Moon": "Sc", "GL": "Li", "AL": "Vi",
+        },
+        "events": {"Vajpayee was sworn in as Prime Minister": "March 19, 1998"},
+        "first_seen": "chapter 25, Example 108",
+        "note": (
+            "A transit chart with full data, unlike Charts 52 and 53. It is "
+            "read against Chart 58's D-10 ashtakavarga, which makes it §25.4's "
+            "interaction (1) with §25.5's rekha counts behind it."
+        ),
+    },
     57: {
         "title": "John F. Kennedy, Jr — natal rasi and transit D-11, Example 107",
         "birth": "November 25, 1960, 12:22 am (5:00 West), 77 W 02, 38 N 53",

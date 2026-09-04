@@ -392,6 +392,20 @@
         "number": 57,
         "recomputable": true,
         "title": "John F. Kennedy, Jr \u2014 natal rasi and transit D-11, Example 107"
+      },
+      {
+        "birth": "December 25, 1926, 5:12 am (IST), 78 E 10, 26 N 13",
+        "first_seen": "chapter 25, Example 108",
+        "number": 58,
+        "recomputable": true,
+        "title": "A.B. Vajpayee, D-10 and its ashtakavarga \u2014 Example 108"
+      },
+      {
+        "birth": "March 19, 1998, 9:32 am (IST), 77 E 12, 28 N 36",
+        "first_seen": "chapter 25, Example 108",
+        "number": 59,
+        "recomputable": true,
+        "title": "Vajpayee's swearing-in transit \u2014 Example 108"
       }
     ],
     "not_supplied": [
@@ -447,7 +461,9 @@
       54,
       55,
       56,
-      57
+      57,
+      58,
+      59
     ]
   },
   "status": 200
