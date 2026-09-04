@@ -430,6 +430,48 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    47: {
+        "title": "An astrologer — Example 99",
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1970, "month": 4, "day": 4, "hour": 17, "minute": 50,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "14 Vi 52", "Sun": "20 Pi 52", "Moon": "28 Aq 35",
+            "Mars": "26 Ar 40", "Merc": "3 Ar 07", "Jup": "9 Li 45",
+            "Ven": "7 Ar 55", "Sat": "15 Ar 06", "Rahu": "16 Aq 53",
+            "Ketu": "16 Le 53", "HL": "15 Pi 42", "GL": "8 Vi 40",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Mars": "AmK", "Sun": "BK", "Sat": "MK",
+            "Rahu": "PiK", "Jup": "PK", "Ven": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "divisional": {
+            "D24": {
+                "Jup": "Pi", "Mars": "Ta", "Moon": "Ge", "Asc": "Ge",
+                "HL": "Cn", "Sat": "Le", "Ketu": "Vi", "Rahu": "Vi",
+                "Merc": "Li", "Sun": "Sc", "GL": "Cp", "Ven": "Aq",
+                "AL": "Aq",
+            },
+        },
+        "sav_strongest": {"D24": {"Le": 36, "Ge": 34, "Pi": 33}},
+        "events": {
+            "seriously into astrology since": "1993",
+            "a very fruitful period for knowledge": "1996-2000",
+        },
+        "first_seen": "chapter 24, Example 99",
+        "note": (
+            "The **third** printing of the native of Charts 27 and 33 -- same "
+            "birth data, longitudes and chara karakas. Chart 27 drew the D-4, "
+            "Chart 33 the D-16 and Chart 47 the D-24, so between them the "
+            "register now holds three vargas of one chart and no rasi "
+            "diagram. Example 99 is the only worked SAV of a divisional "
+            "chart: Le 36, Ge 34 and Pi 33 rekhas, and nothing else over 30."
+        ),
+    },
     46: {
         "title": "A male who married in Dec 1994 — Example 98",
         "birth": "May 9, 1971, 9:22 am (IST), 81 E 12, 16 N 15",

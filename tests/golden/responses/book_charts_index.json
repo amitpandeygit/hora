@@ -315,6 +315,13 @@
         "number": 46,
         "recomputable": true,
         "title": "A male who married in Dec 1994 \u2014 Example 98"
+      },
+      {
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 24, Example 99",
+        "number": 47,
+        "recomputable": true,
+        "title": "An astrologer \u2014 Example 99"
       }
     ],
     "not_supplied": [
@@ -359,7 +366,8 @@
       42,
       43,
       44,
-      46
+      46,
+      47
     ]
   },
   "status": 200

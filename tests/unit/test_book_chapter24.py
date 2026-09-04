@@ -1890,3 +1890,331 @@ def test_example_98_dates_nothing_finely_enough_to_settle_oi_115():
         assert aq_start < wedding                # Aq had opened
         assert aq_end < wedding < pi_pi_end      # and Pi-Pi was running
     assert "both year lengths" in EXAMPLE_98_DOES_NOT_SEPARATE_THE_YEAR_LENGTHS
+
+
+# ---------------------------------------------------------------------------
+# Example 99 — Chart 47, an astrologer's D-24
+# ---------------------------------------------------------------------------
+
+D24_REFERENCES = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars",
+                  "Merc": "Mercury", "Jup": "Jupiter", "Ven": "Venus",
+                  "Sat": "Saturn", "Asc": "Lagna"}
+
+
+def _chart_47_d24():
+    """Chart 47's D-24 signs, from the printed rasi longitudes."""
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(47)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    return {
+        "printed": printed,
+        "lagna": varga(printed["Asc"], "D24").sign,
+        "signs": {int(g): varga(printed[n], "D24").sign
+                  for n, g in named.items()},
+        "references": {ref: varga(printed[name], "D24").sign
+                       for name, ref in D24_REFERENCES.items()},
+    }
+
+
+def test_chart_47_recomputes_and_is_the_third_printing_of_one_native():
+    """Charts 27, 33 and 47 share a birth line, twelve longitudes and eight
+    chara karakas. The rasi chart has never been drawn for him.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import CHART_47_IS_THE_THIRD_PRINTING
+
+    records = {n: chart(n) for n in (27, 33, 47)}
+    assert (records[27]["birth_data"] == records[33]["birth_data"]
+            == records[47]["birth_data"])
+    assert (records[27]["longitudes"] == records[33]["longitudes"]
+            == records[47]["longitudes"])
+    assert (records[27]["chara_karakas"] == records[33]["chara_karakas"]
+            == records[47]["chara_karakas"])
+    assert [list(records[n]["divisional"]) for n in (27, 33, 47)] == [
+        ["D4"], ["D16"], ["D24"]]
+    assert all(records[n].get("drawn") is None for n in (27, 33, 47))
+
+    computed = compute_chart(
+        from_local(**records[47]["birth_data"]),
+        Place(name="Chart 47", **records[47]["place"]),
+        Settings(node_type=NodeType.MEAN))
+    printed = longitudes(47)
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+
+    assert "three" in CHART_47_IS_THE_THIRD_PRINTING or "27, 33 and 47" in (
+        CHART_47_IS_THE_THIRD_PRINTING)
+
+
+def test_chart_47s_drawn_d24_reproduces_from_the_longitudes():
+    """All twelve placements in the printed D-24."""
+    from hora.charts.book import chart
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_ABBR
+
+    drawn = dict(chart(47)["divisional"]["D24"])
+    arudha = drawn.pop("AL")
+    printed = chart(47)["longitudes"]
+
+    assert len(drawn) == 12
+    assert set(drawn) == set(printed)
+    for name, abbr in drawn.items():
+        got = str(RASI_ABBR[varga(_chart_47_d24()["printed"][name],
+                                  "D24").sign])
+        assert got == abbr, f"{name}: printed {abbr}, computed {got}"
+    assert arudha == "Aq"
+
+
+def test_example_99s_first_three_reasons():
+    """"Gemini contains lagna in D-24... Its lord Mercury is in the 5th house
+    of scholarship from lagna... Mercury and Venus are in trines from Ge."
+    """
+    from hora.core.const import RASI_LORD, RASI_NAMES, Graha
+    from hora.dasha.nakshatra.kalachakra import EXAMPLE_99_REASONS
+
+    chart = _chart_47_d24()
+    lagna = chart["lagna"]
+    assert str(RASI_NAMES[lagna]) == "Gemini"
+
+    mercury = int(Graha.MERCURY)
+    assert int(RASI_LORD[lagna]) == mercury
+    fifth = (lagna + 4) % 12
+    assert chart["signs"][mercury] == fifth
+    assert str(RASI_NAMES[fifth]) == "Libra"
+
+    trines = {(lagna + step) % 12 for step in (0, 4, 8)}
+    assert chart["signs"][mercury] in trines
+    assert chart["signs"][int(Graha.VENUS)] in trines
+    assert str(RASI_NAMES[chart["signs"][int(Graha.VENUS)]]) == "Aquarius"
+
+    assert {row["rasi"] for row in EXAMPLE_99_REASONS} == {"Gemini"}
+    assert [row["rule"] for row in EXAMPLE_99_REASONS] == [
+        "house", "lord", "trines", "sav", "arudha"]
+
+
+def test_the_d24_sav_reproduces_the_three_strongest_signs():
+    """"The strongest houses in this D-24 SAV are Le (36 rekhas), Ge (34
+    rekhas) and Pi (33 rekhas)."  The only worked SAV of a divisional chart in
+    the book, and the whole of it comes out of §12.4's tables.
+    """
+    from hora.charts.ashtakavarga import sarvashtakavarga
+    from hora.charts.book import chart
+    from hora.core.const import RASI_ABBR
+
+    sav = sarvashtakavarga(_chart_47_d24()["references"])
+    ranked = sorted(sav["signs"], key=lambda row: -row["rekhas"])
+    assert [(str(RASI_ABBR[row["sign"]]), row["rekhas"])
+            for row in ranked[:3]] == [("Le", 36), ("Ge", 34), ("Pi", 33)]
+    assert ranked[3]["rekhas"] < 30              # nothing else is strong
+    assert sav["total"] == sav["expected_total"] == 337
+
+    printed = chart(47)["sav_strongest"]["D24"]
+    assert printed == {"Le": 36, "Ge": 34, "Pi": 33}
+
+
+def test_the_three_strongest_are_the_2nd_5th_and_7th_from_al():
+    """"They are the 7th, 5th and 2nd houses from AL. As these are the houses
+    conducive to recognition and awards..."  A rule §24.3.1 did not give.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_ABBR
+    from hora.dasha.nakshatra.kalachakra import (
+        TWO_FIVE_AND_SEVEN_FROM_AL_ARE_RECOGNITION,
+    )
+
+    chart = _chart_47_d24()
+    al = arudha_pada(1, chart["lagna"], chart["signs"]).sign
+    assert str(RASI_ABBR[al]) == "Aq"
+
+    houses = {house: str(RASI_ABBR[(al + house - 1) % 12])
+              for house in (2, 5, 7)}
+    assert houses == {2: "Pi", 5: "Ge", 7: "Le"}
+    assert "recognition and awards" in TWO_FIVE_AND_SEVEN_FROM_AL_ARE_RECOGNITION
+
+
+def test_gemini_is_both_the_5th_from_al_and_a5():
+    """"With Ge being the 5th house from AL and also A5, this dasa can bring
+    some reputation for his knowledge."  Two different counts landing on one
+    sign, which is why the example bothers to say both.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_ABBR
+
+    chart = _chart_47_d24()
+    al = arudha_pada(1, chart["lagna"], chart["signs"]).sign
+    a5 = arudha_pada(5, chart["lagna"], chart["signs"]).sign
+
+    assert str(RASI_ABBR[(al + 4) % 12]) == "Ge"     # the 5th from AL
+    assert str(RASI_ABBR[a5]) == "Ge"                # and A5 itself
+    assert a5 != al
+
+
+def test_example_99s_kalachakra_dasas():
+    """"About 3 years and 2 months of Sg dasa was left at birth and Ar, Ta, Ge,
+    Cn etc dasas run after it."  Moon at 28 Aq 35 is Poorvabhadrapada's 3rd
+    pada, savya-1, paramayush 83.
+    """
+    from hora.charts.book import longitudes
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_order,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+        paramayush,
+        sub_group_of,
+    )
+
+    moon = pada_of(longitudes(47)["Moon"])
+    assert (moon["nakshatra"], moon["group"], moon["pada"]) == (
+        25, "savya", 3)                          # Poorvabhadrapada
+    assert sub_group_of(25) == 1
+    assert moon["elapsed_fraction"] == pytest.approx(115.0 / 200.0)
+
+    nine = pada_sequence("savya", 1, 3)
+    assert [A[rasi] for rasi in nine] == [
+        "Ta", "Ar", "Pi", "Aq", "Cp", "Sg", "Ar", "Ta", "Ge"]
+    assert paramayush(nine) == 83
+
+    birth = first_dasa(nine, moon["elapsed_fraction"])
+    assert birth["rasi"] == "Sagittarius"
+    assert birth["position"] == 5
+
+    following = dasa_order(25, 3, 4, skip=birth["position"] + 1)
+    assert [A[row["sign"]] for row in following] == ["Ar", "Ta", "Ge", "Cn"]
+    assert [row["position"] for row in following] == [0, 1, 2, 3]
+    assert following[2]["years"] == 9            # "Gemini dasa of 9 years"
+
+
+def test_gemini_dasa_starts_in_1996_under_either_year_length():
+    """"One may find that Gemini dasa of 9 years started in 1996."  Born April
+    1970, so Gemini opens at about 26.24 years of age.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    record = chart(47)
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 47", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    moon = computed.positions[int(Graha.MOON)].longitude
+
+    nine = pada_sequence("savya", 1, 3)
+    birth = first_dasa(nine, pada_of(moon)["elapsed_fraction"])
+    age = birth["balance_years"] + 7 + 16        # Sg's balance, then Ar and Ta
+
+    for year_days in (360.0, 365.25):
+        year = 1970 + (4 - 1 + 4 / 30) / 12 + age * year_days / 365.25
+        assert 1996 <= year < 1997
+
+    assert 26.0 < age < 26.5
+    # and the printed Moon puts it in 1996 too, being only 0.09' away
+    printed = first_dasa(nine, pada_of(longitudes(47)["Moon"])["elapsed_fraction"])
+    assert abs(printed["balance_years"] - birth["balance_years"]) < 0.05
+
+
+def test_the_birth_balance_needs_the_unrounded_moon():
+    """The book's "3 years and 2 months" comes from the ephemeris Moon. The
+    printed 28 Aq 35 gives 3 years 3.3 months -- a difference of 0.09' of
+    longitude, because one arcminute is worth paramayush/200 years.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        THE_BIRTH_BALANCE_NEEDS_THE_UNROUNDED_MOON,
+        balance_per_arcminute,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    nine = pada_sequence("savya", 1, 3)
+    assert balance_per_arcminute(nine) == pytest.approx(83 / 200)
+    assert 4.9 < balance_per_arcminute(nine) * 12 < 5.0      # months
+
+    record = chart(47)
+    moon = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 47", **record["place"]),
+        Settings(node_type=NodeType.MEAN)
+    ).positions[int(Graha.MOON)].longitude
+
+    def months(longitude):
+        balance = first_dasa(nine, pada_of(longitude)["elapsed_fraction"])
+        return balance["balance_years"] % 1 * 12
+
+    assert int(months(longitudes(47)["Moon"])) == 3          # printed: 3.3
+    assert int(months(moon)) == 2                            # computed: 2.9
+    assert abs(moon - longitudes(47)["Moon"]) * 60 < 0.1     # 0.09 arcminutes
+
+    assert "paramayush/200" in THE_BIRTH_BALANCE_NEEDS_THE_UNROUNDED_MOON
+
+
+def test_example_98s_balance_also_comes_from_the_computed_moon():
+    """"About 5 years of Sc dasa left at birth."  The printed Moon gives 5.50
+    years and the computed one 5.20, and 5.20 is what "about 5" describes.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        balance_per_arcminute,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    nine = pada_sequence("savya", 1, 1)
+    assert balance_per_arcminute(nine) == pytest.approx(0.5)   # 6 months
+
+    record = chart(46)
+    moon = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 46", **record["place"]),
+        Settings(node_type=NodeType.MEAN)
+    ).positions[int(Graha.MOON)].longitude
+
+    printed = first_dasa(nine, pada_of(longitudes(46)["Moon"])["elapsed_fraction"])
+    exact = first_dasa(nine, pada_of(moon)["elapsed_fraction"])
+    assert printed["balance_years"] == pytest.approx(5.5)
+    assert exact["balance_years"] == pytest.approx(5.20, abs=0.01)
+    assert printed["rasi"] == exact["rasi"] == "Scorpio"
+
+
+def test_example_99_drops_24_3_1s_hedge_on_the_sav_threshold():
+    """§24.3.1 said "usually dasas of rasis with 30 or more rekhas"; Example 99
+    says "any rasi 30 or more rekhas". The threshold is the same.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        SAV_STRONG_REKHAS,
+        SAV_THRESHOLD_READINGS,
+        SAV_THRESHOLD_RESTATED_WITHOUT_THE_HEDGE,
+    )
+
+    assert SAV_STRONG_REKHAS == 30
+    assert "Any rasi" in SAV_THRESHOLD_RESTATED_WITHOUT_THE_HEDGE
+    assert "usually" not in SAV_THRESHOLD_RESTATED_WITHOUT_THE_HEDGE.lower()
+    assert all(row["hedge"] == "usually" for row in SAV_THRESHOLD_READINGS)

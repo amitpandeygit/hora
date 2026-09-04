@@ -1115,3 +1115,75 @@ EXAMPLE_98_DOES_NOT_SEPARATE_THE_YEAR_LENGTHS = (
     "falls inside the Pi-Pi antardasa under both. The example dates nothing "
     "finely enough to choose."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 99 — why Gemini gave knowledge
+# --------------------------------------------------------------------------
+
+#: **Finding.** Chart 47 is the third printing of the native of Charts 27 and
+#: 33. Chart 27 drew the D-4, Chart 33 the D-16 and Chart 47 the D-24; the
+#: rasi chart has never been drawn for him, only its twelve longitudes.
+CHART_47_IS_THE_THIRD_PRINTING = (
+    "Charts 27, 33 and 47 are one native, April 4 1970 at 81 E 12, 16 N 15, "
+    "printed as a D-4, a D-16 and a D-24."
+)
+
+
+def balance_per_arcminute(sequence: tuple[int, ...]) -> float:
+    """How much the birth balance moves per arcminute of Moon longitude.
+
+    A pada is 200 arcminutes and its paramayush is spread across them, so one
+    arcminute is ``paramayush / 200`` years — between **4.98 and 6 months**
+    for the four paramayush values. See
+    :data:`THE_BIRTH_BALANCE_NEEDS_THE_UNROUNDED_MOON`.
+    """
+    return paramayush(sequence) / 200.0
+
+
+#: **Finding.** Kalachakra's balance at birth cannot be reproduced from a
+#: longitude printed to the arcminute. Example 99 says "about 3 years and 2
+#: months of Sg dasa was left at birth"; the printed Moon of 28 Aq 35 gives
+#: **3 years 3.3 months** and the ephemeris Moon, 0.09' further on, gives
+#: **3 years 2.9 months**. Example 98 is the same story — its printed Moon
+#: gives a balance of 5.50 years and the computed one 5.20, and the book says
+#: "about 5 years". Both examples were worked from the unrounded Moon.
+THE_BIRTH_BALANCE_NEEDS_THE_UNROUNDED_MOON = (
+    "One arcminute of Moon longitude moves the balance at birth by "
+    "paramayush/200 years -- five to six months. A longitude rounded to the "
+    "arcminute is therefore worth +/- 2.5 months of balance, and near a dasa "
+    "boundary it can change which dasa runs at birth."
+)
+
+#: Example 99's reading of the D-24, in the order it gives it.
+EXAMPLE_99_REASONS: tuple[dict[str, str], ...] = (
+    {"rasi": "Gemini", "because": "it contains lagna in D-24",
+     "gives": "all-round progress related to learning and knowledge",
+     "rule": "house"},
+    {"rasi": "Gemini",
+     "because": "its lord Mercury is in the 5th house of scholarship",
+     "gives": "scholarship", "rule": "lord"},
+    {"rasi": "Gemini",
+     "because": "Mercury and Venus are in trines from it",
+     "gives": "prosperity of the indications of Gemini", "rule": "trines"},
+    {"rasi": "Gemini", "because": "it has 34 rekhas in the D-24 SAV",
+     "gives": "favorable results related to that house", "rule": "sav"},
+    {"rasi": "Gemini", "because": "it is the 5th from AL and also A5",
+     "gives": "some reputation for his knowledge", "rule": "arudha"},
+)
+
+#: A rule §24.3.1 did not give, and the reason the three strongest signs of a
+#: D-24 SAV were worth naming at all.
+TWO_FIVE_AND_SEVEN_FROM_AL_ARE_RECOGNITION = (
+    "The strongest houses in this D-24 SAV are Le (36 rekhas), Ge (34 rekhas) "
+    "and Pi (33 rekhas). They are the 7th, 5th and 2nd houses from AL. As "
+    "these are the houses conducive to recognition and awards, this D-24 "
+    "shows a person with academic achievements and associated recognition."
+)
+
+#: Example 99 restates §24.3.1's threshold without the hedge §24.3.1 gave it.
+#: §24.3.1 said "usually"; this says "any rasi".
+SAV_THRESHOLD_RESTATED_WITHOUT_THE_HEDGE = (
+    "Any rasi 30 or more rekhas brings favorable results related to that "
+    "house in that divisional chart."
+)
