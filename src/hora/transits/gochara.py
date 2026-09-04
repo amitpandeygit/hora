@@ -160,7 +160,7 @@ STANDARD_RESULT_TABLES: dict[int, dict[str, object]] = {
     55: {"for": "Mars", "built": True},
     56: {"for": "Mercury", "built": True},
     57: {"for": "Jupiter", "built": True},
-    58: {"for": None, "built": False},
+    58: {"for": "Venus", "built": True},
     59: {"for": None, "built": False},
 }
 
@@ -278,16 +278,29 @@ TABLE_55_MARS: tuple[dict[str, object], ...] = (
      "results": "Expenses, quarrels with wife, diseases"},
 )
 
-#: **Finding.** Mars in the 10th is the only row in the three tables so far
-#: whose results contradict its own snapshot: it is marked **Bad** and reads
-#: "Change of place, unexpected wealth". Every other Bad row is unmixed. Held
-#: as printed — the snapshot column is a one-word summary and "change of
-#: place" may be what it summarises, but the row is not self-consistent and a
-#: reader should be told rather than have it smoothed over.
+#: **Finding.** Mars in the 10th is marked **Bad** and reads "Change of place,
+#: unexpected wealth". Held as printed — the snapshot column is a one-word
+#: summary and "change of place" may be what it summarises, but the row is not
+#: self-consistent and a reader should be told rather than have it smoothed
+#: over. It was the only such row until Table 58; see :data:`MIXED_ROWS`.
 MARS_IN_THE_TENTH_IS_MARKED_BAD_AND_READS_GOOD = (
     "Table 55 marks Mars in the 10th Bad and gives its typical results as "
-    "\"Change of place, unexpected wealth\". No other Bad row in Tables 53 to "
-    "55 contains a benefit."
+    "\"Change of place, unexpected wealth\"."
+)
+
+#: **Finding.** Rows whose typical results pull against their own snapshot,
+#: curated by reading every row rather than by matching words — a lexicon
+#: cannot tell "success of enemies" from "success", or "discomfort" from
+#: "comfort". Three of the four are Venus's.
+MIXED_ROWS: tuple[dict[str, object], ...] = (
+    {"graha": "Mars", "house": 10, "snapshot": "Bad",
+     "against_it": "unexpected wealth"},
+    {"graha": "Venus", "house": 4, "snapshot": "Good",
+     "against_it": "success of enemies"},
+    {"graha": "Venus", "house": 10, "snapshot": "Bad",
+     "against_it": "Virtuous acts"},
+    {"graha": "Venus", "house": 12, "snapshot": "Bad",
+     "against_it": "New friends, money, pleasures, gains -- the whole row"},
 )
 
 #: **Finding, and its limit.** Tables 53 to 55 nest — Mars's Good houses are a
@@ -347,8 +360,8 @@ MERCURY_ALTERNATES_FOR_TEN_HOUSES = (
 #: has disagreed about. The 6th survived four tables and fell to Jupiter; the
 #: 5th and 9th survived four and fell to the same table.
 THE_11TH_AND_12TH_HAVE_NOT_VARIED = (
-    "Across Tables 53 to 57 the 11th is Good five times and the 12th Bad five "
-    "times. Every other house now has at least one table against it."
+    "Across Tables 53 to 58 the 11th is Good six times and the 12th Bad six "
+    "times. They are the only two houses no table disagrees about."
 )
 
 #: **Book defect.** Table 56's 12th row lists "disease" twice: "Disease,
@@ -403,15 +416,74 @@ JUPITER_OVERTURNS_THREE_STANDING_AGREEMENTS = (
     "and 9th Good. All three had held across Tables 53 to 56."
 )
 
-#: **Finding.** Jupiter is the section's outlier. It agrees with the Sun, the
-#: Moon and Mercury on five houses of twelve each and with Mars on six, while
-#: every pair among the other four agrees on six to eleven. On the upachayas
-#: it is the Sun's near-opposite: the Sun is Good in all four, Jupiter in the
-#: 11th only.
-JUPITER_IS_THE_OUTLIER_TABLE = (
-    "Table 57 agrees with each of Tables 53, 54 and 56 on five houses of "
-    "twelve and with Table 55 on six. Every pair among the other four agrees "
-    "on at least six, and Tables 53 and 55 agree on eleven."
+#: **Finding.** The six tables fall into two groups, and Jupiter and Venus have
+#: **identical** agreement profiles against the other four — five houses each
+#: with the Sun, the Moon and Mercury, six with Mars — while agreeing with each
+#: other on eight. Every cross-group pair scores 5 or 6; every pair inside
+#: {Sun, Moon, Mars, Mercury} scores 6 to 11.
+#:
+#: Read against Table 57 alone this looked like Jupiter being an outlier. Venus
+#: shows it is a **pair**: the two great benefics against the rest.
+THE_TWO_BENEFICS_FORM_A_PAIR = (
+    "Tables 57 and 58 agree with Tables 53, 54 and 56 on five houses each and "
+    "with Table 55 on six -- the same four numbers -- and with each other on "
+    "eight. No cross-group pair exceeds six."
+)
+
+#: The grouping the agreement scores fall into, ours and not the book's.
+#: Mercury is a natural benefic and sits with the first group, so this is not
+#: the benefic/malefic split.
+TABLE_GROUPS: tuple[tuple[str, ...], ...] = (
+    ("Sun", "Moon", "Mars", "Mercury"),
+    ("Jupiter", "Venus"),
+)
+
+
+# --------------------------------------------------------------------------
+# Table 58 — Venus's transit from janma rasi
+# --------------------------------------------------------------------------
+
+#: Table 58 exactly as printed, in house order.
+TABLE_58_VENUS: tuple[dict[str, object], ...] = (
+    {"house": 1, "snapshot": "Good",
+     "results": "Comforts, pleasures, happiness, good spirits"},
+    {"house": 2, "snapshot": "Good",
+     "results": "Money, fortune, erotic pleasures, childbirth"},
+    {"house": 3, "snapshot": "Good", "results": "Respect, wealth, good spirits"},
+    {"house": 4, "snapshot": "Good",
+     "results": "Prosperity, success of enemies, comforts"},
+    {"house": 5, "snapshot": "Good", "results": "Fame, power, good name"},
+    {"house": 6, "snapshot": "Bad",
+     "results": "Loss of fame, bad name, quarrels"},
+    {"house": 7, "snapshot": "Bad", "results": "Humiliation, disease, troubles"},
+    {"house": 8, "snapshot": "Bad",
+     "results": "Fears, mental worries, injuries, troubles from women"},
+    {"house": 9, "snapshot": "Good",
+     "results": "Fortune, luxuries, marital happiness"},
+    {"house": 10, "snapshot": "Bad",
+     "results": "Virtuous acts, troubles, unpleasant events, disgrace"},
+    {"house": 11, "snapshot": "Good",
+     "results": "Gains, happiness, prosperity, comforts"},
+    {"house": 12, "snapshot": "Bad",
+     "results": "New friends, money, pleasures, gains"},
+)
+
+#: **Finding.** Venus is the most generous table — seven Good houses against
+#: the Moon's and Mercury's six — and the only one whose Good houses open with
+#: an unbroken run, the 1st to the 5th.
+VENUS_IS_THE_MOST_GENEROUS_TABLE = (
+    "Table 58 marks the 1st, 2nd, 3rd, 4th, 5th, 9th and 11th Good. No other "
+    "table has seven, and none other opens with five Good houses in a row."
+)
+
+#: **Finding.** Venus's 12th keeps the verdict every table gives the 12th and
+#: contradicts it in the same row: **Bad**, reading "New friends, money,
+#: pleasures, gains" — four items, none of them a harm. So the section's last
+#: undisputed house survives as a verdict and is undercut as a reading, in the
+#: table that supplies it.
+THE_TWELFTH_IS_BAD_EVERYWHERE_AND_READS_WELL_HERE = (
+    "The 12th is Bad in all six tables read so far. Table 58's 12th row is "
+    "the only one of the six whose typical results contain no harm at all."
 )
 
 
@@ -422,6 +494,7 @@ STANDARD_RESULTS: dict[int, tuple[dict[str, object], ...]] = {
     int(Graha.MARS): TABLE_55_MARS,
     int(Graha.MERCURY): TABLE_56_MERCURY,
     int(Graha.JUPITER): TABLE_57_JUPITER,
+    int(Graha.VENUS): TABLE_58_VENUS,
 }
 
 
