@@ -158,7 +158,7 @@ STANDARD_RESULT_TABLES: dict[int, dict[str, object]] = {
     53: {"for": "Sun", "built": True},
     54: {"for": "Moon", "built": True},
     55: {"for": "Mars", "built": True},
-    56: {"for": None, "built": False},
+    56: {"for": "Mercury", "built": True},
     57: {"for": None, "built": False},
     58: {"for": None, "built": False},
     59: {"for": None, "built": False},
@@ -290,15 +290,73 @@ MARS_IN_THE_TENTH_IS_MARKED_BAD_AND_READS_GOOD = (
     "55 contains a benefit."
 )
 
-#: **Finding.** The three tables so far nest: Mars's Good houses are a strict
-#: subset of the Sun's, which are a strict subset of the Moon's. Mars differs
-#: from the Sun on the **10th** alone and from the Moon on the 1st, 7th and
-#: 10th. So across the three, six houses are always Bad, three always Good,
-#: and only the 1st, 7th and 10th vary at all.
-THE_TABLES_SO_FAR_NEST = (
+#: **Finding, and its limit.** Tables 53 to 55 nest — Mars's Good houses are a
+#: strict subset of the Sun's, which are a strict subset of the Moon's, with
+#: single-house steps. **Table 56 ends it**: Mercury is Good in the 2nd, 4th
+#: and 8th, which all three of the others call Bad, and Bad in the 3rd, which
+#: all three call Good. So the nesting was a fact about the luminaries and
+#: Mars, not about the section.
+THE_FIRST_THREE_TABLES_NEST = (
     "Mars {3, 6, 11} is inside Sun {3, 6, 10, 11} is inside Moon "
-    "{1, 3, 6, 7, 10, 11}. The 3rd, 6th and 11th are Good in every table read "
-    "so far and the 2nd, 4th, 5th, 8th, 9th and 12th are Bad in every one."
+    "{1, 3, 6, 7, 10, 11}, with single-house steps. Mercury {2, 4, 6, 8, 10, "
+    "11} is inside none of them and contains none of them."
+)
+
+
+# --------------------------------------------------------------------------
+# Table 56 — Mercury's transit from janma rasi
+# --------------------------------------------------------------------------
+
+#: Table 56 exactly as printed, in house order. The 12th's "disease" twice is
+#: the book's; see :data:`THE_TWELFTH_ROW_REPEATS_A_WORD`.
+TABLE_56_MERCURY: tuple[dict[str, object], ...] = (
+    {"house": 1, "snapshot": "Bad",
+     "results": "Quarrels, imprisonment, losses, poor advice"},
+    {"house": 2, "snapshot": "Good", "results": "Success, wealth, gains"},
+    {"house": 3, "snapshot": "Bad",
+     "results": "Wandering, losses, trouble from authorities"},
+    {"house": 4, "snapshot": "Good", "results": "Prosperity in family, gains"},
+    {"house": 5, "snapshot": "Bad",
+     "results": "Quarrels with wife and children, suffering"},
+    {"house": 6, "snapshot": "Good", "results": "Renown, success, ornaments"},
+    {"house": 7, "snapshot": "Bad",
+     "results": "Quarrels, mental discomfort, addictions"},
+    {"house": 8, "snapshot": "Good",
+     "results": "Childbirth, happiness, gains, success"},
+    {"house": 9, "snapshot": "Bad", "results": "Mental worries, obstacles"},
+    {"house": 10, "snapshot": "Good",
+     "results": "Money, happiness, domestic harmony, success"},
+    {"house": 11, "snapshot": "Good", "results": "Childbirth, happiness, wealth"},
+    {"house": 12, "snapshot": "Bad",
+     "results": "Disease, domestic disharmony, disease, losses"},
+)
+
+#: **Finding.** Mercury's verdicts **alternate** Bad, Good, Bad, Good through
+#: the first ten houses — the only table so far with a periodic column — and
+#: then stop alternating at the 11th, which is Good where the run would make it
+#: Bad. What replaces the pattern is the section's own fixed pair: the 11th is
+#: Good and the 12th Bad in every table read so far.
+MERCURY_ALTERNATES_FOR_TEN_HOUSES = (
+    "Table 56 runs Bad, Good, Bad, Good, Bad, Good, Bad, Good, Bad, Good "
+    "through houses 1 to 10, then gives Good to the 11th and Bad to the 12th "
+    "-- which is what every other table gives them too."
+)
+
+#: **Finding.** The 11th is Good and the 12th Bad in all four tables read so
+#: far. They are the only two houses no table has yet disagreed about.
+THE_11TH_AND_12TH_HAVE_NOT_VARIED = (
+    "Across Tables 53 to 56 the 11th is Good four times and the 12th Bad four "
+    "times. Every other house has at least one table against it, except the "
+    "6th, Good four times, and the 5th and 9th, Bad four times."
+)
+
+#: **Book defect.** Table 56's 12th row lists "disease" twice: "Disease,
+#: domestic disharmony, disease, losses". Held as printed rather than
+#: de-duplicated, because a repeated word may be a printing slip for a second
+#: signification we cannot recover. See D-72.
+THE_TWELFTH_ROW_REPEATS_A_WORD = (
+    "Mercury's 12th reads \"Disease, domestic disharmony, disease, losses\". "
+    "No other row in Tables 53 to 56 repeats a word."
 )
 
 
@@ -307,6 +365,7 @@ STANDARD_RESULTS: dict[int, tuple[dict[str, object], ...]] = {
     int(Graha.SUN): TABLE_53_SUN,
     int(Graha.MOON): TABLE_54_MOON,
     int(Graha.MARS): TABLE_55_MARS,
+    int(Graha.MERCURY): TABLE_56_MERCURY,
 }
 
 

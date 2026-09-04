@@ -2334,3 +2334,23 @@ is not ("**will** run Ar dasa").
 assert the disagreement so it cannot be read as an engine error.
 
 **Closes when:** a later printing narrows "middle", or names Cancer.
+
+## D-72 · Table 56's 12th row lists "disease" twice
+
+**Status: FINDING — held as printed.**
+
+Mercury's 12th house row reads:
+
+> Disease, domestic disharmony, disease, losses
+
+No other row in Tables 53 to 56 repeats a word, and no other row in the section
+lists four items with one duplicated.
+
+**What we do:** hold the string exactly as printed in `TABLE_56_MERCURY` and
+flag it, rather than de-duplicating. A repeated word is more likely a printing
+slip for a second signification — the surrounding rows pair a bodily result
+with a domestic one — and collapsing it to three items would silently discard
+whatever the fourth was meant to be.
+
+**Closes when:** a later printing gives the fourth signification, or confirms
+the repetition.
