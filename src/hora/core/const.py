@@ -350,6 +350,7 @@ from hora.core.constants.baadhaka import (
 from hora.core.constants.book_charts import (
     BOOK_CHARTS,
     CHARTS_NOT_SUPPLIED,
+    THE_ASCENDANT_CARRIES_THE_BIRTH_TIMES_ROUNDING,
     UNNUMBERED_CHARTS,
 )
 from hora.core.constants.dasha import (
@@ -2120,6 +2121,7 @@ __all__ = [
     "TATTVA_GLOSS_IN_3_2_8",
     "TATTVA_GLOSS_IN_11_4",
     "TENTH_HOUSE_BY_REFERENCE",
+    "THE_ASCENDANT_CARRIES_THE_BIRTH_TIMES_ROUNDING",
     "THE_FIRST_QUESTION_TO_ASK_OF_A_DASA",
     "THE_THREE_MOST_IMPORTANT_PHALITA_DASAS",
     "THIRD_HOUSE_MALEFIC_RULE",

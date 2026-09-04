@@ -371,11 +371,17 @@
         "number": 54,
         "recomputable": true,
         "title": "An engineer, and his wedding-day transit \u2014 Example 105"
+      },
+      {
+        "birth": "June 23, 1961, 10:46 pm (IST), 81 E 48, 17 N 00",
+        "first_seen": "chapter 25, Example 106",
+        "number": 55,
+        "recomputable": true,
+        "title": "A gentleman, and his daughter's birth transit \u2014 Example 106"
       }
     ],
     "not_supplied": [
       4,
-      55,
       61
     ],
     "not_supplied_note": "Chart 4 has never appeared in any section read so far, and nothing has cited it.",
@@ -424,7 +430,8 @@
       50,
       51,
       53,
-      54
+      54,
+      55
     ]
   },
   "status": 200

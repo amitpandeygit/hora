@@ -834,7 +834,8 @@ consumed; what follows is §25.4's prose, its provenance and its structure.
 | `EXAMPLE_105_HITS` · `EXAMPLE_105_SUMMARY` | Example 105's five transit hits and the book's own numbered summary of three of them. The hits **are** reproduced, by `transits_over` and `influenced_rasis`; these hold what the example says |
 | `EXAMPLES_104_AND_105_SHARE_A_WEDDING_CHART` · `INTERACTION_2_IS_NEVER_WORKED` | Two findings of ours about the examples rather than about the technique |
 | `D7_SHOWS` · `EXAMPLE_106_READING` · `MERCURY_IS_BOTH_LORD_AND_OCCUPANT_OF_THE_D7_FIFTH` · `A_THIRD_VARGA_AND_STILL_INTERACTION_ONE` | Example 106's reading. Nothing can be computed against it until Chart 55 is printed |
-| `EXAMPLE_106_AWAITS_CHART_55` | The checklist for Chart 55 — six statements the chart must satisfy when it arrives. Consumed the day it does |
+| `EXAMPLE_106_AWAITS_CHART_55` | The checklist for Chart 55, written before the chart existed. **Consumed**: Chart 55 arrived one section later and a test now checks the chart against all six lines |
+| `THE_ASCENDANT_CARRIES_THE_BIRTH_TIMES_ROUNDING` | Ours, not the book's: a printed ascendant can sit 5' to 16' from ours while every graha agrees, because birth times are printed to the minute. A test checks it across the whole register; nothing reads the sentence |
 
 ---
 

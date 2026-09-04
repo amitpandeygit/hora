@@ -18,10 +18,23 @@ from __future__ import annotations
 from typing import Any
 
 #: Charts cited by a section we have read but not printed there. Chart 4 has
-#: never appeared and nothing cites it; Chart 55 is cited by Example 106 and
-#: Chart 61 by Examples 86, 91 and 94, both promised in sections still to
-#: come. Chart 1's JHora output is still the empty stub of OI-1.
-CHARTS_NOT_SUPPLIED = (4, 55, 61)
+#: never appeared and nothing cites it; Chart 61 is cited by Examples 86, 91
+#: and 94 and promised in a section still to come. Chart 1's JHora output is
+#: still the empty stub of OI-1.
+CHARTS_NOT_SUPPLIED = (4, 61)
+
+#: **Finding.** Every birth time in the book is printed to the minute, so a
+#: printed ascendant can be up to half a minute of time away from ours while
+#: every graha agrees. Nine of the register's forty-four recomputable charts
+#: show it, the widest being Chart 17 at 15.8' — which is 48 seconds, the
+#: ascendant there rising at 19.7' a minute. It is the stated time's
+#: resolution, not the engine: the grahas in those same charts all land inside
+#: an arcminute.
+THE_ASCENDANT_CARRIES_THE_BIRTH_TIMES_ROUNDING = (
+    "A printed ascendant can sit 5' to 16' from ours while every graha in the "
+    "same chart agrees to under an arcminute. In every such case the gap is "
+    "under a minute of birth time, which is the resolution the book prints."
+)
 
 #: number -> record. Keys used across records:
 #:   title, birth, birth_data, place, longitudes, drawn, chara_karakas,
@@ -437,6 +450,66 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
         "note": (
             "Chart 15 prints the D-24 of both twins. They share a rasi chart "
             "to the printed precision, so the D-24 is where they part."
+        ),
+    },
+    55: {
+        "title": "A gentleman, and his daughter's birth transit — Example 106",
+        "birth": "June 23, 1961, 10:46 pm (IST), 81 E 48, 17 N 00",
+        "birth_data": {
+            "year": 1961, "month": 6, "day": 23, "hour": 22, "minute": 46,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 17.0, "longitude": 81 + 48 / 60},
+        "longitudes": {
+            "Asc": "14 Aq 59", "Sun": "8 Ge 40", "Moon": "5 Li 49",
+            "Mars": "3 Le 36", "Merc": "14 Ge 25", "Jup": "12 Cp 32",
+            "Ven": "23 Ar 00", "Sat": "5 Cp 01", "Rahu": "6 Le 49",
+            "Ketu": "6 Aq 49", "HL": "15 Sc 51", "GL": "12 Cp 40",
+        },
+        "chara_karakas": {
+            "Rahu": "AK", "Ven": "AmK", "Merc": "BK", "Mars": "DK",
+            "Sat": "GK", "Jup": "MK", "Sun": "PiK", "Moon": "PK",
+        },
+        "retrograde": ("Merc", "Jup", "Sat"),
+        "divisional": {
+            "D7": {
+                "Ketu": "Pi", "Asc": "Ta", "Mars": "Le", "Sun": "Le",
+                "HL": "Le", "Sat": "Le", "Jup": "Vi", "GL": "Vi",
+                "Merc": "Vi", "Rahu": "Vi", "Ven": "Vi", "Moon": "Sc",
+                "AL": "Cp",
+            },
+        },
+        "transit": {
+            "for": "the birth of his daughter",
+            "date": "October 3, 1992, 11:58 am (IST), 78 E 30, 17 N 29",
+            "birth_data": {
+                "year": 1992, "month": 10, "day": 3, "hour": 11, "minute": 58,
+                "second": 0.0, "utc_offset_hours": 5.5,
+            },
+            "place": {"latitude": 17 + 29 / 60, "longitude": 78.5},
+            "longitudes": {
+                "Asc": "6 Sg 06", "Sun": "16 Vi 32", "Moon": "12 Sg 55",
+                "Mars": "17 Ge 26", "Merc": "29 Vi 49", "Jup": "4 Vi 41",
+                "Ven": "16 Li 10", "Sat": "18 Cp 11", "Rahu": "1 Sg 24",
+                "Ketu": "1 Ge 24", "HL": "11 Pi 56", "GL": "5 Sg 24",
+            },
+            "drawn": {
+                "AL": "Pi", "HL": "Pi", "Ketu": "Ge", "Mars": "Ge",
+                "Merc": "Vi", "Sun": "Vi", "Jup": "Vi", "Ven": "Li",
+                "Moon": "Sg", "Asc": "Sg", "GL": "Sg", "Rahu": "Sg",
+                "Sat": "Cp",
+            },
+        },
+        "events": {"his daughter was born": "October 3, 1992"},
+        "first_seen": "chapter 25, Example 106",
+        "note": (
+            "Supplied one section after Example 106 cited it, and it meets "
+            "every line of the checklist that example allowed us to write "
+            "without it -- the D-7 lagna is Taurus, Jupiter and Mercury both "
+            "stand in Virgo there, and both transit Virgo at the birth. The "
+            "nativity's own diagram is the **D-7**. Its ascendant sits 8.6' "
+            "from ours, which is 28 seconds of birth time at the rate it "
+            "rises here; every graha is inside an arcminute."
         ),
     },
     54: {

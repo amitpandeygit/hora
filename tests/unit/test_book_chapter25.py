@@ -2115,17 +2115,38 @@ def test_interaction_2_is_described_and_never_worked():
 # Example 106 — Chart 55, not yet supplied
 # ---------------------------------------------------------------------------
 
-def test_chart_55_is_cited_and_not_printed():
-    """Example 106 reads it and the section does not print it. It joins Chart
-    4 and Chart 61 in the not-supplied list, which refuses it by name.
+def test_chart_55_arrived_and_met_the_checklist():
+    """Example 106 cited it before the book printed it, so the checklist was
+    written from the example alone. Every line of it holds.
     """
-    from hora.charts.book import BookChartError, chart, numbers
-    from hora.core.const import CHARTS_NOT_SUPPLIED
+    from hora.charts.book import chart, longitudes, numbers
+    from hora.charts.vargas import varga
+    from hora.core.const import EXALTATION_RASI, RASI_LORD, Graha
+    from hora.transits.gochara import EXAMPLE_106_AWAITS_CHART_55
 
-    assert 55 in CHARTS_NOT_SUPPLIED
-    assert 55 not in numbers()
-    with pytest.raises(BookChartError, match="never been printed"):
-        chart(55)
+    assert 55 in numbers()
+    printed = longitudes(55)
+    d7 = chart(55)["divisional"]["D7"]
+
+    # the D-7 lagna is Taurus, as the checklist derived from "the 5th is Vi"
+    assert d7["Asc"] == "Ta"
+    assert A[varga(printed["Asc"], "D7").sign] == "Ta"
+    assert A[(R["Ta"] + 4) % 12] == "Vi"
+
+    # Jupiter and Mercury both stand in Virgo in the D-7
+    assert d7["Jup"] == d7["Merc"] == "Vi"
+    for name in ("Jup", "Merc"):
+        assert A[varga(printed[name], "D7").sign] == "Vi"
+
+    # Mercury lords that house and is exalted in it
+    assert int(RASI_LORD[R["Vi"]]) == int(Graha.MERCURY)
+    assert int(EXALTATION_RASI[int(Graha.MERCURY)]) == R["Vi"]
+
+    # and both transit Virgo at the birth
+    transit = chart(55)["transit"]["drawn"]
+    assert transit["Jup"] == transit["Merc"] == "Vi"
+
+    assert len(EXAMPLE_106_AWAITS_CHART_55) == 6
 
 
 def test_the_d7_lagna_follows_from_the_one_house_the_example_names():
@@ -2206,3 +2227,81 @@ def test_the_checklist_for_chart_55_is_complete_enough_to_check_it():
                   "exalted", "5th lord", "Transit rasi chart",
                   "gave a child"):
         assert claim in joined, claim
+
+
+def test_chart_55s_two_halves_recompute():
+    """Every graha inside an arcminute in both. The nativity's ascendant sits
+    8.6' out, which is 28 seconds of birth time at the rate it rises there --
+    the printed time's resolution, not the engine.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.book import longitude as book_longitude
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(55)
+    settings = Settings(node_type=NodeType.MEAN)
+
+    natal = compute_chart(from_local(**record["birth_data"]),
+                          Place(name="Chart 55", **record["place"]), settings)
+    printed = longitudes(55)
+    for name, graha in GRAHA_OF.items():
+        assert abs(natal.positions[int(graha)].longitude
+                   - printed[name]) * 60 < 1.0, name
+
+    gap = abs(natal.lagna_longitude - printed["Asc"]) * 60
+    assert 8.0 < gap < 9.0
+    later = compute_chart(
+        from_local(**{**record["birth_data"], "minute": 47}),
+        Place(name="Chart 55", **record["place"]), settings)
+    rate = (later.lagna_longitude - natal.lagna_longitude) * 60
+    assert gap / rate * 60 < 60                  # under a minute of time
+
+    block = record["transit"]
+    transit = compute_chart(from_local(**block["birth_data"]),
+                            Place(name="birth", **block["place"]), settings)
+    for name, graha in GRAHA_OF.items():
+        assert abs(transit.positions[int(graha)].longitude
+                   - book_longitude(block["longitudes"][name])) * 60 < 1.0, name
+
+
+def test_the_ascendant_carries_the_birth_times_rounding_across_the_register():
+    """Nine of the forty-four recomputable charts have an ascendant more than
+    an arcminute out, and every one of them is under a minute of birth time.
+    """
+    from hora.charts.book import chart, longitudes, numbers
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import THE_ASCENDANT_CARRIES_THE_BIRTH_TIMES_ROUNDING
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    settings = Settings(node_type=NodeType.MEAN)
+    wide = []
+    for number in numbers():
+        record = chart(number)
+        if "birth_data" not in record or "longitudes" not in record:
+            continue
+        printed = longitudes(number)
+        if "Asc" not in printed or record["birth_data"]["minute"] >= 59:
+            continue
+        place = Place(name=str(number), **record["place"])
+        here = compute_chart(from_local(**record["birth_data"]), place,
+                             settings)
+        gap = abs(here.lagna_longitude - printed["Asc"]) * 60
+        if gap <= 1.0:
+            continue
+        later = compute_chart(
+            from_local(**{**record["birth_data"],
+                          "minute": record["birth_data"]["minute"] + 1}),
+            place, settings)
+        rate = (later.lagna_longitude - here.lagna_longitude) * 60
+        wide.append((number, gap, gap / rate * 60))
+
+    assert len(wide) >= 8
+    for number, gap, seconds in wide:
+        assert seconds < 60, f"Chart {number}: {gap:.1f}' = {seconds:.0f}s"
+    assert max(gap for _n, gap, _s in wide) < 17
+
+    assert "under a minute of birth time" in (
+        THE_ASCENDANT_CARRIES_THE_BIRTH_TIMES_ROUNDING)
