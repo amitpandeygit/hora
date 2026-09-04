@@ -801,6 +801,22 @@ and the seven result tables arrive one at a time.
 | `SNAPSHOTS` · `SUNS_GOOD_HOUSES_ARE_THE_UPACHAYAS` · `SUN_AND_MOON_DIFFER_ONLY_ON_THE_1_7_AXIS` · `AGREEING_SNAPSHOTS_ARE_NOT_THE_SAME_RESULTS` · `THE_FIRST_THREE_TABLES_NEST` · `MARS_IN_THE_TENTH_IS_MARKED_BAD_AND_READS_GOOD` · `MERCURY_ALTERNATES_FOR_TEN_HOUSES` · `THE_11TH_AND_12TH_HAVE_NOT_VARIED` · `THE_TWELFTH_ROW_REPEATS_A_WORD` · `JUPITER_OVERTURNS_THREE_STANDING_AGREEMENTS` · `THE_TWO_BENEFICS_FORM_A_PAIR` · `TABLE_GROUPS` · `MIXED_ROWS` · `VENUS_IS_THE_MOST_GENEROUS_TABLE` · `THE_TWELFTH_IS_BAD_EVERYWHERE_AND_READS_WELL_HERE` · `MARS_AND_SATURN_HAVE_THE_SAME_VERDICTS` · `THE_FOUR_MALEFICS_SHARE_ONE_GOOD_SET` · `SIMILAR_IS_NOT_IDENTICAL` |
 | `THE_SUBJECT_COMES_FROM_THREE_THINGS` · `EXAMPLE_103_KARAKATVAS` · `DIGNITY_IN_THE_TRANSITED_SIGN_SOFTENS_THE_RESULT` · `EXAMPLE_103_READINGS` · `ADAPT_THEM_INTELLIGENTLY` · `THERE_ARE_OTHER_NATAL_REFERENCES` | Example 103's four modifiers and its forward pointer. The verdicts it quotes **are** consumed — they come back out of `transit_result` — but nothing yet joins a transit to a natal chart's lordships, occupations or karakatvas, which is what would consume these | The two verdicts the tables offer, and three findings about their structure that the book never states — it prints one table per graha and never compares them. `TABLE_53_SUN` and `TABLE_54_MOON` themselves **are** consumed, by `transit_result` and `agreement` |
 
+### Chapter 25 — §25.3's other natal references (13)
+
+`transits/gochara.py`. The master rule **is** consumed — `influenced_rasis`
+and `influences` compute which natal houses and planets a transiting graha
+reaches — and so is `OTHER_REFERENCES`, by the test that pins what is
+computable. What follows is the prose and the readings around them.
+
+| constant | why it is not consumed |
+|---|---|
+| `ASHTAKAVARGA_JUDGES_A_TRANSIT_FROM_LAGNA` | §25.3 judges a transit favourable through the ashtakavarga **from lagna**, where §25.2 read everything from janma rasi. The BAV tables exist; nothing yet joins them to a transit |
+| `THE_MASTER_RULE` · `THE_NATURE_OF_THE_INFLUENCE` | The bolded rule and its qualifier. `influences` implements the first half — which rasis are reached — and the nature of the influence has no rule to implement |
+| `EXAMPLE_TRANSITS` · `NATAL_LORDSHIP_EXAMPLES` | §25.3's four worked transits and its two lordship cases. Held as data; the tests reproduce the houses, and the readings are prose |
+| `MALEFIC_OVER_THE_THREE_SELF_POINTS` · `THE_THREE_SELF_POINTS_DIVIDE_MIND_VITALITY_AND_BODY` | Mind, vitality and body at janma rasi, lagna and paaka lagna. No reading layer applies them yet |
+| `ARUDHA_PADA_TRANSITS` · `ARUDHA_PADA_TRANSIT_EXAMPLES` | A10 and A9 named. The padas are computable; joining them to a transit reading is not built |
+| `SAHAMS_ARE_USEFUL` · `SAHAM_TRANSIT_EXAMPLES` · `SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB` | Cannot be built: sahams are deferred to the Tajaka part and "close to" has no orb. See OI-116 |
+
 ---
 
 ## How to use this register

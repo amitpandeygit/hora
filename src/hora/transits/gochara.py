@@ -764,3 +764,184 @@ THERE_ARE_OTHER_NATAL_REFERENCES = (
     "In addition, there are natal references other than Moon, though Moon is "
     "the most important natal reference when interpreting transits."
 )
+
+
+# --------------------------------------------------------------------------
+# §25.3 Other natal references
+# --------------------------------------------------------------------------
+
+#: §25.1 promised "several reference points" and §25.2 gave one. This is the
+#: rest, each with what §25.3 says it stands for. ``computable`` says whether
+#: the reference itself can be produced today — sahams cannot; the book calls
+#: them a Tajaka topic and defers them.
+OTHER_REFERENCES: tuple[dict[str, object], ...] = (
+    {"reference": "lagna",
+     "stands_for": "the hub of vitality and one's personality",
+     "computable": True},
+    {"reference": "paaka lagna", "stands_for": "the physical self",
+     "computable": True},
+    {"reference": "natal houses", "stands_for": "the matters of that house",
+     "computable": True},
+    {"reference": "natal planets",
+     "stands_for": "what each planet stands for in the chart",
+     "computable": True},
+    {"reference": "arudha padas",
+     "stands_for": "the appearance of their houses' matters",
+     "computable": True},
+    {"reference": "sahams", "stands_for": "significant points in the zodiac",
+     "computable": False},
+)
+
+#: §25.3's opening, and its use of the ashtakavarga — from **lagna**, where
+#: §25.2 read everything from janma rasi.
+ASHTAKAVARGA_JUDGES_A_TRANSIT_FROM_LAGNA = (
+    "We can analyze transits with respect to lagna and paaka lagna. Lagna is "
+    "the hub of vitality and one's personality in a chart. Using the "
+    "ashtakavarga tables, we can decipher whether the transit of a planet in "
+    "a house from lagna is favorable or not."
+)
+
+#: **The section's master rule**, and the only sentence §25.3 sets in bold.
+THE_MASTER_RULE = (
+    "A planet occupying or aspecting a rasi in transit influences the matters "
+    "signified by the houses and planets stationed in that rasi in the natal "
+    "chart."
+)
+
+#: And its qualifier, which is §25.2's caveat again in another form.
+THE_NATURE_OF_THE_INFLUENCE = (
+    "The exact nature of the influence exerted by a planet depends on its "
+    "inherent nature and the matters it stands for in the natal chart."
+)
+
+
+def influenced_rasis(graha: int, transit_sign: int) -> dict:
+    """The rasis a transiting graha reaches — the one it occupies and the ones
+    it aspects, which is what :data:`THE_MASTER_RULE` puts together.
+    """
+    from hora.charts.aspects import graha_aspects_sign
+
+    index = validate.in_range("graha", int(graha), 0, 8)
+    sign = validate.in_range("transit_sign", transit_sign, 0, 11)
+    aspected = tuple(other for other in range(12)
+                     if other != sign
+                     and graha_aspects_sign(index, sign, other))
+    return {
+        "graha": index, "graha_name": str(GRAHA_NAMES[index]),
+        "occupies": sign, "occupies_rasi": str(RASI_NAMES[sign]),
+        "aspects": aspected,
+        "reaches": (sign, *aspected),
+    }
+
+
+def influences(graha: int, transit_sign: int, lagna_sign: int,
+               natal_signs: dict[int, int] | None = None) -> tuple[dict, ...]:
+    """§25.3's master rule, applied: for each rasi a transiting graha reaches,
+    the natal house it is and the natal grahas standing in it.
+
+    :param natal_signs: graha -> sign in the **natal** chart. Omitted means
+        the houses are reported and the planets are not.
+    """
+    reach = influenced_rasis(graha, transit_sign)
+    lagna = validate.in_range("lagna_sign", lagna_sign, 0, 11)
+    occupants: dict[int, list[int]] = {}
+    for body, sign in (natal_signs or {}).items():
+        occupants.setdefault(
+            validate.in_range("natal_signs", int(sign), 0, 11), []).append(
+                int(body))
+
+    out = []
+    for sign in reach["reaches"]:
+        standing = sorted(occupants.get(sign, []))
+        out.append({
+            "rasi": sign, "rasi_name": str(RASI_NAMES[sign]),
+            "how": "occupies" if sign == reach["occupies"] else "aspects",
+            "natal_house": house_of_rasi(lagna, sign),
+            "natal_grahas": tuple(standing),
+            "natal_graha_names": tuple(str(GRAHA_NAMES[g]) for g in standing),
+        })
+    return tuple(out)
+
+
+#: §25.3's four worked illustrations, in the order it gives them. The first
+#: two are occupation and the last two are aspect.
+EXAMPLE_TRANSITS: tuple[dict[str, object], ...] = (
+    {"graha": "Jupiter", "transits": "Ta", "lagna": "Sc", "how": "occupies",
+     "house": 7, "gives": "marriage"},
+    {"graha": "Saturn", "transits": "Ar", "lagna": "Li", "how": "occupies",
+     "house": 7, "gives": "relationship problems or marital problems"},
+    {"graha": "Jupiter", "transits": "Vi", "lagna": "Sc", "how": "aspects",
+     "house": 7, "gives": "marriage"},
+    {"graha": "Jupiter", "transits": "Vi", "lagna": "Sc", "how": "aspects",
+     "house": 7, "also_reaches": "natal Venus in Pi", "gives": "marriage"},
+)
+
+#: §25.3's two illustrations of the qualifier, both keyed on natal lordship.
+NATAL_LORDSHIP_EXAMPLES: tuple[dict[str, object], ...] = (
+    {"natal_lord_of": 5, "in_transit": "occupies the 8th house from natal "
+                                       "lagna",
+     "expect": "some troubles related to children"},
+    {"graha": "Mars", "natal_lord_of": 8,
+     "in_transit": "aspects the rasis occupied by Venus and the 7th lord",
+     "expect": "some disturbances in marital life"},
+)
+
+#: **Finding.** §25.3 gives three self-points and a different harm for each: a
+#: malefic in **janma rasi** troubles the mind, in **natal lagna** the vitality,
+#: in **paaka lagna** the body. The three references the chapter reads the
+#: native's own self through are thus mind, life-force and flesh — and the
+#: paaka-lagna half agrees word for word with what §7.3.5 said paaka lagna
+#: shows, eighteen chapters earlier.
+MALEFIC_OVER_THE_THREE_SELF_POINTS: tuple[dict[str, str], ...] = (
+    {"reference": "janma rasi", "gives": "mental worries"},
+    {"reference": "natal lagna",
+     "gives": "may affect the vitality of the native and create obstacles in "
+              "his efforts"},
+    {"reference": "paaka lagna", "gives": "bodily complaints"},
+)
+
+THE_THREE_SELF_POINTS_DIVIDE_MIND_VITALITY_AND_BODY = (
+    "A malefic transiting janma rasi troubles the mind, natal lagna the "
+    "vitality, paaka lagna the body. §25.3 says paaka lagna \"explicitly "
+    "stands for the physical self\", which is what §7.3.5 already said."
+)
+
+#: §25.3's arudha-pada transits, and the two it names.
+ARUDHA_PADA_TRANSITS = (
+    "Similarly planets occupying or aspecting arudha padas in transit may "
+    "give relevant results. For example, Saturn's transit in A10 can be bad "
+    "for career, Jupiter's transit in A9 is good for fortune."
+)
+
+ARUDHA_PADA_TRANSIT_EXAMPLES: tuple[dict[str, object], ...] = (
+    {"graha": "Saturn", "pada": "A10", "house": 10, "reading": "bad for career"},
+    {"graha": "Jupiter", "pada": "A9", "house": 9,
+     "reading": "good for fortune"},
+)
+
+#: §25.3's saham rules, which we cannot compute.
+SAHAMS_ARE_USEFUL = (
+    "Sahams are useful in transit analysis. Sahams are the significant points "
+    "in the zodiac. For example, when the 7th lord or Venus transits close to "
+    "vivaha saham, one may get married. When the 6th lord or 8th lord or Mars "
+    "or Rahu transits close to kali saham, one may have an accident."
+)
+
+SAHAM_TRANSIT_EXAMPLES: tuple[dict[str, object], ...] = (
+    {"saham": "vivaha", "transiting": ("the 7th lord", "Venus"),
+     "gives": "marriage"},
+    {"saham": "kali",
+     "transiting": ("the 6th lord", "the 8th lord", "Mars", "Rahu"),
+     "gives": "an accident"},
+)
+
+#: **Gap.** Two things stop the saham rules being built. Sahams are a Tajaka
+#: topic the book defers to a later part, so neither vivaha saham nor kali
+#: saham can be computed here; and "transits **close to**" is given no orb, so
+#: even with the point we would not know how near is near. Both must arrive
+#: before this is more than recorded. See OI-116.
+SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB = (
+    "§25.3 reads transits against vivaha saham and kali saham. Sahams are "
+    "deferred to the Tajaka part and are not computed, and \"close to\" is "
+    "given no orb."
+)

@@ -1268,3 +1268,185 @@ def test_25_2_closes_by_pointing_past_the_moon():
     assert "other than Moon" in THERE_ARE_OTHER_NATAL_REFERENCES
     assert "most important natal reference" in THERE_ARE_OTHER_NATAL_REFERENCES
     assert "adapt them intelligently" in ADAPT_THEM_INTELLIGENTLY
+
+
+# ---------------------------------------------------------------------------
+# §25.3 Other natal references
+# ---------------------------------------------------------------------------
+
+def test_25_3_names_the_rest_of_25_1s_reference_points():
+    """§25.1 promised "several"; §25.2 gave one. Six more, and only sahams
+    cannot be produced today.
+    """
+    from hora.transits.gochara import (
+        ASHTAKAVARGA_JUDGES_A_TRANSIT_FROM_LAGNA,
+        OTHER_REFERENCES,
+    )
+
+    named = [row["reference"] for row in OTHER_REFERENCES]
+    assert named == ["lagna", "paaka lagna", "natal houses", "natal planets",
+                     "arudha padas", "sahams"]
+    uncomputable = [row["reference"] for row in OTHER_REFERENCES
+                    if not row["computable"]]
+    assert uncomputable == ["sahams"]
+
+    assert "hub of vitality" in ASHTAKAVARGA_JUDGES_A_TRANSIT_FROM_LAGNA
+    assert "from lagna" in ASHTAKAVARGA_JUDGES_A_TRANSIT_FROM_LAGNA
+
+
+def test_paaka_lagnas_meaning_agrees_with_chapter_7():
+    """§25.3 says paaka lagna "explicitly stands for the physical self".
+    §7.3.5 said the same thing eighteen chapters earlier.
+    """
+    from hora.core.const import PAAKA_LAGNA_DEFINITION, PAAKA_LAGNA_SHOWS
+    from hora.transits.gochara import OTHER_REFERENCES
+
+    paaka = next(row for row in OTHER_REFERENCES
+                 if row["reference"] == "paaka lagna")
+    assert paaka["stands_for"] == "the physical self"
+    assert "physical self" in PAAKA_LAGNA_SHOWS
+    assert "lagna lord" in PAAKA_LAGNA_DEFINITION
+
+
+def test_a_transiting_graha_reaches_the_rasi_it_occupies_and_those_it_aspects():
+    """§25.3's master rule joins the two. Jupiter in Virgo reaches four rasis:
+    Virgo itself and its 5th, 7th and 9th.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import THE_MASTER_RULE, influenced_rasis
+
+    got = influenced_rasis(Graha.JUPITER, R["Vi"])
+    assert got["occupies"] == R["Vi"]
+    assert [A[r] for r in got["aspects"]] == ["Ta", "Cp", "Pi"]
+    assert [A[r] for r in got["reaches"]] == ["Vi", "Ta", "Cp", "Pi"]
+
+    assert "occupying or aspecting" in THE_MASTER_RULE
+    assert "houses and planets stationed in that rasi" in THE_MASTER_RULE
+
+
+@pytest.mark.parametrize(("graha", "transits", "lagna"), [
+    ("JUPITER", "Ta", "Sc"),
+    ("SATURN", "Ar", "Li"),
+])
+def test_25_3s_two_occupation_examples(graha, transits, lagna):
+    """"Jupiter transiting in the Ta may give marriage to someone born in Sc
+    lagna, because Ta is the 7th house from Sc."  And Saturn in Ar for Li.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import influences
+
+    rows = influences(getattr(Graha, graha), R[transits], R[lagna])
+    occupied = next(row for row in rows if row["how"] == "occupies")
+    assert occupied["rasi"] == R[transits]
+    assert occupied["natal_house"] == 7
+
+
+def test_25_3s_two_aspect_examples():
+    """"Jupiter aspects Ta, the 7th house from Sc, when he is in Vi."  And
+    with natal Venus in Pi, the same transit reaches Venus too.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import EXAMPLE_TRANSITS, influences
+
+    plain = influences(Graha.JUPITER, R["Vi"], R["Sc"])
+    seventh = next(row for row in plain if row["natal_house"] == 7)
+    assert seventh["rasi"] == R["Ta"]
+    assert seventh["how"] == "aspects"
+
+    with_venus = influences(Graha.JUPITER, R["Vi"], R["Sc"],
+                            {int(Graha.VENUS): R["Pi"]})
+    reached = {row["rasi_name"]: row for row in with_venus}
+    assert reached["Taurus"]["natal_house"] == 7
+    assert reached["Pisces"]["natal_graha_names"] == ("Venus",)
+    assert reached["Pisces"]["how"] == "aspects"
+    # both, from one transit -- which is why the example says it may give marriage
+    assert reached["Taurus"]["how"] == "aspects"
+
+    assert [row["how"] for row in EXAMPLE_TRANSITS] == [
+        "occupies", "occupies", "aspects", "aspects"]
+
+
+def test_the_master_rule_needs_no_natal_planets_to_report_houses():
+    """`natal_signs` is optional: without it the houses come back and the
+    planets are empty, rather than the call refusing.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import influences
+
+    rows = influences(Graha.SATURN, R["Ar"], R["Li"])
+    assert all(row["natal_grahas"] == () for row in rows)
+    assert {row["natal_house"] for row in rows} == {7, 9, 1, 4}
+
+
+def test_a_malefic_over_the_three_self_points_harms_three_things():
+    """Mind at janma rasi, vitality at natal lagna, body at paaka lagna."""
+    from hora.transits.gochara import (
+        MALEFIC_OVER_THE_THREE_SELF_POINTS,
+        THE_THREE_SELF_POINTS_DIVIDE_MIND_VITALITY_AND_BODY,
+    )
+
+    rows = MALEFIC_OVER_THE_THREE_SELF_POINTS
+    assert [row["reference"] for row in rows] == [
+        "janma rasi", "natal lagna", "paaka lagna"]
+    assert rows[0]["gives"] == "mental worries"
+    assert "vitality" in rows[1]["gives"]
+    assert rows[2]["gives"] == "bodily complaints"
+    assert len({row["gives"] for row in rows}) == 3
+
+    assert "mind" in THE_THREE_SELF_POINTS_DIVIDE_MIND_VITALITY_AND_BODY
+    assert "§7.3.5" in THE_THREE_SELF_POINTS_DIVIDE_MIND_VITALITY_AND_BODY
+
+
+def test_arudha_pada_transits_name_two():
+    """"Saturn's transit in A10 can be bad for career, Jupiter's transit in A9
+    is good for fortune."
+    """
+    from hora.transits.gochara import (
+        ARUDHA_PADA_TRANSIT_EXAMPLES,
+        ARUDHA_PADA_TRANSITS,
+    )
+
+    assert [(row["graha"], row["pada"], row["house"])
+            for row in ARUDHA_PADA_TRANSIT_EXAMPLES] == [
+        ("Saturn", "A10", 10), ("Jupiter", "A9", 9)]
+    assert "occupying or aspecting arudha padas" in ARUDHA_PADA_TRANSITS
+
+
+def test_the_saham_rules_cannot_be_built_and_say_so():
+    """Sahams are a Tajaka topic the book defers, and "close to" is given no
+    orb. Two reasons, both recorded. OI-116.
+    """
+    from hora.transits.gochara import (
+        OTHER_REFERENCES,
+        SAHAM_TRANSIT_EXAMPLES,
+        SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB,
+        SAHAMS_ARE_USEFUL,
+    )
+
+    assert [row["saham"] for row in SAHAM_TRANSIT_EXAMPLES] == ["vivaha", "kali"]
+    assert "close to" in SAHAMS_ARE_USEFUL
+    assert "no orb" in SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB
+    assert "Tajaka" in SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB
+
+    sahams = next(row for row in OTHER_REFERENCES
+                  if row["reference"] == "sahams")
+    assert sahams["computable"] is False
+
+
+def test_natal_lordship_qualifies_the_master_rule():
+    """"The exact nature of the influence... depends on its inherent nature
+    and the matters it stands for in the natal chart" -- §25.2's caveat again,
+    with two worked cases.
+    """
+    from hora.transits.gochara import (
+        NATAL_LORDSHIP_EXAMPLES,
+        THE_NATURE_OF_THE_INFLUENCE,
+        THE_TABLES_ARE_REFERENCE_ONLY,
+    )
+
+    assert [row["natal_lord_of"] for row in NATAL_LORDSHIP_EXAMPLES] == [5, 8]
+    assert "children" in str(NATAL_LORDSHIP_EXAMPLES[0]["expect"])
+    assert "marital life" in str(NATAL_LORDSHIP_EXAMPLES[1]["expect"])
+
+    for text in (THE_NATURE_OF_THE_INFLUENCE, THE_TABLES_ARE_REFERENCE_ONLY):
+        assert "natal chart" in text
