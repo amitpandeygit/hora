@@ -2218,3 +2218,269 @@ def test_example_99_drops_24_3_1s_hedge_on_the_sav_threshold():
     assert "Any rasi" in SAV_THRESHOLD_RESTATED_WITHOUT_THE_HEDGE
     assert "usually" not in SAV_THRESHOLD_RESTATED_WITHOUT_THE_HEDGE.lower()
     assert all(row["hedge"] == "usually" for row in SAV_THRESHOLD_READINGS)
+
+
+# ---------------------------------------------------------------------------
+# Example 100 — Chart 48, a father's death
+# ---------------------------------------------------------------------------
+
+def _chart_48():
+    """Chart 48's D-12, from the printed rasi longitudes."""
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(48)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    return {
+        "printed": printed,
+        "lagna": varga(printed["Asc"], "D12").sign,
+        "signs": {int(g): varga(printed[n], "D12").sign
+                  for n, g in named.items()},
+    }
+
+
+def _chart_48_moon():
+    """The ephemeris Moon, which is what the example's balance needs."""
+    from hora.charts.book import chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(48)
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 48", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    return computed.positions[int(Graha.MOON)].longitude
+
+
+def test_chart_48_recomputes_and_is_a_new_native():
+    """The first chart in the register at 80 E 55, 16 N 05, and the first born
+    in 1933.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes, numbers
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(48)
+    others = [chart(n)["place"] for n in numbers() if n != 48
+              and "place" in chart(n)]
+    assert record["place"] not in others
+
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 48", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    printed = longitudes(48)
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+
+
+def test_chart_48s_drawn_d12_reproduces_from_the_longitudes():
+    """All twelve placements, plus an AL that needs the same-sign exception:
+    Virgo's lord Mercury is the 7th from it, the 7th from Mercury is Virgo
+    again, so the arudha moves to the 10th -- Gemini.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_ABBR
+
+    drawn = dict(chart(48)["divisional"]["D12"])
+    arudha = drawn.pop("AL")
+    assert len(drawn) == 12
+    assert set(drawn) == set(chart(48)["longitudes"])
+
+    positions = _chart_48()
+    for name, abbr in drawn.items():
+        got = str(RASI_ABBR[varga(positions["printed"][name], "D12").sign])
+        assert got == abbr, f"{name}: printed {abbr}, computed {got}"
+
+    al = arudha_pada(1, positions["lagna"], positions["signs"]).sign
+    assert str(RASI_ABBR[al]) == arudha == "Ge"
+    assert al != positions["lagna"]
+
+
+def test_example_100s_chain_from_the_ninth_house_to_the_eighth_from_a9():
+    """"Lagna in D-12 is in Vi. The 9th house is in Ta... Here A9 is in Cp.
+    Taking Cp as lagna, we see that Cn is the 7th house of death and its lord
+    Moon is exalted... he afflicts Sun, who owns the 8th house from Cp."
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import EXALTATION_RASI, RASI_LORD, RASI_NAMES, Graha
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_100_CHAIN,
+        THE_HOUSE_IS_THE_CONCEPT_AND_THE_ARUDHA_IS_THE_BODY,
+    )
+
+    chart = _chart_48()
+    lagna = chart["lagna"]
+    assert str(RASI_NAMES[lagna]) == "Virgo"
+    assert str(RASI_NAMES[(lagna + 8) % 12]) == "Taurus"      # the 9th house
+
+    a9 = arudha_pada(9, lagna, chart["signs"]).sign
+    assert str(RASI_NAMES[a9]) == "Capricorn"
+
+    seventh = (a9 + 6) % 12
+    assert str(RASI_NAMES[seventh]) == "Cancer"
+    moon = int(Graha.MOON)
+    assert int(RASI_LORD[seventh]) == moon
+    assert chart["signs"][moon] == int(EXALTATION_RASI[moon])   # Taurus
+
+    eighth = (a9 + 7) % 12
+    assert str(RASI_NAMES[eighth]) == "Leo"
+    assert int(RASI_LORD[eighth]) == int(Graha.SUN)
+    assert chart["signs"][int(Graha.SUN)] == chart["signs"][moon]
+
+    assert "A9 represents it" in THE_HOUSE_IS_THE_CONCEPT_AND_THE_ARUDHA_IS_THE_BODY
+    assert [row["sign"] for row in EXAMPLE_100_CHAIN] == [
+        "Capricorn", "Cancer", "Taurus", "Leo"]
+
+
+def test_the_moon_that_afflicts_is_a_waning_moon():
+    """"He afflicts Sun" is undefined here, and the Moon is no general malefic.
+    This one is: the birth falls in Krishna paksha, which §3.2.1 makes a
+    natural malefic. The book does not say so; recorded as inference.
+    """
+    from hora.charts.benefic import moon_nature
+    from hora.charts.book import longitudes
+    from hora.dasha.nakshatra.kalachakra import AFFLICTS_IS_NOT_DEFINED_HERE
+    from hora.panchanga.core import paksha_at
+
+    printed = longitudes(48)
+    paksha = paksha_at(printed["Sun"], printed["Moon"])
+    assert paksha == 1                            # Krishna, waning
+    assert moon_nature(paksha) == "malefic"
+    assert moon_nature(0) == "benefic"            # a waxing Moon would not be
+    assert "does not say what afflicting is" in AFFLICTS_IS_NOT_DEFINED_HERE
+
+
+def test_example_100_is_the_first_reading_to_use_a_gati():
+    """"Cn dasa here comes after Vi and involves mandooki gati (frog's leap)...
+    mandooki gati in savya nakshatras can bring distress to father."
+
+    It confirms the named rasi is the leap's destination: the step is Vi to Cn
+    and the dasa called mandooki is Cancer's, not Virgo's.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_100_USES_THE_FROGS_LEAP,
+        gati_rasis,
+        gati_results,
+        transitions,
+    )
+
+    leap = [row for row in transitions("savya")
+            if (A[row["from"]], A[row["to"]]) == ("Vi", "Cn")]
+    assert len(leap) == 1
+    assert leap[0]["kind"] == "mandooki"
+    assert A[leap[0]["to"]] == "Cn"
+    assert leap[0]["to"] in gati_rasis("savya")["mandooki"]
+
+    assert "father" in gati_results("mandooki", "savya")
+    assert "distress to father" in EXAMPLE_100_USES_THE_FROGS_LEAP
+
+
+def test_example_100s_kalachakra_dasas():
+    """"About 1 year and 8 months of Pi dasa was remaining at birth and the
+    dasas coming after it are Sc, Li, Vi, Cn, Le, Ge, Ta and Ar."
+
+    Moon at 3 Ar 58 is Aswini's 2nd pada, savya-1, paramayush 85 -- and the
+    balance needs the ephemeris Moon: the printed one gives 1y 10.2m.
+    """
+    from hora.charts.book import longitudes
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_order,
+        first_dasa,
+        nine_from_birth,
+        pada_of,
+        pada_sequence,
+        paramayush,
+        sub_group_of,
+    )
+
+    moon = pada_of(_chart_48_moon())
+    assert (moon["nakshatra"], moon["group"], moon["pada"]) == (1, "savya", 2)
+    assert sub_group_of(1) == 1
+
+    nine = pada_sequence("savya", 1, 2)
+    assert [A[rasi] for rasi in nine] == [
+        "Cp", "Aq", "Pi", "Sc", "Li", "Vi", "Cn", "Le", "Ge"]
+    assert paramayush(nine) == 85
+
+    birth = first_dasa(nine, moon["elapsed_fraction"])
+    assert birth["rasi"] == "Pisces"
+    assert birth["position"] == 2
+    assert int(birth["balance_years"]) == 1
+    assert round(birth["balance_years"] % 1 * 12) == 8        # 1y 8m
+
+    printed = first_dasa(
+        nine, pada_of(longitudes(48)["Moon"])["elapsed_fraction"])
+    assert round(printed["balance_years"] % 1 * 12, 1) == 10.2
+
+    following = dasa_order(1, 2, 8, skip=birth["position"] + 1)
+    assert [A[row["sign"]] for row in following] == [
+        "Sc", "Li", "Vi", "Cn", "Le", "Ge", "Ta", "Ar"]
+    assert len(nine_from_birth(1, 2, birth["position"])["dasas"]) == 9
+
+
+def test_cancer_dasa_opens_in_september_1966_only_under_savana():
+    """"Cn dasa started in September 1966."  Savana gives 1966-09-20 and a
+    solar year gives 1967-03-15. The first dated Kalachakra event that
+    separates OI-115's two readings -- evidence, not a change of default.
+    """
+    import swisseph as swe
+
+    from hora.charts.book import chart, longitudes
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_100_SEPARATES_THE_YEAR_LENGTHS,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    birth = from_local(**chart(48)["birth_data"]).jd_ut
+    nine = pada_sequence("savya", 1, 2)
+
+    def cancer_opens(moon_longitude, year_days):
+        balance = first_dasa(
+            nine, pada_of(moon_longitude)["elapsed_fraction"])["balance_years"]
+        # Pisces' balance, then Sc 7, Li 16 and Vi 9
+        year, month, _day, _hour = swe.revjul(
+            birth + (balance + 7 + 16 + 9) * year_days)
+        return year, month
+
+    exact = _chart_48_moon()
+    assert cancer_opens(exact, 360.0) == (1966, 9)            # the book
+    assert cancer_opens(exact, 365.25) == (1967, 3)
+    assert cancer_opens(exact, 365.2564) == (1967, 3)
+
+    # and the conclusion survives the Moon's arcminute rounding
+    rounded = longitudes(48)["Moon"]
+    assert cancer_opens(rounded, 360.0)[0] == 1966
+    assert cancer_opens(rounded, 365.25)[0] == 1967
+
+    assert "September 1966" in EXAMPLE_100_SEPARATES_THE_YEAR_LENGTHS
+
+
+def test_cancer_cancer_antardasa_covers_the_fathers_death_in_1967():
+    """"Cn-Cn antardasa was running at the time of his father's demise."
+    Cancer's own antardasa is the first of its nine and over five years long.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.nakshatra.kalachakra import antardasas
+
+    assert chart(48)["events"]["the native's father passed away"] == "1967"
+
+    cancer = antardasas(1, 15, 21.0)             # Cn at wheel position 15
+    assert A[cancer[0]["sign"]] == "Cn"
+    assert sum(row["share_years"] for row in cancer) == 86
+    assert cancer[0]["years"] == pytest.approx(21.0 * 21 / 86)
+    assert cancer[0]["years"] > 5                # Sept 1966 well into 1971

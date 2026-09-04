@@ -430,6 +430,43 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    48: {
+        "title": "A gentleman — Example 100",
+        "birth": "July 15, 1933, 4:15 am (IST), 80 E 55, 16 N 05",
+        "birth_data": {
+            "year": 1933, "month": 7, "day": 15, "hour": 4, "minute": 15,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 5 / 60, "longitude": 80 + 55 / 60},
+        "longitudes": {
+            "Asc": "8 Ge 37", "Sun": "29 Ge 03", "Moon": "3 Ar 58",
+            "Mars": "11 Vi 29", "Merc": "20 Cn 17", "Jup": "26 Le 05",
+            "Ven": "21 Cn 34", "Sat": "21 Cp 40", "Rahu": "7 Aq 39",
+            "Ketu": "7 Le 39", "HL": "14 Ta 48", "GL": "9 Pi 46",
+        },
+        "chara_karakas": {
+            "Sun": "AK", "Jup": "AmK", "Rahu": "BK", "Moon": "DK",
+            "Mars": "GK", "Sat": "MK", "Merc": "PK", "Ven": "PiK",
+        },
+        "retrograde": ("Sat",),
+        "divisional": {
+            "D12": {
+                "Ven": "Pi", "Merc": "Pi", "Moon": "Ta", "Sun": "Ta",
+                "Rahu": "Ta", "GL": "Ge", "Jup": "Ge", "AL": "Ge",
+                "Sat": "Vi", "Asc": "Vi", "HL": "Li", "Ketu": "Sc",
+                "Mars": "Cp",
+            },
+        },
+        "events": {"the native's father passed away": "1967"},
+        "first_seen": "chapter 24, Example 100",
+        "note": (
+            "A new native, and the first at 80 E 55, 16 N 05. Only the D-12 "
+            "is drawn. Its Kalachakra dasa is the first dated event in the "
+            "book that separates OI-115's year lengths: Cn dasa opens in "
+            "September 1966 under savana years and in March 1967 under a "
+            "solar year, and the example says September 1966."
+        ),
+    },
     47: {
         "title": "An astrologer — Example 99",
         "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",

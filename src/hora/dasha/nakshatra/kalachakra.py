@@ -1187,3 +1187,67 @@ SAV_THRESHOLD_RESTATED_WITHOUT_THE_HEDGE = (
     "Any rasi 30 or more rekhas brings favorable results related to that "
     "house in that divisional chart."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 100 — the death of a father, and the first date that separates
+# OI-115's year lengths
+# --------------------------------------------------------------------------
+
+#: §24.3's rule for reading a relative through a varga, given in full only
+#: here. The house is the *concept*; its arudha is the physical body.
+THE_HOUSE_IS_THE_CONCEPT_AND_THE_ARUDHA_IS_THE_BODY = (
+    "The 9th house in D-12 shows the relation with father and the associated "
+    "happiness. It stands for the \"concept\" of father and paternal "
+    "guidance. The \"physical body\" of the father is an illusion related to "
+    "the concept of father and A9 represents it. So we can use the 9th lord "
+    "or A9 to see the physical body of father."
+)
+
+#: Example 100's chain, in the order it is given. Each step is a house count
+#: from the one before, which is why the arudha has to be found first.
+EXAMPLE_100_CHAIN: tuple[dict[str, str], ...] = (
+    {"step": "A9 in the D-12", "sign": "Capricorn",
+     "means": "the physical body of the father"},
+    {"step": "the 7th from A9", "sign": "Cancer",
+     "means": "the house of death, taking Capricorn as lagna"},
+    {"step": "its lord, the Moon", "sign": "Taurus",
+     "means": "exalted, and afflicting the Sun"},
+    {"step": "the 8th from A9", "sign": "Leo",
+     "means": "owned by the Sun, whom the Moon afflicts"},
+)
+
+#: **Gap.** "He afflicts Sun" is not defined at this site, and the Moon is not
+#: a natural malefic in general. It is one *here*: this birth falls in Krishna
+#: paksha, and §3.2.1 makes a waning Moon a natural malefic. That reconciles
+#: the sentence with the book's own definitions, but the book does not say so,
+#: and the affliction's mechanism -- conjunction in Taurus in the D-12 --
+#: is inferred from the chart rather than stated.
+AFFLICTS_IS_NOT_DEFINED_HERE = (
+    "§24.3 does not say what afflicting is. The Moon of this chart is waning "
+    "and so a natural malefic by §3.2.1, and it shares Taurus with the Sun in "
+    "the D-12; neither fact is stated in the example."
+)
+
+#: The first reading in the book to use a gati, and it confirms that the named
+#: rasi is the leap's **destination**: the leap is Vi to Cn and the dasa
+#: called mandooki is Cancer's.
+EXAMPLE_100_USES_THE_FROGS_LEAP = (
+    "Moreover, Cn dasa here comes after Vi and involves mandooki gati (frog's "
+    "leap). We see from the previous discussions that mandooki gati in savya "
+    "nakshatras can bring distress to father."
+)
+
+#: **Finding.** Example 100 is the first dated Kalachakra event that separates
+#: OI-115's two year lengths, and it lands on **savana**. "Cn dasa started in
+#: September 1966": savana gives 1966-09-20 and a solar year gives 1967-03-15,
+#: six months and a year out. The conclusion survives the Moon's rounding —
+#: the printed Moon moves savana to November 1966 and the solar year to May
+#: 1967, so savana keeps 1966 either way. Examples 96 and 98 separated
+#: nothing; this one does, and it agrees with footnote 65.
+#:
+#: **Evidence only.** OI-115 stays open and the default is unchanged.
+EXAMPLE_100_SEPARATES_THE_YEAR_LENGTHS = (
+    "Cn dasa opens 1966-09-20 under a 360-day year and 1967-03-15 under "
+    "365.25 days. The example says September 1966."
+)
