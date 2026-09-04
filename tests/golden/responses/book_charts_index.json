@@ -357,6 +357,13 @@
         "number": 52,
         "recomputable": false,
         "title": "Transit chart, June 7 1999 \u2014 Example 103"
+      },
+      {
+        "birth": "July 26, 1973, 9:41 pm (IST), 80 E 28, 16 N 13",
+        "first_seen": "chapter 25, Example 104",
+        "number": 53,
+        "recomputable": true,
+        "title": "A lady, and her wedding-day transit \u2014 Example 104"
       }
     ],
     "not_supplied": [
@@ -406,7 +413,8 @@
       48,
       49,
       50,
-      51
+      51,
+      53
     ]
   },
   "status": 200

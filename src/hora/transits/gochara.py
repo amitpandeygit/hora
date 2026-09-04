@@ -945,3 +945,65 @@ SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB = (
     "deferred to the Tajaka part and are not computed, and \"close to\" is "
     "given no orb."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 104 — a wedding read against four natal reference points
+# --------------------------------------------------------------------------
+
+#: Example 104's four natal reference points for a marriage, and what makes
+#: each one a reference. It is §25.3's list applied: a house, that house's
+#: lord, a karaka, and a saham.
+EXAMPLE_104_REFERENCE_POINTS: tuple[dict[str, str], ...] = (
+    {"point": "the 7th house", "at": "Virgo", "why": "marriage is its matter"},
+    {"point": "the 7th lord", "at": "Cancer", "why": "Mercury lords Virgo"},
+    {"point": "Venus", "at": "Leo", "why": "the significator of marriage"},
+    {"point": "vivaha saham", "at": "1 Cp", "why": "the saham of marriage"},
+)
+
+#: And the rule that makes them worth listing.
+INFLUENCE_THESE_AND_THEY_CAN_GIVE_MARRIAGE = (
+    "If important planets influence these reference points in transit, they "
+    "can give marriage."
+)
+
+#: Why Jupiter's transit is the one watched, which is two reasons and not one.
+JUPITER_TIMES_AUSPICIOUS_EVENTS = (
+    "Jupiter is a natural benefic and also lagna lord here. His transit is "
+    "important for timing auspicious events."
+)
+
+#: Example 104's four transit hits, in the order it gives them. Every one is
+#: :data:`THE_MASTER_RULE` — a transiting graha occupying or aspecting a rasi
+#: that holds a natal reference point.
+EXAMPLE_104_HITS: tuple[dict[str, object], ...] = (
+    {"transiting": "Jupiter", "in": "Pi", "how": "aspects", "reaches": "Vi",
+     "which_is": "the natal 7th house"},
+    {"transiting": "Jupiter", "in": "Pi", "how": "aspects", "reaches": "Cn",
+     "which_is": "the rasi of the natal 7th lord"},
+    {"transiting": "Mercury", "in": "Cp", "how": "aspects", "reaches": "Cn",
+     "which_is": "his own natal rasi"},
+    {"transiting": "Venus", "in": "Aq", "how": "aspects", "reaches": "Le",
+     "which_is": "his own natal rasi"},
+)
+
+#: **Finding.** Two of the four hits are a graha aspecting **its own natal
+#: position** — Mercury from Capricorn onto Cancer, Venus from Aquarius onto
+#: Leo. §25.3's master rule covers it without saying so, a natal planet being
+#: one of the things stationed in a rasi; Example 104 is where it is used.
+A_GRAHA_CAN_ASPECT_ITS_OWN_NATAL_POSITION = (
+    "Transit Mercury aspected Cn, the rasi he occupies in the natal chart, "
+    "and transit Venus aspected his own natal Leo. Both are the seventh "
+    "aspect, which every graha has."
+)
+
+#: **Finding.** The saham half of Example 104 is the one thing in it we cannot
+#: check. The book prints vivaha saham at 1 Cp and says transit Mercury stood
+#: "about 1° away"; our Mercury is at about 2.5 Cp on the day, so the gap is
+#: 1.4° to 1.5° — consistent with a saham printed to the whole degree, and not
+#: a confirmation, because we cannot compute the saham to compare against.
+THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED = (
+    "Transit Mercury is at about 2.5 Cp through the wedding window, so it "
+    "stands 1.4° to 1.5° from a vivaha saham printed at 1 Cp. The book says "
+    "\"about 1° away\". The saham itself is not computed."
+)

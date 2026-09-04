@@ -816,6 +816,7 @@ computable. What follows is the prose and the readings around them.
 | `MALEFIC_OVER_THE_THREE_SELF_POINTS` · `THE_THREE_SELF_POINTS_DIVIDE_MIND_VITALITY_AND_BODY` | Mind, vitality and body at janma rasi, lagna and paaka lagna. No reading layer applies them yet |
 | `ARUDHA_PADA_TRANSITS` · `ARUDHA_PADA_TRANSIT_EXAMPLES` | A10 and A9 named. The padas are computable; joining them to a transit reading is not built |
 | `SAHAMS_ARE_USEFUL` · `SAHAM_TRANSIT_EXAMPLES` · `SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB` | Cannot be built: sahams are deferred to the Tajaka part and "close to" has no orb. See OI-116 |
+| `EXAMPLE_104_REFERENCE_POINTS` · `EXAMPLE_104_HITS` · `INFLUENCE_THESE_AND_THEY_CAN_GIVE_MARRIAGE` · `JUPITER_TIMES_AUSPICIOUS_EVENTS` · `A_GRAHA_CAN_ASPECT_ITS_OWN_NATAL_POSITION` · `THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED` | Example 104's four reference points and four transit hits. The hits themselves **are** reproduced, by `influences`; these hold what the example says about them |
 
 ---
 

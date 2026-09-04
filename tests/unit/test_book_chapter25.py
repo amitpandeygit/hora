@@ -1450,3 +1450,238 @@ def test_natal_lordship_qualifies_the_master_rule():
 
     for text in (THE_NATURE_OF_THE_INFLUENCE, THE_TABLES_ARE_REFERENCE_ONLY):
         assert "natal chart" in text
+
+
+# ---------------------------------------------------------------------------
+# Example 104 — Chart 53, a nativity and its wedding-day transit
+# ---------------------------------------------------------------------------
+
+def _chart_53_natal_signs():
+    from hora.charts.book import longitudes
+    from hora.core.const import Graha
+
+    printed = longitudes(53)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    return {int(g): int(printed[n] // 30) for n, g in named.items()}
+
+
+def test_chart_53_holds_two_charts_under_one_number():
+    """The nativity and the transit chart for her wedding day."""
+    from hora.charts.book import chart
+
+    record = chart(53)
+    assert record["transit"]["for"] == "the wedding"
+    assert record["transit"]["date"].startswith("January 24, 1999")
+    assert record["transit"]["drawn"]["Jup"] == "Pi"
+    assert record["drawn"]["Jup"] == "Cp"                # the natal one
+    assert record["events"]["the lady married"] == "January 24, 1999"
+
+
+def test_chart_53s_nativity_recomputes_within_an_arcminute():
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(53)
+    computed = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 53", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    printed = longitudes(53)
+    for name, graha in GRAHA_OF.items():
+        error = abs(computed.positions[int(graha)].longitude
+                    - printed[name]) * 60
+        assert error < 1.0, f"{name}: {error:.2f}'"
+    assert abs(computed.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+
+def test_the_wedding_transit_chart_pins_its_own_unstated_time():
+    """A date and no time again. The Moon reaches Aries and the Ascendant
+    Aquarius together only in a narrow morning window, and the AL comes out
+    Gemini there, as drawn.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(53)
+    drawn = record["transit"]["drawn"]
+    place = Place(name="wedding", **record["place"])
+    settings = Settings(node_type=NodeType.MEAN)
+
+    def at(hour, minute):
+        computed = compute_chart(
+            from_local(year=1999, month=1, day=24, hour=hour, minute=minute,
+                       second=0.0, utc_offset_hours=5.5), place, settings)
+        longs = {int(g): computed.positions[int(g)].longitude
+                 for g in list(Graha)[:9]}
+        signs = {g: int(v // 30) for g, v in longs.items()}
+        lords = {rasi: stronger(rasi, longs).winner for rasi in (7, 10)}
+        return computed, signs, arudha_pada(1, computed.lagna_rasi, signs,
+                                            lords).sign
+
+    computed, signs, arudha = at(8, 45)
+    assert A[computed.lagna_rasi] == drawn["Asc"] == "Aq"
+    assert A[signs[int(Graha.MOON)]] == drawn["Moon"] == "Ar"
+    assert A[arudha] == drawn["AL"] == "Ge"
+
+    # outside the window one of the two moving points is wrong
+    early, early_signs, _ = at(6, 0)
+    assert (A[early.lagna_rasi] != "Aq"
+            or A[early_signs[int(Graha.MOON)]] != "Ar")
+
+
+def test_the_transit_grahas_match_the_drawn_chart_all_day():
+    """The seven slow bodies and the nodes need no time; only the Moon and the
+    Ascendant do.
+    """
+    from hora.charts.book import chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(53)
+    drawn = record["transit"]["drawn"]
+    named = {"Sun": Graha.SUN, "Mars": Graha.MARS, "Merc": Graha.MERCURY,
+             "Jup": Graha.JUPITER, "Ven": Graha.VENUS, "Sat": Graha.SATURN,
+             "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    for hour in (0, 8, 16, 23):
+        computed = compute_chart(
+            from_local(year=1999, month=1, day=24, hour=hour, minute=0,
+                       second=0.0, utc_offset_hours=5.5),
+            Place(name="wedding", **record["place"]),
+            Settings(node_type=NodeType.MEAN))
+        for name, graha in named.items():
+            got = A[int(computed.positions[int(graha)].longitude // 30)]
+            assert got == drawn[name], f"{name} at {hour}:00"
+
+
+def test_example_104s_four_reference_points():
+    """"The 7th house in the natal chart is in Vi. Mercury is the 7th lord and
+    he is in Cn... Venus... is in Le... Vivaha saham is at 1 deg in Cp."
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.core.const import RASI_LORD, Graha
+    from hora.transits.gochara import (
+        EXAMPLE_104_REFERENCE_POINTS,
+        INFLUENCE_THESE_AND_THEY_CAN_GIVE_MARRIAGE,
+    )
+
+    lagna = int(longitudes(53)["Asc"] // 30)
+    natal = _chart_53_natal_signs()
+    assert A[lagna] == "Pi"
+
+    seventh = (lagna + 6) % 12
+    assert A[seventh] == "Vi"
+    assert int(RASI_LORD[seventh]) == int(Graha.MERCURY)
+    assert A[natal[int(Graha.MERCURY)]] == "Cn"
+    assert A[natal[int(Graha.VENUS)]] == "Le"
+    assert chart(53)["sahams"]["vivaha"] == "1 Cp"
+
+    assert [row["at"] for row in EXAMPLE_104_REFERENCE_POINTS] == [
+        "Virgo", "Cancer", "Leo", "1 Cp"]
+    assert "give marriage" in INFLUENCE_THESE_AND_THEY_CAN_GIVE_MARRIAGE
+
+
+def test_jupiter_is_watched_for_two_reasons():
+    """"Jupiter is a natural benefic and also lagna lord here." """
+    from hora.charts.book import longitudes
+    from hora.core.const import NATURAL_BENEFIC, RASI_LORD, Graha
+    from hora.transits.gochara import JUPITER_TIMES_AUSPICIOUS_EVENTS
+
+    lagna = int(longitudes(53)["Asc"] // 30)
+    assert int(RASI_LORD[lagna]) == int(Graha.JUPITER)
+    assert int(Graha.JUPITER) in set(NATURAL_BENEFIC)
+    assert "timing auspicious events" in JUPITER_TIMES_AUSPICIOUS_EVENTS
+
+
+def test_example_104s_transit_hits_are_the_master_rule():
+    """Each of the four is a transiting graha reaching a rasi that holds a
+    natal reference point -- which is exactly what `influences` computes.
+    """
+    from hora.charts.book import longitudes
+    from hora.core.const import Graha
+    from hora.transits.gochara import EXAMPLE_104_HITS, influences
+
+    lagna = int(longitudes(53)["Asc"] // 30)
+    natal = _chart_53_natal_signs()
+
+    def reaches(graha, transit_sign):
+        return {row["rasi_name"]: row
+                for row in influences(graha, R[transit_sign], lagna, natal)}
+
+    jupiter = reaches(Graha.JUPITER, "Pi")
+    assert jupiter["Virgo"]["natal_house"] == 7
+    assert jupiter["Virgo"]["how"] == "aspects"
+    assert "Mercury" in jupiter["Cancer"]["natal_graha_names"]
+    assert jupiter["Cancer"]["how"] == "aspects"
+
+    mercury = reaches(Graha.MERCURY, "Cp")
+    assert "Mercury" in mercury["Cancer"]["natal_graha_names"]
+
+    venus = reaches(Graha.VENUS, "Aq")
+    assert "Venus" in venus["Leo"]["natal_graha_names"]
+
+    assert len(EXAMPLE_104_HITS) == 4
+    assert all(row["how"] == "aspects" for row in EXAMPLE_104_HITS)
+
+
+def test_two_of_the_four_hits_are_a_graha_on_its_own_natal_place():
+    """Mercury from Capricorn onto Cancer, Venus from Aquarius onto Leo --
+    both the seventh aspect, which every graha has.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import (
+        A_GRAHA_CAN_ASPECT_ITS_OWN_NATAL_POSITION,
+        influenced_rasis,
+    )
+
+    natal = _chart_53_natal_signs()
+    for graha, transit_sign in ((Graha.MERCURY, "Cp"), (Graha.VENUS, "Aq")):
+        own = natal[int(graha)]
+        assert own in influenced_rasis(graha, R[transit_sign])["aspects"]
+        assert (R[transit_sign] + 6) % 12 == own          # the 7th aspect
+
+    assert "seventh aspect" in A_GRAHA_CAN_ASPECT_ITS_OWN_NATAL_POSITION
+
+
+def test_the_saham_claim_is_consistent_but_cannot_be_checked():
+    """The book prints vivaha saham at 1 Cp and says transit Mercury stood
+    "about 1 deg away". Our Mercury is at about 2.5 Cp, so the gap is 1.4 to
+    1.5 deg -- consistent, and not a confirmation, because the saham itself
+    is a Tajaka quantity we do not compute.
+    """
+    from hora.charts.book import chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.gochara import (
+        OTHER_REFERENCES,
+        THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED,
+    )
+
+    record = chart(53)
+    saham = R["Cp"] * 30 + 1.0
+    for hour, minute in ((8, 0), (9, 30)):
+        computed = compute_chart(
+            from_local(year=1999, month=1, day=24, hour=hour, minute=minute,
+                       second=0.0, utc_offset_hours=5.5),
+            Place(name="wedding", **record["place"]),
+            Settings(node_type=NodeType.MEAN))
+        mercury = computed.positions[int(Graha.MERCURY)].longitude
+        assert 1.3 < abs(mercury - saham) < 1.6
+
+    # and the reference itself is still uncomputable
+    sahams = next(row for row in OTHER_REFERENCES
+                  if row["reference"] == "sahams")
+    assert sahams["computable"] is False
+    assert "not computed" in THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED

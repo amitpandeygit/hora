@@ -437,6 +437,54 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    53: {
+        "title": "A lady, and her wedding-day transit — Example 104",
+        "birth": "July 26, 1973, 9:41 pm (IST), 80 E 28, 16 N 13",
+        "birth_data": {
+            "year": 1973, "month": 7, "day": 26, "hour": 21, "minute": 41,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 13 / 60, "longitude": 80 + 28 / 60},
+        "longitudes": {
+            "Asc": "3 Pi 18", "Sun": "10 Cn 01", "Moon": "26 Ta 39",
+            "Mars": "28 Pi 12", "Merc": "0 Cn 13", "Jup": "14 Cp 12",
+            "Ven": "8 Le 25", "Sat": "5 Ge 48", "Rahu": "12 Sg 48",
+            "Ketu": "12 Ge 48", "HL": "6 Sc 15", "GL": "1 Sc 32",
+        },
+        "chara_karakas": {
+            "Mars": "AK", "Moon": "AmK", "Rahu": "BK", "Merc": "DK",
+            "Sat": "GK", "Jup": "MK", "Sun": "PiK", "Ven": "PK",
+        },
+        "retrograde": ("Merc", "Jup"),
+        "drawn": {
+            "Mars": "Pi", "Asc": "Pi", "Moon": "Ta", "Ketu": "Ge",
+            "Sat": "Ge", "Merc": "Cn", "Sun": "Cn", "Ven": "Le",
+            "GL": "Sc", "HL": "Sc", "AL": "Sc", "Rahu": "Sg", "Jup": "Cp",
+        },
+        "sahams": {"vivaha": "1 Cp"},
+        "transit": {
+            "for": "the wedding",
+            "date": "January 24, 1999 — no time given",
+            "drawn": {
+                "Jup": "Pi", "Sat": "Ar", "Moon": "Ar", "AL": "Ge",
+                "Rahu": "Cn", "Mars": "Li", "Merc": "Cp", "Sun": "Cp",
+                "Ketu": "Cp", "Ven": "Aq", "Asc": "Aq",
+            },
+        },
+        "events": {"the lady married": "January 24, 1999"},
+        "first_seen": "chapter 25, Example 104",
+        "note": (
+            "One number, two charts: the nativity and the transit chart for "
+            "her wedding day. The nativity recomputes within an arcminute. "
+            "The transit chart gives a date and no time, and its own diagram "
+            "pins one: the Moon reaches Aries and the Ascendant Aquarius "
+            "together only between about **07:57 and 09:36 IST**, where its "
+            "AL also comes out Gemini as drawn. It carries the register's "
+            "first printed **saham** -- vivaha saham at 1 Cp -- which we "
+            "cannot compute, sahams being deferred to the Tajaka part, so it "
+            "is held as a fixture for when that part arrives. See OI-116."
+        ),
+    },
     52: {
         "title": "Transit chart, June 7 1999 — Example 103",
         "birth": "June 7, 1999 — a transit chart; no time and no place given",
