@@ -21,7 +21,7 @@ from typing import Any
 #: never appeared and nothing cites it; Chart 61 is cited by Examples 86, 91
 #: and 94 and promised in a section still to come. Chart 1's JHora output is
 #: still the empty stub of OI-1.
-CHARTS_NOT_SUPPLIED = (4, 61)
+CHARTS_NOT_SUPPLIED = (4,)
 
 #: **Finding.** Every birth time in the book is printed to the minute, so a
 #: printed ascendant can be up to half a minute of time away from ours while
@@ -2227,8 +2227,69 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "D-10 signs. The D-10's AL comes out Virgo as drawn when the "
             "arudha is taken inside the D-10. Every graha recomputes within "
             "0.91' and all eight chara karakas match. The transit half is "
-            "drawn without a date; see `inferred_date`, which is ours and "
-            "not the book's, and OI-142."
+            "drawn without a date; Chart 61 prints the same nine positions "
+            "for **October 31, 1984**, which settled it — see OI-142, closed."
+        ),
+    },
+    61: {
+        "title": "Indira Gandhi, and the transit at her assassination — "
+                 "Example 110",
+        "birth": "November 19, 1917, 11:03 pm (IST), 81 E 52, 25 N 28",
+        "birth_data": {
+            "year": 1917, "month": 11, "day": 19, "hour": 23, "minute": 3,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 25 + 28 / 60, "longitude": 81 + 52 / 60},
+        "longitudes": {
+            "Asc": "25 Cn 38", "Sun": "4 Sc 07", "Moon": "5 Cp 30",
+            "Mars": "16 Le 22", "Merc": "13 Sc 13", "Jup": "14 Ta 59",
+            "Ven": "21 Sg 00", "Sat": "21 Cn 47", "Rahu": "10 Sg 33",
+            "Ketu": "10 Ge 33", "HL": "23 Pi 43", "GL": "24 Ar 09",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Ven": "AmK", "Rahu": "BK", "Mars": "MK",
+            "Jup": "PiK", "Merc": "PK", "Moon": "GK", "Sun": "DK",
+        },
+        "retrograde": ("Jup",),
+        "drawn": {
+            "HL": "Pi", "AL": "Ar", "GL": "Ar", "Jup": "Ta", "Ketu": "Ge",
+            "Sat": "Cn", "Asc": "Cn", "Moon": "Cp", "Mars": "Le",
+            "Rahu": "Sg", "Ven": "Sg", "Merc": "Sc", "Sun": "Sc",
+        },
+        "transit": {
+            "for": "her assassination",
+            "date": "October 31, 1984, 12:30 pm (IST), 77 E 12, 28 N 36",
+            "birth_data": {
+                "year": 1984, "month": 10, "day": 31, "hour": 12, "minute": 30,
+                "second": 0.0, "utc_offset_hours": 5.5,
+            },
+            "place": {"latitude": 28 + 36 / 60, "longitude": 77 + 12 / 60},
+            "longitudes": {
+                "Asc": "4 Cp 25", "Sun": "14 Li 24", "Moon": "11 Cp 28",
+                "Mars": "24 Sg 54", "Merc": "27 Li 05", "Jup": "15 Sg 04",
+                "Ven": "19 Sc 47", "Sat": "24 Li 07", "Rahu": "4 Ta 46",
+                "Ketu": "4 Sc 46", "HL": "12 Ar 53", "GL": "10 Cp 59",
+            },
+            "chara_karakas": {
+                "Merc": "AK", "Rahu": "AmK", "Mars": "BK", "Sat": "MK",
+                "Ven": "PiK", "Jup": "PK", "Sun": "GK", "Moon": "DK",
+            },
+            "drawn": {
+                "Rahu": "Ta", "Moon": "Cp", "Asc": "Cp", "AL": "Ar",
+                "Jup": "Sg", "Mars": "Sg", "Ketu": "Sc", "Ven": "Sc",
+                "Merc": "Li", "Sun": "Li", "Sat": "Li",
+            },
+        },
+        "events": {"she was assassinated": "October 31, 1984"},
+        "first_seen": "chapter 25, Example 110",
+        "note": (
+            "Promised since chapter 1 and supplied only here, the last chart "
+            "the register was missing. Both halves recompute — worst body "
+            "1.01' (natal Mercury) and 1.00' (transit Venus), ascendants 0.40' "
+            "and 0.95' — and all sixteen chara karakas match. Jupiter is "
+            "printed (R) natally and computes retrograde. Its transit half "
+            "carries the **same nine positions Chart 60 draws undated**, "
+            "which is what closed OI-142."
         ),
     },
 }

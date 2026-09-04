@@ -4,6 +4,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 
 | ID | Item |
 |---|---|
+| [OI-142](#oi-142) | Chart 60's transit chart carried no date |
 | [OI-5](#oi-5) | Upagrahas |
 | [OI-132](#oi-132) | which Trishoola rasi each longevity category takes |
 | [OI-123](#oi-123) | what a varga's houses are counted from |
@@ -1845,3 +1846,21 @@ Only Gemini meets 36-72, and the native died at 50, inside it.
 
 `select_trishoola` applies it. The residual — what to do when two Trishoolas
 land in one range, which a quarter of combinations produce — is OI-133.
+
+
+## OI-142 — Chart 60's transit chart carried no date
+
+**Closed by Chart 61**, one example later. Chart 60's AV timing exercise prints
+a nativity in full and a transit chart with no date and no time — the only one
+in the register with neither.
+
+Scanning its nine drawn positions against every day from 1960 to 2025 at Mumbai
+had left one window, October 31 to November 1, 1984, the Moon being in
+Capricorn only across it. Chart 61 then prints **the same nine positions** as
+longitudes and dates them: **October 31, 1984, 12:30 pm (IST)**, the transit at
+Indira Gandhi's assassination. Every sign matches, and a test asserts the two
+charts agree body by body.
+
+No time question survives it: Chart 60's transit diagram draws no ascendant, so
+the day is all it needs. `inferred_date` stays on the record, now corroborated
+rather than merely computed.

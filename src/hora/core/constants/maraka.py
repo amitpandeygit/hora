@@ -752,3 +752,75 @@ CHAPTER_14_USE_AND_CAUTION: tuple[str, str] = (
     "will be useful in timing death using dasas",
     "we should not be biased by these calculations",
 )
+
+
+# --------------------------------------------------------------------------
+# Chart 61 completes Example 86's Rudra chain
+# --------------------------------------------------------------------------
+# Example 86 read Indira Gandhi's chart in chapter 22 and the book printed it
+# eight chapters later, with Example 110. These record what the arrival
+# settled. Nothing here changes `rudra`; see OI-109, OI-134 and OI-135.
+
+#: **Finding.** With Chart 61 in hand, Example 86's Rudra can be followed
+#: step by step for the first time, and every step lands:
+#:
+#: 1. Saturn is in Cancer, so the exception applies and the 8th houses are
+#:    taken the normal way — **Aquarius** and **Leo**, not Table 32's
+#:    Sagittarius and Gemini.
+#: 2. Aquarius is co-owned and the example takes **Rahu**; Leo's lord is the
+#:    **Sun**.
+#: 3. Both conjoin exactly one planet — Rahu with Venus, the Sun with
+#:    Mercury — which is the example's own "both candidates join another
+#:    planet", and the cascade's first step ties.
+#: 4. The cascade resolves at **step 4**: the Sun is rasi-aspected by two
+#:    planets and Rahu by one, so the Sun is stronger and **Rahu is the
+#:    weaker**.
+#: 5. Rahu is **debilitated** in Sagittarius and rasi-aspected by Ketu, a
+#:    malefic on §14.3's own list, so the affliction override fires and
+#:    **Rahu becomes Rudra** — the example's answer.
+EXAMPLE_86_RUDRA_CHAIN_REPRODUCES = (
+    "Chart 61 makes Example 86's Rudra checkable end to end. The exception "
+    "gives Aquarius and Leo, their lords Rahu and the Sun tie at cascade step "
+    "1 as the example says, step 4 makes the Sun stronger on rasi aspects "
+    "two to one, and the weaker Rahu is debilitated in Sagittarius and "
+    "aspected by Ketu, so the affliction override makes him Rudra."
+)
+
+#: **Finding.** The same chart shows our default disagreeing with the book,
+#: and names all three reasons. `rudra` returns **Mercury** on Chart 61 where
+#: Example 86 gives **Rahu**, because it takes Table 32's Sagittarius and
+#: Gemini rather than applying the Saturn exception (OI-134), would take
+#: Saturn as Aquarius's first co-lord rather than Rahu (OI-135), and does not
+#: apply the affliction override (OI-109). Each is an open item on its own and
+#: none is changed here; this is the first chart on which all three bite at
+#: once, and the first on which the book's answer can be reconstructed.
+CHART_61_SEPARATES_ALL_THREE_RUDRA_OPEN_ITEMS = (
+    "On Chart 61 our default Rudra is Mercury and the book's is Rahu. Table "
+    "32 versus the Saturn exception changes the two houses, the co-lord "
+    "choice for Aquarius changes one candidate, and the affliction override "
+    "changes the winner. It is the only chart so far where all three matter."
+)
+
+#: The Rudra Example 86 names, and the two houses it reaches him through.
+EXAMPLE_86_RUDRA = "Rahu"
+EXAMPLE_86_RUDRA_HOUSES = ("Aquarius", "Leo")
+
+
+#: **Finding.** Every co-owned 8th house the book has actually read, it reads
+#: as the **node**. Scorpio is called Ketu's in Examples 85 and 87, and
+#: Aquarius is called Rahu's in Example 86 — three for three, and the opposite
+#: of our first-co-lord default in both signs. It is a pattern in the worked
+#: examples, not a rule PVR states, so nothing acts on it. See OI-135.
+THE_BOOK_ALWAYS_TAKES_THE_NODE_AS_THE_CO_LORD = (
+    "Scorpio's 8th lord is Ketu in Examples 85 and 87 and Aquarius's is Rahu "
+    "in Example 86. In all three co-owned 8th houses the book has read, it "
+    "names the node rather than Mars or Saturn."
+)
+
+#: The three instances behind that pattern: (example, rasi, the co-lord the
+#: book names, the co-lord our default would take).
+CO_OWNED_EIGHTH_INSTANCES: tuple[tuple[int, str, str, str], ...] = (
+    (85, "Scorpio", "Ketu", "Mars"),
+    (86, "Aquarius", "Rahu", "Saturn"),
+    (87, "Scorpio", "Ketu", "Mars"),
+)

@@ -2141,7 +2141,7 @@ def test_what_the_examples_have_established_about_chart_61():
     from hora.charts.book import numbers
     from hora.dasha.rasi.shoola import CHART_61_FROM_THE_EXAMPLES
 
-    assert 61 not in numbers()
+    assert 61 in numbers()          # arrived with Example 110
     assert len(CHART_61_FROM_THE_EXAMPLES) == 8
     joined = " | ".join(CHART_61_FROM_THE_EXAMPLES)
     for fact in ("lagna is Cancer", "November 1917", "Saturn is in Cancer",

@@ -1514,3 +1514,64 @@ EXAMPLE_109_PLACEMENTS: tuple[tuple[str, float, str, str], ...] = (
     ("Jupiter", 24.0, "Vi", "Moon"),
     ("Venus", 4.0, "Sc", "Jupiter"),
 )
+
+
+# --------------------------------------------------------------------------
+# Example 110 — the day method worked in full
+# --------------------------------------------------------------------------
+
+#: Example 110's opening step, and the first place the book reads a PAV cell
+#: rather than a BAV count.
+EXAMPLE_110_SUN_IN_HIS_OWN_KAKSHYA = (
+    "Sun is at 14 Li 24. Because 14º 24' is between 11º 15' and 15º, he is in "
+    "his own kakshya. Sun's PAV does not have a rekha in Sun's kakshya in Li. "
+    "Sun is benefic in Li only with respect to lagna, Moon, Mercury, Jupiter "
+    "and Saturn. So only the corresponding kakshyas in Li have a rekha in "
+    "Sun's BAV.")
+
+#: The five references the Sun is benefic from in Libra, named by the example.
+#: `bhinnashtakavarga("Sun", ...).contributors[Libra]` reproduces exactly this
+#: set from Chart 61's natal positions.
+EXAMPLE_110_SUN_IS_BENEFIC_IN_LIBRA_FROM = (
+    "Lagna", "Moon", "Mercury", "Jupiter", "Saturn")
+
+#: Example 110's seven placements: graha -> the kakshya lord the book names.
+#: Every one reproduces from Chart 61's transit longitudes.
+EXAMPLE_110_KAKSHYA_LORDS: dict[str, str] = {
+    "Sun": "Sun", "Moon": "Sun", "Mars": "Moon", "Mercury": "Lagna",
+    "Jupiter": "Venus", "Venus": "Mercury", "Saturn": "Moon",
+}
+
+#: The two of the seven whose PAV has a rekha in the kakshya they occupy.
+EXAMPLE_110_WITH_REKHAS = ("Moon", "Mercury")
+
+EXAMPLE_110_VERDICT = (
+    "With 5 out of 7 planets transiting in kakshyas without rekhas, "
+    "including Vimsottari dasa lord Saturn, it is not a favorable time for "
+    "Mrs. Gandhi.")
+
+#: **Finding.** §25.5.2 states the day method by counting planets that **have**
+#: a rekha; Example 110 states its verdict by counting those that **do not**.
+#: Same tally read from either end — 2 with, 5 without — so nothing turns on
+#: it, but a reader matching the section's wording to the example's will not
+#: find the same number, and `kakshya_rekha_count` returns both.
+THE_EXAMPLE_COUNTS_THE_BLANKS_THE_SECTION_COUNTS_THE_REKHAS = (
+    "Section 25.5.2 counts \"the number of planets that are in a kakshya with "
+    "a rekha\"; Example 110 concludes from \"5 out of 7 planets transiting in "
+    "kakshyas without rekhas\". The two counts are complements of one another.")
+
+#: **Finding.** The one datum for OI-141's missing threshold. "Too few" is not
+#: given a number anywhere, and this is the only place the book grades a
+#: tally: **2 of 7** with a rekha reads as not favourable. One point does not
+#: fix a boundary, and the verdict also leans on *which* graha is blank —
+#: the Vimsottari dasa lord — so it is not a count alone.
+EXAMPLE_110_IS_THE_ONLY_GRADED_TALLY = (
+    "Two of seven planets in kakshyas with rekhas is read as not favorable, "
+    "and the reading names the dasa lord being among the five blanks. It is "
+    "one data point for a threshold the book never states, not the threshold.")
+
+#: PVR's second warning, given again at the end of the worked example.
+KAKSHYA_DAY_METHOD_WARNED_TWICE = (
+    "Again it must be emphasized that this technique can only be used in "
+    "conjunction with other techniques and readers should not rush to "
+    "predictions just based on this principle.")

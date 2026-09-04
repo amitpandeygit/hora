@@ -1257,31 +1257,36 @@ EX86_ANTARDASAS = [("Le", 1982, 11), ("Vi", 1983, 6), ("Li", 1984, 1),
                    ("Sc", 1984, 8)]
 
 
-def test_chart_61_has_not_been_supplied_yet():
-    """"Chart 61 (in a later chapter)". The coverage line for Example 86:
-    everything on `EXAMPLE_86_AWAITS_CHART_61` waits on it, and this fails
-    loudly when the chart lands so the list gets worked through.
+def _chart_61_positions():
+    """Chart 61's natal positions, keyed by graha id."""
+    from hora.charts.book import graha_longitudes, graha_signs, lagna
+
+    return ({int(g): lon for g, lon in graha_longitudes(61).items()},
+            {int(g): sign for g, sign in graha_signs(61).items()},
+            lagna(61))
+
+
+def test_chart_61_arrived_and_meets_example_86s_checklist():
+    """"Chart 61 (in a later chapter)" landed with Example 110, eight chapters
+    on. Every item `EXAMPLE_86_AWAITS_CHART_61` could not check now checks.
     """
     from hora.charts.book import BookChartError, chart, numbers
-    from hora.core.const import CHARTS_NOT_SUPPLIED
+    from hora.core.const import CHARTS_NOT_SUPPLIED, RASI_ABBR, Graha
     from hora.dasha.rasi.niryaana_shoola import EXAMPLE_86_AWAITS_CHART_61
 
-    assert 61 not in numbers()
-    assert max(numbers()) < 61
-    # cited by the book and not yet printed, which is a different refusal
-    # from a number the book never mentions
-    assert 61 in CHARTS_NOT_SUPPLIED
-    with pytest.raises(BookChartError, match="never been printed"):
-        chart(61)
+    assert 61 in numbers()
+    assert 61 not in CHARTS_NOT_SUPPLIED
     with pytest.raises(BookChartError, match="there is no Chart"):
         chart(99)
 
     assert len(EXAMPLE_86_AWAITS_CHART_61) == 9
-    assert any("Saturn is in Cancer" in item
-               for item in EXAMPLE_86_AWAITS_CHART_61)
-    # Example 91 reads the same chart with chapter 23's dasa, so its claims
-    # wait on the same page.
-    assert any("Example 91" in item for item in EXAMPLE_86_AWAITS_CHART_61)
+    _longitudes, signs, lagna_sign = _chart_61_positions()
+    assert RASI_ABBR[lagna_sign] == "Cn"
+    assert RASI_ABBR[signs[int(Graha.SATURN)]] == "Cn"
+    assert RASI_ABBR[signs[int(Graha.RAHU)]] == "Sg"
+    assert RASI_ABBR[signs[int(Graha.MARS)]] == "Le"
+    assert chart(61)["birth_data"]["year"] == 1917
+    assert chart(61)["birth_data"]["month"] == 11
 
 
 def test_example_86_reveals_a_table_32_exception_14_3_never_states():
@@ -1854,7 +1859,8 @@ def test_chapter_22s_four_charts_and_what_each_settled():
 
     assert {8, 39, 40} <= set(numbers())
     assert all(is_recomputable(n) for n in (8, 39, 40))
-    assert 61 not in numbers()
+    # 61 was the one it could not reach until Example 110 printed it
+    assert is_recomputable(61)
 
 
 # --------------------------------------------------------------------------
@@ -2728,3 +2734,138 @@ def test_chapter_22_is_finished_and_chapter_23_took_the_other_name():
     assert by_name["Shoola dasa"]["module"] == "hora.dasha.rasi.shoola"
     assert by_name["Niryaana Shoola dasa"]["module"] == (
         "hora.dasha.rasi.niryaana_shoola")
+
+
+# --------------------------------------------------------------------------
+# Chart 61 arrived — Example 86's Rudra chain, and where our default diverges
+# --------------------------------------------------------------------------
+
+def test_the_saturn_exception_gives_aquarius_and_leo_on_chart_61():
+    """"Because Saturn is in Cn, we take the 8th houses from Cn and Cp in the
+    normal way." Table 32 would give Sagittarius and Gemini.
+    """
+    from hora.charts.maraka import ordinary_eighth, rudra_eighth
+    from hora.core.const import (
+        EXAMPLE_86_RUDRA_HOUSES,
+        RASI_ABBR,
+        Graha,
+    )
+
+    _longitudes, signs, lagna_sign = _chart_61_positions()
+    assert signs[int(Graha.SATURN)] == lagna_sign          # Saturn in Cancer
+    seventh = (lagna_sign + 6) % 12
+    normal = (ordinary_eighth(lagna_sign), ordinary_eighth(seventh))
+    table32 = (rudra_eighth(lagna_sign), rudra_eighth(seventh))
+
+    assert [RASI_ABBR[s] for s in normal] == ["Aq", "Le"]
+    assert [RASI_ABBR[s] for s in table32] == ["Sg", "Ge"]
+    assert EXAMPLE_86_RUDRA_HOUSES == ("Aquarius", "Leo")
+
+
+def test_example_86s_cascade_ties_at_step_one_as_it_says():
+    """"Both candidates join another planet." Rahu with Venus, the Sun with
+    Mercury — one apiece, so step 1 cannot decide.
+    """
+    from hora.core.const import RASI_ABBR, Graha
+
+    _longitudes, signs, _lagna = _chart_61_positions()
+    for candidate in (Graha.RAHU, Graha.SUN):
+        together = [g for g, s in signs.items()
+                    if s == signs[int(candidate)] and g != int(candidate)]
+        assert len(together) == 1, candidate
+    assert RASI_ABBR[signs[int(Graha.RAHU)]] == "Sg"
+    assert RASI_ABBR[signs[int(Graha.SUN)]] == "Sc"
+
+
+def test_the_cascade_makes_the_sun_stronger_and_rahu_the_weaker():
+    """Step 4 decides it: the Sun is rasi-aspected by two planets, Rahu by
+    one. So Rahu is the weaker, which is what the override needs.
+    """
+    from hora.charts.maraka import _cascade_step
+    from hora.core.const import DEBILITATION_RASI, GRAHA_NAMES, Graha
+
+    longitudes, signs, _lagna = _chart_61_positions()
+    winner, step, why = _cascade_step(int(Graha.RAHU), int(Graha.SUN),
+                                      signs, longitudes)
+    assert str(GRAHA_NAMES[winner]) == "Sun"
+    assert step == 4
+    assert "rasi-aspected" in why
+    assert DEBILITATION_RASI[int(Graha.RAHU)] == signs[int(Graha.RAHU)]
+
+
+def test_the_affliction_override_is_what_makes_rahu_rudra():
+    """Rahu is debilitated and rasi-aspected by Ketu, who is on §14.3's own
+    malefic list. That is both limbs of the override.
+    """
+    from hora.charts.aspects import rasi_drishti
+    from hora.core.const import (
+        DEBILITATION_RASI,
+        EXAMPLE_86_RUDRA,
+        EXAMPLE_86_RUDRA_CHAIN_REPRODUCES,
+        GRAHA_NAMES,
+        RUDRA_AFFLICTION_MALEFICS,
+        RUDRA_AFFLICTION_RULE,
+        Graha,
+    )
+
+    _longitudes, signs, _lagna = _chart_61_positions()
+    rahu = signs[int(Graha.RAHU)]
+    assert DEBILITATION_RASI[int(Graha.RAHU)] == rahu
+
+    afflicters = [str(GRAHA_NAMES[g]) for g, s in signs.items()
+                  if g != int(Graha.RAHU) and rahu in rasi_drishti(s)
+                  and str(GRAHA_NAMES[g]) in RUDRA_AFFLICTION_MALEFICS]
+    assert afflicters == ["Ketu"]
+    assert "debilitated" in RUDRA_AFFLICTION_RULE
+    assert EXAMPLE_86_RUDRA == "Rahu"
+    assert "affliction override" in EXAMPLE_86_RUDRA_CHAIN_REPRODUCES
+
+
+def test_our_default_rudra_disagrees_with_example_86_on_chart_61():
+    """Pinned in both directions. `rudra` gives Mercury because it uses Table
+    32, would take Saturn for Aquarius, and does not apply the override. Not
+    changed here -- OI-134, OI-135 and OI-109.
+    """
+    from hora.charts.maraka import rudra
+    from hora.core.const import (
+        CHART_61_SEPARATES_ALL_THREE_RUDRA_OPEN_ITEMS,
+        EXAMPLE_86_RUDRA,
+    )
+
+    longitudes, signs, lagna_sign = _chart_61_positions()
+    got = rudra(lagna_sign, signs, longitudes)
+
+    assert got["rudra"] == "Mercury"
+    assert got["rudra"] != EXAMPLE_86_RUDRA
+    assert got["from_lagna"]["rasi"] == "Sagittarius"
+    assert got["from_seventh"]["rasi"] == "Gemini"
+    assert "Because Saturn is in Cn" in got["table_32_exception"]
+    assert "all three matter" in (
+        CHART_61_SEPARATES_ALL_THREE_RUDRA_OPEN_ITEMS)
+
+
+def test_the_book_names_the_node_in_every_co_owned_eighth_house():
+    """Scorpio is Ketu's in Examples 85 and 87, Aquarius is Rahu's in Example
+    86. Three for three, and the opposite of our default in both signs.
+    OI-135 -- nothing acts on the pattern.
+    """
+    from hora.core.const import (
+        CO_OWNED_EIGHTH_INSTANCES,
+        RASI_LORD,
+        RASI_NAMES,
+        THE_BOOK_ALWAYS_TAKES_THE_NODE_AS_THE_CO_LORD,
+        Graha,
+    )
+
+    names = [str(name) for name in RASI_NAMES]
+    for _example, rasi, book, ours in CO_OWNED_EIGHTH_INSTANCES:
+        sign = names.index(rasi)
+        assert str(RASI_LORD[sign]) != book          # never the primary lord
+        assert ours in ("Mars", "Saturn")
+        assert book in ("Rahu", "Ketu")
+    assert {rasi for _e, rasi, _b, _o in CO_OWNED_EIGHTH_INSTANCES} == {
+        "Scorpio", "Aquarius"}
+    assert len(CO_OWNED_EIGHTH_INSTANCES) == 3
+    assert "three co-owned 8th houses" in (
+        THE_BOOK_ALWAYS_TAKES_THE_NODE_AS_THE_CO_LORD)
+    assert int(Graha.RAHU) != int(Graha.SATURN)

@@ -3530,3 +3530,208 @@ def test_no_other_day_that_year_matches_the_drawn_transit():
                          // 30)] == sign for name, sign in drawn.items()):
                 matches.append((month, dom))
     assert sorted(matches) == [(10, 31), (11, 1)]
+
+
+# --------------------------------------------------------------------------
+# Example 110 — Chart 61, and the day method worked end to end
+# --------------------------------------------------------------------------
+
+def _chart_61_reference_signs():
+    """Indira Gandhi's eight natal reference signs, from Chart 61."""
+    from hora.charts.book import longitudes
+
+    printed = longitudes(61)
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Merc": "Mercury",
+             "Jup": "Jupiter", "Ven": "Venus", "Sat": "Saturn",
+             "Asc": "Lagna"}
+    return {ref: int(printed[name] // 30) for name, ref in named.items()}
+
+
+def _chart_61_transit_longitudes():
+    from hora.charts.book import chart
+    from hora.charts.book import longitude as book_longitude
+
+    return {name: book_longitude(value)
+            for name, value in chart(61)["transit"]["longitudes"].items()}
+
+
+def test_example_110s_sun_is_in_his_own_kakshya():
+    """"Because 14º 24' is between 11º 15' and 15º, he is in his own
+    kakshya."
+    """
+    from hora.charts.ashtakavarga import kakshya_of
+    from hora.core.const import EXAMPLE_110_SUN_IN_HIS_OWN_KAKSHYA
+
+    sun = _chart_61_transit_longitudes()["Sun"]
+    k = kakshya_of(sun)
+    assert k.rasi == R["Li"]
+    assert (k.start, k.end) == (11.25, 15.0)
+    assert k.lord == "Sun"
+    assert "his own kakshya" in EXAMPLE_110_SUN_IN_HIS_OWN_KAKSHYA
+
+
+def test_the_sun_is_benefic_in_libra_from_exactly_the_five_named():
+    """"Sun is benefic in Li only with respect to lagna, Moon, Mercury,
+    Jupiter and Saturn." The BAV's contributors, not just its count.
+    """
+    from hora.charts.ashtakavarga import bhinnashtakavarga
+    from hora.core.const import EXAMPLE_110_SUN_IS_BENEFIC_IN_LIBRA_FROM
+
+    bav = bhinnashtakavarga("Sun", _chart_61_reference_signs())
+    assert set(bav.contributors[R["Li"]]) == set(
+        EXAMPLE_110_SUN_IS_BENEFIC_IN_LIBRA_FROM)
+    assert bav.rekhas[R["Li"]] == 5
+    assert "Sun" not in bav.contributors[R["Li"]]
+
+
+def test_all_seven_of_example_110s_kakshya_lords_reproduce():
+    """"Sun is in Sun's kakshya, Moon in Sun's kakshya, Mars in Moon's
+    kakshya, Mercury in lagna's kakshya, Jupiter in Venus's kakshya, Venus in
+    Mercury's kakshya and Saturn in Moon's kakshya."
+    """
+    from hora.charts.ashtakavarga import kakshya_of
+    from hora.core.const import EXAMPLE_110_KAKSHYA_LORDS
+
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Mercury": "Merc",
+             "Jupiter": "Jup", "Venus": "Ven", "Saturn": "Sat"}
+    transiting = _chart_61_transit_longitudes()
+    assert len(EXAMPLE_110_KAKSHYA_LORDS) == 7
+    for graha, lord in EXAMPLE_110_KAKSHYA_LORDS.items():
+        assert kakshya_of(transiting[named[graha]]).lord == lord, graha
+
+
+def test_only_the_moon_and_mercury_are_in_kakshyas_with_rekhas():
+    """"Only Moon and Mercury are in kakshyas with rekhas." Seven PAV cells,
+    read from Chart 61's natal positions.
+    """
+    from hora.charts.ashtakavarga import kakshya_rekha_count
+    from hora.core.const import (
+        EXAMPLE_110_VERDICT,
+        EXAMPLE_110_WITH_REKHAS,
+    )
+
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Mercury": "Merc",
+             "Jupiter": "Jup", "Venus": "Ven", "Saturn": "Sat"}
+    transiting = _chart_61_transit_longitudes()
+    got = kakshya_rekha_count(
+        _chart_61_reference_signs(),
+        {owner: transiting[name] for owner, name in named.items()})
+
+    assert tuple(got["with_rekha"]) == EXAMPLE_110_WITH_REKHAS
+    assert got["count"] == 2
+    assert len(got["without_rekha"]) == 5
+    assert "Saturn" in got["without_rekha"]
+    assert "5 out of 7" in EXAMPLE_110_VERDICT
+    assert "Vimsottari dasa lord Saturn" in EXAMPLE_110_VERDICT
+
+
+def test_the_section_counts_rekhas_and_the_example_counts_blanks():
+    from hora.charts.ashtakavarga import kakshya_rekha_count
+    from hora.core.const import (
+        KAKSHYA_DAY_METHOD,
+        THE_EXAMPLE_COUNTS_THE_BLANKS_THE_SECTION_COUNTS_THE_REKHAS,
+    )
+
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Mercury": "Merc",
+             "Jupiter": "Jup", "Venus": "Ven", "Saturn": "Sat"}
+    transiting = _chart_61_transit_longitudes()
+    got = kakshya_rekha_count(
+        _chart_61_reference_signs(),
+        {owner: transiting[name] for owner, name in named.items()})
+
+    assert got["count"] + len(got["without_rekha"]) == got["of"] == 7
+    assert "with a rekha" in KAKSHYA_DAY_METHOD
+    assert "complements" in (
+        THE_EXAMPLE_COUNTS_THE_BLANKS_THE_SECTION_COUNTS_THE_REKHAS)
+
+
+def test_example_110_is_the_only_graded_tally_and_still_gives_no_threshold():
+    """It grades 2 of 7 as not favorable, and names the dasa lord among the
+    blanks -- so even here the verdict is not a count alone. OI-141 stays
+    open and `kakshya_rekha_count` still returns no verdict.
+    """
+    from hora.charts.ashtakavarga import kakshya_rekha_count
+    from hora.core.const import (
+        EXAMPLE_110_IS_THE_ONLY_GRADED_TALLY,
+        KAKSHYA_DAY_METHOD_WARNED_TWICE,
+        THE_DAY_METHOD_HAS_NO_STATED_THRESHOLD,
+    )
+
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Mercury": "Merc",
+             "Jupiter": "Jup", "Venus": "Ven", "Saturn": "Sat"}
+    transiting = _chart_61_transit_longitudes()
+    got = kakshya_rekha_count(
+        _chart_61_reference_signs(),
+        {owner: transiting[name] for owner, name in named.items()})
+
+    assert got["verdict"] is None
+    assert "not the threshold" in EXAMPLE_110_IS_THE_ONLY_GRADED_TALLY
+    assert "gives no number" in THE_DAY_METHOD_HAS_NO_STATED_THRESHOLD
+    assert "should not rush to" in KAKSHYA_DAY_METHOD_WARNED_TWICE
+
+
+def test_chart_61_was_the_last_chart_the_register_was_missing():
+    from hora.core.const import CHARTS_NOT_SUPPLIED
+
+    assert CHARTS_NOT_SUPPLIED == (4,)
+    assert 61 not in CHARTS_NOT_SUPPLIED
+
+
+def test_both_halves_of_chart_61_recompute():
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.book import longitude as book_longitude
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(61)
+    settings = Settings(node_type=NodeType.MEAN)
+
+    natal = compute_chart(from_local(**record["birth_data"]),
+                          Place(name="Indira Gandhi", **record["place"]),
+                          settings)
+    printed = longitudes(61)
+    for name, graha in GRAHA_OF.items():
+        assert abs(natal.positions[int(graha)].longitude
+                   - printed[name]) * 60 < 1.02, name
+    assert abs(natal.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+    block = record["transit"]
+    moment = compute_chart(from_local(**block["birth_data"]),
+                           Place(name="New Delhi", **block["place"]), settings)
+    for name, graha in GRAHA_OF.items():
+        assert abs(moment.positions[int(graha)].longitude
+                   - book_longitude(block["longitudes"][name])) * 60 < 1.01, (
+            name)
+
+
+def test_chart_61s_jupiter_is_printed_retrograde_and_computes_retrograde():
+    from hora.charts.book import GRAHA_OF, chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(61)
+    natal = compute_chart(from_local(**record["birth_data"]),
+                          Place(name="Indira Gandhi", **record["place"]),
+                          Settings(node_type=NodeType.MEAN))
+    assert record["retrograde"] == ("Jup",)
+    retrograde = {name for name, graha in GRAHA_OF.items()
+                  if name not in ("Rahu", "Ketu")
+                  and natal.positions[int(graha)].is_retrograde}
+    assert retrograde == {"Jup"}
+
+
+def test_chart_61s_transit_is_the_day_chart_60_draws_undated():
+    """Chart 60's transit chart carries no date. Chart 61 prints the same
+    nine positions and dates them, which is what closed OI-142.
+    """
+    from hora.charts.book import chart
+    from hora.charts.book import longitude as book_longitude
+
+    undated = chart(60)["transit"]["drawn"]
+    dated = chart(61)["transit"]["longitudes"]
+    for name, sign in undated.items():
+        assert A[int(book_longitude(dated[name]) // 30)] == sign, name
+    assert chart(61)["transit"]["date"].startswith("October 31, 1984")
+    assert chart(60)["transit"]["inferred_date"].startswith("October 31")

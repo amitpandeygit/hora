@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 97 waiting on evidence · 2 parked**
+**5 waiting on Amit · 96 waiting on evidence · 2 parked**
 
 ---
 
@@ -647,12 +647,19 @@ cascade agrees on Example 85's chart and gives **Mars** on Example 87's — wher
 the choice decides everything: Mars makes the first pair long life, Ketu makes
 it short, and only short life selects the Capricorn dasa the native died in.
 
-**What we do:** `rudra` and `three_pairs` take an `overrides` map, and without
-one keep the first co-lord as before, reporting `lord_was_chosen`. The default
-is not changed on our own judgement — it flips a longevity verdict.
+**Chart 61 adds the third instance and makes a pattern.** Example 86's 8th
+house from Cancer is **Aquarius**, and the example takes **Rahu**, not Saturn.
+So in all three co-owned 8th houses the book has read — Scorpio twice, Aquarius
+once — it names the **node**, never the planet. Three for three is a pattern,
+not a rule the book states, and it is the opposite of our first-co-lord
+default in both signs.
 
-**Closes when:** you decide, or a section states which co-lord a longevity 8th
-house takes.
+**What we do:** `rudra` and `three_pairs` take an `overrides` map, and without
+one keep the first co-lord, reporting `lord_was_chosen`. The default is not
+changed on our own judgement — it flips a longevity verdict.
+
+**Closes when:** you decide (the node in every case is now a real option), or
+a section states which co-lord a longevity 8th house takes.
 
 ### OI-140 — §24.3.1's "8th from AL" carries no Table 32 pointer
 
@@ -764,19 +771,21 @@ and Gemini — are exactly that, where the normal count gives Aquarius and Leo.
 So Saturn reverses the count, as he reverses a Narayana dasa's direction in
 §18.2.1.
 
-What triggers it is not said: Saturn **occupies** one reference rasi here and
-**owns** the other, and the example flips both; Chart 61 is printed in a later
-chapter, so Example 86 cannot be recomputed. Example 87 narrows it: there
-Saturn sits in the Table 32 8th house itself and the exception is **not**
-invoked, so occupying just any rasi is not the trigger.
+**Chart 61 has now arrived** (Example 110), and it shows the exception is not
+optional: applying it gives Aquarius and Leo, whose lords reach Example 86's
+Rudra, and Table 32's Sagittarius and Gemini give lords who cannot. So the
+effect is settled and only the **trigger** is still open. Saturn **occupies**
+one reference rasi here and **owns** the other, and the example flips both;
+Example 87 narrows it, since there Saturn sits in the Table 32 8th house itself
+and the exception is **not** invoked, so occupying just any rasi is not it.
 
 **What we do:** `rudra_eighth` keeps Table 32, and `rudra` reports the
 exception beside the affliction override — named, not applied, as OI-109 does.
-
 §22.3 accounts for the omission — "special cases, exceptions and special rules
-... were omited in this book" — and closes nothing.
+... were omited in this book".
 
-**Closes when:** Chart 61 arrives, or a section states the trigger.
+**Closes when:** a section states the trigger, or you accept "Saturn in or
+owning either reference rasi" on the two examples' evidence.
 
 ### OI-133 — which Trishoola when two of them fall in the range
 
@@ -1209,11 +1218,18 @@ a later section extends Table 34.
 ### OI-109 — §14.3's affliction override and Shiva's motion
 
 **The affliction override.** All five strength tests are computable — Exercise
-23 runs the cascade to its fifth and we reproduce it. The override is not: the
+23 runs the cascade to its fifth and we reproduce it. The override was not: the
 weaker planet takes over if it is "debilitated or in an inimical sign and
-conjoined/aspected by malefics **like** Mars, Saturn, Rahu and Ketu". "Like"
-leaves the list open and no example applies it. The cascade decides Rudra;
-whether the weaker candidate is debilitated is reported beside it, unapplied.
+conjoined/aspected by malefics **like** Mars, Saturn, Rahu and Ketu", and
+"like" leaves the list open.
+
+**Chart 61 supplies the first worked instance.** On Example 86's reading the
+cascade makes the Sun stronger at step 4 (rasi aspects, two to one), and the
+weaker Rahu is debilitated in Sagittarius and rasi-aspected by **Ketu** — named
+on §14.3's own list, so the open "like" is not stretched. The override is what
+produces the example's Rudra. It is still not applied: the trigger list stays
+open and this is one case. The cascade decides Rudra; whether the weaker
+candidate is debilitated is reported beside it.
 
 **Shiva's motion.** Footnote 50 builds Table 32 by counting zodiacally from odd
 rasis and anti-zodiacally from even ones, except that Shiva rasis use Shiva's
@@ -2033,31 +2049,20 @@ a rekha, favorable or unfavorable results may be expected (respectively)." No
 number is given for either bound, and which planets are counted is never said —
 seven, or the eight references including Lagna.
 
-`kakshya_rekha_count` returns the tally, the per-planet detail and
+**Example 110 is the one graded tally**, and it does not fix a bound. It reads
+**2 of 7** with a rekha as "not a favorable time" — but the sentence also names
+*which* graha is blank, "including Vimsottari dasa lord Saturn", so even there
+the verdict is not a count alone. It also counts the complement: the section
+counts planets **with** a rekha, the example counts the five **without**.
+
+`kakshya_rekha_count` returns both counts, the per-planet detail and
 `verdict: None` with `undecided` naming this item; the planet set is a
-parameter defaulting to the seven of `SAV_OWNERS`. Grading a count against a
-number the book does not supply would be ours, not PVR's. His own limit is
-served beside it: the principle is for fine-tuning to a few days and not to be
-used in vacuum.
+parameter defaulting to the seven of `SAV_OWNERS`. Grading against a number the
+book does not supply would be ours. PVR's own limit is served beside it, and he
+gives it twice — fine-tuning to a few days, never in vacuum.
 
-**Closes when:** a worked example counts, or you set the bounds.
+**Closes when:** a second graded tally bounds it, or you set the bounds.
 
-### OI-142 — Chart 60's transit chart carries no date
-
-**Waiting on the book.** The AV timing exercise prints a nativity in full and a
-transit chart with no date and no time — the only transit chart in the register
-with neither. The exercise text that would supply it has not been read.
-
-Scanning the nine drawn positions against every day from 1960 to 2025 at Mumbai
-leaves exactly one window: **October 31 and November 1, 1984**, the Moon being
-in Capricorn only from the night of 30 October to early 2 November. No other
-day matches more than eight.
-
-Held as `inferred_date` on the chart record, marked ours, and pinned by tests
-that reproduce all nine positions and show no other day that year fits. Nothing
-reads it as the book's.
-
-**Closes when:** the exercise supplies the date.
 
 ---
 

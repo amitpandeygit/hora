@@ -895,6 +895,33 @@ is one column of §12.6's PAV re-ordered into Table 60's order, and
 | `EXAMPLE_109_PLACEMENTS` | Example 109's three placements, held as a fixture. The bounds the book quotes are checked against the division |
 | `KAKSHYA_DAY_METHOD` · `THE_DAY_METHOD_HAS_NO_STATED_THRESHOLD` | The day method verbatim, and ours noting it has no numbers. `kakshya_rekha_count` returns the tally and refuses a verdict — OI-141 |
 
+### Chapter 25 — Example 110's worked day method (7)
+
+`core/constants/ashtakavarga.py`. The example's arithmetic **is** consumed —
+the Sun's five contributors in Libra, all seven kakshya lords and the two
+rekhas reproduce from Chart 61 — so what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_110_SUN_IN_HIS_OWN_KAKSHYA` · `EXAMPLE_110_VERDICT` | The example verbatim, held for citation |
+| `EXAMPLE_110_SUN_IS_BENEFIC_IN_LIBRA_FROM` · `EXAMPLE_110_KAKSHYA_LORDS` · `EXAMPLE_110_WITH_REKHAS` | Fixtures. Each is checked against what the engine derives from Chart 61 rather than read by it |
+| `THE_EXAMPLE_COUNTS_THE_BLANKS_THE_SECTION_COUNTS_THE_REKHAS` | Ours: the section and the example count opposite ends of the same tally. Both are returned, so nothing depends on this |
+| `EXAMPLE_110_IS_THE_ONLY_GRADED_TALLY` | Ours: the single data point for OI-141's missing threshold, and why one point does not fix it |
+| `KAKSHYA_DAY_METHOD_WARNED_TWICE` | PVR's second warning, bounding what any endpoint on the day method may claim |
+
+### Chapter 22 — what Chart 61's arrival settled (6)
+
+`core/constants/maraka.py`. Findings and fixtures around a chart the book
+printed eight chapters after the example that read it. Nothing here changes
+`rudra`, which is the point of three of them.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_86_RUDRA_CHAIN_REPRODUCES` | Ours: the five steps from the Saturn exception to the affliction override, each pinned by its own test |
+| `CHART_61_SEPARATES_ALL_THREE_RUDRA_OPEN_ITEMS` | Ours: the first chart on which OI-134, OI-135 and OI-109 all bite, and our default answer differs from the book's. Held, not acted on |
+| `EXAMPLE_86_RUDRA` · `EXAMPLE_86_RUDRA_HOUSES` | Fixtures — the answer and the two houses, checked against what the engine derives |
+| `THE_BOOK_ALWAYS_TAKES_THE_NODE_AS_THE_CO_LORD` · `CO_OWNED_EIGHTH_INSTANCES` | Ours: three for three across Examples 85, 86 and 87, and the opposite of our default. A pattern in the examples, not a rule PVR states — OI-135 |
+
 ---
 
 ## How to use this register

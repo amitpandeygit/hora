@@ -413,11 +413,17 @@
         "number": 60,
         "recomputable": true,
         "title": "AV Timing Exercise \u2014 D-10 and a transit chart"
+      },
+      {
+        "birth": "November 19, 1917, 11:03 pm (IST), 81 E 52, 25 N 28",
+        "first_seen": "chapter 25, Example 110",
+        "number": 61,
+        "recomputable": true,
+        "title": "Indira Gandhi, and the transit at her assassination \u2014 Example 110"
       }
     ],
     "not_supplied": [
-      4,
-      61
+      4
     ],
     "not_supplied_note": "Chart 4 has never appeared in any section read so far, and nothing has cited it.",
     "note": "A chart with birth data is recomputed from its own birth line and so checks the ephemeris. One without is a transcription only, and its record says why.",
@@ -471,7 +477,8 @@
       57,
       58,
       59,
-      60
+      60,
+      61
     ]
   },
   "status": 200
