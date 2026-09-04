@@ -437,6 +437,68 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    54: {
+        "title": "An engineer, and his wedding-day transit — Example 105",
+        "birth": "October 5, 1970, 12:34 pm (IST), 80 E 21, 15 N 49",
+        "birth_data": {
+            "year": 1970, "month": 10, "day": 5, "hour": 12, "minute": 34,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 15 + 49 / 60, "longitude": 80 + 21 / 60},
+        "longitudes": {
+            "Asc": "18 Sg 31", "Sun": "18 Vi 11", "Moon": "12 Sc 14",
+            "Mars": "26 Le 56", "Merc": "2 Vi 35", "Jup": "15 Li 29",
+            "Ven": "27 Li 37", "Sat": "28 Ar 21", "Rahu": "7 Aq 09",
+            "Ketu": "7 Le 09", "HL": "5 Ar 23", "GL": "1 Aq 37",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Ven": "AmK", "Mars": "BK", "Merc": "DK",
+            "Moon": "GK", "Rahu": "MK", "Sun": "PiK", "Jup": "PK",
+        },
+        "retrograde": ("Sat",),
+        "divisional": {
+            "D9": {
+                "AL": "Ta", "HL": "Ta", "Ven": "Ge", "Sun": "Ge",
+                "Ketu": "Ge", "Jup": "Aq", "Merc": "Cp", "Sat": "Sg",
+                "Mars": "Sg", "Rahu": "Sg", "GL": "Li", "Moon": "Li",
+                "Asc": "Vi",
+            },
+        },
+        "transit": {
+            "for": "the wedding",
+            "date": "January 24, 1999, 9:30 am (IST), 78 E 30, 17 N 20",
+            "birth_data": {
+                "year": 1999, "month": 1, "day": 24, "hour": 9, "minute": 30,
+                "second": 0.0, "utc_offset_hours": 5.5,
+            },
+            "place": {"latitude": 17 + 20 / 60, "longitude": 78 + 30 / 60},
+            "longitudes": {
+                "Asc": "25 Aq 31", "Sun": "9 Cp 52", "Moon": "1 Ar 31",
+                "Mars": "5 Li 11", "Merc": "2 Cp 32", "Jup": "2 Pi 03",
+                "Ven": "0 Aq 32", "Sat": "3 Ar 31", "Rahu": "29 Cn 19",
+                "Ketu": "29 Cp 19", "HL": "29 Pi 46", "GL": "29 Cn 47",
+            },
+            "drawn": {
+                "HL": "Pi", "Jup": "Pi", "Sat": "Ar", "Moon": "Ar",
+                "AL": "Ge", "GL": "Cn", "Rahu": "Cn", "Ven": "Aq",
+                "Asc": "Aq", "Merc": "Cp", "Sun": "Cp", "Ketu": "Cp",
+                "Mars": "Li",
+            },
+        },
+        "events": {"the engineer married": "January 24, 1999"},
+        "first_seen": "chapter 25, Example 105",
+        "note": (
+            "Two charts again, and this time both carry full data. The "
+            "nativity's diagram is its **navamsa**, not its rasi chart, which "
+            "is what Example 105 reads. Its transit chart is **the same chart "
+            "as Chart 53's** -- same date, and every position, the Ascendant "
+            "and the AL identical -- but where Chart 53 gave a date only, "
+            "this gives 9:30 am IST at 78 E 30, 17 N 20. That falls inside "
+            "the 07:57 to 09:36 window Chart 53's own diagram implied. The "
+            "natural reading is that Examples 104 and 105 are the bride and "
+            "the groom of one wedding; the book never says so."
+        ),
+    },
     53: {
         "title": "A lady, and her wedding-day transit — Example 104",
         "birth": "July 26, 1973, 9:41 pm (IST), 80 E 28, 16 N 13",

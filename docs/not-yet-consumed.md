@@ -830,6 +830,9 @@ consumed; what follows is §25.4's prose, its provenance and its structure.
 | `ONE_ZODIAC_FOR_EVERY_DIVISIONAL_CHART` | §25.4's premise. A test proves it of every varga we build; the sentence is held for the reason it gives |
 | `THE_TWO_AXES` | Rasi/divisional and natal/transit, with what each shows. Structure, not a rule |
 | `WHY_THE_SECOND_INTERACTION_FINE_TUNES` | Ours, not the book's: the arithmetic reason (2) times more finely than (1). A test checks the arithmetic; nothing reads the sentence |
+| `THE_NINTH_LORD_IN_NAVAMSA_SHOWS_THE_DHARMA_FOLLOWED` | A navamsa-specific reading rule given nowhere else. No reading layer applies it |
+| `EXAMPLE_105_HITS` · `EXAMPLE_105_SUMMARY` | Example 105's five transit hits and the book's own numbered summary of three of them. The hits **are** reproduced, by `transits_over` and `influenced_rasis`; these hold what the example says |
+| `EXAMPLES_104_AND_105_SHARE_A_WEDDING_CHART` · `INTERACTION_2_IS_NEVER_WORKED` | Two findings of ours about the examples rather than about the technique |
 
 ---
 

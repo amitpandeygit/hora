@@ -1862,3 +1862,243 @@ def test_precedence_records_25_4s_standing():
     assert "own researches" in text
     assert "prone to errors" in text
     assert "never overrides PVR silently" in text
+
+
+# ---------------------------------------------------------------------------
+# Example 105 — Chart 54, a wedding read from the natal navamsa
+# ---------------------------------------------------------------------------
+
+def _chart_54_navamsa():
+    """Chart 54's navamsa signs and its navamsa lagna, from the printed
+    natal longitudes."""
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(54)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    return {
+        "lagna": varga(printed["Asc"], "D9").sign,
+        "signs": {int(g): varga(printed[n], "D9").sign
+                  for n, g in named.items()},
+        "longitudes": {int(g): varga(printed[n], "D9").sign * 30.0
+                       + varga(printed[n], "D9").longitude % 30.0
+                       for n, g in named.items()},
+    }
+
+
+def test_chart_54s_nativity_and_transit_both_recompute():
+    """Both halves carry full data this time, and both land within an
+    arcminute.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.book import longitude as book_longitude
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(54)
+    printed_natal = longitudes(54)
+    natal = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 54", **record["place"]),
+        Settings(node_type=NodeType.MEAN))
+    for name, graha in GRAHA_OF.items():
+        assert abs(natal.positions[int(graha)].longitude
+                   - printed_natal[name]) * 60 < 1.0, name
+
+    transit_block = record["transit"]
+    transit = compute_chart(
+        from_local(**transit_block["birth_data"]),
+        Place(name="wedding", **transit_block["place"]),
+        Settings(node_type=NodeType.MEAN))
+    for name, graha in GRAHA_OF.items():
+        printed = book_longitude(transit_block["longitudes"][name])
+        assert abs(transit.positions[int(graha)].longitude
+                   - printed) * 60 < 1.0, name
+
+
+def test_chart_54s_drawn_navamsa_reproduces():
+    """The nativity's diagram is its navamsa, which is what Example 105
+    reads -- and its AL comes out Taurus as drawn.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart, longitudes
+    from hora.charts.colord import stronger
+    from hora.charts.vargas import varga
+
+    drawn = dict(chart(54)["divisional"]["D9"])
+    arudha = drawn.pop("AL")
+    printed = longitudes(54)
+    for name, abbr in drawn.items():
+        assert A[varga(printed[name], "D9").sign] == abbr, name
+
+    navamsa = _chart_54_navamsa()
+    lords = {rasi: stronger(rasi, navamsa["longitudes"]).winner
+             for rasi in (7, 10)}
+    al = arudha_pada(1, navamsa["lagna"], navamsa["signs"], lords).sign
+    assert A[al] == arudha == "Ta"
+
+
+def test_example_105s_navamsa_houses_and_their_lords():
+    """"Pi contains the 7th house and its lord Jupiter is in Aq."  Venus lords
+    the 9th, Moon the 11th, Mercury the lagna.
+    """
+    from hora.core.const import RASI_LORD, Graha
+    from hora.transits.gochara import (
+        THE_NINTH_LORD_IN_NAVAMSA_SHOWS_THE_DHARMA_FOLLOWED,
+    )
+
+    navamsa = _chart_54_navamsa()
+    lagna, signs = navamsa["lagna"], navamsa["signs"]
+    assert A[lagna] == "Vi"
+
+    for house, sign, lord in ((7, "Pi", Graha.JUPITER), (9, "Ta", Graha.VENUS),
+                              (11, "Cn", Graha.MOON), (1, "Vi", Graha.MERCURY)):
+        place = (lagna + house - 1) % 12
+        assert A[place] == sign, house
+        assert int(RASI_LORD[place]) == int(lord), house
+
+    assert A[signs[int(Graha.JUPITER)]] == "Aq"      # the 7th lord's rasi
+    assert A[signs[int(Graha.MERCURY)]] == "Cp"      # the lagna lord's rasi
+
+    assert "shows the dharma followed" in (
+        THE_NINTH_LORD_IN_NAVAMSA_SHOWS_THE_DHARMA_FOLLOWED)
+    assert "act of dharma" in (
+        THE_NINTH_LORD_IN_NAVAMSA_SHOWS_THE_DHARMA_FOLLOWED)
+
+
+def test_the_navamsa_upapada_is_aries_as_the_example_says():
+    """"Aries contains upapada in the natal navamsa chart" -- not drawn in the
+    diagram, so it has to be computed.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart
+    from hora.charts.colord import stronger
+
+    navamsa = _chart_54_navamsa()
+    lords = {rasi: stronger(rasi, navamsa["longitudes"]).winner
+             for rasi in (7, 10)}
+    ul = arudha_pada(12, navamsa["lagna"], navamsa["signs"], lords).sign
+    assert A[ul] == "Ar"
+    assert "AL" in chart(54)["divisional"]["D9"]     # AL is drawn, UL is not
+
+
+def test_example_105s_five_hits_are_all_interaction_one():
+    """Each is a transit **rasi** position landing on a natal **navamsa**
+    point -- §25.4's interaction (1), and none of them shows in the rasi chart.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart
+    from hora.charts.book import longitude as book_longitude
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.transits.gochara import (
+        EXAMPLE_105_HITS,
+        influenced_rasis,
+        transits_over,
+    )
+    navamsa = _chart_54_navamsa()
+    signs, lagna = navamsa["signs"], navamsa["lagna"]
+    transit = {name: int(book_longitude(value) // 30)
+               for name, value in chart(54)["transit"]["longitudes"].items()}
+
+    # Jupiter occupies the navamsa 7th and aspects the navamsa lagna
+    assert transit["Jup"] == (lagna + 6) % 12
+    assert lagna in influenced_rasis(Graha.JUPITER, transit["Jup"])["aspects"]
+
+    # Venus stands on the navamsa 7th lord's rasi
+    assert transits_over(transit["Ven"], signs[int(Graha.JUPITER)])
+    # Mercury stands on his own navamsa rasi
+    assert transits_over(transit["Merc"], signs[int(Graha.MERCURY)])
+
+    # Moon stands on the navamsa upapada
+    lords = {rasi: stronger(rasi, navamsa["longitudes"]).winner
+             for rasi in (7, 10)}
+    ul = arudha_pada(12, lagna, signs, lords).sign
+    assert transits_over(transit["Moon"], ul)
+
+    assert len(EXAMPLE_105_HITS) == 5
+    assert {row["transiting"] for row in EXAMPLE_105_HITS} == {
+        "Jupiter", "Venus", "Moon", "Mercury"}
+
+
+def test_jupiter_transits_pisces_in_his_own_sign():
+    """"Jupiter is in own sign in Pi in transit, which is the 7th house in
+    natal navamsa."
+    """
+    from hora.charts.book import chart
+    from hora.charts.book import longitude as book_longitude
+    from hora.core.const import RASI_LORD, Graha
+
+    jupiter = int(book_longitude(
+        chart(54)["transit"]["longitudes"]["Jup"]) // 30)
+    assert A[jupiter] == "Pi"
+    assert int(RASI_LORD[jupiter]) == int(Graha.JUPITER)
+
+
+def test_charts_53_and_54_print_the_same_transit_chart():
+    """Same date, and every position, the Ascendant and the AL identical.
+    Chart 54 supplies the time Chart 53 withheld, and it falls inside the
+    window Chart 53's own diagram implied.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.gochara import EXAMPLES_104_AND_105_SHARE_A_WEDDING_CHART
+
+    fifty_four = chart(54)["transit"]
+    assert fifty_four["birth_data"]["hour"] == 9
+    assert fifty_four["birth_data"]["minute"] == 30
+    assert 7 * 60 + 57 <= 9 * 60 + 30 <= 9 * 60 + 36      # inside the window
+
+    computed = compute_chart(
+        from_local(**fifty_four["birth_data"]),
+        Place(name="wedding", **fifty_four["place"]),
+        Settings(node_type=NodeType.MEAN))
+    longs = {int(g): computed.positions[int(g)].longitude
+             for g in list(Graha)[:9]}
+    signs = {g: int(v // 30) for g, v in longs.items()}
+    lords = {rasi: stronger(rasi, longs).winner for rasi in (7, 10)}
+    arudha = arudha_pada(1, computed.lagna_rasi, signs, lords).sign
+
+    drawn_53 = chart(53)["transit"]["drawn"]
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    for name, graha in named.items():
+        assert A[signs[int(graha)]] == drawn_53[name], name
+    assert A[computed.lagna_rasi] == drawn_53["Asc"]
+    assert A[arudha] == drawn_53["AL"]
+
+    assert "the same chart" in EXAMPLES_104_AND_105_SHARE_A_WEDDING_CHART
+
+
+def test_interaction_2_is_described_and_never_worked():
+    """Both examples take a transit rasi position against a natal chart. No
+    example takes a transit divisional chart against the natal rasi chart --
+    which is the half §25.4 says fine-tunes.
+    """
+    from hora.transits.gochara import (
+        EXAMPLE_104_HITS,
+        EXAMPLE_105_HITS,
+        INTERACTION_2_IS_NEVER_WORKED,
+        THE_TWO_IMPORTANT_INTERACTIONS,
+    )
+
+    assert THE_TWO_IMPORTANT_INTERACTIONS[1]["timing"] == "fine-tune"
+    assert THE_TWO_IMPORTANT_INTERACTIONS[1]["transit"] == (
+        "a transit divisional chart")
+
+    # every worked hit reads a transit rasi position
+    for row in EXAMPLE_104_HITS:
+        assert row["in"] in ("Pi", "Cp", "Aq")
+    for row in EXAMPLE_105_HITS:
+        assert row["in"] in ("Pi", "Aq", "Ar", "Cp")
+    assert "No example" in INTERACTION_2_IS_NEVER_WORKED

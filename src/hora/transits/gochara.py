@@ -1153,3 +1153,70 @@ def divisional_interaction(interaction: int, graha: int, transit_sign: int,
         "varga": varga_code,
         "reaches": influences(graha, transit_sign, natal_lagna, natal_signs),
     }
+
+
+# --------------------------------------------------------------------------
+# Example 105 — a wedding read from the natal navamsa
+# --------------------------------------------------------------------------
+
+#: **A navamsa-specific reading rule**, given nowhere else. The 9th lord is
+#: read in *every* chart as the lord of dharma; §25.4 says that in the navamsa
+#: it is the one to look at, because the navamsa is the chart of dharma.
+THE_NINTH_LORD_IN_NAVAMSA_SHOWS_THE_DHARMA_FOLLOWED = (
+    "When we look at navamsa, we should look at the 9th lord. The 9th lord in "
+    "navamsa shows the dharma followed. In Hindu life, the marriage ceremony "
+    "is an act of dharma."
+)
+
+#: Example 105's four transit hits. Every one is §25.4's interaction (1) — a
+#: transit **rasi** position landing on a natal **navamsa** position — and
+#: none of them would be visible in the rasi chart alone.
+EXAMPLE_105_HITS: tuple[dict[str, object], ...] = (
+    {"transiting": "Jupiter", "in": "Pi", "how": "occupies",
+     "navamsa_point": "the 7th house", "note": "and in his own sign"},
+    {"transiting": "Jupiter", "in": "Pi", "how": "aspects",
+     "navamsa_point": "Vi, the navamsa lagna", "note": None},
+    {"transiting": "Venus", "in": "Aq", "how": "occupies",
+     "navamsa_point": "the rasi of Jupiter, the navamsa 7th lord",
+     "note": "Venus lords the navamsa 9th, so he shows dharma"},
+    {"transiting": "Moon", "in": "Ar", "how": "occupies",
+     "navamsa_point": "the navamsa upapada",
+     "note": "Moon lords the navamsa 11th, so he shows gains"},
+    {"transiting": "Mercury", "in": "Cp", "how": "occupies",
+     "navamsa_point": "his own navamsa rasi",
+     "note": "Mercury lords the navamsa lagna"},
+)
+
+#: §25.4's summary of the same, numbered as it numbers them.
+EXAMPLE_105_SUMMARY: tuple[str, ...] = (
+    ("Jupiter is in Pi in transit rasi chart and aspects Vi. Lagna is in Vi "
+     "and the 7th house is in Pi in the natal navamsa chart."),
+    ("Venus is the significator of marriage and the lord of the 9th house "
+     "(dharma) in natal navamsa. He is in Aq in the transit rasi chart. The "
+     "7th lord Jupiter occupies Aq in the natal navamsa chart."),
+    ("Mercury is the lord of lagna and occupies Cp, in the natal navamsa "
+     "chart. He is in Cp in the transit rasi chart also."),
+)
+
+#: **Finding.** Charts 53 and 54 print **the same transit chart**: the same
+#: date, and every graha, the Ascendant and the AL identical. Chart 53 gave a
+#: date only; Chart 54 gives 9:30 am IST at 78 E 30, 17 N 20, which falls
+#: inside the window Chart 53's own diagram implied. The natural reading is
+#: that Examples 104 and 105 are the bride and the groom of one wedding. The
+#: book never says so, and two charts being identical does not prove it.
+EXAMPLES_104_AND_105_SHARE_A_WEDDING_CHART = (
+    "Chart 53's transit chart and Chart 54's are the same chart. Chart 54 "
+    "supplies the time and place Chart 53 withheld, and it lies inside the "
+    "window Chart 53's Ascendant and AL already implied."
+)
+
+#: **Finding.** Every one of Example 105's hits is interaction (1) and none is
+#: interaction (2): the transit side is always the rasi chart and the natal
+#: side always the navamsa. So the section's "fine-tuning" half is described
+#: and never demonstrated.
+INTERACTION_2_IS_NEVER_WORKED = (
+    "Examples 104 and 105 work interaction (1) only -- a transit rasi "
+    "position against a natal chart. No example takes a transit divisional "
+    "chart against the natal rasi chart, which is the half §25.4 says "
+    "fine-tunes the timing."
+)
