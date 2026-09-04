@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 96 waiting on evidence · 2 parked**
+**5 waiting on Amit · 97 waiting on evidence · 2 parked**
 
 ---
 
@@ -2063,6 +2063,27 @@ gives it twice — fine-tuning to a few days, never in vacuum.
 
 **Closes when:** a second graded tally bounds it, or you set the bounds.
 
+
+### OI-143 — §25.6's remainder rule says nothing about a remainder of 0
+
+**Waiting on the book.** The rule maps a remainder to an ordinal: 25 gives the
+25th nakshatra, 10 the 10th rasi. A product that is a multiple of 27 or of 12
+leaves **0**, and no ordinal is given for it.
+
+It is not a corner case. Running Table 61 over Chart 7 with Exercise 22's own
+BAVs and sodhya pindas, the **rasi** remainder is 0 in **four of the seven
+rows**, and in **22 of all 84** (planet, house) pairs — none of them from an
+empty house, so it is ordinary arithmetic and not a degenerate input. The
+nakshatra side hits it 6 times in 84. A house with no rekhas would make the
+product 0 outright, which is a second route in.
+
+`timing_nakshatra` and `timing_rasi` return the **27th** and the **12th** —
+the only reading that keeps the cycle closed — and flag it: `remainder_was_zero`
+is true and `zero_reading` names this item, so a caller never mistakes it for
+the book's.
+
+**Closes when:** a worked case lands on a multiple, or you accept 0 as the
+27th and 12th.
 
 ---
 

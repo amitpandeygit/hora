@@ -469,17 +469,20 @@ Most were added by the inverted coverage sweep (see
 had no word for. They are reference data by design and may stay unconsumed
 indefinitely — being listed here is the normal state, not a defect.
 
-### Tables a calculation duplicates rather than imports (12)
+### Tables a calculation duplicates rather than imports (11)
 
 These are verified and correct, but the code that needs them defines its own
 copy instead of importing these. **Two sources of truth for the same table.**
 Nothing is wrong today — `test_vimshottari_tables_agree` pins the pair that
 matters — but a future edit to one side would silently diverge.
 
-`VIMSHOTTARI_ORDER` · `VIMSHOTTARI_YEARS` · `NAKSHATRA_LORD` ·
+`VIMSHOTTARI_ORDER` · `VIMSHOTTARI_YEARS` ·
 `TABLE_10_DAY` · `TABLE_10_NIGHT` · `TIME_BASED_UPAGRAHAS` ·
 `MALEFIC_STRONG_AYANA` · `MALEFIC_STRONG_PAKSHA` · `CO_LORDS_ONLY` ·
 `DEBILITATION_DEG` · `CHATURASRA` · `ABHIJIT_INDEX`
+
+The nakshatra-lord table left this list when §25.6's companion rule began
+importing it instead of restating it.
 
 `dasha/nakshatra/systems.py` carries its own `order` and `years` for
 Vimshottari; `constants/nakshatra.py` carries `VIMSHOTTARI_ORDER` and
@@ -921,6 +924,24 @@ printed eight chapters after the example that read it. Nothing here changes
 | `CHART_61_SEPARATES_ALL_THREE_RUDRA_OPEN_ITEMS` | Ours: the first chart on which OI-134, OI-135 and OI-109 all bite, and our default answer differs from the book's. Held, not acted on |
 | `EXAMPLE_86_RUDRA` · `EXAMPLE_86_RUDRA_HOUSES` | Fixtures — the answer and the two houses, checked against what the engine derives |
 | `THE_BOOK_ALWAYS_TAKES_THE_NODE_AS_THE_CO_LORD` · `CO_OWNED_EIGHTH_INSTANCES` | Ours: three for three across Examples 85, 86 and 87, and the opposite of our default. A pattern in the examples, not a rule PVR states — OI-135 |
+
+### Chapter 25 — §25.6's sodhya-pinda timing (9)
+
+`transits/gochara.py`. The procedure **is** consumed — `sodhya_timing`,
+`timing_nakshatra`, `timing_rasi` and `companion_nakshatras` run all four
+steps, and §25.6's illustration reproduces to the quotient — so what follows
+is prose, fixtures and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `SODHYA_TIMING_SOURCE` · `SODHYA_TIMING_RULE` · `SODHYA_TIMING_RASI_RULE` · `SODHYA_TIMING_PROCEDURE` | The section verbatim. The functions implement all of it; these hold the wording |
+| `SODHYA_TIMING_COMPANIONS` · `YOGA_PINDA_IS_THE_SAME_THING` | The optional companion nakshatras, and the section's only statement that a sodhya pinda is also called a yoga pinda |
+| `THE_TENTH_AND_NINETEENTH_ARE_ALWAYS_THE_SAME_LORD` | Ours: the companion rule is an identity over all 27, checked against the Vimsottari lord table rather than asserted |
+| `SODHYA_TIMING_MATTERS` · `TABLE_61_TIMING` | Data. `sodhya_timing` serves both beside its result; a test also shows each Table 61 area is one word of that planet's own longer list |
+| `TABLE_61_IS_A_SHORTLIST_NOT_THE_SCOPE` | The book's own note that any house from any planet is allowed, which is why the function takes any pair |
+| `ILLUSTRATION_INPUTS` · `ILLUSTRATION_WORKING` | §25.6's supposed case, held as an arithmetic fixture. It reads no chart, so it is not a chart record |
+| `THE_ZERO_REMAINDER_IS_NOT_DEFINED` | Ours: the gap OI-143 records. It **is** returned in `zero_reading` when the remainder is 0, and held here for the other path |
+| `SODHYA_TIMING_IS_OPEN_TO_RESEARCH` · `SODHYA_TIMING_OPEN_QUESTIONS` · `SODHYA_TIMING_CLOSING` | PVR's warning and his four unanswered questions. The warning **is** served on every result; the questions bound what the section can be built into |
 
 ---
 

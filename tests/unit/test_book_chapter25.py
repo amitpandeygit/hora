@@ -3735,3 +3735,239 @@ def test_chart_61s_transit_is_the_day_chart_60_draws_undated():
         assert A[int(book_longitude(dated[name]) // 30)] == sign, name
     assert chart(61)["transit"]["date"].startswith("October 31, 1984")
     assert chart(60)["transit"]["inferred_date"].startswith("October 31")
+
+
+# --------------------------------------------------------------------------
+# §25.6 — timing with sodhya pindas, and Table 61
+# --------------------------------------------------------------------------
+
+def _chart_7_signs():
+    """Chart 7's graha signs keyed by the ashtakavarga owner names."""
+    from hora.charts.book import graha_signs
+    from hora.core.const import Graha
+
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Mercury": Graha.MERCURY, "Jupiter": Graha.JUPITER,
+             "Venus": Graha.VENUS, "Saturn": Graha.SATURN}
+    signs = {int(graha): sign for graha, sign in graha_signs(7).items()}
+    return {name: signs[int(graha)] for name, graha in named.items()}
+
+
+def test_25_6s_illustration_reproduces_to_the_quotient():
+    """"Multiplying 86 with 5, we get 430. If we divide 430 by 27, the
+    quotient is 15 and the remainder is 25. The 25th constellation is
+    Poorvabhadrapada." And 430 by 12 gives 35 remainder 10, Capricorn.
+    """
+    from hora.transits.gochara import ILLUSTRATION_INPUTS, sodhya_timing
+
+    bav = [0] * 12
+    bav[R["Li"]] = int(ILLUSTRATION_INPUTS["rekhas"])
+    got = sodhya_timing(str(ILLUSTRATION_INPUTS["planet"]),
+                        int(ILLUSTRATION_INPUTS["house"]),
+                        planet_sign=R[str(ILLUSTRATION_INPUTS["planet_sign"])],
+                        bav_rekhas=bav,
+                        pinda=int(ILLUSTRATION_INPUTS["pinda"]))
+
+    assert got["house_rasi"] == "Libra"          # the 9th from Aquarius
+    assert got["product"] == 430
+    assert (got["nakshatra"]["quotient"], got["nakshatra"]["remainder"]) == (
+        15, 25)
+    assert got["nakshatra"]["ordinal"] == 25
+    assert got["nakshatra"]["nakshatra"].replace(" ", "").lower().startswith(
+        "purvabhadrapada")
+    assert (got["rasi"]["quotient"], got["rasi"]["remainder"]) == (35, 10)
+    assert got["rasi"]["rasi"] == "Capricorn"
+    assert got["rasi"]["ordinal"] == 10
+
+
+def test_table_61_pairs_seven_planets_with_seven_houses():
+    from hora.transits.gochara import (
+        TABLE_61_IS_A_SHORTLIST_NOT_THE_SCOPE,
+        TABLE_61_TIMING,
+    )
+
+    assert TABLE_61_TIMING == {
+        "Sun": (9, "Father"), "Moon": (4, "Mother"), "Mars": (3, "Siblings"),
+        "Mercury": (10, "Profession"), "Jupiter": (5, "Children"),
+        "Venus": (7, "Marriage"), "Saturn": (8, "Longevity"),
+    }
+    assert len({house for house, _area in TABLE_61_TIMING.values()}) == 7
+    assert len({area for _house, area in TABLE_61_TIMING.values()}) == 7
+    assert "any house from any planet" in TABLE_61_IS_A_SHORTLIST_NOT_THE_SCOPE
+
+
+def test_each_table_61_area_appears_in_that_planets_matters():
+    """Table 61's area of life is one word out of §25.6's own longer list for
+    the same planet, so the two are not independent claims.
+    """
+    from hora.transits.gochara import SODHYA_TIMING_MATTERS, TABLE_61_TIMING
+
+    for planet, (_house, area) in TABLE_61_TIMING.items():
+        matters = SODHYA_TIMING_MATTERS[planet].lower()
+        assert area.lower() in matters, (planet, area)
+
+
+def test_the_tenth_and_nineteenth_share_a_lord_for_every_nakshatra():
+    """The book gives the rule as a reason to add companions. It is an
+    identity: Vimsottari lordship repeats every 9 and 27 is three nines.
+    """
+    from hora.transits.gochara import (
+        THE_TENTH_AND_NINETEENTH_ARE_ALWAYS_THE_SAME_LORD,
+        companion_nakshatras,
+    )
+
+    for index in range(27):
+        got = companion_nakshatras(index)
+        assert got["indexes"] == tuple(
+            (index + step) % 27 for step in (0, 9, 18))
+        assert len(set(got["nakshatras"])) == 3
+    assert companion_nakshatras(24)["lord"] == "Jupiter"
+    assert "all 27" in THE_TENTH_AND_NINETEENTH_ARE_ALWAYS_THE_SAME_LORD
+
+
+def test_the_three_companions_are_one_lords_whole_holding():
+    from hora.core.constants.nakshatra import NAKSHATRA_LORD
+    from hora.transits.gochara import companion_nakshatras
+
+    for index in range(27):
+        trio = set(companion_nakshatras(index)["indexes"])
+        lord = NAKSHATRA_LORD[index]
+        assert {n for n in range(27) if NAKSHATRA_LORD[n] == lord} == trio
+
+
+def test_the_rasi_half_says_it_ranks_below_the_nakshatra():
+    from hora.transits.gochara import SODHYA_TIMING_RASI_RULE, timing_rasi
+
+    got = timing_rasi(430)
+    assert got["rasi"] == "Capricorn"
+    assert "nakshatras are more important" in got["ranked_below_the_nakshatra"]
+    assert "nakshatras are more important" in SODHYA_TIMING_RASI_RULE
+
+
+def test_a_zero_remainder_has_no_reading_in_the_book():
+    """§25.6 maps 25 to the 25th and 10 to the 10th, and never says what 0
+    means. We return the 27th and the 12th and say it is ours. OI-143.
+    """
+    from hora.transits.gochara import (
+        THE_ZERO_REMAINDER_IS_NOT_DEFINED,
+        timing_nakshatra,
+        timing_rasi,
+    )
+
+    for product in (0, 27, 54, 27 * 15):
+        got = timing_nakshatra(product)
+        assert got["remainder"] == 0
+        assert got["remainder_was_zero"] is True
+        assert got["ordinal"] == 27
+        assert got["zero_reading"] == THE_ZERO_REMAINDER_IS_NOT_DEFINED
+    for product in (0, 12, 420, 1248):
+        got = timing_rasi(product)
+        assert got["remainder"] == 0
+        assert got["ordinal"] == 12
+        assert got["rasi"] == "Pisces"
+
+    assert timing_nakshatra(430)["zero_reading"] is None
+    assert timing_rasi(430)["zero_reading"] is None
+    assert "no reading in section 25.6" in THE_ZERO_REMAINDER_IS_NOT_DEFINED
+
+
+def test_table_61_runs_end_to_end_on_chart_7():
+    """Exercise 22 supplies BAVs and sodhya pindas for a real chart, so
+    §25.6's procedure can be run without supposing anything. The book works no
+    such case, so these are our figures -- pinned as a regression.
+    """
+    from hora.core.const import EXERCISE_22_BAV, EXERCISE_22_PINDAS
+    from hora.transits.gochara import TABLE_61_TIMING, sodhya_timing
+
+    signs = _chart_7_signs()
+    products = {}
+    for planet, (house, area) in TABLE_61_TIMING.items():
+        got = sodhya_timing(planet, house, planet_sign=signs[planet],
+                            bav_rekhas=EXERCISE_22_BAV[planet],
+                            pinda=EXERCISE_22_PINDAS[planet][2])
+        assert got["in_table_61"] is True
+        assert got["table_61_area"] == area
+        assert got["rekhas"] == EXERCISE_22_BAV[planet][got["house_sign"]]
+        assert got["product"] == got["rekhas"] * EXERCISE_22_PINDAS[planet][2]
+        products[planet] = got["product"]
+
+    assert products == {"Sun": 1165, "Moon": 420, "Mars": 285,
+                        "Mercury": 896, "Jupiter": 372, "Venus": 1248,
+                        "Saturn": 900}
+
+
+def test_the_undefined_zero_is_common_not_a_corner_case():
+    """On Chart 7 the rasi remainder is 0 in four of Table 61's seven rows,
+    and in 22 of all 84 (planet, house) pairs -- none of them from an empty
+    house. It is ordinary arithmetic, which is why OI-143 matters.
+    """
+    from hora.core.const import EXERCISE_22_BAV, EXERCISE_22_PINDAS
+    from hora.transits.gochara import TABLE_61_TIMING, sodhya_timing
+
+    signs = _chart_7_signs()
+
+    def run(planet, house):
+        return sodhya_timing(planet, house, planet_sign=signs[planet],
+                             bav_rekhas=EXERCISE_22_BAV[planet],
+                             pinda=EXERCISE_22_PINDAS[planet][2])
+
+    table_61 = [run(p, h) for p, (h, _a) in TABLE_61_TIMING.items()]
+    assert sum(g["rasi"]["remainder_was_zero"] for g in table_61) == 4
+    assert sum(g["nakshatra"]["remainder_was_zero"] for g in table_61) == 0
+
+    every = [run(p, h) for p in TABLE_61_TIMING for h in range(1, 13)]
+    assert len(every) == 84
+    assert sum(g["rasi"]["remainder_was_zero"] for g in every) == 22
+    assert sum(g["nakshatra"]["remainder_was_zero"] for g in every) == 6
+    assert all(g["rekhas"] > 0 for g in every)
+
+
+def test_sodhya_timing_carries_pvrs_own_warning():
+    """"This approach does not give consistent results." It is served on
+    every result, so nothing built on §25.6 can present it as settled.
+    """
+    from hora.transits.gochara import (
+        SODHYA_TIMING_CLOSING,
+        SODHYA_TIMING_IS_OPEN_TO_RESEARCH,
+        SODHYA_TIMING_OPEN_QUESTIONS,
+        sodhya_timing,
+    )
+
+    bav = [4] * 12
+    got = sodhya_timing("Venus", 7, planet_sign=0, bav_rekhas=bav, pinda=208)
+    assert got["caveat"] == SODHYA_TIMING_IS_OPEN_TO_RESEARCH
+    assert "does not give consistent results" in (
+        SODHYA_TIMING_IS_OPEN_TO_RESEARCH)
+    assert len(SODHYA_TIMING_OPEN_QUESTIONS) == 4
+    assert any("D-12" in q for q in SODHYA_TIMING_OPEN_QUESTIONS)
+    assert any("Moon and Venus" in q for q in SODHYA_TIMING_OPEN_QUESTIONS)
+    assert "may not be the final word" in SODHYA_TIMING_CLOSING
+
+
+def test_sodhya_timing_checks_its_inputs():
+    from hora.core.validate import InputError
+    from hora.transits.gochara import (
+        GocharaError,
+        companion_nakshatras,
+        sodhya_timing,
+        timing_nakshatra,
+    )
+
+    bav = [4] * 12
+    with pytest.raises(GocharaError, match="no sodhya pinda"):
+        sodhya_timing("Rahu", 9, planet_sign=0, bav_rekhas=bav, pinda=86)
+    with pytest.raises(GocharaError, match="no sodhya pinda"):
+        sodhya_timing("Lagna", 9, planet_sign=0, bav_rekhas=bav, pinda=86)
+    with pytest.raises(GocharaError, match="twelve counts"):
+        sodhya_timing("Sun", 9, planet_sign=0, bav_rekhas=[4] * 11, pinda=86)
+    for bad_house in (0, 13):
+        with pytest.raises(InputError):
+            sodhya_timing("Sun", bad_house, planet_sign=0, bav_rekhas=bav,
+                          pinda=86)
+    with pytest.raises(InputError):
+        sodhya_timing("Sun", 9, planet_sign=0, bav_rekhas=bav, pinda=-1)
+    with pytest.raises(InputError):
+        timing_nakshatra(-1)
+    for bad in (-1, 27):
+        with pytest.raises(InputError):
+            companion_nakshatras(bad)

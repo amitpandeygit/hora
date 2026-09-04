@@ -10,9 +10,12 @@ other.
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 from hora.charts.house import house_of_rasi
 from hora.core import validate
-from hora.core.const import GRAHA_NAMES, RASI_NAMES, Graha
+from hora.core.const import GRAHA_NAMES, NAKSHATRA_NAMES, RASI_NAMES, Graha
+from hora.core.constants.nakshatra import NAKSHATRA_LORD
 
 
 class GocharaError(validate.InputError):
@@ -1645,3 +1648,272 @@ EXAMPLE_108_CONCLUSION = (
     "So, as per ashtakavarga, transits are very favorable to Sri Vajpayee's "
     "career on March 19, 1998."
 )
+
+
+# --------------------------------------------------------------------------
+# §25.6 — Timing with sodhya pindas
+# --------------------------------------------------------------------------
+
+SODHYA_TIMING_SOURCE = (
+    "Parasara taught some techniques of timing events based on sodhya "
+    "pindas.")
+
+#: §25.6's core rule, verbatim.
+SODHYA_TIMING_RULE = (
+    "We can take the number of rekhas in any house from a planet and "
+    "multiply the count with the planet's sodhya pinda. We can get a "
+    "nakshatra from that product by dividing it with 27, taking the "
+    "remainder and counting nakshatras from Aswini. Benefics and malefics "
+    "transiting in the nakshatra will give good or bad results "
+    "(respectively) relating to the original house. Especially Saturn's "
+    "transit is important. Saturn's transit in the nakshatra corresponding "
+    "to a particular house makes the signified matters suffer. Jupiter's "
+    "transit is beneficial.")
+
+#: The rasi half of the same rule, with its own ranking clause.
+SODHYA_TIMING_RASI_RULE = (
+    "We can also find a rasi by dividing the product with 12 instead of 27 "
+    "and counting rasis from Aries. Saturn's transit in the resultant rasi "
+    "brings misfortune relating to the original house. However, nakshatras "
+    "are more important.")
+
+#: §25.6's other name for the sodhya pinda, given only here.
+YOGA_PINDA_IS_THE_SAME_THING = (
+    "We should multiply it by the sodhya pinda of the planet (also called "
+    "yoga pinda).")
+
+#: The companion nakshatras some readers add, and the book's reason.
+SODHYA_TIMING_COMPANIONS = (
+    "Some people also take the 10th or 19th nakshatra from the nakshtra "
+    "found above. A nakshatra and the 10th and 19th nakshatras from it are "
+    "owned by the same planet under Vimsottari dasa scheme and they go "
+    "together.")
+
+#: **Finding.** The companion rule is an identity, not an observation. The
+#: 10th from a nakshatra counted inclusively is the 9th after it, Vimsottari
+#: lordship repeats every 9 nakshatras, and 27 is three nines — so *every*
+#: nakshatra shares its lord with its 10th and 19th, all 27 of them, and the
+#: three always partition into one lord's whole holding.
+THE_TENTH_AND_NINETEENTH_ARE_ALWAYS_THE_SAME_LORD = (
+    "Vimsottari lordship repeats every 9 nakshatras and there are 27, so a "
+    "nakshatra, the 10th from it and the 19th from it are the complete set "
+    "of nakshatras one planet owns. The rule holds for all 27, not for some."
+)
+
+#: §25.6's matters per planet, verbatim and in its order.
+SODHYA_TIMING_MATTERS: dict[str, str] = {
+    "Sun": "soul, inherent nature, personality, will power and father",
+    "Moon": "mind, wisdom, peace, happiness and mother",
+    "Mars": "siblings, land and strength",
+    "Mercury": "business, commerce, profession, friends and good behavior",
+    "Jupiter": "the nourishment of body, learning, children and wealth",
+    "Venus": "marriage, comforts, luxuries, vehicles and sexual pleasures",
+    "Saturn": "longevity, livelihood, fears, sadness, dangers and sorrows",
+}
+
+#: §25.6's four-step procedure, in its own words.
+SODHYA_TIMING_PROCEDURE: tuple[str, ...] = (
+    ("When we want to time events relating to a particular matter, we should "
+     "first fix the relevant planet."),
+    "Then we should fix the relevant house.",
+    ("We should then find the number of rekhas in that house from that "
+     "planet in that planet's BAV."),
+    ("We should multiply it by the sodhya pinda of the planet (also called "
+     "yoga pinda). By dividing the product with 27 or 12 and taking the "
+     "remainder, we should find the associated nakshatra or rasi. Then we "
+     "can time key events based on the transits in that nakshatra and rasi."),
+)
+
+#: Table 61 — the seven pairings Parasara gave as specific examples, with the
+#: area of life each reads. Planet -> (house, area).
+TABLE_61_TIMING: dict[str, tuple[int, str]] = {
+    "Sun": (9, "Father"),
+    "Moon": (4, "Mother"),
+    "Mars": (3, "Siblings"),
+    "Mercury": (10, "Profession"),
+    "Jupiter": (5, "Children"),
+    "Venus": (7, "Marriage"),
+    "Saturn": (8, "Longevity"),
+}
+
+#: **Finding.** Table 61 is a shortlist, not the method's scope. §25.6 says
+#: outright that "we can take **any** house from **any** planet", and the
+#: table is only where Parasara worked examples. So `sodhya_timing` takes any
+#: (planet, house) pair and Table 61 is served beside it as the seven that
+#: are attested.
+TABLE_61_IS_A_SHORTLIST_NOT_THE_SCOPE = (
+    "Though Parasara indicated that we can take any house from any planet "
+    "and gave a long list of matters to be seen from each planet, he gave a "
+    "few specific examples. A list of the matters is given in Table 61."
+)
+
+#: §25.6's worked illustration. It supposes its inputs rather than reading a
+#: chart, so it is arithmetic to be reproduced and not a chart fixture.
+ILLUSTRATION_INPUTS = {"planet": "Sun", "house": 9, "planet_sign": "Aq",
+                       "house_sign": "Li", "rekhas": 5, "pinda": 86}
+ILLUSTRATION_WORKING = (
+    "Suppose Sun is in Aq. Suppose Sun's BAV contains 5 rekhas in Li (the "
+    "9th from Aq). Suppose Sun's sodhya pinda is 86. Multiplying 86 with 5, "
+    "we get 430. If we divide 430 by 27, the quotient is 15 and the "
+    "remainder is 25. The 25th constellation is Poorvabhadrapada. So "
+    "Saturn's transit in Poorvabhadrapada is bad for father and Jupiter's "
+    "transit in the same nakshatra is good. Now let us find the rasi. By "
+    "dividing 430 by 12, we get a quotient of 35 and a remainder of 10. So "
+    "Saturn's transit in Cp (the 10th rasi of the zodiac) is bad for father "
+    "and Jupiter's transit in Cp is good.")
+
+#: PVR's own warning about the whole section, and the reason it is here at
+#: all. Nothing built on §25.6 may present its output as settled.
+SODHYA_TIMING_IS_OPEN_TO_RESEARCH = (
+    "However, this approach does not give consistent results. Readers should "
+    "realize that the topic of sodhya pindas is open to research.")
+
+#: The four questions §25.6 leaves open, in its own words.
+SODHYA_TIMING_OPEN_QUESTIONS: tuple[str, ...] = (
+    ("Most astrologers use these principles with only the rasi chart. If "
+     "matters relating to father have to be seen from D-12, as taught by "
+     "Parasara, should we use D-12 when timing events related to father?"),
+    "Should we use the sodhya pinda and rekha count from D-12?",
+    "Should we take the 9th from Sun in rasi chart or take it in D-12?",
+    ("Moreover, as we have learnt, there are some inconsistencies between "
+     "Parasara and Varahamihira in the definition of ashtakavarga and this "
+     "can alter the sodhya pindas of Moon and Venus. In addition, we have "
+     "some controversies in the exact definitions of the reductions to be "
+     "done to get Sodhita Ashtakavarga from Bhinna Ashtakavarga. That can "
+     "again alter sodhya pindas."),
+)
+
+SODHYA_TIMING_CLOSING = (
+    "Timing of events with sodhya pindas is a very important topic, but what "
+    "the readers learn here may not be the final word. It is hoped that "
+    "readers will experiment with an open mind and share their findings with "
+    "other astrologers.")
+
+#: **Gap.** The remainder rule is stated only for a non-zero remainder: 25
+#: gives the 25th nakshatra, 10 the 10th rasi. A product that is a multiple
+#: of 27 or of 12 leaves 0, and §25.6 never says what 0 means. It is reachable
+#: two ways — a house with **no** rekhas makes the product 0 outright, and an
+#: ordinary product can land on a multiple. See OI-143.
+THE_ZERO_REMAINDER_IS_NOT_DEFINED = (
+    "A remainder of 0 has no reading in section 25.6. It arises whenever the "
+    "house holds no rekhas, since the product is then 0, and whenever the "
+    "product is a multiple of 27 or 12."
+)
+
+
+def timing_nakshatra(product: int) -> dict:
+    """§25.6's nakshatra from a product: the remainder mod 27, from Aswini.
+
+    A remainder of 0 is **not** defined by the section. It is returned as the
+    27th, the only reading that keeps the cycle closed, and flagged as ours —
+    see `THE_ZERO_REMAINDER_IS_NOT_DEFINED` and OI-143.
+    """
+    value = int(validate.non_negative("product", int(product)))
+    remainder = value % 27
+    ordinal = remainder if remainder else 27
+    return {
+        "product": value,
+        "divisor": 27,
+        "quotient": value // 27,
+        "remainder": remainder,
+        "ordinal": ordinal,
+        "index": ordinal - 1,
+        "nakshatra": str(NAKSHATRA_NAMES[ordinal - 1]),
+        "lord": str(GRAHA_NAMES[NAKSHATRA_LORD[ordinal - 1]]),
+        "remainder_was_zero": remainder == 0,
+        "zero_reading": (
+            None if remainder else THE_ZERO_REMAINDER_IS_NOT_DEFINED),
+    }
+
+
+def timing_rasi(product: int) -> dict:
+    """§25.6's rasi from the same product: the remainder mod 12, from Aries.
+
+    "However, nakshatras are more important" — said so in the result.
+    """
+    value = int(validate.non_negative("product", int(product)))
+    remainder = value % 12
+    ordinal = remainder if remainder else 12
+    return {
+        "product": value,
+        "divisor": 12,
+        "quotient": value // 12,
+        "remainder": remainder,
+        "ordinal": ordinal,
+        "sign": ordinal - 1,
+        "rasi": str(RASI_NAMES[ordinal - 1]),
+        "remainder_was_zero": remainder == 0,
+        "zero_reading": (
+            None if remainder else THE_ZERO_REMAINDER_IS_NOT_DEFINED),
+        "ranked_below_the_nakshatra": (
+            "However, nakshatras are more important."),
+    }
+
+
+def companion_nakshatras(index: int) -> dict:
+    """The 10th and 19th from a nakshatra — counted inclusively, so the 9th
+    and 18th after it. All three share a Vimsottari lord, always.
+    """
+    start = validate.in_range("nakshatra index", int(index), 0, 26)
+    trio = tuple((start + step) % 27 for step in (0, 9, 18))
+    lords = {str(GRAHA_NAMES[NAKSHATRA_LORD[n]]) for n in trio}
+    return {
+        "nakshatra": str(NAKSHATRA_NAMES[start]),
+        "indexes": trio,
+        "nakshatras": [str(NAKSHATRA_NAMES[n]) for n in trio],
+        "lord": lords.pop(),
+        "counted": "inclusively — the 10th from a nakshatra is the 9th after "
+                   "it",
+        "why": THE_TENTH_AND_NINETEENTH_ARE_ALWAYS_THE_SAME_LORD,
+        "optional": SODHYA_TIMING_COMPANIONS,
+    }
+
+
+def sodhya_timing(planet: str, house: int, *, planet_sign: int,
+                  bav_rekhas: Sequence[int], pinda: int) -> dict:
+    """§25.6's four steps for one (planet, house) pair.
+
+    :param planet: one of the seven; the nodes and lagna have no sodhya pinda.
+    :param house: 1 to 12, counted from `planet_sign`.
+    :param planet_sign: where the planet is, 0 = Aries.
+    :param bav_rekhas: the planet's twelve BAV counts, Aries first.
+    :param pinda: the planet's sodhya pinda, also called its yoga pinda.
+    """
+    if planet not in SODHYA_TIMING_MATTERS:
+        raise GocharaError(
+            f"{planet!r} has no sodhya pinda; the seven are "
+            f"{', '.join(SODHYA_TIMING_MATTERS)}")
+    validate.in_range("house", int(house), 1, 12)
+    validate.in_range("planet sign", int(planet_sign), 0, 11)
+    validate.non_negative("pinda", int(pinda))
+    if len(bav_rekhas) != 12:
+        raise GocharaError(
+            f"a BAV has twelve counts, one per rasi; got {len(bav_rekhas)}")
+
+    sign = (int(planet_sign) + int(house) - 1) % 12
+    rekhas = validate.in_range(
+        f"{planet}'s rekhas in {RASI_NAMES[sign]}", int(bav_rekhas[sign]),
+        0, 8)
+    product = rekhas * int(pinda)
+    attested = TABLE_61_TIMING.get(planet)
+    return {
+        "planet": planet,
+        "house": int(house),
+        "house_sign": sign,
+        "house_rasi": str(RASI_NAMES[sign]),
+        "planet_sign": int(planet_sign),
+        "rekhas": rekhas,
+        "pinda": int(pinda),
+        "product": product,
+        "nakshatra": timing_nakshatra(product),
+        "rasi": timing_rasi(product),
+        "matters": SODHYA_TIMING_MATTERS[planet],
+        "in_table_61": bool(attested and attested[0] == int(house)),
+        "table_61_house": None if attested is None else attested[0],
+        "table_61_area": None if attested is None else attested[1],
+        "reading": (
+            "Saturn's transit in the nakshatra makes the signified matters "
+            "suffer; Jupiter's transit is beneficial. Benefics and malefics "
+            "transiting there give good or bad results respectively."),
+        "caveat": SODHYA_TIMING_IS_OPEN_TO_RESEARCH,
+    }
