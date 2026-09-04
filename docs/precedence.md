@@ -156,6 +156,31 @@ incompleteness in the source**, not rules we failed to find. Filling them from
 elsewhere would produce answers PVR did not endorse while looking like answers
 he did.
 
+### When PVR marks a section as his own research
+
+§25.4 does something no earlier section does: it labels itself. "The actual
+approach is **essentially based on this author's own researches**", it is not
+claimed to have "the sanction of maharshis", and the reader is told that "what
+follows is a product of the very limited intelligence of this author and hence
+prone to errors" with an invitation "to question and to conduct further
+researches in this area".
+
+That is still PVR, so it still outranks BPHS and everything below — the ladder
+does not change. What changes is the **weight of a disagreement**:
+
+| elsewhere in the book | §25.4 |
+|---|---|
+| a conflict with BPHS is a flag for research (OI-15) | there is no BPHS reading to conflict with; the section says so |
+| a gap is acknowledged incompleteness in a classical method | a gap is an open question in a method still being researched |
+| "the book says X" is evidence about Parasari practice | "the book says X" is evidence about PVR's own findings |
+
+**What we do:** implement it as written, exactly as anywhere else, and mark the
+constants and functions as §25.4's so that a later reader can tell which parts
+of the engine rest on the author's research rather than on a classical rule.
+Do not weaken it, do not skip it, and do not let a classical source override it
+by default — the "BPHS never overrides PVR silently" rule applies here as much
+as anywhere, and with more force, since there is no classical rule in view.
+
 ## Obligations on every entry
 
 1. **Register it here before encoding it.** The id exists first.

@@ -818,6 +818,19 @@ computable. What follows is the prose and the readings around them.
 | `SAHAMS_ARE_USEFUL` · `SAHAM_TRANSIT_EXAMPLES` · `SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB` | Cannot be built: sahams are deferred to the Tajaka part and "close to" has no orb. See OI-116 |
 | `EXAMPLE_104_REFERENCE_POINTS` · `EXAMPLE_104_HITS` · `INFLUENCE_THESE_AND_THEY_CAN_GIVE_MARRIAGE` · `JUPITER_TIMES_AUSPICIOUS_EVENTS` · `A_GRAHA_CAN_ASPECT_ITS_OWN_NATAL_POSITION` · `THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED` | Example 104's four reference points and four transit hits. The hits themselves **are** reproduced, by `influences`; these hold what the example says about them |
 
+### Chapter 25 — §25.4, the author's own research (10)
+
+`transits/gochara.py`. `transits_over` and `divisional_interaction` **are**
+consumed; what follows is §25.4's prose, its provenance and its structure.
+
+| constant | why it is not consumed |
+|---|---|
+| `SECTION_25_4_IS_THE_AUTHORS_OWN_RESEARCH` · `BHRIGU_TRANSITS` · `WHY_IT_IS_TAUGHT_ANYWAY` · `THE_AUTHORS_OWN_CAVEAT` | The only provenance block in the book. It changes what a disagreement with this section would mean, not what we compute — see docs/precedence.md |
+| `FOOTNOTE_69` | The definition `transits_over` implements. The prose itself is not read by code |
+| `ONE_ZODIAC_FOR_EVERY_DIVISIONAL_CHART` | §25.4's premise. A test proves it of every varga we build; the sentence is held for the reason it gives |
+| `THE_TWO_AXES` | Rasi/divisional and natal/transit, with what each shows. Structure, not a rule |
+| `WHY_THE_SECOND_INTERACTION_FINE_TUNES` | Ours, not the book's: the arithmetic reason (2) times more finely than (1). A test checks the arithmetic; nothing reads the sentence |
+
 ---
 
 ## How to use this register

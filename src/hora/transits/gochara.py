@@ -1007,3 +1007,149 @@ THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED = (
     "stands 1.4° to 1.5° from a vivaha saham printed at 1 Cp. The book says "
     "\"about 1° away\". The saham itself is not computed."
 )
+
+
+# --------------------------------------------------------------------------
+# §25.4 Transits and divisional charts — PVR's own research
+# --------------------------------------------------------------------------
+
+#: **Provenance, and the only section in the book to carry one.** §25.4 says
+#: outright that it is not classical. Recorded because it changes what a
+#: disagreement with this section would mean, not what we implement — see
+#: docs/precedence.md.
+SECTION_25_4_IS_THE_AUTHORS_OWN_RESEARCH = (
+    "Though the motivation for the approach described here comes from some "
+    "principles described in classics, the actual approach is essentially "
+    "based on this author's own researches."
+)
+
+#: The tradition it may or may not touch. The book does not claim the link.
+BHRIGU_TRANSITS = (
+    "This author heard about \"Bhrigu transits\", which correlate the transit "
+    "positions in navamsa chart with the natal positions in rasi chart. "
+    "However, he does not know much about the tradition of Bhrigu transits to "
+    "conclude whether or not his findings are loosely related to that "
+    "tradition."
+)
+
+#: Why it is taught anyway, and the caution attached to it.
+WHY_IT_IS_TAUGHT_ANYWAY = (
+    "Though this author prefers to teach only those approaches that have the "
+    "sanction of maharshis, he finds this particular approach superior to "
+    "most other techniques of transit analysis. Moreover, this approach does "
+    "not violate any teachings of maharshis. This is also a fertile area for "
+    "research and deserves our attention. Hence it will be covered here."
+)
+
+THE_AUTHORS_OWN_CAVEAT = (
+    "Readers are advised to keep in mind that what follows is a product of "
+    "the very limited intelligence of this author and hence prone to errors. "
+    "Readers are encouraged to question and to conduct further researches in "
+    "this area."
+)
+
+#: Footnote 69's definition of a phrase §25.3 and §25.4 both use without it.
+FOOTNOTE_69 = (
+    "We say that \"Jupiter transits over Venus\", if Jupiter, in his transit, "
+    "occupies the rasi occupied by Venus in the natal chart."
+)
+
+
+def transits_over(transit_sign: int, natal_sign: int) -> bool:
+    """Footnote 69 — whether a transiting graha "transits over" a natal one.
+
+    Occupation only: the aspect cases of :data:`THE_MASTER_RULE` are a
+    different relation, and the footnote defines the narrower one.
+    """
+    return (validate.in_range("transit_sign", transit_sign, 0, 11)
+            == validate.in_range("natal_sign", natal_sign, 0, 11))
+
+
+#: **§25.4's whole argument, in one move.** Every divisional chart is drawn on
+#: the same zodiac, so a sign in a natal varga and the same sign in the transit
+#: rasi chart are one sign — and a transit that can reach what stands in that
+#: sign in the rasi chart can reach what stands in it in any varga.
+ONE_ZODIAC_FOR_EVERY_DIVISIONAL_CHART = (
+    "We do not have different zodiacs for different divisional charts. All "
+    "the divisional charts use the same zodiac. So Cancer in natal navamsa "
+    "chart and Cancer in transit rasi chart are not different. They are one "
+    "and the same. If Jupiter transiting in Cancer can influence the house "
+    "and planets stationed in Cancer in rasi chart, he should be able to "
+    "influence the house and planets stationed in Cancer in navamsa chart "
+    "too! We can extend this logic to all the divisional charts."
+)
+
+#: The two axes §25.4 sets up, which is what makes four combinations.
+THE_TWO_AXES: tuple[dict[str, str], ...] = (
+    {"axis": "rasi vs divisional",
+     "rasi": "everything that exists at the physical level",
+     "divisional": "various areas of life",
+     "interaction": "how events in various areas of life materialize at the "
+                    "physical level"},
+    {"axis": "natal vs transit", "natal": "the innate potential",
+     "transit": "the temporary influences",
+     "interaction": "how temporary influences convert innate potential into "
+                    "actions and life events"},
+)
+
+#: The two of the four combinations §25.4 calls most important — the **crossed**
+#: pairs. It never mentions natal-rasi against transit-rasi, which is §25.2 and
+#: §25.3, nor natal-varga against transit-varga at all.
+THE_TWO_IMPORTANT_INTERACTIONS: tuple[dict[str, object], ...] = (
+    {"number": 1, "natal": "a natal divisional chart",
+     "transit": "the transit rasi chart",
+     "shows": "how innate potential in a particular area of life is "
+              "influenced at a given time to result in action at the "
+              "physical level",
+     "timing": "coarse"},
+    {"number": 2, "natal": "the natal rasi chart",
+     "transit": "a transit divisional chart",
+     "shows": "how the potential at the physical level is transformed into an "
+              "event in a particular area of life",
+     "timing": "fine-tune"},
+)
+
+#: **Finding.** §25.4 says (1) gives coarse timing and (2) fine-tunes it, and
+#: never says why. The reason is arithmetic: a transit **rasi** sign changes
+#: once in 30° of a graha's motion, while a transit **D-9** sign changes every
+#: 3°20' — nine times as often, and a D-60 sign sixty times. So the chart that
+#: moves in (2) resolves time N times finer than the chart that moves in (1),
+#: where N is the varga's divisor.
+WHY_THE_SECOND_INTERACTION_FINE_TUNES = (
+    "In interaction (1) the moving chart is the transit rasi chart, whose "
+    "signs change once per 30 degrees of motion. In (2) it is a transit "
+    "divisional chart, whose signs change every 30/N degrees. The second "
+    "therefore resolves time N times more finely, N being the divisor."
+)
+
+
+def divisional_interaction(interaction: int, graha: int, transit_sign: int,
+                           natal_lagna: int, natal_signs: dict[int, int],
+                           *, varga_code: str) -> dict:
+    """§25.4's two interactions, which are :func:`influences` given a varga on
+    one side or the other.
+
+    :param interaction: 1 for a natal divisional chart against the transit
+        rasi chart, 2 for the natal rasi chart against a transit divisional
+        chart.
+    :param transit_sign: the transiting graha's sign **in whichever chart the
+        interaction moves in** — the rasi chart for (1), the varga for (2).
+    :param natal_lagna, natal_signs: the natal side, likewise in the varga for
+        (1) and in the rasi chart for (2).
+
+    The caller supplies both sides already reduced to signs, because §25.4's
+    point is that a sign is a sign: there is one zodiac, so no conversion
+    happens here. What this adds over :func:`influences` is the label — which
+    interaction it is, and how finely it times.
+    """
+    if interaction not in (1, 2):
+        raise GocharaError(
+            f"§25.4 names two interactions, 1 and 2; got {interaction!r}")
+    row = THE_TWO_IMPORTANT_INTERACTIONS[interaction - 1]
+    return {
+        "interaction": interaction,
+        "natal": row["natal"], "transit": row["transit"],
+        "shows": row["shows"], "timing": row["timing"],
+        "varga": varga_code,
+        "reaches": influences(graha, transit_sign, natal_lagna, natal_signs),
+    }

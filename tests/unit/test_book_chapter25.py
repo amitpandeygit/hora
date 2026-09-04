@@ -1685,3 +1685,180 @@ def test_the_saham_claim_is_consistent_but_cannot_be_checked():
                   if row["reference"] == "sahams")
     assert sahams["computable"] is False
     assert "not computed" in THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED
+
+
+# ---------------------------------------------------------------------------
+# §25.4 Transits and divisional charts
+# ---------------------------------------------------------------------------
+
+def test_25_4_labels_itself_as_the_authors_own_research():
+    """No earlier section carries a provenance. This one says it is not
+    classical, does not claim the sanction of maharshis, and invites the
+    reader to question it.
+    """
+    from hora.transits.gochara import (
+        BHRIGU_TRANSITS,
+        SECTION_25_4_IS_THE_AUTHORS_OWN_RESEARCH,
+        THE_AUTHORS_OWN_CAVEAT,
+        WHY_IT_IS_TAUGHT_ANYWAY,
+    )
+
+    assert "own researches" in SECTION_25_4_IS_THE_AUTHORS_OWN_RESEARCH
+    assert "motivation" in SECTION_25_4_IS_THE_AUTHORS_OWN_RESEARCH
+    assert "does not know much about the tradition" in BHRIGU_TRANSITS
+    assert "sanction of maharshis" in WHY_IT_IS_TAUGHT_ANYWAY
+    assert "does not violate any teachings" in WHY_IT_IS_TAUGHT_ANYWAY
+    assert "prone to errors" in THE_AUTHORS_OWN_CAVEAT
+    assert "encouraged to question" in THE_AUTHORS_OWN_CAVEAT
+
+
+def test_footnote_69_defines_transiting_over():
+    """"Jupiter transits over Venus" means Jupiter occupies the rasi Venus
+    occupies natally -- occupation only, not aspect.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import (
+        FOOTNOTE_69,
+        influenced_rasis,
+        transits_over,
+    )
+
+    assert "occupies the rasi occupied by Venus" in FOOTNOTE_69
+
+    natal_venus = R["Cn"]
+    assert transits_over(R["Cn"], natal_venus)
+    assert not transits_over(R["Cp"], natal_venus)
+
+    # Jupiter in Cp aspects Cn but does not transit over it
+    reach = influenced_rasis(Graha.JUPITER, R["Cp"])
+    assert natal_venus in reach["aspects"]
+    assert not transits_over(reach["occupies"], natal_venus)
+
+
+def test_every_divisional_chart_uses_the_same_zodiac():
+    """§25.4's premise, and it is checkable: every varga maps into the same
+    twelve signs, so a sign in a natal varga and a sign in the transit rasi
+    chart are the same sign.
+    """
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_NAMES
+    from hora.transits.gochara import ONE_ZODIAC_FOR_EVERY_DIVISIONAL_CHART
+
+    for code in ("D1", "D9", "D10", "D12", "D24", "D60"):
+        signs = {varga(longitude / 4.0, code).sign
+                 for longitude in range(360 * 4)}
+        assert signs == set(range(12)), code
+    assert len(RASI_NAMES) == 12
+
+    assert "same zodiac" in ONE_ZODIAC_FOR_EVERY_DIVISIONAL_CHART
+    assert "one and the same" in ONE_ZODIAC_FOR_EVERY_DIVISIONAL_CHART
+
+
+def test_the_two_axes_make_four_combinations_and_25_4_names_the_crossed_two():
+    """Rasi/divisional and natal/transit. The two the section calls most
+    important are the crossed pairs; it never mentions the two like-for-like
+    ones, one of which is §25.2 and §25.3.
+    """
+    from hora.transits.gochara import (
+        THE_TWO_AXES,
+        THE_TWO_IMPORTANT_INTERACTIONS,
+    )
+
+    assert [row["axis"] for row in THE_TWO_AXES] == [
+        "rasi vs divisional", "natal vs transit"]
+
+    named = [(row["natal"], row["transit"])
+             for row in THE_TWO_IMPORTANT_INTERACTIONS]
+    assert named == [
+        ("a natal divisional chart", "the transit rasi chart"),
+        ("the natal rasi chart", "a transit divisional chart"),
+    ]
+    # both are crossed: never varga-against-varga, never rasi-against-rasi
+    for natal, transit in named:
+        assert ("divisional" in natal) != ("divisional" in transit)
+
+
+def test_the_second_interaction_fine_tunes_because_a_varga_sign_is_narrower():
+    """§25.4 says (1) is coarse and (2) fine-tunes, and never says why. A
+    transit rasi sign changes once per 30 degrees; a transit D-N sign changes N
+    times as often.
+    """
+    from hora.charts.vargas import varga
+    from hora.transits.gochara import (
+        THE_TWO_IMPORTANT_INTERACTIONS,
+        WHY_THE_SECOND_INTERACTION_FINE_TUNES,
+    )
+
+    assert [row["timing"] for row in THE_TWO_IMPORTANT_INTERACTIONS] == [
+        "coarse", "fine-tune"]
+
+    for code, divisor in (("D1", 1), ("D9", 9), ("D10", 10), ("D60", 60)):
+        changes, previous = 0, None
+        step = 30.0 / divisor / 4.0
+        position = 0.0
+        while position < 30.0:
+            sign = varga(position, code).sign
+            if sign != previous:
+                changes += 1
+                previous = sign
+            position += step
+        assert changes == divisor, code
+
+    assert "N times more finely" in WHY_THE_SECOND_INTERACTION_FINE_TUNES
+
+
+def test_the_master_rule_needs_no_change_to_read_a_varga():
+    """That is §25.4's whole point: one zodiac, so the same call works with a
+    natal navamsa on one side. Demonstrated mechanically on Chart 53 -- the
+    reading itself is not the book's.
+    """
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+    from hora.transits.gochara import divisional_interaction, influences
+
+    printed = longitudes(53)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    navamsa = {int(g): varga(printed[n], "D9").sign for n, g in named.items()}
+    navamsa_lagna = varga(printed["Asc"], "D9").sign
+
+    rasi_rows = influences(Graha.JUPITER, R["Pi"],
+                           int(printed["Asc"] // 30),
+                           {int(g): int(printed[n] // 30)
+                            for n, g in named.items()})
+    varga_rows = influences(Graha.JUPITER, R["Pi"], navamsa_lagna, navamsa)
+
+    # the same four rasis are reached either way -- the transit has not moved
+    assert ([row["rasi"] for row in rasi_rows]
+            == [row["rasi"] for row in varga_rows])
+    # what stands in them differs, because the natal chart differs
+    assert rasi_rows != varga_rows
+
+    got = divisional_interaction(1, Graha.JUPITER, R["Pi"], navamsa_lagna,
+                                 navamsa, varga_code="D9")
+    assert got["timing"] == "coarse"
+    assert got["varga"] == "D9"
+    assert got["reaches"] == tuple(varga_rows)
+
+
+def test_divisional_interaction_checks_its_number():
+    from hora.core.const import Graha
+    from hora.transits.gochara import GocharaError, divisional_interaction
+
+    with pytest.raises(GocharaError, match="names two interactions"):
+        divisional_interaction(3, Graha.JUPITER, 0, 0, {}, varga_code="D9")
+
+
+def test_precedence_records_25_4s_standing():
+    """PVR still outranks BPHS here; what changes is what a disagreement
+    means, and the register says so.
+    """
+    import pathlib
+
+    text = pathlib.Path("docs/precedence.md").read_text()
+    assert "When PVR marks a section as his own research" in text
+    assert "own researches" in text
+    assert "prone to errors" in text
+    assert "never overrides PVR silently" in text
