@@ -156,7 +156,7 @@ THE_TABLE_IS_NOT_THE_READING = (
 #: called finished early or a table registered without being built.
 STANDARD_RESULT_TABLES: dict[int, dict[str, object]] = {
     53: {"for": "Sun", "built": True},
-    54: {"for": None, "built": False},
+    54: {"for": "Moon", "built": True},
     55: {"for": None, "built": False},
     56: {"for": None, "built": False},
     57: {"for": None, "built": False},
@@ -206,9 +206,54 @@ SUNS_GOOD_HOUSES_ARE_THE_UPACHAYAS = (
     "Those four are §7's upachaya houses, which Table 53 does not name."
 )
 
+# --------------------------------------------------------------------------
+# Table 54 — Moon's transit from janma rasi
+# --------------------------------------------------------------------------
+
+#: Table 54 exactly as printed, in house order.
+TABLE_54_MOON: tuple[dict[str, object], ...] = (
+    {"house": 1, "snapshot": "Good", "results": "Comfort, good spirits"},
+    {"house": 2, "snapshot": "Bad", "results": "Obstacles, losses"},
+    {"house": 3, "snapshot": "Good", "results": "Gains, happiness"},
+    {"house": 4, "snapshot": "Bad",
+     "results": "Lack of peace of mind, distrust"},
+    {"house": 5, "snapshot": "Bad",
+     "results": "Failures, disappointments, sadness"},
+    {"house": 6, "snapshot": "Good", "results": "Happiness, health, wealth"},
+    {"house": 7, "snapshot": "Good", "results": "Respect, gains"},
+    {"house": 8, "snapshot": "Bad", "results": "Losses, tension, worries"},
+    {"house": 9, "snapshot": "Bad", "results": "Mental uneasiness"},
+    {"house": 10, "snapshot": "Good", "results": "Success, gains, authority"},
+    {"house": 11, "snapshot": "Good", "results": "Prosperity, comforts, gains"},
+    {"house": 12, "snapshot": "Bad",
+     "results": "Injuries, expenditure, sadness"},
+)
+
+#: **Finding.** Tables 53 and 54 agree on ten of twelve houses and differ only
+#: on the **1st and the 7th** — the axis through janma rasi itself. The Sun is
+#: Bad in both and the Moon Good in both; every other house has the same
+#: verdict in the two tables. So Moon's Good set is Sun's plus that axis, and
+#: Sun's four Good houses are a strict subset of Moon's six.
+SUN_AND_MOON_DIFFER_ONLY_ON_THE_1_7_AXIS = (
+    "Table 53 and Table 54 give the same verdict in ten of twelve houses. The "
+    "two exceptions are the 1st and the 7th, Bad for the Sun and Good for the "
+    "Moon -- janma rasi itself and the house opposite it."
+)
+
+#: **Finding.** The verdicts agreeing does not make the rows copies: where both
+#: tables say Good or both say Bad, the typical results are still different
+#: words. The 3rd is "Wealth, good health, victory" for the Sun and "Gains,
+#: happiness" for the Moon.
+AGREEING_SNAPSHOTS_ARE_NOT_THE_SAME_RESULTS = (
+    "No house has the same typical results in Tables 53 and 54, including the "
+    "ten where the snapshots agree."
+)
+
+
 #: Every supplied table, keyed by graha. Tables 54 to 59 join it as they come.
 STANDARD_RESULTS: dict[int, tuple[dict[str, object], ...]] = {
     int(Graha.SUN): TABLE_53_SUN,
+    int(Graha.MOON): TABLE_54_MOON,
 }
 
 
@@ -276,3 +321,30 @@ SEVEN_TABLES_ARE_PROMISED = (
     "The standard results given in literature are given in Table 53 - Table "
     "59."
 )
+
+
+def agreement(first: int, second: int) -> dict:
+    """Where two supplied tables give the same verdict and where they part.
+
+    Useful as Tables 53 to 59 accumulate: the tables are printed one per graha
+    and never compared, so any structure across them is ours to find.
+    """
+    left = validate.in_range("first", int(first), 0, 8)
+    right = validate.in_range("second", int(second), 0, 8)
+    for graha in (left, right):
+        if graha not in STANDARD_RESULTS:
+            raise GocharaError(
+                f"§25.2's standard results for {GRAHA_NAMES[graha]} have not "
+                f"been supplied")
+
+    agree: list[int] = []
+    differ: list[int] = []
+    for house in range(1, 13):
+        a = STANDARD_RESULTS[left][house - 1]["snapshot"]
+        b = STANDARD_RESULTS[right][house - 1]["snapshot"]
+        (agree if a == b else differ).append(house)
+    return {
+        "first": left, "first_name": str(GRAHA_NAMES[left]),
+        "second": right, "second_name": str(GRAHA_NAMES[right]),
+        "agree": tuple(agree), "differ": tuple(differ),
+    }
