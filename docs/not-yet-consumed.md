@@ -768,6 +768,21 @@ Part 2.)
 | `kalachakra.PVRS_FAVOURITE_DASA` · `kalachakra.THE_COMPUTATION_IS_CONTROVERSIAL` | Provenance. The second matters for D-67 and OI-139 — chapter 24 is PVR's chosen recension of BPHS, so a defect in its tables may be his source's |
 | `kalachakra.APPLIES_TO_EVERYONE` · `kalachakra.REJECTED_APPLICABILITY_TEST` | A restriction the book **rejects**. Consumed as an absence: no applicability gate exists in the module, and a test asserts none |
 
+### Part 3 — the opening page (7)
+
+Part 3 opens by defining "transits", naming its two inputs and saying that
+"some" techniques follow. Nothing here is a calculation, and unlike Part 2's
+opening there is no roadmap to build against.
+
+| constant | why it is not consumed |
+|---|---|
+| `TRANSITS_MEANS` · `TRANSITS_RELATE_TWO_CHARTS` | The definition: a transit is a relation between a chart for a given time and a chart for a birth, not a property of the sky. Prose; the relation is what the part goes on to read |
+| `TRANSIT_INPUTS` | The same two inputs as data, with where each comes from. Held so a later chapter's technique can be checked against which input it uses |
+| `POSITIONS_ARE_ASSUMED` | Part 3's scope: positions come from software, an ephemeris or a panchanga, and **judging** them is the subject. A statement about the part, not a rule |
+| `PART_3_NEEDS_NO_NEW_EPHEMERIS` | Our own note that both inputs are already computable, so nothing in Part 3 waits on the engine. A test proves it by computing a natal chart and a later one from the same call |
+| `PART_3_IS_KNOWINGLY_PARTIAL` | "Some of those techniques are explained in this part." Recorded because Part 2's opening named its nine and this one names none, so there is nothing to check off |
+| `TRANSIT_VERBATIM_CONSTANTS` | The fidelity list for the four transcribed passages above |
+
 ---
 
 ## How to use this register
