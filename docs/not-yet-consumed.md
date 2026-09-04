@@ -783,6 +783,22 @@ opening there is no roadmap to build against.
 | `PART_3_IS_KNOWINGLY_PARTIAL` | "Some of those techniques are explained in this part." Recorded because Part 2's opening named its nine and this one names none, so there is nothing to check off |
 | `TRANSIT_VERBATIM_CONSTANTS` | The fidelity list for the four transcribed passages above |
 
+### Chapter 25 — §25.1's vocabulary and §25.2's opening (10)
+
+`transits/gochara.py`. The house count itself is consumed —
+`house_from_janma` and `houses_from_janma` run §7.1's rule from janma rasi —
+and the seven result tables arrive one at a time.
+
+| constant | why it is not consumed |
+|---|---|
+| `TRANSIT_MEANS` · `NATAL_MEANS` | §25.1's two definitions. Prose |
+| `TRANSIT_SYNONYMS` · `NATAL_SYNONYMS` | transit/chaara/gochaara and natal/radical/birth/janma. Held so a reader of our output need not guess they are the same word; no code branches on them |
+| `CORRELATION_IS_THE_METHOD` | The chapter's scope — "several reference points", "some methods". A statement about the chapter |
+| `MOON_IS_THE_MOST_POPULAR_REFERENCE` · `JANMA_RASI_MEANS` | Why Moon is taken first and what janma rasi is. `janma_rasi` implements the definition; the prose is not read by code |
+| `THE_DASA_LORDS_TRANSIT_MATTERS_MOST` | A cross-link to Vimsottari, agreeing with §24.5's `DASA_SPECIALISATIONS`. No reading layer joins a dasa lord to a transit yet |
+| `THE_TABLES_ARE_REFERENCE_ONLY` · `THE_SUBJECT_COMES_FROM_NATAL_LORDSHIP` · `THE_TABLE_IS_NOT_THE_READING` | The caveat that governs Tables 53 to 59: the table gives the valence, natal lordship gives the subject. Cannot be consumed until a table exists to qualify |
+| `STANDARD_RESULT_TABLES` · `SEVEN_TABLES_ARE_PROMISED` | The roadmap for §25.2, all seven still unbuilt. A test fails if one is registered built without being tested |
+
 ---
 
 ## How to use this register
