@@ -1370,3 +1370,73 @@ PARASARA_CHECKSUM_INVARIANT = (
     "references. The machine-checkable residue is that benefic and malefic "
     "must account for all eight references in every house of every table: "
     "8 tables x 12 houses = 96 checks.")
+
+
+# --------------------------------------------------------------------------
+# §25.5.2 — Kakshyas
+# --------------------------------------------------------------------------
+# Chapter 25's subsection, kept here rather than with the transit rules: a
+# kakshya is a division of a rasi, of the same family as the tables above, and
+# this is where a reader looks for it. `transits/gochara.py` cites it.
+
+KAKSHYA_MEANS = "orbit"
+
+KAKSHYA_DEFINITION = (
+    "Each rasi is divided into eight kakshyas of 3º 45' each. Kakshya "
+    "literally means “orbit”.")
+
+#: The rule that makes kakshyas worth computing at all — whose column of the
+#: PAV to read first when a graha is transiting.
+KAKSHYA_LORD_IS_THE_REFERENCE_THAT_MATTERS = (
+    "When a planet is in Saturn's kakshya, its placement with respect to "
+    "Saturn is the most important. When a planet is in Jupiter's kakshya, "
+    "its placement with respect to Jupiter is the most important.")
+
+KAKSHYA_ORIGIN = (
+    "The first kakshya in each rasi starts from 0º in that rasi and ends at "
+    "3º 45'. Saturn is the ruler of the first kakshya.")
+
+#: Eight kakshyas to a rasi.
+KAKSHYA_COUNT = 8
+
+#: 30º / 8, in degrees. The book writes it 3º 45'.
+KAKSHYA_SPAN = 3.75
+
+#: Table 60, in the printed order: (start, end, lord). Degrees within the
+#: rasi. The spans are contiguous and half-open — each row's end is the next
+#: row's start, so a graha exactly on a boundary belongs to the later kakshya.
+TABLE_60_KAKSHYAS: tuple[tuple[float, float, str], ...] = (
+    (0.00, 3.75, "Saturn"),
+    (3.75, 7.50, "Jupiter"),
+    (7.50, 11.25, "Mars"),
+    (11.25, 15.00, "Sun"),
+    (15.00, 18.75, "Venus"),
+    (18.75, 22.50, "Mercury"),
+    (22.50, 26.25, "Moon"),
+    (26.25, 30.00, "Lagna"),
+)
+
+#: Table 60's third column alone, first kakshya first.
+KAKSHYA_LORDS: tuple[str, ...] = tuple(
+    lord for _start, _end, lord in TABLE_60_KAKSHYAS)
+
+#: **Finding.** The book prints Table 60 without saying where its order comes
+#: from. It is `HORA_LORD_ORDER` — the classical sequence of decreasing
+#: apparent speed, Saturn down to Moon, that §1.3.11 uses for planetary hours
+#: — with Lagna, the fastest reference of all, appended. So the third column
+#: is not an eighth arbitrary list to be typed from the page; it is a sequence
+#: we already hold, and the test derives the column and compares.
+THE_KAKSHYA_LORDS_ARE_THE_HORA_ORDER_PLUS_LAGNA = (
+    "Table 60's lords run Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon, "
+    "Lagna. The first seven are HORA_LORD_ORDER exactly — slowest first — and "
+    "Lagna, which is faster than all of them, closes the rasi.")
+
+#: **Finding.** The kakshya order is *not* `ASHTAKAVARGA_REFERENCES`. Chapter
+#: 12 numbers the eight references Sun first; Table 60 runs them Saturn first.
+#: Both orders name the same eight, so a PAV row can be indexed either way and
+#: nothing but the ordering changes — but the two must not be zipped together.
+THE_TWO_ORDERINGS_OF_THE_EIGHT_MUST_NOT_BE_ZIPPED = (
+    "ASHTAKAVARGA_REFERENCES is Sun, Moon, Mars, Mercury, Jupiter, Venus, "
+    "Saturn, Lagna. KAKSHYA_LORDS is Saturn, Jupiter, Mars, Sun, Venus, "
+    "Mercury, Moon, Lagna. The same eight names in different orders; only "
+    "Mars and Lagna sit in the same position in both.")

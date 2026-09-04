@@ -27,6 +27,9 @@ from hora.core.const import (
     ELEMENT_NAMES,
     GRAHA_NAMES,
     JUPITER_ASHTAKAVARGA_ROWS,
+    KAKSHYA_COUNT,
+    KAKSHYA_LORDS,
+    KAKSHYA_SPAN,
     LAGNA_ASHTAKAVARGA_ROWS,
     MARS_ASHTAKAVARGA_ROWS,
     MERCURY_ASHTAKAVARGA_ROWS,
@@ -46,6 +49,7 @@ from hora.core.const import (
     SUN_ASHTAKAVARGA_ROWS,
     TABLE_28_RASIMANA,
     TABLE_29_GRAHAMANA,
+    TABLE_60_KAKSHYAS,
     VENUS_ASHTAKAVARGA_ROWS,
     Graha,
 )
@@ -924,3 +928,81 @@ def sodhya_pinda(owner: str, soav: Sequence[int],
         graha_pinda=graha_total,
         sodhya_pinda=rasi_total + graha_total,
     )
+
+
+# --------------------------------------------------------------------------
+# §25.5.2 — Kakshyas
+# --------------------------------------------------------------------------
+
+@dataclass(frozen=True, slots=True)
+class Kakshya:
+    """One of the eight 3º 45' divisions of a rasi.
+
+    `index` is 1-based, as Table 60 reads. `start` and `end` are degrees
+    *within* the rasi; `start_longitude` and `end_longitude` are the same
+    bounds on the zodiac, so a caller does not have to add the rasi back.
+    """
+
+    #: 1..8, first kakshya first.
+    index: int
+    #: Table 60's third column.
+    lord: str
+    #: The rasi this kakshya belongs to, 0 = Aries.
+    rasi: int
+    #: Degrees within the rasi.
+    start: float
+    end: float
+    #: The same bounds as sidereal longitudes.
+    start_longitude: float
+    end_longitude: float
+
+
+def kakshya_bounds(index: int) -> tuple[float, float]:
+    """Degrees within a rasi spanned by the `index`-th kakshya, 1-based.
+
+    The bounds are half-open: a graha exactly on a boundary belongs to the
+    later kakshya, which is the only reading that keeps the eight spans a
+    partition of the rasi.
+    """
+    validate.in_range("kakshya index", index, 1, KAKSHYA_COUNT)
+    start, end, _lord = TABLE_60_KAKSHYAS[index - 1]
+    return (start, end)
+
+
+def kakshya_lord(index: int) -> str:
+    """Table 60's lord of the `index`-th kakshya, 1-based."""
+    validate.in_range("kakshya index", index, 1, KAKSHYA_COUNT)
+    return KAKSHYA_LORDS[index - 1]
+
+
+def kakshya_of(longitude: float) -> Kakshya:
+    """The kakshya a sidereal longitude falls in.
+
+    §25.5.2's purpose is the lord: it names the ashtakavarga reference whose
+    PAV row matters most for a graha sitting here.
+    """
+    longitude = validate.longitude("longitude", float(longitude))
+    rasi = int(longitude // 30)
+    within = longitude - rasi * 30.0
+    index = min(int(within // KAKSHYA_SPAN) + 1, KAKSHYA_COUNT)
+    start, end = kakshya_bounds(index)
+    return Kakshya(
+        index=index,
+        lord=kakshya_lord(index),
+        rasi=rasi,
+        start=start,
+        end=end,
+        start_longitude=rasi * 30.0 + start,
+        end_longitude=rasi * 30.0 + end,
+    )
+
+
+def kakshyas(rasi: int = 0) -> tuple[Kakshya, ...]:
+    """All eight kakshyas of a rasi — Table 60 as data.
+
+    The default is Aries, where the bounds within the rasi and the longitudes
+    coincide and the result is the printed table itself.
+    """
+    validate.in_range("rasi", rasi, 0, 11)
+    return tuple(kakshya_of(rasi * 30.0 + (index - 1) * KAKSHYA_SPAN)
+                 for index in range(1, KAKSHYA_COUNT + 1))

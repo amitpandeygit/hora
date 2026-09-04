@@ -868,6 +868,20 @@ so what follows is prose and findings around it.
 | `TOO_WEAK_MEANS_THE_EXTREME_NOT_THE_BAND` | Ours: a reading of one phrase, needed to keep the example consistent with §25.5's bands |
 | `JUPITER_IS_CARRIED_BY_HIS_OWN_BAV` · `THE_DOMINATION_RULE_IS_SET_ASIDE_FOR_JUPITER` | The example verbatim, and ours noting it goes against §25.5.1's own precedence. `transit_strength` still applies the rule as written |
 
+### Chapter 25 — §25.5.2's kakshyas (6)
+
+`core/constants/ashtakavarga.py`, cited from `charts/ashtakavarga.py`. The
+division itself **is** consumed — `kakshya_of`, `kakshya_bounds`,
+`kakshya_lord` and `kakshyas` read Table 60 — so what follows is prose,
+findings, and one rule whose use has not been printed yet.
+
+| constant | why it is not consumed |
+|---|---|
+| `KAKSHYA_MEANS` · `KAKSHYA_DEFINITION` · `KAKSHYA_ORIGIN` | The section verbatim: the gloss "orbit", the eight-way division, and where the first kakshya starts. The functions implement all three |
+| `KAKSHYA_LORD_IS_THE_REFERENCE_THAT_MATTERS` | **The rule the section exists for**, and the only one here not yet applied. It says whose PAV row to read first for a transiting graha; §25.5.2's title promises the PAV link and the page supplied stops at Table 60. Held verbatim until the rest of the section arrives |
+| `THE_KAKSHYA_LORDS_ARE_THE_HORA_ORDER_PLUS_LAGNA` | Ours: where Table 60's third column comes from. The test derives the column from the hora-lord order and compares, so the claim is checked rather than consumed |
+| `THE_TWO_ORDERINGS_OF_THE_EIGHT_MUST_NOT_BE_ZIPPED` | Ours: a warning that the kakshya order and the ashtakavarga reference order name the same eight differently. A test pins the two positions that agree |
+
 ---
 
 ## How to use this register

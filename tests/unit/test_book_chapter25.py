@@ -8,6 +8,7 @@ cannot be called finished early.
 from __future__ import annotations
 
 import re
+from itertools import pairwise
 
 import pytest
 
@@ -3091,3 +3092,185 @@ def test_charts_58_and_59_both_recompute():
         for name, graha in GRAHA_OF.items():
             assert abs(computed.positions[int(graha)].longitude
                        - printed[name]) * 60 < 1.0, (number, name)
+
+
+# --------------------------------------------------------------------------
+# §25.5.2 — kakshyas, and Table 60
+# --------------------------------------------------------------------------
+
+def test_25_5_2_divides_each_rasi_into_eight_kakshyas():
+    """"Each rasi is divided into eight kakshyas of 3º 45' each. Kakshya
+    literally means "orbit"."
+    """
+    from hora.core.const import (
+        KAKSHYA_COUNT,
+        KAKSHYA_DEFINITION,
+        KAKSHYA_MEANS,
+        KAKSHYA_SPAN,
+    )
+
+    assert KAKSHYA_COUNT == 8
+    assert KAKSHYA_SPAN == 3.75
+    assert KAKSHYA_COUNT * KAKSHYA_SPAN == 30.0
+    assert KAKSHYA_MEANS == "orbit"
+    assert "3º 45'" in KAKSHYA_DEFINITION
+    assert KAKSHYA_MEANS in KAKSHYA_DEFINITION
+
+
+def test_table_60_is_contiguous_and_covers_the_whole_rasi():
+    from hora.core.const import KAKSHYA_SPAN, TABLE_60_KAKSHYAS
+
+    assert len(TABLE_60_KAKSHYAS) == 8
+    assert TABLE_60_KAKSHYAS[0][0] == 0.0
+    assert TABLE_60_KAKSHYAS[-1][1] == 30.0
+    for first, second in pairwise(TABLE_60_KAKSHYAS):
+        assert first[1] == second[0]
+    for start, end, _lord in TABLE_60_KAKSHYAS:
+        assert round(end - start, 10) == KAKSHYA_SPAN
+    assert len({lord for _s, _e, lord in TABLE_60_KAKSHYAS}) == 8
+
+
+def test_saturn_rules_the_first_kakshya_which_starts_at_zero():
+    """"The first kakshya in each rasi starts from 0º in that rasi and ends at
+    3º 45'. Saturn is the ruler of the first kakshya."
+    """
+    from hora.charts.ashtakavarga import kakshya_bounds, kakshya_lord
+    from hora.core.const import KAKSHYA_ORIGIN
+
+    assert kakshya_bounds(1) == (0.0, 3.75)
+    assert kakshya_lord(1) == "Saturn"
+    assert "Saturn is the ruler of the first kakshya" in KAKSHYA_ORIGIN
+
+
+def test_table_60s_lords_are_the_hora_order_with_lagna_appended():
+    """The book prints the column without saying where it comes from. It is
+    §1.3.11's speed order, Saturn down to Moon, then Lagna.
+    """
+    from hora.core.const import (
+        GRAHA_NAMES,
+        HORA_LORD_ORDER,
+        KAKSHYA_LORDS,
+        THE_KAKSHYA_LORDS_ARE_THE_HORA_ORDER_PLUS_LAGNA,
+    )
+
+    derived = tuple(str(GRAHA_NAMES[g]) for g in HORA_LORD_ORDER) + ("Lagna",)
+    assert derived == KAKSHYA_LORDS
+    assert KAKSHYA_LORDS == ("Saturn", "Jupiter", "Mars", "Sun", "Venus",
+                             "Mercury", "Moon", "Lagna")
+    assert "HORA_LORD_ORDER" in (
+        THE_KAKSHYA_LORDS_ARE_THE_HORA_ORDER_PLUS_LAGNA)
+
+
+def test_the_kakshya_order_is_not_the_ashtakavarga_reference_order():
+    from hora.core.const import (
+        ASHTAKAVARGA_REFERENCES,
+        KAKSHYA_LORDS,
+        THE_TWO_ORDERINGS_OF_THE_EIGHT_MUST_NOT_BE_ZIPPED,
+    )
+
+    assert set(KAKSHYA_LORDS) == set(ASHTAKAVARGA_REFERENCES)
+    assert KAKSHYA_LORDS != ASHTAKAVARGA_REFERENCES
+    agreeing = [i for i in range(8)
+                if KAKSHYA_LORDS[i] == ASHTAKAVARGA_REFERENCES[i]]
+    assert agreeing == [2, 7]
+    assert "only" in THE_TWO_ORDERINGS_OF_THE_EIGHT_MUST_NOT_BE_ZIPPED
+    assert "Mars and Lagna" in THE_TWO_ORDERINGS_OF_THE_EIGHT_MUST_NOT_BE_ZIPPED
+
+
+def test_table_60s_printed_bounds_are_exactly_the_arithmetic():
+    """The code reads the bounds off the printed table -- this is the check
+    that the printed table is the arithmetic, eight equal 3º 45' spans."""
+    from hora.core.const import KAKSHYA_SPAN, TABLE_60_KAKSHYAS
+
+    for index, (start, end, _lord) in enumerate(TABLE_60_KAKSHYAS, start=1):
+        assert start == (index - 1) * KAKSHYA_SPAN
+        assert end == index * KAKSHYA_SPAN
+
+
+def test_kakshyas_reproduces_table_60():
+    from hora.charts.ashtakavarga import kakshyas
+    from hora.core.const import TABLE_60_KAKSHYAS
+
+    assert tuple((k.start, k.end, k.lord) for k in kakshyas()) == (
+        TABLE_60_KAKSHYAS)
+    for index, k in enumerate(kakshyas(), start=1):
+        assert k.index == index
+        assert k.rasi == 0
+        assert (k.start_longitude, k.end_longitude) == (k.start, k.end)
+
+
+def test_kakshyas_repeat_in_every_rasi():
+    """"Each rasi is divided" -- the division is the same in all twelve, and
+    the longitudes carry the rasi."""
+    from hora.charts.ashtakavarga import kakshyas
+    from hora.core.const import TABLE_60_KAKSHYAS
+
+    for rasi in range(12):
+        eight = kakshyas(rasi)
+        assert tuple((k.start, k.end, k.lord) for k in eight) == (
+            TABLE_60_KAKSHYAS)
+        assert eight[0].start_longitude == rasi * 30.0
+        assert eight[-1].end_longitude == rasi * 30.0 + 30.0
+        assert all(k.rasi == rasi for k in eight)
+
+
+def test_a_boundary_longitude_belongs_to_the_later_kakshya():
+    """Table 60's rows share their endpoints -- 3º 45' is both the first row's
+    end and the second's start. Half-open is the only reading under which the
+    eight spans partition the rasi.
+    """
+    from hora.charts.ashtakavarga import kakshya_of
+    from hora.core.const import TABLE_60_KAKSHYAS
+
+    for index, (start, _end, lord) in enumerate(TABLE_60_KAKSHYAS, start=1):
+        assert kakshya_of(start).index == index
+        assert kakshya_of(start).lord == lord
+    assert kakshya_of(3.75).lord == "Jupiter"
+    assert kakshya_of(3.7499).lord == "Saturn"
+    assert kakshya_of(29.9999).lord == "Lagna"
+    assert kakshya_of(30.0).lord == "Saturn"
+    assert kakshya_of(30.0).rasi == 1
+
+
+def test_kakshya_of_places_a_longitude_in_its_own_rasi():
+    from hora.charts.ashtakavarga import kakshya_of
+
+    k = kakshya_of(4 * 30.0 + 20.0)          # 20 Leo
+    assert (k.rasi, k.index, k.lord) == (4, 6, "Mercury")
+    assert (k.start, k.end) == (18.75, 22.5)
+    assert (k.start_longitude, k.end_longitude) == (138.75, 142.5)
+    assert k.start_longitude <= 140.0 < k.end_longitude
+
+
+def test_the_kakshya_lord_names_the_reference_whose_row_matters():
+    """"When a planet is in Saturn's kakshya, its placement with respect to
+    Saturn is the most important." The lord is always one of chapter 12's
+    eight, so it always indexes a PAV row.
+    """
+    from hora.charts.ashtakavarga import kakshya_of, prastaara
+    from hora.core.const import (
+        ASHTAKAVARGA_REFERENCES,
+        KAKSHYA_LORD_IS_THE_REFERENCE_THAT_MATTERS,
+    )
+
+    signs = _chart_58_d10_reference_signs()
+    pav = prastaara("Jupiter", signs)
+    for degrees in (0.0, 3.75, 100.0, 259.99, 359.9):
+        lord = kakshya_of(degrees).lord
+        assert lord in ASHTAKAVARGA_REFERENCES
+        assert lord in pav.rows
+    assert "most important" in KAKSHYA_LORD_IS_THE_REFERENCE_THAT_MATTERS
+
+
+def test_kakshya_helpers_check_their_inputs():
+    from hora.charts.ashtakavarga import kakshya_bounds, kakshya_lord, kakshyas
+    from hora.core.validate import InputError
+
+    for bad in (0, 9, -1):
+        with pytest.raises(InputError):
+            kakshya_bounds(bad)
+        with pytest.raises(InputError):
+            kakshya_lord(bad)
+    for bad in (-1, 12):
+        with pytest.raises(InputError):
+            kakshyas(bad)
