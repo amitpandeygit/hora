@@ -2484,3 +2484,272 @@ def test_cancer_cancer_antardasa_covers_the_fathers_death_in_1967():
     assert sum(row["share_years"] for row in cancer) == 86
     assert cancer[0]["years"] == pytest.approx(21.0 * 21 / 86)
     assert cancer[0]["years"] > 5                # Sept 1966 well into 1971
+
+
+# ---------------------------------------------------------------------------
+# Example 101 — Chart 3, Vajpayee's Capricorn dasa
+# ---------------------------------------------------------------------------
+
+def _chart_3(code):
+    """Chart 3 in one chart, with Scorpio's co-lord resolved by §15.5.1."""
+    from hora.charts.book import longitudes
+    from hora.charts.colord import stronger
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(3)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    references = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars",
+                  "Merc": "Mercury", "Jup": "Jupiter", "Ven": "Venus",
+                  "Sat": "Saturn", "Asc": "Lagna"}
+
+    def sign_of(longitude):
+        return (int(longitude // 30) if code == "D1"
+                else varga(longitude, code).sign)
+
+    signs = {int(g): sign_of(printed[n]) for n, g in named.items()}
+    in_chart = {graha: sign * 30.0 for graha, sign in signs.items()}
+    return {
+        "lagna": sign_of(printed["Asc"]),
+        "gl": sign_of(printed["GL"]),
+        "signs": signs,
+        "references": {ref: sign_of(printed[n])
+                       for n, ref in references.items()},
+        "co_lords": {rasi: stronger(rasi, in_chart).winner for rasi in (7, 10)},
+    }
+
+
+def test_example_101s_two_sav_figures_for_capricorn():
+    """"Cp has 31 rekhas in the SAV of D-10 and 34 rekhas in the SAV of rasi
+    chart. Because Cp is strong in both charts, Cp dasa must be good."
+    """
+    from hora.charts.ashtakavarga import sarvashtakavarga
+    from hora.dasha.nakshatra.kalachakra import (
+        SAV_STRONG_REKHAS,
+        STRONG_IN_BOTH_CHARTS,
+    )
+
+    capricorn = R["Cp"]
+    rasi = sarvashtakavarga(_chart_3("D1")["references"])
+    d10 = sarvashtakavarga(_chart_3("D10")["references"])
+
+    assert rasi["rekhas"][capricorn] == 34
+    assert d10["rekhas"][capricorn] == 31
+    assert min(34, 31) >= SAV_STRONG_REKHAS
+    assert rasi["total"] == d10["total"] == 337
+    assert "strong in both charts" in STRONG_IN_BOTH_CHARTS
+
+
+def test_the_strong_d10_houses_are_the_1st_3rd_5th_7th_and_10th_from_al():
+    """"The houses having 30 or more rekhas are the 1st, 3rd, 5th, 7th and 10th
+    houses from AL."  Five signs reach 30 in the D-10 SAV and they are exactly
+    those five houses from a Virgo AL.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.ashtakavarga import sarvashtakavarga
+    from hora.dasha.nakshatra.kalachakra import (
+        AL_IS_THE_REFERENCE_FOR_FAME,
+        SAV_STRONG_REKHAS,
+    )
+
+    chart = _chart_3("D10")
+    al = arudha_pada(1, chart["lagna"], chart["signs"], chart["co_lords"]).sign
+    assert A[al] == "Vi"
+
+    sav = sarvashtakavarga(chart["references"])
+    strong = {(sign - al) % 12 + 1: (A[sign], sav["rekhas"][sign])
+              for sign in range(12)
+              if sav["rekhas"][sign] >= SAV_STRONG_REKHAS}
+    assert sorted(strong) == [1, 3, 5, 7, 10]
+    assert strong[1] == ("Vi", 33)
+    assert strong[3] == ("Sc", 35)
+    assert strong[5] == ("Cp", 31)
+    assert strong[7] == ("Pi", 30)
+    assert strong[10] == ("Ge", 33)
+    assert "most appropriate reference" in AL_IS_THE_REFERENCE_FOR_FAME
+
+
+def test_the_fame_houses_from_al_are_not_a_fixed_list():
+    """Example 99 named the 2nd, 5th and 7th from AL; Example 101 names the
+    1st, 3rd, 5th, 7th and 10th, hedged with "most of these". Each describes
+    the chart in hand.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        THE_FAME_HOUSES_FROM_AL_ARE_NOT_A_FIXED_LIST,
+        TWO_FIVE_AND_SEVEN_FROM_AL_ARE_RECOGNITION,
+    )
+
+    ninety_nine = {2, 5, 7}
+    hundred_one = {1, 3, 5, 7, 10}
+    assert ninety_nine & hundred_one == {5, 7}
+    assert ninety_nine - hundred_one == {2}
+
+    assert "recognition and awards" in TWO_FIVE_AND_SEVEN_FROM_AL_ARE_RECOGNITION
+    assert "most of these" in THE_FAME_HOUSES_FROM_AL_ARE_NOT_A_FIXED_LIST
+
+
+def test_capricorns_lord_is_exalted_in_gl_in_the_d10():
+    """"Moreover, the lord of Cp is exalted in GL."  Saturn sits in Libra in
+    the D-10, which is both its exaltation and the sign GL occupies there --
+    two conditions the rasi chart does not meet, where GL is in Cancer.
+    """
+    from hora.core.const import EXALTATION_RASI, RASI_LORD, Graha
+
+    saturn = int(Graha.SATURN)
+    assert int(RASI_LORD[R["Cp"]]) == saturn
+
+    d10 = _chart_3("D10")
+    assert A[d10["signs"][saturn]] == "Li"
+    assert d10["signs"][saturn] == int(EXALTATION_RASI[saturn])
+    assert d10["gl"] == d10["signs"][saturn]
+
+    rasi = _chart_3("D1")
+    assert A[rasi["gl"]] == "Cn"                 # not in the rasi chart
+    assert rasi["signs"][saturn] != rasi["gl"]
+
+
+def test_a5_is_in_capricorn_in_both_charts():
+    """"Cp contains A5 in rasi chart and D-10."  Two different lagnas, two
+    different lords' placements, one sign.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.dasha.nakshatra.kalachakra import (
+        A5_IS_THE_ILLUSION_OF_THE_FIFTH,
+        EXAMPLE_101_REASONS,
+    )
+
+    for code in ("D1", "D10"):
+        chart = _chart_3(code)
+        a5 = arudha_pada(5, chart["lagna"], chart["signs"],
+                         chart["co_lords"]).sign
+        assert A[a5] == "Cp", code
+
+    assert "positions held and the power wielded" in A5_IS_THE_ILLUSION_OF_THE_FIFTH
+    assert "academic distinctions and awards" in A5_IS_THE_ILLUSION_OF_THE_FIFTH
+    assert [row["rule"] for row in EXAMPLE_101_REASONS] == [
+        "sav", "arudha", "lord", "arudha"]
+
+
+def test_example_101s_kalachakra_dasas():
+    """"About 4.5 years of Vi dasa was left at birth. The dasas to follow are
+    Le, Cn, Ge, Ta, Ar, Sg, Cp and Aq."
+
+    Moon at 15 Le 28 is Poorvaphalguni's 1st pada, apasavya-2, paramayush 86 --
+    and the balance again needs the ephemeris Moon, the printed one giving 4.96.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_order,
+        first_dasa,
+        nine_from_birth,
+        pada_of,
+        pada_sequence,
+        paramayush,
+        sub_group_of,
+    )
+
+    record = chart(3)
+    moon = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 3", **record["place"]),
+        Settings(node_type=NodeType.MEAN)
+    ).positions[int(Graha.MOON)].longitude
+
+    where = pada_of(moon)
+    assert (where["nakshatra"], where["group"], where["pada"]) == (
+        11, "apasavya", 1)                       # Poorvaphalguni
+    assert sub_group_of(11) == 2
+
+    nine = pada_sequence("apasavya", 2, 1)
+    assert [A[rasi] for rasi in nine] == [
+        "Pi", "Aq", "Cp", "Sg", "Sc", "Li", "Vi", "Le", "Cn"]
+    assert paramayush(nine) == 86
+
+    birth = first_dasa(nine, where["elapsed_fraction"])
+    assert birth["rasi"] == "Virgo"
+    assert birth["position"] == 6
+    assert birth["balance_years"] == pytest.approx(4.65, abs=0.01)   # "about 4.5"
+
+    printed = first_dasa(
+        nine, pada_of(longitudes(3)["Moon"])["elapsed_fraction"])
+    assert printed["balance_years"] == pytest.approx(4.96, abs=0.01)
+
+    following = dasa_order(11, 1, 8, skip=birth["position"] + 1)
+    assert [A[row["sign"]] for row in following] == [
+        "Le", "Cn", "Ge", "Ta", "Ar", "Sg", "Cp", "Aq"]
+    assert following[6]["years"] == 4            # "his 4-year Cp dasa"
+    assert len(nine_from_birth(11, 1, birth["position"])["dasas"]) == 9
+
+
+def test_capricorn_dasa_runs_1998_to_2002_only_under_savana():
+    """"His 4-year Cp dasa runs during 1998-2002."  Savana gives 1998-08-04 to
+    2002-07-14; a solar year gives 1999-08-21 to 2003-08-21. Both ends move,
+    which makes this a sharper separation than Example 100's single date.
+    """
+    import swisseph as swe
+
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_101_SEPARATES_THE_YEAR_LENGTHS,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    record = chart(3)
+    birth = from_local(**record["birth_data"]).jd_ut
+    nine = pada_sequence("apasavya", 2, 1)
+
+    def capricorn_runs(moon_longitude, year_days):
+        balance = first_dasa(
+            nine, pada_of(moon_longitude)["elapsed_fraction"])["balance_years"]
+        # Vi's balance, then Le 5, Cn 21, Ge 9, Ta 16, Ar 7 and Sg 10
+        start = birth + (balance + 5 + 21 + 9 + 16 + 7 + 10) * year_days
+        return (swe.revjul(start)[0], swe.revjul(start + 4 * year_days)[0])
+
+    exact = compute_chart(
+        from_local(**record["birth_data"]),
+        Place(name="Chart 3", **record["place"]),
+        Settings(node_type=NodeType.MEAN)
+    ).positions[int(Graha.MOON)].longitude
+
+    assert capricorn_runs(exact, 360.0) == (1998, 2002)       # the book
+    assert capricorn_runs(exact, 365.25) == (1999, 2003)
+    assert capricorn_runs(exact, 365.2564) == (1999, 2003)
+
+    # and the conclusion survives the Moon's arcminute rounding
+    rounded = longitudes(3)["Moon"]
+    assert capricorn_runs(rounded, 360.0) == (1998, 2002)
+    assert capricorn_runs(rounded, 365.25)[0] == 1999
+
+    assert "1998-2002" in EXAMPLE_101_SEPARATES_THE_YEAR_LENGTHS
+    assert record["events"]["India's Prime Minister since"] == "March 1998"
+
+
+def test_both_kalachakra_datings_agree_and_neither_changes_the_default():
+    """Examples 100 and 101 are independent charts and independent events, and
+    both land on savana. The default stays sidereal; OI-115 is still open.
+    """
+    from hora.core.settings import DashaYearLength, Settings
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_100_SEPARATES_THE_YEAR_LENGTHS,
+        EXAMPLE_101_SEPARATES_THE_YEAR_LENGTHS,
+        FOOTNOTE_65,
+    )
+
+    assert "September 1966" in EXAMPLE_100_SEPARATES_THE_YEAR_LENGTHS
+    assert "1998-2002" in EXAMPLE_101_SEPARATES_THE_YEAR_LENGTHS
+    assert "prefers savana years" in FOOTNOTE_65
+
+    assert Settings().dasha_year_length is DashaYearLength.SIDEREAL
+    assert Settings().dasha_year_length is not DashaYearLength.SAVANA

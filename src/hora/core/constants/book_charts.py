@@ -86,7 +86,14 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "Merc": "AK", "Ven": "AmK", "Rahu": "BK", "Moon": "MK",
             "Mars": "PiK", "Sat": "PK", "Sun": "GK", "Jup": "DK",
         },
+        "events": {"India's Prime Minister since": "March 1998"},
         "first_seen": "chapter 12, Example 39",
+        "note": (
+            "Example 101 calls this \"birthdata and D-10 chart\"; the register "
+            "holds the rasi diagram and the twelve rasi longitudes, and the "
+            "D-10 is computed from them rather than transcribed. Its SAV, AL, "
+            "A5 and GL all reproduce what Examples 39 and 101 assert."
+        ),
     },
     5: {
         "title": "The aspects exercise chart",

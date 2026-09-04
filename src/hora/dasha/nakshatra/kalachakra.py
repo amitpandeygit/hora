@@ -1251,3 +1251,67 @@ EXAMPLE_100_SEPARATES_THE_YEAR_LENGTHS = (
     "Cn dasa opens 1966-09-20 under a 360-day year and 1967-03-15 under "
     "365.25 days. The example says September 1966."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 101 — Vajpayee's Capricorn dasa
+# --------------------------------------------------------------------------
+
+#: §24.3's rule for reading one rasi across two charts, and the plainest
+#: statement of why §24.3.1 said to keep several SAVs to hand.
+STRONG_IN_BOTH_CHARTS = (
+    "We can see that Cp has 31 rekhas in the SAV of D-10 and 34 rekhas in the "
+    "SAV of rasi chart. Because Cp is strong in both charts, Cp dasa must be "
+    "good."
+)
+
+#: Why the strong houses are counted from AL rather than from lagna.
+AL_IS_THE_REFERENCE_FOR_FAME = (
+    "AL is the most appropriate reference for judging fame and recognition."
+)
+
+#: **Finding.** Examples 99 and 101 each name the houses from AL that came out
+#: strong and then call them houses of recognition, and the two lists are not
+#: the same — 2nd, 5th and 7th there, 1st, 3rd, 5th, 7th and 10th here. Only
+#: the 5th and 7th are in both. Example 101 hedges with "most of these", so
+#: neither is a fixed list; each is an observation about the chart in hand.
+THE_FAME_HOUSES_FROM_AL_ARE_NOT_A_FIXED_LIST = (
+    "Example 99 calls the 2nd, 5th and 7th from AL conducive to recognition "
+    "and awards; Example 101 calls the 1st, 3rd, 5th, 7th and 10th important "
+    "for fame and recognition, hedged with \"most of these\". The 5th and 7th "
+    "are the overlap."
+)
+
+#: Example 101's reading of A5, which extends Example 100's concept/body rule
+#: to a second pada and names what it means in two vargas.
+A5_IS_THE_ILLUSION_OF_THE_FIFTH = (
+    "A5 shows the illusion associated with the 5th house matters. In D-24, A5 "
+    "shows the illusion associated with scholarship (5th house), i.e. one's "
+    "degrees, academic distinctions and awards. In D-10, it shows the "
+    "illusion associated with one's following (5th house), i.e. the positions "
+    "held and the power wielded by one."
+)
+
+#: Example 101's four reasons for Capricorn, in the order it gives them.
+EXAMPLE_101_REASONS: tuple[dict[str, str], ...] = (
+    {"because": "Cp has 31 rekhas in the D-10 SAV and 34 in the rasi SAV",
+     "gives": "a good dasa", "rule": "sav"},
+    {"because": "Cp is the 5th house from AL",
+     "gives": "reputation and power", "rule": "arudha"},
+    {"because": "the lord of Cp is exalted in GL",
+     "gives": "power", "rule": "lord"},
+    {"because": "Cp contains A5 in the rasi chart and in D-10",
+     "gives": "the probability of power in Cp dasa", "rule": "arudha"},
+)
+
+#: **Finding.** Example 101 separates OI-115's year lengths a second time, and
+#: more sharply than Example 100 did, because it gives both ends of the dasa.
+#: "His 4-year Cp dasa runs during 1998-2002": savana gives 1998-08-04 to
+#: 2002-07-14 and a solar year gives 1999-08-21 to 2003-08-21. The conclusion
+#: survives the Moon's rounding — savana keeps 1998 and the solar year 1999.
+#:
+#: **Evidence only.** OI-115 stays open and the default is unchanged.
+EXAMPLE_101_SEPARATES_THE_YEAR_LENGTHS = (
+    "Cp dasa runs 1998-08-04 to 2002-07-14 under a 360-day year and "
+    "1999-08-21 to 2003-08-21 under 365.25 days. The example says 1998-2002."
+)
