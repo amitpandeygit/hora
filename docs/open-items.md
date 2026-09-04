@@ -9,8 +9,8 @@ Unresolved only. Closed items and the evidence that closed them live in
 
 ## Waiting on you
 
-Deferred by decision, 2026-08-26: held until every algorithm in the book is
-implemented. Do not act on these, and do not re-raise them each session.
+Deferred 2026-08-26, widened 2026-09-04: **every** item in this file waits
+until the book is finished, not only the five below. Record; never re-raise.
 
 | ID | Decision | What moves if you say yes |
 |---|---|---|
@@ -20,8 +20,8 @@ implemented. Do not act on these, and do not re-raise them each session.
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
 | OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Seventeen** charts reproduce with mean and none with true; under `true` Chart 41's Rahu is **98'** out and Chart 39's **96'**, both a whole sign wrong |
 
-Listed in the order I would take them: OI-39 is the only unambiguous defect and
-the only one touching `/v1/chart`. OI-37 and OI-40 are preference.
+Order I would take them: OI-39 is the only unambiguous defect and the only one
+touching `/v1/chart`; OI-37 and OI-40 are preference.
 
 ### OI-39 — floor-dividing by 360/27 lands one unit early
 
