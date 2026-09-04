@@ -329,6 +329,13 @@
         "number": 48,
         "recomputable": true,
         "title": "A gentleman \u2014 Example 100"
+      },
+      {
+        "birth": "January 26, 1971, 10:43 am (3:00 East), 24 E 01, 49 N 49",
+        "first_seen": "chapter 24, Example 102",
+        "number": 49,
+        "recomputable": true,
+        "title": "ISKCON devotee, D-20 \u2014 Example 102"
       }
     ],
     "not_supplied": [
@@ -375,7 +382,8 @@
       44,
       46,
       47,
-      48
+      48,
+      49
     ]
   },
   "status": 200

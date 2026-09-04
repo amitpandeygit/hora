@@ -437,6 +437,48 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    49: {
+        "title": "ISKCON devotee, D-20 — Example 102",
+        "birth": "January 26, 1971, 10:43 am (3:00 East), 24 E 01, 49 N 49",
+        "birth_data": {
+            "year": 1971, "month": 1, "day": 26, "hour": 10, "minute": 43,
+            "second": 0.0, "utc_offset_hours": 3.0,
+        },
+        "place": {"latitude": 49 + 49 / 60, "longitude": 24 + 1 / 60},
+        "longitudes": {
+            "Asc": "24 Aq 49", "Sun": "12 Cp 16", "Moon": "3 Cp 35",
+            "Mars": "8 Sc 37", "Merc": "19 Sg 10", "Jup": "8 Sc 30",
+            "Ven": "25 Sc 31", "Sat": "22 Ar 20", "Rahu": "1 Aq 11",
+            "Ketu": "1 Le 11", "HL": "28 Aq 51", "GL": "8 Ta 49",
+        },
+        "chara_karakas": {
+            "Rahu": "AK", "Ven": "AmK", "Sat": "BK", "Merc": "MK",
+            "Sun": "PiK", "Mars": "PK", "Jup": "GK", "Moon": "DK",
+        },
+        "divisional": {
+            "D20": {
+                "Asc": "Ar", "Jup": "Ta", "Mars": "Ta", "GL": "Ta",
+                "Ven": "Ta", "Sat": "Ge", "Moon": "Ge", "AL": "Ge",
+                "HL": "Cn", "Merc": "Le", "Rahu": "Sg", "Sun": "Sg",
+                "Ketu": "Sg",
+            },
+        },
+        "sav_strongest": {"D20": {"Ar": 33, "Pi": 33, "Ge": 31, "Li": 30}},
+        "events": {
+            "left mathematics, wandered in the forests, found ISKCON and "
+            "moved to a monastery": "1990",
+        },
+        "first_seen": "chapter 24, Example 102",
+        "note": (
+            "The same nativity as Chart 37, **cast differently**: one minute "
+            "earlier, 10:43 against 10:44, and every graha 1' to 2' further "
+            "on, which is an ayanamsa difference of about 1.5'. Our settings "
+            "reproduce Chart 37 within an arcminute and are 1' to 1.8' below "
+            "Chart 49. The difference is not cosmetic -- the two sets give "
+            "different D-20 signs for Venus and GL, and only Chart 49's own "
+            "longitudes give the D-20 SAV figures Example 102 quotes."
+        ),
+    },
     48: {
         "title": "A gentleman — Example 100",
         "birth": "July 15, 1933, 4:15 am (IST), 80 E 55, 16 N 05",

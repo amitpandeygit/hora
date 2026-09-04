@@ -1098,8 +1098,8 @@ saham formula from another source.
 
 **NEEDS YOU. Every Vimsottari date in chapter 16 turns on it.** §16.2's
 controversy box settles its own question: "Savana years will be used with
-nakshatra dasas in all the calculations given in this book." Savana is 360 days;
-our default is sidereal, 365.2564.
+nakshatra dasas in all the calculations given in this book." Savana is 360
+days; our default is sidereal, 365.2564.
 
 | source | rank | says |
 |---|---|---|
@@ -1109,15 +1109,15 @@ our default is sidereal, 365.2564.
 §24.2's footnote 65 names a second system — "This author prefers savana years
 with all nakshatra dasas. Kalachakra dasa is a nakshatra dasa" — and Example
 100 and Example 101 date it. Cn dasa opens 1966-09-20 under savana and
-1967-03-15 under 365.25; Vajpayee's Cp dasa runs 1998-08-04 to 2002-07-14 under
-savana and 1999-08-21 to 2003-08-21 under 365.25. The book says **September
-1966** and **1998-2002**. Both survive the Moon's rounding; Examples 96, 98 and
-99 separated nothing. Chapter 16's Example 53 is the same story: Rahu dasa
-starts Nov 1993 under savana and Feb 1994 under sidereal, and Saturn runs the
-pratyantardasa at both childbirths only under savana. Precedence still keeps JHora's default and nothing changes until you
-say. **Scoped to nakshatra dasas**: §18.6 measures *rasi* dasa time by the
-Sun's arc, so a rasi-dasa year is a solar revolution — do not carry a decision
-here into `sub_period_arc`.
+1967-03-15 under 365.25; Vajpayee's Cp dasa runs 1998-2002 under savana and
+1999-2003 under 365.25. The book says **September 1966** and **1998-2002**, and
+both survive the Moon's rounding. Examples 96, 98 and 99 separated nothing, and
+**Example 102 cannot** — its chart does not reproduce under our ayanamsa
+(D-69), and on the balance it states it would favour 365.25. Chapter 16's Example 53 agrees with 100 and 101 (Rahu dasa
+Nov 1993 under savana, Feb 1994 under sidereal). Precedence still keeps JHora's
+default; nothing changes until you say. **Scoped to nakshatra dasas** — §18.6
+measures *rasi* dasa time by the Sun's arc; do not carry a decision here into
+`sub_period_arc`.
 
 **Closes when:** a JHora run settles parity 3, or you prefer the book's examples.
 

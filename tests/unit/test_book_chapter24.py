@@ -2753,3 +2753,311 @@ def test_both_kalachakra_datings_agree_and_neither_changes_the_default():
 
     assert Settings().dasha_year_length is DashaYearLength.SIDEREAL
     assert Settings().dasha_year_length is not DashaYearLength.SAVANA
+
+
+# ---------------------------------------------------------------------------
+# Example 102 — Chart 49, the ISKCON devotee's D-20
+# ---------------------------------------------------------------------------
+
+def _chart_49(code):
+    """Chart 49 in one chart, from its own printed longitudes."""
+    from hora.charts.book import longitudes
+    from hora.charts.colord import stronger
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(49)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    references = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars",
+                  "Merc": "Mercury", "Jup": "Jupiter", "Ven": "Venus",
+                  "Sat": "Saturn", "Asc": "Lagna"}
+
+    def sign_of(longitude):
+        return (int(longitude // 30) if code == "D1"
+                else varga(longitude, code).sign)
+
+    signs = {int(g): sign_of(printed[n]) for n, g in named.items()}
+    return {
+        "lagna": sign_of(printed["Asc"]),
+        "signs": signs,
+        "references": {ref: sign_of(printed[n])
+                       for n, ref in references.items()},
+        "co_lords": {rasi: stronger(rasi, {g: s * 30.0 for g, s in
+                                           signs.items()}).winner
+                     for rasi in (7, 10)},
+    }
+
+
+def test_chart_49_is_chart_37_recast_and_ours_reproduces_chart_37():
+    """Same nativity, one minute earlier and about 1.5' further on in every
+    graha. Our settings match Chart 37 within an arcminute and sit below Chart
+    49 by more than that. D-69.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import CHART_49_IS_NOT_CHART_37_RECAST
+
+    thirty_seven, forty_nine = chart(37), chart(49)
+    assert thirty_seven["place"] == forty_nine["place"]
+    assert thirty_seven["birth_data"]["minute"] == 44
+    assert forty_nine["birth_data"]["minute"] == 43
+    assert thirty_seven["chara_karakas"] == forty_nine["chara_karakas"]
+    assert thirty_seven["longitudes"] != forty_nine["longitudes"]
+
+    gaps = {name: (longitudes(49)[name] - longitudes(37)[name]) * 60
+            for name in longitudes(37)}
+    for name in ("Sun", "Moon", "Mars", "Merc", "Jup", "Ven", "Sat", "Rahu"):
+        assert 0.5 < gaps[name] < 2.5, f"{name}: {gaps[name]:+.1f}'"
+    assert gaps["Asc"] < -30                     # the minute of time
+
+    for number, ceiling in ((37, 1.0), (49, 2.0)):
+        record = chart(number)
+        computed = compute_chart(
+            from_local(**record["birth_data"]),
+            Place(name=f"Chart {number}", **record["place"]),
+            Settings(node_type=NodeType.MEAN))
+        worst = max(abs(computed.positions[int(graha)].longitude
+                        - longitudes(number)[name]) * 60
+                    for name, graha in GRAHA_OF.items())
+        assert worst < ceiling
+        if number == 49:
+            assert worst > 1.0                   # and NOT within an arcminute
+
+    assert "1.5'" in CHART_49_IS_NOT_CHART_37_RECAST
+
+
+def test_the_two_castings_give_different_d20_signs():
+    """Venus sits an arcminute from an exact D-20 boundary -- 25 Sc 30 is
+    17 x 1 deg 30' -- so the ayanamsa alone decides its amsa. GL moves too.
+    The drawn diagram follows Chart 49.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import RASI_ABBR
+
+    drawn = dict(chart(49)["divisional"]["D20"])
+    drawn.pop("AL")
+    differ = {}
+    for name, abbr in drawn.items():
+        from_49 = str(RASI_ABBR[varga(longitudes(49)[name], "D20").sign])
+        from_37 = str(RASI_ABBR[varga(longitudes(37)[name], "D20").sign])
+        assert from_49 == abbr, f"{name}: drawn {abbr}, from Chart 49 {from_49}"
+        if from_37 != abbr:
+            differ[name] = (from_37, abbr)
+
+    assert differ == {"GL": ("Ge", "Ta"), "Ven": ("Ar", "Ta")}
+    assert abs(longitudes(49)["Ven"] - (R["Sc"] * 30 + 25.5)) * 60 < 1.1
+
+
+def test_example_102s_d20_sav_needs_chart_49s_own_longitudes():
+    """"Pi ... has 33 rekhas in SAV", "Ar has 33 rekhas in D-20 SAV", and "the
+    3rd house (Ge) and A3 (Li) have 30 or more rekhas". All four come out of
+    Chart 49's longitudes; Chart 37's give 30, 32 and 28.
+    """
+    from hora.charts.ashtakavarga import sarvashtakavarga
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    sav = sarvashtakavarga(_chart_49("D20")["references"])
+    assert sav["total"] == 337
+    assert sav["rekhas"][R["Pi"]] == 33
+    assert sav["rekhas"][R["Ar"]] == 33
+    assert sav["rekhas"][R["Ge"]] == 31
+    assert sav["rekhas"][R["Li"]] == 30
+    assert chart(49)["sav_strongest"]["D20"] == {
+        "Ar": 33, "Pi": 33, "Ge": 31, "Li": 30}
+
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": "Mercury", "Jup": "Jupiter", "Ven": "Venus",
+             "Sat": "Saturn", "Asc": "Lagna"}
+    other = sarvashtakavarga({
+        ("Mercury" if n == "Merc" else "Jupiter" if n == "Jup" else
+         "Venus" if n == "Ven" else "Saturn" if n == "Sat" else
+         "Lagna" if n == "Asc" else n): varga(longitudes(37)[n], "D20").sign
+        for n in named})
+    assert other["rekhas"][R["Pi"]] == 30        # not 33
+    assert other["rekhas"][R["Ar"]] == 32        # not 33
+    assert other["rekhas"][R["Li"]] == 28        # below thirty
+
+
+def test_example_102s_houses_and_arudha_padas_in_the_d20():
+    """"Pi is the 12th house in D-20 and Sg is the 9th house."  "Darapada (A7)
+    of D-20 is in Sg."  "Ar contains A5 (mantra pada)."  "A3 (Li)."
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_LORD, Graha
+    from hora.dasha.nakshatra.kalachakra import (
+        A5_IS_THE_MANTRA_PADA,
+        D20_HOUSE_READINGS,
+    )
+
+    chart = _chart_49("D20")
+    lagna = chart["lagna"]
+    assert A[lagna] == "Ar"
+    assert A[(lagna + 11) % 12] == "Pi"          # the 12th
+    assert A[(lagna + 8) % 12] == "Sg"           # the 9th
+    assert A[(lagna + 2) % 12] == "Ge"           # the 3rd
+
+    padas = {house: A[arudha_pada(house, lagna, chart["signs"],
+                                  chart["co_lords"]).sign]
+             for house in (3, 5, 7)}
+    assert padas == {3: "Li", 5: "Ar", 7: "Sg"}
+
+    jupiter = int(Graha.JUPITER)
+    assert int(RASI_LORD[R["Pi"]]) == int(RASI_LORD[R["Sg"]]) == jupiter
+
+    # Sg holds the Sun and both nodes in the D-20
+    for graha in (Graha.SUN, Graha.RAHU, Graha.KETU):
+        assert chart["signs"][int(graha)] == R["Sg"]
+
+    assert "mantra pada" in A5_IS_THE_MANTRA_PADA
+    assert [row["house"] for row in D20_HOUSE_READINGS] == [3, 5, 7, 9, 12]
+    assert [row["arudha"] for row in D20_HOUSE_READINGS] == [
+        "A3", "A5", "A7", None, None]
+
+
+def test_the_d10_half_of_the_third_house_claim_fails():
+    """"the 3rd house and A3 have 30 or more rekhas, in D-10 SAV also."  A3 is
+    Pisces with 31; the 3rd house from a Libra D-10 lagna is Sagittarius with
+    25, and no other reading of "the 3rd house" reaches thirty either. D-70.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.ashtakavarga import sarvashtakavarga
+    from hora.dasha.nakshatra.kalachakra import (
+        SAV_STRONG_REKHAS,
+        THE_D10_THIRD_HOUSE_DOES_NOT_REACH_THIRTY,
+    )
+
+    d10 = _chart_49("D10")
+    sav = sarvashtakavarga(d10["references"])
+    assert A[d10["lagna"]] == "Li"
+
+    a3 = arudha_pada(3, d10["lagna"], d10["signs"], d10["co_lords"]).sign
+    assert A[a3] == "Pi"
+    assert sav["rekhas"][a3] == 31 >= SAV_STRONG_REKHAS      # the half that holds
+
+    third = (d10["lagna"] + 2) % 12
+    assert A[third] == "Sg"
+    assert sav["rekhas"][third] == 25 < SAV_STRONG_REKHAS    # the half that fails
+
+    strong = {A[sign] for sign in range(12)
+              if sav["rekhas"][sign] >= SAV_STRONG_REKHAS}
+    assert strong == {"Cn", "Le", "Sc", "Pi"}
+    for candidate in ("Ge",                       # the D-20's 3rd house
+                      A[(_chart_49("D1")["lagna"] + 2) % 12]):   # rasi's 3rd
+        assert candidate not in strong
+
+    assert "half-supported" in THE_D10_THIRD_HOUSE_DOES_NOT_REACH_THIRTY
+
+
+def test_example_102s_kalachakra_dasas():
+    """"Ta dasa of about 9.5 years was left at birth. The dasas to follow are
+    Ar, Pi, Aq, Cp, Sg, Ar, Ta and Ge."
+    """
+    from hora.charts.book import longitudes
+    from hora.dasha.nakshatra.kalachakra import (
+        dasa_order,
+        first_dasa,
+        nine_from_birth,
+        pada_of,
+        pada_sequence,
+        paramayush,
+        sub_group_of,
+    )
+
+    moon = pada_of(longitudes(49)["Moon"])
+    assert (moon["nakshatra"], moon["group"], moon["pada"]) == (
+        21, "savya", 3)                          # Uttarashadha
+    assert sub_group_of(21) == 1
+
+    nine = pada_sequence("savya", 1, 3)
+    assert [A[rasi] for rasi in nine] == [
+        "Ta", "Ar", "Pi", "Aq", "Cp", "Sg", "Ar", "Ta", "Ge"]
+    assert paramayush(nine) == 83
+
+    birth = first_dasa(nine, moon["elapsed_fraction"])
+    assert birth["rasi"] == "Taurus"
+    assert birth["position"] == 0
+    assert birth["balance_years"] == pytest.approx(9.775)     # "about 9.5"
+
+    following = dasa_order(21, 3, 8, skip=1)
+    assert [A[row["sign"]] for row in following] == [
+        "Ar", "Pi", "Aq", "Cp", "Sg", "Ar", "Ta", "Ge"]
+    assert len(nine_from_birth(21, 3, 0)["dasas"]) == 9
+
+
+def test_sagittarius_then_aries_are_the_antardasas_the_example_reads():
+    """"Sg antardasa in it was running when he moved to the monastery" and
+    "the next antardasa belonged to Ar".  Pisces sits at wheel position 20, so
+    its nine antardasas run Pi, Aq, Cp, Sg, Ar and the walk crosses the wheel's
+    end between the fourth and the fifth.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.nakshatra.kalachakra import antardasas
+
+    pisces = antardasas(21, 20, 10.0)
+    assert [A[row["sign"]] for row in pisces][:5] == [
+        "Pi", "Aq", "Cp", "Sg", "Ar"]
+    assert [row["position"] for row in pisces][:5] == [20, 21, 22, 23, 0]
+    assert sum(row["years"] for row in pisces) == pytest.approx(10.0)
+
+    # Sagittarius opens a little over two years into the ten-year dasa
+    opens = sum(row["years"] for row in pisces[:3])
+    assert 2.0 < opens < 2.2
+    assert chart(49)["events"][
+        "left mathematics, wandered in the forests, found ISKCON and "
+        "moved to a monastery"] == "1990"
+
+
+def test_example_102_cannot_separate_the_year_lengths():
+    """"Pi dasa started in July 1987."  The truncated arcminute of Moon spans
+    balances from 9.36 to 9.775 years, and both year lengths put Pi somewhere
+    in 1987 inside that span -- so this example decides nothing, unlike
+    Examples 100 and 101.
+    """
+    import swisseph as swe
+
+    from hora.charts.book import chart
+    from hora.core.timeutil import from_local
+    from hora.dasha.nakshatra.kalachakra import (
+        EXAMPLE_102_CANNOT_SEPARATE_THE_YEAR_LENGTHS,
+        first_dasa,
+        pada_of,
+        pada_sequence,
+    )
+
+    birth = from_local(**chart(49)["birth_data"]).jd_ut
+    nine = pada_sequence("savya", 1, 3)
+    floor = R["Cp"] * 30 + 3 + 35 / 60.0         # 3 Cp 35, as printed
+    ceiling = R["Cp"] * 30 + 3 + 36 / 60.0       # the next arcminute
+
+    span = [first_dasa(nine, pada_of(moon)["elapsed_fraction"])["balance_years"]
+            for moon in (floor, ceiling)]
+    assert span[0] == pytest.approx(9.775)
+    assert span[1] == pytest.approx(9.36)
+
+    for year_days in (360.0, 365.25):
+        years = {swe.revjul(birth + (balance + 7) * year_days)[0]
+                 for balance in span}
+        assert years == {1987}                   # both, either way
+
+    assert "cannot" in EXAMPLE_102_CANNOT_SEPARATE_THE_YEAR_LENGTHS.lower() or (
+        "both year lengths" in EXAMPLE_102_CANNOT_SEPARATE_THE_YEAR_LENGTHS)
+
+
+def test_thirty_rekhas_is_attributed_to_parasara_here():
+    """§24.3.1 gave the threshold with "usually"; Example 99 dropped the hedge;
+    Example 102 names the authority.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        SAV_STRONG_REKHAS,
+        THIRTY_REKHAS_IS_PARASARAS,
+    )
+
+    assert SAV_STRONG_REKHAS == 30
+    assert "as per Parasara" in THIRTY_REKHAS_IS_PARASARAS

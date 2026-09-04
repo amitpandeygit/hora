@@ -1315,3 +1315,84 @@ EXAMPLE_101_SEPARATES_THE_YEAR_LENGTHS = (
     "Cp dasa runs 1998-08-04 to 2002-07-14 under a 360-day year and "
     "1999-08-21 to 2003-08-21 under 365.25 days. The example says 1998-2002."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 102 — the ISKCON devotee's D-20, revisited from chapter 21
+# --------------------------------------------------------------------------
+
+#: **Book defect.** Chart 49 and Chart 37 are the same nativity printed twice
+#: and they are not the same chart: Chart 49 is stated one minute earlier,
+#: 10:43 against 10:44, and every graha is 1' to 2' further on, which is an
+#: ayanamsa difference of about 1.5'. Our settings reproduce Chart 37 within an
+#: arcminute and sit 1' to 1.8' below Chart 49. It is not cosmetic — the two
+#: sets put **Venus** and **GL** in different D-20 signs, and only Chart 49's
+#: own longitudes give the D-20 SAV figures Example 102 quotes. See D-69.
+CHART_49_IS_NOT_CHART_37_RECAST = (
+    "Chart 49 restates Chart 37's nativity one minute earlier and about 1.5' "
+    "further on in every graha. Venus and GL land in different D-20 signs, "
+    "and the D-20 SAV moves by up to 4 rekhas."
+)
+
+#: **Book defect.** "If one casts D-10 of this native, one will see that the
+#: 3rd house and A3 have 30 or more rekhas, in D-10 SAV also." A3 does — the
+#: D-10 arudha of the 3rd is Pisces with **31**. The 3rd house does not: the
+#: D-10 lagna is Libra, its 3rd is Sagittarius, and Sagittarius has **25**.
+#: Only Cn 36, Le 37, Sc 30 and Pi 31 reach thirty in that SAV, and no reading
+#: of "the 3rd house" — the D-20's third sign, the third from AL, the third
+#: from the rasi lagna — reaches it either. True under both printings of the
+#: chart, so it is not the ayanamsa. See D-70.
+THE_D10_THIRD_HOUSE_DOES_NOT_REACH_THIRTY = (
+    "In the D-10 SAV the arudha of the 3rd reaches 30 and the 3rd house does "
+    "not: Pisces has 31 and Sagittarius 25. The conclusion that both are "
+    "strong in D-10 as well as D-20 is half-supported."
+)
+
+#: §24.3's D-20 readings, house by house, as Example 102 gives them. The
+#: pattern is Example 100's: the house is the matter and its arudha pada the
+#: impression the world forms of it.
+D20_HOUSE_READINGS: tuple[dict[str, object], ...] = (
+    {"house": 3, "shows": "communication skills as applicable in religious "
+                          "activities",
+     "arudha": "A3", "arudha_shows": "one's religious works, the books and "
+                                     "articles authored by one"},
+    {"house": 5, "shows": "one's devotion and bhakti in religious matters",
+     "arudha": "A5", "arudha_shows": "the maya relating to devotion, i.e. "
+                                     "practice of mantras and religious "
+                                     "rituals"},
+    {"house": 7, "shows": "relations with others",
+     "arudha": "A7", "arudha_shows": "the people one associates with, in "
+                                     "one's spiritual life"},
+    {"house": 9, "shows": "one's spiritual guru or organized religion or "
+                          "religious practices; it can also show pilgrimages "
+                          "and moving to a monastery",
+     "arudha": None, "arudha_shows": None},
+    {"house": 12, "shows": "spiritual evolution and activities related to "
+                           "moksha",
+     "arudha": None, "arudha_shows": None},
+)
+
+#: A5's other name, given only here.
+A5_IS_THE_MANTRA_PADA = "A5 (mantra pada, arudha pada of the 5th house)"
+
+#: The authority §24.3.1's threshold rests on, named for the first time.
+THIRTY_REKHAS_IS_PARASARAS = (
+    "Houses with 30 or more rekhas in SAV are strengthened as per Parasara."
+)
+
+#: **Finding.** Example 102 does **not** separate OI-115's year lengths, and on
+#: one reading it leans the other way from Examples 100 and 101. "Pi dasa
+#: started in July 1987" needs a balance of 9.71 years under savana and 9.47
+#: under 365.25, and the example says "about 9.5". But Chart 49's own printed
+#: Moon gives 9.775, which puts Pi in August 1987 under savana and November
+#: under 365.25. The chart does not reproduce under our ayanamsa, so the
+#: balance cannot be pinned from the ephemeris the way Examples 100 and 101
+#: were; and the arcminute of Moon is worth five months of balance here while
+#: the year lengths differ by only three at this age. The uncertainty exceeds
+#: the signal.
+EXAMPLE_102_CANNOT_SEPARATE_THE_YEAR_LENGTHS = (
+    "Taken with the stated balance of 9.5 years, July 1987 needs 365.25 days; "
+    "taken with Chart 49's printed Moon, it is nearer savana. The truncated "
+    "arcminute spans balances from 9.36 to 9.775, and both year lengths put "
+    "Pi dasa in 1987 somewhere in that span."
+)

@@ -2187,3 +2187,69 @@ stated rule, and the wheel walk behind it is unbounded — `dasa_order` returns
 as many dasas as asked for, so a caller wanting Exercise 34's ten gets them.
 
 **Closes when:** a later example fixes the count either way.
+
+## D-69 · Chart 49 restates Chart 37's nativity as a different chart
+
+**Status: FINDING — recorded; both printings are kept as printed.**
+
+Charts 37 and 49 are the same ISKCON devotee, and the two printings disagree.
+
+| | Chart 37 | Chart 49 | difference |
+|---|---|---|---|
+| time | 10:44 am | 10:43 am | one minute |
+| Asc | 25 Aq 20 | 24 Aq 49 | −31′ |
+| Sun, Moon, Mars | 12 Cp 15, 3 Cp 34, 8 Sc 36 | 12 Cp 16, 3 Cp 35, 8 Sc 37 | +1′ |
+| Merc, Jup, Ven, Sat, nodes | | | +2′ |
+| GL | 10 Ta 04 | 8 Ta 49 | −75′ |
+
+The uniform +1′ to +2′ on every graha is an **ayanamsa** difference of about
+1.5′; the ascendant carries that plus the minute of time. Our settings
+reproduce **Chart 37** within an arcminute and sit 1.0′ to 1.8′ below Chart 49.
+
+It is not cosmetic at the varga level:
+
+| | from Chart 37 | from Chart 49 | drawn in Chart 49 |
+|---|---|---|---|
+| Venus in D-20 | Aries | Taurus | **Taurus** |
+| GL in D-20 | Gemini | Taurus | **Taurus** |
+| D-20 SAV, Ar / Pi / Li | 32 / 30 / 28 | 33 / 33 / 30 | quoted as 33 / 33 / ≥30 |
+
+Venus sits 1′ from an exact D-20 boundary — 25 Sc 30 is 17 × 1° 30′ — so the
+ayanamsa alone decides its amsa. Example 102's own figures come out **only**
+from Chart 49's longitudes.
+
+**What we do:** register both as printed and compute Example 102 from Chart
+49's own longitudes. Chart 49 is flagged as not reproducing under our
+ayanamsa; a test asserts both facts so neither is forgotten.
+
+**Closes when:** the ayanamsa gap is identified, or a later chart of this
+native settles which casting is intended.
+
+## D-70 · Example 102's D-10 claim holds for A3 and not for the 3rd house
+
+**Status: FINDING — half the claim fails; the conclusion drawn from it is
+half-supported.**
+
+"If one casts D-10 of this native, one will see that the 3rd house and A3 have
+30 or more rekhas, in D-10 SAV also. ... So the 3rd house and A3 are strong in
+both D-20 and D-10."
+
+The D-20 half holds: the 3rd house is Gemini with 31 rekhas and A3 is Libra
+with 30. The D-10 half does not.
+
+| | sign | D-10 SAV |
+|---|---|---|
+| A3 | Pisces | **31** ✓ |
+| the 3rd house, from a Libra D-10 lagna | Sagittarius | **25** ✗ |
+
+Only four signs reach thirty in that SAV — Cn 36, Le 37, Sc 30, Pi 31 — and no
+other reading of "the 3rd house" gets there either: Gemini, the D-20's third
+sign, has 28; the 3rd from the D-10 AL has 29; the 3rd from the rasi lagna has
+27. True from both Chart 37's and Chart 49's longitudes, so it is not D-69.
+
+**What we do:** report both figures. The reading the example draws — a good
+communicator known for religious literature — rests on the D-20 pair, which is
+sound, plus an A3 that is strong in D-10 too.
+
+**Closes when:** a later printing corrects the figure or names a different
+third house.
