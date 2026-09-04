@@ -1252,6 +1252,18 @@ overlap and this reasoning are served on `/v1/ashtakavarga/rules` as
 Chart 6 makes the boundary live: its Capricorn and Pisces both sit at exactly
 30, and both are graded strong.
 
+**A third phrasing, §25.5.1.** "Planets transiting in rasis with **more than
+30** rekhas in SAV usually bring favorable results. Planets transiting in rasis
+with **less than 25** rekhas usually bring unfavorable results." So the book
+now says "30 or more" twice in §12.4 and "more than 30" once in §25.5.1, on the
+same threshold. It leaves 25 to 30 unnamed here, which agrees with §12.4's
+"average" rather than contradicting it.
+
+That does not move our reading — two clauses to one, and §24.3.1 says "30 or
+more rekhas" as well, making it three to one — but it is the first time the
+bound has been written the other way, and it is recorded rather than smoothed
+over.
+
 **Closes when:** you confirm, or a later passage settles it differently.
 
 ## D-41 · §12.7.2's rule (3) does not cover an empty rasi of equal value

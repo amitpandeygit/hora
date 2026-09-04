@@ -840,6 +840,20 @@ consumed; what follows is §25.4's prose, its provenance and its structure.
 | `THE_THIRD_FROM_AL_SHOWS_THE_PLACE_OF_DEATH` · `THE_CRUEL_ASPECT_HERE_IS_RASI_DRISHTI` · `CAPRICORN_IS_CALLED_WATERY_HERE` | §25.4's place-of-death rule, and two findings about how it is applied. D-73 for the element |
 | `EXAMPLE_107_NATAL_RASI_POINTS` · `EXAMPLE_107_TRANSIT_D11_HITS` · `THE_KILLER_MEETS_THE_BODY` · `THE_TRANSIT_MOONS_AMSA_NEEDS_THE_UNROUNDED_POSITION` · `INTERACTION_2_IS_WORKED_ONCE` · `INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES` | The interaction (2) reading. Every placement **is** reproduced; these hold what it means |
 
+### Chapter 25 — §25.5's transit ashtakavarga (10)
+
+`transits/gochara.py`. `bav_transit_verdict` and `transit_strength` **are**
+consumed — they implement the bands and §25.5.1's precedence — so what follows
+is the prose and the findings around them.
+
+| constant | why it is not consumed |
+|---|---|
+| `ASHTAKAVARGAS_MOST_IMPORTANT_PURPOSE` · `THE_EIGHT_REFERENCES_GENERALISE_THE_EARLIER_SECTIONS` | A claim about what ashtakavarga is *for*, and the observation that §25.2's Moon and §25.3's lagna are two of its eight references. Neither is a rule |
+| `BAV_TRANSIT_RULE` · `BAV_TRANSIT_EXTREMES` · `SAV_TRANSIT_RULE` | The bands verbatim. `bav_transit_verdict` and `transit_strength` implement them |
+| `THE_BAV_BANDS_ARE_12_3S` · `THE_EXTREMES_ARE_NEW` | Ours: which part of §25.5 restates §12.3 and which part adds to it. Tests check both against `grade` |
+| `BAV_TRANSIT_EXAMPLES` · `WHY_A_VARGA_BAV_READS_A_RASI_TRANSIT` | §25.5's two worked counts and its explanation of the varga case |
+| `SAV_DOMINATES_THE_BAVS` · `SAV_DOMINATES_BUT_THE_BAV_STILL_ORDERS` | The precedence rule chapter 12 never gave. `transit_strength` applies it; these hold the wording and the illustration |
+
 ---
 
 ## How to use this register

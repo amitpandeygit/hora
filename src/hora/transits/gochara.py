@@ -1411,3 +1411,162 @@ INTERACTION_2_IS_WORKED_ONCE = (
     "is §25.4's interaction (2). Charts 56 and 57 give the same nativity and "
     "the same instant through both interactions, one after the other."
 )
+
+
+# --------------------------------------------------------------------------
+# §25.5 Transits and ashtakavarga
+# --------------------------------------------------------------------------
+
+#: **A claim about what ashtakavarga is for**, made only here. Chapter 12
+#: built the BAVs and the SAV to grade a natal chart; §25.5 says that is the
+#: lesser use.
+ASHTAKAVARGAS_MOST_IMPORTANT_PURPOSE = (
+    "Though one of the purposes of ashtakavarga is to assess the strength of "
+    "planets and houses in natal charts, its most important purpose is the "
+    "interpretation of transits."
+)
+
+#: **Finding.** §25.2 read transits from natal Moon and §25.3 added natal
+#: lagna. Both are among the **eight** references the ashtakavarga already
+#: uses, so §25.5 is not a new technique but the same one against all eight at
+#: once — and the BAV count *is* the tally of how many of the eight approve.
+THE_EIGHT_REFERENCES_GENERALISE_THE_EARLIER_SECTIONS = (
+    "Just as we look at the house occupied by a transit planet with respect "
+    "to natal Moon and natal lagna, we can look at the houses occupied by a "
+    "transit planet with respect to all the eight references used in "
+    "ashtakavarga."
+)
+
+#: §25.5's transit reading of a BAV count, in its own words.
+BAV_TRANSIT_RULE = (
+    "If a planet is benefic in its transit rasi with respect to 5 or more "
+    "natal references, out of eight, then it will produce good results. If a "
+    "planet is benefic in its transit rasi with respect to 3 or less natal "
+    "references, out of eight, then it will produce bad results."
+)
+
+#: And the extremes, which are new: §12.3 graded 5-8 alike and 0-3 alike.
+BAV_TRANSIT_EXTREMES = (
+    "A planet with 6 or 7 rekhas in its transit rasi in its BAV invariably "
+    "brings excellent results. A planet with 1 or 0 rekhas in its transit "
+    "rasi in its BAV invariably brings very poor results."
+)
+
+#: **Finding.** §25.5's bands are §12.3's, restated for transits — 5 or more
+#: is §12.3's "favorable", 3 or less its "unfavorable" — and the 4 that §25.5
+#: passes over in silence is §12.3's **neutral**. So there is no gap at 4; the
+#: earlier section already named it.
+THE_BAV_BANDS_ARE_12_3S = (
+    "§25.5 gives 5-or-more and 3-or-less and says nothing about 4. §12.3 "
+    "grades 5 to 8 favorable, 4 neutral and 3 to 0 unfavorable, so 4 is "
+    "already answered."
+)
+
+#: **Finding.** What §25.5 *adds* to §12.3 is a finer band inside each side:
+#: 6 or 7 are singled out from the favorable five-to-eight, and 1 or 0 from
+#: the unfavorable nought-to-three, both with "invariably". §12.3 grades all
+#: of 5 to 8 alike and all of 0 to 3 alike.
+THE_EXTREMES_ARE_NEW = (
+    "§12.3's grade is one of three. §25.5 keeps it and marks 6 and 7 as "
+    "invariably excellent and 1 and 0 as invariably very poor, which §12.3 "
+    "does not distinguish from 5 and 8, or from 2 and 3."
+)
+
+
+def bav_transit_verdict(rekhas: int) -> dict:
+    """§25.5's reading of a transiting graha's own BAV count in its transit
+    rasi, with §12.3's grade beside it.
+
+    ``emphasis`` carries §25.5's "invariably" for the extremes and is ``None``
+    elsewhere; ``verdict`` is ``"neutral"`` at 4, which §25.5 leaves unsaid and
+    §12.3 supplies.
+    """
+    from hora.charts.ashtakavarga import grade
+
+    count = validate.in_range("rekhas", int(rekhas), 0, 8)
+    verdict = "good" if count >= 5 else "bad" if count <= 3 else "neutral"
+    emphasis = ("invariably excellent" if count in (6, 7) else
+                "invariably very poor" if count in (0, 1) else None)
+    return {
+        "rekhas": count, "verdict": verdict, "emphasis": emphasis,
+        "grade_12_3": grade(count),
+        "references_approving": count, "of": 8,
+    }
+
+
+#: §25.5's worked pair — one in the rasi chart, one carried into a varga,
+#: which is §25.4's interaction (1) with an ashtakavarga behind it.
+BAV_TRANSIT_EXAMPLES: tuple[dict[str, object], ...] = (
+    {"graha": "Saturn", "bav_of": "the natal rasi chart", "rasi": "Ta",
+     "rekhas": 5, "gives": "good results when he transits Taurus"},
+    {"graha": "Jupiter", "bav_of": "the natal D-10 chart", "rasi": "Ar",
+     "rekhas": 8,
+     "gives": "excellent results in career on his rasi transit of Aries"},
+)
+
+#: Why the varga case works, in §25.4's terms.
+WHY_A_VARGA_BAV_READS_A_RASI_TRANSIT = (
+    "Basically, Jupiter's rasi transit in Aries activates the manifestation "
+    "of Jovian energy at the physical level in Aries. If Jupiter has many "
+    "rekhas in his D-10 BAV, it shows that Jovian energy in Aries goes well "
+    "with most sources of energy in D-10 and thus it can have a significant "
+    "impact on a native's career."
+)
+
+
+# --------------------------------------------------------------------------
+# §25.5.1 Samudaaya Ashtakavarga
+# --------------------------------------------------------------------------
+
+#: §25.5.1's transit bands for the SAV. §12.4 already stated the same
+#: consequence — "planets transiting in such a rasi bring good results" — so
+#: this is that rule restated, with the boundary written the other way. See
+#: D-40.
+SAV_TRANSIT_RULE = (
+    "Planets transiting in rasis with more than 30 rekhas in SAV usually "
+    "bring favorable results. Planets transiting in rasis with less than 25 "
+    "rekhas in SAV usually bring unfavorable results."
+)
+
+#: **The rule that is genuinely new.** Chapter 12 never says which of the two
+#: wins when a BAV and the SAV disagree about a rasi; §25.5.1 does.
+SAV_DOMINATES_THE_BAVS = (
+    "Rekhas in the individual BAVs of planets also matter, but SAV will "
+    "dominate over the BAVs if it has too many or too few rekhas."
+)
+
+#: Its illustration, which keeps the BAV meaningful inside a dominant SAV.
+SAV_DOMINATES_BUT_THE_BAV_STILL_ORDERS = (
+    "If SAV has 40 bindus in Pisces, then it means that Pisces is very strong "
+    "in the chart. Planets transiting in Pisces, tend to give good results "
+    "irrespective of their strength. Of course, if a planet with 6 rekhas in "
+    "Pi in its own BAV and a planet with 2 rekhas in Pi in its own BAV are "
+    "transiting Pi, the former planet will produce better results than the "
+    "latter planet."
+)
+
+
+def transit_strength(bav_rekhas: int, sav_rekhas: int) -> dict:
+    """§25.5 and §25.5.1 together: the transiting graha's own BAV count and
+    the rasi's SAV count, with §25.5.1's precedence applied.
+
+    "SAV will dominate over the BAVs if it has too many or too few rekhas" —
+    so a SAV above 30 or below 25 decides, and the BAV still orders two grahas
+    inside the same rasi. Between 25 and 30 the SAV is not dominant and
+    ``decided_by`` is the BAV.
+    """
+    from hora.charts.ashtakavarga import sav_grade
+
+    bav = bav_transit_verdict(bav_rekhas)
+    total = validate.in_range("sav_rekhas", int(sav_rekhas), 0, 56)
+    dominant = total > 30 or total < 25
+    sav_verdict = ("favorable" if total > 30 else
+                   "unfavorable" if total < 25 else None)
+    return {
+        "bav": bav,
+        "sav": {"rekhas": total, "verdict": sav_verdict,
+                "grade_12_4": sav_grade(total), "dominant": dominant},
+        "decided_by": "SAV" if dominant else "BAV",
+        "verdict": sav_verdict if dominant else bav["verdict"],
+        "note": SAV_DOMINATES_THE_BAVS,
+    }

@@ -2726,3 +2726,202 @@ def test_interaction_2_is_worked_exactly_once():
     assert "interaction (2)" in INTERACTION_2_IS_WORKED_ONCE
     assert "All three are interaction (1)" in (
         INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES)
+
+
+# ---------------------------------------------------------------------------
+# §25.5 Transits and ashtakavarga
+# ---------------------------------------------------------------------------
+
+def test_25_5_claims_transits_are_ashtakavargas_main_purpose():
+    """Chapter 12 built the BAVs and the SAV to grade a natal chart. §25.5
+    says that is the lesser use.
+    """
+    from hora.transits.gochara import (
+        ASHTAKAVARGAS_MOST_IMPORTANT_PURPOSE,
+        THE_EIGHT_REFERENCES_GENERALISE_THE_EARLIER_SECTIONS,
+    )
+
+    assert "most important purpose is the interpretation of transits" in (
+        ASHTAKAVARGAS_MOST_IMPORTANT_PURPOSE)
+    assert "assess the strength of planets and houses in natal charts" in (
+        ASHTAKAVARGAS_MOST_IMPORTANT_PURPOSE)
+    assert "all the eight references" in (
+        THE_EIGHT_REFERENCES_GENERALISE_THE_EARLIER_SECTIONS)
+
+
+def test_moon_and_lagna_are_two_of_the_eight_references():
+    """§25.2 read from natal Moon and §25.3 added natal lagna; both are among
+    the eight the ashtakavarga already uses, so §25.5 generalises them.
+    """
+    from hora.charts.ashtakavarga import available_tables
+    from hora.transits.gochara import (
+        THE_EIGHT_REFERENCES_GENERALISE_THE_EARLIER_SECTIONS,
+    )
+
+    references = set(available_tables())
+    assert len(references) == 8
+    assert {"Moon", "Lagna"} <= references
+    assert "natal Moon and natal lagna" in (
+        THE_EIGHT_REFERENCES_GENERALISE_THE_EARLIER_SECTIONS)
+
+
+@pytest.mark.parametrize(("rekhas", "verdict", "emphasis"), [
+    (0, "bad", "invariably very poor"),
+    (1, "bad", "invariably very poor"),
+    (2, "bad", None),
+    (3, "bad", None),
+    (4, "neutral", None),
+    (5, "good", None),
+    (6, "good", "invariably excellent"),
+    (7, "good", "invariably excellent"),
+    (8, "good", None),
+])
+def test_the_bav_transit_bands(rekhas, verdict, emphasis):
+    """"5 or more... good results. 3 or less... bad results", with 6-7 and 0-1
+    singled out.
+    """
+    from hora.transits.gochara import bav_transit_verdict
+
+    got = bav_transit_verdict(rekhas)
+    assert got["verdict"] == verdict
+    assert got["emphasis"] == emphasis
+    assert got["references_approving"] == rekhas
+    assert got["of"] == 8
+
+
+def test_the_bav_bands_are_12_3s_and_4_is_already_answered():
+    """§25.5 says nothing about 4. §12.3 grades it neutral, so there is no gap
+    -- the earlier section supplies it.
+    """
+    from hora.charts.ashtakavarga import grade
+    from hora.transits.gochara import (
+        BAV_TRANSIT_RULE,
+        THE_BAV_BANDS_ARE_12_3S,
+        bav_transit_verdict,
+    )
+
+    assert "4" not in BAV_TRANSIT_RULE.replace("out of eight", "")
+    assert grade(4) == "neutral"
+    assert bav_transit_verdict(4)["verdict"] == "neutral"
+
+    # and the two gradings agree everywhere else
+    for rekhas in range(9):
+        got = bav_transit_verdict(rekhas)
+        assert (got["grade_12_3"] == "favorable") == (got["verdict"] == "good")
+        assert (got["grade_12_3"] == "unfavorable") == (got["verdict"] == "bad")
+    assert "already answered" in THE_BAV_BANDS_ARE_12_3S
+
+
+def test_the_extremes_are_what_25_5_adds_to_12_3():
+    """§12.3 grades 5 to 8 alike and 0 to 3 alike. §25.5 marks 6-7 and 0-1
+    "invariably", which is a finer band inside each side.
+    """
+    from hora.charts.ashtakavarga import grade
+    from hora.transits.gochara import THE_EXTREMES_ARE_NEW, bav_transit_verdict
+
+    assert len({grade(n) for n in (5, 6, 7, 8)}) == 1
+    assert len({grade(n) for n in (0, 1, 2, 3)}) == 1
+
+    emphasised = {n for n in range(9) if bav_transit_verdict(n)["emphasis"]}
+    assert emphasised == {0, 1, 6, 7}
+    assert "does not distinguish" in THE_EXTREMES_ARE_NEW
+
+
+def test_25_5s_two_worked_bav_examples():
+    """Saturn with 5 rekhas in Ta in the rasi BAV; Jupiter with 8 in Ar in the
+    D-10 BAV, read against a **rasi** transit -- §25.4's interaction (1).
+    """
+    from hora.transits.gochara import (
+        BAV_TRANSIT_EXAMPLES,
+        WHY_A_VARGA_BAV_READS_A_RASI_TRANSIT,
+        bav_transit_verdict,
+    )
+
+    saturn, jupiter = BAV_TRANSIT_EXAMPLES
+    assert saturn["rekhas"] == 5
+    assert bav_transit_verdict(5)["verdict"] == "good"
+    assert jupiter["rekhas"] == 8
+    assert bav_transit_verdict(8)["verdict"] == "good"
+    assert jupiter["bav_of"] == "the natal D-10 chart"
+    assert "physical level" in WHY_A_VARGA_BAV_READS_A_RASI_TRANSIT
+
+
+def test_the_sav_transit_bands_are_12_4s_restated():
+    """§12.4 already said "planets transiting in such a rasi bring good
+    results". §25.5.1 repeats it with the boundary written the other way --
+    D-40's third phrasing.
+    """
+    import pathlib
+
+    from hora.core.const import SAV_AVERAGE_FROM, SAV_STRENGTH_RULE, SAV_STRONG_FROM
+    from hora.transits.gochara import SAV_TRANSIT_RULE
+
+    assert SAV_STRONG_FROM == 30 and SAV_AVERAGE_FROM == 25
+    assert "planets transiting in such a rasi" in SAV_STRENGTH_RULE
+    assert "30 or more" in SAV_STRENGTH_RULE
+    assert "more than 30" in SAV_TRANSIT_RULE
+    assert "less than 25" in SAV_TRANSIT_RULE
+
+    text = pathlib.Path("docs/book-deviations.md").read_text()
+    assert "A third phrasing, §25.5.1" in text
+
+
+def test_sav_dominates_the_bavs_when_it_is_extreme():
+    """The rule chapter 12 never gave: which wins when the two disagree."""
+    from hora.transits.gochara import (
+        SAV_DOMINATES_THE_BAVS,
+        transit_strength,
+    )
+
+    # a very strong rasi carries a weak graha
+    strong = transit_strength(bav_rekhas=2, sav_rekhas=40)
+    assert strong["decided_by"] == "SAV"
+    assert strong["verdict"] == "favorable"
+    assert strong["bav"]["verdict"] == "bad"
+
+    # and a very weak rasi drags a strong one down
+    weak = transit_strength(bav_rekhas=6, sav_rekhas=20)
+    assert weak["decided_by"] == "SAV"
+    assert weak["verdict"] == "unfavorable"
+
+    # between 25 and 30 the SAV is not dominant, so the BAV decides
+    for total in (25, 27, 30):
+        middling = transit_strength(bav_rekhas=6, sav_rekhas=total)
+        assert middling["decided_by"] == "BAV"
+        assert middling["verdict"] == "good"
+        assert middling["sav"]["dominant"] is False
+
+    assert "dominate over the BAVs" in SAV_DOMINATES_THE_BAVS
+
+
+def test_the_bav_still_orders_two_grahas_inside_a_dominant_sav():
+    """"If a planet with 6 rekhas in Pi and a planet with 2 rekhas in Pi are
+    transiting Pi, the former will produce better results."  Both favourable,
+    and still ranked.
+    """
+    from hora.transits.gochara import (
+        SAV_DOMINATES_BUT_THE_BAV_STILL_ORDERS,
+        transit_strength,
+    )
+
+    better = transit_strength(bav_rekhas=6, sav_rekhas=40)
+    worse = transit_strength(bav_rekhas=2, sav_rekhas=40)
+    assert better["verdict"] == worse["verdict"] == "favorable"
+    assert better["bav"]["rekhas"] > worse["bav"]["rekhas"]
+    assert better["bav"]["verdict"] == "good"
+    assert worse["bav"]["verdict"] == "bad"
+
+    assert "irrespective of their strength" in (
+        SAV_DOMINATES_BUT_THE_BAV_STILL_ORDERS)
+    assert "better results than the latter" in (
+        SAV_DOMINATES_BUT_THE_BAV_STILL_ORDERS)
+
+
+def test_transit_strength_checks_its_inputs():
+    from hora.core.validate import InputError
+    from hora.transits.gochara import transit_strength
+
+    with pytest.raises(InputError):
+        transit_strength(bav_rekhas=9, sav_rekhas=30)
+    with pytest.raises(InputError):
+        transit_strength(bav_rekhas=4, sav_rekhas=57)
