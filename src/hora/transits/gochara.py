@@ -1210,15 +1210,15 @@ EXAMPLES_104_AND_105_SHARE_A_WEDDING_CHART = (
     "window Chart 53's Ascendant and AL already implied."
 )
 
-#: **Finding.** Every one of Example 105's hits is interaction (1) and none is
-#: interaction (2): the transit side is always the rasi chart and the natal
-#: side always the navamsa. So the section's "fine-tuning" half is described
-#: and never demonstrated.
-INTERACTION_2_IS_NEVER_WORKED = (
-    "Examples 104 and 105 work interaction (1) only -- a transit rasi "
-    "position against a natal chart. No example takes a transit divisional "
-    "chart against the natal rasi chart, which is the half §25.4 says "
-    "fine-tunes the timing."
+#: **Finding, superseded.** Examples 104, 105 and 106 all work interaction (1)
+#: — a transit rasi position against a natal chart, in the D-1, D-9 and D-7
+#: respectively. Through those three it looked as though the fine-tuning half
+#: was described and never demonstrated. **Example 107 demonstrates it**; see
+#: :data:`INTERACTION_2_IS_WORKED_ONCE`.
+INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES = (
+    "Examples 104, 105 and 106 each read a transit rasi position against a "
+    "natal chart -- the rasi chart, the D-9 and the D-7 in turn. All three "
+    "are interaction (1)."
 )
 
 
@@ -1328,4 +1328,86 @@ THE_LIFE_DEATH_SPLIT_IS_THE_MARAKA_HOUSES = (
     "Jupiter and Moon are called planets of death as lords of the 7th and the "
     "2nd, which are the maraka houses; Rahu joins them as a malefic in lagna. "
     "The life side is the 1st, 3rd and 8th lords."
+)
+
+
+# --------------------------------------------------------------------------
+# Example 107, part 2 — the natal rasi chart against the transit D-11
+# --------------------------------------------------------------------------
+
+#: §25.4's rule for reading the place and manner of death from the rasi chart.
+THE_THIRD_FROM_AL_SHOWS_THE_PLACE_OF_DEATH = (
+    "In rasi chart, the 3rd house from AL shows the place and nature of "
+    "death. It must have the aspect of a cruel planet for a violent death."
+)
+
+#: **Finding.** "It is aspected by Rahu from Le" is **rasi** drishti, not graha
+#: drishti. Rahu in Leo does not reach Capricorn by the 5th, 7th or 9th; Leo
+#: reaches it because a fixed rasi aspects the movable rasis but its own
+#: neighbour. The sentence names the graha and uses the sign's aspect.
+THE_CRUEL_ASPECT_HERE_IS_RASI_DRISHTI = (
+    "Leo aspects Capricorn by rasi drishti, a fixed sign aspecting the "
+    "movable ones other than its neighbour. Rahu standing in Leo does not "
+    "aspect Capricorn by graha drishti, whose 5th, 7th and 9th from Leo are "
+    "Sagittarius, Aquarius and Aries."
+)
+
+#: **Book defect.** Capricorn is called watery here and earthy in §2.2.5 and
+#: §12.6. Held as printed; `RASI_ELEMENT` is unchanged. See D-73.
+CAPRICORN_IS_CALLED_WATERY_HERE = (
+    "§25.4 calls Capricorn \"a watery sign\". §2.2.5's element cycle makes it "
+    "earthy and §12.6 names the watery trine as Cn, Sc and Pi."
+)
+
+#: What each point of the natal rasi chart stands for, as §25.4 assigns them
+#: before bringing the transit D-11 to bear.
+EXAMPLE_107_NATAL_RASI_POINTS: tuple[dict[str, str], ...] = (
+    {"point": "Le, the lagna", "stands_for": "the native"},
+    {"point": "Cp, the 6th", "stands_for": "his accidents"},
+    {"point": "Sun, the lagna lord", "stands_for": "the physical body"},
+    {"point": "Aq, the 7th, and Saturn its lord", "stands_for": "death"},
+    {"point": "Jupiter, the 8th lord", "stands_for": "longevity"},
+)
+
+#: And how the transit D-11 finds each of them. This is §25.4's interaction
+#: (2), and the only place in the book it is worked.
+EXAMPLE_107_TRANSIT_D11_HITS: tuple[dict[str, str], ...] = (
+    {"natal_point": "Le, the native", "transit_d11": "Rahu and Moon stand in "
+     "it", "reading": "afflicted, the Moon being the natal 12th lord"},
+    {"natal_point": "Jupiter, longevity", "transit_d11": "stands in Cn",
+     "reading": "the 12th house from the natal lagna"},
+    {"natal_point": "Sun, the physical body", "transit_d11": "stands in Cp "
+     "with exalted Mars", "reading": "the 6th house of accidents"},
+    {"natal_point": "Saturn, the killer", "transit_d11": "stands in Sc",
+     "reading": "the sign holding the lagna lord in the natal rasi chart"},
+)
+
+#: §25.4's own summary of the last of those.
+THE_KILLER_MEETS_THE_BODY = (
+    "So the killer of the natal rasi chart (Saturn) interacts with the "
+    "physical body (Sun) in the chart showing momentary forces of destruction "
+    "(transit D-11)."
+)
+
+#: **Finding.** The transit Moon's ekadamsa cannot be got from the printed
+#: longitude. 21 Le 49 sits **5.5 arcseconds** below the 9th amsa of Leo, which
+#: opens at 21°49.09', and gives Cancer; the ephemeris position is 47
+#: arcseconds above it and gives Leo, which is what Chart 57 draws. A D-11 amsa
+#: is 2°43'38" wide, so an arcminute of print is a fortieth of one — usually
+#: harmless, and here decisive, because the Moon lands on a boundary.
+THE_TRANSIT_MOONS_AMSA_NEEDS_THE_UNROUNDED_POSITION = (
+    "Chart 57 draws the transit Moon's D-11 in Leo. The printed 21 Le 49 "
+    "gives Cancer and the ephemeris gives Leo; the boundary lies between "
+    "them, 5.5 arcseconds above the printed value."
+)
+
+#: **Correction.** Recorded after Examples 104 to 106 that interaction (2) was
+#: described and never worked. Chart 57 works it: the natal rasi chart against
+#: the transit D-11, which is exactly that pairing. It is the only instance in
+#: the book, and it arrives in the same example as the interaction (1) reading
+#: it is meant to fine-tune.
+INTERACTION_2_IS_WORKED_ONCE = (
+    "Example 107 reads the natal rasi chart against the transit D-11, which "
+    "is §25.4's interaction (2). Charts 56 and 57 give the same nativity and "
+    "the same instant through both interactions, one after the other."
 )

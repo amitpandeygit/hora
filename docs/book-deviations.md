@@ -2354,3 +2354,37 @@ whatever the fourth was meant to be.
 
 **Closes when:** a later printing gives the fourth signification, or confirms
 the repetition.
+
+## D-73 · §25.4 calls Capricorn a watery sign; the book elsewhere calls it earthy
+
+**Status: FINDING — held as printed; the element table is unchanged.**
+
+Example 107 reads the place of death from the 3rd house from AL:
+
+> Here the 3rd house from AL is in Cp, a watery sign. It is aspected by Rahu
+> from Le and a violent death in water is possible.
+
+The 3rd from AL **is** Capricorn — AL is Scorpio and the count checks. But the
+book classes Capricorn as **earthy** in two earlier places:
+
+| where | says |
+|---|---|
+| §2.2.5's element cycle | fire, earth, air, water repeating from Aries, so Capricorn is **earth** |
+| §12.6's trinal reduction | names the watery trine explicitly as **Cn, Sc, Pi** |
+
+So the premise of the reading conflicts with the book's own classification
+twice over, while the conclusion — death in water — is what happened.
+
+The likeliest explanation is that Capricorn is *Makara*, a sea creature, and
+several traditions treat Makara as watery for **place** of death while keeping
+it earthy elementally. That is a reconstruction, not the book: §25.4 gives no
+reason and never mentions the tension.
+
+**What we do:** hold the sentence as printed and leave `RASI_ELEMENT`
+untouched — Capricorn stays earth, because two earlier sections say so and one
+later sentence is not a licence to change a table the rest of the engine reads.
+A test pins both the sentence and the table so the disagreement cannot be
+quietly resolved either way.
+
+**Closes when:** a later section states a second, place-of-death classification
+of the signs, or corrects one of the two.

@@ -2089,15 +2089,14 @@ def test_charts_53_and_54_print_the_same_transit_chart():
     assert "the same chart" in EXAMPLES_104_AND_105_SHARE_A_WEDDING_CHART
 
 
-def test_interaction_2_is_described_and_never_worked():
-    """Both examples take a transit rasi position against a natal chart. No
-    example takes a transit divisional chart against the natal rasi chart --
-    which is the half §25.4 says fine-tunes.
+def test_interaction_1_carries_examples_104_to_106():
+    """All three read a transit rasi position against a natal chart -- the
+    rasi chart, the D-9 and the D-7 in turn.
     """
     from hora.transits.gochara import (
         EXAMPLE_104_HITS,
         EXAMPLE_105_HITS,
-        INTERACTION_2_IS_NEVER_WORKED,
+        INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES,
         THE_TWO_IMPORTANT_INTERACTIONS,
     )
 
@@ -2105,12 +2104,13 @@ def test_interaction_2_is_described_and_never_worked():
     assert THE_TWO_IMPORTANT_INTERACTIONS[1]["transit"] == (
         "a transit divisional chart")
 
-    # every worked hit reads a transit rasi position
+    # every hit in those three reads a transit rasi position
     for row in EXAMPLE_104_HITS:
         assert row["in"] in ("Pi", "Cp", "Aq")
     for row in EXAMPLE_105_HITS:
         assert row["in"] in ("Pi", "Aq", "Ar", "Cp")
-    assert "No example" in INTERACTION_2_IS_NEVER_WORKED
+    assert "All three are interaction (1)" in (
+        INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES)
 
 
 # ---------------------------------------------------------------------------
@@ -2203,14 +2203,15 @@ def test_example_106_is_interaction_one_with_a_third_varga():
     from hora.transits.gochara import (
         A_THIRD_VARGA_AND_STILL_INTERACTION_ONE,
         EXAMPLE_106_READING,
-        INTERACTION_2_IS_NEVER_WORKED,
+        INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES,
         THE_TWO_IMPORTANT_INTERACTIONS,
     )
 
     assert "rasi chart transit" in EXAMPLE_106_READING
     assert "D-7" in A_THIRD_VARGA_AND_STILL_INTERACTION_ONE
     assert "interaction (1)" in A_THIRD_VARGA_AND_STILL_INTERACTION_ONE
-    assert "No example" in INTERACTION_2_IS_NEVER_WORKED
+    assert "All three are interaction (1)" in (
+        INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES)
 
     assert THE_TWO_IMPORTANT_INTERACTIONS[0]["transit"] == (
         "the transit rasi chart")
@@ -2485,3 +2486,243 @@ def test_the_transit_rasi_chart_finds_the_d11s_life_houses():
 
     assert transit["Sat"] == int(DEBILITATION_RASI[int(Graha.SATURN)])
     assert len(EXAMPLE_107_TRANSIT_AGAINST_THE_D11) == 4
+
+
+# ---------------------------------------------------------------------------
+# Example 107, part 2 — Chart 57, natal rasi against the transit D-11
+# ---------------------------------------------------------------------------
+
+def test_charts_56_and_57_are_one_nativity_and_one_instant():
+    """Same birth data, same longitudes, same transit moment -- drawn the two
+    different ways §25.4's two interactions need.
+    """
+    from hora.charts.book import chart
+
+    fifty_six, fifty_seven = chart(56), chart(57)
+    assert fifty_six["birth_data"] == fifty_seven["birth_data"]
+    assert fifty_six["longitudes"] == fifty_seven["longitudes"]
+    assert fifty_six["chara_karakas"] == fifty_seven["chara_karakas"]
+    assert (fifty_six["transit"]["birth_data"]
+            == fifty_seven["transit"]["birth_data"])
+    assert (fifty_six["transit"]["longitudes"]
+            == fifty_seven["transit"]["longitudes"])
+
+    # 56 draws the natal D-11 and the transit rasi; 57 the natal rasi and the
+    # transit D-11
+    assert "D11" in fifty_six["divisional"] and "drawn" not in fifty_six
+    assert "drawn" in fifty_seven and "divisional" not in fifty_seven
+    assert "drawn" in fifty_six["transit"]
+    assert "D11" in fifty_seven["transit"]["divisional"]
+
+
+def test_chart_57s_natal_rasi_diagram_and_its_arudha_lagna():
+    """AL reaches Scorpio only through §9.2's exception: the lagna lord is the
+    4th from lagna, the arudha lands on the 7th, and the 7th is sent to the
+    10th.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart, longitudes
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+
+    drawn = dict(chart(57)["drawn"])
+    arudha = drawn.pop("AL")
+    printed = longitudes(57)
+    for name, abbr in drawn.items():
+        assert A[int(printed[name] // 30)] == abbr, name
+
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    longs = {int(g): printed[n] for n, g in named.items()}
+    signs = {g: int(v // 30) for g, v in longs.items()}
+    lagna = int(printed["Asc"] // 30)
+    lords = {rasi: stronger(rasi, longs).winner for rasi in (7, 10)}
+
+    al = arudha_pada(1, lagna, signs, lords)
+    assert A[al.sign] == arudha == "Sc"
+    exception = [step for step in al.steps if step.number == 5]
+    assert "take the 10th" in exception[0].detail
+
+
+def test_the_third_from_al_is_capricorn_and_leo_aspects_it_by_rasi_drishti():
+    """"The 3rd house from AL is in Cp... It is aspected by Rahu from Le."
+    Rahu in Leo does not reach Capricorn by graha drishti; Leo reaches it by
+    rasi drishti.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.aspects import graha_aspects_sign, rasi_drishti
+    from hora.charts.book import longitudes
+    from hora.charts.colord import stronger
+    from hora.core.const import Graha
+    from hora.transits.gochara import (
+        THE_CRUEL_ASPECT_HERE_IS_RASI_DRISHTI,
+        THE_THIRD_FROM_AL_SHOWS_THE_PLACE_OF_DEATH,
+    )
+
+    printed = longitudes(57)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    longs = {int(g): printed[n] for n, g in named.items()}
+    signs = {g: int(v // 30) for g, v in longs.items()}
+    lagna = int(printed["Asc"] // 30)
+    lords = {rasi: stronger(rasi, longs).winner for rasi in (7, 10)}
+    al = arudha_pada(1, lagna, signs, lords).sign
+
+    third = (al + 2) % 12
+    assert A[third] == "Cp"
+    assert A[signs[int(Graha.RAHU)]] == "Le"
+
+    assert third in rasi_drishti(signs[int(Graha.RAHU)])
+    assert not graha_aspects_sign(int(Graha.RAHU), signs[int(Graha.RAHU)],
+                                  third, rahu_ketu_aspects=True)
+
+    assert "place and nature of death" in (
+        THE_THIRD_FROM_AL_SHOWS_THE_PLACE_OF_DEATH)
+    assert "rasi drishti" in THE_CRUEL_ASPECT_HERE_IS_RASI_DRISHTI
+
+
+def test_capricorn_is_called_watery_here_and_earthy_elsewhere():
+    """D-73. Held both ways: the sentence stands as printed and RASI_ELEMENT
+    stays earth, because two earlier sections say so.
+    """
+    from hora.core.const import ELEMENT_NAMES, RASI_ELEMENT
+    from hora.transits.gochara import CAPRICORN_IS_CALLED_WATERY_HERE
+
+    assert ELEMENT_NAMES[RASI_ELEMENT[R["Cp"]]] == "earth"
+    watery = [A[sign] for sign in range(12)
+              if ELEMENT_NAMES[RASI_ELEMENT[sign]] == "water"]
+    assert watery == ["Cn", "Sc", "Pi"]
+    assert "watery sign" in CAPRICORN_IS_CALLED_WATERY_HERE
+    assert "§2.2.5" in CAPRICORN_IS_CALLED_WATERY_HERE
+
+
+def test_the_natal_rasi_points_example_107_assigns():
+    """Le the native, Cp his accidents, Sun the physical body, Aq and Saturn
+    death, Jupiter longevity.
+    """
+    from hora.charts.book import longitudes
+    from hora.core.const import RASI_LORD, Graha
+    from hora.transits.gochara import EXAMPLE_107_NATAL_RASI_POINTS
+
+    lagna = int(longitudes(57)["Asc"] // 30)
+    assert A[lagna] == "Le"
+    assert int(RASI_LORD[lagna]) == int(Graha.SUN)
+    assert A[(lagna + 5) % 12] == "Cp"                    # the 6th, accidents
+    assert A[(lagna + 6) % 12] == "Aq"                    # the 7th, death
+    assert int(RASI_LORD[(lagna + 6) % 12]) == int(Graha.SATURN)
+    assert int(RASI_LORD[(lagna + 7) % 12]) == int(Graha.JUPITER)
+    assert len(EXAMPLE_107_NATAL_RASI_POINTS) == 5
+
+
+def test_the_transit_d11_finds_every_natal_rasi_point():
+    """§25.4's interaction (2), worked. Computed from the **ephemeris**, which
+    is what the drawn D-11 needs.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.vargas import varga
+    from hora.core.const import EXALTATION_RASI, RASI_LORD, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.gochara import (
+        EXAMPLE_107_TRANSIT_D11_HITS,
+        THE_KILLER_MEETS_THE_BODY,
+    )
+
+    block = chart(57)["transit"]
+    computed = compute_chart(from_local(**block["birth_data"]),
+                             Place(name="death", **block["place"]),
+                             Settings(node_type=NodeType.MEAN))
+    d11 = {int(g): varga(computed.positions[int(g)].longitude, "D11").sign
+           for g in list(Graha)[:9]}
+
+    natal = longitudes(57)
+    lagna = int(natal["Asc"] // 30)
+    natal_sun = int(natal["Sun"] // 30)
+
+    # the native's own sign holds Rahu and the natal 12th lord
+    assert d11[int(Graha.RAHU)] == lagna
+    assert d11[int(Graha.MOON)] == lagna
+    assert int(RASI_LORD[(lagna + 11) % 12]) == int(Graha.MOON)
+
+    # longevity in the 12th, the body in the 6th with exalted Mars
+    assert (d11[int(Graha.JUPITER)] - lagna) % 12 + 1 == 12
+    assert (d11[int(Graha.SUN)] - lagna) % 12 + 1 == 6
+    assert d11[int(Graha.MARS)] == d11[int(Graha.SUN)]
+    assert d11[int(Graha.MARS)] == int(EXALTATION_RASI[int(Graha.MARS)])
+
+    # and the killer stands on the sign holding the natal lagna lord
+    assert d11[int(Graha.SATURN)] == natal_sun
+    assert A[natal_sun] == "Sc"
+
+    assert len(EXAMPLE_107_TRANSIT_D11_HITS) == 4
+    assert "momentary forces of destruction" in THE_KILLER_MEETS_THE_BODY
+
+
+def test_the_transit_moons_amsa_needs_the_unrounded_position():
+    """The printed 21 Le 49 gives Cancer and the ephemeris gives Leo, which is
+    what the chart draws. The boundary lies 5.5 arcseconds above the print.
+    """
+    from hora.charts.book import chart
+    from hora.charts.book import longitude as book_longitude
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.gochara import (
+        THE_TRANSIT_MOONS_AMSA_NEEDS_THE_UNROUNDED_POSITION,
+    )
+
+    block = chart(57)["transit"]
+    drawn = block["divisional"]["D11"]
+    printed = book_longitude(block["longitudes"]["Moon"])
+    computed = compute_chart(
+        from_local(**block["birth_data"]),
+        Place(name="death", **block["place"]),
+        Settings(node_type=NodeType.MEAN)
+    ).positions[int(Graha.MOON)].longitude
+
+    assert A[varga(printed, "D11").sign] == "Cn"          # the print misses
+    assert A[varga(computed, "D11").sign] == drawn["Moon"] == "Le"
+
+    boundary = R["Le"] * 30 + 8 * (30.0 / 11.0)
+    assert 0 < (boundary - printed) * 3600 < 10           # arcseconds below
+    assert 0 < (computed - boundary) * 3600 < 60          # and above
+
+    # every other body's amsa is the same either way
+    for name in ("Sun", "Mars", "Merc", "Jup", "Ven", "Sat", "Rahu", "Ketu"):
+        assert (varga(book_longitude(block["longitudes"][name]), "D11").sign
+                == varga(compute_chart(
+                    from_local(**block["birth_data"]),
+                    Place(name="death", **block["place"]),
+                    Settings(node_type=NodeType.MEAN)
+                ).positions[int(getattr(Graha, {
+                    "Merc": "MERCURY", "Jup": "JUPITER", "Ven": "VENUS",
+                    "Sat": "SATURN"}.get(name, name.upper())))].longitude,
+                    "D11").sign), name
+
+    assert "5.5 arcseconds" in (
+        THE_TRANSIT_MOONS_AMSA_NEEDS_THE_UNROUNDED_POSITION)
+
+
+def test_interaction_2_is_worked_exactly_once():
+    """Corrects the earlier finding. Chart 57 is the natal rasi chart against
+    the transit D-11 -- interaction (2) -- and it is the only instance.
+    """
+    from hora.transits.gochara import (
+        INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES,
+        INTERACTION_2_IS_WORKED_ONCE,
+        THE_TWO_IMPORTANT_INTERACTIONS,
+    )
+
+    second = THE_TWO_IMPORTANT_INTERACTIONS[1]
+    assert second["natal"] == "the natal rasi chart"
+    assert second["transit"] == "a transit divisional chart"
+    assert second["timing"] == "fine-tune"
+
+    assert "interaction (2)" in INTERACTION_2_IS_WORKED_ONCE
+    assert "All three are interaction (1)" in (
+        INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES)

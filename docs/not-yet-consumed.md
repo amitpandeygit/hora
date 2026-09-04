@@ -837,6 +837,8 @@ consumed; what follows is §25.4's prose, its provenance and its structure.
 | `EXAMPLE_106_AWAITS_CHART_55` | The checklist for Chart 55, written before the chart existed. **Consumed**: Chart 55 arrived one section later and a test now checks the chart against all six lines |
 | `THE_ASCENDANT_CARRIES_THE_BIRTH_TIMES_ROUNDING` | Ours, not the book's: a printed ascendant can sit 5' to 16' from ours while every graha agrees, because birth times are printed to the minute. A test checks it across the whole register; nothing reads the sentence |
 | `D11_IS_RUDRAMSA` · `EXAMPLE_107_NATAL_D11` · `EXAMPLE_107_TRANSIT_AGAINST_THE_D11` · `PLANETS_OF_LIFE_AND_DEATH` · `THE_LIFE_DEATH_SPLIT_IS_THE_MARAKA_HOUSES` | Example 107's D-11 reading and the life/death split it introduces. Every placement it asserts **is** reproduced; these hold the reasoning, and no layer yet sorts a chart's grahas into life and death |
+| `THE_THIRD_FROM_AL_SHOWS_THE_PLACE_OF_DEATH` · `THE_CRUEL_ASPECT_HERE_IS_RASI_DRISHTI` · `CAPRICORN_IS_CALLED_WATERY_HERE` | §25.4's place-of-death rule, and two findings about how it is applied. D-73 for the element |
+| `EXAMPLE_107_NATAL_RASI_POINTS` · `EXAMPLE_107_TRANSIT_D11_HITS` · `THE_KILLER_MEETS_THE_BODY` · `THE_TRANSIT_MOONS_AMSA_NEEDS_THE_UNROUNDED_POSITION` · `INTERACTION_2_IS_WORKED_ONCE` · `INTERACTION_1_CARRIES_THE_FIRST_THREE_EXAMPLES` | The interaction (2) reading. Every placement **is** reproduced; these hold what it means |
 
 ---
 
