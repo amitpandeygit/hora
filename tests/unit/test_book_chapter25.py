@@ -148,11 +148,18 @@ def test_the_seven_promised_tables_are_tracked_and_none_is_built_yet():
     assert len(STANDARD_RESULT_TABLES) == 7
     assert "Table 53 - Table 59" in SEVEN_TABLES_ARE_PROMISED
 
-    built = {number for number, row in STANDARD_RESULT_TABLES.items()
-             if row["built"]}
-    assert built == set(), f"registered as built but untested: {built}"
+    from hora.core.const import GRAHA_NAMES
+    from hora.transits.gochara import STANDARD_RESULTS
+
     for row in STANDARD_RESULT_TABLES.values():
         assert (row["for"] is None) == (not row["built"])
+
+    registered = {row["for"] for row in STANDARD_RESULT_TABLES.values()
+                  if row["built"]}
+    supplied = {str(GRAHA_NAMES[graha]) for graha in STANDARD_RESULTS}
+    assert registered == supplied, (
+        f"registered {registered} but built {supplied}")
+    assert registered == {"Sun"}                 # Table 53 only, so far
 
 
 def test_part_3s_opening_gave_no_roadmap_but_25_2_does():
@@ -197,3 +204,150 @@ def test_janma_rasi_wraps_rather_than_raising(longitude, expected):
     assert A[janma_rasi(longitude)] == expected
     with pytest.raises(InputError):
         janma_rasi(float("nan"))
+
+
+# ---------------------------------------------------------------------------
+# Table 53 — Sun's transit from janma rasi
+# ---------------------------------------------------------------------------
+
+#: Table 53 exactly as printed, House / Snapshot / Typical results.
+PRINTED_TABLE_53 = (
+    (1, "Bad", "Financial loss, many travels, discomfort"),
+    (2, "Bad", "Unhappiness, eye troubles, fear"),
+    (3, "Good", "Wealth, good health, victory"),
+    (4, "Bad", "Marital disharmony, loss of name"),
+    (5, "Bad", "Bad health, fear from enemies"),
+    (6, "Good", "Success over enemies, good health"),
+    (7, "Bad", "Travels, physical pain"),
+    (8, "Bad", "Disease, setbacks in marriage"),
+    (9, "Bad", "Mental worries, obstacles"),
+    (10, "Good", "Success, honors, gains"),
+    (11, "Good", "Good health, prosperity, honors"),
+    (12, "Bad", "Expenditure, losses"),
+)
+
+
+@pytest.mark.parametrize(("house", "snapshot", "results"), PRINTED_TABLE_53)
+def test_table_53_row_by_row(house, snapshot, results):
+    from hora.core.const import Graha
+    from hora.transits.gochara import transit_result
+
+    got = transit_result(Graha.SUN, house)
+    assert got["house"] == house
+    assert got["snapshot"] == snapshot
+    assert got["results"] == results
+    assert got["graha_name"] == "Sun"
+
+
+def test_table_53_is_twelve_rows_in_house_order_and_two_verdicts():
+    from hora.transits.gochara import SNAPSHOTS, TABLE_53_SUN
+
+    assert len(TABLE_53_SUN) == 12
+    assert [row["house"] for row in TABLE_53_SUN] == list(range(1, 13))
+    assert {row["snapshot"] for row in TABLE_53_SUN} == set(SNAPSHOTS)
+    assert SNAPSHOTS == ("Good", "Bad")
+
+
+def test_suns_good_houses_are_exactly_the_upachayas():
+    """Table 53 marks the 3rd, 6th, 10th and 11th Good and the other eight
+    Bad. Those four are §7's upachaya houses -- which Table 53 never names, so
+    the identity is ours.
+    """
+    from hora.core.const import UPACHAYA, Graha
+    from hora.transits.gochara import (
+        SUNS_GOOD_HOUSES_ARE_THE_UPACHAYAS,
+        TABLE_53_SUN,
+        good_houses,
+    )
+
+    assert good_houses(Graha.SUN) == (3, 6, 10, 11)
+    assert good_houses(Graha.SUN) == UPACHAYA
+
+    bad = tuple(row["house"] for row in TABLE_53_SUN
+                if row["snapshot"] == "Bad")
+    assert set(bad) == set(range(1, 13)) - set(UPACHAYA)
+    assert len(bad) == 8
+    assert "does not name" in SUNS_GOOD_HOUSES_ARE_THE_UPACHAYAS
+
+
+def test_every_row_carries_25_2s_caveat():
+    """The table gives a valence; the caveat says the subject comes from the
+    natal chart. A caller cannot get one without the other.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import (
+        THE_TABLES_ARE_REFERENCE_ONLY,
+        transit_result,
+    )
+
+    for house in range(1, 13):
+        assert transit_result(Graha.SUN, house)["caveat"] == (
+            THE_TABLES_ARE_REFERENCE_ONLY)
+
+
+def test_an_unsupplied_table_raises_and_names_the_graha():
+    """Tables 54 to 59 have not arrived. Asking for one says so rather than
+    returning a neutral verdict.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import GocharaError, good_houses, transit_result
+
+    for graha in (Graha.MOON, Graha.MARS, Graha.MERCURY, Graha.JUPITER,
+                  Graha.VENUS, Graha.SATURN, Graha.RAHU, Graha.KETU):
+        with pytest.raises(GocharaError, match="have not been supplied"):
+            transit_result(graha, 1)
+        with pytest.raises(GocharaError, match="have not been supplied"):
+            good_houses(graha)
+
+
+def test_read_transits_reports_what_is_missing_rather_than_dropping_it():
+    """A whole transit chart read from janma rasi: the Sun gets a verdict and
+    the rest are `undecided`, not absent.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import read_transits
+
+    moon = R["Le"] * 30 + 15.0                   # janma rasi Leo
+    got = read_transits(moon, {
+        int(Graha.SUN): R["Li"] * 30 + 1.0,      # the 3rd from Leo
+        int(Graha.MARS): R["Pi"] * 30 + 1.0,     # the 8th
+    })
+    assert len(got) == 2
+
+    sun = next(row for row in got if row["graha"] == int(Graha.SUN))
+    assert (sun["house"], sun["snapshot"]) == (3, "Good")
+    assert sun["results"] == "Wealth, good health, victory"
+    assert sun["undecided"] is None
+
+    mars = next(row for row in got if row["graha"] == int(Graha.MARS))
+    assert mars["house"] == 8                    # the house is known
+    assert mars["snapshot"] is None              # the verdict is not
+    assert "have not been supplied" in mars["undecided"]
+
+
+def test_the_suns_own_transit_of_a_real_chart():
+    """Chart 3's janma rasi is Leo. On the day he became Prime Minister the
+    Sun stood in Pisces -- the 8th from janma rasi, which Table 53 calls Bad.
+    The caveat is the point: a snapshot is not the reading.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.gochara import house_from_janma, transit_result
+
+    record = chart(3)
+    sworn_in = compute_chart(
+        from_local(year=1998, month=3, day=19, hour=12, minute=0,
+                   second=0.0, utc_offset_hours=5.5),
+        Place(name="Chart 3", **record["place"]), Settings())
+
+    natal_moon = longitudes(3)["Moon"]
+    transit_sun = sworn_in.positions[int(Graha.SUN)].longitude
+    where = house_from_janma(natal_moon, transit_sun)
+
+    assert where["janma_rasi_name"] == "Leo"
+    assert where["transit_rasi_name"] == "Pisces"
+    assert where["house"] == 8
+    assert transit_result(Graha.SUN, where["house"])["snapshot"] == "Bad"

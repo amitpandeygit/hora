@@ -797,7 +797,8 @@ and the seven result tables arrive one at a time.
 | `MOON_IS_THE_MOST_POPULAR_REFERENCE` · `JANMA_RASI_MEANS` | Why Moon is taken first and what janma rasi is. `janma_rasi` implements the definition; the prose is not read by code |
 | `THE_DASA_LORDS_TRANSIT_MATTERS_MOST` | A cross-link to Vimsottari, agreeing with §24.5's `DASA_SPECIALISATIONS`. No reading layer joins a dasa lord to a transit yet |
 | `THE_TABLES_ARE_REFERENCE_ONLY` · `THE_SUBJECT_COMES_FROM_NATAL_LORDSHIP` · `THE_TABLE_IS_NOT_THE_READING` | The caveat that governs Tables 53 to 59: the table gives the valence, natal lordship gives the subject. Cannot be consumed until a table exists to qualify |
-| `STANDARD_RESULT_TABLES` · `SEVEN_TABLES_ARE_PROMISED` | The roadmap for §25.2, all seven still unbuilt. A test fails if one is registered built without being tested |
+| `STANDARD_RESULT_TABLES` · `SEVEN_TABLES_ARE_PROMISED` | The roadmap for §25.2. Table 53 is in, 54 to 59 are not. A test fails if the register and `STANDARD_RESULTS` disagree |
+| `SNAPSHOTS` · `SUNS_GOOD_HOUSES_ARE_THE_UPACHAYAS` | The two verdicts Table 53 offers, and our own note that its four Good houses are §7's upachayas. `TABLE_53_SUN` itself **is** consumed, by `transit_result` |
 
 ---
 

@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from hora.charts.house import house_of_rasi
 from hora.core import validate
-from hora.core.const import RASI_NAMES
+from hora.core.const import GRAHA_NAMES, RASI_NAMES, Graha
 
 
 class GocharaError(validate.InputError):
@@ -152,10 +152,10 @@ THE_TABLE_IS_NOT_THE_READING = (
 )
 
 #: The seven tables §25.2 promises, filled in as each is supplied. A test
-#: asserts this matches what is actually built, so the section cannot be
-#: called finished early.
+#: asserts this matches :data:`STANDARD_RESULTS`, so the section cannot be
+#: called finished early or a table registered without being built.
 STANDARD_RESULT_TABLES: dict[int, dict[str, object]] = {
-    53: {"for": None, "built": False},
+    53: {"for": "Sun", "built": True},
     54: {"for": None, "built": False},
     55: {"for": None, "built": False},
     56: {"for": None, "built": False},
@@ -163,6 +163,112 @@ STANDARD_RESULT_TABLES: dict[int, dict[str, object]] = {
     58: {"for": None, "built": False},
     59: {"for": None, "built": False},
 }
+
+
+# --------------------------------------------------------------------------
+# Table 53 — Sun's transit from janma rasi
+# --------------------------------------------------------------------------
+
+#: The two verdicts the "Snapshot" column uses. Nothing finer is offered, and
+#: nothing finer is invented: a house is Good or it is Bad.
+SNAPSHOTS: tuple[str, ...] = ("Good", "Bad")
+
+#: Table 53 exactly as printed, in house order.
+TABLE_53_SUN: tuple[dict[str, object], ...] = (
+    {"house": 1, "snapshot": "Bad",
+     "results": "Financial loss, many travels, discomfort"},
+    {"house": 2, "snapshot": "Bad",
+     "results": "Unhappiness, eye troubles, fear"},
+    {"house": 3, "snapshot": "Good",
+     "results": "Wealth, good health, victory"},
+    {"house": 4, "snapshot": "Bad",
+     "results": "Marital disharmony, loss of name"},
+    {"house": 5, "snapshot": "Bad",
+     "results": "Bad health, fear from enemies"},
+    {"house": 6, "snapshot": "Good",
+     "results": "Success over enemies, good health"},
+    {"house": 7, "snapshot": "Bad", "results": "Travels, physical pain"},
+    {"house": 8, "snapshot": "Bad",
+     "results": "Disease, setbacks in marriage"},
+    {"house": 9, "snapshot": "Bad", "results": "Mental worries, obstacles"},
+    {"house": 10, "snapshot": "Good", "results": "Success, honors, gains"},
+    {"house": 11, "snapshot": "Good",
+     "results": "Good health, prosperity, honors"},
+    {"house": 12, "snapshot": "Bad", "results": "Expenditure, losses"},
+)
+
+#: **Finding.** Sun's four Good houses are the **upachayas** — 3, 6, 10 and 11
+#: — exactly, and its eight Bad houses are exactly the rest. §7's upachaya set
+#: is defined for natal placement and growth over time; Table 53 never says
+#: the word, so the identity is ours and not the book's.
+SUNS_GOOD_HOUSES_ARE_THE_UPACHAYAS = (
+    "Table 53 marks the 3rd, 6th, 10th and 11th Good and the other eight Bad. "
+    "Those four are §7's upachaya houses, which Table 53 does not name."
+)
+
+#: Every supplied table, keyed by graha. Tables 54 to 59 join it as they come.
+STANDARD_RESULTS: dict[int, tuple[dict[str, object], ...]] = {
+    int(Graha.SUN): TABLE_53_SUN,
+}
+
+
+def transit_result(graha: int, house: int) -> dict:
+    """One row of §25.2's standard results.
+
+    :param house: the house from janma rasi, 1 to 12, as
+        :func:`house_from_janma` reports it.
+    :raises GocharaError: for a graha whose table has not been supplied — the
+        error names it rather than returning a neutral verdict.
+    """
+    index = validate.in_range("graha", int(graha), 0, 8)
+    place = validate.in_range("house", house, 1, 12)
+    if index not in STANDARD_RESULTS:
+        raise GocharaError(
+            f"§25.2's standard results for {GRAHA_NAMES[index]} have not been "
+            f"supplied; Table 53 to Table 59 arrive one at a time")
+    row = STANDARD_RESULTS[index][place - 1]
+    return {
+        "graha": index, "graha_name": str(GRAHA_NAMES[index]),
+        "house": place,
+        "snapshot": row["snapshot"], "results": row["results"],
+        "caveat": THE_TABLES_ARE_REFERENCE_ONLY,
+    }
+
+
+def good_houses(graha: int) -> tuple[int, ...]:
+    """The houses a graha's table marks Good, in order."""
+    index = validate.in_range("graha", int(graha), 0, 8)
+    if index not in STANDARD_RESULTS:
+        raise GocharaError(
+            f"§25.2's standard results for {GRAHA_NAMES[index]} have not been "
+            f"supplied")
+    return tuple(int(str(row["house"])) for row in STANDARD_RESULTS[index]
+                 if row["snapshot"] == "Good")
+
+
+def read_transits(natal_moon_longitude: float,
+                  transit_longitudes: dict[int, float]) -> tuple[dict, ...]:
+    """§25.2 applied: each transiting graha's house from janma rasi and the
+    standard result for it.
+
+    Grahas whose table has not been supplied are reported with ``undecided``
+    rather than dropped, so a caller can see what is missing.
+    """
+    houses = houses_from_janma(natal_moon_longitude, transit_longitudes)
+    out = []
+    for graha, house in sorted(houses.items()):
+        try:
+            row = transit_result(graha, house)
+        except GocharaError as missing:
+            out.append({
+                "graha": graha, "graha_name": str(GRAHA_NAMES[graha]),
+                "house": house, "snapshot": None, "results": None,
+                "undecided": str(missing),
+            })
+        else:
+            row["undecided"] = None
+            out.append(row)
+    return tuple(out)
 
 #: §25.2's own sentence naming them, which is the only roadmap Part 3 gives.
 #: Part 3's opening named no techniques at all.
