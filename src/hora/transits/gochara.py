@@ -1269,3 +1269,63 @@ MERCURY_IS_BOTH_LORD_AND_OCCUPANT_OF_THE_D7_FIFTH = (
     "Virgo is the D-7's 5th house, Mercury lords it, and Mercury stands in "
     "it exalted. Jupiter, the karaka of children, stands there too."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 107, part 1 — the natal D-11 against the transit rasi chart
+# --------------------------------------------------------------------------
+
+#: Why the D-11 is the chart chosen, and the only place the book names the
+#: varga by its other name in a transit context.
+D11_IS_RUDRAMSA = (
+    "D-11 or Rudramsa is the chart that shows death and destruction. "
+    "Considering that the native had a violent death in a plane crash, D-11 "
+    "is the apt chart to see his death."
+)
+
+#: **A reading device introduced here.** §25.4 splits the grahas of a chart
+#: into those that carry **life** and those that carry **death**, by what they
+#: lord in the chart being read, and then asks how each fares in transit.
+#: Nothing earlier in the book divides a chart's grahas this way.
+PLANETS_OF_LIFE_AND_DEATH: tuple[dict[str, object], ...] = (
+    {"side": "life", "graha": "Mercury", "because": "1st lord"},
+    {"side": "life", "graha": "Sun",
+     "because": "3rd lord, which shows physical vitality"},
+    {"side": "life", "graha": "Saturn", "because": "8th lord"},
+    {"side": "death", "graha": "Jupiter", "because": "7th lord"},
+    {"side": "death", "graha": "Moon", "because": "2nd lord"},
+    {"side": "death", "graha": "Rahu", "because": "a malefic in lagna"},
+)
+
+#: The natal D-11's own features, before any transit is brought to it.
+EXAMPLE_107_NATAL_D11: tuple[str, ...] = (
+    ("Natal D-11 has lagna in Ge and Rahu occupies it. That is consistent "
+     "with a violent death."),
+    "The 2nd house in Cn is strong with its lord Moon occupying it.",
+    ("Sun is the 3rd lord -- which shows physical vitality -- and he joins the "
+     "house of death, 7th, with 7th lord Jupiter."),
+    "Mercury owns lagna and he is in 12th.",
+    "This D-11 chart has unfavorable features.",
+)
+
+#: And how the transit rasi chart finds them, which is §25.4's interaction (1).
+EXAMPLE_107_TRANSIT_AGAINST_THE_D11: tuple[str, ...] = (
+    ("Two planets of life, Mercury and Sun, are in Cn, afflicted by Rahu. Cn "
+     "is the 2nd house and stands for death in the natal D-11."),
+    ("Planet of death Moon is in Le (a house of life from natal D-11 lagna) "
+     "and Jupiter aspects him, as well as his own 7th house (Sg)."),
+    "Saturn is debilitated.",
+    ("On the whole, the houses and planets of life in D-11 are afflicted or "
+     "weak in the transit rasi chart."),
+)
+
+#: **Finding.** The 2nd and the 7th are the maraka houses everywhere in the
+#: book, and §25.4 uses them here without saying so: the two "planets of
+#: death" that are lords are the **2nd** lord and the **7th** lord, and the
+#: house Mercury and the Sun are found in is the **2nd**. So the life/death
+#: split is the maraka doctrine applied to a varga rather than a new rule.
+THE_LIFE_DEATH_SPLIT_IS_THE_MARAKA_HOUSES = (
+    "Jupiter and Moon are called planets of death as lords of the 7th and the "
+    "2nd, which are the maraka houses; Rahu joins them as a malefic in lagna. "
+    "The life side is the 1st, 3rd and 8th lords."
+)

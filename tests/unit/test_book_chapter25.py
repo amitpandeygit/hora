@@ -7,6 +7,8 @@ cannot be called finished early.
 """
 from __future__ import annotations
 
+import re
+
 import pytest
 
 from hora.core.const import RASI_ABBR
@@ -2305,3 +2307,181 @@ def test_the_ascendant_carries_the_birth_times_rounding_across_the_register():
 
     assert "under a minute of birth time" in (
         THE_ASCENDANT_CARRIES_THE_BIRTH_TIMES_ROUNDING)
+
+
+# ---------------------------------------------------------------------------
+# Example 107, part 1 — Chart 56, natal D-11 against the transit rasi chart
+# ---------------------------------------------------------------------------
+
+def _chart_56_d11():
+    """JFK Jr's natal D-11, from the printed natal longitudes."""
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+    from hora.core.const import Graha
+
+    printed = longitudes(56)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+    return {
+        "lagna": varga(printed["Asc"], "D11").sign,
+        "signs": {int(g): varga(printed[n], "D11").sign
+                  for n, g in named.items()},
+    }
+
+
+def _chart_56_transit_signs():
+    from hora.charts.book import chart
+    from hora.charts.book import longitude as book_longitude
+
+    return {name: int(book_longitude(value) // 30)
+            for name, value in chart(56)["transit"]["longitudes"].items()}
+
+
+def test_chart_56s_two_halves_recompute():
+    """Both, ascendants included -- this nativity's birth time is fine enough
+    that the ascendant lands inside an arcminute too.
+    """
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.book import longitude as book_longitude
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(56)
+    settings = Settings(node_type=NodeType.MEAN)
+
+    natal = compute_chart(from_local(**record["birth_data"]),
+                          Place(name="JFK Jr", **record["place"]), settings)
+    printed = longitudes(56)
+    for name, graha in GRAHA_OF.items():
+        assert abs(natal.positions[int(graha)].longitude
+                   - printed[name]) * 60 < 1.0, name
+    assert abs(natal.lagna_longitude - printed["Asc"]) * 60 < 1.0
+
+    block = record["transit"]
+    transit = compute_chart(from_local(**block["birth_data"]),
+                            Place(name="death", **block["place"]), settings)
+    for name, graha in GRAHA_OF.items():
+        assert abs(transit.positions[int(graha)].longitude
+                   - book_longitude(block["longitudes"][name])) * 60 < 1.0, name
+    assert abs(transit.lagna_longitude
+               - book_longitude(block["longitudes"]["Asc"])) * 60 < 1.0
+
+
+def test_chart_56s_drawn_d11_and_transit_rasi_reproduce():
+    from hora.charts.book import chart, longitudes
+    from hora.charts.book import longitude as book_longitude
+    from hora.charts.vargas import varga
+
+    drawn = dict(chart(56)["divisional"]["D11"])
+    drawn.pop("AL")
+    printed = longitudes(56)
+    for name, abbr in drawn.items():
+        assert A[varga(printed[name], "D11").sign] == abbr, name
+
+    block = chart(56)["transit"]
+    transit_drawn = dict(block["drawn"])
+    transit_drawn.pop("AL")
+    for name, abbr in transit_drawn.items():
+        assert A[int(book_longitude(block["longitudes"][name]) // 30)] == abbr, name
+
+
+def test_example_107s_four_claims_about_the_natal_d11():
+    """"Lagna in Ge and Rahu occupies it... The 2nd house in Cn is strong with
+    its lord Moon occupying it... Sun is the 3rd lord and he joins the house of
+    death, 7th, with 7th lord Jupiter... Mercury owns lagna and he is in 12th."
+    """
+    from hora.core.const import RASI_LORD, Graha
+    from hora.transits.gochara import D11_IS_RUDRAMSA, EXAMPLE_107_NATAL_D11
+
+    d11 = _chart_56_d11()
+    lagna, signs = d11["lagna"], d11["signs"]
+    assert A[lagna] == "Ge"
+    assert signs[int(Graha.RAHU)] == lagna
+
+    second = (lagna + 1) % 12
+    assert A[second] == "Cn"
+    assert int(RASI_LORD[second]) == int(Graha.MOON)
+    assert signs[int(Graha.MOON)] == second          # its lord occupies it
+
+    third, seventh = (lagna + 2) % 12, (lagna + 6) % 12
+    assert int(RASI_LORD[third]) == int(Graha.SUN)
+    assert int(RASI_LORD[seventh]) == int(Graha.JUPITER)
+    assert signs[int(Graha.SUN)] == signs[int(Graha.JUPITER)] == seventh
+    assert A[seventh] == "Sg"
+
+    assert int(RASI_LORD[lagna]) == int(Graha.MERCURY)
+    assert signs[int(Graha.MERCURY)] == (lagna + 11) % 12
+
+    assert "Rudramsa" in D11_IS_RUDRAMSA
+    assert len(EXAMPLE_107_NATAL_D11) == 5
+
+
+def test_the_life_death_split_is_the_maraka_houses():
+    """The two "planets of death" that are lords own the 2nd and the 7th --
+    §14's maraka houses -- and Rahu joins them as a malefic in lagna. The
+    section never says the word.
+    """
+    from hora.core.const import MARAKA_HOUSES, RASI_LORD, Graha
+    from hora.transits.gochara import (
+        PLANETS_OF_LIFE_AND_DEATH,
+        THE_LIFE_DEATH_SPLIT_IS_THE_MARAKA_HOUSES,
+    )
+
+    d11 = _chart_56_d11()
+    lagna = d11["lagna"]
+    by_side = {}
+    for row in PLANETS_OF_LIFE_AND_DEATH:
+        by_side.setdefault(row["side"], []).append(row)
+    assert len(by_side["life"]) == len(by_side["death"]) == 3
+
+    named = {"Mercury": Graha.MERCURY, "Sun": Graha.SUN, "Saturn": Graha.SATURN,
+             "Jupiter": Graha.JUPITER, "Moon": Graha.MOON, "Rahu": Graha.RAHU}
+
+    def house_lorded(because):
+        match = re.match(r"(\d+)(?:st|nd|rd|th) lord", because)
+        return int(match.group(1)) if match else None
+
+    for row in PLANETS_OF_LIFE_AND_DEATH:
+        house = house_lorded(str(row["because"]))
+        if house is None:
+            continue
+        assert int(RASI_LORD[(lagna + house - 1) % 12]) == int(
+            named[str(row["graha"])]), row
+
+    life_lords = {house_lorded(str(row["because"])) for row in by_side["life"]}
+    death_lords = {house_lorded(str(row["because"]))
+                   for row in by_side["death"]} - {None}
+    assert death_lords == set(MARAKA_HOUSES) == {2, 7}
+    assert life_lords == {1, 3, 8}
+    assert "maraka houses" in THE_LIFE_DEATH_SPLIT_IS_THE_MARAKA_HOUSES
+
+
+def test_the_transit_rasi_chart_finds_the_d11s_life_houses():
+    """"Mercury and Sun are in Cn, afflicted by Rahu... Moon is in Le, a house
+    of life... Jupiter aspects him and his own 7th... Saturn is debilitated."
+    """
+    from hora.charts.aspects import graha_aspects_sign
+    from hora.core.const import DEBILITATION_RASI, Graha
+    from hora.transits.gochara import EXAMPLE_107_TRANSIT_AGAINST_THE_D11
+
+    d11 = _chart_56_d11()
+    lagna = d11["lagna"]
+    transit = _chart_56_transit_signs()
+
+    # the two planets of life stand in the D-11's 2nd, with Rahu
+    assert transit["Merc"] == transit["Sun"] == transit["Rahu"] == R["Cn"]
+    assert (R["Cn"] - lagna) % 12 + 1 == 2
+
+    # the planet of death stands in the D-11's 3rd, a house of life
+    assert transit["Moon"] == R["Le"]
+    assert (R["Le"] - lagna) % 12 + 1 == 3
+
+    # Jupiter reaches both the Moon and his own 7th
+    assert graha_aspects_sign(int(Graha.JUPITER), transit["Jup"], R["Le"])
+    assert graha_aspects_sign(int(Graha.JUPITER), transit["Jup"], R["Sg"])
+    assert (R["Sg"] - lagna) % 12 + 1 == 7
+
+    assert transit["Sat"] == int(DEBILITATION_RASI[int(Graha.SATURN)])
+    assert len(EXAMPLE_107_TRANSIT_AGAINST_THE_D11) == 4

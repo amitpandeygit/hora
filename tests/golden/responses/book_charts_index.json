@@ -378,6 +378,13 @@
         "number": 55,
         "recomputable": true,
         "title": "A gentleman, and his daughter's birth transit \u2014 Example 106"
+      },
+      {
+        "birth": "November 25, 1960, 12:22 am (5:00 West), 77 W 02, 38 N 53",
+        "first_seen": "chapter 25, Example 107",
+        "number": 56,
+        "recomputable": true,
+        "title": "John F. Kennedy, Jr \u2014 natal D-11 and transit rasi, Example 107"
       }
     ],
     "not_supplied": [
@@ -431,7 +438,8 @@
       51,
       53,
       54,
-      55
+      55,
+      56
     ]
   },
   "status": 200

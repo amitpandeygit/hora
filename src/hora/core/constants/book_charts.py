@@ -452,6 +452,67 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "to the printed precision, so the D-24 is where they part."
         ),
     },
+    56: {
+        "title": "John F. Kennedy, Jr — natal D-11 and transit rasi, Example 107",
+        "birth": "November 25, 1960, 12:22 am (5:00 West), 77 W 02, 38 N 53",
+        "birth_data": {
+            "year": 1960, "month": 11, "day": 25, "hour": 0, "minute": 22,
+            "second": 0.0, "utc_offset_hours": -5.0,
+        },
+        "place": {"latitude": 38 + 53 / 60, "longitude": -(77 + 2 / 60)},
+        "longitudes": {
+            "Asc": "18 Le 39", "Sun": "9 Sc 38", "Moon": "4 Aq 06",
+            "Mars": "25 Ge 12", "Merc": "19 Li 55", "Jup": "12 Sg 31",
+            "Ven": "18 Sg 35", "Sat": "22 Sg 15", "Rahu": "17 Le 58",
+            "Ketu": "17 Aq 58", "HL": "19 Ar 11", "GL": "19 Ge 34",
+        },
+        "chara_karakas": {
+            "Mars": "AK", "Sat": "AmK", "Merc": "BK", "Moon": "DK",
+            "Sun": "GK", "Ven": "MK", "Jup": "PiK", "Rahu": "PK",
+        },
+        "retrograde": ("Mars",),
+        "divisional": {
+            "D11": {
+                "AL": "Ar", "Sat": "Ar", "Merc": "Ta", "Rahu": "Ge",
+                "Asc": "Ge", "Moon": "Cn", "GL": "Vi", "HL": "Sc",
+                "Mars": "Sc", "Jup": "Sg", "Sun": "Sg", "Ketu": "Sg",
+                "Ven": "Aq",
+            },
+        },
+        "transit": {
+            "for": "his death",
+            "date": "July 16, 1999, 9:45 pm (4:00 West), 71 W 12, 42 N 30",
+            "birth_data": {
+                "year": 1999, "month": 7, "day": 16, "hour": 21, "minute": 45,
+                "second": 0.0, "utc_offset_hours": -4.0,
+            },
+            "place": {"latitude": 42.5, "longitude": -(71 + 12 / 60)},
+            "longitudes": {
+                "Asc": "0 Aq 51", "Sun": "0 Cn 14", "Moon": "21 Le 49",
+                "Mars": "10 Li 37", "Merc": "14 Cn 58", "Jup": "8 Ar 45",
+                "Ven": "8 Le 18", "Sat": "21 Ar 41", "Rahu": "20 Cn 06",
+                "Ketu": "20 Cp 06", "HL": "10 Sc 49", "GL": "27 Sc 42",
+            },
+            "drawn": {
+                "Sat": "Ar", "Jup": "Ar", "Merc": "Cn", "Sun": "Cn",
+                "Rahu": "Cn", "Ven": "Le", "Moon": "Le", "Mars": "Li",
+                "GL": "Sc", "HL": "Sc", "AL": "Sg", "Ketu": "Cp",
+                "Asc": "Aq",
+            },
+        },
+        "events": {
+            "died in a plane crash": "July 16, 1999",
+        },
+        "first_seen": "chapter 25, Example 107",
+        "note": (
+            "The first chart in the register named for a public figure whose "
+            "**death** it reads. Both halves recompute inside an arcminute, "
+            "the ascendants included, and all twelve natal D-11 placements "
+            "follow from the printed longitudes. Chart 57 prints the same two "
+            "moments the other way round -- natal rasi against transit D-11 "
+            "-- so the pair is one nativity and one instant drawn twice."
+        ),
+    },
     55: {
         "title": "A gentleman, and his daughter's birth transit — Example 106",
         "birth": "June 23, 1961, 10:46 pm (IST), 81 E 48, 17 N 00",
