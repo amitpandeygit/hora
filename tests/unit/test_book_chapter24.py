@@ -2344,14 +2344,15 @@ def test_example_100s_chain_from_the_ninth_house_to_the_eighth_from_a9():
         "Capricorn", "Cancer", "Taurus", "Leo"]
 
 
-def test_the_moon_that_afflicts_is_a_waning_moon():
-    """"He afflicts Sun" is undefined here, and the Moon is no general malefic.
-    This one is: the birth falls in Krishna paksha, which §3.2.1 makes a
-    natural malefic. The book does not say so; recorded as inference.
+def test_the_moon_that_afflicts_is_also_a_waning_moon():
+    """This Moon is a natural malefic -- the birth falls in Krishna paksha, and
+    §3.2.1 makes a waning Moon one. True, and superseded as an explanation by
+    Exercise 35, which afflicts with Venus; see
+    :func:`test_afflicts_cannot_mean_malefic_influence`.
     """
     from hora.charts.benefic import moon_nature
     from hora.charts.book import longitudes
-    from hora.dasha.nakshatra.kalachakra import AFFLICTS_IS_NOT_DEFINED_HERE
+    from hora.dasha.nakshatra.kalachakra import THE_AFFLICTING_MOON_IS_ALSO_WANING
     from hora.panchanga.core import paksha_at
 
     printed = longitudes(48)
@@ -2359,7 +2360,7 @@ def test_the_moon_that_afflicts_is_a_waning_moon():
     assert paksha == 1                            # Krishna, waning
     assert moon_nature(paksha) == "malefic"
     assert moon_nature(0) == "benefic"            # a waxing Moon would not be
-    assert "does not say what afflicting is" in AFFLICTS_IS_NOT_DEFINED_HERE
+    assert "Krishna paksha" in THE_AFFLICTING_MOON_IS_ALSO_WANING
 
 
 def test_example_100_is_the_first_reading_to_use_a_gati():
@@ -3061,3 +3062,170 @@ def test_thirty_rekhas_is_attributed_to_parasara_here():
 
     assert SAV_STRONG_REKHAS == 30
     assert "as per Parasara" in THIRTY_REKHAS_IS_PARASARAS
+
+
+# ---------------------------------------------------------------------------
+# Exercise 35 — the same native's mother, from A4
+# ---------------------------------------------------------------------------
+
+def test_exercise_35_reads_the_mother_from_a4():
+    """"The 4th house is in Sg. A4 or the arudha pada of 4th house is in Vi."
+
+    Example 100 read the father from A9; nothing there said the rule extended
+    to other relatives. This is the same rule on the 4th house.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_NAMES
+    from hora.dasha.nakshatra.kalachakra import (
+        EXERCISE_35_READS_THE_MOTHER_FROM_A4,
+        THE_HOUSE_IS_THE_CONCEPT_AND_THE_ARUDHA_IS_THE_BODY,
+    )
+
+    chart = _chart_48()
+    fourth = (chart["lagna"] + 3) % 12
+    assert str(RASI_NAMES[fourth]) == "Sagittarius"
+
+    a4 = arudha_pada(4, chart["lagna"], chart["signs"])
+    assert str(RASI_NAMES[a4.sign]) == "Virgo"
+
+    assert "A9 represents it" in THE_HOUSE_IS_THE_CONCEPT_AND_THE_ARUDHA_IS_THE_BODY
+    assert "arudha pada of 4th house" in EXERCISE_35_READS_THE_MOTHER_FROM_A4
+
+
+def test_a4_needs_the_same_sign_exception_too():
+    """Sagittarius' lord Jupiter is the 7th from it, so the arudha lands back
+    on Sagittarius and §9.2 sends it to the 10th -- Virgo. The third chart in
+    a row to need this.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.dasha.nakshatra.kalachakra import THE_SAME_SIGN_EXCEPTION_KEEPS_FIRING
+
+    chart = _chart_48()
+    a4 = arudha_pada(4, chart["lagna"], chart["signs"])
+    exception = [step for step in a4.steps if step.number == 5]
+    assert len(exception) == 1
+    assert "take the 10th" in exception[0].detail
+    assert a4.sign != (chart["lagna"] + 3) % 12
+
+    assert "exception" in THE_SAME_SIGN_EXCEPTION_KEEPS_FIRING
+
+
+def test_libra_is_a_strong_maraka_from_a4():
+    """"From Vi, Li is the 2nd house. Its lord Venus is in exalted in the 7th
+    house and afflicts the debilitated 1st lord (all from Vi)."
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import (
+        DEBILITATION_RASI,
+        EXALTATION_RASI,
+        RASI_LORD,
+        RASI_NAMES,
+        Graha,
+    )
+    from hora.dasha.nakshatra.kalachakra import VENUS_IS_A_MARAKA_TWICE_OVER
+
+    chart = _chart_48()
+    a4 = arudha_pada(4, chart["lagna"], chart["signs"]).sign
+    venus, mercury = int(Graha.VENUS), int(Graha.MERCURY)
+
+    second = (a4 + 1) % 12
+    assert str(RASI_NAMES[second]) == "Libra"
+    assert int(RASI_LORD[second]) == venus            # its lord Venus
+
+    seventh = (a4 + 6) % 12
+    assert chart["signs"][venus] == seventh           # in the 7th house
+    assert chart["signs"][venus] == int(EXALTATION_RASI[venus])   # exalted
+
+    assert int(RASI_LORD[a4]) == mercury              # the 1st lord from Vi
+    assert chart["signs"][mercury] == int(DEBILITATION_RASI[mercury])
+    assert chart["signs"][mercury] == chart["signs"][venus]       # afflicts it
+
+    assert "2nd from A4" in VENUS_IS_A_MARAKA_TWICE_OVER
+
+
+def test_venus_is_a_maraka_by_both_routes_which_the_exercise_never_joins():
+    """The 2nd and the 7th are both maraka houses, and Venus is the lord of one
+    and the occupant of the other. That is what "strong" is doing.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import MARAKA_HOUSES, RASI_LORD, Graha
+
+    chart = _chart_48()
+    a4 = arudha_pada(4, chart["lagna"], chart["signs"]).sign
+    venus = int(Graha.VENUS)
+
+    lords = (chart["signs"][venus] - a4) % 12 + 1
+    owns = (((a4 + 1) % 12) - a4) % 12 + 1
+    assert {lords, owns} == {2, 7}
+    assert set(MARAKA_HOUSES) >= {2, 7}
+    assert int(RASI_LORD[(a4 + 1) % 12]) == venus
+
+
+def test_a4_coincides_with_the_d12_lagna_on_this_chart():
+    """"All from Vi" is ambiguous here because A4 and the D-12 lagna are the
+    same sign. Example 100's A9 was not the lagna, which is what shows the
+    reference is the arudha and not the lagna.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_NAMES
+    from hora.dasha.nakshatra.kalachakra import A4_HAPPENS_TO_BE_THE_D12_LAGNA_HERE
+
+    chart = _chart_48()
+    a4 = arudha_pada(4, chart["lagna"], chart["signs"]).sign
+    a9 = arudha_pada(9, chart["lagna"], chart["signs"]).sign
+
+    assert a4 == chart["lagna"]
+    assert str(RASI_NAMES[a4]) == "Virgo"
+    assert a9 != chart["lagna"]
+    assert str(RASI_NAMES[a9]) == "Capricorn"
+    assert "not the lagna" in A4_HAPPENS_TO_BE_THE_D12_LAGNA_HERE
+
+
+def test_afflicts_cannot_mean_malefic_influence():
+    """Example 100 afflicts with the Moon and Exercise 35 with Venus. Venus is
+    a natural benefic in every paksha, so the waning-Moon reading of Example
+    100 cannot be the mechanism; both uses are an exalted graha sharing a rasi.
+    """
+    from hora.charts.benefic import moon_nature
+    from hora.core.const import EXALTATION_RASI, NATURAL_BENEFIC, Graha
+    from hora.dasha.nakshatra.kalachakra import (
+        AFFLICTS_IS_NOT_DEFINED_HERE,
+        THE_AFFLICTING_MOON_IS_ALSO_WANING,
+    )
+
+    chart = _chart_48()
+    moon, sun = int(Graha.MOON), int(Graha.SUN)
+    venus, mercury = int(Graha.VENUS), int(Graha.MERCURY)
+
+    # both afflictions: an exalted graha sharing a rasi with the afflicted one
+    for afflicter, afflicted in ((moon, sun), (venus, mercury)):
+        assert chart["signs"][afflicter] == int(EXALTATION_RASI[afflicter])
+        assert chart["signs"][afflicter] == chart["signs"][afflicted]
+
+    assert int(Graha.VENUS) in set(NATURAL_BENEFIC)
+    assert moon_nature(1) == "malefic"           # true of this Moon
+    assert "not the mechanism" in THE_AFFLICTING_MOON_IS_ALSO_WANING
+    assert "cannot mean malefic influence" in AFFLICTS_IS_NOT_DEFINED_HERE
+
+
+def test_the_li_li_antardasa_is_the_first_of_libras_nine():
+    """"Li-Li antardasa" -- Libra's dasa is the third of this native's, sixteen
+    years long, and its own antardasa opens it.
+    """
+    from hora.charts.book import chart
+    from hora.dasha.nakshatra.kalachakra import antardasas, dasa_order
+
+    order = dasa_order(1, 2, 3, skip=2)          # Pi, Sc, Li
+    assert [A[row["sign"]] for row in order] == ["Pi", "Sc", "Li"]
+    libra = order[2]
+    assert libra["position"] == 13
+    assert libra["years"] == 16
+
+    inner = antardasas(1, libra["position"], 16.0)
+    assert A[inner[0]["sign"]] == "Li"
+    assert sum(row["share_years"] for row in inner) == 97
+    assert inner[0]["years"] == pytest.approx(16.0 * 16 / 97)
+    assert sum(row["years"] for row in inner) == pytest.approx(16.0)
+
+    assert chart(48)["events"]["the native's mother died"] == (
+        "not dated; in Li-Li antardasa")

@@ -506,7 +506,10 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
                 "Mars": "Cp",
             },
         },
-        "events": {"the native's father passed away": "1967"},
+        "events": {
+            "the native's father passed away": "1967",
+            "the native's mother died": "not dated; in Li-Li antardasa",
+        },
         "first_seen": "chapter 24, Example 100",
         "note": (
             "A new native, and the first at 80 E 55, 16 N 05. Only the D-12 "

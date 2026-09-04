@@ -1217,16 +1217,26 @@ EXAMPLE_100_CHAIN: tuple[dict[str, str], ...] = (
      "means": "owned by the Sun, whom the Moon afflicts"},
 )
 
-#: **Gap.** "He afflicts Sun" is not defined at this site, and the Moon is not
-#: a natural malefic in general. It is one *here*: this birth falls in Krishna
-#: paksha, and §3.2.1 makes a waning Moon a natural malefic. That reconciles
-#: the sentence with the book's own definitions, but the book does not say so,
-#: and the affliction's mechanism -- conjunction in Taurus in the D-12 --
-#: is inferred from the chart rather than stated.
+#: **Gap.** "He afflicts Sun" is not defined at this site. Exercise 35 uses the
+#: word a second time on the same chart -- "exalted Venus ... afflicts the
+#: debilitated 1st lord" -- and Venus is a natural benefic in every paksha, so
+#: whatever affliction is here, it is **not** malefic influence. What the two
+#: uses share is an **exalted graha conjoining** the graha it afflicts: the
+#: exalted Moon with the Sun in Taurus, exalted Venus with debilitated Mercury
+#: in Pisces. That the Moon is also waning, and so a natural malefic by
+#: §3.2.1, looks incidental rather than the mechanism.
 AFFLICTS_IS_NOT_DEFINED_HERE = (
-    "§24.3 does not say what afflicting is. The Moon of this chart is waning "
-    "and so a natural malefic by §3.2.1, and it shares Taurus with the Sun in "
-    "the D-12; neither fact is stated in the example."
+    "§24.3 never says what afflicting is. Both uses on this chart are an "
+    "exalted graha sharing a rasi with the one it afflicts, and one of the "
+    "two is Venus, a natural benefic -- so it cannot mean malefic influence."
+)
+
+#: Recorded separately because it was my first reading of the sentence and
+#: Exercise 35 supersedes it: the Moon of this chart *is* a natural malefic,
+#: being waning, but that cannot be what "afflicts" means, since Venus is not.
+THE_AFFLICTING_MOON_IS_ALSO_WANING = (
+    "This birth falls in Krishna paksha, which §3.2.1 makes a natural "
+    "malefic. True, and not the mechanism -- Exercise 35 afflicts with Venus."
 )
 
 #: The first reading in the book to use a gati, and it confirms that the named
@@ -1395,4 +1405,49 @@ EXAMPLE_102_CANNOT_SEPARATE_THE_YEAR_LENGTHS = (
     "taken with Chart 49's printed Moon, it is nearer savana. The truncated "
     "arcminute spans balances from 9.36 to 9.775, and both year lengths put "
     "Pi dasa in 1987 somewhere in that span."
+)
+
+
+# --------------------------------------------------------------------------
+# Exercise 35 — the same native's mother, read from A4
+# --------------------------------------------------------------------------
+
+#: Exercise 35 confirms that Example 100's rule is general: the father was read
+#: from **A9** and the mother is read from **A4**, each the arudha of the house
+#: that signifies the relative. Nothing in Example 100 said the rule extended.
+EXERCISE_35_READS_THE_MOTHER_FROM_A4 = (
+    "The 4th house is in Sg. A4 or the arudha pada of 4th house is in Vi. "
+    "From Vi, Li is the 2nd house. Its lord Venus is in exalted in the 7th "
+    "house and afflicts the debilitated 1st lord (all from Vi). So Li is a "
+    "strong maraka rasi from Vi. So Li-Li antardasa resulted in the death of "
+    "mother."
+)
+
+#: **Finding.** What makes Libra a *strong* maraka is that Venus is a maraka
+#: twice over from A4: it lords the 2nd and sits in the 7th, and §14 makes both
+#: houses maraka. The exercise says only "the 2nd house" and "the 7th house"
+#: and never joins them.
+VENUS_IS_A_MARAKA_TWICE_OVER = (
+    "Venus lords Libra, the 2nd from A4, and occupies Pisces, the 7th from A4. "
+    "Both are maraka houses, which is what \"a strong maraka rasi\" rests on."
+)
+
+#: **Finding.** A4 comes out as Virgo, which is also the D-12 lagna, so the
+#: exercise's "all from Vi" reads the same as reading from lagna. That is a
+#: coincidence of this chart: Example 100's A9 was Capricorn and the D-12
+#: lagna was Virgo, and the two parted company there.
+A4_HAPPENS_TO_BE_THE_D12_LAGNA_HERE = (
+    "A4 is Virgo and so is the D-12 lagna, so \"all from Vi\" cannot show "
+    "which of the two the exercise is counting from. Example 100 counted from "
+    "A9, which was not the lagna."
+)
+
+#: **Finding.** Three charts in a row have needed §9.2's same-sign exception:
+#: Chart 46's navamsa AL, Chart 48's D-12 AL, and now Chart 48's A4. In each
+#: the house's lord sits the 7th from it, which sends the arudha back onto the
+#: house itself and then on to the 10th.
+THE_SAME_SIGN_EXCEPTION_KEEPS_FIRING = (
+    "Chart 46's navamsa AL, Chart 48's D-12 AL and Chart 48's A4 all reach "
+    "their sign through §9.2's exception, the lord being the 7th from its own "
+    "house each time."
 )
