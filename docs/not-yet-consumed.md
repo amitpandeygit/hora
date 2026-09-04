@@ -872,15 +872,28 @@ so what follows is prose and findings around it.
 
 `core/constants/ashtakavarga.py`, cited from `charts/ashtakavarga.py`. The
 division itself **is** consumed — `kakshya_of`, `kakshya_bounds`,
-`kakshya_lord` and `kakshyas` read Table 60 — so what follows is prose,
-findings, and one rule whose use has not been printed yet.
+`kakshya_lord` and `kakshyas` read Table 60, and `kakshya_rekha` applies the
+rule about the kakshya lord — so what follows is prose and findings.
 
 | constant | why it is not consumed |
 |---|---|
+| `KAKSHYA_LORD_IS_THE_REFERENCE_THAT_MATTERS` | The rule the section exists for, held verbatim. `kakshya_rekha` applies it — it reads the kakshya lord's PAV row — but the sentence itself is prose |
 | `KAKSHYA_MEANS` · `KAKSHYA_DEFINITION` · `KAKSHYA_ORIGIN` | The section verbatim: the gloss "orbit", the eight-way division, and where the first kakshya starts. The functions implement all three |
-| `KAKSHYA_LORD_IS_THE_REFERENCE_THAT_MATTERS` | **The rule the section exists for**, and the only one here not yet applied. It says whose PAV row to read first for a transiting graha; §25.5.2's title promises the PAV link and the page supplied stops at Table 60. Held verbatim until the rest of the section arrives |
 | `THE_KAKSHYA_LORDS_ARE_THE_HORA_ORDER_PLUS_LAGNA` | Ours: where Table 60's third column comes from. The test derives the column from the hora-lord order and compares, so the claim is checked rather than consumed |
 | `THE_TWO_ORDERINGS_OF_THE_EIGHT_MUST_NOT_BE_ZIPPED` | Ours: a warning that the kakshya order and the ashtakavarga reference order name the same eight differently. A test pins the two positions that agree |
+
+### Chapter 25 — §25.5.2's rekha in a kakshya (6)
+
+`core/constants/ashtakavarga.py`. The rule **is** consumed — `kakshya_rekhas`
+is one column of §12.6's PAV re-ordered into Table 60's order, and
+`kakshya_rekha` answers it for a transiting longitude.
+
+| constant | why it is not consumed |
+|---|---|
+| `KAKSHYA_REKHA_DEFINITION` · `KAKSHYA_OVERRIDES_THE_BARE_BAV_COUNT` | The section verbatim: what a rekha in a kakshya is, and its worked warning that a five-rekha rasi can still hold a blank kakshya |
+| `A_STRONG_BAV_CAN_STILL_HOLD_A_BLANK_KAKSHYA` | Ours: the same warning as an invariant. A test finds a real instance in Chart 58's D-10 rather than asserting it |
+| `EXAMPLE_109_PLACEMENTS` | Example 109's three placements, held as a fixture. The bounds the book quotes are checked against the division |
+| `KAKSHYA_DAY_METHOD` · `THE_DAY_METHOD_HAS_NO_STATED_THRESHOLD` | The day method verbatim, and ours noting it has no numbers. `kakshya_rekha_count` returns the tally and refuses a verdict — OI-141 |
 
 ---
 

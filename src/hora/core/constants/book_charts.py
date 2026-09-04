@@ -2173,6 +2173,64 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "inherent nature, strengths and weaknesses from D-27."
         ),
     },
+    60: {
+        "title": "AV Timing Exercise — D-10 and a transit chart",
+        "birth": "August 20, 1944, 7:11 am (IST), 72 E 49, 18 N 58",
+        "birth_data": {
+            "year": 1944, "month": 8, "day": 20, "hour": 7, "minute": 11,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 18 + 58 / 60, "longitude": 72 + 49 / 60},
+        "longitudes": {
+            "Asc": "14 Le 44", "Sun": "3 Le 49", "Moon": "17 Le 09",
+            "Mars": "1 Vi 12", "Merc": "28 Le 34", "Jup": "12 Le 12",
+            "Ven": "18 Le 40", "Sat": "14 Ge 13", "Rahu": "2 Cn 48",
+            "Ketu": "2 Cp 48", "HL": "29 Le 06", "GL": "7 Li 04",
+        },
+        "chara_karakas": {
+            "Merc": "AK", "Rahu": "AmK", "Ven": "BK", "Moon": "MK",
+            "Sat": "PiK", "Jup": "PK", "Sun": "GK", "Mars": "DK",
+        },
+        "divisional": {
+            "D10": {
+                "Rahu": "Pi", "Merc": "Ta", "Mars": "Ta", "HL": "Ta",
+                "Ven": "Aq", "Moon": "Cp", "Jup": "Sg", "Asc": "Sg",
+                "GL": "Sg", "Sat": "Li", "Ketu": "Vi", "Sun": "Vi",
+                "AL": "Vi",
+            },
+        },
+        "transit": {
+            "for": "the exercise",
+            "date": "not printed — the transit chart carries no date",
+            "drawn": {
+                "Rahu": "Ta", "Moon": "Cp", "Jup": "Sg", "Mars": "Sg",
+                "Ketu": "Sc", "Ven": "Sc", "Merc": "Li", "Sun": "Li",
+                "Sat": "Li",
+            },
+            "inferred_date": "October 31 or November 1, 1984",
+            "inferred_how": (
+                "The nine drawn positions were scanned against every day "
+                "from 1960 to 2025 at Mumbai. Exactly one window matches all "
+                "nine: the Moon is in Capricorn only from the night of "
+                "October 30 to the early hours of November 2, 1984, and the "
+                "other eight hold across it, giving October 31 and November "
+                "1 as the only full days that fit. No other day in the "
+                "65-year span matches more than eight."
+            ),
+        },
+        "first_seen": "chapter 25, after §25.5.2",
+        "note": (
+            "Printed for an exercise, so it is the diagrams and not a worked "
+            "reading that must hold. Both top charts are the **D-10**, drawn "
+            "South Indian and North Indian; the printed longitudes are the "
+            "**rasi** longitudes, and all twelve of them map to the drawn "
+            "D-10 signs. The D-10's AL comes out Virgo as drawn when the "
+            "arudha is taken inside the D-10. Every graha recomputes within "
+            "0.91' and all eight chara karakas match. The transit half is "
+            "drawn without a date; see `inferred_date`, which is ours and "
+            "not the book's, and OI-142."
+        ),
+    },
 }
 
 

@@ -406,6 +406,13 @@
         "number": 59,
         "recomputable": true,
         "title": "Vajpayee's swearing-in transit \u2014 Example 108"
+      },
+      {
+        "birth": "August 20, 1944, 7:11 am (IST), 72 E 49, 18 N 58",
+        "first_seen": "chapter 25, after \u00a725.5.2",
+        "number": 60,
+        "recomputable": true,
+        "title": "AV Timing Exercise \u2014 D-10 and a transit chart"
       }
     ],
     "not_supplied": [
@@ -463,7 +470,8 @@
       56,
       57,
       58,
-      59
+      59,
+      60
     ]
   },
   "status": 200

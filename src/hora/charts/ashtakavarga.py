@@ -28,6 +28,7 @@ from hora.core.const import (
     GRAHA_NAMES,
     JUPITER_ASHTAKAVARGA_ROWS,
     KAKSHYA_COUNT,
+    KAKSHYA_DAY_METHOD_IS_A_FINE_TUNING_ONLY,
     KAKSHYA_LORDS,
     KAKSHYA_SPAN,
     LAGNA_ASHTAKAVARGA_ROWS,
@@ -1006,3 +1007,117 @@ def kakshyas(rasi: int = 0) -> tuple[Kakshya, ...]:
     validate.in_range("rasi", rasi, 0, 11)
     return tuple(kakshya_of(rasi * 30.0 + (index - 1) * KAKSHYA_SPAN)
                  for index in range(1, KAKSHYA_COUNT + 1))
+
+
+def kakshya_rekhas(owner: str, reference_signs: dict[str, int],
+                   rasi: int) -> tuple[dict, ...]:
+    """The eight kakshyas of one rasi, each with or without `owner`'s rekha.
+
+    §25.5.2: "a kakshya has a rekha in a planet's PAV if that planet is
+    benefic in that rasi with respect to the kakshya lord". So this is one
+    column of `owner`'s PAV, re-ordered from `ASHTAKAVARGA_REFERENCES` into
+    Table 60's order and given the degree bounds that select each entry.
+
+    The rekhas here sum to `owner`'s BAV count in that rasi, because the
+    eight kakshya lords are the eight references.
+    """
+    validate.in_range("rasi", rasi, 0, 11)
+    rows = prastaara(owner, reference_signs).rows
+    out = []
+    for kakshya in kakshyas(rasi):
+        out.append({
+            "kakshya": kakshya.index,
+            "lord": kakshya.lord,
+            "rasi": kakshya.rasi,
+            "start": kakshya.start,
+            "end": kakshya.end,
+            "start_longitude": kakshya.start_longitude,
+            "end_longitude": kakshya.end_longitude,
+            "rekha": int(rows[kakshya.lord][rasi]),
+        })
+    return tuple(out)
+
+
+def kakshya_rekha(owner: str, reference_signs: dict[str, int],
+                  longitude: float) -> dict:
+    """Is `owner` benefic from the lord of the kakshya it is transiting?
+
+    The kakshya is taken from the **rasi** longitude even when the PAV is a
+    varga's, which is the reading §25.5 already gives for a varga BAV: the
+    rasi transit is what activates the placement, and the varga's PAV is what
+    grades it.
+
+    :param longitude: the transiting sidereal longitude of `owner`.
+    """
+    longitude = validate.longitude("longitude", float(longitude))
+    kakshya = kakshya_of(longitude)
+    bav = bhinnashtakavarga(owner, reference_signs)
+    rekha = int(kakshya.lord in bav.contributors[kakshya.rasi])
+    return {
+        "owner": owner,
+        "longitude": longitude,
+        "rasi": kakshya.rasi,
+        "rasi_name": str(RASI_NAMES[kakshya.rasi]),
+        "kakshya": kakshya.index,
+        "kakshya_lord": kakshya.lord,
+        "kakshya_start": kakshya.start,
+        "kakshya_end": kakshya.end,
+        "rekha": rekha,
+        "benefic_from_kakshya_lord": bool(rekha),
+        "bav_rekhas": bav.rekhas[kakshya.rasi],
+        "note": (
+            "The BAV count is how many of the eight references approve of "
+            "this rasi; the kakshya asks only about the one whose 3º 45' the "
+            "graha occupies. A high count does not guarantee this cell."
+        ),
+    }
+
+
+def kakshya_rekha_count(reference_signs: dict[str, int],
+                        longitudes: dict[str, float],
+                        owners: Sequence[str] | None = None) -> dict:
+    """§25.5.2's day method: how many planets sit in a kakshya with a rekha.
+
+    The section gives no threshold for "too many" or "too few" and never says
+    which planets are counted, so this returns the tally and the per-planet
+    detail and **no verdict**. `verdict` is `None` and `undecided` says why —
+    see OI-141.
+
+    :param reference_signs: the natal reference signs the PAVs are built from.
+    :param longitudes: transiting longitude per planet.
+    :param owners: which planets to count. Defaults to the seven of
+        `SAV_OWNERS`; Lagna has a table but is not a planet.
+    """
+    counted = list(SAV_OWNERS) if owners is None else list(owners)
+    unknown = [o for o in counted if o not in ASHTAKAVARGA_TABLES]
+    if unknown:
+        raise AshtakavargaError(
+            f"no ashtakavarga table for {', '.join(sorted(unknown))}")
+    missing = [o for o in counted if o not in longitudes]
+    if missing:
+        raise AshtakavargaError(
+            f"a transiting longitude is needed for every planet counted; "
+            f"{', '.join(missing)} "
+            f"{'is' if len(missing) == 1 else 'are'} missing")
+
+    per_owner = {owner: kakshya_rekha(owner, reference_signs,
+                                      longitudes[owner])
+                 for owner in counted}
+    with_rekha = [o for o in counted if per_owner[o]["rekha"]]
+    return {
+        "counted": counted,
+        "of": len(counted),
+        "with_rekha": with_rekha,
+        "count": len(with_rekha),
+        "without_rekha": [o for o in counted if o not in with_rekha],
+        "per_owner": per_owner,
+        "verdict": None,
+        "undecided": (
+            "Section 25.5.2 says favorable results follow when too many "
+            "planets are in a kakshya with a rekha and unfavorable when too "
+            "few, and gives no number for either. The count is returned "
+            "without a grading rather than graded against a number the book "
+            "does not supply."
+        ),
+        "limits": KAKSHYA_DAY_METHOD_IS_A_FINE_TUNING_ONLY,
+    }

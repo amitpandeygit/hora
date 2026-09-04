@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 95 waiting on evidence · 2 parked**
+**5 waiting on Amit · 97 waiting on evidence · 2 parked**
 
 ---
 
@@ -236,11 +236,10 @@ house and mother (respectively)."
 `house_service.meanings_in_varga` takes the literal overlap of the two
 signification lists, so every word it returns is PVR's own. It reaches D-24,
 D-16 and D-4. **It cannot reach D-12**: that signifies "parents", the 4th house
-signifies "Mother", and *mother is a parent* is world knowledge neither table
-contains. The overlap returns `relative` — in both lists, not wrong, not what
-PVR picked.
+"Mother", and *mother is a parent* is world knowledge neither table holds. The
+overlap returns `relative` — not wrong, not what PVR picked.
 
-**This is a pattern, not one case.** Three instances so far, all in chapter 7:
+**A pattern, not one case.** Three instances so far, all in chapter 7:
 
 | section | the book says | the tables say |
 |---|---|---|
@@ -248,12 +247,10 @@ PVR picked.
 | §7.3.5 | 5th shows **memory**, **success in competition** | 5th lists neither |
 | §7.3.9 | 5th shows **progeny** | 5th lists "Children" |
 
-The book links matters to houses by meaning throughout. Any code that matches
-significations literally will keep hitting this, and each miss looks like a bug
-until it is recognised as the same gap.
-
-The response carries `derivable` and a `limitation` field naming this case
-rather than presenting a partial method as complete. Nothing invents a synonym.
+The book links matters to houses by meaning throughout, so any code matching
+significations literally keeps hitting this, and each miss looks like a bug
+until recognised as the same gap. The response carries `derivable` and a
+`limitation` field naming the case; nothing invents a synonym.
 
 **Closes when:** a semantic map is taken from the book (not from general
 knowledge), or you accept the overlap as a hint for callers to pick from —
@@ -301,12 +298,10 @@ of the presence test, because the book attaches it to full results.
 ### OI-85 — one planet lording both a quadrant and a trine
 
 §11.7.1 asks for "the lord of a quadrant ... associated with the lord of a
-trine", and every association it names needs **two** planets: conjoined, in
-mutual drishti, or exchanging signs. A planet cannot do any of those with
-himself.
-
+trine", and every association it names needs **two** planets — conjoined, in
+mutual drishti, or exchanging signs — which a planet cannot do with himself.
 But for six lagnas one planet lords a quadrant and a trine that are different
-houses. Derived from the book's own house lists, not asserted:
+houses. Derived from the book's own house lists:
 
 | lagna | planet | quadrant | trine |
 |---|---|---|---|
@@ -317,15 +312,14 @@ houses. Derived from the book's own house lists, not asserted:
 | Capricorn | Venus | 10th | 5th |
 | Aquarius | Venus | 4th | 9th |
 
-The lagna lord is a separate, trivial case the book has handled — "Lagna can be
-taken as a quadrant or a trine here. It is both" — so he is excluded above.
-Taurus alone also makes Dharma-Karmadhipati unreachable: Saturn lords both its
-9th and 10th, and Capricorn and Aquarius are the only adjacent pair under one
-lord, so it is the only lagna where those two lords can never associate.
+The lagna lord is a separate case the book handles — "Lagna can be taken as a
+quadrant or a trine here. It is both" — so he is excluded. Taurus alone also
+makes Dharma-Karmadhipati unreachable: Saturn lords its 9th and 10th, and
+Capricorn/Aquarius are the only adjacent pair under one lord.
 
 **What we do:** nothing is concluded. `raaja_basic` reports such a planet as a
-qualifier naming the houses, and `dharma_karmadhipati` says outright when the
-two lords are one planet. Neither is counted as forming the yoga.
+qualifier naming the houses, `dharma_karmadhipati` says outright when the two
+lords are one planet, and neither counts as forming the yoga.
 
 **Closes when:** a later section discusses it, or you decide.
 
@@ -368,11 +362,9 @@ this way.
 functional malefics."
 
 Nothing read so far says what a functional malefic is. It is not a natural
-malefic — §3.2.2's list is fixed and has nothing to do with a chart's lagna —
-so it must be a lagna-relative notion the book defines elsewhere. Guessing at
-it would be inventing a rule.
-
-§11.7.2 does let two things slip, both in passing:
+malefic — §3.2.2's list is fixed and lagna-independent — so it is a
+lagna-relative notion defined elsewhere, and guessing would invent a rule.
+§11.7.2 lets two things slip, both in passing:
 
 - **Libra lagna: Jupiter.** "They are afflicted by a functional malefic
   (Jupiter)" — of Chart 10, Emperor Akbar.
@@ -380,15 +372,13 @@ it would be inventing a rule.
   with them", of the Sun and Jupiter in Rajiv Gandhi's Leo lagna. Those three
   are the rest of Leo; the book names none of them.
 
-Two points do not make a rule — Jupiter is a natural benefic and the 6th lord
-for Libra, which is *a* hypothesis and not the book's.
+Two points do not make a rule — Jupiter is a natural benefic and Libra's 6th
+lord, which is *a* hypothesis and not the book's.
 
-**What we do:** the factor is returned with `satisfied: null` and a detail
-naming this item, and `/v1/planetary-yoga/raaja-magnitude` lists it under
-`not_assessed` — now with both data points served beside it, as data.
-`FUNCTIONAL_MALEFIC_DATA_POINTS` records exactly what the book said and nothing
-more; a lagna it has not spoken about is simply absent. The factor is never
-silently treated as satisfied.
+**What we do:** the factor returns `satisfied: null` with a detail naming this
+item, and `/v1/planetary-yoga/raaja-magnitude` lists it under `not_assessed`
+with both data points beside it. `FUNCTIONAL_MALEFIC_DATA_POINTS` records what
+the book said and nothing more; the factor is never treated as satisfied.
 
 **Closes when:** a section defining functional malefics is supplied.
 
@@ -421,20 +411,15 @@ degrees, and our output reproduces both readings — 24.00° and 1.00°.
 
 For an **aspect** the book gives no example. Graha drishti is whole-sign, so
 "close" has to mean near the exact angle: an aspect on the Nth house is exact
-at (N−1)×30° of separation, and the orb is the deviation from that.
+at (N−1)×30° of separation, and the orb is the deviation from that. That
+reading is used and stated on every aspect pair. The 6° figure is hedged twice
+— "say" and "or so" — so `close_orb_is_approximate` is served alongside it.
 
-**What we do:** that reading is used, and the response says so on every aspect
-pair rather than reporting a bare number. The 6° figure itself is hedged twice
-in the book — "say" and "or so" — so `close_orb_is_approximate` is served
-alongside it and no verdict turns on the boundary alone.
-
-**§11.7.2's two charts confirm the reading.** Both aspect orbs the book grades
-are ones it calls close, and both are small under this measure and only this
-measure: Akbar's Moon and Mercury are **1.32°** from an exact 7th-house aspect
-("they have a close aspect"), and Rajiv Gandhi's Saturn is **2.01°** from an
-exact 3rd-house aspect on Jupiter ("a very close aspect"). Measured as raw
-separation instead they would be 178.68° and 57.99°, which no one would call
-close.
+**§11.7.2's two charts confirm it.** Both orbs the book calls close are small
+under this measure and only this measure: Akbar's Moon and Mercury **1.32°**
+from an exact 7th-house aspect, Rajiv Gandhi's Saturn **2.01°** from an exact
+3rd-house aspect on Jupiter. As raw separation they would be 178.68° and
+57.99°, which no one would call close.
 
 **Closes when:** you confirm the reading. The evidence above is why it is no
 longer a guess.
@@ -593,18 +578,17 @@ and GL 1.25°/minute, so each error implies a sunrise shift, and within each
 chart the two agree to within a second: +18.4s/+19.1s (Chart 3), +49.5s/+49.3s
 (Chart 12), +26.6s/+26.9s (Chart 58). Under `disc_center` they agree too, at
 −62s, −43s and −34s. HL and GL are right and the sunrise is not. Neither §5
-definition is the book's — ours early every time, `disc_center` late every
-time, at no fixed fraction between (23% at 26 N, 53% at 43 N), so a toggle
-cannot fix it; it looks like a refraction or horizon-dip model diverging with
-latitude. In a **divisional** chart the reach is not monotone: Chart 12's GL is
-a rasi out yet lands in the same D-10 sign, while its HL agrees in the rasi
-chart and is one sign out in the D-10.
+definition is the book's — ours early every time, `disc_center` late, at no
+fixed fraction between (23% at 26 N, 53% at 43 N), so a toggle cannot fix it;
+it looks like refraction or horizon dip diverging with latitude. The reach into
+a **divisional** chart is not monotone: Chart 12's GL is a rasi out yet lands
+in the same D-10 sign, while its HL agrees in the rasi and misses in the D-10.
 
-**Chart 58 reprints Chart 3** at 26 N **13** rather than 26 N 14. Every graha
-and the ascendant are identical; only HL and GL move, by −3' and −7'. So the
-book's two castings sit **8s apart** in implied sunrise for **1'** of latitude
-while ours moves **2.2s the other way** — the gap varies with latitude faster
-than our model, and in the opposite sense.
+**Chart 58 reprints Chart 3** at 26 N **13** rather than 26 N 14, with every
+graha and the ascendant identical and only HL and GL moving, by −3' and −7'.
+So the book's two castings sit **8s apart** in implied sunrise for **1'** of
+latitude while ours moves **2.2s the other way** — faster than our model
+varies, and in the opposite sense.
 
 **Not changed** — neither available value is right. Pinned by the
 `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec
@@ -981,21 +965,20 @@ Exercises 28 and 30 fall outside them, and none is a matter of degree:
 | Ketu in the 11th gives **foreign** gains | both, same words | principle 5 gives any planet there bare "gains" |
 | houses read for a nation: 3rd weapons, 7th foreign relations, 9th religion, 10th the head of government | Ex 69 throughout | the principles give a placement's valence; its subject comes from the house |
 | an antardasa judged by what its **rasi** aspects, the target a natal arudha | Ex 69, Pi dasa | §18.4 judges an antardasa by the house its *lord* holds from the dasa rasi |
-| a navamsa dasa read for marriage: lagna and the 1st, 3rd, 8th from UL favour it, the 6th from lagna and the 2nd, 7th from UL threaten it; and an antardasa rasi judged by what it **holds** | Ex 72, 73 | the sixteen never read a bhava as a life of its own, and read an antardasa by the house its *lord* holds from the dasa rasi |
+| a navamsa dasa read for marriage (1st, 3rd, 8th from UL favour; 6th from lagna and 2nd, 7th from UL threaten), and an antardasa rasi judged by what it **holds** | Ex 72, 73 | the sixteen never read a bhava as a life of its own, and judge an antardasa by its *lord*'s house |
 | a D-10 dasa read for career: the 8th from lagna, the 2nd and 5th for recognition, the 12th from AL, the satru pada A6 | Ex 74 | the sixteen never name an arudha pada, and give the 8th only for benefics and malefics |
 | a karaka afflicted **in the dasa rasi** — the Sun with Rahu, giving scandal | Ex 74 | neither a house nor a lordship, so no principle reaches it |
 | a dasa of an **arudha pada** — A1, A3, A4, A6, A8, A9, A10 or UL, each showing the appearance of its house's matter | Ex 68 to 75, Ex 30 | the sixteen never name an arudha; Exercise 30 states the principle behind all eight |
 
-The last is a different mechanism rather than a missing row — a fourth
-reference point in a section that already had three.
+The last is a different mechanism, not a missing row — a fourth reference point
+in a section that already had three.
 
 **What we do:** each is its own named constant — `UNLISTED_DASA_LAGNA_READINGS`,
 `EXALTED_DUSTHANA_LORD_CONVERSE`, `KETU_IN_THE_ELEVENTH_IS_FOREIGN`,
 `MUNDANE_HOUSE_READINGS`, `ANTARDASA_ASPECT_RULE`, `NAVAMSA_MARRIAGE_DASA_RULES`,
 `ANTARDASA_CANDIDATE_BY_CONTENTS`, `CAREER_DASA_READINGS`,
-`AFFLICTED_KARAKA_IN_THE_DASA_RASI` and `ARUDHA_PADA_DASA_READINGS`. Folding them
-into `PARASARA_DASA_PRINCIPLES` would put words in Parasara's mouth, and no
-interpretation layer reads either set yet.
+`AFFLICTED_KARAKA_IN_THE_DASA_RASI`, `ARUDHA_PADA_DASA_READINGS`. Folding them
+into `PARASARA_DASA_PRINCIPLES` would put words in Parasara's mouth.
 
 **Closes when:** a later chapter states them, or you say the list may grow.
 
@@ -1108,22 +1091,16 @@ days; our default is sidereal, 365.2564.
 | JHora | 1 | sidereal — tier-2; PyJHora defaults to `TRUE_SIDEREAL_YEAR`, balance matched at 17y 11m 18d (parity 3) |
 | The book | 2 | savana, for every nakshatra dasa it computes |
 
-§24.2's footnote 65 names a second system — "This author prefers savana years
-with all nakshatra dasas. Kalachakra dasa is a nakshatra dasa" — and Example
-100 and Example 101 date it. Cn dasa opens 1966-09-20 under savana and
-1967-03-15 under 365.25; Vajpayee's Cp dasa runs 1998-2002 under savana and
-1999-2003 under 365.25. The book says **September 1966** and **1998-2002**, and
-both survive the Moon's rounding. Examples 96, 98 and 99 separated nothing, and
-**Example 102 cannot** — its chart does not reproduce under our ayanamsa
-(D-69), and on the balance it states it would favour 365.25. **Exercise 36
-points the other way**: its two dates need 365.25 and the printed Moon, savana
-closing Ge antardasa four months before the wedding — but Chart 50 does not
-reproduce within an arcminute either. The two charts that contradict savana are
-exactly the two we cannot recompute. Chapter 16's Example 53 agrees with 100 and 101 (Rahu dasa
-Nov 1993 under savana, Feb 1994 under sidereal). Precedence still keeps JHora's
-default; nothing changes until you say. **Scoped to nakshatra dasas** — §18.6
-measures *rasi* dasa time by the Sun's arc; do not carry a decision here into
-`sub_period_arc`.
+§24.2's footnote 65 extends it — "This author prefers savana years with all
+nakshatra dasas. Kalachakra dasa is a nakshatra dasa" — and Examples 100 and
+101 date it: Cn dasa opens 1966-09-20 under savana, 1967-03-15 under 365.25;
+Vajpayee's Cp dasa runs 1998-2002 under savana, 1999-2003 under 365.25. The
+book says **September 1966** and **1998-2002**, both surviving the Moon's
+rounding, and Example 53 agrees (Rahu dasa Nov 1993 vs Feb 1994). Against:
+Example 102 and Exercise 36 favour 365.25 — but those are exactly the two
+charts that do not reproduce under our ayanamsa (D-69), so neither is decisive.
+Precedence still keeps JHora's default; nothing changes until you say. **Scoped
+to nakshatra dasas** — §18.6 measures *rasi* dasa time by the Sun's arc.
 
 **Closes when:** a JHora run settles parity 3, or you prefer the book's examples.
 
@@ -1405,27 +1382,20 @@ so the entry stays marked untranscribed.
 are **applicable** in a chart."
 
 Its own worked example decides what "applicable" means. Lord Sri Rama's chart
-— §1.3.4's Example 1, which Figure 1 draws, and a fixture here since chapter 1
-— is given as **Daama**. It contains exactly one earlier Naabhasa yoga:
+(§1.3.4's Example 1) is given as **Daama**, and contains exactly one earlier
+Naabhasa yoga: **Sarpa** — malefics in the 4th, 7th and 10th from Cancer — of
+which §11.5.2 says "If a benefic also occupies one of the quadrants, this yoga
+**may not operate well**", and Jupiter and the Moon hold the lagna. Count that
+Sarpa as applicable and it supersedes Daama, contradicting the example on the
+same page. Do not count it, and rule and example agree exactly.
 
-> **Sarpa.** Malefics hold the 4th, 7th and 10th from Cancer — Saturn in
-> Libra, Mars in Capricorn, the Sun in Aries. But Jupiter and the Moon hold
-> the lagna itself, and §11.5.2 says: "If a benefic also occupies one of the
-> quadrants, this yoga **may not operate well**."
-
-Count that Sarpa as applicable and it supersedes Daama, so §11.5.4's rule
-contradicts §11.5.4's example on the same page. Do not count it, and rule and
-example agree exactly.
-
-**So a yoga the book itself says may not operate well does not count as
-applicable.** Implemented as a `weakened` flag, set only by the Dala detectors —
-§11.5.2's clause is the only place the book says a yoga does not fully operate.
-Combustion (§11.2.4) and Kemadruma (§11.3.4) weaken *results*, a different
-claim, and do not set it. **This is a judgement call**: it is the reading under
-which the section is self-consistent, but PVR never says it and a reader could
-conclude his example simply overlooked the Sarpa. Registered as PVR-13. It does
-not rescue Gola or Yuga (OI-79), which are superseded by Aasraya and Aakriti
-yogas that carry no weakening clause at all.
+**So a yoga the book says may not operate well does not count as applicable.**
+Implemented as a `weakened` flag set only by the Dala detectors; §11.5.2's
+clause is the only place the book says a yoga does not fully operate, while
+combustion and Kemadruma weaken *results*. **A judgement call** — the reading
+under which the section is self-consistent, but PVR never says it and a reader
+could conclude the example overlooked the Sarpa. Registered as PVR-13. It does
+not rescue Gola or Yuga (OI-79), superseded by yogas with no weakening clause.
 
 **Closes when:** JHora's Naabhasa output shows whether a weakened Dala yoga
 suppresses a Sankhya one.
@@ -1442,25 +1412,17 @@ Taken literally, **Gola and Yuga can never be present**. Proved exhaustively:
 | Gola | 1 distinct sign | 0 of 144 sign × lagna combinations |
 | Yuga | 2 distinct signs | 0 of 792 sign-pair × lagna combinations |
 
-The reason is structural. Any one or two signs fit inside some
-seven-consecutive-sign window — the shorter arc between two signs is at most
-six — and §11.5.3's five run-yogas cover all twelve windows, so one always
-supersedes; one sign is also one modality, so an Aasraya yoga applies too.
-Three signs *can* escape every window (40 of 220 triples), which is why Soola
-survives, in about 16% of three-sign charts.
+Structural: one or two signs always fit inside some seven-sign window (the
+shorter arc between two signs is at most six), §11.5.3's five run-yogas cover
+all twelve windows, and one sign is one modality so an Aasraya yoga applies
+too. Three signs *can* escape every window (40 of 220 triples), which is why
+Soola survives, in about 16% of three-sign charts.
 
 **We implement the rule as stated**, so both yogas are defined, transcribed and
-permanently absent. Their verdicts say so: the reason names the count *and* the
-yoga that superseded them, so nothing is hidden.
-
-Three readings, and the book supports none of them over the others:
-
-- the fallback is meant strictly, and Gola and Yuga are dead letters PVR
-  inherited from the classical list without checking;
-- "applicable" means something weaker than "detected" — perhaps only the
-  families §11.5 calls more important;
-- the run-yogas are meant to require the *whole* seven-sign span to be used,
-  not merely to contain the planets, which would free both.
+permanently absent; each verdict names the count *and* the superseding yoga.
+Three readings, none favoured by the book: the fallback is strict and both are
+dead letters; "applicable" is weaker than "detected"; or the run-yogas need
+the whole seven-sign span used, not merely occupied, which would free both.
 
 **Closes when:** JHora's Naabhasa output shows whether it ever reports Gola.
 
@@ -1563,24 +1525,22 @@ worth doing properly rather than approximately.
 One graha is excluded by name. Whether the nodes are in the set at all, the
 chapter never says, and it changes how often three of the four Ravi yogas fire.
 
-The book uses "planet" both ways elsewhere. §8.1 writes "Rahu, Ketu **and the
-seven planets**", which puts the nodes outside the word; §10.2's "**All
-planets** aspect the 7th house from them" puts them inside, and we treat it as
-all nine. §11.2's four examples use Jupiter, Mercury, Venus and Mars only, so
-they do not settle it either.
+The book uses "planet" both ways: §8.1's "Rahu, Ketu **and the seven planets**"
+puts the nodes outside it, §10.2's "**All planets** aspect the 7th house from
+them" puts them inside. §11.2's four examples use Jupiter, Mercury, Venus and
+Mars only, so they settle nothing.
 
 **Excluded by default**, as a per-call parameter (`include_nodes`), and the
 response lists `grahas_considered` so the choice is visible in the output and
 not only in the request.
 
 **§11.5 sharpens it three ways.** §11.5.1's Aasraya yogas say "**all the
-planets**", so two extra grahas must agree — though never fatally, the nodes
-being always six signs apart and so the same modality. §11.5.2's Dala yogas say
-"natural benefics/malefics", and their own Sarpa example uses Mars, **Rahu and
-Ketu** — so the flag governs the phrase "a planet" only. §11.5.3's preamble is
-the closest to an answer: "Rahu and Ketu are **not counted as planets by many
-authors**" — matching our default, but attribution rather than a ruling, and
-scoped to the Aakriti twenty. The default under-reports, and it is not PVR's.
+planets**", so two extra grahas must agree — never fatally, the nodes being six
+signs apart and so the same modality. §11.5.2's Dala yogas say "natural
+benefics/malefics" and their Sarpa example uses **Rahu and Ketu**, so the flag
+governs the phrase "a planet" only. §11.5.3's preamble is the closest to an
+answer — "Rahu and Ketu are **not counted as planets by many authors**" —
+matching our default, but attribution rather than a ruling.
 
 **Closes when:** JHora's yoga output settles it, or a later chapter uses a node
 to form one of these.
@@ -1624,27 +1584,24 @@ Both worked examples read the **argala** as decisive. Neither count fits both:
 | Ex 35, Narasimha Rao | 3 v 3 tie | 0 v 1 → virodha | argala — writing, politics |
 | Ex 36, Reagan | 1 v 3 → virodha | 1 v 0 → argala | argala — acting |
 
-**What both examples actually do is skip step 3.** They identify the argala and
-read it, weighing no obstruction, though both charts have one. So `dominant`
-implements a stated rule that **no worked example confirms**; it is returned
-because §10.7 states it and should not be trusted until something validates it.
-The effective *counts* are returned as data, but no `dominant_effective`
-verdict, since that would be our judgement rather than PVR's. Where the book
-does give a verdict — "Sun's **unobstructed** argala on GL" — both counts agree,
-and "unobstructed" is the effective test on one argala rather than a tally.
-Related: OI-67 is the same question one level down, and step 4 is unavailable in
-both examples anyway.
+**Both examples skip step 3.** They identify the argala and read it, weighing
+no obstruction though both charts have one. So `dominant` implements a stated
+rule **no worked example confirms**, and should not be trusted until something
+validates it. The effective *counts* are returned as data but no
+`dominant_effective` verdict, which would be our judgement. Where the book does
+give one — "Sun's **unobstructed** argala on GL" — both counts agree, and
+"unobstructed" is the effective test on one argala rather than a tally. OI-67
+is the same question one level down.
 
 **Closes when:** an example applies step 3 where the counts differ, or JHora's
 argala output settles it.
 
 ### OI-68 — Seventeen charts all need the **mean** node; our default is `true`
 
-Seventeen charts print their own birth data, so all can be recomputed rather
-than transcribed. All seventeen reproduce every **graha** to within one
-arcminute — **only with the mean node**, Chart 42's Sun at 1.02' aside. Charts
-13 and 24 to 44 are the sixth to seventeenth; under `true` Chart 41's Rahu is **98'** out, Chart 39's 96' and
-Chart 24's 79' — all three a whole sign wrong — then 67', 66', 57' and 41'.
+Seventeen charts print their own birth data and all reproduce every **graha**
+within one arcminute — **only with the mean node** (Chart 42's Sun at 1.02'
+aside). Under `true`, Chart 41's Rahu is **98'** out, Chart 39's 96' and Chart
+24's 79' — all three a whole sign wrong — then 67', 66', 57' and 41'.
 
 | Chart | Rahu, mean | Rahu, true | printed |
 |---|---|---|---|
@@ -1654,20 +1611,16 @@ Chart 24's 79' — all three a whole sign wrong — then 67', 66', 57' and 41'.
 | 12 · SAV exercise, 1958, 4h **west** | 2 Li 04 | 0 Li 46 | 2 Li 03 |
 | 3 · Vajpayee, 1926, IST | 14 Ge 31 | 14 Ge 39 | 14 Ge 30 |
 
-Thirty-nine, twelve, fifty-six, **seventy-seven** and nine arcminutes out under
-`true` for the five tabled. Every other body lands within one arcminute — the
-book's display rounding — except Chart 3's ascendant at 5.5' and Chart 39's at
-8.6', which are their birth minutes being rounded, not a node question. Chart 8
-separates nothing. The seventeen span 1542 to 1971 and both hemispheres, and
-Chart 10 predates the Gregorian reform, so the agreement is not an artefact of
-one era or setup, and it points against our default. Chart 1 cannot settle it: its JHora
-output is still the empty stub of OI-1.
+39', 12', 56', **77'** and 9' out under `true` for the five tabled. Everything
+else lands within the book's display rounding except Chart 3's ascendant (5.5')
+and Chart 39's (8.6'), which are rounded birth minutes, not a node question.
+The seventeen span 1542 to 1971 and both hemispheres, and Chart 10 predates the
+Gregorian reform, so the agreement is not an artefact of one era, and it points
+against our default. Chart 1 cannot settle it — its JHora output is OI-1's stub.
 
 **Not changed.** `node_type` is a live default touching Rahu and Ketu on every
-endpoint — chart, panchanga, karakas, dasa lords, argala. Pinned by the
-mean-node tests over charts 3, 6, 7, 10, 12, 13, 24 to 26 and 37 to 44 —
-grep
-`mean_node` — which assert the failure in both directions so it is not lost.
+endpoint. Pinned by the mean-node tests (grep `mean_node`) over charts 3, 6, 7,
+10, 12, 13, 24 to 26 and 37 to 44, which assert the failure both ways.
 
 **Closes when:** you decide, or a JHora run of Chart 1 settles it.
 
@@ -1703,25 +1656,17 @@ tables may be extended from worked examples.
 §10.7 step 3: "If there are both, see if **more planets** cause argala or
 virodhargala."
 
-§10.5 has already split the four argala houses into three **primary** (2nd,
-4th, 11th) and one **secondary** (5th), and §10.7 gives the 5th the weakest
-role — "the additional contributing factors", against "basic ingredient" and
-"basic factor" for the 2nd and 4th. But step 3 says "more planets" and draws no
-distinction.
+§10.5 splits the four argala houses into three **primary** (2nd, 4th, 11th) and
+one **secondary** (5th), and §10.7 gives the 5th the weakest role — "additional
+contributing factors" against "basic ingredient". But step 3 says "more
+planets" and draws no distinction, so a graha in the 5th may or may not be a
+full vote.
 
-So a graha in the 5th may or may not count as a full vote against a
-virodhargala. The book never says.
-
-The engine counts all argala houses equally, and returns
-`primary_argala_graha_count` and `secondary_argala_graha_count` separately so a
-caller can weight them differently without recomputing. No verdict changes
-today that would not change under either reading — but that is because nothing
-consumes the tally yet.
-
-Bound up with **step 4**, which is also unresolved: "compare the strengths and
-decide whether argala dominates" needs a graha strength measure. Chapter 15's
-`simple_rules` is the one section 9.2 wants and it is not built. On a tie the
-engine returns `dominant: null` with the reason, rather than picking.
+The engine counts all argala houses equally and returns
+`primary_argala_graha_count` and `secondary_argala_graha_count` separately, so
+a caller can weight them without recomputing. Bound up with **step 4**, also
+unresolved: comparing strengths needs a graha strength measure that is not
+built. On a tie the engine returns `dominant: null` with the reason.
 
 **Closes when:** the strength chapters land and step 4 becomes computable —
 the same evidence will probably settle whether the 5th votes at full weight.
@@ -1757,25 +1702,17 @@ Two sections say it outright.
 §10.1: "The nature of the influence exerted and **the degree to which that
 influence succeeds** depends on the individual situation."
 
-§10.4, with a case: "How pious and god-fearing his influence makes his
-neighbors depends on other factors. **If one of the neighbors is a dreaded
-criminal, he is not going to be influenced.**"
+§10.4, with a case: "**If one of the neighbors is a dreaded criminal, he is not
+going to be influenced.**"
 
 So an aspect existing and an aspect taking effect are different things. The
-engine computes the first and says nothing about the second — correctly, since
-chapter 10 gives no rule for it, only the warning that one is needed.
-
-Two further §10.4 claims are recorded and equally uncomputed:
-
-- **Nature.** Grahas sharing a rasi share their rasi-drishti *targets* but not
-  the nature of the influence — the priest and his movie-loving brother reach
-  the same neighbours and do opposite things there. Nothing computes nature.
-- **Scope.** Graha drishti is "greater influence", rasi drishti "limited
-  influence on the neighbors" — comparative, never numeric. `ASPECT_SOURCE`
-  keeps it as prose and a test asserts no number is exposed.
-
-The response carries `influence_caveat` so a caller cannot read an aspect as an
-outcome.
+engine computes the first and says nothing about the second — chapter 10 gives
+no rule for it, only the warning that one is needed. Two further §10.4 claims
+are equally uncomputed: **nature** (grahas sharing a rasi share their
+rasi-drishti targets but not what they do there) and **scope** (graha drishti
+is "greater influence", rasi drishti "limited" — comparative, never numeric;
+a test asserts no number is exposed). The response carries `influence_caveat`
+so a caller cannot read an aspect as an outcome.
 
 **Closes when:** a later chapter gives a rule for whether an aspect succeeds —
 benefic/malefic nature of the aspected graha, strength, or argala — or you
@@ -1796,17 +1733,14 @@ Graha.KETU: (5, 9),
 
 **No behaviour is wrong today** — `rahu_ketu_aspects` defaults False, so
 `graha_drishti_houses(RAHU)` returns `(7,)` and Exercise 14 reproduces exactly.
-The problem is provenance: 5 and 9 for the nodes is not in this chapter, and
-the comment cites JHora rather than PVR. It is the same shape as the
-`rasi_drishti` offsets that were wrong in all three rows (OI-27, closed) —
-written from general classical knowledge, not from the book.
+The problem is provenance: 5 and 9 for the nodes is not in this chapter and the
+comment cites JHora, not PVR — the same shape as the `rasi_drishti` offsets
+that were wrong in all three rows (OI-27, closed). Schools differ (5/9/12,
+5/7/9, none) and which JHora implements has not been checked.
 
-Some schools give the nodes 5/9/12, some 5/7/9, some none. Which one JHora
-implements has not been checked.
-
-Options: (a) confirm against JHora and cite it; (b) find PVR's own statement in
-a later chapter, if he makes one; (c) drop the entries and let the flag raise
-rather than silently return a school we cannot source.
+Options: (a) confirm against JHora and cite it; (b) find PVR's own statement
+later; (c) drop the entries and let the flag raise rather than return a school
+we cannot source.
 
 **Closes when:** the source for the nodes' 5 and 9 is named, or the entries go.
 
@@ -1821,19 +1755,16 @@ most are prose. Examples: `CHARA_KARAKA_PROCEDURE`, `CHARA_KARAKA_TIE_BREAK`,
 `CHOOSING_A_KARAKA`, `AVASTHA_EFFECTS`, `CONJUNCTION_DEFINITION`,
 `CHOOSE_MEANING_BY_VARGA`.
 
-`reference_service.py` is exempt for exactly this reason — its docstring says
-it "formats constants and computes nothing astrological". But `karaka_service`,
+`reference_service.py` is exempt for exactly this reason. But `karaka_service`,
 `strength_service`, `varga_service`, `maasa_service` and `house_service` all
-publish prose the same way in among their real calculations, and the guard
-cannot tell the two apart at file granularity.
+publish prose the same way among their real calculations, and the guard cannot
+tell the two apart at file granularity. So the register **understates** how
+much of the book is recorded but not acted on.
 
-Consequence: the register **understates** how much of the book is recorded but
-not acted on. Publishing a rule is not applying it.
-
-Options: (a) exempt at function granularity rather than file — a service
-function that only reads constants and returns them is an exposer; (b) mark the
-publication-only constants explicitly, e.g. a `PUBLISHED_ONLY` tuple per
-module; (c) accept it and say so in the register's preamble.
+Options: (a) exempt at function granularity — a service function that only
+reads constants and returns them is an exposer; (b) mark publication-only
+constants explicitly, e.g. a `PUBLISHED_ONLY` tuple per module; (c) accept it
+and say so in the register's preamble.
 
 Related to OI-61 — both are guards that promise more than they check.
 
@@ -1847,23 +1778,17 @@ Related to OI-61 — both are guards that promise more than they check.
 def _flat(text): return re.sub(r"[^a-z]", "", text.lower())
 ```
 
-Everything but the letters is thrown away. So the check that gives
-`VERBATIM_FIELDS` its meaning cannot see:
-
-- case — "Dara karaka" against "Dara Karaka" (OI-60);
-- punctuation — "&" against "and", parentheses, commas;
-- word boundaries — a phrase split differently still matches.
-
-It catches a paraphrase, not a normalisation — the failure mode
-`core/constants/karaka.py`'s own docstring warns about. §8.3's list is a live
-instance: the book capitalises every relative, we store lowercase, and the
-check is satisfied.
+Everything but the letters is thrown away, so the check cannot see case ("Dara
+karaka" vs "Dara Karaka", OI-60), punctuation ("&" vs "and"), or word
+boundaries. It catches a paraphrase, not a normalisation — the failure mode
+`core/constants/karaka.py`'s docstring warns about, and §8.3's list is a live
+instance (the book capitalises every relative, we store lowercase, and the
+check passes).
 
 The flattening exists because PDF extraction inserts line breaks and
-hyphenation, but only whitespace and soft hyphens need normalising — case and
-punctuation survive extraction fine. Proposed: a second, stricter comparison
-collapsing those only. Not written, because the check is PDF-gated and cannot
-be run here. `test_the_verbatim_check_is_case_and_punctuation_insensitive`
+hyphenation, but only those need normalising. Proposed: a second, stricter
+comparison collapsing whitespace and soft hyphens only. Not written, because
+the check is PDF-gated. `test_the_verbatim_check_is_case_and_punctuation_insensitive`
 pins the weakness.
 
 **Run 2026-08-27: all 109 fidelity checks pass** — weaker than it sounds, since
@@ -2100,6 +2025,39 @@ paksha and co-tenants threaded through.
 
 **Closes when:** you approve the avastha change — it belongs with the four
 decisions above.
+
+### OI-141 — §25.5.2's day method gives no threshold and names no planet set
+
+**Waiting on the book.** "If too many or too few planets are in a kakshya with
+a rekha, favorable or unfavorable results may be expected (respectively)." No
+number is given for either bound, and which planets are counted is never said —
+seven, or the eight references including Lagna.
+
+`kakshya_rekha_count` returns the tally, the per-planet detail and
+`verdict: None` with `undecided` naming this item; the planet set is a
+parameter defaulting to the seven of `SAV_OWNERS`. Grading a count against a
+number the book does not supply would be ours, not PVR's. His own limit is
+served beside it: the principle is for fine-tuning to a few days and not to be
+used in vacuum.
+
+**Closes when:** a worked example counts, or you set the bounds.
+
+### OI-142 — Chart 60's transit chart carries no date
+
+**Waiting on the book.** The AV timing exercise prints a nativity in full and a
+transit chart with no date and no time — the only transit chart in the register
+with neither. The exercise text that would supply it has not been read.
+
+Scanning the nine drawn positions against every day from 1960 to 2025 at Mumbai
+leaves exactly one window: **October 31 and November 1, 1984**, the Moon being
+in Capricorn only from the night of 30 October to early 2 November. No other
+day matches more than eight.
+
+Held as `inferred_date` on the chart record, marked ours, and pinned by tests
+that reproduce all nine positions and show no other day that year fits. Nothing
+reads it as the book's.
+
+**Closes when:** the exercise supplies the date.
 
 ---
 

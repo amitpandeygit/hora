@@ -3274,3 +3274,259 @@ def test_kakshya_helpers_check_their_inputs():
     for bad in (-1, 12):
         with pytest.raises(InputError):
             kakshyas(bad)
+
+
+def test_example_109_places_three_grahas_in_their_kakshyas():
+    """"Because 16º is between 15º and 18º 45', Mercury is in the kakshya of
+    Venus." All three, bounds included.
+    """
+    from hora.charts.ashtakavarga import kakshya_of
+    from hora.core.const import EXAMPLE_109_PLACEMENTS
+
+    assert len(EXAMPLE_109_PLACEMENTS) == 3
+    for graha, degrees, rasi, lord in EXAMPLE_109_PLACEMENTS:
+        k = kakshya_of(R[rasi] * 30.0 + degrees)
+        assert k.lord == lord, graha
+        assert k.rasi == R[rasi]
+        assert k.start <= degrees < k.end
+    quoted = {("Mercury", 15.0, 18.75), ("Jupiter", 22.5, 26.25),
+              ("Venus", 3.75, 7.5)}
+    got = {(g, kakshya_of(R[r] * 30.0 + d).start,
+            kakshya_of(R[r] * 30.0 + d).end)
+           for g, d, r, _lord in EXAMPLE_109_PLACEMENTS}
+    assert got == quoted
+
+
+def test_a_kakshya_holds_a_rekha_when_the_lord_approves_that_rasi():
+    """"a kakshya has a rekha in a planet's PAV if that planet is benefic in
+    that rasi with respect to the kakshya lord."
+    """
+    from hora.charts.ashtakavarga import kakshya_rekhas, prastaara
+    from hora.core.const import KAKSHYA_REKHA_DEFINITION
+
+    signs = _chart_58_d10_reference_signs()
+    rows = prastaara("Venus", signs).rows
+    for rasi in range(12):
+        for cell in kakshya_rekhas("Venus", signs, rasi):
+            assert cell["rekha"] == rows[cell["lord"]][rasi]
+    assert "with respect to the kakshya lord" in KAKSHYA_REKHA_DEFINITION
+
+
+def test_the_eight_kakshya_rekhas_of_a_rasi_sum_to_the_bav_count():
+    """The eight kakshya lords are the eight references, so a rasi's kakshya
+    rekhas are its PAV column and must add up to its BAV count. 84 checks.
+    """
+    from hora.charts.ashtakavarga import bhinnashtakavarga, kakshya_rekhas
+
+    signs = _chart_58_d10_reference_signs()
+    for owner in ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus",
+                  "Saturn"):
+        bav = bhinnashtakavarga(owner, signs)
+        for rasi in range(12):
+            cells = kakshya_rekhas(owner, signs, rasi)
+            assert len(cells) == 8
+            assert sum(c["rekha"] for c in cells) == bav.rekhas[rasi]
+
+
+def test_a_strong_bav_can_still_hold_a_blank_kakshya():
+    """§25.5.2's warning, made a fact of the data rather than a claim: some
+    rasi with five or more rekhas has a kakshya without one.
+    """
+    from hora.charts.ashtakavarga import bhinnashtakavarga, kakshya_rekhas
+    from hora.core.const import (
+        A_STRONG_BAV_CAN_STILL_HOLD_A_BLANK_KAKSHYA,
+        KAKSHYA_OVERRIDES_THE_BARE_BAV_COUNT,
+    )
+
+    signs = _chart_58_d10_reference_signs()
+    found = False
+    for owner in ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus",
+                  "Saturn"):
+        bav = bhinnashtakavarga(owner, signs)
+        for rasi in range(12):
+            if bav.rekhas[rasi] < 5:
+                continue
+            blanks = [c for c in kakshya_rekhas(owner, signs, rasi)
+                      if not c["rekha"]]
+            if blanks:
+                found = True
+                assert len(blanks) == 8 - bav.rekhas[rasi]
+    assert found
+    assert "3º 45'" in KAKSHYA_OVERRIDES_THE_BARE_BAV_COUNT
+    assert "it does not say which" in (
+        A_STRONG_BAV_CAN_STILL_HOLD_A_BLANK_KAKSHYA)
+
+
+def test_kakshya_rekha_reports_the_cell_and_the_column_together():
+    from hora.charts.ashtakavarga import kakshya_rekha
+
+    signs = _chart_58_d10_reference_signs()
+    got = kakshya_rekha("Venus", signs, R["Sc"] * 30.0 + 4.0)
+    assert got["kakshya"] == 2
+    assert got["kakshya_lord"] == "Jupiter"
+    assert (got["kakshya_start"], got["kakshya_end"]) == (3.75, 7.5)
+    assert got["rasi_name"] == "Scorpio"
+    assert got["rekha"] in (0, 1)
+    assert got["benefic_from_kakshya_lord"] is bool(got["rekha"])
+    assert 0 <= got["bav_rekhas"] <= 8
+
+
+def test_the_day_method_returns_a_count_and_refuses_a_verdict():
+    """"If too many or too few planets are in a kakshya with a rekha,
+    favorable or unfavorable results may be expected." No number is given for
+    either, so no grading is returned.
+    """
+    from hora.charts.ashtakavarga import kakshya_rekha_count
+    from hora.core.const import (
+        KAKSHYA_DAY_METHOD,
+        KAKSHYA_DAY_METHOD_IS_A_FINE_TUNING_ONLY,
+        SAV_OWNERS,
+        THE_DAY_METHOD_HAS_NO_STATED_THRESHOLD,
+    )
+
+    signs = _chart_58_d10_reference_signs()
+    longitudes = {owner: (index * 37.0) % 360.0
+                  for index, owner in enumerate(SAV_OWNERS)}
+    got = kakshya_rekha_count(signs, longitudes)
+
+    assert got["counted"] == list(SAV_OWNERS)
+    assert got["of"] == 7
+    assert got["count"] == len(got["with_rekha"])
+    assert len(got["with_rekha"]) + len(got["without_rekha"]) == 7
+    assert got["verdict"] is None
+    assert "gives no number for either" in got["undecided"]
+    assert got["limits"] == KAKSHYA_DAY_METHOD_IS_A_FINE_TUNING_ONLY
+    assert "in vacuum" in KAKSHYA_DAY_METHOD
+    assert "fine-tune" in KAKSHYA_DAY_METHOD_IS_A_FINE_TUNING_ONLY
+    assert "never" not in THE_DAY_METHOD_HAS_NO_STATED_THRESHOLD.lower()
+
+
+def test_the_day_method_checks_what_it_is_given():
+    from hora.charts.ashtakavarga import AshtakavargaError, kakshya_rekha_count
+    from hora.core.const import SAV_OWNERS
+
+    signs = _chart_58_d10_reference_signs()
+    full = {owner: 10.0 for owner in SAV_OWNERS}
+    with pytest.raises(AshtakavargaError):
+        kakshya_rekha_count(signs, {"Sun": 10.0})
+    with pytest.raises(AshtakavargaError):
+        kakshya_rekha_count(signs, full, owners=["Neptune"])
+    assert kakshya_rekha_count(signs, full, owners=["Sun"])["of"] == 1
+
+
+# --------------------------------------------------------------------------
+# Chart 60 — the AV timing exercise
+# --------------------------------------------------------------------------
+
+def test_chart_60s_printed_longitudes_are_the_rasi_ones():
+    """Both top diagrams are the D-10; the longitudes under them are the rasi
+    longitudes, and all twelve map to the drawn D-10 signs.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
+
+    drawn = chart(60)["divisional"]["D10"]
+    printed = longitudes(60)
+    for name, sign in drawn.items():
+        if name == "AL":
+            continue
+        assert A[varga(printed[name], "D10").sign] == sign, name
+
+
+def test_chart_60s_d10_arudha_lagna_is_taken_inside_the_d10():
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.vargas import varga
+
+    printed = longitudes(60)
+    signs = {int(graha): varga(printed[name], "D10").sign
+             for name, graha in GRAHA_OF.items()
+             if name not in ("Rahu", "Ketu")}
+    lagna = varga(printed["Asc"], "D10").sign
+    assert A[arudha_pada(1, lagna, signs).sign] == (
+        chart(60)["divisional"]["D10"]["AL"])
+
+
+def test_chart_60_recomputes_and_its_chara_karakas_match():
+    from hora.charts.book import GRAHA_OF, chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.karaka import chara_karakas
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(60)
+    computed = compute_chart(from_local(**record["birth_data"]),
+                             Place(name="Chart 60", **record["place"]),
+                             Settings(node_type=NodeType.MEAN))
+    printed = longitudes(60)
+    for name, graha in GRAHA_OF.items():
+        assert abs(computed.positions[int(graha)].longitude
+                   - printed[name]) * 60 < 1.0, name
+
+    advancement = {int(graha): printed[name]
+                   for name, graha in GRAHA_OF.items() if name != "Ketu"}
+    got = {k.graha: k.symbol for k in chara_karakas(advancement)}
+    assert {GRAHA_OF[name]: symbol
+            for name, symbol in record["chara_karakas"].items()} == got
+
+
+def test_chart_60s_transit_half_is_drawn_without_a_date():
+    """It is the only transit chart in the register with no date printed at
+    all. The window we scanned for it is recorded as ours, not the book's.
+    """
+    from hora.charts.book import chart
+
+    transit = chart(60)["transit"]
+    assert transit["date"].startswith("not printed")
+    assert transit["inferred_date"] == "October 31 or November 1, 1984"
+    assert "1960 to 2025" in transit["inferred_how"]
+    assert set(transit["drawn"]) == {"Sun", "Moon", "Mars", "Merc", "Jup",
+                                     "Ven", "Sat", "Rahu", "Ketu"}
+    assert (R[transit["drawn"]["Rahu"]] - R[transit["drawn"]["Ketu"]]) % 12 == 6
+
+
+def test_the_inferred_transit_date_reproduces_all_nine_drawn_positions():
+    from hora.charts.book import GRAHA_OF, chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(60)
+    place = Place(name="Mumbai", **record["place"])
+    settings = Settings(node_type=NodeType.MEAN)
+    drawn = record["transit"]["drawn"]
+    for day in (31, 1):
+        month = 10 if day == 31 else 11
+        computed = compute_chart(
+            from_local(1984, month, day, 12, 0, 0.0, utc_offset_hours=5.5),
+            place, settings)
+        for name, sign in drawn.items():
+            got = int(computed.positions[int(GRAHA_OF[name])].longitude // 30)
+            assert A[got] == sign, (month, day, name)
+
+
+def test_no_other_day_that_year_matches_the_drawn_transit():
+    """The two days are not one fit among many -- the Moon leaves Capricorn
+    on either side and takes the match with it.
+    """
+    from hora.charts.book import GRAHA_OF, chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    record = chart(60)
+    place = Place(name="Mumbai", **record["place"])
+    settings = Settings(node_type=NodeType.MEAN)
+    drawn = record["transit"]["drawn"]
+    matches = []
+    for day in range(25, 32):
+        for month, dom in ((10, day), (11, day - 25)):
+            if dom < 1:
+                continue
+            computed = compute_chart(
+                from_local(1984, month, dom, 12, 0, 0.0, utc_offset_hours=5.5),
+                place, settings)
+            if all(A[int(computed.positions[int(GRAHA_OF[name])].longitude
+                         // 30)] == sign for name, sign in drawn.items()):
+                matches.append((month, dom))
+    assert sorted(matches) == [(10, 31), (11, 1)]

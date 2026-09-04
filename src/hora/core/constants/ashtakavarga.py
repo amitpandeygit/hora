@@ -1440,3 +1440,77 @@ THE_TWO_ORDERINGS_OF_THE_EIGHT_MUST_NOT_BE_ZIPPED = (
     "Saturn, Lagna. KAKSHYA_LORDS is Saturn, Jupiter, Mars, Sun, Venus, "
     "Mercury, Moon, Lagna. The same eight names in different orders; only "
     "Mars and Lagna sit in the same position in both.")
+
+
+# --------------------------------------------------------------------------
+# §25.5.2 — a rekha in a kakshya
+# --------------------------------------------------------------------------
+
+#: §25.5.2's definition of what it means for a kakshya to hold a rekha. This
+#: is the rule the earlier half of the section was building towards, and it
+#: reduces to one cell of §12.6's PAV: the kakshya lord's row, the transit
+#: rasi's column.
+KAKSHYA_REKHA_DEFINITION = (
+    "To find out whether Venus is benefic with respect to Jupiter in Sc or "
+    "not, we can look at the Prastaara Ashtakavarga (PAV) of Venus. If we "
+    "find that Venus is benefic with respect to Jupiter in Sc, we say that "
+    "the PAV of Venus has a rekha in the kakshya of Jupiter in Sc. Each rasi "
+    "has eight kakshyas and a kakshya has a rekha in a planet's PAV if that "
+    "planet is benefic in that rasi with respect to the kakshya lord.")
+
+#: §25.5.2's worked warning: a good BAV count is not enough, because the
+#: kakshya picks out *which* references have to be among them.
+KAKSHYA_OVERRIDES_THE_BARE_BAV_COUNT = (
+    "Suppose the BAV of Venus has 5 rekhas in Sc. Then Venus is benefic in "
+    "Sc with respect to 5 out of 8 references and that is favorable. "
+    "However, when Venus is at 4º in Sc, he is in Jupiter's kakshya and what "
+    "matters the most is whether Venus is benefic in Sc with respect to "
+    "Jupiter or not. If Jupiter is not one of the 5 references from which "
+    "Venus is benefic in Sc, then Venusian transit between 3º 45' and 7º 30' "
+    "in Sc will not be favorable.")
+
+#: **Finding.** The consequence, stated as an invariant rather than as prose:
+#: a rasi with a high BAV count can still hold an unfavourable kakshya, and a
+#: rasi with a low one can hold a favourable kakshya. The BAV is the column
+#: sum; the kakshya reads a single cell of that column.
+A_STRONG_BAV_CAN_STILL_HOLD_A_BLANK_KAKSHYA = (
+    "Five rekhas out of eight in a rasi means three of the eight references "
+    "are blank, and the transiting graha can be sitting in the kakshya of "
+    "any of those three. The BAV count bounds how many kakshyas of a rasi "
+    "hold a rekha; it does not say which.")
+
+#: §25.5.2's closing paragraph — the day-level technique, and PVR's own
+#: limits on it.
+KAKSHYA_DAY_METHOD = (
+    "A popular method of delineating favorable and unfavorable days is to "
+    "look at the number of planets that are in a kakshya with a rekha. If "
+    "too many or too few planets are in a kakshya with a rekha, favorable or "
+    "unfavorable results may be expected (respectively). However, one should "
+    "not use this principle in vacuum. It should be used only in conjunction "
+    "with dasas, Tajaka charts and other transit analysis techniques. This "
+    "principle can only be used to fine-tune a prediction to a few days.")
+
+#: **Finding.** The day method is stated without a threshold. "Too many" and
+#: "too few" are never given numbers, and the set of planets counted is never
+#: named. `kakshya_rekha_count` therefore returns the count and refuses to
+#: return a verdict — see OI-141.
+THE_DAY_METHOD_HAS_NO_STATED_THRESHOLD = (
+    "The section says favorable results follow when too many planets are in "
+    "a kakshya with a rekha and unfavorable when too few, and gives no "
+    "number for either, nor which planets are counted.")
+
+#: PVR's own restriction on the day method, kept because it bounds what any
+#: endpoint built on it may claim.
+KAKSHYA_DAY_METHOD_IS_A_FINE_TUNING_ONLY = (
+    "One should not use this principle in vacuum. It should be used only in "
+    "conjunction with dasas, Tajaka charts and other transit analysis "
+    "techniques. This principle can only be used to fine-tune a prediction "
+    "to a few days.")
+
+#: Example 109's three placements: (graha, degrees within the rasi, rasi
+#: abbreviation, the kakshya lord the book names).
+EXAMPLE_109_PLACEMENTS: tuple[tuple[str, float, str, str], ...] = (
+    ("Mercury", 16.0, "Cn", "Venus"),
+    ("Jupiter", 24.0, "Vi", "Moon"),
+    ("Venus", 4.0, "Sc", "Jupiter"),
+)
