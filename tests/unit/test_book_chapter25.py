@@ -4354,3 +4354,102 @@ def test_two_independent_runs_agreeing_is_read_as_corroboration():
     assert len(planets) == len(houses) == len(products) == 2
     assert len(stars) == 1
     assert "the same star" in TWO_RUNS_CONVERGING_IS_TREATED_AS_CORROBORATION
+
+
+# --------------------------------------------------------------------------
+# §25.7 — the conclusion, and the chapter closing
+# --------------------------------------------------------------------------
+
+def test_25_7_defines_the_two_kinds_of_position():
+    """§25.1 said what the word "transits" means. §25.7 is the first place the
+    two kinds of position are defined against each other.
+    """
+    from hora.core.const import TRANSITS_MEANS
+    from hora.transits.gochara import (
+        NATAL_IS_POTENTIAL_TRANSIT_IS_INFLUENCE,
+        TRANSIT_AND_NATAL_POSITIONS_DEFINED,
+    )
+
+    assert "at a given time" in TRANSIT_AND_NATAL_POSITIONS_DEFINED
+    assert "at the time of one's birth" in TRANSIT_AND_NATAL_POSITIONS_DEFINED
+    assert "constant movement" in TRANSITS_MEANS
+    assert "positions occupied" not in TRANSITS_MEANS
+    assert "innate potential" in NATAL_IS_POTENTIAL_TRANSIT_IS_INFLUENCE
+    assert "pulls and pushes" in NATAL_IS_POTENTIAL_TRANSIT_IS_INFLUENCE
+
+
+def test_the_conclusion_repeats_25_4s_ranking_without_changing_it():
+    """"Coarse timing" and "fine timing" here; "coarse" and "fine-tune" in
+    §25.4. The pairings themselves must match exactly.
+    """
+    from hora.transits.gochara import (
+        THE_TWO_IMPORTANT_INTERACTIONS,
+        THE_TWO_INTERACTIONS_RESTATED,
+    )
+
+    first, second = THE_TWO_IMPORTANT_INTERACTIONS
+    assert first["timing"] == "coarse"
+    assert second["timing"] == "fine-tune"
+    assert "natal divisional charts and the transit rasi chart" in (
+        THE_TWO_INTERACTIONS_RESTATED)
+    assert "coarse timing" in THE_TWO_INTERACTIONS_RESTATED
+    assert "natal rasi chart and transit divisional charts" in (
+        THE_TWO_INTERACTIONS_RESTATED)
+    assert "fine timing" in THE_TWO_INTERACTIONS_RESTATED
+
+
+def test_every_technique_the_conclusion_claims_is_implemented():
+    """"Some techniques based on ashtakavarga, kakshyas and sodhya pindas are
+    also given in this chapter." The summary cannot outrun the code.
+    """
+    from hora.charts import ashtakavarga
+    from hora.transits import gochara
+    from hora.transits.gochara import (
+        CONCLUSION_TECHNIQUES,
+        THE_CHAPTER_ALSO_GAVE_THREE_TECHNIQUES,
+    )
+
+    for technique in CONCLUSION_TECHNIQUES:
+        assert technique in THE_CHAPTER_ALSO_GAVE_THREE_TECHNIQUES
+
+    assert callable(gochara.bav_transit_verdict)
+    assert callable(gochara.transit_strength)
+    assert callable(ashtakavarga.kakshya_of)
+    assert callable(ashtakavarga.kakshya_rekhas)
+    assert callable(ashtakavarga.kakshya_rekha_count)
+    assert callable(gochara.sodhya_timing)
+    assert callable(gochara.timing_nakshatra)
+    assert callable(gochara.timing_rasi)
+
+
+def test_the_conclusion_states_no_rule_that_is_not_already_built():
+    from hora.transits.gochara import THE_CONCLUSION_INTRODUCES_NOTHING_NEW
+
+    assert "No rule appears here for the first time" in (
+        THE_CONCLUSION_INTRODUCES_NOTHING_NEW)
+
+
+def test_chapter_25_is_complete():
+    """Sections, tables, examples and charts, each checked by its own tests
+    above. This is the coverage line for the chapter.
+    """
+    from hora.charts.book import chart, numbers
+    from hora.transits.gochara import (
+        CHAPTER_25_IS_COMPLETE,
+        STANDARD_RESULT_TABLES,
+        TABLE_61_TIMING,
+    )
+
+    assert tuple(STANDARD_RESULT_TABLES) == (53, 54, 55, 56, 57, 58, 59)
+    assert len(TABLE_61_TIMING) == 7
+    assert set(range(52, 63)) <= set(numbers())
+    for number in range(52, 63):
+        assert "chapter 25" in chart(number)["first_seen"] or number in (
+            24, 45, 52)
+
+    assert "§25.1 to §25.7" in CHAPTER_25_IS_COMPLETE
+    assert "Tables 53 to 61" in CHAPTER_25_IS_COMPLETE
+    assert "Examples 103 to 112" in CHAPTER_25_IS_COMPLETE
+    assert "Charts 52 to 62" in CHAPTER_25_IS_COMPLETE
+    assert "OI-142" in CHAPTER_25_IS_COMPLETE
+    assert "OI-143" in CHAPTER_25_IS_COMPLETE

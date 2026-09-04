@@ -2069,3 +2069,64 @@ SATURN_PREVAILS_OVER_A_SIMULTANEOUS_JUPITER = (
 
 EXAMPLE_112_OUTCOME = (
     "As a result, he suffered an unfavorable ruling from a US judge.")
+
+
+# --------------------------------------------------------------------------
+# §25.7 — Conclusion
+# --------------------------------------------------------------------------
+
+#: §25.7's definitions. §25.1 said what "transits" means as a word; this is the
+#: first place the two kinds of *position* are defined against each other.
+TRANSIT_AND_NATAL_POSITIONS_DEFINED = (
+    "Transit positions of planets are the positions occupied by them at a "
+    "given time. Natal positions of planets are the positions occupied by "
+    "them at the time of one's birth.")
+
+#: What each kind of position stands for, and the gloss §25.7 adds.
+NATAL_IS_POTENTIAL_TRANSIT_IS_INFLUENCE = (
+    "Natal positions stand for the innate potential of a nativity and the "
+    "transit positions show the temporary influences - planetary pulls and "
+    "pushes. If their interaction is studied, some insight can be gained on "
+    "the kind of results that are experienced at a given time.")
+
+#: §25.7 restating §25.4's ranking, and the only place it uses the phrase
+#: "fine timing" rather than "fine-tune".
+THE_TWO_INTERACTIONS_RESTATED = (
+    "It is suggested that the interaction between the natal divisional "
+    "charts and the transit rasi chart helps in coarse timing of events and "
+    "the interaction between the natal rasi chart and transit divisional "
+    "charts helps in fine timing of events.")
+
+#: The chapter's own list of what else it carried. Each of the three is
+#: implemented, and a test checks that this sentence cannot outrun the code.
+THE_CHAPTER_ALSO_GAVE_THREE_TECHNIQUES = (
+    "Some techniques based on ashtakavarga, kakshyas and sodhya pindas are "
+    "also given in this chapter.")
+
+#: The three, mapped to what implements them.
+CONCLUSION_TECHNIQUES: dict[str, str] = {
+    "ashtakavarga": "bav_transit_verdict and transit_strength — §25.5",
+    "kakshyas": "kakshya_of, kakshya_rekhas and kakshya_rekha_count — §25.5.2",
+    "sodhya pindas": "sodhya_timing, timing_nakshatra and timing_rasi — §25.6",
+}
+
+#: **Finding.** The conclusion adds no rule. Every claim in it restates an
+#: earlier section — the definitions sharpen §25.1's wording, the potential /
+#: influence contrast is §25.1's again, and the coarse-and-fine ranking is
+#: §25.4's with "fine-tune" reworded to "fine timing". Recorded so that a
+#: reader meeting the chapter's summary first is not looking for a rule that
+#: is not there.
+THE_CONCLUSION_INTRODUCES_NOTHING_NEW = (
+    "Section 25.7 defines transit and natal positions, contrasts potential "
+    "with temporary influence, repeats section 25.4's coarse-and-fine "
+    "ranking of the two interactions, and names the three technique families "
+    "the chapter carried. No rule appears here for the first time."
+)
+
+#: Chapter 25 end to end, and what it leaves open.
+CHAPTER_25_IS_COMPLETE = (
+    "§25.1 to §25.7, Tables 53 to 61, Examples 103 to 112 and Charts 52 to "
+    "62, checked against the printed pages 313 to 340. Open: OI-141 (the day "
+    "method's missing threshold) and D-40's wording, which Example 108 "
+    "settled on the arithmetic. Closed here: OI-142 and OI-143."
+)

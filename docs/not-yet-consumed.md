@@ -972,6 +972,20 @@ what follows is prose and findings.
 | `EXAMPLE_112_RUNS` · `KRITTIKA_SPAN_AS_PRINTED` | Fixtures. The span is the only degree-level check that our nakshatra numbering matches the book's |
 | `SATURN_PREVAILS_OVER_A_SIMULTANEOUS_JUPITER` | Ours: measured from the ephemeris — the two were about a degree apart. It reads §25.6's "especially Saturn" as a precedence, which the book states as emphasis only |
 
+### Chapter 25 — §25.7's conclusion (6)
+
+`transits/gochara.py`. A summary section, so all of it is prose. The one thing
+that **is** enforced is `CONCLUSION_TECHNIQUES`, whose three entries a test
+resolves to live callables, so the chapter's own summary cannot outrun the
+code.
+
+| constant | why it is not consumed |
+|---|---|
+| `TRANSIT_AND_NATAL_POSITIONS_DEFINED` · `NATAL_IS_POTENTIAL_TRANSIT_IS_INFLUENCE` | §25.7's definitions and its potential-versus-influence contrast. Sharper wording than §25.1's, held for it |
+| `THE_TWO_INTERACTIONS_RESTATED` · `THE_CHAPTER_ALSO_GAVE_THREE_TECHNIQUES` | The conclusion restating §25.4 and listing the chapter's techniques |
+| `THE_CONCLUSION_INTRODUCES_NOTHING_NEW` | Ours: the audit that says so, recorded so a reader meeting the summary first does not hunt for a rule that is not there |
+| `CHAPTER_25_IS_COMPLETE` | The coverage line — sections, tables, examples, charts and what stays open |
+
 ---
 
 ## How to use this register
