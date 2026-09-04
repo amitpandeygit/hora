@@ -24,8 +24,10 @@ def index() -> dict:
         "recomputable": list(recomputable()),
         "not_supplied": list(CHARTS_NOT_SUPPLIED),
         "not_supplied_note": (
-            "Chart 4 has never appeared in any section read so far, and "
-            "nothing has cited it."
+            "Chart 4 has never appeared in any section read so far and "
+            "nothing has cited it. Chart 65 is cited by Exercise 39 and its "
+            "page has not been supplied; that exercise's claims are checked "
+            "by reconstruction from Charts 63 and 64's nativity instead."
         ),
         "note": (
             "A chart with birth data is recomputed from its own birth line "

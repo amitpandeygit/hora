@@ -2127,10 +2127,12 @@ THE_CONCLUSION_INTRODUCES_NOTHING_NEW = (
 
 #: Chapter 25 end to end, and what it leaves open.
 CHAPTER_25_IS_COMPLETE = (
-    "§25.1 to §25.7, Tables 53 to 61, Examples 103 to 112, Exercise 38 and "
-    "Charts 52 to 64, checked against the printed pages 313 to 340. Open: "
-    "OI-141 (the day method's missing threshold) and D-40's wording, which "
-    "Example 108 settled on the arithmetic. Closed here: OI-142 and OI-143."
+    "§25.1 to §25.7, Tables 53 to 61, Examples 103 to 112, Exercises 38 and "
+    "39, and Charts 52 to 64, checked against the printed pages 313 to 340. "
+    "**Chart 65 has not been supplied** — Exercise 39 cites it, and its "
+    "claims are checked by reconstruction instead. Open: OI-141 (the day "
+    "method's missing threshold) and D-40's wording, which Example 108 "
+    "settled on the arithmetic. Closed here: OI-142 and OI-143."
 )
 
 
@@ -2226,4 +2228,97 @@ RELEVANCE_IS_DRAWN_FROM_BOTH_CHARTS_AT_ONCE = (
     "Jupiter matters because he owns lagna in the natal D-4, Mercury because "
     "he owns lagna in the natal rasi chart, and Mars because he owns the "
     "12th in the natal D-4. Three lordships, two charts, one reading."
+)
+
+
+# --------------------------------------------------------------------------
+# Exercise 39 — the same native, a D-24 event, and Chart 65 unseen
+# --------------------------------------------------------------------------
+
+EXERCISE_39 = (
+    "The native of Exercise 38 had an important event related to D-24 on "
+    "April 17, 1998. Try to guess it based on the interaction between the "
+    "natal D-24 chart and the transit rasi chart.")
+
+EXERCISE_39_ANSWER = (
+    "The native was accepted as a sishya (disciple) by a Jyotish guru on the "
+    "given date.")
+
+#: **Chart 65 has not been supplied.** The answer opens "See Chart 65" and the
+#: page was not given, so nothing is transcribed from it. Everything the
+#: answer claims is checked instead from Exercise 38's nativity — the same
+#: native — and the transit date the exercise states.
+CHART_65_IS_RECONSTRUCTED_NOT_TRANSCRIBED = (
+    "Exercise 39 cites Chart 65 and it has not been supplied. Its natal D-24 "
+    "is computed from Exercise 38's printed longitudes and its transit rasi "
+    "chart from April 17, 1998, and every claim the answer makes about both "
+    "holds."
+)
+
+#: The two transits the answer singles out.
+EXERCISE_39_STANDOUT_TRANSITS = (
+    "The rasi transits that stand out are: (1) benefics Jupiter and Venus in "
+    "Aq with Ketu and (2) three malefics in Ar, with two of them being very "
+    "strong.")
+
+#: The reading of Aries, and of Aquarius.
+EXERCISE_39_ARIES = (
+    "Ar has the 11th house in natal D-24 and shows gains. It also contains "
+    "Guru pada (A9 - arudha pada of the 9th house). Its lord Mars and "
+    "exalted Sun occupy it in the transit rasi chart and that can show gains "
+    "in the area of life represented by D-24, i.e. knowledge and learning. "
+    "With A9 in D-24 activated by rasi transits, some developments related "
+    "to guru are also possible.")
+EXERCISE_39_AQUARIUS = (
+    "Now look at Jupiter and Venus. They are in Aq in the transit rasi "
+    "chart. What does Aq stand for in the natal D-24? It is the 9th house "
+    "and it shows one's teacher. Transit of Jupiter and Venus in it can show "
+    "coming under the influence of a guru.")
+
+#: **Finding.** "Two of them being very strong" identifies exactly which two,
+#: without naming them. In Aries on that date the Sun is **exalted** and Mars
+#: is in his **own** sign, while the third malefic, Saturn, is **debilitated**
+#: there. So the phrase picks out the two that are not debilitated, and the
+#: count is exact rather than loose.
+THE_TWO_STRONG_MALEFICS_ARE_THE_TWO_NOT_DEBILITATED = (
+    "Aries holds the Sun exalted, Mars in his own sign and Saturn "
+    "debilitated. \"Three malefics in Ar, with two of them being very "
+    "strong\" is exactly that split."
+)
+
+#: **Finding.** Exercise 39's date is the counter-case to Exercise 38's. On 16
+#: August 1991 no transit rasi sign moved all day, so the rasi chart was a
+#: date. On **17 April 1998 Saturn crosses from Pisces into Aries at about
+#: 11:50 IST** — so the answer's own "three malefics in Ar" is true only for
+#: the afternoon, and false all morning. A transit rasi chart is a date until
+#: an ingress falls on it.
+A_RASI_TRANSIT_CHART_IS_A_DATE_EXCEPT_ON_AN_INGRESS_DAY = (
+    "Saturn enters Aries at about 11:50 IST on 17 April 1998, the very day "
+    "of the event, so Aries holds two malefics that morning and three that "
+    "afternoon. Exercise 39 gives only a date and its reading needs the "
+    "later half of it."
+)
+
+#: **Finding.** The natal D-24's 9th house is Aquarius, co-owned, and the
+#: answer's A9 in Aries needs **Rahu** as its lord — Saturn gives Scorpio.
+#: §9.2 says to take the stronger lord, and §15.5.1's cascade picks Rahu on
+#: its first rule, so our default reaches the book's answer with no override.
+#: It is also a fourth instance of the book reading a co-owned sign as the
+#: node's, and the first outside §14.3's longevity 8th house — see OI-135.
+THE_D24_A9_NEEDS_RAHU_AND_THE_CASCADE_SUPPLIES_HIM = (
+    "Aquarius is the 9th house of the natal D-24. With Saturn as its lord A9 "
+    "falls in Scorpio; with Rahu it falls in Aries, which is what the answer "
+    "says. Section 15.5.1's cascade names Rahu at rule 1, so the default "
+    "path reaches Aries without being told."
+)
+
+#: **Finding.** The exercise reads Aries twice over — as the 11th house of the
+#: natal D-24 (gains) and as the seat of A9 (the guru) — and takes two
+#: predictions from the one rasi being transited. It is the same
+#: house-and-occupant habit as Exercise 38, with an arudha pada standing in
+#: for the occupant.
+ONE_RASI_CARRIES_TWO_READINGS_AT_ONCE = (
+    "Aries is the 11th house of the natal D-24 and holds its A9. The "
+    "transits over it are read for gains in learning and for developments "
+    "with a guru, from the one activation."
 )

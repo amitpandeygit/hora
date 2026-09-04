@@ -1001,6 +1001,22 @@ findings.
 | `WHY_ONLY_THE_DIVISIONAL_HALF_NEEDS_A_TIME` | Ours: measured over the book's own day — no transit rasi sign moves, the Moon's D-4 moves twice. Explains why one half is dated and the other timed |
 | `THE_HOUSE_AND_ITS_OCCUPANT_ARE_READ_TOGETHER` · `RELEVANCE_IS_DRAWN_FROM_BOTH_CHARTS_AT_ONCE` | Ours: two reading habits the exercise uses and §25.4 never states — a rasi read by house *and* occupant, and relevance drawn from lordships in either chart |
 
+### Chapter 25 — Exercise 39 (10)
+
+`transits/gochara.py`. Chart 65 was cited and not supplied, so every claim in
+the answer **is** checked by reconstruction — the natal D-24 from Exercise 38's
+longitudes, the transit rasi chart from the given date. What follows is prose
+and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXERCISE_39` · `EXERCISE_39_ANSWER` · `EXERCISE_39_STANDOUT_TRANSITS` · `EXERCISE_39_ARIES` · `EXERCISE_39_AQUARIUS` | The exercise and its answer verbatim. Every placement in them is asserted; nothing composes the prose |
+| `CHART_65_IS_RECONSTRUCTED_NOT_TRANSCRIBED` | Ours: what was and was not transcribed, so nothing here is mistaken for the page |
+| `THE_TWO_STRONG_MALEFICS_ARE_THE_TWO_NOT_DEBILITATED` | Ours: which two the answer means, from exaltation, own sign and debilitation |
+| `A_RASI_TRANSIT_CHART_IS_A_DATE_EXCEPT_ON_AN_INGRESS_DAY` | Ours, and the counter-case to Exercise 38's day: Saturn's Aries ingress falls on the event date |
+| `THE_D24_A9_NEEDS_RAHU_AND_THE_CASCADE_SUPPLIES_HIM` | Ours: the co-lord choice the answer's A9 requires, and that §15.5.1 makes it unaided. OI-135's fourth instance |
+| `ONE_RASI_CARRIES_TWO_READINGS_AT_ONCE` | Ours: house and arudha pada read together off one activation |
+
 ---
 
 ## How to use this register

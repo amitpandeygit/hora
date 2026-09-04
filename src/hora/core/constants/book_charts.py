@@ -18,10 +18,11 @@ from __future__ import annotations
 from typing import Any
 
 #: Charts cited by a section we have read but not printed there. Chart 4 has
-#: never appeared and nothing cites it; Chart 61 is cited by Examples 86, 91
-#: and 94 and promised in a section still to come. Chart 1's JHora output is
-#: still the empty stub of OI-1.
-CHARTS_NOT_SUPPLIED = (4,)
+#: never appeared and nothing cites it. Chart 65 is cited by Exercise 39's
+#: answer — "See Chart 65" — and has not been supplied; every claim the answer
+#: makes about it is checked from Exercise 38's nativity and the given transit
+#: date instead. Chart 1's JHora output is still the empty stub of OI-1.
+CHARTS_NOT_SUPPLIED = (4, 65)
 
 #: **Finding.** Every birth time in the book is printed to the minute, so a
 #: printed ascendant can be up to half a minute of time away from ours while

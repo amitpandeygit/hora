@@ -3671,9 +3671,10 @@ def test_example_110_is_the_only_graded_tally_and_still_gives_no_threshold():
 
 
 def test_chart_61_was_the_last_chart_the_register_was_missing():
+    """Until Exercise 39 cited Chart 65, which has not been supplied."""
     from hora.core.const import CHARTS_NOT_SUPPLIED
 
-    assert CHARTS_NOT_SUPPLIED == (4,)
+    assert CHARTS_NOT_SUPPLIED == (4, 65)
     assert 61 not in CHARTS_NOT_SUPPLIED
 
 
@@ -4450,7 +4451,8 @@ def test_chapter_25_is_complete():
     assert "§25.1 to §25.7" in CHAPTER_25_IS_COMPLETE
     assert "Tables 53 to 61" in CHAPTER_25_IS_COMPLETE
     assert "Examples 103 to 112" in CHAPTER_25_IS_COMPLETE
-    assert "Exercise 38" in CHAPTER_25_IS_COMPLETE
+    assert "Exercises 38 and " in CHAPTER_25_IS_COMPLETE
+    assert "Chart 65 has not been supplied" in CHAPTER_25_IS_COMPLETE
     assert "Charts 52 to 64" in CHAPTER_25_IS_COMPLETE
     assert "OI-142" in CHAPTER_25_IS_COMPLETE
     assert "OI-143" in CHAPTER_25_IS_COMPLETE
@@ -4673,3 +4675,191 @@ def test_interaction_2_is_now_worked_twice():
     assert THE_TWO_IMPORTANT_INTERACTIONS[1]["timing"] == "fine-tune"
     assert "finer and momentary" in (
         INTERACTION_2_SHOWS_FINER_AND_MOMENTARY_DETAILS)
+
+
+# --------------------------------------------------------------------------
+# Exercise 39 — the same native, and Chart 65 unseen
+# --------------------------------------------------------------------------
+
+def _exercise_39_natal_d24():
+    """The natal D-24 of Exercise 38's native, from the printed longitudes."""
+    from hora.charts.book import GRAHA_OF, longitudes
+    from hora.charts.vargas import varga
+
+    printed = longitudes(63)
+    signs = {int(graha): varga(printed[name], "D24").sign
+             for name, graha in GRAHA_OF.items()}
+    return varga(printed["Asc"], "D24").sign, signs
+
+
+def _exercise_39_transit(hour=12):
+    from hora.charts.book import GRAHA_OF, chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    computed = compute_chart(
+        from_local(1998, 4, 17, hour, 0, 0.0, utc_offset_hours=5.5),
+        Place(name="Machilipatnam", **chart(63)["place"]),
+        Settings(node_type=NodeType.MEAN))
+    return {name: computed.positions[int(graha)].longitude
+            for name, graha in GRAHA_OF.items()}
+
+
+def test_chart_65_is_cited_and_not_supplied():
+    from hora.charts.book import BookChartError, chart, numbers
+    from hora.core.const import CHARTS_NOT_SUPPLIED
+    from hora.transits.gochara import CHART_65_IS_RECONSTRUCTED_NOT_TRANSCRIBED
+
+    assert 65 in CHARTS_NOT_SUPPLIED
+    assert 65 not in numbers()
+    with pytest.raises(BookChartError, match="never been printed"):
+        chart(65)
+    assert "has not been supplied" in (
+        CHART_65_IS_RECONSTRUCTED_NOT_TRANSCRIBED)
+
+
+def test_the_natal_d24s_lagna_puts_aries_eleventh_and_aquarius_ninth():
+    """"Ar has the 11th house in natal D-24" and "Aq ... is the 9th house"."""
+    lagna, _signs = _exercise_39_natal_d24()
+
+    assert A[lagna] == "Ge"
+    assert A[(lagna + 10) % 12] == "Ar"
+    assert A[(lagna + 8) % 12] == "Aq"
+
+
+def test_the_d24s_guru_pada_falls_in_aries_and_needs_rahu():
+    """A9 is Aries only with Rahu as Aquarius's lord. §15.5.1's cascade names
+    Rahu at rule 1, so the default path gets there unaided. OI-135's fourth
+    instance, and the first outside the longevity 8th house.
+    """
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import GRAHA_OF, longitudes
+    from hora.charts.colord import stronger
+    from hora.charts.vargas import varga
+    from hora.core.const import GRAHA_NAMES, Graha
+    from hora.services import arudha_service
+    from hora.transits.gochara import (
+        THE_D24_A9_NEEDS_RAHU_AND_THE_CASCADE_SUPPLIES_HIM,
+    )
+
+    lagna, signs = _exercise_39_natal_d24()
+    printed = longitudes(63)
+    d24_longitudes = {int(graha): varga(printed[name], "D24").longitude
+                      for name, graha in GRAHA_OF.items()}
+
+    with_saturn = arudha_pada(9, lagna, signs,
+                              stronger_lord={10: int(Graha.SATURN)})
+    with_rahu = arudha_pada(9, lagna, signs,
+                            stronger_lord={10: int(Graha.RAHU)})
+    assert A[with_saturn.sign] == "Sc"
+    assert A[with_rahu.sign] == "Ar"
+
+    verdict = stronger(10, d24_longitudes, purpose="arudha")
+    assert str(GRAHA_NAMES[verdict.winner]) == "Rahu"
+
+    served = arudha_service.one(9, lagna, signs,
+                                graha_longitudes=d24_longitudes)
+    assert served["sign_name"] == "Aries"
+    assert "cascade names Rahu at rule 1" in (
+        THE_D24_A9_NEEDS_RAHU_AND_THE_CASCADE_SUPPLIES_HIM)
+
+
+def test_guru_pada_is_one_of_table_18s_names_for_a9():
+    """The exercise's "Guru pada (A9)" is chapter 9's Table 18 being used, so
+    the two chapters agree without either being adjusted.
+    """
+    from hora.charts.arudha import ARUDHA_SPECIFIC_NAMES
+
+    assert "Guru pada" in ARUDHA_SPECIFIC_NAMES[9]
+    assert "Bhagya pada" in ARUDHA_SPECIFIC_NAMES[9]
+    assert not any("Guru pada" in names
+                   for house, names in ARUDHA_SPECIFIC_NAMES.items() if house != 9)
+
+
+def test_the_two_standout_transits_are_where_the_answer_says():
+    """"Benefics Jupiter and Venus in Aq with Ketu" and "three malefics in
+    Ar".
+    """
+    from hora.core.const import NATURAL_BENEFIC, NATURAL_MALEFIC, Graha
+    from hora.transits.gochara import EXERCISE_39_STANDOUT_TRANSITS
+
+    transit = _exercise_39_transit()
+    signs = {name: int(value // 30) for name, value in transit.items()}
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER, "Ven": Graha.VENUS,
+             "Sat": Graha.SATURN, "Rahu": Graha.RAHU, "Ketu": Graha.KETU}
+
+    in_aquarius = {n for n, s in signs.items() if s == R["Aq"]}
+    assert in_aquarius == {"Jup", "Ven", "Ketu"}
+    assert {n for n in in_aquarius if named[n] in NATURAL_BENEFIC} == {
+        "Jup", "Ven"}
+
+    in_aries = {n for n, s in signs.items() if s == R["Ar"]}
+    assert in_aries == {"Sun", "Mars", "Sat"}
+    assert all(named[n] in NATURAL_MALEFIC for n in in_aries)
+    assert "three malefics in Ar" in EXERCISE_39_STANDOUT_TRANSITS
+
+
+def test_the_two_strong_malefics_are_the_two_that_are_not_debilitated():
+    """The Sun exalted, Mars in his own sign, Saturn debilitated — that is
+    the "two of them being very strong" split, exactly.
+    """
+    from hora.core.const import (
+        DEBILITATION_RASI,
+        EXALTATION_RASI,
+        RASI_LORD,
+        Graha,
+    )
+    from hora.transits.gochara import (
+        THE_TWO_STRONG_MALEFICS_ARE_THE_TWO_NOT_DEBILITATED,
+    )
+
+    aries = R["Ar"]
+    assert EXALTATION_RASI[int(Graha.SUN)] == aries
+    assert RASI_LORD[aries] == int(Graha.MARS)
+    assert DEBILITATION_RASI[int(Graha.SATURN)] == aries
+
+    transit = _exercise_39_transit()
+    for name in ("Sun", "Mars", "Sat"):
+        assert int(transit[name] // 30) == aries
+    assert "Saturn debilitated" in (
+        THE_TWO_STRONG_MALEFICS_ARE_THE_TWO_NOT_DEBILITATED)
+
+
+def test_a_rasi_transit_chart_is_a_date_until_an_ingress_falls_on_it():
+    """Exercise 38's day had no rasi ingress at all. Exercise 39's has one:
+    Saturn enters Aries about 11:50 IST, so "three malefics in Ar" is true
+    only after lunchtime.
+    """
+    from hora.transits.gochara import (
+        A_RASI_TRANSIT_CHART_IS_A_DATE_EXCEPT_ON_AN_INGRESS_DAY,
+    )
+
+    morning = _exercise_39_transit(hour=6)
+    afternoon = _exercise_39_transit(hour=18)
+    aries = R["Ar"]
+
+    assert int(morning["Sat"] // 30) == R["Pi"]
+    assert int(afternoon["Sat"] // 30) == aries
+    assert len([n for n in ("Sun", "Mars", "Sat")
+                if int(morning[n] // 30) == aries]) == 2
+    assert len([n for n in ("Sun", "Mars", "Sat")
+                if int(afternoon[n] // 30) == aries]) == 3
+    assert "11:50 IST" in A_RASI_TRANSIT_CHART_IS_A_DATE_EXCEPT_ON_AN_INGRESS_DAY
+
+
+def test_aries_carries_two_readings_from_one_activation():
+    from hora.transits.gochara import (
+        EXERCISE_39_ANSWER,
+        EXERCISE_39_AQUARIUS,
+        EXERCISE_39_ARIES,
+        ONE_RASI_CARRIES_TWO_READINGS_AT_ONCE,
+    )
+
+    assert "11th house in natal D-24" in EXERCISE_39_ARIES
+    assert "Guru pada" in EXERCISE_39_ARIES
+    assert "knowledge and learning" in EXERCISE_39_ARIES
+    assert "9th house and it shows one's teacher" in EXERCISE_39_AQUARIUS
+    assert "from the one activation" in ONE_RASI_CARRIES_TWO_READINGS_AT_ONCE
+    assert "sishya" in EXERCISE_39_ANSWER

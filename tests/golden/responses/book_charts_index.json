@@ -444,9 +444,10 @@
       }
     ],
     "not_supplied": [
-      4
+      4,
+      65
     ],
-    "not_supplied_note": "Chart 4 has never appeared in any section read so far, and nothing has cited it.",
+    "not_supplied_note": "Chart 4 has never appeared in any section read so far and nothing has cited it. Chart 65 is cited by Exercise 39 and its page has not been supplied; that exercise's claims are checked by reconstruction from Charts 63 and 64's nativity instead.",
     "note": "A chart with birth data is recomputed from its own birth line and so checks the ephemeris. One without is a transcription only, and its record says why.",
     "recomputable": [
       3,
