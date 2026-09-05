@@ -18,11 +18,11 @@ from __future__ import annotations
 from typing import Any
 
 #: Charts cited by a section we have read but not printed there. Chart 4 has
-#: never appeared and nothing cites it. Chart 65 is cited by Exercise 39's
-#: answer — "See Chart 65" — and has not been supplied; every claim the answer
-#: makes about it is checked from Exercise 38's nativity and the given transit
-#: date instead. Chart 1's JHora output is still the empty stub of OI-1.
-CHARTS_NOT_SUPPLIED = (4, 65)
+#: never appeared and nothing cites it. Chart 65 was briefly here — cited by
+#: Exercise 39 before its page arrived — and every claim checked against the
+#: reconstruction then held against the page. Chart 1's JHora output is still
+#: the empty stub of OI-1.
+CHARTS_NOT_SUPPLIED = (4,)
 
 #: **Finding.** Every birth time in the book is printed to the minute, so a
 #: printed ascendant can be up to half a minute of time away from ours while
@@ -2189,7 +2189,7 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
         ),
     },
     60: {
-        "title": "AV Timing Exercise — D-10 and a transit chart",
+        "title": "Rajiv Gandhi, D-10 and a transit chart — Exercise 40",
         "birth": "August 20, 1944, 7:11 am (IST), 72 E 49, 18 N 58",
         "birth_data": {
             "year": 1944, "month": 8, "day": 20, "hour": 7, "minute": 11,
@@ -2232,7 +2232,21 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
                 "1 as the only full days that fit. No other day in the "
                 "65-year span matches more than eight."
             ),
+            "confirmed_by": (
+                "Exercise 40's answer — \"the transit chart belongs to the "
+                "time when he became the Prime Minister of India\" — and "
+                "Chart 61, whose transit half prints the same nine "
+                "positions for October 31, 1984."
+            ),
         },
+        "ashtakavarga": {
+            "D10": {
+                "rekhas": {"Sun": {"Li": 6}, "Mercury": {"Li": 6},
+                           "Saturn": {"Li": 5}, "Jupiter": {"Sg": 6}},
+                "SAV": {"Li": 36},
+            },
+        },
+        "events": {"he became Prime Minister of India": "October 31, 1984"},
         "first_seen": "chapter 25, after §25.5.2",
         "note": (
             "Printed for an exercise, so it is the diagrams and not a worked "
@@ -2243,7 +2257,10 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "arudha is taken inside the D-10. Every graha recomputes within "
             "0.91' and all eight chara karakas match. The transit half is "
             "drawn without a date; Chart 61 prints the same nine positions "
-            "for **October 31, 1984**, which settled it — see OI-142, closed."
+            "for **October 31, 1984** and Exercise 40's answer names both "
+            "the native — **Rajiv Gandhi** — and the occasion, his becoming "
+            "Prime Minister. See OI-142, closed. Exercise 40 also prints "
+            "four D-10 BAV counts and one SAV count, all of which reproduce."
         ),
     },
     61: {
@@ -2458,6 +2475,64 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "retrograde. This half carries a **time** where Chart 63's does "
             "not, and it has to: across August 16 no transit rasi sign "
             "changes at all, while the Moon crosses three D-4 signs."
+        ),
+    },
+    65: {
+        "title": "Exercise 39 — natal D-24 against the transit rasi chart",
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1970, "month": 4, "day": 4, "hour": 17, "minute": 50,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "14 Vi 52", "Sun": "20 Pi 52", "Moon": "28 Aq 35",
+            "Mars": "26 Ar 40", "Merc": "3 Ar 07", "Jup": "9 Li 45",
+            "Ven": "7 Ar 55", "Sat": "15 Ar 06", "Rahu": "16 Aq 53",
+            "Ketu": "16 Le 53", "HL": "15 Pi 42", "GL": "8 Vi 40",
+        },
+        "chara_karakas": {
+            "Moon": "AK", "Mars": "AmK", "Sun": "BK", "Jup": "PK",
+            "Sat": "MK", "Rahu": "PiK", "Ven": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "divisional": {
+            "D24": {
+                "Jup": "Pi", "Mars": "Ta", "Moon": "Ge", "Asc": "Ge",
+                "AL": "Aq", "Ven": "Aq", "HL": "Cn", "GL": "Cp",
+                "Sat": "Le", "Sun": "Sc", "Merc": "Li", "Ketu": "Vi",
+                "Rahu": "Vi",
+            },
+        },
+        "transit": {
+            "for": "the event of April 17, 1998",
+            "date": "April 17, 1998, 7:00 pm (IST), 81 E 12, 16 N 15",
+            "birth_data": {
+                "year": 1998, "month": 4, "day": 17, "hour": 19, "minute": 0,
+                "second": 0.0, "utc_offset_hours": 5.5,
+            },
+            "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+            "drawn": {
+                "Merc": "Pi", "Mars": "Ar", "Sun": "Ar", "Sat": "Ar",
+                "Ven": "Aq", "Jup": "Aq", "Ketu": "Aq", "Rahu": "Le",
+                "Moon": "Sg",
+            },
+            "retrograde": ("Merc",),
+        },
+        "events": {"he was accepted as a sishya by a Jyotish guru":
+                   "April 17, 1998"},
+        "first_seen": "chapter 25, Exercise 39",
+        "note": (
+            "Exercise 38's nativity a third time, now through the D-24. It "
+            "was cited before it was supplied, so its natal D-24 and its "
+            "transit chart were both **reconstructed** from Charts 63 and "
+            "64's longitudes and checked against Exercise 39's answer; the "
+            "page then arrived and every one of the thirteen D-24 "
+            "placements and nine transit positions matches, both nodes "
+            "landing in Virgo together and the AL in Aquarius. Its printed "
+            "time of **7:00 pm** matters: Saturn crosses into Aries at about "
+            "11:50 IST that day, and the answer's \"three malefics in Ar\" "
+            "needs the later half of it."
         ),
     },
 }

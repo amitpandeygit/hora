@@ -412,7 +412,7 @@
         "first_seen": "chapter 25, after \u00a725.5.2",
         "number": 60,
         "recomputable": true,
-        "title": "AV Timing Exercise \u2014 D-10 and a transit chart"
+        "title": "Rajiv Gandhi, D-10 and a transit chart \u2014 Exercise 40"
       },
       {
         "birth": "November 19, 1917, 11:03 pm (IST), 81 E 52, 25 N 28",
@@ -441,13 +441,19 @@
         "number": 64,
         "recomputable": true,
         "title": "Exercise 38 \u2014 natal rasi chart against the transit D-4"
+      },
+      {
+        "birth": "April 4, 1970, 5:50 pm (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 25, Exercise 39",
+        "number": 65,
+        "recomputable": true,
+        "title": "Exercise 39 \u2014 natal D-24 against the transit rasi chart"
       }
     ],
     "not_supplied": [
-      4,
-      65
+      4
     ],
-    "not_supplied_note": "Chart 4 has never appeared in any section read so far and nothing has cited it. Chart 65 is cited by Exercise 39 and its page has not been supplied; that exercise's claims are checked by reconstruction from Charts 63 and 64's nativity instead.",
+    "not_supplied_note": "Chart 4 has never appeared in any section read so far and nothing has cited it.",
     "note": "A chart with birth data is recomputed from its own birth line and so checks the ephemeris. One without is a transcription only, and its record says why.",
     "recomputable": [
       3,
@@ -503,7 +509,8 @@
       61,
       62,
       63,
-      64
+      64,
+      65
     ]
   },
   "status": 200

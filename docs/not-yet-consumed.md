@@ -1011,11 +1011,25 @@ and findings.
 | constant | why it is not consumed |
 |---|---|
 | `EXERCISE_39` · `EXERCISE_39_ANSWER` · `EXERCISE_39_STANDOUT_TRANSITS` · `EXERCISE_39_ARIES` · `EXERCISE_39_AQUARIUS` | The exercise and its answer verbatim. Every placement in them is asserted; nothing composes the prose |
-| `CHART_65_IS_RECONSTRUCTED_NOT_TRANSCRIBED` | Ours: what was and was not transcribed, so nothing here is mistaken for the page |
+| `CHART_65_RECONSTRUCTED_THEN_CONFIRMED` | Ours: the chart was computed before its page arrived, and the page then agreed on all twenty-two placements |
 | `THE_TWO_STRONG_MALEFICS_ARE_THE_TWO_NOT_DEBILITATED` | Ours: which two the answer means, from exaltation, own sign and debilitation |
 | `A_RASI_TRANSIT_CHART_IS_A_DATE_EXCEPT_ON_AN_INGRESS_DAY` | Ours, and the counter-case to Exercise 38's day: Saturn's Aries ingress falls on the event date |
 | `THE_D24_A9_NEEDS_RAHU_AND_THE_CASCADE_SUPPLIES_HIM` | Ours: the co-lord choice the answer's A9 requires, and that §15.5.1 makes it unaided. OI-135's fourth instance |
 | `ONE_RASI_CARRIES_TWO_READINGS_AT_ONCE` | Ours: house and arudha pada read together off one activation |
+
+### Chapter 25 — Exercise 40 (6)
+
+`transits/gochara.py`. The exercise's five printed counts **are** consumed —
+four BAV rekhas and one SAV, all reproducing from Chart 60's own D-10 — so
+what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXERCISE_40` · `EXERCISE_40_ANSWER` · `EXERCISE_40_FINAL` | The exercise, its reading and the identity it reveals, verbatim |
+| `EXERCISE_40_REKHAS` · `EXERCISE_40_SAV_IN_LIBRA` | Fixtures, checked against what the engine derives rather than read by it |
+| `EXERCISE_40_NAMES_CHART_60S_NATIVE` | Ours: the scan, Chart 61 and the book's own statement all reaching the same date. OI-142's epilogue |
+| `EXERCISE_40_IS_THE_CASE_WHERE_BAV_AND_SAV_AGREE` | Ours: both bands say favourable, so §25.5.1's precedence never fires — the clean counterpart to Example 108's Jupiter |
+| `DIGNITY_IS_READ_IN_BOTH_CHARTS_AT_ONCE` | Ours: exaltation read in the natal D-10 and the transit rasi chart together, which chapter 25 never states |
 
 ---
 

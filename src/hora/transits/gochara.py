@@ -2127,10 +2127,9 @@ THE_CONCLUSION_INTRODUCES_NOTHING_NEW = (
 
 #: Chapter 25 end to end, and what it leaves open.
 CHAPTER_25_IS_COMPLETE = (
-    "§25.1 to §25.7, Tables 53 to 61, Examples 103 to 112, Exercises 38 and "
-    "39, and Charts 52 to 64, checked against the printed pages 313 to 340. "
-    "**Chart 65 has not been supplied** — Exercise 39 cites it, and its "
-    "claims are checked by reconstruction instead. Open: OI-141 (the day "
+    "§25.1 to §25.7, Tables 53 to 61, Examples 103 to 112, Exercises 38 to "
+    "40 and Charts 52 to 65, checked against the printed pages 313 to 340. "
+    "Every chart the chapter cites has been supplied. Open: OI-141 (the day "
     "method's missing threshold) and D-40's wording, which Example 108 "
     "settled on the arithmetic. Closed here: OI-142 and OI-143."
 )
@@ -2244,15 +2243,16 @@ EXERCISE_39_ANSWER = (
     "The native was accepted as a sishya (disciple) by a Jyotish guru on the "
     "given date.")
 
-#: **Chart 65 has not been supplied.** The answer opens "See Chart 65" and the
-#: page was not given, so nothing is transcribed from it. Everything the
-#: answer claims is checked instead from Exercise 38's nativity — the same
-#: native — and the transit date the exercise states.
-CHART_65_IS_RECONSTRUCTED_NOT_TRANSCRIBED = (
-    "Exercise 39 cites Chart 65 and it has not been supplied. Its natal D-24 "
-    "is computed from Exercise 38's printed longitudes and its transit rasi "
-    "chart from April 17, 1998, and every claim the answer makes about both "
-    "holds."
+#: **Chart 65 was checked before it was seen.** The answer opens "See Chart
+#: 65" and the page came a turn later. Its natal D-24 and transit chart were
+#: reconstructed from Exercise 38's printed longitudes and the given date, and
+#: when the page arrived every one of the thirteen D-24 placements and nine
+#: transit positions matched — both nodes in Virgo together, the AL in
+#: Aquarius, Mercury the only retrograde.
+CHART_65_RECONSTRUCTED_THEN_CONFIRMED = (
+    "Exercise 39's chart was computed from Exercise 38's nativity and the "
+    "transit date before the page was supplied, and the page then agreed on "
+    "all twenty-two placements."
 )
 
 #: The two transits the answer singles out.
@@ -2295,8 +2295,8 @@ THE_TWO_STRONG_MALEFICS_ARE_THE_TWO_NOT_DEBILITATED = (
 A_RASI_TRANSIT_CHART_IS_A_DATE_EXCEPT_ON_AN_INGRESS_DAY = (
     "Saturn enters Aries at about 11:50 IST on 17 April 1998, the very day "
     "of the event, so Aries holds two malefics that morning and three that "
-    "afternoon. Exercise 39 gives only a date and its reading needs the "
-    "later half of it."
+    "afternoon. Exercise 39's text gives only a date, and Chart 65 casts it "
+    "at 7:00 pm — the later half, which is the half the reading needs."
 )
 
 #: **Finding.** The natal D-24's 9th house is Aquarius, co-owned, and the
@@ -2321,4 +2321,70 @@ ONE_RASI_CARRIES_TWO_READINGS_AT_ONCE = (
     "Aries is the 11th house of the natal D-24 and holds its A9. The "
     "transits over it are read for gains in learning and for developments "
     "with a guru, from the one activation."
+)
+
+
+# --------------------------------------------------------------------------
+# Exercise 40 — Chart 60 read with §25.5, and the chart's native named
+# --------------------------------------------------------------------------
+
+EXERCISE_40 = (
+    "Consider the D-10 chart of a gentleman and the transit rasi chart "
+    "during a crucial week in his life, given in Chart 60. What are the "
+    "prospects for his career at the time of the transit? Do you expect good "
+    "results or setbacks?")
+
+EXERCISE_40_ANSWER = (
+    "Sun, Mercury and Saturn have 6, 6 and 5 rekhas (respectively) in Libra "
+    "in their D-10 BAV's. So their Libra transit is good for D-10 related "
+    "matters. SAV contains 36 rekhas in Libra and that adds to it. Jupiter "
+    "is also strong with 6 rekhas in Sg in his D-10. A few planets are very "
+    "well-placed. Saturn is exalted in natal D-10 and he is exalted in "
+    "transit chart also. On the whole, transits look very good.")
+
+EXERCISE_40_FINAL = (
+    "This D-10 belongs to Rajiv Gandhi, assassinated former PM of India. The "
+    "transit chart belongs to the time when he became the Prime Minister of "
+    "India.")
+
+#: The counts Exercise 40 prints: (owner, rasi, rekhas). All four reproduce
+#: from Chart 60's own D-10, as does the SAV's 36 in Libra.
+EXERCISE_40_REKHAS: tuple[tuple[str, str, int], ...] = (
+    ("Sun", "Li", 6), ("Mercury", "Li", 6), ("Saturn", "Li", 5),
+    ("Jupiter", "Sg", 6),
+)
+EXERCISE_40_SAV_IN_LIBRA = 36
+
+#: **Finding.** Exercise 40 names Chart 60's native and its occasion, which
+#: closes the identity OI-142 had reached by arithmetic alone: the chart is
+#: **Rajiv Gandhi's** and the transit is his becoming Prime Minister — 31
+#: October 1984, the day Chart 61 dates his mother's assassination. So the
+#: register's two undated inferences and the book's own statement agree.
+EXERCISE_40_NAMES_CHART_60S_NATIVE = (
+    "Chart 60's transit half was drawn with no date. A scan pinned it to 31 "
+    "October or 1 November 1984, Chart 61 printed the same nine positions "
+    "for 31 October 1984, and Exercise 40 now names the native and the "
+    "occasion outright."
+)
+
+#: **Finding.** Exercise 40 reads §25.5 the way §25.5.1 says to and the
+#: reading is unanimous, so no precedence question arises: all three grahas
+#: transiting Libra have **good** BAV counts there (6, 6, 5 — §25.5 grades 5
+#: and above good) and the SAV's 36 is **very strong** by §12.4's bound. It is
+#: the clean case Example 108's Jupiter was not.
+EXERCISE_40_IS_THE_CASE_WHERE_BAV_AND_SAV_AGREE = (
+    "Libra holds 6, 6 and 5 rekhas in the three transiting grahas' own D-10 "
+    "BAVs and 36 in the D-10 SAV. Both bands say favourable, so section "
+    "25.5.1's precedence rule never has to be applied."
+)
+
+#: **Finding.** The last step is not an ashtakavarga one at all. "Saturn is
+#: exalted in natal D-10 and he is exalted in transit chart also" reads
+#: dignity in two charts at once — Libra in the natal D-10 and Libra in the
+#: transit rasi chart — which no section of chapter 25 sets out. It is the
+#: same crossing habit Exercise 38 used for lordship, applied to exaltation.
+DIGNITY_IS_READ_IN_BOTH_CHARTS_AT_ONCE = (
+    "Saturn occupies Libra in the natal D-10 and Libra in the transit rasi "
+    "chart, and he is exalted in Libra. The reading takes the two together, "
+    "which chapter 25 never states as a rule."
 )

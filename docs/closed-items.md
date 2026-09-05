@@ -1866,6 +1866,12 @@ No time question survives it: Chart 60's transit diagram draws no ascendant, so
 the day is all it needs. `inferred_date` stays on the record, now corroborated
 rather than merely computed.
 
+**Exercise 40 then said it outright**, two turns later: "This D-10 belongs to
+Rajiv Gandhi ... the transit chart belongs to the time when he became the Prime
+Minister of India." He was sworn in on 31 October 1984, the day Chart 61 dates
+his mother's assassination. Scan, corroboration and the book's own statement
+all agree.
+
 
 ## OI-143 — §25.6 never said what a remainder of 0 meant
 

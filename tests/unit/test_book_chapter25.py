@@ -3671,11 +3671,14 @@ def test_example_110_is_the_only_graded_tally_and_still_gives_no_threshold():
 
 
 def test_chart_61_was_the_last_chart_the_register_was_missing():
-    """Until Exercise 39 cited Chart 65, which has not been supplied."""
+    """Chart 65 was briefly missing too, between Exercise 39's answer citing
+    it and its page arriving. Only Chart 4 has never been printed at all.
+    """
     from hora.core.const import CHARTS_NOT_SUPPLIED
 
-    assert CHARTS_NOT_SUPPLIED == (4, 65)
+    assert CHARTS_NOT_SUPPLIED == (4,)
     assert 61 not in CHARTS_NOT_SUPPLIED
+    assert 65 not in CHARTS_NOT_SUPPLIED
 
 
 def test_both_halves_of_chart_61_recompute():
@@ -4443,17 +4446,18 @@ def test_chapter_25_is_complete():
 
     assert tuple(STANDARD_RESULT_TABLES) == (53, 54, 55, 56, 57, 58, 59)
     assert len(TABLE_61_TIMING) == 7
-    assert set(range(52, 65)) <= set(numbers())
-    for number in range(52, 65):
+    assert set(range(52, 66)) <= set(numbers())
+    for number in range(52, 66):
         assert "chapter 25" in chart(number)["first_seen"] or number in (
             24, 45, 52)
 
     assert "§25.1 to §25.7" in CHAPTER_25_IS_COMPLETE
     assert "Tables 53 to 61" in CHAPTER_25_IS_COMPLETE
     assert "Examples 103 to 112" in CHAPTER_25_IS_COMPLETE
-    assert "Exercises 38 and " in CHAPTER_25_IS_COMPLETE
-    assert "Chart 65 has not been supplied" in CHAPTER_25_IS_COMPLETE
-    assert "Charts 52 to 64" in CHAPTER_25_IS_COMPLETE
+    assert "Exercises 38 to 40" in CHAPTER_25_IS_COMPLETE
+    assert "Every chart the chapter cites has been supplied" in (
+        CHAPTER_25_IS_COMPLETE)
+    assert "Charts 52 to 65" in CHAPTER_25_IS_COMPLETE
     assert "OI-142" in CHAPTER_25_IS_COMPLETE
     assert "OI-143" in CHAPTER_25_IS_COMPLETE
 
@@ -4706,17 +4710,27 @@ def _exercise_39_transit(hour=12):
             for name, graha in GRAHA_OF.items()}
 
 
-def test_chart_65_is_cited_and_not_supplied():
-    from hora.charts.book import BookChartError, chart, numbers
+def test_chart_65_arrived_and_matched_the_reconstruction():
+    """It was cited a turn before its page came. Every placement the
+    reconstruction produced is what the page prints.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.vargas import varga
     from hora.core.const import CHARTS_NOT_SUPPLIED
-    from hora.transits.gochara import CHART_65_IS_RECONSTRUCTED_NOT_TRANSCRIBED
+    from hora.transits.gochara import CHART_65_RECONSTRUCTED_THEN_CONFIRMED
 
-    assert 65 in CHARTS_NOT_SUPPLIED
-    assert 65 not in numbers()
-    with pytest.raises(BookChartError, match="never been printed"):
-        chart(65)
-    assert "has not been supplied" in (
-        CHART_65_IS_RECONSTRUCTED_NOT_TRANSCRIBED)
+    assert 65 not in CHARTS_NOT_SUPPLIED
+    printed = longitudes(65)
+    assert printed == longitudes(63)          # Exercise 38's nativity again
+
+    for name, sign in chart(65)["divisional"]["D24"].items():
+        if name == "AL":
+            continue
+        assert A[varga(printed[name], "D24").sign] == sign, name
+    assert chart(65)["divisional"]["D24"]["Rahu"] == "Vi"
+    assert chart(65)["divisional"]["D24"]["Ketu"] == "Vi"
+    assert "agreed on all twenty-two placements" in (
+        CHART_65_RECONSTRUCTED_THEN_CONFIRMED)
 
 
 def test_the_natal_d24s_lagna_puts_aries_eleventh_and_aquarius_ninth():
@@ -4832,6 +4846,7 @@ def test_a_rasi_transit_chart_is_a_date_until_an_ingress_falls_on_it():
     Saturn enters Aries about 11:50 IST, so "three malefics in Ar" is true
     only after lunchtime.
     """
+    from hora.charts.book import chart
     from hora.transits.gochara import (
         A_RASI_TRANSIT_CHART_IS_A_DATE_EXCEPT_ON_AN_INGRESS_DAY,
     )
@@ -4846,7 +4861,9 @@ def test_a_rasi_transit_chart_is_a_date_until_an_ingress_falls_on_it():
                 if int(morning[n] // 30) == aries]) == 2
     assert len([n for n in ("Sun", "Mars", "Sat")
                 if int(afternoon[n] // 30) == aries]) == 3
-    assert "11:50 IST" in A_RASI_TRANSIT_CHART_IS_A_DATE_EXCEPT_ON_AN_INGRESS_DAY
+    assert "11:50 IST" in (
+        A_RASI_TRANSIT_CHART_IS_A_DATE_EXCEPT_ON_AN_INGRESS_DAY)
+    assert "7:00 pm" in chart(65)["transit"]["date"]
 
 
 def test_aries_carries_two_readings_from_one_activation():
@@ -4863,3 +4880,137 @@ def test_aries_carries_two_readings_from_one_activation():
     assert "9th house and it shows one's teacher" in EXERCISE_39_AQUARIUS
     assert "from the one activation" in ONE_RASI_CARRIES_TWO_READINGS_AT_ONCE
     assert "sishya" in EXERCISE_39_ANSWER
+
+
+# --------------------------------------------------------------------------
+# Exercise 40 — Chart 60 read with §25.5, and its native named
+# --------------------------------------------------------------------------
+
+def _chart_60_d10_signs():
+    from hora.charts.book import longitudes
+    from hora.charts.vargas import varga
+
+    printed = longitudes(60)
+    named = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Merc": "Mercury",
+             "Jup": "Jupiter", "Ven": "Venus", "Sat": "Saturn",
+             "Asc": "Lagna"}
+    return {ref: varga(printed[name], "D10").sign
+            for name, ref in named.items()}
+
+
+def test_exercise_40s_four_rekha_counts_reproduce():
+    """"Sun, Mercury and Saturn have 6, 6 and 5 rekhas in Libra ... Jupiter
+    is also strong with 6 rekhas in Sg."
+    """
+    from hora.charts.ashtakavarga import bhinnashtakavarga
+    from hora.charts.book import chart
+    from hora.transits.gochara import EXERCISE_40_REKHAS
+
+    signs = _chart_60_d10_signs()
+    printed = chart(60)["ashtakavarga"]["D10"]["rekhas"]
+    for owner, rasi, expected in EXERCISE_40_REKHAS:
+        assert bhinnashtakavarga(owner, signs).rekhas[R[rasi]] == expected
+        assert printed[owner][rasi] == expected
+
+
+def test_exercise_40s_sav_of_36_in_libra_reproduces():
+    from hora.charts.ashtakavarga import sarvashtakavarga
+    from hora.charts.book import chart
+    from hora.core.const import SAV_TOTAL
+    from hora.transits.gochara import EXERCISE_40_SAV_IN_LIBRA
+
+    sav = sarvashtakavarga(_chart_60_d10_signs())
+    assert sav["rekhas"][R["Li"]] == EXERCISE_40_SAV_IN_LIBRA == 36
+    assert sav["total"] == SAV_TOTAL
+    assert chart(60)["ashtakavarga"]["D10"]["SAV"]["Li"] == 36
+
+
+def test_the_three_grahas_reading_libra_are_the_three_transiting_it():
+    """The counts are for the Sun, Mercury and Saturn because those are the
+    three in Libra in Chart 60's transit rasi chart.
+    """
+    from hora.charts.book import chart
+    from hora.transits.gochara import EXERCISE_40_REKHAS
+
+    transit = chart(60)["transit"]["drawn"]
+    in_libra = {name for name, sign in transit.items() if sign == "Li"}
+    assert in_libra == {"Sun", "Merc", "Sat"}
+    named = {"Sun": "Sun", "Mercury": "Merc", "Saturn": "Sat"}
+    for owner, rasi, _rekhas in EXERCISE_40_REKHAS:
+        if rasi == "Li":
+            assert transit[named[owner]] == "Li"
+    assert transit["Jup"] == "Sg"
+
+
+def test_exercise_40_is_the_case_where_the_bav_and_sav_bands_agree():
+    """5, 6 and 6 are good by §25.5's band and 36 is very strong by §12.4's,
+    so §25.5.1's precedence never has to fire — unlike Example 108's Jupiter.
+    """
+    from hora.transits.gochara import (
+        EXERCISE_40_IS_THE_CASE_WHERE_BAV_AND_SAV_AGREE,
+        EXERCISE_40_REKHAS,
+        EXERCISE_40_SAV_IN_LIBRA,
+        transit_strength,
+    )
+
+    for owner, rasi, rekhas in EXERCISE_40_REKHAS:
+        if rasi != "Li":
+            continue
+        verdict = transit_strength(bav_rekhas=rekhas,
+                                   sav_rekhas=EXERCISE_40_SAV_IN_LIBRA)
+        assert verdict["bav"]["verdict"] == "good", owner
+        assert verdict["verdict"] == "favorable", owner
+    assert "never has to be applied" in (
+        EXERCISE_40_IS_THE_CASE_WHERE_BAV_AND_SAV_AGREE)
+
+
+def test_saturn_is_exalted_in_both_of_chart_60s_charts():
+    """"Saturn is exalted in natal D-10 and he is exalted in transit chart
+    also." Libra in each, and Libra is his exaltation.
+    """
+    from hora.charts.book import chart
+    from hora.core.const import EXALTATION_RASI, Graha
+    from hora.transits.gochara import DIGNITY_IS_READ_IN_BOTH_CHARTS_AT_ONCE
+
+    assert EXALTATION_RASI[int(Graha.SATURN)] == R["Li"]
+    assert _chart_60_d10_signs()["Saturn"] == R["Li"]
+    assert chart(60)["transit"]["drawn"]["Sat"] == "Li"
+    assert "chapter 25 never states as a rule" in (
+        DIGNITY_IS_READ_IN_BOTH_CHARTS_AT_ONCE)
+
+
+def test_exercise_40_names_chart_60s_native_and_confirms_oi_142():
+    """"This D-10 belongs to Rajiv Gandhi ... the transit chart belongs to
+    the time when he became the Prime Minister of India."
+    """
+    from hora.charts.book import chart
+    from hora.transits.gochara import (
+        EXERCISE_40_FINAL,
+        EXERCISE_40_NAMES_CHART_60S_NATIVE,
+    )
+
+    record = chart(60)
+    assert "Rajiv Gandhi" in record["title"]
+    assert record["events"] == {
+        "he became Prime Minister of India": "October 31, 1984"}
+    assert record["transit"]["inferred_date"].startswith("October 31")
+    assert "Prime Minister" in record["transit"]["confirmed_by"]
+    assert "Rajiv Gandhi" in EXERCISE_40_FINAL
+    assert "names the native and the occasion outright" in (
+        EXERCISE_40_NAMES_CHART_60S_NATIVE)
+
+
+def test_charts_60_and_61_are_the_same_day_from_two_sides():
+    """One nativity became Prime Minister on the day another was
+    assassinated, and the book prints a transit chart for each.
+    """
+    from hora.charts.book import chart
+    from hora.charts.book import longitude as book_longitude
+
+    sixty = chart(60)["transit"]["drawn"]
+    sixty_one = chart(61)["transit"]["longitudes"]
+    for name, sign in sixty.items():
+        assert A[int(book_longitude(sixty_one[name]) // 30)] == sign, name
+    assert chart(61)["transit"]["date"].startswith("October 31, 1984")
+    assert chart(61)["events"] == {
+        "she was assassinated": "October 31, 1984"}
