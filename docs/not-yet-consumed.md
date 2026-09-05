@@ -1035,8 +1035,8 @@ what follows is prose and findings.
 
 `core/constants/transit.py`, beside Part 3's own opening. The whole section is
 prose — it announces two threads and states no rule — so all of it is here.
-§26.2 has since arrived and has its own module; the nakshatra thread has not,
-and a test fails if a module for it appears ahead of a page.
+§26.2 and §26.3 have since arrived, each with its own module; the nakshatra
+thread has not, and a test fails if a module for it appears ahead of a page.
 
 | constant | why it is not consumed |
 |---|---|
@@ -1059,6 +1059,21 @@ findings.
 | `LOHA_IS_THE_MOKSHA_TRIKONA` · `EVERY_QUADRANT_BUT_THE_FIRST_IS_UNFAVOURABLE` | Ours: two structural facts about Table 62, both checked against §7.4's own house categories rather than asserted |
 | `THE_MURTHI_SCALES_A_VERDICT_IT_DOES_NOT_MAKE_ONE` | The book's own limit on the rule. It **is** returned on every result as `modifies`, and held here for its wording |
 | `ONE_INGRESS_GIVES_A_DIFFERENT_MURTHI_TO_EACH_NATIVE` | Ours: why the rule is per-nativity, which the section shows but never says |
+
+### Chapter 26 — §26.3's vedha (6)
+
+`transits/vedha.py`. The rule **is** consumed — `vedha_sthana` reads Table 63,
+`causes_vedha` applies the two exceptions, and `vedha` puts them together over
+a transit chart, reproducing §26.3's worked case — so what follows is prose and
+findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `VEDHA_MEANS` · `VEDHA_RULE` · `VEDHA_EXCEPTIONS_ARE_FATHER_AND_SON` | The section verbatim. The exceptions **are** applied; the sentence is returned as the reason and held here for its wording |
+| `VEDHA_WORKED_CASE` | A fixture — Bill Gates, Mercury in Gemini, the 3rd from his Moon — checked against what the engine derives |
+| `ONLY_THE_SUNS_ROW_HAS_A_CONSTANT_OFFSET` | Ours: why Table 63 cannot be derived. A test measures every row's offsets and the 3rd's five different partners |
+| `MARS_AND_SATURN_SHARE_A_ROW` | Ours: the one row that repeats, and that it follows from chapter 25 rather than being a coincidence |
+| `VEDHA_AND_MURTHI_ARE_BOTH_BRAKES` | §26.3's closing sentence, naming the chapter's two modifiers together |
 
 ---
 

@@ -2417,3 +2417,42 @@ quietly resolved either way.
 
 **Closes when:** a later section states a second, place-of-death classification
 of the signs, or corrects one of the two.
+
+---
+
+## D-74 · Table 63 calls Venus's 8th and 12th auspicious; Table 58 marks both Bad
+
+**Status: BOOK DEFECT — both tables held as printed; nothing is reconciled.**
+
+Table 63's left column is meant to be the good transit houses "we listed ... in
+a previous chapter", and for six of the seven grahas it is that list exactly:
+
+| graha | Table 63 | Tables 53–59 |
+|---|---|---|
+| Sun | 3, 6, 10, 11 | same |
+| Moon | 1, 3, 6, 7, 10, 11 | same |
+| Mars | 3, 6, 11 | same |
+| Mercury | 2, 4, 6, 8, 10, 11 | same |
+| Jupiter | 2, 5, 7, 9, 11 | same |
+| Saturn | 3, 6, 11 | same |
+| **Venus** | 1, 2, 3, 4, 5, **8**, 9, 11, **12** | 1, 2, 3, 4, 5, 9, 11 |
+
+Table 63 adds two houses for Venus alone, and the two are not alike:
+
+- **The 12th** was already flagged. Table 58 marks it **Bad** and gives its
+  typical results as "New friends, money, pleasures, gains" — four items, no
+  harm in any of them, which is why it is in `MIXED_ROWS` and why
+  `THE_TWELFTH_IS_BAD_EVERYWHERE_AND_READS_WELL_HERE` exists. Table 63 sides
+  with the row's own results text against its snapshot label, so this one is
+  a snapshot that the rest of the book contradicts twice.
+- **The 8th** is a straight conflict. Table 58 marks it Bad and its results
+  read bad — "Fears, mental worries, injuries, troubles from women". Table 63
+  calls it auspicious anyway. Nothing internal breaks the tie.
+
+**What we do.** Both tables are transcribed as printed and neither is edited.
+`good_houses` still answers from chapter 25, `TABLE_63_VEDHA` from chapter 26,
+and `vedha_sthana` sets `disputed_by_chapter_25` with a pointer to this entry
+whenever the two disagree — so a caller is told rather than served one silently.
+
+**Closes when:** you decide which list Venus's transits are read from, or a
+later section repeats one of them.

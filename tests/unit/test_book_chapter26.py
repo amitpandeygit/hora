@@ -289,3 +289,232 @@ def test_murthi_helpers_check_their_inputs():
     for bad in (0, 13, -1):
         with pytest.raises(InputError):
             murthi_of_house(bad)
+
+
+# --------------------------------------------------------------------------
+# §26.3 — rasi gochara vedha, and Table 63
+# --------------------------------------------------------------------------
+
+def test_table_63s_auspicious_houses_agree_with_chapter_25_except_for_venus():
+    """"the good and bad houses ... in a previous chapter." Six rows are
+    Tables 53 to 59 exactly; Venus adds the 8th and the 12th. D-74.
+    """
+    from hora.core.const import Graha
+    from hora.transits.gochara import good_houses
+    from hora.transits.vedha import TABLE_63_VEDHA
+
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Mercury": Graha.MERCURY, "Jupiter": Graha.JUPITER,
+             "Venus": Graha.VENUS, "Saturn": Graha.SATURN}
+    assert set(TABLE_63_VEDHA) == set(named)
+
+    disagreed = {}
+    for name, graha in named.items():
+        listed = tuple(sorted(TABLE_63_VEDHA[name]))
+        chapter_25 = tuple(sorted(good_houses(int(graha))))
+        if listed != chapter_25:
+            disagreed[name] = (listed, chapter_25)
+    assert set(disagreed) == {"Venus"}
+    listed, chapter_25 = disagreed["Venus"]
+    assert set(listed) - set(chapter_25) == {8, 12}
+    assert set(chapter_25) - set(listed) == set()
+
+
+def test_venus_8th_and_12th_are_flagged_not_reconciled():
+    from hora.transits.vedha import vedha_sthana
+
+    for house in (8, 12):
+        got = vedha_sthana("Venus", house)
+        assert got["auspicious"] is True
+        assert got["disputed_by_chapter_25"] is True
+        assert "D-74" in got["dispute"]
+    for house in (1, 2, 3, 4, 5, 9, 11):
+        assert vedha_sthana("Venus", house)["disputed_by_chapter_25"] is False
+    # and no other graha has a disputed house at all
+    from hora.transits.vedha import TABLE_63_VEDHA
+
+    for name, row in TABLE_63_VEDHA.items():
+        if name == "Venus":
+            continue
+        assert not any(vedha_sthana(name, h)["disputed_by_chapter_25"]
+                       for h in row), name
+
+
+def test_the_twelfth_dispute_is_the_mixed_row_chapter_25_already_flagged():
+    """Table 58 marks Venus's 12th Bad and reads it well. Table 63 sides with
+    the results text, so §26.3 resolves a row §25.2 left contradicting itself.
+    """
+    from hora.transits.gochara import (
+        MIXED_ROWS,
+        THE_TWELFTH_IS_BAD_EVERYWHERE_AND_READS_WELL_HERE,
+    )
+    from hora.transits.vedha import TABLE_63_VEDHA
+
+    twelfth = next(row for row in MIXED_ROWS
+                   if row["graha"] == "Venus" and row["house"] == 12)
+    assert twelfth["snapshot"] == "Bad"
+    assert "New friends, money, pleasures, gains" in str(twelfth["against_it"])
+    assert 12 in TABLE_63_VEDHA["Venus"]
+    assert "no harm at all" in THE_TWELFTH_IS_BAD_EVERYWHERE_AND_READS_WELL_HERE
+
+
+def test_only_the_suns_row_has_a_constant_vedha_offset():
+    from hora.transits.vedha import (
+        ONLY_THE_SUNS_ROW_HAS_A_CONSTANT_OFFSET,
+        TABLE_63_VEDHA,
+    )
+
+    offsets = {name: {(v - h) % 12 for h, v in row.items()}
+               for name, row in TABLE_63_VEDHA.items()}
+    assert offsets["Sun"] == {6}                # always the 7th from it
+    assert all(len(o) > 1 for name, o in offsets.items() if name != "Sun")
+
+    # and one house takes different partners for different grahas
+    third = {name: row[3] for name, row in TABLE_63_VEDHA.items() if 3 in row}
+    assert third == {"Sun": 9, "Moon": 9, "Mars": 12, "Venus": 1, "Saturn": 12}
+    assert "the 7th from the auspicious house" in (
+        ONLY_THE_SUNS_ROW_HAS_A_CONSTANT_OFFSET)
+
+
+def test_mars_and_saturn_share_a_row_because_chapter_25_gave_them_one():
+    from hora.core.const import Graha
+    from hora.transits.gochara import good_houses
+    from hora.transits.vedha import MARS_AND_SATURN_SHARE_A_ROW, TABLE_63_VEDHA
+
+    assert TABLE_63_VEDHA["Mars"] == TABLE_63_VEDHA["Saturn"]
+    assert good_houses(int(Graha.MARS)) == good_houses(int(Graha.SATURN))
+    assert "Tables 55 and 59" in MARS_AND_SATURN_SHARE_A_ROW
+
+
+def test_the_two_father_and_son_pairs_are_exempt():
+    from hora.core.const import Graha
+    from hora.transits.vedha import (
+        VEDHA_EXCEPTIONS_ARE_FATHER_AND_SON,
+        VEDHA_EXEMPT_PAIRS,
+        causes_vedha,
+    )
+
+    assert len(VEDHA_EXEMPT_PAIRS) == 2
+    for first, second in ((Graha.SUN, Graha.SATURN),
+                          (Graha.MOON, Graha.MERCURY)):
+        for a, b in ((first, second), (second, first)):
+            got = causes_vedha(int(a), int(b))
+            assert got["causes_vedha"] is False
+            assert got["exempt"] is True
+    # everyone else obstructs everyone else
+    for a in range(7):
+        for b in range(7):
+            if a == b or frozenset({a, b}) in VEDHA_EXEMPT_PAIRS:
+                continue
+            assert causes_vedha(a, b)["causes_vedha"] is True
+    assert causes_vedha(0, 0)["causes_vedha"] is False
+    assert "father and son pairs" in VEDHA_EXCEPTIONS_ARE_FATHER_AND_SON
+
+
+def test_26_3s_worked_case_finds_the_several_obstructing_planets():
+    """"There were several planets causing vedha on Mercury on June 8, 2000."
+    Four of them, all in Taurus, the 3rd from Bill Gates's Pisces Moon.
+    """
+    from hora.charts.book import longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.vedha import VEDHA_WORKED_CASE, vedha
+
+    moon = longitudes(24)["Moon"]
+    assert int(moon // 30) == R[str(VEDHA_WORKED_CASE["natal_moon"])] == R["Pi"]
+
+    computed = compute_chart(
+        from_local(2000, 6, 8, 12, 0, 0.0, utc_offset_hours=-7.0),
+        Place(name="Seattle", latitude=47 + 36 / 60,
+              longitude=-(122 + 20 / 60)),
+        Settings(node_type=NodeType.MEAN))
+    got = vedha(int(Graha.MERCURY), moon,
+                {g: computed.positions[g].longitude for g in range(7)})
+
+    assert got["house"] == 4 == VEDHA_WORKED_CASE["house"]
+    assert got["transit_rasi"] == "Gemini"
+    assert got["auspicious"] is True
+    assert got["vedha_house"] == 3 == VEDHA_WORKED_CASE["vedha_house"]
+    assert got["vedha_rasi"] == "Taurus"
+    assert sorted(got["obstructors"]) == ["Jupiter", "Saturn", "Sun", "Venus"]
+    assert got["exempt_in_the_vedha_sthana"] == []
+    assert got["obstructed"] is True
+    assert "cannot give its good results" in got["results"]
+
+
+def test_the_moon_would_have_been_exempt_had_it_been_in_the_vedha_sthana():
+    """Mercury's obstruction is judged with the Moon-Mercury exception live:
+    on the day the Moon was in Leo, but if it were in Taurus it would be
+    listed as exempt rather than as an obstructor.
+    """
+    from hora.core.const import Graha
+    from hora.transits.vedha import vedha
+
+    moon_natal = R["Pi"] * 30.0 + 14.0
+    longitudes = {int(Graha.MERCURY): R["Ge"] * 30.0 + 10.0,
+                  int(Graha.MOON): R["Ta"] * 30.0 + 5.0,
+                  int(Graha.SUN): R["Ta"] * 30.0 + 20.0}
+    got = vedha(int(Graha.MERCURY), moon_natal, longitudes)
+
+    assert got["vedha_rasi"] == "Taurus"
+    assert got["obstructors"] == ["Sun"]
+    assert got["exempt_in_the_vedha_sthana"] == ["Moon"]
+    assert got["obstructed"] is True
+
+
+def test_an_unobstructed_good_transit_is_reported_as_standing():
+    from hora.core.const import Graha
+    from hora.transits.vedha import vedha
+
+    got = vedha(int(Graha.MERCURY), R["Pi"] * 30.0 + 14.0,
+                {int(Graha.MERCURY): R["Ge"] * 30.0 + 10.0,
+                 int(Graha.SUN): R["Le"] * 30.0 + 1.0})
+    assert got["obstructed"] is False
+    assert got["obstructors"] == []
+    assert "the good transit stands" in got["results"]
+
+
+def test_a_house_table_63_does_not_call_auspicious_has_no_vedha():
+    from hora.core.const import Graha
+    from hora.transits.vedha import vedha, vedha_sthana
+
+    got = vedha_sthana("Mercury", 12)
+    assert got["auspicious"] is False
+    assert got["vedha_house"] is None
+    assert "does not arise" in got["reason"]
+
+    run = vedha(int(Graha.MERCURY), R["Pi"] * 30.0 + 14.0,
+                {int(Graha.MERCURY): R["Aq"] * 30.0 + 10.0})
+    assert run["auspicious"] is False
+    assert run["obstructed"] is None
+    assert run["obstructors"] == []
+
+
+def test_vedha_and_murthi_are_named_together_as_the_two_brakes():
+    from hora.transits.murthi import (
+        THE_MURTHI_SCALES_A_VERDICT_IT_DOES_NOT_MAKE_ONE,
+    )
+    from hora.transits.vedha import VEDHA_AND_MURTHI_ARE_BOTH_BRAKES
+
+    assert "vedhas and murthis" in VEDHA_AND_MURTHI_ARE_BOTH_BRAKES
+    assert "marginal results" in VEDHA_AND_MURTHI_ARE_BOTH_BRAKES
+    assert "full results" in THE_MURTHI_SCALES_A_VERDICT_IT_DOES_NOT_MAKE_ONE
+
+
+def test_vedha_helpers_check_their_inputs():
+    from hora.core.const import Graha
+    from hora.core.validate import InputError
+    from hora.transits.vedha import VedhaError, causes_vedha, vedha, vedha_sthana
+
+    with pytest.raises(VedhaError, match="no row in Table 63"):
+        vedha_sthana("Rahu", 3)
+    for bad in (0, 13):
+        with pytest.raises(InputError):
+            vedha_sthana("Sun", bad)
+    for bad in (7, 8, -1):
+        with pytest.raises(InputError):
+            causes_vedha(bad, 0)
+    with pytest.raises(VedhaError, match="graha being judged"):
+        vedha(int(Graha.MERCURY), 0.0, {int(Graha.SUN): 10.0})
