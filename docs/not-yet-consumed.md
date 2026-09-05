@@ -1035,8 +1035,8 @@ what follows is prose and findings.
 
 `core/constants/transit.py`, beside Part 3's own opening. The whole section is
 prose — it announces two threads and states no rule — so all of it is here.
-**No module has been created for chapter 26**: the first section carrying a
-rule has not been supplied, and a test fails if one appears ahead of a page.
+§26.2 has since arrived and has its own module; the nakshatra thread has not,
+and a test fails if a module for it appears ahead of a page.
 
 | constant | why it is not consumed |
 |---|---|
@@ -1044,6 +1044,21 @@ rule has not been supplied, and a test fails if one appears ahead of a page.
 | `CHAPTER_26_THREADS` | The two threads as data, with the scope words the book puts on each |
 | `CHAPTER_26_IS_THE_FIRST_TO_PAIR_NAKSHATRAS` | Ours: §26.1's claim about chapter 25 checked against what chapter 25 built — only §25.6 produces a nakshatra, and from a product |
 | `CHAPTER_26_NAMES_NOTHING_IT_WILL_COVER` | Ours: the chapter promises "a couple" and "a few" and names none, as Part 3's opening did. Recorded so finishing it is not mistaken for having covered rasi transits |
+
+### Chapter 26 — §26.2's murthis (6)
+
+`transits/murthi.py`. The rule **is** consumed — `murthi` counts the house and
+reads Table 62, `rasi_ingress` finds the moment it is counted at, and §26.2's
+worked transit reproduces to the printed minute — so what follows is prose and
+findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `MURTHI_RULE` · `MURTHI_MEANS` | The section verbatim and the gloss in its title. The functions implement the rule |
+| `MERCURY_IN_GEMINI_2000` · `MURTHI_WORKED_CASES` | Fixtures — the worked transit and its two natives, checked against what the engine derives |
+| `LOHA_IS_THE_MOKSHA_TRIKONA` · `EVERY_QUADRANT_BUT_THE_FIRST_IS_UNFAVOURABLE` | Ours: two structural facts about Table 62, both checked against §7.4's own house categories rather than asserted |
+| `THE_MURTHI_SCALES_A_VERDICT_IT_DOES_NOT_MAKE_ONE` | The book's own limit on the rule. It **is** returned on every result as `modifies`, and held here for its wording |
+| `ONE_INGRESS_GIVES_A_DIFFERENT_MURTHI_TO_EACH_NATIVE` | Ours: why the rule is per-nativity, which the section shows but never says |
 
 ---
 
