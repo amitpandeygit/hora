@@ -1031,6 +1031,20 @@ what follows is prose and findings.
 | `EXERCISE_40_IS_THE_CASE_WHERE_BAV_AND_SAV_AGREE` | Ours: both bands say favourable, so §25.5.1's precedence never fires — the clean counterpart to Example 108's Jupiter |
 | `DIGNITY_IS_READ_IN_BOTH_CHARTS_AT_ONCE` | Ours: exaltation read in the natal D-10 and the transit rasi chart together, which chapter 25 never states |
 
+### Chapter 26 — §26.1's opening (5)
+
+`core/constants/transit.py`, beside Part 3's own opening. The whole section is
+prose — it announces two threads and states no rule — so all of it is here.
+**No module has been created for chapter 26**: the first section carrying a
+rule has not been supplied, and a test fails if one appears ahead of a page.
+
+| constant | why it is not consumed |
+|---|---|
+| `CHAPTER_26_LOOKS_BACK_AT_25` · `NAKSHATRAS_ARE_AS_IMPORTANT_AS_RASIS` | The section verbatim: what chapter 25 did, and the nakshatra thread this one opens |
+| `CHAPTER_26_THREADS` | The two threads as data, with the scope words the book puts on each |
+| `CHAPTER_26_IS_THE_FIRST_TO_PAIR_NAKSHATRAS` | Ours: §26.1's claim about chapter 25 checked against what chapter 25 built — only §25.6 produces a nakshatra, and from a product |
+| `CHAPTER_26_NAMES_NOTHING_IT_WILL_COVER` | Ours: the chapter promises "a couple" and "a few" and names none, as Part 3's opening did. Recorded so finishing it is not mistaken for having covered rasi transits |
+
 ---
 
 ## How to use this register

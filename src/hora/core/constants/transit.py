@@ -68,3 +68,61 @@ TRANSIT_VERBATIM_CONSTANTS: tuple[str, ...] = (
     "POSITIONS_ARE_ASSUMED",
     "PART_3_IS_KNOWINGLY_PARTIAL",
 )
+
+
+# --------------------------------------------------------------------------
+# §26.1 — Chapter 26's opening
+# --------------------------------------------------------------------------
+
+#: What chapter 26 says chapter 25 was, and what it leaves undone. Note the
+#: name it gives chapter 25 — "Transits and Natal References" — which is the
+#: title the chapter itself carries.
+CHAPTER_26_LOOKS_BACK_AT_25 = (
+    "In the chapter \"Transits and Natal References\", we concentrated on "
+    "correlating the natal chart and the transit chart using the rasis "
+    "occupied by planets in both. There are some principles about rasi "
+    "transits that we haven't yet covered. We will cover a couple of "
+    "concepts in this chapter.")
+
+#: The second thread, and the chapter's reason for existing.
+NAKSHATRAS_ARE_AS_IMPORTANT_AS_RASIS = (
+    "Nakshatras are also an important division of the zodiac and they are as "
+    "important as rasis. By looking at the interactions between the "
+    "nakshatras occupied by planets in the natal and transit charts, we can "
+    "make some predictions about the results given by them at the time of "
+    "the transit. We will look at a few principles.")
+
+#: **Finding.** Chapter 25's whole apparatus was rasi-based — janma rasi,
+#: house_of_rasi, the standard result tables, the two divisional interactions,
+#: ashtakavarga and kakshyas. §25.6's sodhya-pinda timing was the one place a
+#: **nakshatra** appeared as an output, and even there it was derived from a
+#: product rather than from a graha's own nakshatra. Chapter 26 is the first
+#: to read a transit nakshatra against a natal one directly.
+CHAPTER_26_IS_THE_FIRST_TO_PAIR_NAKSHATRAS = (
+    "Chapter 25 correlated the two charts by rasi throughout. The only "
+    "nakshatra it produced was section 25.6's, computed from a rekha count "
+    "times a sodhya pinda. Chapter 26 pairs the nakshatra a graha occupies "
+    "natally with the one it occupies in transit."
+)
+
+#: **Finding.** The chapter announces itself as partial twice over — "some
+#: principles ... that we haven't yet covered", "a couple of concepts", "a few
+#: principles". Like Part 3's own opening it names nothing, so there is again
+#: no list to check off as the chapter is read. Recorded so that reaching the
+#: end of it is not mistaken for having covered rasi transits.
+CHAPTER_26_NAMES_NOTHING_IT_WILL_COVER = (
+    "Section 26.1 promises \"a couple of concepts\" and \"a few principles\" "
+    "and names none of them, exactly as Part 3's opening promised \"some\" "
+    "techniques and named none."
+)
+
+#: The two threads §26.1 sets out, in its order.
+CHAPTER_26_THREADS: tuple[dict[str, str], ...] = (
+    {"thread": "rasi transits",
+     "why": "some principles about rasi transits that we haven't yet covered",
+     "scope": "a couple of concepts"},
+    {"thread": "nakshatra transits",
+     "why": "the interactions between the nakshatras occupied by planets in "
+            "the natal and transit charts",
+     "scope": "a few principles"},
+)
