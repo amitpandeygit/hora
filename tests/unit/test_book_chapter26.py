@@ -1346,3 +1346,122 @@ def test_jfk_jrs_death_is_now_read_through_two_mechanisms():
     assert chart(56)["transit"]["date"].startswith("July 16, 1999")
     assert "Example 107" in chart(56)["title"]
     assert "transit D-11" in JFK_JRS_DEATH_IS_READ_TWICE
+
+
+# --------------------------------------------------------------------------
+# Exercise 43 — Chart 63's native, and the two layers separated
+# --------------------------------------------------------------------------
+
+def test_every_claim_in_exercise_43_holds_against_chart_63():
+    from hora.charts.book import longitudes
+    from hora.charts.house import house_of_rasi
+    from hora.core.const import DEBILITATION_RASI, NAKSHATRA_NAMES, Graha
+    from hora.transits.gochara import good_houses
+    from hora.transits.tara import (
+        EXERCISE_43_CLAIMS,
+        NAKSHATRA_SPAN,
+        nakshatra_of,
+        special_nakshatra,
+    )
+
+    natal = longitudes(63)
+    moon, lagna = natal["Moon"], int(natal["Asc"] // 30)
+
+    index = nakshatra_of(moon)
+    assert str(NAKSHATRA_NAMES[index]) == "Purva Bhadrapada"
+    assert int((moon % NAKSHATRA_SPAN) // (NAKSHATRA_SPAN / 4)) + 1 == 3
+    assert A[lagna] == "Vi"
+
+    assert house_of_rasi(int(moon // 30), R["Cn"]) == 6
+    assert house_of_rasi(lagna, R["Cn"]) == 11
+    assert {6, 11} <= set(good_houses(int(Graha.MARS)))
+
+    ashlesha = [str(n) for n in NAKSHATRA_NAMES].index("Ashlesha")
+    assert (ashlesha - index) % 27 + 1 == 12
+    assert special_nakshatra("Desa", moon)["nakshatra"] == "Ashlesha"
+    assert DEBILITATION_RASI[int(Graha.MARS)] == R["Cn"]
+
+    assert len(EXERCISE_43_CLAIMS) == 8
+
+
+def test_mars_is_in_ashlesha_across_the_second_week_of_november_1994():
+    import datetime
+
+    from hora.charts.book import chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.tara import (
+        MARS_IS_IN_ASHLESHA_FOR_A_MONTH_AROUND_THE_EVENT,
+        nakshatra_of,
+    )
+
+    place = Place(name="Machilipatnam", **chart(63)["place"])
+    settings = Settings(node_type=NodeType.MEAN)
+    ashlesha = [str(n) for n in NAKSHATRA_NAMES].index("Ashlesha")
+
+    def where(date):
+        computed = compute_chart(
+            from_local(date.year, date.month, date.day, 12, 0, 0.0,
+                       utc_offset_hours=5.5), place, settings)
+        return nakshatra_of(computed.positions[int(Graha.MARS)].longitude)
+
+    for day in range(8, 15):                      # the second week
+        assert where(datetime.date(1994, 11, day)) == ashlesha, day
+    assert where(datetime.date(1994, 10, 23)) != ashlesha
+    assert where(datetime.date(1994, 11, 24)) != ashlesha
+    assert "24 October 1994" in (
+        MARS_IS_IN_ASHLESHA_FOR_A_MONTH_AROUND_THE_EVENT)
+
+
+def test_the_house_gives_the_valence_and_the_nakshatra_the_subject():
+    """The exercise states the gains up front and asks only for their nature,
+    which is the two layers separated as plainly as the book ever does.
+    """
+    from hora.transits.tara import (
+        EXERCISE_43,
+        THE_HOUSE_GIVES_THE_VALENCE_AND_THE_NAKSHATRA_THE_SUBJECT,
+    )
+
+    assert "brought material gains" in EXERCISE_43
+    assert "guess the nature of the gains" in EXERCISE_43
+    assert "Neither layer decides the other" in (
+        THE_HOUSE_GIVES_THE_VALENCE_AND_THE_NAKSHATRA_THE_SUBJECT)
+
+
+def test_one_debilitated_malefic_does_what_the_section_asked_many_to_do():
+    from hora.transits.tara import (
+        A_DEBILITATED_MALEFIC_COUNTS_FOR_MANY,
+        RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE,
+    )
+
+    assert "many malefics are transiting in desa nakshatra" in (
+        RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE)
+    assert "with a single Mars" in A_DEBILITATED_MALEFIC_COUNTS_FOR_MANY
+
+
+def test_a_debilitated_graha_can_still_have_a_favourable_transit():
+    from hora.core.const import DEBILITATION_RASI, Graha
+    from hora.transits.gochara import good_houses, transit_result
+    from hora.transits.tara import (
+        DEBILITATION_DOES_NOT_MAKE_THE_TRANSIT_UNFAVOURABLE,
+    )
+
+    assert DEBILITATION_RASI[int(Graha.MARS)] == R["Cn"]
+    for house in (6, 11):
+        assert house in good_houses(int(Graha.MARS))
+        assert transit_result(int(Graha.MARS), house)["snapshot"] == "Good"
+    assert "only to sharpen what it does" in (
+        DEBILITATION_DOES_NOT_MAKE_THE_TRANSIT_UNFAVOURABLE)
+
+
+def test_chart_63s_native_is_recorded_as_leaving_india_twice():
+    from hora.charts.book import chart
+    from hora.transits.tara import CHART_63S_NATIVE_LEAVES_INDIA_TWICE
+
+    events = chart(63)["events"]
+    assert len(events) == 2
+    assert events["he left India and landed in the USA"] == "August 16, 1991"
+    assert "November 1994" in events["he left his motherland India again"]
+    assert "three years apart" in CHART_63S_NATIVE_LEAVES_INDIA_TWICE

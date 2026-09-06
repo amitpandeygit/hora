@@ -2415,7 +2415,11 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             },
             "retrograde": ("Sat", "Merc", "Ven"),
         },
-        "events": {"he left India and landed in the USA": "August 16, 1991"},
+        "events": {
+            "he left India and landed in the USA": "August 16, 1991",
+            "he left his motherland India again":
+                "the second week of November 1994 — Exercise 43",
+        },
         "first_seen": "chapter 25, Exercise 38",
         "note": (
             "The chapter's exercise, and §25.4's interaction (1): a natal "

@@ -529,3 +529,90 @@ EXERCISE_42_CLAIMS: tuple[str, ...] = (
     "Saturn owns the 7th from Leo and is therefore a maraka",
     "Saturn was in Bharani at the recorded moment of death",
 )
+
+
+# --------------------------------------------------------------------------
+# Exercise 43 — the special nakshatra supplies the subject, not the verdict
+# --------------------------------------------------------------------------
+
+EXERCISE_43 = (
+    "For a native with natal Moon in the 3rd quarter of Poorvabhadrapada and "
+    "lagna in Virgo, transit of Mars in Aasresha constellation in Cancer "
+    "brought material gains. Cancer is the 6th from natal Moon and 11th from "
+    "natal lagna. Both are favorable transits and so it makes sense that this "
+    "transit gave material gains. Now find out if Mars occupies a special "
+    "constellation and, based on it, guess the nature of the gains.")
+
+EXERCISE_43_ANSWER = (
+    "Aasresha is the 12th constellation from Poorvabhaadrapada, i.e. Desa "
+    "nakshatra. Being a debilitated malefic in desa nakshatra (country), Mars "
+    "can drive him out of his country. That was indeed how Mars gave gains to "
+    "the native of Chart 63 in the second week of November 1994. The native "
+    "left his motherland India then.")
+
+#: **Finding.** This is the clearest statement in either chapter of how the
+#: two layers compose. The **houses** decide whether a transit is favourable —
+#: Cancer is the 6th from the Moon and the 11th from the lagna, both among
+#: Mars's good houses — and the **special nakshatra** decides what the results
+#: are about. The exercise asks for exactly that split: it states the gains up
+#: front and asks the reader only to "guess the nature of the gains".
+THE_HOUSE_GIVES_THE_VALENCE_AND_THE_NAKSHATRA_THE_SUBJECT = (
+    "Cancer is favourable for Mars by house from both the Moon and the "
+    "lagna, which is why the transit gives gains. Ashlesha is the desa "
+    "nakshatra, which is why the gains come through leaving the country. "
+    "Neither layer decides the other."
+)
+
+#: **Finding.** §26.4.2's wording is "**many** malefics transiting in desa
+#: nakshatra"; Exercise 43 reaches the same result from **one**, and the extra
+#: weight it names is debilitation. So a debilitated malefic counts for what
+#: the section otherwise wants several. The book states no exchange rate, and
+#: none is coded — this is the second unquantified "many" in the chapter.
+A_DEBILITATED_MALEFIC_COUNTS_FOR_MANY = (
+    "Section 26.4.2 asks for many malefics in desa nakshatra to drive one "
+    "from one's country. Exercise 43 gets there with a single Mars, and says "
+    "only that he is debilitated."
+)
+
+#: **Finding.** A transit can be favourable and unwelcome at once. Mars is
+#: **debilitated** in Cancer, and the exercise still calls the transit
+#: favourable and its results gains — because the favourability is read from
+#: the house and the debilitation from the sign. Nothing here treats a
+#: debilitated graha's transit as bad on that ground alone.
+DEBILITATION_DOES_NOT_MAKE_THE_TRANSIT_UNFAVOURABLE = (
+    "Mars is debilitated in Cancer and Cancer is one of his good transit "
+    "houses from both reference points. The exercise reads the transit as "
+    "favourable and uses the debilitation only to sharpen what it does."
+)
+
+#: **Finding.** Chart 63's native is described leaving India twice — landing
+#: in the USA on 16 August 1991 in Exercise 38, and leaving his motherland
+#: again in the second week of November 1994 here. Both readings stand on
+#: their own transits and neither is a misprint of the other; both are on the
+#: chart's record so a reader does not take one for the other.
+CHART_63S_NATIVE_LEAVES_INDIA_TWICE = (
+    "Exercise 38 dates a departure to 16 August 1991 and Exercise 43 dates "
+    "one to the second week of November 1994, three years apart, for the "
+    "same nativity."
+)
+
+#: **Finding.** The transit window is ours, from the ephemeris: Mars is in
+#: Ashlesha from **24 October to 23 November 1994**, so the second week of
+#: November falls inside it with a fortnight to spare either side. The
+#: exercise gives a week and no day.
+MARS_IS_IN_ASHLESHA_FOR_A_MONTH_AROUND_THE_EVENT = (
+    "Mars enters Ashlesha on 24 October 1994 and leaves on 23 November 1994. "
+    "The second week of November is inside that month-long stay."
+)
+
+#: Exercise 43's checkable claims, each asserted against Chart 63.
+EXERCISE_43_CLAIMS: tuple[str, ...] = (
+    "the natal Moon is in the 3rd quarter of Poorvabhadrapada",
+    "lagna is Virgo",
+    "Cancer is the 6th from the natal Moon",
+    "Cancer is the 11th from the natal lagna",
+    "both are favourable houses for a Mars transit",
+    "Aasresha is the 12th constellation from Poorvabhadrapada",
+    "so Ashlesha is this nativity's desa nakshatra",
+    "Mars is debilitated in Cancer",
+)

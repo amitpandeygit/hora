@@ -1153,6 +1153,20 @@ prose and findings.
 | `FOOTNOTE_72_IS_NOT_SUPPLIED` | Ours: the disclaimer carries a footnote whose text has not been given. Recorded so nothing is inferred from the marker |
 | `JFK_JRS_DEATH_IS_READ_TWICE` | Ours: Example 107 read the same instant through a transit D-11; this reads it through a nakshatra |
 
+### Chapter 26 — Exercise 43 (8)
+
+`transits/tara.py`. All eight claims **are** checked against Chart 63, and the
+transit window was measured, so what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXERCISE_43` · `EXERCISE_43_ANSWER` · `EXERCISE_43_CLAIMS` | The exercise and its answer verbatim, and the eight claims as a list each asserted by a test |
+| `THE_HOUSE_GIVES_THE_VALENCE_AND_THE_NAKSHATRA_THE_SUBJECT` | Ours: the plainest statement in either chapter of how the two layers compose. Nothing composes them in code — the caller does |
+| `A_DEBILITATED_MALEFIC_COUNTS_FOR_MANY` | Ours: §26.4.2 asks for many malefics and the exercise uses one. The book gives no exchange rate and none is coded |
+| `DEBILITATION_DOES_NOT_MAKE_THE_TRANSIT_UNFAVOURABLE` | Ours: house favourability and sign dignity are read separately here |
+| `CHART_63S_NATIVE_LEAVES_INDIA_TWICE` | Ours: both departures are on the chart's record so neither is taken for a misprint of the other |
+| `MARS_IS_IN_ASHLESHA_FOR_A_MONTH_AROUND_THE_EVENT` | Ours: the exercise gives a week and no day, so the stay was measured |
+
 ---
 
 ## How to use this register
