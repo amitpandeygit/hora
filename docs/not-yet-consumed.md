@@ -1219,6 +1219,20 @@ what follows is prose and findings.
 | `ONE_DWELLING_CAN_SPAN_TWO_MURTHIS` | Ours: a nakshatra window and a rasi window do not line up, so the murthi changes inside the dwelling |
 | `THE_WINDOW_IS_GIVEN_IN_WHOLE_DAYS` | Ours: the Sun leaves Satabhisha on the morning of 4 March and the book prints 3 March, so the window names last full days |
 
+### Chapter 26 — §26.7 opened (6)
+
+`transits/latta.py`, a module of its own like murthi and vedha. Prose only:
+the section states the rule and not the offsets, so `LATTA_OFFSETS` is empty
+and `latta` raises. A test fails the moment offsets appear without being
+declared, so no kick is guessed.
+
+| constant | why it is not consumed |
+|---|---|
+| `LATTA_MEANS` · `LATTA_RULE` · `LATTA_TARGETS` | The section verbatim, and the two natal points a kick can land on |
+| `LATTA_COUNTS_FROM_THE_TRANSIT_NOT_THE_NATAL_POINT` | Ours: the chapter's other counting techniques run the other way, and a test checks their wording |
+| `THE_HARM_IS_READ_FROM_THE_NATAL_SIGNIFICATION` | Ours: the rule reads the graha's natal significations, not its natural nature — unlike §26.5 |
+| `LATTA_OFFSETS` · `LATTA_OFFSETS_ARE_NOT_SUPPLIED` | The empty registry and the reason. Consumed by the coverage test only |
+
 ---
 
 ## How to use this register

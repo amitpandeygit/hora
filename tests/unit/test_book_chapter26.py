@@ -2512,3 +2512,79 @@ def test_the_other_modifier_path_is_aspect_and_vedha():
         A_DWELLING_CAN_BE_AFFLICTED_BY_ASPECT_OR_VEDHA)
     assert "natural malefic" in NAKSHATRA_DRISHTI_RESULTS
     assert "vedha sthana" in VEDHA_RULE
+
+
+# --------------------------------------------------------------------------
+# §26.7 — latta, opened
+# --------------------------------------------------------------------------
+
+def test_26_7_states_the_rule_and_names_two_natal_targets():
+    from hora.transits.latta import LATTA_MEANS, LATTA_RULE, LATTA_TARGETS
+
+    assert LATTA_MEANS == "kick"
+    assert "nakshatra-based planetary kick" in LATTA_RULE
+    assert "based on its transit position" in LATTA_RULE
+    assert "Moon (or lagna) in natal chart" in LATTA_RULE
+    assert LATTA_TARGETS == ("natal Moon", "natal lagna")
+
+
+def test_latta_is_the_first_of_the_chapter_to_admit_the_lagnas_nakshatra():
+    """§26.4's taras, §26.4.2's special nakshatras and §26.6's body parts all
+    read from the natal Moon's nakshatra alone.
+    """
+    from hora.transits.latta import LATTA_TARGETS
+    from hora.transits.tara import (
+        BODY_PART_RULE,
+        SPECIAL_NAKSHATRAS_INTRO,
+        TARA_COUNTING_RULE,
+    )
+
+    assert "natal lagna" in LATTA_TARGETS
+    for earlier in (TARA_COUNTING_RULE, BODY_PART_RULE,
+                    SPECIAL_NAKSHATRAS_INTRO):
+        assert "lagna" not in earlier.lower()
+
+
+def test_latta_counts_from_the_transit_where_the_others_count_to_it():
+    from hora.transits.latta import (
+        LATTA_COUNTS_FROM_THE_TRANSIT_NOT_THE_NATAL_POINT,
+    )
+    from hora.transits.tara import BODY_PART_RULE, TARA_COUNTING_RULE
+
+    for earlier in (TARA_COUNTING_RULE, BODY_PART_RULE):
+        assert "from janma nakshatra" in earlier or (
+            "from the constellation of natal Moon" in earlier)
+    assert "counted from the transit position" in (
+        LATTA_COUNTS_FROM_THE_TRANSIT_NOT_THE_NATAL_POINT)
+
+
+def test_the_harm_is_the_grahas_natal_signification_not_its_nature():
+    from hora.charts.aspects import NAKSHATRA_DRISHTI_RESULTS
+    from hora.transits.latta import (
+        LATTA_RULE,
+        THE_HARM_IS_READ_FROM_THE_NATAL_SIGNIFICATION,
+    )
+
+    assert "signification of the planet in natal chart" in LATTA_RULE
+    assert "natural benefic" not in LATTA_RULE
+    # §26.5 by contrast grades by natural nature
+    assert "natural benefic" in NAKSHATRA_DRISHTI_RESULTS
+    assert "spoils what that benefic signifies natally" in (
+        THE_HARM_IS_READ_FROM_THE_NATAL_SIGNIFICATION)
+
+
+def test_no_latta_is_computed_until_the_offsets_are_supplied():
+    """The coverage line for §26.7. It fails the moment offsets appear
+    without this assertion being updated, so nothing is guessed.
+    """
+    from hora.transits.latta import (
+        LATTA_OFFSETS,
+        LATTA_OFFSETS_ARE_NOT_SUPPLIED,
+        LattaError,
+        latta,
+    )
+
+    assert LATTA_OFFSETS == {}
+    with pytest.raises(LattaError, match="none is guessed"):
+        latta("Sun", 100.0)
+    assert "has not been given" in LATTA_OFFSETS_ARE_NOT_SUPPLIED
