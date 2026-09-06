@@ -4304,3 +4304,191 @@ def test_example_117_is_transcribed_with_its_verdict():
     assert "November 22, 1989" in EXAMPLE_117
     assert "karma nakshatra" in EXAMPLE_117_KARMA_NAKSHATRA
     assert "lost power" in EXAMPLE_117_CONCLUSION
+
+
+# --------------------------------------------------------------------------
+# §26.9 — the chapter's conclusion, and the criterion it introduces
+# --------------------------------------------------------------------------
+
+
+def test_the_conclusion_is_transcribed_and_carries_its_criterion():
+    from hora.core.const import (
+        CHAPTER_26_CONCLUSION,
+        THE_TWENTY_SEVEN_GROUP_CRITERION,
+    )
+
+    assert THE_TWENTY_SEVEN_GROUP_CRITERION in CHAPTER_26_CONCLUSION
+    assert "chart-sensitive methods" in CHAPTER_26_CONCLUSION
+    assert "new students should not make predictions" in CHAPTER_26_CONCLUSION
+
+
+def test_this_conclusion_introduces_a_criterion_where_25_7_did_not():
+    from hora.core.const import THIS_CONCLUSION_INTRODUCES_A_CRITERION
+    from hora.transits.gochara import THE_CONCLUSION_INTRODUCES_NOTHING_NEW
+
+    assert "No rule appears here for the first time" in (
+        THE_CONCLUSION_INTRODUCES_NOTHING_NEW)
+    assert "adds a coarseness test" in THIS_CONCLUSION_INTRODUCES_A_CRITERION
+
+
+def test_the_criterion_generalises_the_caution_in_26_4_2():
+    from hora.core.const import (
+        THE_CRITERION_GENERALISES_SECTION_26_4_2S_OWN_CAUTION,
+    )
+    from hora.transits.tara import special_transits
+
+    # §26.4.2 makes the same argument for one nakshatra, four sections early.
+    caution = str(special_transits(6.6, {6: 273.0})["caution"])
+    assert "almost the same number of people" in caution
+    assert "each constellation" in caution
+    assert "cannot be read" in (
+        THE_CRITERION_GENERALISES_SECTION_26_4_2S_OWN_CAUTION)
+
+
+def test_the_conclusion_drops_the_rasi_thread_26_1_announced():
+    from hora.core.const import (
+        CHAPTER_26_CONCLUSION,
+        CHAPTER_26_THREADS,
+        THE_CONCLUSION_DROPS_THE_RASI_THREAD,
+    )
+
+    assert [entry["thread"] for entry in CHAPTER_26_THREADS] == [
+        "rasi transits", "nakshatra transits"]
+    assert "transits in nakshatras" in CHAPTER_26_CONCLUSION
+    assert "rasi" not in CHAPTER_26_CONCLUSION
+
+    # And the two sections it drops really are keyed to rasis.
+    from hora.transits.murthi import MURTHI_RULE
+    from hora.transits.vedha import TABLE_63_VEDHA
+
+    assert "enters the rasi" in MURTHI_RULE
+    for houses in TABLE_63_VEDHA.values():
+        assert all(1 <= house <= 12 for house in houses)
+    assert "keyed to rasis" in THE_CONCLUSION_DROPS_THE_RASI_THREAD
+
+
+def test_not_one_technique_in_the_chapter_gives_twenty_seven_results():
+    from hora.core.const import NOT_ONE_TECHNIQUE_GIVES_TWENTY_SEVEN_RESULTS
+    from hora.transits.latta import latta_hits
+    from hora.transits.murthi import murthi_of_house
+    from hora.transits.tara import body_part, special_transits, tara
+
+    span = 360 / 27
+    transit = 20 * span + 5.0
+
+    def nativities():
+        """One nativity in each of the 27 birth stars."""
+        return [index * span + span / 2 for index in range(27)]
+
+    taras = {tara(moon, transit)["tara"] for moon in nativities()}
+    assert len(taras) == 9
+
+    parts = {graha: len({body_part(graha, moon, transit)["part"]
+                         for moon in nativities()})
+             for graha in ("Sun", "Moon", "Mars", "Mercury", "Saturn")}
+    assert set(parts.values()) <= set(range(6, 10))
+
+    specials = {tuple(sorted(str(hit) for hit in special_transits(
+        moon, {6: transit})["in_special_nakshatras"]))
+        for moon in nativities()}
+    assert len(specials) <= 12
+
+    kicks = {latta_hits("Saturn", transit, moon)["kicked"]
+             for moon in nativities()}
+    assert kicks == {True, False}
+
+    murthis = {murthi_of_house(house)["murthi"] for house in range(1, 13)}
+    assert len(murthis) == 4
+
+    assert max(len(taras), max(parts.values()), len(specials),
+               len(kicks), len(murthis)) < 27
+    assert "not the number of answers" in (
+        NOT_ONE_TECHNIQUE_GIVES_TWENTY_SEVEN_RESULTS)
+
+
+def test_the_chakra_is_the_one_technique_the_criterion_does_not_reach():
+    from hora.core.const import (
+        THE_CHAKRA_IS_THE_ONE_THE_CRITERION_DOES_NOT_REACH,
+    )
+    from hora.transits.sarvatobhadra import (
+        FOOTNOTE_70,
+        NATAL_POINTS_TO_WATCH,
+    )
+
+    assert len(NATAL_POINTS_TO_WATCH) == 5
+    kinds = " ".join(str(entry["point"]) for entry in NATAL_POINTS_TO_WATCH)
+    for kind in ("constellation", "rasi", "name", "tithi", "weekday"):
+        assert kind in kinds
+    assert "very very limited" in FOOTNOTE_70
+    assert "five natal points of four kinds" in (
+        THE_CHAKRA_IS_THE_ONE_THE_CRITERION_DOES_NOT_REACH)
+
+
+def test_the_chapters_four_hedges_widen_and_only_one_names_a_remedy():
+    from hora.core.const import (
+        CHAPTER_26_CONCLUSION,
+        THE_FOUR_HEDGES_WIDEN_AND_THE_LAST_NAMES_NOTHING,
+    )
+    from hora.transits.sarvatobhadra import FOOTNOTE_70
+    from hora.transits.tara import FOOTNOTE_72, FOOTNOTE_74
+
+    assert "This author's experience" in FOOTNOTE_70          # one technique
+    assert "predict someone's death" in FOOTNOTE_74           # one prediction
+    assert "cannot make predictions just based on them" in FOOTNOTE_72
+    assert "chart-sensitive methods" in CHAPTER_26_CONCLUSION  # the chapter
+
+    named = [text for text in (FOOTNOTE_70, FOOTNOTE_72, FOOTNOTE_74,
+                               CHAPTER_26_CONCLUSION)
+             if "dasas" in text or "Tajaka" in text]
+    assert named == [FOOTNOTE_74]
+    assert "names a remedy is footnote 74" in (
+        THE_FOUR_HEDGES_WIDEN_AND_THE_LAST_NAMES_NOTHING)
+
+
+def test_the_caution_names_a_reader_and_its_reason_names_a_method():
+    from hora.core.const import (
+        CHAPTER_26_CONCLUSION,
+        THE_CAUTION_IS_ADDRESSED_TO_THE_READER_AND_THE_REASON_IS_NOT,
+        THE_TWENTY_SEVEN_GROUP_CRITERION,
+    )
+
+    assert "new students" in CHAPTER_26_CONCLUSION
+    assert "students" not in THE_TWENTY_SEVEN_GROUP_CRITERION
+    assert "technique" in THE_TWENTY_SEVEN_GROUP_CRITERION
+    assert "does not depend on who is reading" in (
+        THE_CAUTION_IS_ADDRESSED_TO_THE_READER_AND_THE_REASON_IS_NOT)
+
+
+def test_chapter_26_is_complete_end_to_end():
+    """The chapter's closing inventory. Every span it claims is asserted."""
+    from hora.charts import aspects
+    from hora.core.const import CHAPTER_26_IS_COMPLETE
+    from hora.core.constants.book_charts import BOOK_CHARTS
+    from hora.transits import latta, murthi, sarvatobhadra, tara, vedha
+
+    # Tables 62 to 70, each in the module for its section.
+    assert murthi.TABLE_62_MURTHIS and vedha.TABLE_63_VEDHA
+    assert tara.TABLE_64_TARAS and latta.TABLE_70_LATTAS
+    assert sorted(tara.BODY_PART_TABLES) == [65, 66, 67, 68, 69]
+    assert not tara.BODY_PART_TABLES_PENDING
+
+    # Figure 3, and §26.5, which has a table of its own kind and no number.
+    assert len(sarvatobhadra.FIGURE_3) == 9
+    assert len(aspects.NAKSHATRA_DRISHTI) == 7
+
+    # Examples 113 to 117 and Exercises 41 to 46.
+    assert latta.EXAMPLE_113 and sarvatobhadra.EXAMPLE_114
+    assert sarvatobhadra.EXAMPLE_115 and sarvatobhadra.EXAMPLE_116
+    assert sarvatobhadra.EXAMPLE_117
+    for number in (41, 42, 43, 44):
+        assert getattr(tara, f"EXERCISE_{number}", None) is not None
+    assert latta.EXERCISE_45 and sarvatobhadra.EXERCISE_46
+
+    # Footnotes 70 to 74.
+    assert sarvatobhadra.FOOTNOTE_70 and sarvatobhadra.FOOTNOTE_71
+    assert tara.FOOTNOTE_72 and tara.FOOTNOTE_73 and tara.FOOTNOTE_74
+
+    # The chapter prints no chart of its own; the three it reads are earlier.
+    for number in (39, 56, 60):
+        assert number in BOOK_CHARTS
+    assert "prints no chart of its own" in CHAPTER_26_IS_COMPLETE

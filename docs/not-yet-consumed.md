@@ -1336,6 +1336,43 @@ vedhas from `vedha_lines` — so what follows is prose and findings.
 | `A_SQUARE_IS_READ_FOR_WHAT_THE_CHART_MAKES_RELEVANT` | Ours: the Nanda square holds Sunday and Tuesday and the example takes only Sunday |
 | `RAJIV_GANDHI_IS_PRINTED_AS_TWO_CHARTS` | Ours: Chart 39 and Chart 60 are one nativity, and Example 116 cites the earlier |
 
+### Chapter 26 — Example 117 (9)
+
+`transits/sarvatobhadra.py`. Every claim **is** checked — the four transiting
+malefics from the ephemeris and all seven contacts from `strike`, which the
+example's own second clause is what forced into existence — so what follows is
+prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_117` · `EXAMPLE_117_KARMA_NAKSHATRA` · `EXAMPLE_117_CONCLUSION` | The example, its paragraph on the constellation of profession, and its verdict, verbatim |
+| `EXAMPLE_117_STRIKES` · `EXAMPLE_117_NATAL_POINTS` | Fixtures — seven contacts and four natal points, each checked against what the chakra derives |
+| `OCCUPATION_COUNTS_AS_WELL_AS_VEDHA` | Ours: the section states the reading in vedha alone and this example counts a graha standing in the square. `strike` reports the kinds apart, so the finding is the reason and not an input |
+| `THE_KARMA_NAKSHATRA_CHANGES_HANDS` · `VENUS_IS_IN_THE_KARMA_NAKSHATRA_TOO` | Ours: Jupiter there at the ascension and Saturn at the defeat, both occupations; and Venus there with Saturn, unmentioned |
+| `THE_TWO_SPECIAL_NAKSHATRAS_FIX_THE_JANMA_NAKSHATRA` | Ours: the 10th and the 13th together admit one birth star, and it is the one Chart 14 prints |
+| `THE_EXAMPLES_NAME_ONLY_THE_STRIKES_THAT_CARRY_THE_VERDICT` · `A_NATAL_POINT_WITH_NO_EVIDENCE_IS_DROPPED` | Ours: both readings are silent on the opposite nature, and the point carrying none of the read nature is dropped — OI-150 |
+| `THREE_PLANETS_MAY_STRIKE_ONE_SQUARE` · `THE_UNDATED_HOUR_TOUCHES_NOTHING_THE_EXAMPLE_CLAIMS` | Ours: the floor is a minimum and not a shape, and the missing hour reaches nothing the example claims |
+
+### Chapter 26 — §26.9's conclusion (10)
+
+`core/constants/transit.py`, beside §26.1's opening. The whole section is
+prose — it summarises and cautions and states no rule — so all of it is here.
+The criterion it introduces **is** checked, against every technique in the
+chapter.
+
+| constant | why it is not consumed |
+|---|---|
+| `CHAPTER_26_CONCLUSION` · `THE_TWENTY_SEVEN_GROUP_CRITERION` | The section verbatim, and the one sentence in it that is not a summary |
+| `THIS_CONCLUSION_INTRODUCES_A_CRITERION` | Ours: §25.7 restated the chapter it closed and this one adds a test no earlier section states in general form |
+| `THE_CRITERION_GENERALISES_SECTION_26_4_2S_OWN_CAUTION` | Ours: §26.4.2 made the same argument about the desa nakshatra four sections earlier |
+| `THE_CONCLUSION_DROPS_THE_RASI_THREAD` | Ours: §26.1 announced two threads and the conclusion accounts for one, leaving §26.2 and §26.3 unsummarised |
+| `NOT_ONE_TECHNIQUE_GIVES_TWENTY_SEVEN_RESULTS` | Ours: fixing a transit and varying the nativity, the chapter's techniques give between two and twelve answers, never 27 |
+| `THE_CHAKRA_IS_THE_ONE_THE_CRITERION_DOES_NOT_REACH` | Ours: §26.8 reads five natal points of four kinds, and it is the technique footnote 70 disclaims experience of |
+| `THE_FOUR_HEDGES_WIDEN_AND_THE_LAST_NAMES_NOTHING` | Ours: footnotes 70, 74 and 72 and then §26.9, each wider than the last, and only footnote 74 naming a remedy |
+| `THE_CAUTION_IS_ADDRESSED_TO_THE_READER_AND_THE_REASON_IS_NOT` | Ours: the caution names new students and the reason given for it is a property of the technique |
+| `CHAPTER_26_IS_COMPLETE` | The chapter's closing inventory — sections, tables, figure, examples, exercises, footnotes and the charts it reuses |
+
+
 ---
 
 ## How to use this register
