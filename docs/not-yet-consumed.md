@@ -1182,9 +1182,9 @@ special ones — so what follows is prose and findings.
 | `FOOTNOTE_73` · `MRITYU_BHAGA_IS_USED_WITHOUT_A_DEFINITION` | The footnote verbatim, and ours recording that the table behind it has never been printed — OI-144 |
 | `FOOTNOTE_74` · `THE_TECHNIQUE_NEEDS_DASAS_AND_TAJAKA_TO_BE_USED_AT_ALL` | The book's own limit on the whole method, and ours noting one half of the corroboration it demands is a part not yet reached |
 
-### Chapter 26 — §26.6, Tables 65 and 66 (13)
+### Chapter 26 — §26.6, Tables 65 to 67 (15)
 
-`transits/tara.py`. Tables 65 and 66 have arrived; 67 to 69 are pending.
+`transits/tara.py`. Tables 65 to 67 have arrived; 68 and 69 are pending.
 `BODY_PART_TABLES` registers all five and a test fails while any is pending,
 so §26.6 cannot be reported complete early — the same guard chapter 25 used
 while Tables 53 to 59 arrived one at a time.
@@ -1194,11 +1194,12 @@ while Tables 53 to 59 arrived one at a time.
 | `BODY_PART_RULE` · `BODY_PART_PURPOSES` | The section verbatim: the counting, and the two uses it names |
 | `THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS` | Ours: the only inverse reading in Part 3 — symptom to graha to remedy — and that it narrows rather than identifies |
 | `FIVE_TABLES_FOR_SEVEN_GRAHAS` | Ours: five tables are promised for seven grahas and the section does not say how they divide. Nothing is assumed |
-| `BODY_PART_TABLES` · `BODY_PART_TABLES_PENDING` · `TABLE_65_SUN` · `TABLE_66_MOON` | The registry and the Sun's table. `body_part` and `grahas_dwelling_in` read them; the register entry stays while four tables are missing |
+| `BODY_PART_TABLES` · `BODY_PART_TABLES_PENDING` · `TABLE_65_SUN` · `TABLE_66_MOON` · `TABLE_67_MARS` | The registry and the Sun's table. `body_part` and `grahas_dwelling_in` read them; the register entry stays while four tables are missing |
 | `BODY_PART_HARMS` · `BODY_PART_NEUTRAL` | **Ours**, not the book's — §26.6 prints no good/bad column. Returned as a three-valued `harm` with a note saying so |
 | `NOT_EVERY_STANDARD_RESULT_IS_A_VERDICT` | Ours: "Going abroad" is an event, and Exercise 43 read a departure as a gain, so it is left ungraded |
-| `THE_TABLES_DO_NOT_SHARE_A_BODY_PART_VOCABULARY` | Ours: Mouth/Face against Face. `grahas_dwelling_in` reports overlapping names because of it |
-| `TWO_FEET_TAKES_SIX_COUNTS_IN_BOTH_TABLES_SO_FAR` | Ours, and deliberately provisional — two tables is not a pattern |
+| `THE_TABLES_DRAW_EIGHT_PARTS_FROM_A_LARGER_POOL` | Ours: eight parts each from a pool of eleven, five of them in every table. `grahas_dwelling_in` reports overlapping names because of it |
+| `MOUTH_FACE_AND_FACE_ARE_DIFFERENT_PARTS` | Ours, and a **correction**: Tables 65 and 66 made them look like one part twice named, and Table 67 gives Mars both |
+| `TWO_FEET_TAKES_SIX_COUNTS_IN_EVERY_TABLE_SO_FAR` | Ours, and deliberately provisional — three of five tables, and only the block size repeats |
 | `THE_BODY_PART_TABLE_IS_BLOCKS_NOT_A_CYCLE` · `THE_TWO_TABLES_AGREE_NO_BETTER_THAN_CHANCE` · `THE_FIRST_COUNT_IS_GRADED_THREE_WAYS` | Ours: Table 65's shape, its 12-to-12 disagreement with Table 64, and the three different verdicts the 1st count receives |
 
 ---

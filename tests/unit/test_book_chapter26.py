@@ -1747,7 +1747,7 @@ def test_section_26_6_is_not_finished_early():
     assert tuple(STANDARD_RESULT_TABLES) == (53, 54, 55, 56, 57, 58, 59)
     assert all(STANDARD_RESULT_TABLES.values())
 
-    assert pending == {67, 68, 69}, (
+    assert pending == {68, 69}, (
         f"Tables {sorted(pending)} of section 26.6 are still pending; "
         f"update this assertion as each is supplied")
 
@@ -1875,10 +1875,10 @@ def test_body_part_reads_a_transit_and_marks_its_own_grading_as_ours():
 def test_a_graha_with_no_supplied_table_is_refused():
     from hora.transits.tara import TaraError, body_part, body_part_table
 
-    for graha in ("Mars", "Mercury", "Jupiter", "Venus", "Saturn"):
+    for graha in ("Mercury", "Jupiter", "Venus", "Saturn"):
         with pytest.raises(TaraError, match="still pending"):
             body_part(graha, 5.0, 100.0)
-    for number in (67, 68, 69):
+    for number in (68, 69):
         with pytest.raises(TaraError, match="has not been supplied"):
             body_part_table(number)
 
@@ -1889,9 +1889,11 @@ def test_the_reverse_lookup_says_how_much_of_the_section_it_has():
     got = grahas_dwelling_in("Eyes")
     assert got["grahas"] == [
         {"graha": "Sun", "table": 65, "counts": (24, 25), "result": "Gains"},
-        {"graha": "Moon", "table": 66, "counts": (9, 10), "result": "Money"}]
-    assert got["tables_supplied"] == [65, 66]
-    assert got["tables_pending"] == [67, 68, 69]
+        {"graha": "Moon", "table": 66, "counts": (9, 10), "result": "Money"},
+        {"graha": "Mars", "table": 67, "counts": (26, 27),
+         "result": "Going abroad"}]
+    assert got["tables_supplied"] == [65, 66, 67]
+    assert got["tables_pending"] == [68, 69]
     assert got["complete"] is False
 
     assert grahas_dwelling_in("Left knee")["grahas"] == []
@@ -1935,20 +1937,47 @@ def test_table_66_partitions_the_27_in_blocks_of_its_own():
         assert len({row["result"] for row in rows}) == 8
 
 
-def test_the_two_tables_do_not_share_a_body_part_vocabulary():
+def test_each_table_draws_eight_parts_from_a_larger_pool():
     from hora.transits.tara import (
-        THE_TABLES_DO_NOT_SHARE_A_BODY_PART_VOCABULARY,
+        BODY_PART_TABLES,
+        THE_TABLES_DRAW_EIGHT_PARTS_FROM_A_LARGER_POOL,
         body_part_table,
     )
 
-    sun = {row["part"] for row in body_part_table(65)["rows"]}
-    moon = {row["part"] for row in body_part_table(66)["rows"]}
-    assert sun & moon == {"Head", "Eyes", "Left hand", "Right hand",
+    supplied = [n for n, t in BODY_PART_TABLES.items() if t is not None]
+    named = {n: {row["part"] for row in body_part_table(n)["rows"]}
+             for n in supplied}
+    assert all(len(parts) == 8 for parts in named.values())
+
+    everywhere = set.intersection(*named.values())
+    assert everywhere == {"Head", "Eyes", "Left hand", "Right hand",
                           "Two feet"}
-    assert sun - moon == {"Mouth/Face", "Chest", "Private parts"}
-    assert moon - sun == {"Face", "Back", "Heart"}
-    assert "Mouth/Face and Table 66 calls it Face" in (
-        THE_TABLES_DO_NOT_SHARE_A_BODY_PART_VOCABULARY)
+    pool = set.union(*named.values())
+    assert pool - everywhere == {"Mouth/Face", "Chest", "Private parts",
+                                 "Face", "Back", "Heart"}
+    assert len(pool) == 11
+    assert "Each table names exactly eight" in (
+        THE_TABLES_DRAW_EIGHT_PARTS_FROM_A_LARGER_POOL)
+
+
+def test_mouth_face_and_face_are_two_different_parts():
+    """Reading Tables 65 and 66 alone they looked like one part under two
+    names. Table 67 gives Mars both, with different counts and results.
+    """
+    from hora.transits.tara import (
+        MOUTH_FACE_AND_FACE_ARE_DIFFERENT_PARTS,
+        body_part_table,
+    )
+
+    rows = body_part_table(67)["rows"]
+    mouth = next(r for r in rows if r["part"] == "Mouth/Face")
+    face = next(r for r in rows if r["part"] == "Face")
+    assert (mouth["counts"], mouth["result"]) == ((1, 2), "Death")
+    assert (face["counts"], face["result"]) == ((18, 19, 20, 21),
+                                                "Great fear")
+    assert not set(mouth["counts"]) & set(face["counts"])
+    assert "not two spellings of one part" in (
+        MOUTH_FACE_AND_FACE_ARE_DIFFERENT_PARTS)
 
 
 def test_the_reverse_lookup_reports_parts_whose_names_overlap():
@@ -1956,14 +1985,16 @@ def test_the_reverse_lookup_reports_parts_whose_names_overlap():
     from hora.transits.tara import grahas_dwelling_in
 
     got = grahas_dwelling_in("Face")
-    assert [entry["graha"] for entry in got["grahas"]] == ["Moon"]
+    assert [entry["graha"] for entry in got["grahas"]] == ["Moon", "Mars"]
     assert got["similar_parts"] == [
-        {"part": "Mouth/Face", "graha": "Sun", "table": 65}]
-    assert "not enough" in got["vocabulary"]
+        {"part": "Mouth/Face", "graha": "Sun", "table": 65},
+        {"part": "Mouth/Face", "graha": "Mars", "table": 67}]
+    assert "Each table names exactly eight" in got["vocabulary"]
 
     # an exactly shared name needs no near-match
     hands = grahas_dwelling_in("Left hand")
-    assert [entry["graha"] for entry in hands["grahas"]] == ["Sun", "Moon"]
+    assert [entry["graha"] for entry in hands["grahas"]] == [
+        "Sun", "Moon", "Mars"]
     assert all(entry["part"] != "Left hand"
                for entry in hands["similar_parts"])
 
@@ -2042,21 +2073,84 @@ def test_table_66_also_disagrees_with_table_64():
     assert agree + disagree + mixed + neutral == 27
 
 
-def test_two_feet_takes_six_counts_in_both_tables_so_far():
+def test_two_feet_takes_six_counts_in_every_table_so_far():
     from hora.transits.tara import (
-        TWO_FEET_TAKES_SIX_COUNTS_IN_BOTH_TABLES_SO_FAR,
+        BODY_PART_TABLES,
+        TWO_FEET_TAKES_SIX_COUNTS_IN_EVERY_TABLE_SO_FAR,
         body_part_table,
     )
 
-    blocks = {}
-    for number in (65, 66):
-        row = next(r for r in body_part_table(number)["rows"]
-                   if r["part"] == "Two feet")
-        blocks[number] = row
-        assert len(row["counts"]) == 6
-        assert len(row["counts"]) == max(
-            len(r["counts"]) for r in body_part_table(number)["rows"])
-    assert blocks[65]["result"] == "Poverty"
-    assert blocks[66]["result"] == "Going abroad"
-    assert "the widest block in both" in (
-        TWO_FEET_TAKES_SIX_COUNTS_IN_BOTH_TABLES_SO_FAR)
+    supplied = [n for n, t in BODY_PART_TABLES.items() if t is not None]
+    results = {}
+    for number in supplied:
+        rows = body_part_table(number)["rows"]
+        row = next(r for r in rows if r["part"] == "Two feet")
+        assert len(row["counts"]) == 6, number
+        assert len(row["counts"]) == max(len(r["counts"]) for r in rows)
+        results[number] = row["result"]
+    assert results == {65: "Poverty", 66: "Going abroad", 67: "Separation"}
+    assert len(set(results.values())) == 3      # only the size repeats
+    assert "the widest block in each table" in (
+        TWO_FEET_TAKES_SIX_COUNTS_IN_EVERY_TABLE_SO_FAR)
+
+
+# --------------------------------------------------------------------------
+# Table 67 — Mars's body parts
+# --------------------------------------------------------------------------
+
+def test_table_67s_rows_are_as_printed():
+    from hora.transits.tara import body_part_table
+
+    table = body_part_table(67)
+    assert table["graha"] == "Mars"
+    assert tuple((row["counts"], row["part"], row["result"])
+                 for row in table["rows"]) == (
+        ((1, 2), "Mouth/Face", "Death"),
+        ((3, 4, 5, 6, 7, 8), "Two feet", "Separation"),
+        ((9, 10, 11), "Chest", "Victory"),
+        ((12, 13, 14, 15), "Left hand", "Poverty"),
+        ((16, 17), "Head", "Gains"),
+        ((18, 19, 20, 21), "Face", "Great fear"),
+        ((22, 23, 24, 25), "Right hand", "Well-being"),
+        ((26, 27), "Eyes", "Going abroad"),
+    )
+
+
+def test_every_supplied_table_partitions_the_27_in_blocks_of_its_own():
+    from hora.transits.tara import BODY_PART_TABLES, body_part_table
+
+    sizes = {}
+    for number, table in BODY_PART_TABLES.items():
+        if table is None:
+            continue
+        rows = body_part_table(number)["rows"]
+        counts = [c for row in rows for c in row["counts"]]
+        assert sorted(counts) == list(range(1, 28)), number
+        for row in rows:
+            block = list(row["counts"])
+            assert block == list(range(block[0], block[-1] + 1))
+        assert len(rows) == 8
+        sizes[number] = [len(row["counts"]) for row in rows]
+
+    assert sizes == {65: [1, 4, 4, 4, 6, 4, 2, 2],
+                     66: [2, 4, 2, 2, 5, 3, 6, 3],
+                     67: [2, 6, 3, 4, 2, 4, 4, 2]}
+    assert len({tuple(v) for v in sizes.values()}) == 3   # all different
+
+
+def test_separation_joins_the_harms():
+    from hora.transits.tara import (
+        BODY_PART_HARMS,
+        BODY_PART_NEUTRAL,
+        body_part_table,
+    )
+
+    assert "Separation" in BODY_PART_HARMS
+    assert "Going abroad" in BODY_PART_NEUTRAL
+    results = {str(row["result"])
+               for number in (65, 66, 67)
+               for row in body_part_table(number)["rows"]}
+    ungraded = results - BODY_PART_HARMS - BODY_PART_NEUTRAL
+    assert ungraded == {"Influx of wealth", "Victory", "Wealth", "Gains",
+                        "Well-being", "Victory over enemies", "Money",
+                        "Comforts and peace", "Financial gains"}

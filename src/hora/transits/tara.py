@@ -851,10 +851,31 @@ TABLE_66_MOON: dict[str, object] = {
     ),
 }
 
+#: Table 67, as printed. It is the table that proves Mouth/Face and Face are
+#: two different parts: Mars dwells in both, at different counts and to
+#: different effect.
+TABLE_67_MARS: dict[str, object] = {
+    "graha": "Mars",
+    "title": "Body Parts in the Transit of Mars",
+    "rows": (
+        {"counts": (1, 2), "part": "Mouth/Face", "result": "Death"},
+        {"counts": (3, 4, 5, 6, 7, 8), "part": "Two feet",
+         "result": "Separation"},
+        {"counts": (9, 10, 11), "part": "Chest", "result": "Victory"},
+        {"counts": (12, 13, 14, 15), "part": "Left hand",
+         "result": "Poverty"},
+        {"counts": (16, 17), "part": "Head", "result": "Gains"},
+        {"counts": (18, 19, 20, 21), "part": "Face", "result": "Great fear"},
+        {"counts": (22, 23, 24, 25), "part": "Right hand",
+         "result": "Well-being"},
+        {"counts": (26, 27), "part": "Eyes", "result": "Going abroad"},
+    ),
+}
+
 BODY_PART_TABLES: dict[int, dict[str, object] | None] = {
     65: TABLE_65_SUN,
     66: TABLE_66_MOON,
-    67: None,
+    67: TABLE_67_MARS,
     68: None,
     69: None,
 }
@@ -865,7 +886,7 @@ BODY_PART_TABLES: dict[int, dict[str, object] | None] = {
 #: but see `BODY_PART_NEUTRAL` for the results that are neither.
 BODY_PART_HARMS: frozenset[str] = frozenset({
     "Destruction", "Poverty", "Physical ailments", "Death",
-    "Great fear", "Quarrels"})
+    "Great fear", "Quarrels", "Separation"})
 
 #: **Ours.** Results that are neither a harm nor a benefit. Table 66's "Going
 #: abroad" is the first: it is an event, not a verdict, and Exercise 43 read
@@ -883,27 +904,38 @@ NOT_EVERY_STANDARD_RESULT_IS_A_VERDICT = (
     "welcome or not depending on the native, and section 26.6 says nothing."
 )
 
-#: **Finding.** The tables do not share a vocabulary of body parts. Tables 65
-#: and 66 agree on five names — Head, Eyes, Left hand, Right hand, Two feet —
-#: and differ on the rest: the Sun's table says **Mouth/Face** where the
-#: Moon's says **Face**, and each has parts the other lacks (Chest and Private
-#: parts against Back and Heart). A reverse lookup by exact name therefore
-#: misses matches, which is why `grahas_dwelling_in` also reports parts whose
-#: names overlap.
-THE_TABLES_DO_NOT_SHARE_A_BODY_PART_VOCABULARY = (
-    "Table 65 calls it Mouth/Face and Table 66 calls it Face. Five of the "
-    "eight names are shared exactly and three differ in each table, so "
-    "looking a part up by string alone is not enough."
+#: **Finding.** Each table names eight parts and they are drawn from a larger
+#: shared pool: five — Head, Eyes, Left hand, Right hand, Two feet — appear in
+#: every table so far, and the rest vary. A reverse lookup by exact name will
+#: therefore find some grahas and not others for closely-named parts, which is
+#: why `grahas_dwelling_in` also reports parts whose names overlap.
+THE_TABLES_DRAW_EIGHT_PARTS_FROM_A_LARGER_POOL = (
+    "Head, Eyes, Left hand, Right hand and Two feet are in every table so "
+    "far; Chest, Private parts, Back, Heart, Face and Mouth/Face appear in "
+    "some. Each table names exactly eight."
 )
 
-#: **Finding.** Both tables give **Two feet** a block of exactly six counts,
-#: the largest block in each, and read it oppositely — Poverty for the Sun,
-#: Going abroad for the Moon. Recorded as an observation on two tables; three
-#: more are pending before it is worth calling a pattern.
-TWO_FEET_TAKES_SIX_COUNTS_IN_BOTH_TABLES_SO_FAR = (
-    "Two feet spans the 14th to 19th for the Sun and the 19th to 24th for "
-    "the Moon, six counts each and the widest block in both. The results "
-    "differ: Poverty and Going abroad."
+#: **Correction, on Table 67's evidence.** Reading Tables 65 and 66 alone it
+#: looked as though the Sun's **Mouth/Face** and the Moon's **Face** might be
+#: one part under two names. Table 67 settles it: Mars dwells in **both**, at
+#: the 1st and 2nd giving Death and at the 18th to 21st giving Great fear. So
+#: they are two distinct parts, and nothing merges them.
+MOUTH_FACE_AND_FACE_ARE_DIFFERENT_PARTS = (
+    "Table 67 gives Mars Mouth/Face at the 1st and 2nd and Face at the 18th "
+    "to 21st, with different results. They are not two spellings of one "
+    "part."
+)
+
+#: **Finding.** Every table so far gives **Two feet** a block of exactly six
+#: counts, and in each it is the widest block. The counts move and the results
+#: differ — Poverty for the Sun, Going abroad for the Moon, Separation for
+#: Mars — so what repeats is the size alone. Three of five; still an
+#: observation, not yet a rule.
+TWO_FEET_TAKES_SIX_COUNTS_IN_EVERY_TABLE_SO_FAR = (
+    "Two feet spans the 14th to 19th for the Sun, the 19th to 24th for the "
+    "Moon and the 3rd to 8th for Mars — six counts each time and the widest "
+    "block in each table. The results are Poverty, Going abroad and "
+    "Separation."
 )
 
 #: **Finding.** Table 65 has a different *shape* from Table 64, so neither can
@@ -1037,5 +1069,5 @@ def grahas_dwelling_in(part: str) -> dict:
         "tables_pending": list(BODY_PART_TABLES_PENDING),
         "complete": not BODY_PART_TABLES_PENDING,
         "note": THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS,
-        "vocabulary": THE_TABLES_DO_NOT_SHARE_A_BODY_PART_VOCABULARY,
+        "vocabulary": THE_TABLES_DRAW_EIGHT_PARTS_FROM_A_LARGER_POOL,
     }
