@@ -1035,8 +1035,9 @@ what follows is prose and findings.
 
 `core/constants/transit.py`, beside Part 3's own opening. The whole section is
 prose — it announces two threads and states no rule — so all of it is here.
-§26.2, §26.3 and §26.4.1 have since arrived, each with its own module. The
-coverage test still fails if a module appears for a section not yet supplied.
+§26.2, §26.3 and §26.4 have since arrived; §26.4.2's special nakshatras share
+`transits/tara.py` with §26.4.1, being the same counting from the same point.
+The coverage test still fails if a module appears for a section not supplied.
 
 | constant | why it is not consumed |
 |---|---|
@@ -1090,6 +1091,21 @@ findings.
 | `A_TARA_GROUP_IS_ONE_VIMSOTTARI_LORDS_HOLDING` | Ours: Table 64's rows and §25.6's companion rule are one partition. A test checks all 243 combinations |
 | `FOUR_GOOD_THREE_BAD_ONE_MIXED` | Ours: the baseline a weak tara bala is weak against — five good, three bad, one mixed |
 | `MAKSHA_IS_A_SLIP_FOR_MAKHA` | Ours: a one-letter slip in the counting list, recorded rather than corrected |
+
+### Chapter 26 — §26.4.2's special nakshatras (8)
+
+`transits/tara.py`. The eleven **are** consumed — `special_nakshatra` places
+each from a nativity and `special_transits` says which grahas are sitting in
+them — so what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `SPECIAL_NAKSHATRAS_INTRO` · `SPECIAL_NAKSHATRA_RULE` · `SPECIAL_NAKSHATRAS_REACH_BEYOND_THE_VARGAS` | The section verbatim. The rule **is** returned on every result; these hold the wording |
+| `RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE` | The book's own caution, returned as `caution`. Held here for its argument — a country has the same number of people in every desa nakshatra |
+| `SPECIAL_NAKSHATRA_WORKED_CASE` | A fixture — Bill Gates's jaati and karma nakshatras and the two transits — checked against what the engine derives |
+| `NINE_OF_THE_ELEVEN_FORM_THREE_COMPLETE_TRIPLES` | Ours: three of the eleven's groups are whole Vimsottari holdings, checked over all 27 natal positions |
+| `THE_TWO_CLASSIFICATIONS_ARE_INDEPENDENT` | Ours, and a caution: Vainaasika means destruction and sits in a good tara. Nothing reads one off the other |
+| `THE_TWO_SPECIAL_TRANSITS_OVERLAP_FOR_EIGHT_MONTHS` | Ours: the section dates nothing, so the window was measured. It closes before the ruling the other sections read |
 
 ---
 

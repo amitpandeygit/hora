@@ -212,3 +212,179 @@ def muhurta_moon_is_clear(natal_moon_longitude: float,
         "mixed": got["good"] is None,
         "rule": TARA_IN_MUHURTA,
     }
+
+
+# --------------------------------------------------------------------------
+# §26.4.2 — the eleven special nakshatras
+# --------------------------------------------------------------------------
+
+SPECIAL_NAKSHATRAS_INTRO = (
+    "In addition to the above general classification, we have a few special "
+    "nakshatras for each person.")
+
+#: §26.4.2's eleven, in the order the section numbers them.
+SPECIAL_NAKSHATRAS: tuple[dict[str, object], ...] = (
+    {"offset": 1, "name": "Janma", "means": "birth",
+     "shows": "general well-being"},
+    {"offset": 10, "name": "Karma", "means": "profession",
+     "shows": "profession and workplace"},
+    {"offset": 18, "name": "Saamudaayika", "means": "related to a crowd",
+     "shows": "group activities"},
+    {"offset": 16, "name": "Sanghaatika", "means": "belonging to group",
+     "shows": "group/social activities"},
+    {"offset": 4, "name": "Jaati", "means": "community",
+     "shows": "one's community — people who belong to the same class, "
+              "nature and profession"},
+    {"offset": 7, "name": "Naidhana", "means": "death",
+     "shows": "death and suffering"},
+    {"offset": 12, "name": "Desa", "means": "country", "shows": "one's country"},
+    {"offset": 13, "name": "Abhisheka", "means": "coronation",
+     "shows": "power and authority", "also_called": "Raajya (kingdom)"},
+    {"offset": 19, "name": "Aadhaana", "means": "epoch/conception",
+     "shows": "well-being of family"},
+    {"offset": 22, "name": "Vainaasika", "means": "destructive",
+     "shows": "one's destruction", "also_called": "Vinaasana"},
+    {"offset": 25, "name": "Maanasa", "means": "mind",
+     "shows": "one's mental state"},
+)
+
+SPECIAL_NAKSHATRA_RULE = (
+    "Benefics or malefics situated in these constellations in their transit "
+    "bring good or bad results related to the area covered by the nakshatra.")
+
+#: The section's caution, and the reason it gives — the sharpest statement in
+#: the book of why a transit result is personal and not worldly.
+RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE = (
+    "However, it should be kept in mind that the results will be with "
+    "respect to the native. For example, malefics transiting in desa "
+    "nakshatra may not ruin one's country. After all, any country has almost "
+    "the same number of people with desa nakshatra in each constellation. "
+    "When many malefics are transiting in desa nakshatra, one may be driven "
+    "away from one's country or start hating one's country.")
+
+SPECIAL_NAKSHATRAS_REACH_BEYOND_THE_VARGAS = (
+    "Sometimes, using these nakshtras gives special insights that cannot be "
+    "gained by looking at any divisional chart.")
+
+#: **Finding.** Nine of the eleven fall into **three complete tara triples**,
+#: each triple being one Vimsottari lord's whole holding: Janma, Karma and
+#: Aadhaana are the 1st, 10th and 19th; Jaati, Abhisheka and Vainaasika the
+#: 4th, 13th and 22nd; Naidhana, Sanghaatika and Maanasa the 7th, 16th and
+#: 25th. Only Desa (12th) and Saamudaayika (18th) stand alone.
+NINE_OF_THE_ELEVEN_FORM_THREE_COMPLETE_TRIPLES = (
+    "The special nakshatras at offsets 1, 10 and 19 are one tara; 4, 13 and "
+    "22 another; 7, 16 and 25 a third. Each triple is the three nakshatras a "
+    "single Vimsottari lord owns. Desa and Saamudaayika have no partners "
+    "among the eleven."
+)
+
+#: **Finding, and a caution.** The two classifications are independent and
+#: must not be read off one another. **Vainaasika**, which shows one's
+#: destruction, sits in **Kshema** tara, which Table 64 grades good; and
+#: **Sanghaatika** and **Maanasa**, which show social life and the mind, sit
+#: in **Naidhana** tara, which it grades bad. So a special nakshatra's subject
+#: says nothing about its tara's grade.
+THE_TWO_CLASSIFICATIONS_ARE_INDEPENDENT = (
+    "Vainaasika shows destruction and falls in the good Kshema tara; "
+    "Sanghaatika and Maanasa show group life and the mind and fall in the "
+    "bad Naidhana tara. A special nakshatra's meaning and its tara's grade "
+    "are separate readings of the same position."
+)
+
+#: §26.4.2's worked case. The window is ours, from the ephemeris; the section
+#: gives no dates.
+SPECIAL_NAKSHATRA_WORKED_CASE = {
+    "chart": 24, "native": "Bill Gates",
+    "natal_nakshatra": "Uttara Bhadrapada",
+    "jaati": "Bharani", "karma": "Pushya",
+    "readings": (
+        {"graha": "Saturn", "nakshatra": "Bharani", "special": "Jaati",
+         "result": "several people in the software community turned against "
+                   "Bill Gates and gave damaging testimonies ... He was more "
+                   "or less alienated in the community of software "
+                   "entrepreneurs"},
+        {"graha": "Rahu", "nakshatra": "Pushya", "special": "Karma",
+         "result": "that brought tension related to litigation at his "
+                   "workplace"},
+    ),
+}
+
+#: **Finding.** §26.4.2 dates nothing, and the two transits it names overlap
+#: for a definite window: Saturn is in Bharani from 30 April 1999 to 11 May
+#: 2000 and Rahu in Pushya from 20 September 1999 to 28 May 2000, so "at the
+#: same time" runs **20 September 1999 to 11 May 2000**. That window holds the
+#: findings of fact and the conclusions of law, and closes a month before the
+#: breakup order of 8 June 2000 that §26.3 and §26.4.1 read — so the section
+#: is reading an earlier phase, not the same event again.
+THE_TWO_SPECIAL_TRANSITS_OVERLAP_FOR_EIGHT_MONTHS = (
+    "Saturn is in Bharani from 30 April 1999 to 11 May 2000 and Rahu in "
+    "Pushya from 20 September 1999 to 28 May 2000. Both hold together from "
+    "20 September 1999 to 11 May 2000, which ends before the 8 June 2000 "
+    "ruling the other two sections read."
+)
+
+
+def special_nakshatra(name: str, natal_moon_longitude: float) -> dict:
+    """Where one of §26.4.2's eleven falls, for a nativity."""
+    row = next((r for r in SPECIAL_NAKSHATRAS if r["name"] == name), None)
+    if row is None:
+        raise TaraError(
+            f"{name!r} is not one of section 26.4.2's special nakshatras; "
+            f"the eleven are "
+            f"{', '.join(str(r['name']) for r in SPECIAL_NAKSHATRAS)}")
+    natal = nakshatra_of(natal_moon_longitude)
+    offset = int(row["offset"])  # type: ignore[call-overload]
+    index = (natal + offset - 1) % 27
+    return {
+        **row,
+        "janma_nakshatra": str(NAKSHATRA_NAMES[natal]),
+        "index": index,
+        "nakshatra": str(NAKSHATRA_NAMES[index]),
+        "tara": tara_of_count(offset)["name"],
+    }
+
+
+def special_nakshatras(natal_moon_longitude: float) -> tuple[dict, ...]:
+    """All eleven, for a nativity, in §26.4.2's own order."""
+    return tuple(special_nakshatra(str(row["name"]), natal_moon_longitude)
+                 for row in SPECIAL_NAKSHATRAS)
+
+
+def special_transits(natal_moon_longitude: float,
+                     transit_longitudes: Mapping[int, float]) -> dict:
+    """Which of the eleven each transiting graha is sitting in.
+
+    A graha may be in none of them, and most are: the eleven cover eleven of
+    twenty-seven nakshatras. No verdict is returned — §26.4.2 grades by the
+    graha's own benefic or malefic nature and by how *many* are there, and
+    the caller supplies both.
+    """
+    if not transit_longitudes:
+        raise TaraError("name at least one transiting graha")
+    by_index = {int(entry["index"]): entry
+                for entry in special_nakshatras(natal_moon_longitude)}
+    hits: list[dict] = []
+    elsewhere: list[str] = []
+    for graha, longitude in transit_longitudes.items():
+        index = validate.in_range("graha", int(graha), 0, 8)
+        name = str(GRAHA_NAMES[index])
+        where = nakshatra_of(float(longitude))
+        entry = by_index.get(where)
+        if entry is None:
+            elsewhere.append(name)
+            continue
+        hits.append({"graha": name, "nakshatra": entry["nakshatra"],
+                     "special": entry["name"], "shows": entry["shows"]})
+    return {
+        "of": len(transit_longitudes),
+        "in_special_nakshatras": hits,
+        "elsewhere": elsewhere,
+        "rule": SPECIAL_NAKSHATRA_RULE,
+        "caution": RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE,
+        "verdict": None,
+        "undecided": (
+            "Section 26.4.2 grades by the transiting graha's benefic or "
+            "malefic nature and by how many are present — \"many malefics\", "
+            "\"many benefics\" — and gives no number for \"many\". The "
+            "placements are returned without a grading."),
+    }

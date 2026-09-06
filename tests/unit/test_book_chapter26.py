@@ -710,3 +710,211 @@ def test_tara_helpers_check_their_inputs():
         tara_bala(0.0, {})
     with pytest.raises(InputError):
         tara_bala(0.0, {9: 10.0})
+
+
+# --------------------------------------------------------------------------
+# §26.4.2 — the eleven special nakshatras
+# --------------------------------------------------------------------------
+
+def test_the_eleven_special_nakshatras_are_transcribed_as_numbered():
+    from hora.transits.tara import SPECIAL_NAKSHATRAS
+
+    assert len(SPECIAL_NAKSHATRAS) == 11
+    assert [row["offset"] for row in SPECIAL_NAKSHATRAS] == [
+        1, 10, 18, 16, 4, 7, 12, 13, 19, 22, 25]
+    assert len({row["offset"] for row in SPECIAL_NAKSHATRAS}) == 11
+    assert len({row["name"] for row in SPECIAL_NAKSHATRAS}) == 11
+    assert all(1 <= int(row["offset"]) <= 27 for row in SPECIAL_NAKSHATRAS)
+
+    named = {row["name"]: row for row in SPECIAL_NAKSHATRAS}
+    assert named["Abhisheka"]["also_called"] == "Raajya (kingdom)"
+    assert named["Vainaasika"]["also_called"] == "Vinaasana"
+    assert named["Naidhana"]["offset"] == 7
+    assert named["Janma"]["offset"] == 1
+
+
+def test_nine_of_the_eleven_are_three_complete_vimsottari_holdings():
+    """Janma/Karma/Aadhaana, Jaati/Abhisheka/Vainaasika and
+    Naidhana/Sanghaatika/Maanasa are three whole tara triples; Desa and
+    Saamudaayika stand alone.
+    """
+    from collections import defaultdict
+
+    from hora.core.constants.nakshatra import NAKSHATRA_LORD
+    from hora.transits.tara import (
+        NINE_OF_THE_ELEVEN_FORM_THREE_COMPLETE_TRIPLES,
+        SPECIAL_NAKSHATRAS,
+        tara_of_count,
+    )
+
+    grouped = defaultdict(list)
+    for row in SPECIAL_NAKSHATRAS:
+        grouped[tara_of_count(int(row["offset"]))["name"]].append(
+            str(row["name"]))
+
+    complete = {t: sorted(names) for t, names in grouped.items()
+                if len(names) == 3}
+    singles = {t: names for t, names in grouped.items() if len(names) == 1}
+    assert len(complete) == 3
+    assert len(singles) == 2
+    assert sorted(n for names in singles.values() for n in names) == [
+        "Desa", "Saamudaayika"]
+    assert complete["Janma Tara"] == ["Aadhaana", "Janma", "Karma"]
+    assert complete["Kshema Tara"] == ["Abhisheka", "Jaati", "Vainaasika"]
+    assert complete["Naidhana/Vadha Tara"] == [
+        "Maanasa", "Naidhana", "Sanghaatika"]
+
+    # each complete triple really is one Vimsottari lord's holding
+    offsets = {str(row["name"]): int(row["offset"])
+               for row in SPECIAL_NAKSHATRAS}
+    for natal in range(27):
+        for names in complete.values():
+            group = {(natal + offsets[n] - 1) % 27 for n in names}
+            assert len({NAKSHATRA_LORD[x] for x in group}) == 1
+    assert "no partners among the eleven" in (
+        NINE_OF_THE_ELEVEN_FORM_THREE_COMPLETE_TRIPLES)
+
+
+def test_a_special_nakshatras_subject_says_nothing_about_its_taras_grade():
+    """Vainaasika shows destruction and sits in a good tara; Sanghaatika and
+    Maanasa show social life and the mind and sit in a bad one.
+    """
+    from hora.transits.tara import (
+        THE_TWO_CLASSIFICATIONS_ARE_INDEPENDENT,
+        special_nakshatra,
+    )
+
+    natal = 5.0
+    destruction = special_nakshatra("Vainaasika", natal)
+    assert destruction["tara"] == "Kshema Tara"
+    for name in ("Sanghaatika", "Maanasa"):
+        assert special_nakshatra(name, natal)["tara"] == "Naidhana/Vadha Tara"
+    assert special_nakshatra("Naidhana", natal)["tara"] == (
+        "Naidhana/Vadha Tara")
+    assert "separate readings of the same position" in (
+        THE_TWO_CLASSIFICATIONS_ARE_INDEPENDENT)
+
+
+def test_bill_gatess_jaati_is_bharani_and_his_karma_is_pushya():
+    """"His jaati nakshatra is the 4th from Uttarabhadrapada, i.e. Bharani.
+    His karma nakshatra is the 10th ... i.e. Pushyami."
+    """
+    from hora.charts.book import longitudes
+    from hora.transits.tara import (
+        SPECIAL_NAKSHATRA_WORKED_CASE,
+        special_nakshatra,
+    )
+
+    moon = longitudes(24)["Moon"]
+    jaati = special_nakshatra("Jaati", moon)
+    karma = special_nakshatra("Karma", moon)
+
+    assert jaati["janma_nakshatra"] == "Uttara Bhadrapada"
+    assert jaati["nakshatra"] == "Bharani"
+    assert karma["nakshatra"] == "Pushya"          # the book writes Pushyami
+    assert str(SPECIAL_NAKSHATRA_WORKED_CASE["jaati"]) == "Bharani"
+    assert str(SPECIAL_NAKSHATRA_WORKED_CASE["karma"]) == "Pushya"
+
+
+def test_the_two_named_transits_hold_together_for_eight_months():
+    """§26.4.2 gives no dates. Saturn is in Bharani and Rahu in Pushya
+    together from 20 September 1999 to 11 May 2000, which is before the
+    8 June 2000 ruling the other two sections read.
+    """
+    from hora.charts.book import longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.tara import (
+        THE_TWO_SPECIAL_TRANSITS_OVERLAP_FOR_EIGHT_MONTHS,
+        nakshatra_of,
+        special_nakshatra,
+    )
+
+    moon = longitudes(24)["Moon"]
+    bharani = nakshatra_of_name = special_nakshatra("Jaati", moon)["index"]
+    pushya = special_nakshatra("Karma", moon)["index"]
+    place = Place(name="Seattle", latitude=47 + 36 / 60,
+                  longitude=-(122 + 20 / 60))
+    settings = Settings(node_type=NodeType.MEAN)
+
+    def where(year, month, day, graha):
+        computed = compute_chart(
+            from_local(year, month, day, 12, 0, 0.0, utc_offset_hours=-8.0),
+            place, settings)
+        return nakshatra_of(computed.positions[int(graha)].longitude)
+
+    # inside the window both hold
+    for date in ((1999, 11, 5), (2000, 4, 3)):
+        assert where(*date, Graha.SATURN) == bharani
+        assert where(*date, Graha.RAHU) == pushya
+    # outside it, at least one does not
+    assert where(1999, 6, 1, Graha.RAHU) != pushya
+    assert where(2000, 6, 8, Graha.SATURN) != bharani
+
+    assert nakshatra_of_name == bharani
+    assert "20 September 1999 to 11 May 2000" in (
+        THE_TWO_SPECIAL_TRANSITS_OVERLAP_FOR_EIGHT_MONTHS)
+
+
+def test_special_transits_places_both_grahas_the_section_names():
+    from hora.charts.book import longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.tara import (
+        SPECIAL_NAKSHATRA_WORKED_CASE,
+        special_transits,
+    )
+
+    moon = longitudes(24)["Moon"]
+    computed = compute_chart(
+        from_local(1999, 11, 5, 12, 0, 0.0, utc_offset_hours=-8.0),
+        Place(name="Seattle", latitude=47 + 36 / 60,
+              longitude=-(122 + 20 / 60)),
+        Settings(node_type=NodeType.MEAN))
+    got = special_transits(moon,
+                           {g: computed.positions[g].longitude
+                            for g in range(9)})
+
+    found = {hit["graha"]: hit for hit in got["in_special_nakshatras"]}
+    for reading in SPECIAL_NAKSHATRA_WORKED_CASE["readings"]:
+        hit = found[str(reading["graha"])]
+        assert hit["nakshatra"] == reading["nakshatra"]
+        assert hit["special"] == reading["special"]
+    assert got["of"] == 9
+    assert got["verdict"] is None
+    assert "gives no number for \"many\"" in got["undecided"]
+
+
+def test_the_section_says_the_results_are_the_natives_not_the_worlds():
+    from hora.transits.tara import (
+        RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE,
+        SPECIAL_NAKSHATRAS_REACH_BEYOND_THE_VARGAS,
+    )
+
+    assert "may not ruin one's country" in RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE
+    assert "almost the same number of people" in (
+        RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE)
+    assert "cannot be gained by looking at any divisional chart" in (
+        SPECIAL_NAKSHATRAS_REACH_BEYOND_THE_VARGAS)
+
+
+def test_special_nakshatra_helpers_check_their_inputs():
+    from hora.core.validate import InputError
+    from hora.transits.tara import (
+        SPECIAL_NAKSHATRAS,
+        TaraError,
+        special_nakshatra,
+        special_nakshatras,
+        special_transits,
+    )
+
+    with pytest.raises(TaraError, match="not one of section 26.4.2's"):
+        special_nakshatra("Rajya", 0.0)
+    with pytest.raises(TaraError, match="at least one"):
+        special_transits(0.0, {})
+    with pytest.raises(InputError):
+        special_transits(0.0, {9: 10.0})
+    assert len(special_nakshatras(0.0)) == len(SPECIAL_NAKSHATRAS)
