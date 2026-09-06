@@ -2573,18 +2573,107 @@ def test_the_harm_is_the_grahas_natal_signification_not_its_nature():
         THE_HARM_IS_READ_FROM_THE_NATAL_SIGNIFICATION)
 
 
-def test_no_latta_is_computed_until_the_offsets_are_supplied():
-    """The coverage line for §26.7. It fails the moment offsets appear
-    without this assertion being updated, so nothing is guessed.
+def test_only_the_forward_kicks_have_been_supplied():
+    """The coverage line for §26.7. It fails the moment a kick appears for a
+    graha not declared here, so nothing is guessed.
     """
     from hora.transits.latta import (
-        LATTA_OFFSETS,
-        LATTA_OFFSETS_ARE_NOT_SUPPLIED,
+        LATTA_GRAHAS_PENDING,
+        LATTA_KICKS,
         LattaError,
         latta,
     )
 
-    assert LATTA_OFFSETS == {}
-    with pytest.raises(LattaError, match="none is guessed"):
-        latta("Sun", 100.0)
-    assert "has not been given" in LATTA_OFFSETS_ARE_NOT_SUPPLIED
+    assert set(LATTA_KICKS) == {"Sun", "Mars", "Jupiter", "Saturn"}
+    assert LATTA_GRAHAS_PENDING == ("Moon", "Mercury", "Venus", "Rahu",
+                                    "Ketu")
+    for graha in LATTA_GRAHAS_PENDING:
+        with pytest.raises(LattaError, match="has not given a latta"):
+            latta(graha, 100.0)
+    assert all(kick["direction"] == "forward"
+               for kick in LATTA_KICKS.values())
+
+
+# --------------------------------------------------------------------------
+# Purolatta — the forward kicks
+# --------------------------------------------------------------------------
+
+def test_all_four_of_the_sections_own_forward_examples_reproduce():
+    """"If Sun is in Mrigasira ... i.e. Visakha", and the three like it."""
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.latta import PUROLATTA_EXAMPLES, latta
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    span = 360.0 / 27
+    assert len(PUROLATTA_EXAMPLES) == 4
+    for graha, standing, kicked in PUROLATTA_EXAMPLES:
+        got = latta(graha, names.index(standing) * span + 1.0)
+        assert got["from_nakshatra"] == standing, graha
+        assert got["kicks"] == kicked, graha
+        assert got["direction"] == "forward"
+        assert got["kick"] == "purolatta"
+
+
+def test_the_forward_offsets_are_as_printed_and_are_data():
+    from hora.charts.aspects import NAKSHATRA_DRISHTI
+    from hora.core.const import Graha
+    from hora.transits.latta import (
+        PUROLATTA_MEANS,
+        PUROLATTA_OFFSETS,
+        THE_FORWARD_OFFSETS_ARE_DATA,
+    )
+
+    assert PUROLATTA_MEANS == "forward kick"
+    assert PUROLATTA_OFFSETS == {"Sun": 12, "Mars": 3, "Jupiter": 6,
+                                 "Saturn": 8}
+    assert len(set(PUROLATTA_OFFSETS.values())) == 4
+    assert 1 not in PUROLATTA_OFFSETS.values()      # never its own nakshatra
+
+    # the only overlap with §26.5's aspect offsets is Mars's 3rd
+    shared = {graha: offset for graha, offset in PUROLATTA_OFFSETS.items()
+              if offset in NAKSHATRA_DRISHTI[int(getattr(Graha,
+                                                         graha.upper()))]}
+    assert shared == {"Mars": 3}
+    assert "Mars's 3rd appearing in both" in THE_FORWARD_OFFSETS_ARE_DATA
+
+
+def test_the_forward_heading_implies_a_group_still_to_come():
+    from hora.transits.latta import (
+        LATTA_GRAHAS_PENDING,
+        PUROLATTA_IMPLIES_A_BACKWARD_GROUP,
+    )
+
+    assert set(LATTA_GRAHAS_PENDING) == {"Moon", "Mercury", "Venus",
+                                         "Rahu", "Ketu"}
+    assert "a backward kick is implied" in PUROLATTA_IMPLIES_A_BACKWARD_GROUP
+    assert "whether Rahu and Ketu have one at all is not stated" in (
+        PUROLATTA_IMPLIES_A_BACKWARD_GROUP)
+
+
+def test_a_kick_landing_on_a_natal_point_is_reported_with_both_targets():
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.latta import latta_hits
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    span = 360.0 / 27
+
+    # Sun in Mrigasira kicks Visakha
+    on_moon = latta_hits("Sun", names.index("Mrigashira") * span + 1.0,
+                         names.index("Vishakha") * span + 2.0)
+    assert on_moon["hits"] == ["natal Moon"]
+    assert on_moon["kicked"] is True
+    assert "signification of the planet in natal chart" in on_moon["results"]
+    assert on_moon["lagna_not_supplied"] is True
+    assert on_moon["natal_lagna_nakshatra"] is None
+
+    on_lagna = latta_hits("Sun", names.index("Mrigashira") * span + 1.0,
+                          names.index("Rohini") * span + 2.0,
+                          names.index("Vishakha") * span + 3.0)
+    assert on_lagna["hits"] == ["natal lagna"]
+    assert on_lagna["lagna_not_supplied"] is False
+
+    clear = latta_hits("Sun", names.index("Mrigashira") * span + 1.0,
+                       names.index("Rohini") * span + 2.0)
+    assert clear["hits"] == []
+    assert clear["kicked"] is False
+    assert clear["results"] is None
