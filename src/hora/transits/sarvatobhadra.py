@@ -6,10 +6,10 @@ on the two diagonals, and 5 squares of tithis and weekdays at the centre. The
 section's own arithmetic — 16 + 20 + 12 + 28 + 5 = 81 — is the check on the
 transcription, and it is asserted rather than trusted.
 
-One cell is **not** transcribed. See `UNCERTAIN_CELL`: the printed glyph at
-row 2, column 7 reads to us as a vowel, and both the section's arithmetic and
-its own rule about the diagonals say it must be a consonant. Rather than guess
-a letter it is left as ``None`` and the count is checked around it.
+The section's own split of those 81 into 16 vowels and 20 consonants is
+**wrong** — see `THE_TALLY_MISCOUNTS_THE_LETTERS` and D-77. The figure has 17
+vowel squares, the vowel *a* being on two of them, and 19 consonant squares.
+The two errors cancel, so the 81 closes and the slip is easy to miss.
 """
 from __future__ import annotations
 
@@ -45,27 +45,36 @@ DIAGONALS_HOLD_THE_VOWELS = (
     "squares. All the squares lying on diagonals of the chart, except the "
     "central square of the chart, contain vowels.")
 
-#: **The one cell we do not transcribe.** Row 2, column 7 of Figure 3 reads to
-#: us as the vowel "a", but it lies on neither diagonal, and the section says
-#: the diagonals hold the vowels. Counting it as a vowel also gives 17 vowels
-#: and 19 consonants, against the section's own 16 and 20. Both constraints
-#: say it is a **consonant**; which consonant, we will not guess.
-UNCERTAIN_CELL = (2, 7)
-
-UNCERTAIN_CELL_NOTE = (
-    "Figure 3's square at row 2, column 7 is left untranscribed. Our reading "
-    "of the glyph is a vowel, and it is off both diagonals; the section's "
-    "arithmetic and its diagonal rule both require a consonant there. The "
-    "letter is not guessed."
+#: **Finding.** Row 2, column 7 holds the vowel **a**, which is also in the
+#: north-east corner — the only letter in the figure to occupy two squares.
+#: It was left blank until Exercise 46 read it out: that answer's northward
+#: line from Makha lists "uu, d (alveolar), h, k, v, **a**, u and Bharani",
+#: and the sixth of those is this square. It is off both diagonals, so §26.8's
+#: rule that the diagonals hold vowels is a one-way statement, not a
+#: definition of where vowels may be.
+A_IS_THE_ONE_LETTER_ON_TWO_SQUARES = (
+    "The vowel a is at the north-east corner and again at row 2, column 7. "
+    "No other letter in Figure 3 is repeated, and the second of the two is "
+    "on neither diagonal."
 )
 
-#: Figure 3, row by row from NORTH, column by column from WEST. `None` marks
-#: `UNCERTAIN_CELL`.
-FIGURE_3: tuple[tuple[str | None, ...], ...] = (
+#: **Book defect.** The section's closing sum is right in total and wrong in
+#: its split: Figure 3 has **17** vowel squares over 16 distinct vowels, and
+#: **19** consonant squares, not 20. The two slips cancel — both pairs sum to
+#: 36 — so the 81 still closes. The tally is held verbatim and is not used as
+#: a check on the grid. See D-77.
+THE_TALLY_MISCOUNTS_THE_LETTERS = (
+    "Section 26.8 counts 16 vowels and 20 consonants. Figure 3 has 17 vowel "
+    "squares, because a is on two of them, and 19 consonant squares. The "
+    "totals agree at 36 and the section's 81 is unaffected."
+)
+
+#: Figure 3, row by row from NORTH, column by column from WEST.
+FIGURE_3: tuple[tuple[str, ...], ...] = (
     ("ee", "Dhanishtha", "Satabhisha", "P.Bhadra", "U.Bhadra", "Revati",
      "Aswini", "Bharani", "a"),
     ("Sravana", "rii", "g", "s", "d", "ch", "l", "u", "Krittika"),
-    ("Abhijit", "kh", "ai", "Aq", "Pi", "Ar", "lu", None, "Rohini"),
+    ("Abhijit", "kh", "ai", "Aq", "Pi", "Ar", "lu", "a", "Rohini"),
     ("U.Shadha", "j", "Cp", "ah", "Rikta", "o", "Ta", "v", "Mriga"),
     ("P.Shadha", "bh", "Sg", "Jaya", "Poorna", "Nanda", "Ge", "k", "Ardra"),
     ("Moola", "y", "Sc", "am", "Bhadra", "au", "Cn", "h", "Punar"),
@@ -148,8 +157,8 @@ THE_LINES_RUN_INWARD_FROM_THE_NAKSHATRAS_OWN_BORDER = (
 )
 
 
-def cell(row: int, column: int) -> str | None:
-    """One square of Figure 3, or ``None`` for `UNCERTAIN_CELL`."""
+def cell(row: int, column: int) -> str:
+    """One square of Figure 3."""
     r = validate.in_range("row", int(row), 0, 8)
     c = validate.in_range("column", int(column), 0, 8)
     return FIGURE_3[r][c]
@@ -276,3 +285,28 @@ def find(content: str) -> tuple[int, int]:
             if FIGURE_3[r][c] == content:
                 return (r, c)
     raise SarvatobhadraError(f"{content!r} is not in Figure 3")
+
+
+EXERCISE_46 = (
+    "Find all the consonants, vowels, tithis, weekdays, rasis and "
+    "constellations on which Venus in Makha has vedha.")
+
+#: Exercise 46's three lines, as its answer lists them. Makha is on the south
+#: border, so the straight line runs north and the two crossward lines run
+#: northeast and northwest.
+EXERCISE_46_LINES: dict[str, tuple[str, ...]] = {
+    "north": ("uu", "d.", "h", "k", "v", "a", "u", "Bharani"),
+    "northeast": ("Asresha",),
+    "northwest": ("m", "Le", "Bhadra", "Jaya", "Cp", "kh", "Sravana"),
+}
+
+#: **Finding.** Makha sits one square from the south-east corner, and its
+#: north-east crossward line is a **single** square — Asresha — where its
+#: north-west line crosses seven. Example 114's Punarvasu had 8, 5 and 3.
+#: So the same rule gives one nakshatra sixteen obstructions and another nine,
+#: and §26.8 nowhere says the count varies.
+A_CORNER_NAKSHATRA_OBSTRUCTS_FAR_LESS = (
+    "Venus in Makha obstructs sixteen squares: eight north, seven northwest "
+    "and one northeast. A nakshatra beside a corner has one crossward line "
+    "of a single square."
+)

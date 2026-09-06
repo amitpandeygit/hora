@@ -2519,3 +2519,43 @@ book assigns it nowhere instead of being handed an inference.
 
 **Closes when:** a later printing or section gives the 25th a group, or you
 decide Poorna's list may be completed.
+
+---
+
+## D-77 · §26.8's tally of 16 vowels and 20 consonants does not match Figure 3
+
+**Status: BOOK DEFECT — the figure is held as printed; the tally is not used.**
+
+§26.8 closes its description of the chakra with an arithmetic check:
+
+> We see that 16 (vowels) + 20 (consonants) + 12 (rasis) + 28 (nakshtras) + 5
+> (tithis and weekdays) = 81.
+
+The total is right and the split is not. Counting Figure 3's squares once it
+is fully transcribed — Exercise 46 supplied the last one — gives:
+
+| | by square | distinct |
+|---|---|---|
+| vowels | **17** | 16 |
+| consonants | **19** | 19 |
+| rasis | 12 | 12 |
+| nakshatras | 28 | 28 |
+| tithis and weekdays | 5 | 5 |
+| **total** | **81** | — |
+
+Two things are going on. The vowel **a** occupies **two** squares — the
+north-east corner and row 2, column 7 — so sixteen distinct vowels fill
+seventeen squares, and the section's "16" is a count of *letters* where every
+other term in its sum is a count of *squares*. The consonants are nineteen on
+either count: `bh, ch, d, d., g, h, j, k, kh, l, m, n, p, r, s, t, t., v, y`.
+So "20" is one too many.
+
+The two slips cancel — 16 + 20 and 17 + 19 are both 36 — which is why the
+total still comes to 81 and the error is easy to miss.
+
+**What we do.** Figure 3 is transcribed as printed and every count is derived
+from it, so `vedha_lines` and the rest are unaffected. The tally is held as a
+verbatim constant and is **not** used as a check on the grid; the tests assert
+the real counts and this entry.
+
+**Closes when:** you confirm the reading, or a later printing corrects it.

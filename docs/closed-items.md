@@ -4,6 +4,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 
 | ID | Item |
 |---|---|
+| [OI-146](#oi-146) | one square of Figure 3 could not be read |
 | [OI-147](#oi-147) | §26.8's vedha lines were stated but not determined |
 | [OI-143](#oi-143) | §25.6 never said what a remainder of 0 meant |
 | [OI-142](#oi-142) | Chart 60's transit chart carried no date |
@@ -1915,3 +1916,20 @@ The example also verifies the transcription: its three lines name **sixteen**
 of Figure 3's squares and all sixteen reproduce in order, including the plain
 **d** of row 1 and the **alveolar d** of row 6, which it distinguishes in
 words. Square (2, 7) is on none of the three, so OI-146 stays open.
+
+
+## OI-146 — one square of Figure 3 could not be read
+
+**Closed by Exercise 46**, which reads the square out loud. Venus in Makha
+draws its vertical line north, and the answer lists what is on it: "uu, d
+(alveolar), h, k, v, **a**, u and Bharani". The sixth of those is row 2,
+column 7 — the square we left blank — and it is the vowel **a**, exactly as
+the glyph looked.
+
+So the reading was right and the two constraints that argued against it were
+not. Figure 3 is now transcribed with no unknown square, and all three of
+Exercise 46's lines reproduce square for square.
+
+What the constraints were really showing is a defect in the section's own
+tally, not in the figure: **a** occupies two squares, so there are 17 vowel
+squares over 16 distinct vowels, and 19 consonant squares, not 20. See D-77.

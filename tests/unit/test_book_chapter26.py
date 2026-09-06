@@ -3095,11 +3095,10 @@ def test_common_houses_checks_its_inputs():
 # §26.8 — the Sarvatobhadra chakra
 # --------------------------------------------------------------------------
 
-def test_figure_3_is_nine_by_nine_with_one_square_untranscribed():
+def test_figure_3_is_nine_by_nine_and_fully_transcribed():
     from hora.transits.sarvatobhadra import (
+        A_IS_THE_ONE_LETTER_ON_TWO_SQUARES,
         FIGURE_3,
-        UNCERTAIN_CELL,
-        UNCERTAIN_CELL_NOTE,
         cell,
     )
 
@@ -3107,10 +3106,16 @@ def test_figure_3_is_nine_by_nine_with_one_square_untranscribed():
     assert all(len(row) == 9 for row in FIGURE_3)
     squares = [c for row in FIGURE_3 for c in row]
     assert len(squares) == 81
-    assert squares.count(None) == 1
-    assert cell(*UNCERTAIN_CELL) is None
-    assert UNCERTAIN_CELL == (2, 7)
-    assert "The letter is not guessed" in UNCERTAIN_CELL_NOTE
+    assert None not in squares
+
+    # a is the one letter on two squares, and the second is off both diagonals
+    assert cell(0, 8) == cell(2, 7) == "a"
+    row, column = 2, 7
+    assert row != column and row + column != 8      # off both diagonals
+    assert squares.count("a") == 2
+    assert all(squares.count(x) == 1 for x in squares if x != "a")
+    assert "No other letter in Figure 3 is repeated" in (
+        A_IS_THE_ONE_LETTER_ON_TWO_SQUARES)
 
 
 def test_each_border_holds_seven_nakshatras_and_abhijit_is_among_them():
@@ -3144,10 +3149,10 @@ def test_every_diagonal_square_but_the_centre_holds_a_vowel():
     assert "except the central square" in DIAGONALS_HOLD_THE_VOWELS
 
 
-def test_the_sections_own_tally_closes_and_names_the_missing_square():
-    """16 vowels + 20 consonants + 12 rasis + 28 nakshatras + 5 central = 81.
-    Everything but the consonants is transcribed, and the tally leaves
-    exactly 20 — of which 19 are read and one is `UNCERTAIN_CELL`.
+def test_the_sections_tally_is_right_in_total_and_wrong_in_its_split():
+    """"16 (vowels) + 20 (consonants) + ... = 81". The figure has 17 vowel
+    squares and 19 consonant squares. Both pairs sum to 36, so the 81 closes
+    and the slip is easy to miss. D-77.
     """
     from hora.transits.sarvatobhadra import (
         BORDER_NAKSHATRAS,
@@ -3155,22 +3160,32 @@ def test_the_sections_own_tally_closes_and_names_the_missing_square():
         FIGURE_3,
         RASI_CELLS,
         SARVATOBHADRA_TALLY,
+        THE_TALLY_MISCOUNTS_THE_LETTERS,
         VOWELS,
     )
 
     nakshatras = {n for side in BORDER_NAKSHATRAS.values() for n in side}
-    accounted = (len(nakshatras) + len(VOWELS) + len(RASI_CELLS)
-                 + len(CENTRE_CELLS))
-    assert accounted == 61
-    assert 81 - accounted == 20
-
-    named = set(nakshatras) | set(VOWELS) | set(RASI_CELLS)
+    named = nakshatras | set(VOWELS) | set(RASI_CELLS)
     centres = set(CENTRE_CELLS)
-    consonants = [FIGURE_3[r][c] for r in range(9) for c in range(9)
-                  if (r, c) not in centres and FIGURE_3[r][c] not in named]
-    assert consonants.count(None) == 1
-    assert len(consonants) == 20
-    assert "= 81" in SARVATOBHADRA_TALLY
+
+    vowel_squares = [(r, c) for r in range(9) for c in range(9)
+                     if (r, c) not in centres and FIGURE_3[r][c] in VOWELS]
+    consonant_squares = [(r, c) for r in range(9) for c in range(9)
+                         if (r, c) not in centres
+                         and FIGURE_3[r][c] not in named]
+
+    assert len(vowel_squares) == 17
+    assert len({FIGURE_3[r][c] for r, c in vowel_squares}) == 16
+    assert len(consonant_squares) == 19
+    assert len({FIGURE_3[r][c] for r, c in consonant_squares}) == 19
+
+    # the total still closes, which is why the split reads as right
+    assert (len(vowel_squares) + len(consonant_squares) + len(RASI_CELLS)
+            + len(nakshatras) + len(centres)) == 81
+    assert 16 + 20 == len(vowel_squares) + len(consonant_squares) == 36
+
+    assert "16 (vowels) + 20 (consonants)" in SARVATOBHADRA_TALLY
+    assert "19 consonant squares" in THE_TALLY_MISCOUNTS_THE_LETTERS
 
 
 def test_the_twelve_rasis_sit_where_figure_3_puts_them():
@@ -3367,3 +3382,74 @@ def test_only_a_border_square_that_is_not_a_corner_draws_lines():
         vedha_lines(4, 4)
     with pytest.raises(SarvatobhadraError, match="not in Figure 3"):
         find("Abhijeet")
+
+
+# --------------------------------------------------------------------------
+# Exercise 46 — Venus in Makha, and the square that was blank
+# --------------------------------------------------------------------------
+
+def test_exercise_46s_three_lines_reproduce_square_for_square():
+    from hora.transits.sarvatobhadra import (
+        EXERCISE_46_LINES,
+        find,
+        vedha_lines,
+    )
+
+    got = vedha_lines(*find("Makha"))
+    assert find("Makha") == (8, 7)
+    assert got["border"] == "south"
+    assert got["straight"] == "north"
+    assert got["crossward"] == ("northwest", "northeast")
+
+    for direction, expected in EXERCISE_46_LINES.items():
+        drawn = tuple(square["content"]
+                      for square in got["lines"][direction])
+        assert drawn == expected, direction
+
+
+def test_exercise_46_is_what_read_the_square_that_was_left_blank():
+    """"uu, d (alveolar), h, k, v, a, u and Bharani" — the sixth is row 2,
+    column 7, which had no reading until this answer.
+    """
+    from hora.transits.sarvatobhadra import EXERCISE_46_LINES, cell
+
+    northward = EXERCISE_46_LINES["north"]
+    assert northward[5] == "a"
+    assert cell(2, 7) == "a"
+    # and it is the sixth square north of Makha
+    assert northward.index("a") == 5
+
+
+def test_a_nakshatra_beside_a_corner_obstructs_far_less():
+    from hora.transits.sarvatobhadra import (
+        A_CORNER_NAKSHATRA_OBSTRUCTS_FAR_LESS,
+        find,
+        vedha_lines,
+    )
+
+    makha = vedha_lines(*find("Makha"))
+    assert [len(makha["lines"][d])
+            for d in ("north", "northwest", "northeast")] == [8, 7, 1]
+    assert len(makha["obstructs"]) == 16
+
+    punarvasu = vedha_lines(*find("Punar"))
+    assert len(punarvasu["obstructs"]) == 16
+    # same total here, but distributed quite differently
+    assert sorted(len(line) for line in makha["lines"].values()) != sorted(
+        len(line) for line in punarvasu["lines"].values())
+    assert "one crossward line of a single square" in (
+        A_CORNER_NAKSHATRA_OBSTRUCTS_FAR_LESS)
+
+
+def test_the_tithi_groups_named_on_the_line_carry_their_weekdays():
+    from hora.transits.sarvatobhadra import CENTRE_CELLS, find, vedha_lines
+
+    got = vedha_lines(*find("Makha"))
+    on_line = {square["content"]
+               for square in got["lines"]["northwest"]}
+    assert {"Bhadra", "Jaya"} <= on_line
+
+    by_group = {str(entry["tithi_group"]): entry["weekdays"]
+                for entry in CENTRE_CELLS.values()}
+    assert by_group["Bhadra"] == ("Monday", "Wednesday")
+    assert by_group["Jaya"] == ("Thursday",)

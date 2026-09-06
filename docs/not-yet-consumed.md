@@ -1267,17 +1267,21 @@ ephemeris, both natal nakshatra targets, and the common house, which
 | `OCCUPATION_AND_OWNERSHIP_BOTH_RELATE_A_GRAHA_TO_A_HOUSE` | The two relations, returned by `common_houses`. Held here because §26.7 names no third and none is added |
 | `THE_RULING_IS_READ_FOUR_TIMES` | Ours: 8 June 2000 read through sodhya pinda, vedha, tara bala and latta. No other event in the book gets four |
 
-### Chapter 26 — §26.8 and Example 114 (16)
+### Chapter 26 — §26.8, Example 114 and Exercise 46 (19)
 
-`transits/sarvatobhadra.py`. Figure 3 is transcribed square by square, the
-section's own tally is asserted rather than trusted, and `vedha_lines` draws
-the three lines Example 114 fixed. One square is deliberately `None` — OI-146.
+`transits/sarvatobhadra.py`. Figure 3 is transcribed square by square with no
+square left unread, and `vedha_lines` draws the three lines Example 114 fixed.
+The section's own tally is **not** used as a check on the grid — it miscounts;
+see D-77.
 
 | constant | why it is not consumed |
 |---|---|
 | `SARVATAH_MEANS` · `BHADRA_MEANS` · `SARVATOBHADRA_DEFINITION` · `SARVATOBHADRA_COMPOSITION` · `SARVATOBHADRA_TALLY` · `DIAGONALS_HOLD_THE_VOWELS` | The section verbatim. The tally and the diagonal rule **are** checked against the grid; these hold the wording |
 | `FIGURE_3` · `BORDER_NAKSHATRAS` · `VOWELS` · `RASI_CELLS` · `CENTRE_CELLS` · `TITHI_GROUPS` | The figure as data. `cell` and `tithi_group` read it; the rest is checked, not computed from |
-| `UNCERTAIN_CELL` · `UNCERTAIN_CELL_NOTE` | Ours: the one square we will not guess, and the two constraints that say it is a consonant |
+| `A_IS_THE_ONE_LETTER_ON_TWO_SQUARES` | Ours: the vowel *a* is on two squares and the second is off both diagonals — OI-146, closed by Exercise 46 |
+| `THE_TALLY_MISCOUNTS_THE_LETTERS` | Ours: 17 vowel squares and 19 consonant squares against the section's 16 and 20 — D-77 |
+| `EXERCISE_46` · `EXERCISE_46_LINES` | The exercise and its three lists, checked square for square |
+| `A_CORNER_NAKSHATRA_OBSTRUCTS_FAR_LESS` | Ours: Makha's north-east line is one square where its north-west line is seven |
 | `THE_TWENTY_FIFTH_TITHI_IS_MISSING` | Ours: Poorna's list is short and irregular where the other four are not — D-76 |
 | `VEDHA_RULE` · `THE_LINES_RUN_INWARD_FROM_THE_NAKSHATRAS_OWN_BORDER` | The rule verbatim, and ours recording how Example 114 disambiguated it. `vedha_lines` implements it — OI-147, closed |
 | `EXAMPLE_114` · `EXAMPLE_114_LINES` | The worked case and its three lists, checked square for square against what `vedha_lines` draws |
