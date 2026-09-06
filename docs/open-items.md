@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 96 waiting on evidence · 2 parked**
+**5 waiting on Amit · 97 waiting on evidence · 2 parked**
 
 ---
 
@@ -2065,6 +2065,30 @@ gives it twice — fine-tuning to a few days, never in vacuum.
 **Closes when:** a second graded tally bounds it, or you set the bounds.
 
 
+
+### OI-144 — mrityu bhaga is used in a footnote and never defined
+
+**Waiting on the book.** Exercise 44's footnote 73 reads:
+
+> In the natal chart, Mars occupies his Mritya Bhaga (part of death). So his
+> aspect over the two special constellations is also significant.
+
+Nothing read so far defines a mrityu bhaga. It is a **degree** per graha per
+rasi in the classical texts, so the claim needs a table of 12 x 9 values that
+the book has not printed in any section supplied. `MRITYU` in
+`constants/upagraha.py` is §4's *upagraha* of that name, a different object,
+and nothing else in the codebase touches the term.
+
+**The datum is recorded so the claim can be checked when the table lands.**
+Chart 56's Mars is printed at **25 Ge 12**, and the chart recomputes to within
+an arcminute, so any table keyed to whole degrees can be tested against it at
+once.
+
+**What we do:** nothing. No table is written from general knowledge — that is
+how OI-26 happened — and the footnote's claim is held as the book's, unchecked.
+
+**Closes when:** the section defining mrityu bhaga is supplied, or you confirm
+a source for the table.
 
 ---
 

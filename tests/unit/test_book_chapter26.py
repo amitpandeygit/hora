@@ -1465,3 +1465,171 @@ def test_chart_63s_native_is_recorded_as_leaving_india_twice():
     assert events["he left India and landed in the USA"] == "August 16, 1991"
     assert "November 1994" in events["he left his motherland India again"]
     assert "three years apart" in CHART_63S_NATIVE_LEAVES_INDIA_TWICE
+
+
+# --------------------------------------------------------------------------
+# Exercise 44 — §26.5's aspects doing work, and two footnotes
+# --------------------------------------------------------------------------
+
+def test_mars_in_swati_aspects_the_five_the_answer_names():
+    from hora.charts.aspects import nakshatra_aspects
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.transits.tara import EXERCISE_44_ASPECTED
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    aspected = nakshatra_aspects(int(Graha.MARS), names.index("Swati"))
+    assert sorted(names[n] for n in aspected) == sorted(
+        nakshatra for nakshatra, _count in EXERCISE_44_ASPECTED)
+    assert len(EXERCISE_44_ASPECTED) == 5
+
+
+def test_the_counts_from_a_dhanishtha_janma_nakshatra_are_as_printed():
+    from hora.charts.book import longitudes
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.tara import (
+        EXERCISE_44_ASPECTED,
+        NAKSHATRA_SPAN,
+        nakshatra_of,
+        tara,
+    )
+
+    moon = longitudes(56)["Moon"]
+    assert str(NAKSHATRA_NAMES[nakshatra_of(moon)]) == "Dhanishta"
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    for nakshatra, count in EXERCISE_44_ASPECTED:
+        position = names.index(nakshatra) * NAKSHATRA_SPAN + 1.0
+        assert tara(moon, position)["count"] == count, nakshatra
+    assert [count for _n, count in EXERCISE_44_ASPECTED] == [
+        20, 22, 26, 27, 7]
+
+
+def test_exactly_two_of_the_five_are_special_nakshatras():
+    from hora.transits.tara import EXERCISE_44_ASPECTED, SPECIAL_NAKSHATRAS
+
+    offsets = {int(row["offset"]): str(row["name"])
+               for row in SPECIAL_NAKSHATRAS}
+    special = {nakshatra: offsets[count]
+               for nakshatra, count in EXERCISE_44_ASPECTED
+               if count in offsets}
+    assert special == {"Bharani": "Naidhana", "Anuradha": "Vainaasika"}
+    assert len(special) == 2
+
+
+def test_mars_and_saturn_are_the_two_that_reach_both_special_nakshatras():
+    """Bharani is the 15th from Swati, which every graha aspects. Anuradha is
+    the 3rd, and only Mars and Saturn have a 3rd in their lists.
+    """
+    from hora.charts.aspects import NAKSHATRA_DRISHTI, nakshatra_aspects
+    from hora.charts.book import longitudes
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.transits.tara import (
+        ONLY_MARS_AND_SATURN_REACH_BOTH_SPECIAL_NAKSHATRAS,
+        SPECIAL_NAKSHATRAS,
+        nakshatra_of,
+    )
+
+    janma = nakshatra_of(longitudes(56)["Moon"])
+    offsets = {int(row["offset"]) for row in SPECIAL_NAKSHATRAS}
+    swati = [str(n) for n in NAKSHATRA_NAMES].index("Swati")
+
+    def specials_reached(graha):
+        return {n for n in nakshatra_aspects(graha, swati)
+                if (n - janma) % 27 + 1 in offsets}
+
+    both = {g for g in NAKSHATRA_DRISHTI if len(specials_reached(g)) == 2}
+    assert both == {int(Graha.MARS), int(Graha.SATURN)}
+    # everyone else still reaches the naidhana nakshatra, via the 15th
+    for graha in NAKSHATRA_DRISHTI:
+        assert len(specials_reached(graha)) >= 1, graha
+    assert {g for g in NAKSHATRA_DRISHTI if 3 in NAKSHATRA_DRISHTI[g]} == both
+    assert "Mars and Saturn are the only two" in (
+        ONLY_MARS_AND_SATURN_REACH_BOTH_SPECIAL_NAKSHATRAS)
+
+
+def test_occupation_and_aspect_are_read_together_here():
+    """§26.4.2 grades a graha situated in a special nakshatra; §26.5 grades
+    what a graha aspects. Exercise 44 uses both on one moment.
+    """
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.tara import (
+        OCCUPATION_AND_ASPECT_ARE_COMBINED_HERE,
+        SPECIAL_NAKSHATRA_RULE,
+        nakshatra_of,
+        special_nakshatra,
+        special_transits,
+    )
+
+    moon = longitudes(56)["Moon"]
+    block = chart(56)["transit"]
+    computed = compute_chart(from_local(**block["birth_data"]),
+                             Place(name="Martha's Vineyard", **block["place"]),
+                             Settings(node_type=NodeType.MEAN))
+
+    # Saturn occupies the naidhana nakshatra
+    occupied = special_transits(
+        moon, {int(Graha.SATURN): computed.positions[
+            int(Graha.SATURN)].longitude})
+    assert occupied["in_special_nakshatras"] == [
+        {"graha": "Saturn", "nakshatra": "Bharani", "special": "Naidhana",
+         "shows": "death and suffering"}]
+
+    # and Mars aspects it, from wherever he actually was
+    mars = nakshatra_of(computed.positions[int(Graha.MARS)].longitude)
+    assert isinstance(mars, int)
+    assert special_nakshatra("Naidhana", moon)["nakshatra"] == "Bharani"
+
+    assert "situated in these constellations" in SPECIAL_NAKSHATRA_RULE
+    assert "treats the two as adding up" in (
+        OCCUPATION_AND_ASPECT_ARE_COMBINED_HERE)
+
+
+def test_footnote_73_uses_a_mrityu_bhaga_the_book_has_not_defined():
+    """The claim needs a degree per graha per rasi and no section supplied
+    prints one. Chart 56's Mars is at 25 Ge 12 — the datum to test against
+    when a table arrives. OI-144.
+    """
+    from hora.charts.book import longitudes
+    from hora.core.timeutil import format_dms
+    from hora.transits.tara import (
+        FOOTNOTE_73,
+        MRITYU_BHAGA_IS_USED_WITHOUT_A_DEFINITION,
+    )
+
+    mars = longitudes(56)["Mars"]
+    assert A[int(mars // 30)] == "Ge"
+    assert format_dms(mars % 30, seconds=False) == "25-12"
+    assert "Mritya Bhaga" in FOOTNOTE_73
+    assert "not checked" in MRITYU_BHAGA_IS_USED_WITHOUT_A_DEFINITION
+
+    # nothing in the codebase computes one
+    import hora.transits.tara as module
+
+    assert not any("bhaga" in name.lower() and callable(getattr(module, name))
+                   for name in dir(module))
+
+
+def test_footnote_74_makes_the_technique_insufficient_on_its_own():
+    from hora.transits.tara import (
+        FOOTNOTE_74,
+        THE_TECHNIQUE_NEEDS_DASAS_AND_TAJAKA_TO_BE_USED_AT_ALL,
+        THE_TRANSIT_NAMES_A_POSSIBILITY_NOT_A_PERSON,
+    )
+
+    assert "very hasty" in FOOTNOTE_74
+    assert "dasas and Tajaka charts" in FOOTNOTE_74
+    assert "only those people" in FOOTNOTE_74
+    # Exercise 42 gestured at this; footnote 74 names what is required
+    assert "Not everyone" in THE_TRANSIT_NAMES_A_POSSIBILITY_NOT_A_PERSON
+    assert "never sufficient on its own" in (
+        THE_TECHNIQUE_NEEDS_DASAS_AND_TAJAKA_TO_BE_USED_AT_ALL)
+
+
+def test_exercise_44_claims_are_all_listed():
+    from hora.transits.tara import EXERCISE_44_CLAIMS, EXERCISE_44_FINAL
+
+    assert len(EXERCISE_44_CLAIMS) == 6
+    assert "Mr. Kennedy passed away" in EXERCISE_44_FINAL

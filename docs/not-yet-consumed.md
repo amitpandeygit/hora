@@ -1167,6 +1167,21 @@ transit window was measured, so what follows is prose and findings.
 | `CHART_63S_NATIVE_LEAVES_INDIA_TWICE` | Ours: both departures are on the chart's record so neither is taken for a misprint of the other |
 | `MARS_IS_IN_ASHLESHA_FOR_A_MONTH_AROUND_THE_EVENT` | Ours: the exercise gives a week and no day, so the stay was measured |
 
+### Chapter 26 — Exercise 44 and its footnotes (10)
+
+`transits/tara.py`. Every count and every aspect **is** checked — §26.5's
+scheme produces the five nakshatras and §26.4.2's offsets pick out the two
+special ones — so what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXERCISE_44` · `EXERCISE_44_ANSWER` · `EXERCISE_44_FINAL` · `EXERCISE_44_CLAIMS` | The exercise and answer verbatim, and its six checkable claims |
+| `EXERCISE_44_ASPECTED` | A fixture — the five nakshatras and their counts — checked against what the engine derives |
+| `ONLY_MARS_AND_SATURN_REACH_BOTH_SPECIAL_NAKSHATRAS` | Ours: which grahas' lists could produce this reading at all, and why it is the 3rd that does it |
+| `OCCUPATION_AND_ASPECT_ARE_COMBINED_HERE` | Ours: §26.4.2 grades occupation and §26.5 grades aspect, and the exercise adds them |
+| `FOOTNOTE_73` · `MRITYU_BHAGA_IS_USED_WITHOUT_A_DEFINITION` | The footnote verbatim, and ours recording that the table behind it has never been printed — OI-144 |
+| `FOOTNOTE_74` · `THE_TECHNIQUE_NEEDS_DASAS_AND_TAJAKA_TO_BE_USED_AT_ALL` | The book's own limit on the whole method, and ours noting one half of the corroboration it demands is a part not yet reached |
+
 ---
 
 ## How to use this register

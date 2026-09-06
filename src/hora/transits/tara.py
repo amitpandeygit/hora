@@ -616,3 +616,109 @@ EXERCISE_43_CLAIMS: tuple[str, ...] = (
     "so Ashlesha is this nativity's desa nakshatra",
     "Mars is debilitated in Cancer",
 )
+
+
+# --------------------------------------------------------------------------
+# Exercise 44 — a nakshatra aspect that lands on two special nakshatras
+# --------------------------------------------------------------------------
+
+EXERCISE_44 = (
+    "For the native of Exercise 42, transit Mars was in Swaati when transit "
+    "Saturn was in Bharani. Identify the constellations aspected by Mars and "
+    "see if any special constellations are included. If so, predict the "
+    "possible result.")
+
+EXERCISE_44_ANSWER = (
+    "Mars aspects the 1st, 3rd, 7th, 8th and 15th constellations from him. "
+    "Mars in Swaati will aspect (1) Swaati, (2) Anooradha, (3) "
+    "Uttaraashaadha, (4) Sravanam, and, (5) Bharani. Because natal Moon is in "
+    "Dhanishtha, these are the 20th, 22nd, 26th, 27th and 7th constellations "
+    "(respectively) from janma nakshatra. Out of these, 2 are special "
+    "nakshatras. The 7th constellation is known as naidhana nakshatra and "
+    "shows death. The 22nd nakshatra is known as vainaasika nakshatra and "
+    "shows destruction. Mars aspects both. As seen in Exercise 42, maraka in "
+    "the natal chart Saturn occupies naidhana nakshatra. The predicted result "
+    "is death.")
+
+EXERCISE_44_FINAL = (
+    "As already mentioned, Mr. Kennedy passed away during this transit.")
+
+#: The five nakshatras Mars aspects from Swati, and their counts from a
+#: Dhanishtha janma nakshatra, in the order the answer lists them.
+EXERCISE_44_ASPECTED: tuple[tuple[str, int], ...] = (
+    ("Swati", 20), ("Anuradha", 22), ("Uttara Ashadha", 26),
+    ("Shravana", 27), ("Bharani", 7),
+)
+
+#: **Finding.** This is §26.5's aspect scheme doing work for the first time,
+#: and what it needs is the **3rd** alongside the universal 15th. From Swati
+#: the 15th is Bharani, this nativity's naidhana nakshatra, so every graha
+#: reaches that one; the 3rd is Anuradha, its vainaasika, and only **Mars and
+#: Saturn** have a 3rd in their lists. So exactly two of the seven reach both
+#: special nakshatras from Swati, and they are the two the exercise involves.
+ONLY_MARS_AND_SATURN_REACH_BOTH_SPECIAL_NAKSHATRAS = (
+    "Bharani is the 15th from Swati and every graha aspects the 15th, so all "
+    "seven reach the naidhana nakshatra. Anuradha is the 3rd, and Mars and "
+    "Saturn are the only two whose lists contain a 3rd, so they alone also "
+    "reach the vainaasika."
+)
+
+#: **Finding.** The reading stacks four independent things on one moment, and
+#: the exercise names each: Saturn is a maraka lord **occupying** the naidhana
+#: nakshatra, and Mars **aspects** the naidhana and the vainaasika. Occupation
+#: and aspect are different mechanisms, and §26.4.2 gave a rule only for the
+#: first — "benefics or malefics situated in these constellations". §26.5
+#: supplies the second, and the exercise is where they are used together.
+OCCUPATION_AND_ASPECT_ARE_COMBINED_HERE = (
+    "Section 26.4.2 grades a graha situated in a special nakshatra and "
+    "section 26.5 grades what a graha aspects. Exercise 44 reads Saturn "
+    "occupying the naidhana nakshatra and Mars aspecting it, and treats the "
+    "two as adding up."
+)
+
+#: Footnote 73 — a fifth factor, resting on a table the book has not printed.
+FOOTNOTE_73 = (
+    "In the natal chart, Mars occupies his Mritya Bhaga (part of death). So "
+    "his aspect over the two special constellations is also significant.")
+
+#: **Not defined.** Nothing read so far says what a mrityu bhaga is, and the
+#: claim needs a degree per graha per rasi. Chart 56's Mars is printed at
+#: **25 Ge 12**, which is the datum to test a table against when one arrives.
+#: See OI-144; no table is written from outside the book.
+MRITYU_BHAGA_IS_USED_WITHOUT_A_DEFINITION = (
+    "Footnote 73 says Chart 56's Mars occupies his mrityu bhaga. No section "
+    "supplied defines a mrityu bhaga or prints its degrees, so the claim is "
+    "held as the book's and not checked."
+)
+
+#: Footnote 74 — the strongest caution in either transit chapter, and the one
+#: that says what the technique needs alongside it.
+FOOTNOTE_74 = (
+    "It will be very hasty to predict someone's death just based on "
+    "conjunctions and aspects on special nakshatras in transit. Out of the "
+    "many people with the same nakshatra, only those people whose dasas and "
+    "Tajaka charts also show death will die at the time of this "
+    "death-inflicting transit.")
+
+#: **Finding.** Footnote 74 makes the corroboration explicit where Exercise
+#: 42's disclaimer only gestured at it, and one of the two things it names —
+#: **Tajaka charts** — is a part of the book not yet reached. So §26.4's death
+#: readings are, by the book's own statement, incomplete until then, and
+#: nothing built on them may return a death verdict.
+THE_TECHNIQUE_NEEDS_DASAS_AND_TAJAKA_TO_BE_USED_AT_ALL = (
+    "Footnote 74 requires the dasas and the Tajaka chart to show death too. "
+    "Tajaka has not been reached, so a transit reading of this kind is by "
+    "the book's own rule never sufficient on its own."
+)
+
+#: Exercise 44's checkable claims.
+EXERCISE_44_CLAIMS: tuple[str, ...] = (
+    "Mars aspects the 1st, 3rd, 7th, 8th and 15th constellations from him",
+    ("from Swaati those are Swaati, Anooradha, Uttaraashaadha, Sravanam "
+     "and Bharani"),
+    ("from a Dhanishtha janma nakshatra those are the 20th, 22nd, 26th, "
+     "27th and 7th"),
+    "exactly two of the five are special nakshatras",
+    "the 7th is naidhana and the 22nd is vainaasika",
+    "Saturn, the maraka, occupies the naidhana nakshatra",
+)
