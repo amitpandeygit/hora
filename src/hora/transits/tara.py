@@ -809,13 +809,156 @@ FIVE_TABLES_FOR_SEVEN_GRAHAS = (
 #: any is still pending, so the section cannot be reported complete early.
 #: This is the same shape as chapter 25's `STANDARD_RESULT_TABLES`, which was
 #: filled one table at a time from Table 53 to Table 59.
+#: Table 65, as printed. Rows in the table's own order; `counts` are
+#: nakshatras counted inclusively from janma nakshatra.
+TABLE_65_SUN: dict[str, object] = {
+    "graha": "Sun",
+    "title": "Body Parts in the Transit of Sun",
+    "rows": (
+        {"counts": (1,), "part": "Mouth/Face", "result": "Destruction"},
+        {"counts": (2, 3, 4, 5), "part": "Head",
+         "result": "Influx of wealth"},
+        {"counts": (6, 7, 8, 9), "part": "Chest", "result": "Victory"},
+        {"counts": (10, 11, 12, 13), "part": "Right hand",
+         "result": "Wealth"},
+        {"counts": (14, 15, 16, 17, 18, 19), "part": "Two feet",
+         "result": "Poverty"},
+        {"counts": (20, 21, 22, 23), "part": "Left hand",
+         "result": "Physical ailments"},
+        {"counts": (24, 25), "part": "Eyes", "result": "Gains"},
+        {"counts": (26, 27), "part": "Private parts", "result": "Death"},
+    ),
+}
+
 BODY_PART_TABLES: dict[int, dict[str, object] | None] = {
-    65: None,
+    65: TABLE_65_SUN,
     66: None,
     67: None,
     68: None,
     69: None,
 }
 
+#: **Ours, not the book's.** §26.6 prints no good/bad column, so this names
+#: the results that are plainly harms. It is safe to do here in a way it was
+#: not for Table 58: every result in this table is unambiguous — there is no
+#: row whose wording pulls against itself, as Venus's 12th did.
+BODY_PART_HARMS: frozenset[str] = frozenset({
+    "Destruction", "Poverty", "Physical ailments", "Death"})
+
+#: **Finding.** Table 65 has a different *shape* from Table 64, so neither can
+#: be derived from the other. The taras repeat every nine nakshatras; the body
+#: parts run in **contiguous blocks** of 1, 4, 4, 4, 6, 4, 2 and 2, which is
+#: not periodic at all.
+THE_BODY_PART_TABLE_IS_BLOCKS_NOT_A_CYCLE = (
+    "Table 64 assigns a tara by the count modulo 9. Table 65 assigns a body "
+    "part by which contiguous run of counts it falls in, and the runs are "
+    "1, 4, 4, 4, 6, 4, 2, 2. No modulus reproduces that."
+)
+
+#: **Finding.** The two tables also disagree about *outcomes*, and not
+#: slightly. Of the 24 counts Table 64 grades good or bad — Janma's three are
+#: mixed — the plain sense of Table 65's result agrees with 12 and contradicts
+#: 12. The sharpest are the **26th and 27th**, Mitra and Parama Mitra, Table
+#: 64's two friendliest taras, which Table 65 calls **Death**; and the
+#: **7th**, the naidhana tara, which it calls **Victory**.
+THE_TWO_TABLES_AGREE_NO_BETTER_THAN_CHANCE = (
+    "Table 64 and Table 65 agree on 12 of the 24 counts Table 64 grades, and "
+    "contradict each other on the other 12. The 26th and 27th are Mitra and "
+    "Parama Mitra and give Death; the 7th is Naidhana and gives Victory."
+)
+
+#: **Finding.** The Sun in one's **own** janma nakshatra gives Destruction —
+#: the worst of the eight results, on the one count that has a block to
+#: itself. Table 64 grades that same count mixed and §26.4.2 calls it the
+#: Janma nakshatra, "general well-being". Three classifications, three
+#: different verdicts on the 1st.
+THE_FIRST_COUNT_IS_GRADED_THREE_WAYS = (
+    "The 1st constellation from janma nakshatra is Janma Tara and mixed in "
+    "Table 64, the Janma special nakshatra showing general well-being in "
+    "section 26.4.2, and Mouth/Face giving Destruction in Table 65."
+)
+
 BODY_PART_TABLES_PENDING: tuple[int, ...] = tuple(
     number for number, table in BODY_PART_TABLES.items() if table is None)
+
+
+def _rows_of(table: dict[str, object]) -> tuple[dict[str, object], ...]:
+    rows = table["rows"]
+    assert isinstance(rows, tuple)
+    return rows
+
+
+def body_part_table(number: int) -> dict:
+    """One of §26.6's tables, or a refusal naming what is still pending."""
+    index = validate.in_range("table", int(number), 65, 69)
+    table = BODY_PART_TABLES[index]
+    if table is None:
+        raise TaraError(
+            f"Table {index} of section 26.6 has not been supplied; "
+            f"{', '.join(str(n) for n in BODY_PART_TABLES_PENDING)} "
+            f"{'is' if len(BODY_PART_TABLES_PENDING) == 1 else 'are'} pending")
+    return table
+
+
+def body_part(graha: str, natal_moon_longitude: float,
+              transit_longitude: float) -> dict:
+    """Which body part `graha` dwells in, and §26.6's standard result.
+
+    :param graha: the transiting graha's name, matched against the tables'
+        own `graha` field.
+    """
+    for number, table in BODY_PART_TABLES.items():
+        if table is not None and table["graha"] == graha:
+            break
+    else:
+        pending = ", ".join(str(n) for n in BODY_PART_TABLES_PENDING)
+        raise TaraError(
+            f"no supplied table of section 26.6 covers {graha!r}; "
+            f"Tables {pending} are still pending")
+
+    counted = tara(natal_moon_longitude, transit_longitude)
+    row = next(r for r in _rows_of(table)
+               if counted["count"] in r["counts"])  # type: ignore[operator]
+    return {
+        "graha": graha,
+        "table": number,
+        "count": counted["count"],
+        "natal_nakshatra": counted["natal_nakshatra"],
+        "transit_nakshatra": counted["transit_nakshatra"],
+        "part": row["part"],
+        "result": row["result"],
+        "harm": row["result"] in BODY_PART_HARMS,
+        "harm_is_ours": (
+            "Section 26.6 prints no good/bad column; `harm` reads the plain "
+            "sense of the result and is not the book's grading"),
+        "tara": counted["tara"],
+        "tara_grade": counted["grade"],
+        "the_two_disagree_often": THE_TWO_TABLES_AGREE_NO_BETTER_THAN_CHANCE,
+    }
+
+
+def grahas_dwelling_in(part: str) -> dict:
+    """§26.6's second purpose, run backwards: which grahas dwell in a part.
+
+    Returns every (graha, counts) pair from the tables **supplied so far**,
+    and names the ones still pending, because a shortlist drawn from two of
+    five tables is not the answer the section promises.
+    """
+    found = []
+    for number, table in BODY_PART_TABLES.items():
+        if table is None:
+            continue
+        for row in _rows_of(table):
+            if row["part"] == part:
+                found.append({"graha": table["graha"], "table": number,
+                              "counts": row["counts"],
+                              "result": row["result"]})
+    return {
+        "part": part,
+        "grahas": found,
+        "tables_supplied": [n for n, t in BODY_PART_TABLES.items()
+                            if t is not None],
+        "tables_pending": list(BODY_PART_TABLES_PENDING),
+        "complete": not BODY_PART_TABLES_PENDING,
+        "note": THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS,
+    }

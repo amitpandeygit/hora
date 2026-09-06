@@ -1182,20 +1182,21 @@ special ones — so what follows is prose and findings.
 | `FOOTNOTE_73` · `MRITYU_BHAGA_IS_USED_WITHOUT_A_DEFINITION` | The footnote verbatim, and ours recording that the table behind it has never been printed — OI-144 |
 | `FOOTNOTE_74` · `THE_TECHNIQUE_NEEDS_DASAS_AND_TAJAKA_TO_BE_USED_AT_ALL` | The book's own limit on the whole method, and ours noting one half of the corroboration it demands is a part not yet reached |
 
-### Chapter 26 — §26.6 opened (5)
+### Chapter 26 — §26.6 and Table 65 (9)
 
-`transits/tara.py`. Prose only so far: the section promises Tables 65 to 69
-and none has been supplied. `BODY_PART_TABLES` registers all five as pending
-and a test fails while any still is, so §26.6 cannot be reported complete
-early — the same guard chapter 25 used while Tables 53 to 59 arrived one at a
-time.
+`transits/tara.py`. Table 65 has arrived; 66 to 69 are still pending.
+`BODY_PART_TABLES` registers all five and a test fails while any is pending,
+so §26.6 cannot be reported complete early — the same guard chapter 25 used
+while Tables 53 to 59 arrived one at a time.
 
 | constant | why it is not consumed |
 |---|---|
 | `BODY_PART_RULE` · `BODY_PART_PURPOSES` | The section verbatim: the counting, and the two uses it names |
 | `THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS` | Ours: the only inverse reading in Part 3 — symptom to graha to remedy — and that it narrows rather than identifies |
 | `FIVE_TABLES_FOR_SEVEN_GRAHAS` | Ours: five tables are promised for seven grahas and the section does not say how they divide. Nothing is assumed |
-| `BODY_PART_TABLES` · `BODY_PART_TABLES_PENDING` | The registry itself. Consumed by the coverage test, not by a calculation, until the tables land |
+| `BODY_PART_TABLES` · `BODY_PART_TABLES_PENDING` · `TABLE_65_SUN` | The registry and the Sun's table. `body_part` and `grahas_dwelling_in` read them; the register entry stays while four tables are missing |
+| `BODY_PART_HARMS` | **Ours**, not the book's — §26.6 prints no good/bad column. Returned as `harm` with a note saying so |
+| `THE_BODY_PART_TABLE_IS_BLOCKS_NOT_A_CYCLE` · `THE_TWO_TABLES_AGREE_NO_BETTER_THAN_CHANCE` · `THE_FIRST_COUNT_IS_GRADED_THREE_WAYS` | Ours: Table 65's shape, its 12-to-12 disagreement with Table 64, and the three different verdicts the 1st count receives |
 
 ---
 

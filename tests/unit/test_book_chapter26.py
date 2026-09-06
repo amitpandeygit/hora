@@ -1747,6 +1747,150 @@ def test_section_26_6_is_not_finished_early():
     assert tuple(STANDARD_RESULT_TABLES) == (53, 54, 55, 56, 57, 58, 59)
     assert all(STANDARD_RESULT_TABLES.values())
 
-    assert pending == {65, 66, 67, 68, 69}, (
+    assert pending == {66, 67, 68, 69}, (
         f"Tables {sorted(pending)} of section 26.6 are still pending; "
         f"update this assertion as each is supplied")
+
+
+# --------------------------------------------------------------------------
+# Table 65 — the Sun's body parts
+# --------------------------------------------------------------------------
+
+def test_table_65_partitions_the_27_into_contiguous_blocks():
+    from hora.transits.tara import (
+        THE_BODY_PART_TABLE_IS_BLOCKS_NOT_A_CYCLE,
+        body_part_table,
+    )
+
+    table = body_part_table(65)
+    assert table["graha"] == "Sun"
+    rows = table["rows"]
+    assert len(rows) == 8
+
+    counts = [c for row in rows for c in row["counts"]]
+    assert sorted(counts) == list(range(1, 28))
+    for row in rows:
+        block = list(row["counts"])
+        assert block == list(range(block[0], block[-1] + 1)), row["part"]
+    assert [len(row["counts"]) for row in rows] == [1, 4, 4, 4, 6, 4, 2, 2]
+
+    assert len({row["part"] for row in rows}) == 8
+    assert len({row["result"] for row in rows}) == 8
+    assert "No modulus reproduces that" in (
+        THE_BODY_PART_TABLE_IS_BLOCKS_NOT_A_CYCLE)
+
+
+def test_table_65s_rows_are_as_printed():
+    from hora.transits.tara import body_part_table
+
+    assert tuple((row["counts"], row["part"], row["result"])
+                 for row in body_part_table(65)["rows"]) == (
+        ((1,), "Mouth/Face", "Destruction"),
+        ((2, 3, 4, 5), "Head", "Influx of wealth"),
+        ((6, 7, 8, 9), "Chest", "Victory"),
+        ((10, 11, 12, 13), "Right hand", "Wealth"),
+        ((14, 15, 16, 17, 18, 19), "Two feet", "Poverty"),
+        ((20, 21, 22, 23), "Left hand", "Physical ailments"),
+        ((24, 25), "Eyes", "Gains"),
+        ((26, 27), "Private parts", "Death"),
+    )
+
+
+def test_table_65_and_table_64_agree_no_better_than_chance():
+    """Of the 24 counts Table 64 grades — Janma's three are mixed — twelve
+    agree with Table 65's plain sense and twelve contradict it.
+    """
+    from hora.transits.tara import (
+        BODY_PART_HARMS,
+        THE_TWO_TABLES_AGREE_NO_BETTER_THAN_CHANCE,
+        body_part_table,
+        tara_of_count,
+    )
+
+    agree = disagree = mixed = 0
+    for row in body_part_table(65)["rows"]:
+        harm = row["result"] in BODY_PART_HARMS
+        for count in row["counts"]:
+            graded = tara_of_count(count)["good"]
+            if graded is None:
+                mixed += 1
+            elif graded is not harm:
+                agree += 1
+            else:
+                disagree += 1
+    assert (agree, disagree, mixed) == (12, 12, 3)
+    assert agree + disagree + mixed == 27
+    assert "the 7th is Naidhana and gives Victory" in (
+        THE_TWO_TABLES_AGREE_NO_BETTER_THAN_CHANCE)
+
+
+def test_the_friendliest_taras_are_the_deadliest_body_parts():
+    from hora.transits.tara import body_part_table, tara_of_count
+
+    death = next(row for row in body_part_table(65)["rows"]
+                 if row["result"] == "Death")
+    assert death["counts"] == (26, 27)
+    assert tara_of_count(26)["name"] == "Mitra Tara"
+    assert tara_of_count(27)["name"] == "Parama Mitra Tara"
+    assert tara_of_count(26)["good"] is tara_of_count(27)["good"] is True
+
+    victory = next(row for row in body_part_table(65)["rows"]
+                   if row["result"] == "Victory")
+    assert 7 in victory["counts"]
+    assert tara_of_count(7)["name"] == "Naidhana/Vadha Tara"
+    assert tara_of_count(7)["good"] is False
+
+
+def test_the_first_count_is_graded_three_different_ways():
+    from hora.transits.tara import (
+        THE_FIRST_COUNT_IS_GRADED_THREE_WAYS,
+        body_part_table,
+        special_nakshatra,
+        tara_of_count,
+    )
+
+    first = next(row for row in body_part_table(65)["rows"]
+                 if 1 in row["counts"])
+    assert first["counts"] == (1,)
+    assert (first["part"], first["result"]) == ("Mouth/Face", "Destruction")
+    assert tara_of_count(1)["grade"] == "mixed"
+    assert special_nakshatra("Janma", 5.0)["shows"] == "general well-being"
+    assert "Destruction in Table 65" in THE_FIRST_COUNT_IS_GRADED_THREE_WAYS
+    assert "Janma Tara and mixed" in THE_FIRST_COUNT_IS_GRADED_THREE_WAYS
+
+
+def test_body_part_reads_a_transit_and_marks_its_own_grading_as_ours():
+    from hora.transits.tara import NAKSHATRA_SPAN, body_part
+
+    natal = 10 * NAKSHATRA_SPAN + 2.0
+    got = body_part("Sun", natal, (10 + 6) % 27 * NAKSHATRA_SPAN + 2.0)
+    assert got["count"] == 7
+    assert (got["part"], got["result"]) == ("Chest", "Victory")
+    assert got["harm"] is False
+    assert got["table"] == 65
+    assert "not the book's grading" in got["harm_is_ours"]
+    assert got["tara"] == "Naidhana/Vadha Tara"
+
+
+def test_a_graha_with_no_supplied_table_is_refused():
+    from hora.transits.tara import TaraError, body_part, body_part_table
+
+    for graha in ("Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"):
+        with pytest.raises(TaraError, match="still pending"):
+            body_part(graha, 5.0, 100.0)
+    for number in (66, 67, 68, 69):
+        with pytest.raises(TaraError, match="has not been supplied"):
+            body_part_table(number)
+
+
+def test_the_reverse_lookup_says_how_much_of_the_section_it_has():
+    from hora.transits.tara import grahas_dwelling_in
+
+    got = grahas_dwelling_in("Eyes")
+    assert got["grahas"] == [
+        {"graha": "Sun", "table": 65, "counts": (24, 25), "result": "Gains"}]
+    assert got["tables_supplied"] == [65]
+    assert got["tables_pending"] == [66, 67, 68, 69]
+    assert got["complete"] is False
+
+    assert grahas_dwelling_in("Left knee")["grahas"] == []
