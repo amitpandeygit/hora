@@ -4029,3 +4029,278 @@ def test_a_square_with_two_weekdays_is_read_for_the_relevant_one():
                                      for e in EXAMPLE_116_NATAL_POINTS)
     assert "takes Sunday alone" in (
         A_SQUARE_IS_READ_FOR_WHAT_THE_CHART_MAKES_RELEVANT)
+
+
+# --------------------------------------------------------------------------
+# Example 117 — the same native, the same natal points, the other verdict
+# --------------------------------------------------------------------------
+
+
+def test_example_117s_four_transiting_malefics_are_where_it_says():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.tara import nakshatra_of
+
+    computed = compute_chart(
+        from_local(1989, 11, 22, 12, 0, 0.0, utc_offset_hours=5.5),
+        Place(name="New Delhi", latitude=28 + 36 / 60,
+              longitude=77 + 12 / 60),
+        Settings(node_type=NodeType.MEAN))
+    where = {name: str(NAKSHATRA_NAMES[nakshatra_of(
+        computed.positions[int(graha)].longitude)])
+        for name, graha in (("Saturn", Graha.SATURN), ("Rahu", Graha.RAHU),
+                            ("Ketu", Graha.KETU), ("Mars", Graha.MARS))}
+    assert where == {"Saturn": "Purva Ashadha", "Rahu": "Dhanishta",
+                     "Ketu": "Ashlesha", "Mars": "Swati"}
+
+
+def test_every_strike_example_117_claims_is_drawn_by_the_chakra():
+    from hora.transits.sarvatobhadra import EXAMPLE_117_STRIKES, strike
+
+    assert len(EXAMPLE_117_STRIKES) == 7
+    for graha, standing, target, kind in EXAMPLE_117_STRIKES:
+        assert strike(target, standing)["kind"] == kind, (
+            graha, standing, target)
+
+
+def test_occupation_counts_as_evidence_alongside_vedha():
+    from hora.transits.sarvatobhadra import (
+        EXAMPLE_117_STRIKES,
+        OCCUPATION_COUNTS_AS_WELL_AS_VEDHA,
+        SARVATOBHADRA_READING,
+        strike,
+    )
+
+    # The section states the reading in terms of vedha and nothing else.
+    assert "occup" not in SARVATOBHADRA_READING
+
+    on_dhanishtha = [(graha, kind) for graha, _s, target, kind
+                     in EXAMPLE_117_STRIKES if target == "Dhanishtha"]
+    assert on_dhanishtha == [("Rahu", "occupation"), ("Ketu", "vedha")]
+
+    # A graha never has vedha on the square it stands in: Dhanishtha's own
+    # three lines run away from it, so without the new kind Rahu is no
+    # evidence at all and the abhisheka nakshatra falls below the floor.
+    assert "Dhanishtha" not in strike("Nanda", "Dhanishtha")["obstructs"]
+    assert "Rahu occupies Dhanishtha" in OCCUPATION_COUNTS_AS_WELL_AS_VEDHA
+
+
+def test_strike_reports_no_relation_where_there_is_none():
+    from hora.transits.sarvatobhadra import SarvatobhadraError, strike
+
+    assert strike("Li", "Asresha")["kind"] is None
+    assert strike("Li", "U.Pha")["kind"] == "vedha"
+    for square, standing in (("Nowhere", "Asresha"), ("Li", "Nowhere")):
+        with pytest.raises(SarvatobhadraError):
+            strike(square, standing)
+
+
+def test_the_karma_nakshatra_is_read_by_occupation_at_both_moments():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.sarvatobhadra import (
+        THE_KARMA_NAKSHATRA_CHANGES_HANDS,
+        VENUS_IS_IN_THE_KARMA_NAKSHATRA_TOO,
+    )
+    from hora.transits.tara import nakshatra_of
+
+    place = Place(name="New Delhi", latitude=28 + 36 / 60,
+                  longitude=77 + 12 / 60)
+    settings = Settings(node_type=NodeType.MEAN)
+
+    def where(year: int, month: int, day: int, graha: Graha) -> str:
+        computed = compute_chart(
+            from_local(year, month, day, 12, 0, 0.0, utc_offset_hours=5.5),
+            place, settings)
+        return str(NAKSHATRA_NAMES[nakshatra_of(
+            computed.positions[int(graha)].longitude)])
+
+    assert where(1984, 10, 31, Graha.JUPITER) == "Purva Ashadha"
+    assert where(1989, 11, 22, Graha.SATURN) == "Purva Ashadha"
+    assert "by occupation both times" in THE_KARMA_NAKSHATRA_CHANGES_HANDS
+
+    # And a benefic stands there with Saturn, which the example does not say.
+    assert where(1989, 11, 22, Graha.VENUS) == "Purva Ashadha"
+    assert "names only Saturn" in VENUS_IS_IN_THE_KARMA_NAKSHATRA_TOO
+
+
+def test_the_two_special_nakshatras_fix_the_janma_nakshatra():
+    from hora.charts import book
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.sarvatobhadra import (
+        THE_TWO_SPECIAL_NAKSHATRAS_FIX_THE_JANMA_NAKSHATRA,
+    )
+    from hora.transits.tara import SPECIAL_NAKSHATRAS, nakshatra_of
+
+    offsets = {str(entry["name"]): int(entry["offset"])  # type: ignore[arg-type]
+               for entry in SPECIAL_NAKSHATRAS}
+    assert (offsets["Karma"], offsets["Abhisheka"]) == (10, 13)
+
+    moon = nakshatra_of(book.longitudes(14)["Moon"])
+    assert str(NAKSHATRA_NAMES[moon]) == "Purva Phalguni"
+
+    # Only one birth star gives Purva Ashadha as its 10th and Dhanishtha as
+    # its 13th, and it is the one his Moon is actually in.
+    candidates = [start for start in range(27)
+                  if str(NAKSHATRA_NAMES[(start + 9) % 27]) == "Purva Ashadha"
+                  and str(NAKSHATRA_NAMES[(start + 12) % 27]) == "Dhanishta"]
+    assert candidates == [moon]
+    assert "and with no other birth star" in (
+        THE_TWO_SPECIAL_NAKSHATRAS_FIX_THE_JANMA_NAKSHATRA)
+
+
+def test_three_planets_may_strike_one_square():
+    from hora.transits.sarvatobhadra import (
+        EXAMPLE_115_VEDHAS,
+        EXAMPLE_116_VEDHAS,
+        EXAMPLE_117_STRIKES,
+        THE_CHAKRA_STATES_A_MINIMUM_WEIGHT_OF_EVIDENCE,
+        THREE_PLANETS_MAY_STRIKE_ONE_SQUARE,
+    )
+
+    per_target: dict[str, set[str]] = {}
+    for graha, _standing, target, _kind in EXAMPLE_117_STRIKES:
+        per_target.setdefault(target, set()).add(graha)
+    assert {target: len(hit) for target, hit in per_target.items()} == {
+        "Nanda": 3, "Dhanishtha": 2, "Sg": 2}
+
+    for vedhas in (EXAMPLE_115_VEDHAS, EXAMPLE_116_VEDHAS):
+        earlier: dict[str, set[str]] = {}
+        for graha, _standing, target in vedhas:
+            earlier.setdefault(target, set()).add(graha)
+        assert max(len(hit) for hit in earlier.values()) == 2
+
+    assert "is, and even then" in THE_CHAKRA_STATES_A_MINIMUM_WEIGHT_OF_EVIDENCE
+    assert "more than two planets" in THREE_PLANETS_MAY_STRIKE_ONE_SQUARE
+
+
+def test_example_117_drops_the_natal_point_that_carries_no_evidence():
+    from hora.transits.sarvatobhadra import (
+        A_NATAL_POINT_WITH_NO_EVIDENCE_IS_DROPPED,
+        EXAMPLE_116_NATAL_POINTS,
+        EXAMPLE_117_NATAL_POINTS,
+    )
+
+    before = [entry["square"] for entry in EXAMPLE_116_NATAL_POINTS]
+    after = [entry["square"] for entry in EXAMPLE_117_NATAL_POINTS]
+    assert set(before) - set(after) == {"Li"}
+    # Everything else is read again, word for word.
+    assert [e for e in EXAMPLE_116_NATAL_POINTS if e["square"] != "Li"] == list(
+        EXAMPLE_117_NATAL_POINTS)
+    assert "takes no malefic strike" in A_NATAL_POINT_WITH_NO_EVIDENCE_IS_DROPPED
+
+
+def test_both_readings_are_silent_on_the_strikes_of_the_other_nature():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import GRAHA_NAMES, NAKSHATRA_NAMES, NAVAGRAHA
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.sarvatobhadra import (
+        EXAMPLE_116_VEDHAS,
+        EXAMPLE_117_STRIKES,
+        SARVATOBHADRA_BENEFICS,
+        THE_EXAMPLES_NAME_ONLY_THE_STRIKES_THAT_CARRY_THE_VERDICT,
+        strike,
+    )
+
+    # Figure 3 abbreviates the constellation names; the ephemeris does not.
+    cell = dict(zip(
+        [str(name) for name in NAKSHATRA_NAMES],
+        ("Aswini", "Bharani", "Krittika", "Rohini", "Mriga", "Ardra",
+         "Punar", "Pushya", "Asresha", "Makha", "Poo.Pha", "U.Pha", "Hasta",
+         "Chitra", "Swaati", "Visakha", "Anuradha", "Jyeshtha", "Moola",
+         "P.Shadha", "U.Shadha", "Sravana", "Dhanishtha", "Satabhisha",
+         "P.Bhadra", "U.Bhadra", "Revati"), strict=True))
+    place = Place(name="New Delhi", latitude=28 + 36 / 60,
+                  longitude=77 + 12 / 60)
+
+    def struck(year: int, month: int, day: int,
+               squares: tuple[str, ...]) -> dict[str, dict[str, list[str]]]:
+        from hora.transits.tara import nakshatra_of
+
+        computed = compute_chart(
+            from_local(year, month, day, 12, 0, 0.0, utc_offset_hours=5.5),
+            place, Settings(node_type=NodeType.MEAN))
+        out: dict[str, dict[str, list[str]]] = {
+            square: {"benefic": [], "malefic": []} for square in squares}
+        for graha in NAVAGRAHA:
+            name = str(GRAHA_NAMES[int(graha)])
+            standing = cell[str(NAKSHATRA_NAMES[nakshatra_of(
+                computed.positions[int(graha)].longitude)])]
+            for square in squares:
+                if strike(square, standing)["kind"] is not None:
+                    side = ("benefic" if name in SARVATOBHADRA_BENEFICS
+                            else "malefic")
+                    out[square][side].append(name)
+        return out
+
+    # 1984: the example reads four benefics and says nothing of the malefics
+    # our own lines find on the very same squares.
+    ascension = struck(1984, 10, 31, ("Nanda", "Dhanishtha", "Sg", "Li"))
+    named = {graha for graha, _s, _t in EXAMPLE_116_VEDHAS}
+    for square, hits in ascension.items():
+        assert set(hits["benefic"]) >= {
+            g for g, _s, t in EXAMPLE_116_VEDHAS if t == square}
+        assert hits["malefic"], square
+        assert not set(hits["malefic"]) & named
+
+    # 1989: the mirror image, malefics named and benefics unmentioned.
+    defeat = struck(1989, 11, 22, ("Nanda", "Dhanishtha", "Sg"))
+    spoken = {graha for graha, _s, _t, _k in EXAMPLE_117_STRIKES}
+    assert defeat["Nanda"]["benefic"] and defeat["Sg"]["benefic"]
+    assert not defeat["Dhanishtha"]["benefic"]
+    assert not set(defeat["Nanda"]["benefic"]) & spoken
+
+    assert "is silent on the strikes of the other nature" in (
+        THE_EXAMPLES_NAME_ONLY_THE_STRIKES_THAT_CARRY_THE_VERDICT)
+
+
+def test_the_hour_example_117_omits_touches_nothing_it_claims():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.sarvatobhadra import (
+        THE_UNDATED_HOUR_TOUCHES_NOTHING_THE_EXAMPLE_CLAIMS,
+    )
+    from hora.transits.tara import nakshatra_of
+
+    place = Place(name="New Delhi", latitude=28 + 36 / 60,
+                  longitude=77 + 12 / 60)
+    settings = Settings(node_type=NodeType.MEAN)
+    named = (Graha.MARS, Graha.SATURN, Graha.RAHU, Graha.KETU)
+
+    through_the_day = []
+    for hour in (0, 6, 12, 18, 23):
+        computed = compute_chart(
+            from_local(1989, 11, 22, hour, 0, 0.0, utc_offset_hours=5.5),
+            place, settings)
+        through_the_day.append(tuple(
+            str(NAKSHATRA_NAMES[nakshatra_of(
+                computed.positions[int(graha)].longitude)])
+            for graha in named))
+    assert len(set(through_the_day)) == 1
+
+    moon = {str(NAKSHATRA_NAMES[nakshatra_of(compute_chart(
+        from_local(1989, 11, 22, hour, 0, 0.0, utc_offset_hours=5.5),
+        place, settings).positions[int(Graha.MOON)].longitude)])
+        for hour in (0, 23)}
+    assert moon == {"Purva Phalguni", "Uttara Phalguni"}
+    assert "does not use the Moon" in (
+        THE_UNDATED_HOUR_TOUCHES_NOTHING_THE_EXAMPLE_CLAIMS)
+
+
+def test_example_117_is_transcribed_with_its_verdict():
+    from hora.transits.sarvatobhadra import (
+        EXAMPLE_117,
+        EXAMPLE_117_CONCLUSION,
+        EXAMPLE_117_KARMA_NAKSHATRA,
+    )
+
+    assert "November 22, 1989" in EXAMPLE_117
+    assert "karma nakshatra" in EXAMPLE_117_KARMA_NAKSHATRA
+    assert "lost power" in EXAMPLE_117_CONCLUSION

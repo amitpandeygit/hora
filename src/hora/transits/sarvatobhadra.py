@@ -723,3 +723,166 @@ RAJIV_GANDHI_IS_PRINTED_AS_TWO_CHARTS = (
     "Chart 39 is his rasi chart and Chart 60 his D-10 with the accession "
     "transit. The birth data and every printed longitude agree."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 117 — the same native, the same natal points, the other verdict
+# --------------------------------------------------------------------------
+
+EXAMPLE_117 = (
+    "Let us continue with the same native. Rajiv Gandhi's party lost "
+    "majority in the elections of November 22, 1989.")
+
+EXAMPLE_117_KARMA_NAKSHATRA = (
+    "When he became India's Prime Minister in 1984, Jupiter was in "
+    "Poorvashadha. Poorvashadha is karma nakshatra (constellation of "
+    "profession). At the time of Mr. Gandhi's defeat in 1989, Saturn was in "
+    "that constellation.")
+
+#: Example 117's three natal points and the malefics on each. Unlike Examples
+#: 115 and 116 this list mixes two kinds of evidence — see
+#: `OCCUPATION_COUNTS_AS_WELL_AS_VEDHA` — so each strike carries its kind.
+EXAMPLE_117_STRIKES: tuple[tuple[str, str, str, str], ...] = (
+    ("Saturn", "P.Shadha", "Nanda", "vedha"),
+    ("Rahu", "Dhanishtha", "Nanda", "vedha"),
+    ("Ketu", "Asresha", "Nanda", "vedha"),
+    ("Rahu", "Dhanishtha", "Dhanishtha", "occupation"),
+    ("Ketu", "Asresha", "Dhanishtha", "vedha"),
+    ("Mars", "Swaati", "Sg", "vedha"),
+    ("Saturn", "P.Shadha", "Sg", "vedha"),
+)
+
+#: What each struck square stands for. These are Example 116's points read
+#: again — "the same natal references considered in the last example" — minus
+#: the Libra square, on which see `A_NATAL_POINT_WITH_NO_EVIDENCE_IS_DROPPED`.
+EXAMPLE_117_NATAL_POINTS: tuple[dict[str, str], ...] = (
+    {"square": "Nanda", "point": "janma vaara",
+     "value": "Sunday, the weekday of birth"},
+    {"square": "Nanda", "point": "the tithi of power",
+     "value": "Sukla Shashthi, the 6th, in the Nanda group"},
+    {"square": "Dhanishtha", "point": "abhisheka nakshatra",
+     "value": "the constellation of coronation"},
+    {"square": "Sg", "point": "the 5th house of power",
+     "value": "Sagittarius, the 5th from a Leo lagna"},
+)
+
+EXAMPLE_117_CONCLUSION = (
+    "For these reasons, transits were unfavorable from the point of view of "
+    "political power. So Mr. Gandhi's party lost power.")
+
+#: **Finding.** Clause (2) counts a planet **standing in** a square as
+#: evidence on that square: "Dhanishtha ... is occupied by Rahu and Ketu has
+#: vedha on it" is one abhisheka nakshatra carrying two malefics, one by
+#: occupation and one by vedha. `SARVATOBHADRA_READING` speaks only of vedha
+#: and Examples 115 and 116 used nothing else, so occupation as evidence
+#: enters the book here and is never stated as a rule. `strike` reports the
+#: two kinds separately rather than merging them.
+OCCUPATION_COUNTS_AS_WELL_AS_VEDHA = (
+    "Rahu occupies Dhanishtha and Ketu has vedha on it, and Example 117 "
+    "counts both against the abhisheka nakshatra. Section 26.8 states the "
+    "reading in terms of vedha alone."
+)
+
+#: **Finding.** The karma nakshatra changes hands between the two examples.
+#: Poorvashadha is the 10th from this native's janma nakshatra; **Jupiter**
+#: stood there when he took office in 1984 and **Saturn** stands there when
+#: he loses it in 1989. Neither is a vedha — both are occupations — so this
+#: paragraph is the second place in the example where sitting in a square is
+#: the evidence.
+THE_KARMA_NAKSHATRA_CHANGES_HANDS = (
+    "Jupiter occupied Poorvashadha at the ascension and Saturn occupies it "
+    "at the defeat. The same constellation of profession is read twice, by "
+    "occupation both times and by vedha neither time."
+)
+
+#: **Finding.** Neither example prints this native's **janma nakshatra**, and
+#: Example 117 fixes it twice over. Poorvashadha is the karma nakshatra, the
+#: 10th, and Dhanishtha is the abhisheka nakshatra, the 13th; the only
+#: constellation with both those offsets is **Poorva Phalguni**, which is
+#: where his Moon at 17 Le 09 in Chart 14 actually falls.
+THE_TWO_SPECIAL_NAKSHATRAS_FIX_THE_JANMA_NAKSHATRA = (
+    "The 10th from Poorva Phalguni is Poorvashadha and the 13th is "
+    "Dhanishtha. Chart 14 puts Rajiv Gandhi's Moon in Poorva Phalguni, so "
+    "both special nakshatras the two examples name are consistent with it "
+    "and with no other birth star."
+)
+
+#: **Finding.** Both examples name **only the strikes that carry the verdict
+#: they reach.** On 31 October 1984 all four squares take malefic strikes as
+#: well — Mars, Saturn and Rahu reach Nanda, Saturn reaches Dhanishtha, the
+#: Sun and Mars reach Sg, Saturn and Rahu reach Li — and Example 116 lists
+#: none of them. On 22 November 1989 all three squares take benefic strikes
+#: as well — the Moon, Jupiter and Venus reach Nanda, Jupiter and Venus reach
+#: Sg — and Example 117 lists none of those. Every strike the book does name
+#: is confirmed by `vedha_lines`; the omissions are the point. §26.8 gives no
+#: rule for weighing a square struck by both natures. See OI-150.
+THE_EXAMPLES_NAME_ONLY_THE_STRIKES_THAT_CARRY_THE_VERDICT = (
+    "Each of the two readings of this nativity lists strikes of one nature "
+    "and is silent on the strikes of the other nature on the same squares, "
+    "which our own vedha lines find in both charts."
+)
+
+#: **Finding.** Example 117 reads **three** natal points where Example 116
+#: read four, and the one it drops is the Libra square holding GL. On that
+#: date Libra is struck by the **Moon alone** and by no malefic, so the point
+#: that carries nothing of the nature being read is simply not listed.
+A_NATAL_POINT_WITH_NO_EVIDENCE_IS_DROPPED = (
+    "Example 116 reads Nanda, Dhanishtha, Sg and Li. Example 117 says it "
+    "takes the same natal references and reads only the first three; Li "
+    "takes no malefic strike on the later date."
+)
+
+#: **Finding.** Clause (1) puts **three** malefics on one square. Examples 115
+#: and 116 each put exactly two on every square they read, which is
+#: `THE_CHAKRA_STATES_A_MINIMUM_WEIGHT_OF_EVIDENCE` met at its floor. This
+#: one goes past the floor on its strongest point and stays at two on the
+#: others, so the floor is a minimum and not a shape.
+THREE_PLANETS_MAY_STRIKE_ONE_SQUARE = (
+    "Nanda and Sunday take vedha from Saturn, Rahu and Ketu together. No "
+    "earlier reading in the section puts more than two planets on a square."
+)
+
+#: **Finding.** A benefic sits in the karma nakshatra at the defeat too:
+#: **Venus** is at 22 Sg 31 on 22 November 1989 and Saturn at 17 Sg 29, both
+#: in Poorvashadha. The example names Saturn and not Venus, which is
+#: `THE_EXAMPLES_NAME_ONLY_THE_STRIKES_THAT_CARRY_THE_VERDICT` showing up in
+#: the occupation evidence as well as in the vedhas.
+VENUS_IS_IN_THE_KARMA_NAKSHATRA_TOO = (
+    "Saturn and Venus are both in Poorvashadha on 22 November 1989. The "
+    "paragraph on the karma nakshatra names only Saturn."
+)
+
+#: **Finding.** Example 117 gives a date and no time, and it does not need
+#: one: Mars, Saturn, Rahu and Ketu hold their constellations through the
+#: whole of 22 November 1989, so every claim it makes is fixed by the date
+#: alone. The **Moon** is not: it crosses from Poorva Phalguni into Uttara
+#: Phalguni that morning, and the example cites it nowhere.
+THE_UNDATED_HOUR_TOUCHES_NOTHING_THE_EXAMPLE_CLAIMS = (
+    "The four grahas Example 117 names are slow enough that the date settles "
+    "their constellations. The Moon changes nakshatra during the day and the "
+    "example does not use the Moon."
+)
+
+
+def strike(square: str, nakshatra: str) -> dict:
+    """Whether a graha in `nakshatra` bears on `square`, and how.
+
+    §26.8 states the reading in terms of vedha; Example 117 counts a graha
+    **standing in** the square as well — see `OCCUPATION_COUNTS_AS_WELL_AS_
+    VEDHA`. The two are reported separately, because the section never says
+    they weigh the same.
+
+    :returns: ``{"square", "nakshatra", "kind", "obstructs"}`` where ``kind``
+        is ``"occupation"``, ``"vedha"`` or ``None``.
+    """
+    target, from_ = str(square), str(nakshatra)
+    find(target)
+    obstructs = vedha_lines(*find(from_))["obstructs"]
+    if target == from_:
+        kind = "occupation"
+    elif target in obstructs:
+        kind = "vedha"
+    else:
+        kind = None
+    return {"square": target, "nakshatra": from_, "kind": kind,
+            "obstructs": obstructs}

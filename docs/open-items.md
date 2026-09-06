@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 100 waiting on evidence · 2 parked**
+**5 waiting on Amit · 101 waiting on evidence · 2 parked**
 
 ---
 
@@ -2163,6 +2163,31 @@ decision is yours.
 
 **Closes when:** you approve the change, or say the calendar-day reading is
 intended.
+
+### OI-150 — §26.8 never weighs a square struck by both benefic and malefic
+
+**Waiting on the book.** `SARVATOBHADRA_READING` says benefic vedha is
+favourable and malefic vedha unfavourable, and says nothing about a natal
+point that takes both. Every worked reading in the section takes both.
+
+On 31 October 1984 the four squares Example 116 reads are struck by malefics
+as well — Mars, Saturn and Rahu on Nanda, Saturn on the abhisheka nakshatra,
+the Sun and Mars on Sg, Saturn and Rahu on Li — and it names only the four
+benefics. On 22 November 1989 Example 117's three squares are struck by
+benefics as well — the Moon, Jupiter and Venus on Nanda, Jupiter and Venus on
+Sg — and it names only the malefics. Both sets of strikes are drawn by our own
+`vedha_lines`; every strike either example claims is confirmed.
+
+Example 117 adds a second unstated rule: a graha **standing in** a square
+counts as evidence on it ("Dhanishtha ... is occupied by Rahu and Ketu has
+vedha on it"). The section's rule is stated for vedha alone.
+
+`strike` therefore reports the kind of contact and nothing more. No verdict
+function is built, because it would have to invent both the weighting and the
+weight of an occupation against a vedha.
+
+**Closes when:** the book gives a rule for mixed strikes, or you settle one.
+
 
 ---
 
