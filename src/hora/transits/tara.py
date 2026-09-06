@@ -456,3 +456,76 @@ EXERCISE_41_CLAIMS: tuple[str, ...] = (
     "Poorvaashaadha is the 10th constellation from Poorva Phalguni",
     "so the transit falls in the Karma nakshatra, which shows profession",
 )
+
+
+# --------------------------------------------------------------------------
+# Exercise 42 — a naidhana transit that agrees with chapter 14
+# --------------------------------------------------------------------------
+
+EXERCISE_42 = (
+    "For a native with lagna in Leo, natal Moon is in the 4th quarter of "
+    "Dhanishtha. When the transit chart contains Saturn in Bharani, identify "
+    "a possible result.")
+
+EXERCISE_42_ANSWER = (
+    "Bharani is the 7th constellation from Dhanishtha, i.e. it is the "
+    "naidhana nakshatra (death). Saturn is a malefic and the 7th lord - and "
+    "hence a maraka - here. So this transit has the potential to bring "
+    "death. Of course, not everyone with lagna in Leo and Moon in Dhanishtha "
+    "dies then, but death is a possibility during the transit.")
+
+EXERCISE_42_FINAL = (
+    "The details belong to John F. Kennedy, Jr. He died in a plane crash "
+    "during the said transit. We gave his birthdata earlier.")
+
+#: **Finding.** The reading needs **three** things to line up, and the
+#: exercise says so by ruling itself out: the nakshatra is naidhana, the
+#: transiting graha is a natural malefic, **and** he is a maraka lord from the
+#: lagna. Chapter 14's maraka houses are the 2nd and 7th, and Saturn owns
+#: Aquarius, the 7th from Leo. So §26.4.2's special nakshatra and §14's maraka
+#: are two independent systems agreeing on one graha.
+THE_NAIDHANA_READING_NEEDS_A_MARAKA_TOO = (
+    "Bharani is the naidhana nakshatra for this Moon, Saturn is a natural "
+    "malefic, and Saturn is the 7th lord from a Leo lagna and so a maraka "
+    "under section 14. The exercise leans on all three, not on the nakshatra "
+    "alone."
+)
+
+#: **Finding.** The exercise disowns its own rule in the same breath — "not
+#: everyone with lagna in Leo and Moon in Dhanishtha dies then". A Leo lagna
+#: with the Moon in Dhanishtha is roughly one nativity in 324, so the
+#: qualifying population is large, and the section is saying the transit
+#: raises a possibility rather than picking a person. It is the same caution
+#: §26.4.2 gave about desa nakshatra and a whole country.
+THE_TRANSIT_NAMES_A_POSSIBILITY_NOT_A_PERSON = (
+    "Not everyone with lagna in Leo and Moon in Dhanishtha dies then, but "
+    "death is a possibility during the transit."
+)
+
+#: **Not supplied.** The disclaimer carries footnote 72 and the note itself
+#: was not on the page given. Nothing is inferred from the marker.
+FOOTNOTE_72_IS_NOT_SUPPLIED = (
+    "Exercise 42's answer marks its disclaimer with footnote 72. The "
+    "footnote's text has not been supplied and nothing here stands in for it."
+)
+
+#: **Finding.** JFK Jr's death is now read twice by the book through two
+#: different mechanisms — Example 107 through §25.4's interaction (2), the
+#: natal rasi chart against the transit D-11, and Exercise 42 through the
+#: naidhana nakshatra. Same nativity, same instant, two chapters.
+JFK_JRS_DEATH_IS_READ_TWICE = (
+    "Chart 56 and Chart 57 read the crash through a natal rasi chart and a "
+    "transit D-11; Exercise 42 reads the same moment through the nakshatra "
+    "Saturn occupies from the natal Moon's."
+)
+
+#: Exercise 42's checkable claims, each asserted against Chart 56.
+EXERCISE_42_CLAIMS: tuple[str, ...] = (
+    "lagna is Leo",
+    "the natal Moon is in the 4th quarter of Dhanishtha",
+    "Bharani is the 7th constellation from Dhanishtha",
+    "so Bharani is this nativity's naidhana nakshatra",
+    "Saturn is a natural malefic",
+    "Saturn owns the 7th from Leo and is therefore a maraka",
+    "Saturn was in Bharani at the recorded moment of death",
+)

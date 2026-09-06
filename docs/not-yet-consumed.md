@@ -1137,6 +1137,22 @@ and the Karma nakshatra — so what follows is prose and findings.
 | `A_YOGAKARAKA_MALEFIC_IS_READ_AS_FAVOURABLE` | Ours: the rules say natural benefic and malefic, and the exercise uses functional nature without saying so |
 | `KARMA_IS_ALSO_JANMA_TARA_AND_THE_READING_IGNORES_THE_TARA` | Ours: the independence finding happening in a worked case rather than argued from the tables |
 
+### Chapter 26 — Exercise 42 (8)
+
+`transits/tara.py`. Every claim **is** checked against Chart 56 — lagna, the
+Moon's nakshatra and pada, the count to Bharani, Saturn's nature, his maraka
+lordship and his position at the recorded moment of death — so what follows is
+prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXERCISE_42` · `EXERCISE_42_ANSWER` · `EXERCISE_42_FINAL` | The exercise and its answer verbatim, including the identity |
+| `EXERCISE_42_CLAIMS` | The seven checkable claims as a list, each asserted by a test |
+| `THE_NAIDHANA_READING_NEEDS_A_MARAKA_TOO` | Ours: three conditions coincide, and §26.4.2's nakshatra and §14's maraka are independent systems agreeing |
+| `THE_TRANSIT_NAMES_A_POSSIBILITY_NOT_A_PERSON` | The exercise's own disclaimer, and the shape of every claim §26.4 makes |
+| `FOOTNOTE_72_IS_NOT_SUPPLIED` | Ours: the disclaimer carries a footnote whose text has not been given. Recorded so nothing is inferred from the marker |
+| `JFK_JRS_DEATH_IS_READ_TWICE` | Ours: Example 107 read the same instant through a transit D-11; this reads it through a nakshatra |
+
 ---
 
 ## How to use this register

@@ -1225,3 +1225,124 @@ def test_exercise_41_reads_a_chart_the_register_already_held():
     assert "Exercise 41" in record["note"]
     assert record["events"] == {
         "he became Prime Minister of India": "October 31, 1984"}
+
+
+# --------------------------------------------------------------------------
+# Exercise 42 — Chart 56's death, read a second way
+# --------------------------------------------------------------------------
+
+def test_every_claim_in_exercise_42_holds_against_chart_56():
+    from hora.charts.book import chart, longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.charts.maraka import maraka_houses, maraka_sthanas
+    from hora.core.const import (
+        NAKSHATRA_NAMES,
+        NATURAL_MALEFIC,
+        RASI_LORD,
+        Graha,
+    )
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.tara import (
+        EXERCISE_42_CLAIMS,
+        NAKSHATRA_SPAN,
+        nakshatra_of,
+        special_nakshatra,
+        tara,
+    )
+
+    natal = longitudes(56)
+    lagna = int(natal["Asc"] // 30)
+    assert A[lagna] == "Le"
+
+    moon = natal["Moon"]
+    index = nakshatra_of(moon)
+    assert str(NAKSHATRA_NAMES[index]) == "Dhanishta"
+    pada = int((moon % NAKSHATRA_SPAN) // (NAKSHATRA_SPAN / 4)) + 1
+    assert pada == 4
+
+    bharani = [str(n) for n in NAKSHATRA_NAMES].index("Bharani")
+    assert (bharani - index) % 27 + 1 == 7
+    assert special_nakshatra("Naidhana", moon)["nakshatra"] == "Bharani"
+
+    assert Graha.SATURN in NATURAL_MALEFIC
+    assert maraka_houses() == (2, 7)
+    seventh = maraka_sthanas(lagna)[7]
+    assert A[seventh] == "Aq"
+    assert RASI_LORD[seventh] == int(Graha.SATURN)
+
+    block = chart(56)["transit"]
+    computed = compute_chart(from_local(**block["birth_data"]),
+                             Place(name="Martha's Vineyard", **block["place"]),
+                             Settings(node_type=NodeType.MEAN))
+    saturn = computed.positions[int(Graha.SATURN)].longitude
+    assert nakshatra_of(saturn) == bharani
+    assert tara(moon, saturn)["count"] == 7
+    assert tara(moon, saturn)["tara"] == "Naidhana/Vadha Tara"
+
+    assert len(EXERCISE_42_CLAIMS) == 7
+
+
+def test_the_naidhana_reading_leans_on_a_maraka_lordship_as_well():
+    from hora.transits.tara import (
+        EXERCISE_42_ANSWER,
+        THE_NAIDHANA_READING_NEEDS_A_MARAKA_TOO,
+    )
+
+    assert "7th lord" in EXERCISE_42_ANSWER
+    assert "maraka" in EXERCISE_42_ANSWER
+    assert "malefic" in EXERCISE_42_ANSWER
+    assert "not on the nakshatra alone" in (
+        THE_NAIDHANA_READING_NEEDS_A_MARAKA_TOO)
+
+
+def test_the_naidhana_special_nakshatra_and_the_naidhana_tara_coincide_here():
+    """The 7th from the natal Moon's nakshatra is Naidhana under both of
+    §26.4's classifications — the one place they name the same thing.
+    """
+    from hora.transits.tara import (
+        SPECIAL_NAKSHATRAS,
+        TABLE_64_TARAS,
+        special_nakshatra,
+        tara_of_count,
+    )
+
+    naidhana = next(r for r in SPECIAL_NAKSHATRAS if r["name"] == "Naidhana")
+    assert naidhana["offset"] == 7
+    assert tara_of_count(7)["name"] == "Naidhana/Vadha Tara"
+    assert special_nakshatra("Naidhana", 5.0)["tara"] == "Naidhana/Vadha Tara"
+
+    # and it is the only name the two classifications share besides Janma
+    special = {str(r["name"]) for r in SPECIAL_NAKSHATRAS}
+    taras = {str(r["name"]).split()[0].split("/")[0] for r in TABLE_64_TARAS}
+    assert special & taras == {"Janma", "Naidhana"}
+
+
+def test_the_exercise_says_the_transit_names_a_possibility_not_a_person():
+    from hora.transits.tara import (
+        RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE,
+        THE_TRANSIT_NAMES_A_POSSIBILITY_NOT_A_PERSON,
+    )
+
+    assert "Not everyone" in THE_TRANSIT_NAMES_A_POSSIBILITY_NOT_A_PERSON
+    assert "a possibility during the transit" in (
+        THE_TRANSIT_NAMES_A_POSSIBILITY_NOT_A_PERSON)
+    assert "almost the same number of people" in (
+        RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE)
+
+
+def test_footnote_72_has_not_been_supplied():
+    from hora.transits.tara import FOOTNOTE_72_IS_NOT_SUPPLIED
+
+    assert "has not been supplied" in FOOTNOTE_72_IS_NOT_SUPPLIED
+    assert "nothing here stands in for it" in FOOTNOTE_72_IS_NOT_SUPPLIED
+
+
+def test_jfk_jrs_death_is_now_read_through_two_mechanisms():
+    from hora.charts.book import chart
+    from hora.transits.tara import JFK_JRS_DEATH_IS_READ_TWICE
+
+    assert chart(56)["transit"]["for"] == "his death"
+    assert chart(56)["transit"]["date"].startswith("July 16, 1999")
+    assert "Example 107" in chart(56)["title"]
+    assert "transit D-11" in JFK_JRS_DEATH_IS_READ_TWICE
