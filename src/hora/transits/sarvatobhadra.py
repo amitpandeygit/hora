@@ -496,10 +496,28 @@ SPECIAL_TITHI_RULE = (
     "times as fast as normal tithi. Similarly \"dhana tithi\" (lunar day of "
     "wealth) changes twice as fast as normal tithi.")
 
-#: The two special tithis §26.8 names, and their multipliers. The section says
-#: "we can find a tithi for several matters" and names only these two, so the
-#: table is open — a caller may pass any multiplier to `special_tithi`.
-SPECIAL_TITHI_MULTIPLIERS: dict[str, int] = {"karma": 10, "dhana": 2}
+#: The special tithis and their multipliers. §26.8 names karma and dhana;
+#: Example 116 uses a third, the **tithi of power**, and names its house.
+SPECIAL_TITHI_MULTIPLIERS: dict[str, int] = {
+    "karma": 10, "dhana": 2, "power": 5}
+
+#: **Finding.** The multiplier is the **house number** of the matter. Karma is
+#: the 10th house and multiplies by 10; dhana is the 2nd and multiplies by 2;
+#: Example 116's tithi of power multiplies by 5 and the same example calls Sg
+#: "the 5th house of power". §26.8 states the first two multipliers and the
+#: rule behind them nowhere, and Example 116 confirms it by arithmetic — a
+#: multiplier of 5 on Rajiv Gandhi's birth gives the 6th tithi, which is the
+#: Sukla Shashthi in the Nanda group the example names.
+THE_MULTIPLIER_IS_THE_HOUSE_NUMBER = (
+    "Karma tithi is the 10th house's and multiplies by 10, dhana tithi is "
+    "the 2nd house's and multiplies by 2, and the tithi of power is the 5th "
+    "house's and multiplies by 5. The book gives the first two multipliers "
+    "and never the pattern."
+)
+
+#: The house each named tithi belongs to, which is also its multiplier.
+SPECIAL_TITHI_HOUSES: dict[str, int] = {
+    "karma": 10, "dhana": 2, "power": 5}
 
 #: **Finding.** The rule generalises the ordinary tithi rather than replacing
 #: it: a multiplier of **1** is §1.3.8's own tithi, so `special_tithi` with
@@ -632,4 +650,76 @@ FOOTNOTE_71_NAMES_A_DEFECT_IN_OUR_OWN_CODE = (
     "previous sunrise's weekday. Our day_structure takes the first sunrise "
     "after local midnight instead, and compute_panchanga raises for any "
     "instant before sunrise."
+)
+
+
+# --------------------------------------------------------------------------
+# Example 116 — the same method read the other way
+# --------------------------------------------------------------------------
+
+EXAMPLE_116 = (
+    "Let us consider Rajiv Gandhi's ascension to power in India on October "
+    "31, 1984. It was covered in Exercise 40. Rasi chart of Mr. Gandhi can be "
+    "found in Chart 39.")
+
+#: Example 116's four vedhas, each a pair of benefics on one natal reference.
+EXAMPLE_116_VEDHAS: tuple[tuple[str, str, str], ...] = (
+    ("Jupiter", "P.Shadha", "Nanda"),
+    ("Mercury", "Visakha", "Nanda"),
+    ("Mercury", "Visakha", "Dhanishtha"),
+    ("Moon", "Sravana", "Dhanishtha"),
+    ("Jupiter", "P.Shadha", "Sg"),
+    ("Venus", "Jyeshtha", "Sg"),
+    ("Mercury", "Visakha", "Li"),
+    ("Venus", "Jyeshtha", "Li"),
+)
+
+#: What each struck square stands for in the nativity.
+EXAMPLE_116_NATAL_POINTS: tuple[dict[str, str], ...] = (
+    {"square": "Nanda", "point": "janma vaara",
+     "value": "Sunday, the weekday of birth"},
+    {"square": "Nanda", "point": "the tithi of power",
+     "value": "Sukla Shashthi, the 6th, in the Nanda group"},
+    {"square": "Dhanishtha", "point": "abhisheka nakshatra",
+     "value": "the constellation of coronation"},
+    {"square": "Sg", "point": "the 5th house of power",
+     "value": "Sagittarius, the 5th from a Leo lagna"},
+    {"square": "Li", "point": "the rasi holding GL",
+     "value": "Libra; GL is the seat of power"},
+)
+
+EXAMPLE_116_CONCLUSION = (
+    "So janma vaara, an important tithi, an important nakshatra and two "
+    "important rasis in natal chart have vedha from two benefic planets "
+    "each. This is conducive to getting political power.")
+
+#: **Finding.** Examples 115 and 116 are the same method run in mirror. Each
+#: strikes **four** squares, each square by exactly **two** planets, and
+#: neither mixes benefic with malefic: 115 is Saturn, Mars, Rahu and Ketu and
+#: reads death; 116 is Jupiter, Mercury, Venus and the Moon and reads power.
+#: So the chakra's verdict is carried entirely by the nature of the strikers,
+#: and the evidence floor is met identically on both sides.
+THE_TWO_EXAMPLES_ARE_THE_METHOD_IN_MIRROR = (
+    "Example 115 has four malefics striking four squares two apiece and "
+    "reads death; Example 116 has four benefics striking four squares two "
+    "apiece and reads political power. Same shape, opposite natures."
+)
+
+#: **Finding.** The Nanda square carries **Sunday and Tuesday**, and the
+#: example reads only Sunday, because that is this nativity's janma vaara. So
+#: a square with two weekdays is read for whichever the chart makes relevant,
+#: not for both — the same way Example 115's Jaya square was read for one
+#: tithi group and one weekday at once.
+A_SQUARE_IS_READ_FOR_WHAT_THE_CHART_MAKES_RELEVANT = (
+    "The Nanda square holds Sunday and Tuesday. Example 116 takes Sunday "
+    "alone, that being the janma vaara, and the Nanda tithi group, that "
+    "being where the tithi of power falls."
+)
+
+#: **Finding.** Rajiv Gandhi's nativity is printed twice — Chart 39 for the
+#: rasi chart in chapter 22 and Chart 60 for the D-10 and the transit in
+#: chapter 25 — with identical longitudes. Example 116 cites the earlier one.
+RAJIV_GANDHI_IS_PRINTED_AS_TWO_CHARTS = (
+    "Chart 39 is his rasi chart and Chart 60 his D-10 with the accession "
+    "transit. The birth data and every printed longitude agree."
 )

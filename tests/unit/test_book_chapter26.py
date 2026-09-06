@@ -3661,7 +3661,8 @@ def test_karma_tithi_changes_ten_times_as_fast_and_dhana_twice():
         special_tithi,
     )
 
-    assert SPECIAL_TITHI_MULTIPLIERS == {"karma": 10, "dhana": 2}
+    assert SPECIAL_TITHI_MULTIPLIERS["karma"] == 10
+    assert SPECIAL_TITHI_MULTIPLIERS["dhana"] == 2
 
     def changes(multiplier):
         seen, previous = 0, None
@@ -3680,6 +3681,7 @@ def test_karma_tithi_changes_ten_times_as_fast_and_dhana_twice():
     assert named["name"] == "karma"
     assert 1 <= named["tithi"] <= 30
     assert special_tithi(0.0, 30.0, 2)["name"] == "dhana"
+    assert special_tithi(0.0, 30.0, 5)["name"] == "power"
     assert special_tithi(0.0, 30.0, 3)["name"] is None
 
 
@@ -3873,3 +3875,157 @@ def test_footnote_71_names_a_defect_in_our_own_panchanga():
     assert "still Thursday" in FOOTNOTE_71
     assert "raises for any instant before sunrise" in (
         FOOTNOTE_71_NAMES_A_DEFECT_IN_OUR_OWN_CODE)
+
+
+# --------------------------------------------------------------------------
+# Example 116 — the same method in mirror
+# --------------------------------------------------------------------------
+
+def test_chart_39_and_chart_60_are_one_nativity():
+    from hora.charts.book import chart, longitudes
+    from hora.transits.sarvatobhadra import RAJIV_GANDHI_IS_PRINTED_AS_TWO_CHARTS
+
+    assert longitudes(39) == longitudes(60)
+    assert chart(39)["birth_data"] == chart(60)["birth_data"]
+    assert "Rajiv Gandhi" in chart(60)["title"]
+    assert "every printed longitude agree" in (
+        RAJIV_GANDHI_IS_PRINTED_AS_TWO_CHARTS)
+
+
+def test_example_116s_natal_points_reproduce_from_chart_39():
+    from hora.charts.book import chart, longitudes
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.panchanga.core import compute_panchanga, paksha_at
+    from hora.transits.sarvatobhadra import special_tithi
+    from hora.transits.tara import special_nakshatra
+
+    record, printed = chart(39), longitudes(39)
+    instant = from_local(**record["birth_data"])
+    panchanga = compute_panchanga(instant, record["place"]["latitude"],
+                                  record["place"]["longitude"],
+                                  Settings(node_type=NodeType.MEAN))
+    assert str(panchanga.vaara_name) == "Sunday"
+
+    moon = printed["Moon"]
+    assert special_nakshatra("Abhisheka", moon)["nakshatra"] == "Dhanishta"
+    assert special_nakshatra("Abhisheka", moon)["shows"] == (
+        "power and authority")
+
+    power = special_tithi(printed["Sun"], moon, 5)
+    assert power["tithi"] == 6                 # Sukla Shashthi
+    assert power["group"] == "Nanda"
+    assert paksha_at(printed["Sun"], moon) == 0
+
+    assert A[int(printed["GL"] // 30)] == "Li"
+    assert A[(int(printed["Asc"] // 30) + 4) % 12] == "Sg"
+
+
+def test_the_special_tithi_multiplier_is_the_house_number():
+    """Karma is the 10th and multiplies by 10, dhana the 2nd by 2, and
+    Example 116's tithi of power the 5th by 5 — which the book never states
+    and this example confirms by arithmetic.
+    """
+    from hora.charts.book import longitudes
+    from hora.transits.sarvatobhadra import (
+        SPECIAL_TITHI_HOUSES,
+        SPECIAL_TITHI_MULTIPLIERS,
+        THE_MULTIPLIER_IS_THE_HOUSE_NUMBER,
+        special_tithi,
+    )
+
+    assert SPECIAL_TITHI_MULTIPLIERS == SPECIAL_TITHI_HOUSES
+    assert SPECIAL_TITHI_MULTIPLIERS == {"karma": 10, "dhana": 2, "power": 5}
+
+    printed = longitudes(39)
+    assert special_tithi(printed["Sun"], printed["Moon"], 5)["name"] == "power"
+    # and the other multipliers do not give the book's answer
+    for multiplier in (1, 2, 10):
+        assert special_tithi(printed["Sun"], printed["Moon"],
+                             multiplier)["tithi"] != 6
+    assert "the book gives the first two multipliers and never the pattern" in (
+        THE_MULTIPLIER_IS_THE_HOUSE_NUMBER.lower())
+
+
+def test_example_116s_four_transiting_benefics_are_where_it_says():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.tara import nakshatra_of
+
+    computed = compute_chart(
+        from_local(1984, 10, 31, 12, 0, 0.0, utc_offset_hours=5.5),
+        Place(name="New Delhi", latitude=28 + 36 / 60,
+              longitude=77 + 12 / 60),
+        Settings(node_type=NodeType.MEAN))
+    where = {name: str(NAKSHATRA_NAMES[nakshatra_of(
+        computed.positions[int(graha)].longitude)])
+        for name, graha in (("Jupiter", Graha.JUPITER),
+                            ("Venus", Graha.VENUS),
+                            ("Mercury", Graha.MERCURY),
+                            ("Moon", Graha.MOON))}
+    assert where == {"Jupiter": "Purva Ashadha", "Venus": "Jyeshtha",
+                     "Mercury": "Vishakha", "Moon": "Shravana"}
+
+
+def test_every_vedha_example_116_claims_is_drawn_by_the_chakra():
+    from hora.transits.sarvatobhadra import (
+        EXAMPLE_116_VEDHAS,
+        find,
+        vedha_lines,
+    )
+
+    assert len(EXAMPLE_116_VEDHAS) == 8
+    for graha, standing, target in EXAMPLE_116_VEDHAS:
+        got = vedha_lines(*find(standing))
+        reached = {square["content"]
+                   for line in got["lines"].values() for square in line}
+        assert target in reached, (graha, standing, target)
+
+
+def test_the_two_examples_are_the_method_in_mirror():
+    from hora.transits.sarvatobhadra import (
+        EXAMPLE_115_VEDHAS,
+        EXAMPLE_116_VEDHAS,
+        SARVATOBHADRA_BENEFICS,
+        SARVATOBHADRA_MALEFICS,
+        THE_TWO_EXAMPLES_ARE_THE_METHOD_IN_MIRROR,
+    )
+
+    for vedhas, natures in ((EXAMPLE_115_VEDHAS, SARVATOBHADRA_MALEFICS),
+                            (EXAMPLE_116_VEDHAS, SARVATOBHADRA_BENEFICS)):
+        strikers = {graha for graha, _s, _t in vedhas}
+        assert len(strikers) == 4
+        assert strikers <= set(natures)
+        per_target: dict[str, set[str]] = {}
+        for graha, _standing, target in vedhas:
+            per_target.setdefault(target, set()).add(graha)
+        assert len(per_target) == 4
+        assert all(len(hit) == 2 for hit in per_target.values())
+
+    assert not ({g for g, _s, _t in EXAMPLE_115_VEDHAS}
+                & {g for g, _s, _t in EXAMPLE_116_VEDHAS})
+    assert "Same shape, opposite natures" in (
+        THE_TWO_EXAMPLES_ARE_THE_METHOD_IN_MIRROR)
+
+
+def test_a_square_with_two_weekdays_is_read_for_the_relevant_one():
+    from hora.transits.sarvatobhadra import (
+        A_SQUARE_IS_READ_FOR_WHAT_THE_CHART_MAKES_RELEVANT,
+        CENTRE_CELLS,
+        EXAMPLE_116_NATAL_POINTS,
+    )
+
+    nanda = next(entry for entry in CENTRE_CELLS.values()
+                 if entry["tithi_group"] == "Nanda")
+    assert nanda["weekdays"] == ("Sunday", "Tuesday")
+
+    read_for = [entry for entry in EXAMPLE_116_NATAL_POINTS
+                if entry["square"] == "Nanda"]
+    assert len(read_for) == 2
+    assert "Sunday" in read_for[0]["value"]
+    assert "Tuesday" not in " ".join(str(e["value"])
+                                     for e in EXAMPLE_116_NATAL_POINTS)
+    assert "takes Sunday alone" in (
+        A_SQUARE_IS_READ_FOR_WHAT_THE_CHART_MAKES_RELEVANT)

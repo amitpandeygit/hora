@@ -1306,7 +1306,7 @@ with §1.3.8 at a multiplier of 1.
 | `THE_NAME_IS_THE_ONLY_NON_ASTRONOMICAL_INPUT` | Ours: the third natal point asks for a letter of the native's name, which nothing else in the book does |
 | `THE_SPLIT_IGNORES_THE_CONDITIONAL_BENEFICS` | Ours: §26.8 calls the Moon and Mercury benefics flatly where §3.2.2 makes both conditional |
 | `FOOTNOTE_70` · `FOOTNOTE_70_IS_A_DISCLAIMER_OF_EXPERIENCE` | The footnote, and ours noting it limits the author's acquaintance rather than the technique |
-| `SPECIAL_TITHI_MULTIPLIERS` · `A_MULTIPLIER_OF_ONE_IS_THE_ORDINARY_TITHI` | Consumed by `special_tithi`; the identity with §1.3.8 is asserted over 500 random pairs |
+| `SPECIAL_TITHI_MULTIPLIERS` · `SPECIAL_TITHI_HOUSES` · `A_MULTIPLIER_OF_ONE_IS_THE_ORDINARY_TITHI` · `THE_MULTIPLIER_IS_THE_HOUSE_NUMBER` | Consumed by `special_tithi`; the identity with §1.3.8 is asserted over 500 random pairs, and the house-number pattern is checked against Example 116's own answer |
 
 ### Chapter 26 — Example 115 (10)
 
@@ -1321,6 +1321,20 @@ eight vedhas drawn by `vedha_lines` — so what follows is prose and findings.
 | `THE_CHAKRA_STATES_A_MINIMUM_WEIGHT_OF_EVIDENCE` · `THE_EXAMPLE_MEETS_ITS_OWN_EVIDENCE_FLOOR` | Ours: the only technique in Part 3 with a stated floor, and the example meeting it exactly — four points, two malefics each, no benefic |
 | `ONE_SQUARE_CAN_CARRY_TWO_NATAL_POINTS` | Ours: Jaya and Thursday share a square, so one vedha strikes both janma tithi and janma vaara |
 | `FOOTNOTE_71_NAMES_A_DEFECT_IN_OUR_OWN_CODE` | Ours: the footnote states the sunrise rule our `day_structure` gets wrong — OI-149, reported and not changed |
+
+### Chapter 26 — Example 116 (8)
+
+`transits/sarvatobhadra.py`. Every claim **is** checked — the natal points
+from Chart 39, the four transiting benefics from the ephemeris, and all eight
+vedhas from `vedha_lines` — so what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_116` · `EXAMPLE_116_CONCLUSION` | The example and its conclusion verbatim |
+| `EXAMPLE_116_VEDHAS` · `EXAMPLE_116_NATAL_POINTS` | Fixtures — eight vedhas and five natal points, checked against what the chakra derives |
+| `THE_TWO_EXAMPLES_ARE_THE_METHOD_IN_MIRROR` | Ours: 115 and 116 have the same shape — four squares, two planets each — and opposite natures |
+| `A_SQUARE_IS_READ_FOR_WHAT_THE_CHART_MAKES_RELEVANT` | Ours: the Nanda square holds Sunday and Tuesday and the example takes only Sunday |
+| `RAJIV_GANDHI_IS_PRINTED_AS_TWO_CHARTS` | Ours: Chart 39 and Chart 60 are one nativity, and Example 116 cites the earlier |
 
 ---
 
