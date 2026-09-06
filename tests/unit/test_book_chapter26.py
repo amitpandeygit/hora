@@ -3703,3 +3703,173 @@ def test_special_tithi_checks_its_inputs():
     for bad in (0, -1, 361):
         with pytest.raises(InputError):
             special_tithi(0.0, 10.0, bad)
+
+
+# --------------------------------------------------------------------------
+# Example 115 — JFK Jr's death through the chakra
+# --------------------------------------------------------------------------
+
+def test_example_115s_natal_points_reproduce_from_chart_56():
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import longitudes
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.panchanga.core import paksha_at, tithi_at
+    from hora.transits.sarvatobhadra import tithi_group
+    from hora.transits.tara import nakshatra_of, special_nakshatra
+
+    printed = longitudes(56)
+
+    tithi = tithi_at(printed["Sun"], printed["Moon"])
+    assert tithi == 8
+    assert paksha_at(printed["Sun"], printed["Moon"]) == 0      # sukla
+    assert tithi_group(tithi) == "Jaya"
+
+    moon = printed["Moon"]
+    assert str(NAKSHATRA_NAMES[nakshatra_of(moon)]) == "Dhanishta"
+    assert special_nakshatra("Vainaasika", moon)["nakshatra"] == "Anuradha"
+    assert special_nakshatra("Naidhana", moon)["nakshatra"] == "Bharani"
+
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER,
+             "Ven": Graha.VENUS, "Sat": Graha.SATURN}
+    signs = {int(g): int(printed[n] // 30) for n, g in named.items()}
+    al = arudha_pada(1, int(printed["Asc"] // 30), signs).sign
+    assert A[al] == "Sc"
+    assert A[(al + 2) % 12] == "Cp"          # the 3rd from AL
+
+
+def test_example_115s_four_transiting_malefics_are_where_it_says():
+    from hora.charts.book import chart
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.tara import nakshatra_of
+
+    block = chart(56)["transit"]
+    computed = compute_chart(from_local(**block["birth_data"]),
+                             Place(name="Martha's Vineyard", **block["place"]),
+                             Settings(node_type=NodeType.MEAN))
+    where = {name: str(NAKSHATRA_NAMES[nakshatra_of(
+        computed.positions[int(graha)].longitude)])
+        for name, graha in (("Saturn", Graha.SATURN), ("Mars", Graha.MARS),
+                            ("Rahu", Graha.RAHU), ("Ketu", Graha.KETU))}
+    assert where == {"Saturn": "Bharani", "Mars": "Swati",
+                     "Rahu": "Ashlesha", "Ketu": "Shravana"}
+
+
+def test_every_vedha_example_115_claims_is_drawn_by_the_chakra():
+    """Eight claims, each a transiting graha's line reaching a natal square."""
+    from hora.transits.sarvatobhadra import (
+        EXAMPLE_115_VEDHAS,
+        find,
+        vedha_lines,
+    )
+
+    assert len(EXAMPLE_115_VEDHAS) == 8
+    for graha, standing, target in EXAMPLE_115_VEDHAS:
+        got = vedha_lines(*find(standing))
+        reached = {square["content"]
+                   for line in got["lines"].values() for square in line}
+        assert target in reached, (graha, standing, target)
+
+
+def test_the_two_crossward_lines_intersect_in_the_jaya_square():
+    """"If we draw crossward lines from Ketu in Sravanam and Saturn in
+    Bharani, we can see that they intersect in the square containing Jaya and
+    Thursday."
+    """
+    from hora.transits.sarvatobhadra import (
+        CENTRE_CELLS,
+        ONE_SQUARE_CAN_CARRY_TWO_NATAL_POINTS,
+        find,
+        vedha_lines,
+    )
+
+    squares = []
+    for standing in ("Sravana", "Bharani"):
+        got = vedha_lines(*find(standing))
+        crossward = {(s["row"], s["column"])
+                     for direction in got["crossward"]
+                     for s in got["lines"][direction]}
+        squares.append(crossward)
+    intersection = squares[0] & squares[1]
+    assert (4, 3) in intersection
+
+    entry = CENTRE_CELLS[(4, 3)]
+    assert entry["tithi_group"] == "Jaya"
+    assert entry["weekdays"] == ("Thursday",)
+    assert "strikes both the janma tithi and the janma vaara" in (
+        ONE_SQUARE_CAN_CARRY_TWO_NATAL_POINTS)
+
+
+def test_the_example_meets_the_sections_own_evidence_floor():
+    from hora.transits.sarvatobhadra import (
+        EXAMPLE_115_VEDHAS,
+        HOW_MUCH_EVIDENCE_IS_NEEDED,
+        SARVATOBHADRA_BENEFICS,
+        SARVATOBHADRA_MALEFICS,
+        THE_EXAMPLE_MEETS_ITS_OWN_EVIDENCE_FLOOR,
+    )
+
+    strikers = {graha for graha, _standing, _target in EXAMPLE_115_VEDHAS}
+    assert strikers == {"Saturn", "Mars", "Rahu", "Ketu"}
+    assert strikers <= set(SARVATOBHADRA_MALEFICS)
+    assert not strikers & set(SARVATOBHADRA_BENEFICS)
+
+    per_target: dict[str, set[str]] = {}
+    for graha, _standing, target in EXAMPLE_115_VEDHAS:
+        per_target.setdefault(target, set()).add(graha)
+    assert len(per_target) == 4
+    assert all(len(hit) == 2 for hit in per_target.values())
+
+    assert "we cannot make any predictions" in HOW_MUCH_EVIDENCE_IS_NEEDED
+    assert "2-3 natal reference" in HOW_MUCH_EVIDENCE_IS_NEEDED
+    assert "no benefic appears in the reading" in (
+        THE_EXAMPLE_MEETS_ITS_OWN_EVIDENCE_FLOOR)
+
+
+def test_the_chakra_still_defers_to_dasas_and_tajaka():
+    from hora.transits.sarvatobhadra import (
+        HOW_MUCH_EVIDENCE_IS_NEEDED,
+        THE_CHAKRA_STATES_A_MINIMUM_WEIGHT_OF_EVIDENCE,
+    )
+    from hora.transits.tara import FOOTNOTE_74
+
+    assert "dasas and Tajaka charts also show an event" in (
+        HOW_MUCH_EVIDENCE_IS_NEEDED)
+    assert "dasas and Tajaka charts" in FOOTNOTE_74
+    assert "waits on the dasas and the Tajaka chart" in (
+        THE_CHAKRA_STATES_A_MINIMUM_WEIGHT_OF_EVIDENCE)
+
+
+def test_footnote_71_names_a_defect_in_our_own_panchanga():
+    """A birth at 12:22 am belongs to the previous sunrise's weekday. Our
+    day_structure searches from local midnight, so compute_panchanga raises
+    outright. Not changed — OI-149.
+    """
+    from hora.charts.book import chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.panchanga.core import compute_panchanga, day_structure
+    from hora.transits.sarvatobhadra import (
+        FOOTNOTE_71,
+        FOOTNOTE_71_NAMES_A_DEFECT_IN_OUR_OWN_CODE,
+    )
+
+    record = chart(56)
+    instant = from_local(**record["birth_data"])
+    settings = Settings(node_type=NodeType.MEAN)
+    assert instant.local.hour == 0 and instant.local.minute == 22
+
+    day = day_structure(instant, record["place"]["latitude"],
+                        record["place"]["longitude"], 0.0, settings)
+    assert instant.jd_ut < day.sunrise         # the birth precedes it
+
+    with pytest.raises(ValueError, match="hora index must be between"):
+        compute_panchanga(instant, record["place"]["latitude"],
+                          record["place"]["longitude"], settings)
+
+    assert "still Thursday" in FOOTNOTE_71
+    assert "raises for any instant before sunrise" in (
+        FOOTNOTE_71_NAMES_A_DEFECT_IN_OUR_OWN_CODE)

@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 99 waiting on evidence · 2 parked**
+**5 waiting on Amit · 100 waiting on evidence · 2 parked**
 
 ---
 
@@ -239,7 +239,7 @@ D-16 and D-4. **It cannot reach D-12**: that signifies "parents", the 4th house
 "Mother", and *mother is a parent* is world knowledge neither table holds. The
 overlap returns `relative` — not wrong, not what PVR picked.
 
-**A pattern, not one case.** Five instances so far, three in chapter 7:
+**A pattern, not one case.** Six instances so far, three in chapter 7:
 
 | section | the book says | the tables say |
 |---|---|---|
@@ -248,6 +248,7 @@ overlap returns `relative` — not wrong, not what PVR picked.
 | §7.3.9 | 5th shows **progeny** | 5th lists "Children" |
 | §25.6, Ex 112 | 6th shows **litigation** | 6th lists "enemies", never the word |
 | §26.7, Ex 113 | 8th shows **accidents** | the 6th's list has the word, the 8th's does not |
+| §26.8, Ex 115 | 3rd from AL is **the house of accidents** | the 3rd's list has courage and co-borns, not accidents |
 
 The book links matters to houses by meaning throughout, so any code matching
 significations literally keeps hitting this, and each miss looks like a bug
@@ -2128,6 +2129,40 @@ this question first.
 
 **Closes when:** the list is given in full, or you accept the short-long
 pattern and the other two pairs with it.
+
+### OI-149 — `compute_panchanga` raises for any instant before sunrise
+
+**NEEDS YOU — a live defect, not a book question.** Footnote 71 states the
+rule the code gets wrong, and Chart 56 is the test case:
+
+> As per the western calendar, Friday came at midnight and the native was born
+> at 12:22 am. However, a new day starts at sunrise for Hindus. So it was still
+> Thursday.
+
+Two things go wrong for a birth between midnight and sunrise.
+
+1. **It raises.** `day_structure` searches for sunrise from **local midnight**
+   of the calendar date, so for a 00:22 birth it returns that morning's
+   sunrise, seven hours *later*. `hora_at` then gets a negative elapsed time
+   and `hora_lord` raises `ValueError("hora index must be between 1 and 24")`.
+   `compute_panchanga(from_local(1960, 11, 25, 0, 22, ...), 38.88, -77.03)`
+   fails outright.
+2. **The vaara would be a day late.** The code takes the weekday of
+   `day.sunrise`, which for that birth is Friday 25 November. The Hindu day
+   running at 00:22 began at the **previous** sunrise, 24 November 07:00, and
+   its weekday is **Thursday** — which is what the footnote says and what a
+   search backwards from the instant gives.
+
+The fix is one line of intent: `day_structure` should take the last sunrise
+**at or before** the instant, not the first sunrise after local midnight.
+
+**Not changed.** `day_structure` feeds `/v1/panchanga` and everything under it
+— tithi, nakshatra, yoga, karana, hora and the vaara itself — so moving it
+moves live output for every pre-sunrise instant. Evidence is here and the
+decision is yours.
+
+**Closes when:** you approve the change, or say the calendar-day reading is
+intended.
 
 ---
 

@@ -1308,6 +1308,20 @@ with §1.3.8 at a multiplier of 1.
 | `FOOTNOTE_70` · `FOOTNOTE_70_IS_A_DISCLAIMER_OF_EXPERIENCE` | The footnote, and ours noting it limits the author's acquaintance rather than the technique |
 | `SPECIAL_TITHI_MULTIPLIERS` · `A_MULTIPLIER_OF_ONE_IS_THE_ORDINARY_TITHI` | Consumed by `special_tithi`; the identity with §1.3.8 is asserted over 500 random pairs |
 
+### Chapter 26 — Example 115 (10)
+
+`transits/sarvatobhadra.py`. Every claim **is** checked — the five natal
+points from Chart 56, the four transiting malefics from the ephemeris, and all
+eight vedhas drawn by `vedha_lines` — so what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_115` · `EXAMPLE_115_CONCLUSION` · `HOW_MUCH_EVIDENCE_IS_NEEDED` · `FOOTNOTE_71` | The example, its conclusion, the evidence floor and the footnote, verbatim |
+| `EXAMPLE_115_NATAL_POINTS` · `EXAMPLE_115_VEDHAS` | Fixtures — five points and eight vedhas, each checked against what the chakra derives |
+| `THE_CHAKRA_STATES_A_MINIMUM_WEIGHT_OF_EVIDENCE` · `THE_EXAMPLE_MEETS_ITS_OWN_EVIDENCE_FLOOR` | Ours: the only technique in Part 3 with a stated floor, and the example meeting it exactly — four points, two malefics each, no benefic |
+| `ONE_SQUARE_CAN_CARRY_TWO_NATAL_POINTS` | Ours: Jaya and Thursday share a square, so one vedha strikes both janma tithi and janma vaara |
+| `FOOTNOTE_71_NAMES_A_DEFECT_IN_OUR_OWN_CODE` | Ours: the footnote states the sunrise rule our `day_structure` gets wrong — OI-149, reported and not changed |
+
 ---
 
 ## How to use this register

@@ -534,3 +534,102 @@ def special_tithi(sun_longitude: float, moon_longitude: float,
         "group": tithi_group(index),
         "changes_faster_by": factor,
     }
+
+
+# --------------------------------------------------------------------------
+# How much evidence a reading needs, and Example 115
+# --------------------------------------------------------------------------
+
+HOW_MUCH_EVIDENCE_IS_NEEDED = (
+    "If just one natal reference has vedha from just one planet, we cannot "
+    "make any predictions. But, if 2-3 natal reference have vedha from a "
+    "couple of benefic/malefic transit planets, then we can be more "
+    "confident. However, a prediction should be made only if dasas and "
+    "Tajaka charts also show an event.")
+
+#: **Finding.** §26.8 is the only technique in Part 3 that states a **minimum
+#: weight of evidence** — two or three natal references, each struck by a
+#: couple of planets — before anything may be said. And it closes with the
+#: same requirement footnote 74 gave for latta: dasas and Tajaka too. So the
+#: chakra is bounded twice, by a floor of its own and by a corroboration it
+#: cannot supply.
+THE_CHAKRA_STATES_A_MINIMUM_WEIGHT_OF_EVIDENCE = (
+    "One natal reference struck by one planet is explicitly not enough. Two "
+    "or three struck by a couple of planets is, and even then a prediction "
+    "waits on the dasas and the Tajaka chart."
+)
+
+EXAMPLE_115 = (
+    "Let us consider the death of John F. Kennedy, Jr. The data of birth and "
+    "death can be found in Example 107.")
+
+#: Example 115's five natal reference points, and where each sits in Figure 3.
+EXAMPLE_115_NATAL_POINTS: tuple[dict[str, str], ...] = (
+    {"point": "janma tithi", "value": "Sukla Ashtami, the 8th",
+     "square": "Jaya"},
+    {"point": "janma vaara", "value": "Thursday", "square": "Jaya"},
+    {"point": "janma nakshatra", "value": "Dhanishtha",
+     "square": "Dhanishtha"},
+    {"point": "vainaasika nakshatra", "value": "Anooradha",
+     "square": "Anuradha"},
+    {"point": "naidhana nakshatra", "value": "Bharani", "square": "Bharani"},
+    {"point": "the house of accidents", "value": "Cp, the 3rd from AL",
+     "square": "Cp"},
+)
+
+#: Which transiting graha strikes which natal point, as the example reads it.
+EXAMPLE_115_VEDHAS: tuple[tuple[str, str, str], ...] = (
+    ("Ketu", "Sravana", "Jaya"),
+    ("Saturn", "Bharani", "Jaya"),
+    ("Ketu", "Sravana", "Dhanishtha"),
+    ("Rahu", "Asresha", "Dhanishtha"),
+    ("Saturn", "Bharani", "Anuradha"),
+    ("Rahu", "Asresha", "Anuradha"),
+    ("Ketu", "Sravana", "Cp"),
+    ("Mars", "Swaati", "Cp"),
+)
+
+EXAMPLE_115_CONCLUSION = (
+    "Considering that several key natal references are coming under the "
+    "vedha of a couple of malefics, unfavorable results are possible. "
+    "Considering the involvement of naidhana and vainaasika nakshatras, "
+    "death is possible.")
+
+#: **Finding.** Every graha the example uses is a **malefic** — Saturn, Mars,
+#: Rahu and Ketu, four of §26.8's five — and each of the four natal points is
+#: struck by exactly **two** of them. That is the section's own floor of "2-3
+#: natal references ... from a couple of planets" met precisely, which is why
+#: the reading is allowed to stand at all.
+THE_EXAMPLE_MEETS_ITS_OWN_EVIDENCE_FLOOR = (
+    "Four natal points — the Jaya square carrying both janma tithi and janma "
+    "vaara, janma nakshatra, vainaasika nakshatra and the house of accidents "
+    "— each take vedha from exactly two malefics, and no benefic appears in "
+    "the reading."
+)
+
+#: **Finding.** One square carries **two** natal references. Janma tithi is in
+#: the Jaya group and janma vaara is Thursday, and Figure 3 puts Jaya and
+#: Thursday in the same square, so a single vedha strikes both at once. That
+#: is why the example's four struck squares yield five natal points.
+ONE_SQUARE_CAN_CARRY_TWO_NATAL_POINTS = (
+    "Jaya and Thursday share the square at row 4, column 3, so a planet "
+    "striking it strikes both the janma tithi and the janma vaara of this "
+    "nativity."
+)
+
+FOOTNOTE_71 = (
+    "As per the western calendar, Friday came at midnight and the native was "
+    "born at 12:22 am. However, a new day starts at sunrise for Hindus. So "
+    "it was still Thursday.")
+
+#: **Finding.** Footnote 71 states the rule our own `day_structure` gets
+#: wrong. It searches for sunrise from local midnight, so for a 00:22 birth it
+#: finds that morning's sunrise rather than the previous one, and
+#: `compute_panchanga` raises before it can return a vaara at all. See OI-149;
+#: nothing is changed here, because that function feeds every panchanga.
+FOOTNOTE_71_NAMES_A_DEFECT_IN_OUR_OWN_CODE = (
+    "A new day starts at sunrise, so a birth at 12:22 am belongs to the "
+    "previous sunrise's weekday. Our day_structure takes the first sunrise "
+    "after local midnight instead, and compute_panchanga raises for any "
+    "instant before sunrise."
+)
