@@ -2456,3 +2456,37 @@ whenever the two disagree — so a caller is told rather than served one silentl
 
 **Closes when:** you decide which list Venus's transits are read from, or a
 later section repeats one of them.
+
+---
+
+## D-75 · Exercise 41 calls Jupiter's Sg transit "his moolatrikona"; §3.3 says 0–10°
+
+**Status: FINDING — the term is used at rasi granularity; nothing is changed.**
+
+Exercise 41 reads Rajiv Gandhi's accession transit:
+
+> Jupiter is transiting in his moolatrikona, in the 5th house from natal lagna
+> and Moon. That's very favorable transit.
+
+The rasi is right — Sagittarius is Jupiter's moolatrikona **rasi**, and it is
+the 5th from a Leo lagna with the Moon also in Leo. The **degrees** are not.
+§3.3 rule 4 gives moolatrikona as an arc, not a sign, and `MOOLATRIKONA` holds
+Jupiter's as the **first 10 degrees of Sagittarius**.
+
+On 31 October 1984, the day of the accession, Jupiter was at **15° 08′
+Sagittarius** — in his own sign, five degrees past the arc. He was inside 0–10°
+Sagittarius only from about 13 August to 17 September 1984, on his retrograde
+pass, and never again before leaving the sign in January 1985.
+
+Nothing in the exercise's conclusion turns on it: Jupiter in his **own** sign
+in the 5th, with a yogakaraka, in the karma nakshatra, is favourable on any
+reading. But the book defines moolatrikona by degree in §3.3 and uses the word
+by sign here, and a reader checking the claim against `dignity_at` will find it
+false.
+
+**What we do.** `MOOLATRIKONA`'s arcs are unchanged — §3.3's degrees are the
+definition and Table 6 agrees. The looseness is recorded so the exercise is not
+read as evidence for a whole-sign moolatrikona.
+
+**Closes when:** a section states that moolatrikona may be read by rasi alone,
+or you decide the arcs are the only reading.

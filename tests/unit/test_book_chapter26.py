@@ -1103,3 +1103,125 @@ def test_nakshatra_aspects_check_their_inputs():
             nakshatra_aspects(int(Graha.SUN), bad)
         with pytest.raises(ValueError, match="between 0 and 26"):
             graha_aspects_nakshatra(int(Graha.SUN), 0, bad)
+
+
+# --------------------------------------------------------------------------
+# Exercise 41 — Chart 60 read a third way
+# --------------------------------------------------------------------------
+
+def _chart_60_accession():
+    """Chart 60's natal longitudes and the accession-day transit."""
+    from hora.charts.book import longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    computed = compute_chart(
+        from_local(1984, 10, 31, 12, 0, 0.0, utc_offset_hours=5.5),
+        Place(name="New Delhi", latitude=28 + 36 / 60,
+              longitude=77 + 12 / 60),
+        Settings(node_type=NodeType.MEAN))
+    return longitudes(60), computed
+
+
+def test_every_claim_in_exercise_41_holds_against_chart_60():
+    from hora.charts.functional import is_yogakaraka
+    from hora.charts.house import house_of_rasi
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.transits.tara import (
+        EXERCISE_41_CLAIMS,
+        EXERCISE_41_IS_CHART_60_A_THIRD_TIME,
+        nakshatra_of,
+        special_nakshatra,
+        tara,
+    )
+
+    natal, transit = _chart_60_accession()
+    lagna = int(natal["Asc"] // 30)
+
+    assert A[lagna] == "Le"
+    assert A[int(natal["Moon"] // 30)] == "Le"
+    assert str(NAKSHATRA_NAMES[nakshatra_of(natal["Moon"])]) == (
+        "Purva Phalguni")
+
+    for graha in (Graha.JUPITER, Graha.MARS):
+        longitude = transit.positions[int(graha)].longitude
+        assert A[int(longitude // 30)] == "Sg", graha
+        assert str(NAKSHATRA_NAMES[nakshatra_of(longitude)]) == (
+            "Purva Ashadha"), graha
+
+    assert is_yogakaraka("Mars", lagna) is True
+    assert house_of_rasi(lagna, R["Sg"]) == 5
+    assert house_of_rasi(int(natal["Moon"] // 30), R["Sg"]) == 5
+
+    jupiter = transit.positions[int(Graha.JUPITER)].longitude
+    assert tara(natal["Moon"], jupiter)["count"] == 10
+    assert special_nakshatra("Karma", natal["Moon"])["nakshatra"] == (
+        "Purva Ashadha")
+
+    assert len(EXERCISE_41_CLAIMS) == 7
+    assert "Chart 60's own figures" in EXERCISE_41_IS_CHART_60_A_THIRD_TIME
+
+
+def test_the_karma_nakshatra_is_also_janma_tara_and_the_reading_skips_it():
+    from hora.transits.tara import (
+        KARMA_IS_ALSO_JANMA_TARA_AND_THE_READING_IGNORES_THE_TARA,
+        special_nakshatra,
+        tara_of_count,
+    )
+
+    natal, _transit = _chart_60_accession()
+    assert tara_of_count(10)["name"] == "Janma Tara"
+    assert tara_of_count(10)["good"] is None            # mixed
+    karma = special_nakshatra("Karma", natal["Moon"])
+    assert karma["tara"] == "Janma Tara"
+    assert karma["shows"] == "profession and workplace"
+    assert "whose grade is mixed" in (
+        KARMA_IS_ALSO_JANMA_TARA_AND_THE_READING_IGNORES_THE_TARA)
+
+
+def test_a_natural_malefic_is_read_as_favourable_for_being_a_yogakaraka():
+    """§26.4.2 and §26.5 both grade by natural nature. Exercise 41 reads Mars,
+    a natural malefic, as part of a favourable transit because he is a
+    yogakaraka — functional nature, unannounced.
+    """
+    from hora.charts.aspects import NAKSHATRA_DRISHTI_RESULTS
+    from hora.charts.functional import is_yogakaraka
+    from hora.core.const import NATURAL_MALEFIC, Graha
+    from hora.transits.tara import (
+        A_YOGAKARAKA_MALEFIC_IS_READ_AS_FAVOURABLE,
+        SPECIAL_NAKSHATRA_RULE,
+    )
+
+    assert Graha.MARS in NATURAL_MALEFIC
+    assert is_yogakaraka("Mars", R["Le"]) is True
+    assert "Benefics or malefics" in SPECIAL_NAKSHATRA_RULE
+    assert "natural malefic" in NAKSHATRA_DRISHTI_RESULTS
+    assert "on the strength of the lordship alone" in (
+        A_YOGAKARAKA_MALEFIC_IS_READ_AS_FAVOURABLE)
+
+
+def test_jupiter_was_past_his_moolatrikona_arc_on_the_accession_day():
+    """"Jupiter is transiting in his moolatrikona." The rasi is right and the
+    degrees are not — §3.3 gives him the first 10 degrees of Sg. D-75.
+    """
+    from hora.core.const import MOOLATRIKONA, Graha
+
+    _natal, transit = _chart_60_accession()
+    rasi, start, end = MOOLATRIKONA[int(Graha.JUPITER)]
+    assert (int(rasi), start, end) == (R["Sg"], 0.0, 10.0)
+
+    jupiter = transit.positions[int(Graha.JUPITER)].longitude
+    assert int(jupiter // 30) == int(rasi)            # own sign, as claimed
+    assert not start <= jupiter % 30 < end            # but past the arc
+    assert 15.0 < jupiter % 30 < 15.2
+
+
+def test_exercise_41_reads_a_chart_the_register_already_held():
+    from hora.charts.book import chart
+
+    record = chart(60)
+    assert "Rajiv Gandhi" in record["title"]
+    assert "Exercise 41" in record["note"]
+    assert record["events"] == {
+        "he became Prime Minister of India": "October 31, 1984"}

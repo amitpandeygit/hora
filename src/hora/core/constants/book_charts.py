@@ -2260,7 +2260,9 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "for **October 31, 1984** and Exercise 40's answer names both "
             "the native — **Rajiv Gandhi** — and the occasion, his becoming "
             "Prime Minister. See OI-142, closed. Exercise 40 also prints "
-            "four D-10 BAV counts and one SAV count, all of which reproduce."
+            "four D-10 BAV counts and one SAV count, all of which reproduce. "
+            "Exercise 41 reads the same nativity and instant a third way, "
+            "through section 26.4.2's special nakshatras."
         ),
     },
     61: {

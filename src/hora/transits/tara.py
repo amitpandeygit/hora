@@ -388,3 +388,71 @@ def special_transits(natal_moon_longitude: float,
             "\"many benefics\" — and gives no number for \"many\". The "
             "placements are returned without a grading."),
     }
+
+
+# --------------------------------------------------------------------------
+# Exercise 41 — a special nakshatra read on a chart already in the register
+# --------------------------------------------------------------------------
+
+EXERCISE_41 = (
+    "Consider a native born in Leo lagna. He has Moon also in Leo in Poorva "
+    "Phalguni constellation. Let us say Jupiter is transiting in Sg in "
+    "Poorvaashaadha constellation with Mars. Mars is a yogakaraka from natal "
+    "lagna. Jupiter is transiting in his moolatrikona, in the 5th house from "
+    "natal lagna and Moon. That's very favorable transit. Find out if transit "
+    "Jupiter and transit Mars are in a special nakshatra. Based on it, try to "
+    "guess the area in which the transit did good to the native.")
+
+EXERCISE_41_ANSWER = (
+    "Poorvaashaadha is the 10th constellation from Poorva Phalguni. So the "
+    "favorable transit of Jupiter and Mars happens to be in the Karma "
+    "nakshatra, which shows profession. So the good results to be experienced "
+    "may be related to profession.")
+
+EXERCISE_41_FINAL = (
+    "The details belong to Rajiv Gandhi. He suddenly became India's Prime "
+    "Minister during the said transit. We gave his birthdata earlier.")
+
+#: **Finding.** The exercise is Chart 60 read a third way. Exercise 40 read it
+#: with §25.5's ashtakavarga, §26.2's murthi discussion used its ingress
+#: neighbour, and this reads it with §26.4.2's special nakshatras — the same
+#: nativity and the same instant, 31 October 1984, through three chapters.
+EXERCISE_41_IS_CHART_60_A_THIRD_TIME = (
+    "Leo lagna, the Moon in Leo in Purva Phalguni, and Jupiter with Mars in "
+    "Purva Ashadha on the accession day are Chart 60's own figures. Exercise "
+    "40 read the same chart and instant through ashtakavarga."
+)
+
+#: **Finding.** §26.4.2 and §26.5 both grade by *natural* benefic and malefic.
+#: Exercise 41 reads **Mars** — a natural malefic — as part of a "favorable
+#: transit", and the only reason it gives is that he is a **yogakaraka from
+#: natal lagna**. So functional nature is used where the rules say natural,
+#: and the exercise does not say it is doing so.
+A_YOGAKARAKA_MALEFIC_IS_READ_AS_FAVOURABLE = (
+    "Mars is a natural malefic and a yogakaraka for a Leo lagna. Section "
+    "26.4.2 says malefics in a special nakshatra bring bad results related to "
+    "it; Exercise 41 calls his karma-nakshatra transit favourable on the "
+    "strength of the lordship alone."
+)
+
+#: **Finding.** The transit is the **Karma** nakshatra and the **Janma** tara
+#: at once — the 10th from janma nakshatra is both. Table 64 grades Janma
+#: mixed, and the exercise reads the placement as decidedly good, which is
+#: `THE_TWO_CLASSIFICATIONS_ARE_INDEPENDENT` happening in a worked case rather
+#: than argued from the tables.
+KARMA_IS_ALSO_JANMA_TARA_AND_THE_READING_IGNORES_THE_TARA = (
+    "The 10th constellation from the natal Moon's is Karma among the special "
+    "nakshatras and Janma among the taras. Exercise 41 reads the special "
+    "nakshatra and says nothing about the tara, whose grade is mixed."
+)
+
+#: Exercise 41's checkable claims, each asserted against Chart 60.
+EXERCISE_41_CLAIMS: tuple[str, ...] = (
+    "lagna is Leo",
+    "the Moon is in Leo, in Poorva Phalguni",
+    "Jupiter and Mars both transit Sg in Poorvaashaadha",
+    "Mars is a yogakaraka from the natal lagna",
+    "Sg is the 5th house from the natal lagna and from the Moon",
+    "Poorvaashaadha is the 10th constellation from Poorva Phalguni",
+    "so the transit falls in the Karma nakshatra, which shows profession",
+)

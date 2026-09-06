@@ -1123,6 +1123,20 @@ what follows is prose and findings.
 | `JUPITER_ASPECTS_HIS_OWN_VIMSOTTARI_TRIPLE` | Ours: §25.6's partition again, checked from all 27 nakshatras. Saturn's taking the 19th alone is left as printed |
 | `THE_NODES_ARE_NOT_GIVEN_NAKSHATRA_ASPECTS` | Ours: a gap. Asking for a node's raises rather than defaulting |
 
+### Chapter 26 — Exercise 41 (7)
+
+`transits/tara.py`. Every claim in the exercise **is** checked against Chart
+60 — lagna, Moon, both transiting nakshatras, the yogakaraka, the house count
+and the Karma nakshatra — so what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXERCISE_41` · `EXERCISE_41_ANSWER` · `EXERCISE_41_FINAL` | The exercise and its answer verbatim, including the identity it reveals |
+| `EXERCISE_41_CLAIMS` | The seven checkable claims as a list, each asserted by a test |
+| `EXERCISE_41_IS_CHART_60_A_THIRD_TIME` | Ours: the same nativity and instant read through three chapters |
+| `A_YOGAKARAKA_MALEFIC_IS_READ_AS_FAVOURABLE` | Ours: the rules say natural benefic and malefic, and the exercise uses functional nature without saying so |
+| `KARMA_IS_ALSO_JANMA_TARA_AND_THE_READING_IGNORES_THE_TARA` | Ours: the independence finding happening in a worked case rather than argued from the tables |
+
 ---
 
 ## How to use this register
