@@ -794,15 +794,17 @@ THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS = (
     "a shortlist and not a name."
 )
 
-#: **Finding.** Five tables were promised for seven grahas and Table 68
-#: answers how: it covers **Mercury, Jupiter and Venus** together. With the
-#: Sun, Moon and Mars taking one table each that is six of the seven, so
-#: Saturn is the only graha left for Table 69 — an inference from what
-#: remains, not something the book has said.
-FIVE_TABLES_FOR_SEVEN_GRAHAS = (
-    "Table 65 is the Sun's, 66 the Moon's and 67 Mars's; Table 68 covers "
-    "Mercury, Jupiter and Venus together. Saturn is the only graha not yet "
-    "given a table, and Table 69 is the only table not yet supplied."
+#: **Finding, and a correction.** Five tables were promised and §26.6 speaks
+#: of "planets", so the natural reading was seven. Table 69 covers **Saturn,
+#: Rahu and Ketu**, so the five tables cover **nine** bodies: one each for the
+#: Sun, Moon and Mars, one for Mercury, Jupiter and Venus, and one for Saturn
+#: with both nodes. Reading Table 68 alone it looked as though Saturn would
+#: take Table 69 by himself; he does not.
+FIVE_TABLES_COVER_NINE_BODIES_INCLUDING_THE_NODES = (
+    "Table 65 is the Sun's, 66 the Moon's, 67 Mars's, 68 covers Mercury, "
+    "Jupiter and Venus, and 69 covers Saturn, Rahu and Ketu. Five tables, "
+    "nine bodies, and the nodes are included where section 26.6's opening "
+    "said only \"planets\"."
 )
 
 #: Tables 65 to 69, by number. A table moves from ``None`` to its content when
@@ -892,12 +894,32 @@ TABLE_68_MERCURY_JUPITER_VENUS: dict[str, object] = {
     ),
 }
 
+#: Table 69, as printed. Its last two rows fall past a page break. It is the
+#: only table to cover the **nodes**, the only one to split the legs, and the
+#: only one to give the same result to more than one row.
+TABLE_69_SATURN_RAHU_KETU: dict[str, object] = {
+    "grahas": ("Saturn", "Rahu", "Ketu"),
+    "title": "Body Parts in the Transit of Saturn, Rahu and Ketu",
+    "rows": (
+        {"counts": (1,), "part": "Face", "result": "Grief"},
+        {"counts": (2, 3, 4, 5), "part": "Right hand", "result": "Comforts"},
+        {"counts": (6, 7, 8), "part": "Right leg", "result": "Travels"},
+        {"counts": (9, 10, 11), "part": "Left leg", "result": "Destruction"},
+        {"counts": (12, 13, 14, 15), "part": "Left hand", "result": "Gains"},
+        {"counts": (16, 17, 18, 19, 20), "part": "Stomach",
+         "result": "Pleasures"},
+        {"counts": (21, 22, 23), "part": "Head", "result": "Comforts"},
+        {"counts": (24, 25), "part": "Eyes", "result": "Comforts"},
+        {"counts": (26, 27), "part": "Back", "result": "Death"},
+    ),
+}
+
 BODY_PART_TABLES: dict[int, dict[str, object] | None] = {
     65: TABLE_65_SUN,
     66: TABLE_66_MOON,
     67: TABLE_67_MARS,
     68: TABLE_68_MERCURY_JUPITER_VENUS,
-    69: None,
+    69: TABLE_69_SATURN_RAHU_KETU,
 }
 
 #: **Ours, not the book's.** §26.6 prints no good/bad column, so this names
@@ -912,7 +934,7 @@ BODY_PART_HARMS: frozenset[str] = frozenset({
 #: abroad" is the first: it is an event, not a verdict, and Exercise 43 read
 #: one native's departure as the **gain** a favourable transit brought. So it
 #: is left ungraded rather than forced onto a side.
-BODY_PART_NEUTRAL: frozenset[str] = frozenset({"Going abroad"})
+BODY_PART_NEUTRAL: frozenset[str] = frozenset({"Going abroad", "Travels"})
 
 #: **Finding.** §26.6's results are not all verdicts. Table 65's eight all
 #: read plainly good or bad; Table 66 introduces one that does not — "Going
@@ -946,28 +968,39 @@ MOUTH_FACE_AND_FACE_ARE_DIFFERENT_PARTS = (
     "part."
 )
 
-#: **Finding, narrowed by Table 68.** Two feet is the **widest block** in
-#: every table so far, which holds across all four. It took exactly **six**
-#: counts in the three single-graha tables and takes **eight** in Table 68,
-#: so the six belonged to those three and not to the rule. The counts move
-#: and the results differ throughout — Poverty, Going abroad, Separation,
-#: Honor and fame.
-TWO_FEET_IS_THE_WIDEST_BLOCK_IN_EVERY_TABLE = (
-    "Two feet takes six counts for the Sun, the Moon and Mars and eight in "
-    "Table 68, and is the largest block in all four. Only its being the "
-    "widest survives; the six did not."
+#: **Finding, and the end of an observation.** Two feet looked like a fixture
+#: — six counts in Tables 65 to 67, eight and still the widest in Table 68 —
+#: but Table 69 does not have the part at all. It splits the legs into
+#: **Right leg** and **Left leg**, three counts each, and neither is the
+#: widest block there. So nothing about Two feet holds across the section, and
+#: **Head** is the only body part every one of the five tables names.
+ONLY_THE_HEAD_APPEARS_IN_EVERY_TABLE = (
+    "Two feet is in four of the five tables and absent from Table 69, which "
+    "splits the legs instead. Head is the one part named in all five. The "
+    "fifteen parts the section uses are shared unevenly."
 )
 
-#: **Finding.** Granularity tracks how many grahas share a table. The three
-#: single-graha tables have **eight** rows each and split the hands into left
-#: and right; Table 68, which covers three grahas at once, has **six**, merges
-#: them into "Two hands", drops Eyes altogether and adds Stomach. So the
-#: shared table is the coarser reading — which is what one would expect of a
-#: rule stated once for three grahas, though the book does not say so.
-THE_SHARED_TABLE_IS_THE_COARSER_ONE = (
-    "Tables 65, 66 and 67 have eight rows and name Left hand and Right hand "
-    "separately. Table 68 covers three grahas, has six rows, and says Two "
-    "hands."
+#: **Correction, on Table 69's evidence.** After Table 68 it looked as though
+#: granularity tracked how many grahas shared a table — three single-graha
+#: tables of eight rows each, then a three-graha table of six that merged the
+#: hands. Table 69 also covers three and has **nine** rows, the most of any,
+#: splitting the legs where others said Two feet. So row count does not track
+#: graha count, and the two shared tables are the coarsest and the finest.
+ROW_COUNT_DOES_NOT_TRACK_HOW_MANY_GRAHAS_SHARE_A_TABLE = (
+    "Tables 65 to 67 have eight rows for one graha each. Table 68 has six "
+    "for three and Table 69 has nine for three. The coarsest and the finest "
+    "tables both cover three bodies."
+)
+
+#: **Finding.** Table 69 is the only one to give the same result to more than
+#: one row: **Comforts** appears three times, for the Right hand, the Head and
+#: the Eyes. In every other table the eight or six results are distinct, so a
+#: result identified its row; here it does not, and the reverse lookup from a
+#: result would return three parts for one graha set.
+TABLE_69_IS_THE_ONLY_ONE_THAT_REPEATS_A_RESULT = (
+    "Comforts is the standard result for the 2nd to 5th, the 21st to 23rd "
+    "and the 24th to 25th in Table 69. Tables 65 to 68 give every row a "
+    "different result."
 )
 
 #: **Finding.** Table 65 has a different *shape* from Table 64, so neither can
