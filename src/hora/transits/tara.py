@@ -757,3 +757,65 @@ EXERCISE_44_CLAIMS: tuple[str, ...] = (
     "the 7th is naidhana and the 22nd is vainaasika",
     "Saturn, the maraka, occupies the naidhana nakshatra",
 )
+
+
+# --------------------------------------------------------------------------
+# §26.6 — constellations and body parts
+# --------------------------------------------------------------------------
+
+BODY_PART_RULE = (
+    "When they are transiting in various constellations as counted from "
+    "janma nakshatra, planets are said to dwell in different parts of one's "
+    "body and correspondingly some standard results are attributed. These "
+    "results are given in Table 65 - Table 69.")
+
+#: §26.6's two uses, in its order. The second runs the rule **backwards** —
+#: from an ailing body part to the graha responsible — which no other transit
+#: technique in either chapter does.
+BODY_PART_PURPOSES: tuple[str, ...] = (
+    ("We can find the standard results for planetary transits in different "
+     "constellations with respect to the constellation of natal Moon."),
+    ("If a native has a disease or problem in a particular body part, we may "
+     "be able to use these tables and figure out the planet causing it. That "
+     "can help us in deciding the right remedial measures. We can also take "
+     "preventive measures before the transit."),
+)
+
+#: **Finding.** Purpose (2) is the only **inverse** reading in Part 3. Every
+#: other technique goes from a position to a result; this goes from an
+#: observed symptom back to a graha, and then forward again to a remedy and to
+#: a date to prepare for. That makes the tables a lookup in two directions,
+#: and the second direction is many-to-one — several grahas may dwell in one
+#: body part — so it narrows rather than identifies.
+THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS = (
+    "Section 26.6 is the only place in Part 3 that starts from a result and "
+    "asks which graha caused it. The tables are consulted from the body part "
+    "inwards, and more than one graha can dwell in a part, so the answer is "
+    "a shortlist and not a name."
+)
+
+#: **Finding.** Five tables are promised for seven grahas, so at least two
+#: grahas must share a table or a table must cover something other than one
+#: graha. Which, the section does not say. Nothing is assumed: the tables are
+#: registered by **number** and each says what it covers once supplied.
+FIVE_TABLES_FOR_SEVEN_GRAHAS = (
+    "Section 26.6 promises Tables 65 to 69 — five tables — and the transiting "
+    "grahas are seven. The section does not say how the seven are divided "
+    "across the five, so the mapping is read off the tables themselves."
+)
+
+#: Tables 65 to 69, by number. A table moves from ``None`` to its content when
+#: its page is supplied; `test_section_26_6_is_not_finished_early` fails while
+#: any is still pending, so the section cannot be reported complete early.
+#: This is the same shape as chapter 25's `STANDARD_RESULT_TABLES`, which was
+#: filled one table at a time from Table 53 to Table 59.
+BODY_PART_TABLES: dict[int, dict[str, object] | None] = {
+    65: None,
+    66: None,
+    67: None,
+    68: None,
+    69: None,
+}
+
+BODY_PART_TABLES_PENDING: tuple[int, ...] = tuple(
+    number for number, table in BODY_PART_TABLES.items() if table is None)

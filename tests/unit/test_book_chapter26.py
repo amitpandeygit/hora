@@ -1692,3 +1692,61 @@ def test_exercise_44_claims_are_all_listed():
 
     assert len(EXERCISE_44_CLAIMS) == 6
     assert "Mr. Kennedy passed away" in EXERCISE_44_FINAL
+
+
+# --------------------------------------------------------------------------
+# §26.6 — constellations and body parts, opened
+# --------------------------------------------------------------------------
+
+def test_26_6_counts_from_janma_nakshatra_like_the_rest_of_26_4():
+    from hora.transits.tara import BODY_PART_RULE, TARA_COUNTING_RULE
+
+    assert "as counted from janma nakshatra" in BODY_PART_RULE
+    assert "Table 65 - Table 69" in BODY_PART_RULE
+    assert "constellation of natal Moon" in TARA_COUNTING_RULE
+
+
+def test_the_second_purpose_is_the_only_inverse_reading_in_part_3():
+    from hora.transits.tara import (
+        BODY_PART_PURPOSES,
+        THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS,
+    )
+
+    forward, inverse = BODY_PART_PURPOSES
+    assert "standard results for planetary transits" in forward
+    assert "figure out the planet causing it" in inverse
+    assert "remedial measures" in inverse
+    assert "preventive measures before the transit" in inverse
+    assert "a shortlist and not a name" in (
+        THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS)
+
+
+def test_five_tables_are_promised_for_seven_grahas():
+    from hora.transits.tara import BODY_PART_TABLES, FIVE_TABLES_FOR_SEVEN_GRAHAS
+
+    assert sorted(BODY_PART_TABLES) == [65, 66, 67, 68, 69]
+    assert len(BODY_PART_TABLES) == 5
+    assert "does not say how the seven are divided" in (
+        FIVE_TABLES_FOR_SEVEN_GRAHAS)
+
+
+def test_section_26_6_is_not_finished_early():
+    """The coverage line for §26.6. It fails while any of Tables 65 to 69 is
+    still pending, so the section cannot be reported complete before its
+    pages arrive — the same guard chapter 25 used for Tables 53 to 59.
+    """
+    from hora.transits.gochara import STANDARD_RESULT_TABLES
+    from hora.transits.tara import BODY_PART_TABLES, BODY_PART_TABLES_PENDING
+
+    built = {n for n, table in BODY_PART_TABLES.items() if table is not None}
+    pending = set(BODY_PART_TABLES_PENDING)
+    assert built | pending == set(BODY_PART_TABLES)
+    assert not (built & pending)
+
+    # chapter 25's registry is the precedent, and it is complete
+    assert tuple(STANDARD_RESULT_TABLES) == (53, 54, 55, 56, 57, 58, 59)
+    assert all(STANDARD_RESULT_TABLES.values())
+
+    assert pending == {65, 66, 67, 68, 69}, (
+        f"Tables {sorted(pending)} of section 26.6 are still pending; "
+        f"update this assertion as each is supplied")

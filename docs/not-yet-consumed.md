@@ -1182,6 +1182,21 @@ special ones — so what follows is prose and findings.
 | `FOOTNOTE_73` · `MRITYU_BHAGA_IS_USED_WITHOUT_A_DEFINITION` | The footnote verbatim, and ours recording that the table behind it has never been printed — OI-144 |
 | `FOOTNOTE_74` · `THE_TECHNIQUE_NEEDS_DASAS_AND_TAJAKA_TO_BE_USED_AT_ALL` | The book's own limit on the whole method, and ours noting one half of the corroboration it demands is a part not yet reached |
 
+### Chapter 26 — §26.6 opened (5)
+
+`transits/tara.py`. Prose only so far: the section promises Tables 65 to 69
+and none has been supplied. `BODY_PART_TABLES` registers all five as pending
+and a test fails while any still is, so §26.6 cannot be reported complete
+early — the same guard chapter 25 used while Tables 53 to 59 arrived one at a
+time.
+
+| constant | why it is not consumed |
+|---|---|
+| `BODY_PART_RULE` · `BODY_PART_PURPOSES` | The section verbatim: the counting, and the two uses it names |
+| `THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS` | Ours: the only inverse reading in Part 3 — symptom to graha to remedy — and that it narrows rather than identifies |
+| `FIVE_TABLES_FOR_SEVEN_GRAHAS` | Ours: five tables are promised for seven grahas and the section does not say how they divide. Nothing is assumed |
+| `BODY_PART_TABLES` · `BODY_PART_TABLES_PENDING` | The registry itself. Consumed by the coverage test, not by a calculation, until the tables land |
+
 ---
 
 ## How to use this register
