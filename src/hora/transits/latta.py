@@ -38,6 +38,12 @@ LATTA_RULE = (
 #: and it offers it as an alternative rather than a second reading.
 LATTA_TARGETS: tuple[str, ...] = ("natal Moon", "natal lagna")
 
+#: **The rule Example 113 adds.** §26.7's statement offered the two targets as
+#: alternatives — "the constellation occupied by Moon (**or** lagna)" — and
+#: gave no order between them. The example ranks them.
+JANMA_NAKSHATRA_OUTRANKS_LAGNA_NAKSHATRA = (
+    "However, latta on janma nakshatra is more important.")
+
 #: **Finding.** Latta runs the opposite way round from the chapter's other
 #: two counting techniques. §26.4's taras and §26.6's body parts count **from
 #: the natal Moon's nakshatra to** the transiting graha; a latta is counted
@@ -212,11 +218,14 @@ def latta_hits(graha: str, transit_longitude: float,
             None if lagna is None else str(NAKSHATRA_NAMES[lagna])),
         "hits": hits,
         "kicked": bool(hits),
+        "on_janma_nakshatra": "natal Moon" in hits,
         "lagna_not_supplied": lagna is None,
         "results": (
             "unfavorable results related to the signification of the planet "
             "in natal chart" if hits else None),
-        "significations_are_natal": THE_HARM_IS_READ_FROM_THE_NATAL_SIGNIFICATION,
+        "significations_are_natal": (
+            THE_HARM_IS_READ_FROM_THE_NATAL_SIGNIFICATION),
+        "precedence": JANMA_NAKSHATRA_OUTRANKS_LAGNA_NAKSHATRA,
     }
 
 
@@ -270,4 +279,79 @@ THE_BOOK_RATES_LATTA_HIGHLY = (
     "Section 26.7 closes \"this is an important concept and readers should "
     "memorize the latta formulas\", which no other transit section says of "
     "itself."
+)
+
+
+# --------------------------------------------------------------------------
+# Example 113 — Table 70, and a precedence §26.7's opening did not give
+# --------------------------------------------------------------------------
+
+EXAMPLE_113 = (
+    "Let us consider a native whose janma nakshatra is Poorvabhadrapada and "
+    "lagna nakshatra is Hasta. Let us see if any bad result is possible, "
+    "using lattas, on the evening of 5th December 1996.")
+
+#: Table 70, as printed: (graha, transit nakshatra, count, direction, kicked).
+#: All eight reproduce from `latta`, and all eight transit positions
+#: reproduce from the ephemeris for the evening of 5 December 1996.
+TABLE_70_LATTAS: tuple[tuple[str, str, int, str, str], ...] = (
+    ("Sun", "Jyeshtha", 12, "forward", "Bharani"),
+    ("Moon", "Hasta", 22, "backward", "Mula"),
+    ("Mars", "Purva Phalguni", 3, "forward", "Hasta"),
+    ("Mercury", "Mula", 7, "backward", "Hasta"),
+    ("Jupiter", "Purva Ashadha", 6, "forward", "Purva Bhadrapada"),
+    ("Venus", "Vishakha", 5, "backward", "Uttara Phalguni"),
+    ("Saturn", "Uttara Bhadrapada", 8, "forward", "Ardra"),
+    ("Rahu", "Hasta", 9, "backward", "Mrigashira"),
+)
+
+#: **Finding.** The ranking is by **target**, not by weight of evidence. Two
+#: grahas kick the lagna nakshatra here — Mars and Mercury — and one kicks the
+#: janma nakshatra, and the single one is the reading the example takes. So a
+#: caller must not count hits across the two targets and compare totals.
+THE_RANKING_IS_BY_TARGET_NOT_BY_COUNT = (
+    "Mars and Mercury both have latta on Hasta, the lagna nakshatra, and "
+    "only Jupiter has latta on Poorvabhadrapada, the janma nakshatra. The "
+    "example reads Jupiter's. One latta on the janma nakshatra outweighs two "
+    "on the lagna nakshatra."
+)
+
+#: Example 113's reading, in its order.
+EXAMPLE_113_READING: tuple[str, ...] = (
+    ("Natal lagna is in Virgo, as Hasta is in Virgo. There are two lattas on "
+     "lagna nakshatra - Hasta. One is by 8th lord Mars and the other is by "
+     "lagna lord Mercury. So bad results relating to 1st and 8th houses are "
+     "possible. The 6th and 8th houses show accidents."),
+    ("However, latta on janma nakshatra is more important. Here Jupiter has "
+     "latta on Poorvabhadrapada. Jupiter owns the 4th and 7th houses in the "
+     "natal chart. So some misfortune related to vehicle or house or marital "
+     "life is possible."),
+)
+
+EXAMPLE_113_OUTCOME = (
+    "The native had a vehicular accident on the evening of 5th December "
+    "1996, in which his car was totaled.")
+
+#: **Finding.** The reading is sourced from §7.2's own house significations
+#: except for one word. Jupiter owning the 4th and the 7th gives "vehicle or
+#: house or marital life", and the 4th's list has **vehicles** and **house**
+#: while the 7th's has **marital life** — all three verbatim. But "the 6th and
+#: 8th houses show accidents" is only half there: the 6th's list has
+#: **accidents** and the 8th's does not. Same shape as Example 112's
+#: litigation; see OI-55.
+ACCIDENTS_IS_NOT_IN_THE_EIGHTH_HOUSES_PRINTED_LIST = (
+    "Section 7.2 gives the 6th house accidents and gives the 8th longevity, "
+    "debts, disease and the rest without the word. Example 113 reads "
+    "accidents from both."
+)
+
+#: **Finding.** The graha that matters is picked by **lordship**, and Jupiter
+#: qualifies twice over — he owns both the 4th and the 7th from a Virgo lagna.
+#: So the misfortune is read as any of three matters rather than one, and the
+#: outcome named the 4th's: a car. §26.7's watch-list named the 6th lord, the
+#: 7th lord and a planet in the 10th; this adds the 4th by the same logic.
+A_GRAHA_CAN_CARRY_TWO_LORDSHIPS_INTO_THE_READING = (
+    "Jupiter owns Sagittarius and Pisces, the 4th and 7th from Virgo, so his "
+    "latta threatens vehicle, house and marital life together. The event was "
+    "the 4th's."
 )

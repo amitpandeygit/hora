@@ -1239,6 +1239,21 @@ fails the moment a kick appears for him without being declared.
 | `LATTA_IS_WORTH_MEMORISING` · `THE_BOOK_RATES_LATTA_HIGHLY` | The section's closing line, and ours noting no other transit section rates itself so |
 | `THE_FORWARD_OFFSETS_ARE_DATA` | Ours: four distinct offsets, none of them 1, and no relation to §26.5's aspects but Mars's 3rd |
 
+### Chapter 26 — Example 113 (8)
+
+`transits/latta.py`. Everything checkable **is** checked — all eight rows of
+Table 70, all eight transit nakshatras from the ephemeris, the Virgo
+lordships, and the precedence — so what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_113` · `EXAMPLE_113_READING` · `EXAMPLE_113_OUTCOME` | The example verbatim and its two-paragraph reading |
+| `TABLE_70_LATTAS` | The table as a fixture, checked against what `latta` derives and against the ephemeris |
+| `JANMA_NAKSHATRA_OUTRANKS_LAGNA_NAKSHATRA` | The rule the example adds. **Is** returned by `latta_hits` as `precedence`; held here for its wording |
+| `THE_RANKING_IS_BY_TARGET_NOT_BY_COUNT` | Ours: one janma hit outweighs two lagna hits, so a caller must not total them |
+| `ACCIDENTS_IS_NOT_IN_THE_EIGHTH_HOUSES_PRINTED_LIST` | Ours: a signification the reading uses and §7.2's 8th does not carry — OI-55's fifth instance |
+| `A_GRAHA_CAN_CARRY_TWO_LORDSHIPS_INTO_THE_READING` | Ours: Jupiter owns the 4th and the 7th, so his latta threatens three matters and the event was the 4th's |
+
 ---
 
 ## How to use this register

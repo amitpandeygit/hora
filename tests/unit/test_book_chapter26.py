@@ -2791,3 +2791,135 @@ def test_latta_is_the_only_transit_section_told_to_be_memorised():
         THE_BOOK_RATES_LATTA_HIGHLY)
     # and it still sits under footnote 72's general warning
     assert "cannot make predictions just based on them" in FOOTNOTE_72
+
+
+# --------------------------------------------------------------------------
+# Example 113 — Table 70, and janma outranking lagna
+# --------------------------------------------------------------------------
+
+def test_all_eight_rows_of_table_70_reproduce():
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.latta import TABLE_70_LATTAS, latta
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    span = 360.0 / 27
+    assert len(TABLE_70_LATTAS) == 8
+    for graha, standing, count, direction, kicked in TABLE_70_LATTAS:
+        got = latta(graha, names.index(standing) * span + 1.0)
+        assert got["offset"] == count, graha
+        assert got["direction"] == direction, graha
+        assert got["kicks"] == kicked, graha
+
+
+def test_the_transit_positions_of_table_70_reproduce_for_that_evening():
+    """Eight nakshatras on the evening of 5 December 1996, from the
+    ephemeris rather than from the table.
+    """
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import NAKSHATRA_NAMES, Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.latta import TABLE_70_LATTAS, nakshatra_of
+
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Mercury": Graha.MERCURY, "Jupiter": Graha.JUPITER,
+             "Venus": Graha.VENUS, "Saturn": Graha.SATURN,
+             "Rahu": Graha.RAHU}
+    computed = compute_chart(
+        from_local(1996, 12, 5, 18, 0, 0.0, utc_offset_hours=5.5),
+        Place(name="New Delhi", latitude=28 + 36 / 60,
+              longitude=77 + 12 / 60),
+        Settings(node_type=NodeType.MEAN))
+
+    for graha, standing, _count, _direction, _kicked in TABLE_70_LATTAS:
+        index = nakshatra_of(
+            computed.positions[int(named[graha])].longitude)
+        assert str(NAKSHATRA_NAMES[index]) == standing, graha
+
+
+def test_two_lattas_land_on_the_lagna_nakshatra_and_one_on_the_janma():
+    from hora.transits.latta import TABLE_70_LATTAS
+
+    by_target = {}
+    for graha, _standing, _count, _direction, kicked in TABLE_70_LATTAS:
+        by_target.setdefault(kicked, []).append(graha)
+    assert by_target["Hasta"] == ["Mars", "Mercury"]
+    assert by_target["Purva Bhadrapada"] == ["Jupiter"]
+
+
+def test_the_lordships_the_example_names_hold_for_a_virgo_lagna():
+    from hora.core.const import NAKSHATRA_NAMES, RASI_LORD, Graha
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    span = 360.0 / 27
+    hasta = names.index("Hasta")
+    assert int(hasta * span // 30) == int(((hasta + 1) * span - 0.001) // 30)
+    assert A[int(hasta * span // 30)] == "Vi"
+
+    virgo = R["Vi"]
+    lords = {house: RASI_LORD[(virgo + house - 1) % 12]
+             for house in (1, 4, 7, 8)}
+    assert lords[1] == int(Graha.MERCURY)      # lagna lord
+    assert lords[8] == int(Graha.MARS)         # 8th lord
+    assert lords[4] == lords[7] == int(Graha.JUPITER)
+
+
+def test_janma_nakshatra_outranks_lagna_nakshatra_and_not_by_count():
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.latta import (
+        JANMA_NAKSHATRA_OUTRANKS_LAGNA_NAKSHATRA,
+        THE_RANKING_IS_BY_TARGET_NOT_BY_COUNT,
+        latta_hits,
+    )
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    span = 360.0 / 27
+    janma = names.index("Purva Bhadrapada") * span + 1.0
+    lagna = names.index("Hasta") * span + 1.0
+
+    jupiter = latta_hits("Jupiter", names.index("Purva Ashadha") * span + 1.0,
+                         janma, lagna)
+    assert jupiter["hits"] == ["natal Moon"]
+    assert jupiter["on_janma_nakshatra"] is True
+    assert jupiter["precedence"] == JANMA_NAKSHATRA_OUTRANKS_LAGNA_NAKSHATRA
+
+    for graha, standing in (("Mars", "Purva Phalguni"), ("Mercury", "Mula")):
+        got = latta_hits(graha, names.index(standing) * span + 1.0,
+                         janma, lagna)
+        assert got["hits"] == ["natal lagna"], graha
+        assert got["on_janma_nakshatra"] is False
+
+    assert "more important" in JANMA_NAKSHATRA_OUTRANKS_LAGNA_NAKSHATRA
+    assert "outweighs two" in THE_RANKING_IS_BY_TARGET_NOT_BY_COUNT
+
+
+def test_the_readings_matters_come_from_7_2s_own_lists_except_one_word():
+    """Vehicle, house and marital life are all in §7.2's 4th and 7th.
+    "Accidents" is in the 6th's list and not in the 8th's. OI-55 again.
+    """
+    from hora.core.const import HOUSE_SIGNIFICATIONS
+    from hora.transits.latta import (
+        A_GRAHA_CAN_CARRY_TWO_LORDSHIPS_INTO_THE_READING,
+        ACCIDENTS_IS_NOT_IN_THE_EIGHTH_HOUSES_PRINTED_LIST,
+    )
+
+    fourth = str(HOUSE_SIGNIFICATIONS[4]).lower()
+    seventh = str(HOUSE_SIGNIFICATIONS[7]).lower()
+    assert "vehicles" in fourth and "house" in fourth
+    assert "marital life" in seventh
+
+    assert "accidents" in str(HOUSE_SIGNIFICATIONS[6]).lower()
+    assert "accidents" not in str(HOUSE_SIGNIFICATIONS[8]).lower()
+    assert "without the word" in (
+        ACCIDENTS_IS_NOT_IN_THE_EIGHTH_HOUSES_PRINTED_LIST)
+    assert "The event was the 4th's" in (
+        A_GRAHA_CAN_CARRY_TWO_LORDSHIPS_INTO_THE_READING)
+
+
+def test_example_113s_outcome_matches_the_house_it_named():
+    from hora.core.const import HOUSE_SIGNIFICATIONS
+    from hora.transits.latta import EXAMPLE_113, EXAMPLE_113_OUTCOME
+
+    assert "5th December 1996" in EXAMPLE_113
+    assert "vehicular accident" in EXAMPLE_113_OUTCOME
+    assert "vehicles" in str(HOUSE_SIGNIFICATIONS[4]).lower()
