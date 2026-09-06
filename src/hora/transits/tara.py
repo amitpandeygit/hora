@@ -502,11 +502,46 @@ THE_TRANSIT_NAMES_A_POSSIBILITY_NOT_A_PERSON = (
     "death is a possibility during the transit."
 )
 
-#: **Not supplied.** The disclaimer carries footnote 72 and the note itself
-#: was not on the page given. Nothing is inferred from the marker.
-FOOTNOTE_72_IS_NOT_SUPPLIED = (
-    "Exercise 42's answer marks its disclaimer with footnote 72. The "
-    "footnote's text has not been supplied and nothing here stands in for it."
+#: Footnote 72, on Exercise 42's disclaimer. The broadest limit the chapter
+#: puts on itself: it scopes the whole nakshatra family, not just the death
+#: reading footnote 74 qualifies.
+FOOTNOTE_72 = (
+    "These transit principles based on nakshtra give good insight into "
+    "future, but one cannot make predictions just based on them.")
+
+#: **Finding.** The chapter carries two disclaimers and they do different
+#: work. Footnote 72 covers **all** the nakshatra transit principles —
+#: §26.4.1's taras, §26.4.2's special nakshatras and §26.5's aspects — and
+#: says only that they are insufficient. Footnote 74 narrows to death
+#: predictions and names **what** must corroborate: the dasas and the Tajaka
+#: chart. So the general limit comes first and the specific remedy second.
+THE_TWO_FOOTNOTES_SCOPE_AND_THEN_SHARPEN = (
+    "Footnote 72 says the nakshatra transit principles cannot carry a "
+    "prediction on their own. Footnote 74 says what a death prediction needs "
+    "beside them, the dasas and the Tajaka chart. The first bounds the "
+    "family; the second names the corroboration."
+)
+
+#: **Book defect.** Footnote 72 prints "nakshtra" for "nakshatra". The same
+#: kind of one-letter slip as §26.4.1's "Maksha" for "Makha"; recorded rather
+#: than silently corrected.
+NAKSHTRA_IS_A_SLIP_FOR_NAKSHATRA = (
+    "Footnote 72 reads \"transit principles based on nakshtra\". Nothing "
+    "turns on it, and the word is spelt correctly everywhere else in the "
+    "chapter."
+)
+
+#: **Finding.** Every technique chapter 26 introduces is hedged, and §26.5 is
+#: the only one hedged by nothing of its own. §26.2's murthi and §26.3's vedha
+#: are themselves brakes on a chapter 25 verdict rather than verdicts;
+#: §26.4.1 says a bad tara means a graha "cannot give its full results";
+#: §26.4.2 says the results are the native's and not the world's; and
+#: footnotes 72 and 74 bound the family twice more.
+EVERY_TECHNIQUE_IN_CHAPTER_26_IS_HEDGED = (
+    "The murthi and the vedha modify a verdict rather than making one, a bad "
+    "tara withholds full results rather than predicting harm, the special "
+    "nakshatras are read against the native and not the country, and two "
+    "footnotes say the nakshatra principles cannot carry a prediction alone."
 )
 
 #: **Finding.** JFK Jr's death is now read twice by the book through two

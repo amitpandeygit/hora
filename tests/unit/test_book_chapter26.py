@@ -1331,11 +1331,70 @@ def test_the_exercise_says_the_transit_names_a_possibility_not_a_person():
         RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE)
 
 
-def test_footnote_72_has_not_been_supplied():
-    from hora.transits.tara import FOOTNOTE_72_IS_NOT_SUPPLIED
+def test_footnote_72_bounds_the_whole_nakshatra_family():
+    """"These transit principles based on nakshtra give good insight into
+    future, but one cannot make predictions just based on them."
+    """
+    from hora.transits.tara import (
+        FOOTNOTE_72,
+        NAKSHTRA_IS_A_SLIP_FOR_NAKSHATRA,
+    )
 
-    assert "has not been supplied" in FOOTNOTE_72_IS_NOT_SUPPLIED
-    assert "nothing here stands in for it" in FOOTNOTE_72_IS_NOT_SUPPLIED
+    assert "cannot make predictions just based on them" in FOOTNOTE_72
+    assert "good insight into future" in FOOTNOTE_72
+    assert "nakshtra" in FOOTNOTE_72 and "nakshatra" not in FOOTNOTE_72
+    assert "spelt correctly everywhere else" in NAKSHTRA_IS_A_SLIP_FOR_NAKSHATRA
+
+
+def test_the_two_footnotes_do_different_work():
+    """72 bounds every nakshatra transit principle; 74 narrows to death and
+    names the corroboration it needs.
+    """
+    from hora.transits.tara import (
+        FOOTNOTE_72,
+        FOOTNOTE_74,
+        THE_TWO_FOOTNOTES_SCOPE_AND_THEN_SHARPEN,
+    )
+
+    assert "death" not in FOOTNOTE_72
+    assert "death" in FOOTNOTE_74
+    assert "dasas and Tajaka charts" in FOOTNOTE_74
+    assert "dasas" not in FOOTNOTE_72
+    assert "The first bounds the family" in THE_TWO_FOOTNOTES_SCOPE_AND_THEN_SHARPEN
+
+
+def test_every_technique_in_chapter_26_carries_a_limit_but_26_5():
+    """Each section either states a limit on itself or is a limit on a
+    chapter 25 verdict. §26.5 is the one that states none of its own.
+    """
+    from hora.charts.aspects import NAKSHATRA_DRISHTI_RESULTS
+    from hora.transits.murthi import (
+        THE_MURTHI_SCALES_A_VERDICT_IT_DOES_NOT_MAKE_ONE,
+    )
+    from hora.transits.tara import (
+        EVERY_TECHNIQUE_IN_CHAPTER_26_IS_HEDGED,
+        FOOTNOTE_72,
+        FOOTNOTE_74,
+        RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE,
+        TARA_RULE,
+    )
+    from hora.transits.vedha import VEDHA_AND_MURTHI_ARE_BOTH_BRAKES, VEDHA_RULE
+
+    assert "may not give his full results" in (
+        THE_MURTHI_SCALES_A_VERDICT_IT_DOES_NOT_MAKE_ONE)
+    assert "cannot give its good results" in VEDHA_RULE
+    assert "marginal results" in VEDHA_AND_MURTHI_ARE_BOTH_BRAKES
+    assert "cannot give its full results" in TARA_RULE
+    assert "with respect to the native" in RESULTS_ARE_WITH_RESPECT_TO_THE_NATIVE
+    assert "cannot make predictions" in FOOTNOTE_72
+    assert "very hasty" in FOOTNOTE_74
+
+    # §26.5 states a reading and no limit of its own
+    assert "good results" in NAKSHATRA_DRISHTI_RESULTS
+    for hedge in ("cannot", "not enough", "hasty", "only", "just"):
+        assert hedge not in NAKSHATRA_DRISHTI_RESULTS
+    assert "modify a verdict rather than making one" in (
+        EVERY_TECHNIQUE_IN_CHAPTER_26_IS_HEDGED)
 
 
 def test_jfk_jrs_death_is_now_read_through_two_mechanisms():
