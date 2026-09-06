@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 100 waiting on evidence · 2 parked**
+**5 waiting on Amit · 99 waiting on evidence · 2 parked**
 
 ---
 
@@ -2131,23 +2131,6 @@ once that square counts as a consonant.
 
 **Closes when:** you send that square, or a later section names its letter.
 
-### OI-147 — §26.8's vedha lines are stated but not determined
-
-**Waiting on the book.** "We can draw one vertical **or** horizontal line and
-two crossward lines starting at the nakshatra."
-
-Neither half is usable as written. It does not say which of vertical and
-horizontal a given square takes — a nakshatra on the north border has a
-vertical line into the grid and a horizontal one along the border, and both
-are drawable. And "crossward" is not defined: the grid's own diagonals through
-that square is the natural reading, but the figure's diagonals are the vowel
-lines, which would make every planet obstruct vowels.
-
-**What we do:** nothing is drawn. `THE_VEDHA_LINES_ARE_NOT_DETERMINED` records
-the ambiguity and no line function exists, so no obstruction is computed from
-a reading we cannot source.
-
-**Closes when:** a worked case shows the three lines for one nakshatra.
 
 ---
 

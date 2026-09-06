@@ -1267,12 +1267,11 @@ ephemeris, both natal nakshatra targets, and the common house, which
 | `OCCUPATION_AND_OWNERSHIP_BOTH_RELATE_A_GRAHA_TO_A_HOUSE` | The two relations, returned by `common_houses`. Held here because §26.7 names no third and none is added |
 | `THE_RULING_IS_READ_FOUR_TIMES` | Ours: 8 June 2000 read through sodhya pinda, vedha, tara bala and latta. No other event in the book gets four |
 
-### Chapter 26 — §26.8's Sarvatobhadra chakra (12)
+### Chapter 26 — §26.8 and Example 114 (16)
 
-`transits/sarvatobhadra.py`. Figure 3 is transcribed square by square and the
-section's own tally is asserted rather than trusted, so the grid **is**
-consumed by its own checks. One square is deliberately `None` — OI-146 — and
-the vedha lines are not drawn — OI-147.
+`transits/sarvatobhadra.py`. Figure 3 is transcribed square by square, the
+section's own tally is asserted rather than trusted, and `vedha_lines` draws
+the three lines Example 114 fixed. One square is deliberately `None` — OI-146.
 
 | constant | why it is not consumed |
 |---|---|
@@ -1280,7 +1279,10 @@ the vedha lines are not drawn — OI-147.
 | `FIGURE_3` · `BORDER_NAKSHATRAS` · `VOWELS` · `RASI_CELLS` · `CENTRE_CELLS` · `TITHI_GROUPS` | The figure as data. `cell` and `tithi_group` read it; the rest is checked, not computed from |
 | `UNCERTAIN_CELL` · `UNCERTAIN_CELL_NOTE` | Ours: the one square we will not guess, and the two constraints that say it is a consonant |
 | `THE_TWENTY_FIFTH_TITHI_IS_MISSING` | Ours: Poorna's list is short and irregular where the other four are not — D-76 |
-| `VEDHA_RULE` · `THE_VEDHA_LINES_ARE_NOT_DETERMINED` | The rule verbatim and why no line is drawn from it — OI-147 |
+| `VEDHA_RULE` · `THE_LINES_RUN_INWARD_FROM_THE_NAKSHATRAS_OWN_BORDER` | The rule verbatim, and ours recording how Example 114 disambiguated it. `vedha_lines` implements it — OI-147, closed |
+| `EXAMPLE_114` · `EXAMPLE_114_LINES` | The worked case and its three lists, checked square for square against what `vedha_lines` draws |
+| `BORDER_DIRECTIONS` | Consumed by `vedha_lines`. Listed because the east row is read off Example 114 and the other three follow by the figure's symmetry, which §26.8 never states |
+| `EXAMPLE_114_VERIFIES_SIXTEEN_SQUARES` · `LINES_ARE_UNEQUAL_IN_LENGTH` | Ours: sixteen squares confirmed by the book's own reading, and that a nakshatra near a corner obstructs unevenly |
 
 ---
 

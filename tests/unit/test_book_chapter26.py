@@ -3228,19 +3228,16 @@ def test_the_twenty_fifth_tithi_belongs_to_no_group():
     assert "in no group at all" in THE_TWENTY_FIFTH_TITHI_IS_MISSING
 
 
-def test_no_vedha_lines_are_drawn_from_the_chakra():
-    """§26.8 says three lines and leaves both halves ambiguous. OI-147."""
-    import hora.transits.sarvatobhadra as module
+def test_the_vedha_rule_is_stated_ambiguously_and_example_114_fixes_it():
     from hora.transits.sarvatobhadra import (
-        THE_VEDHA_LINES_ARE_NOT_DETERMINED,
+        THE_LINES_RUN_INWARD_FROM_THE_NAKSHATRAS_OWN_BORDER,
         VEDHA_RULE,
     )
 
     assert "one vertical or horizontal line" in VEDHA_RULE
     assert "two crossward lines" in VEDHA_RULE
-    assert "the lines are not drawn" in THE_VEDHA_LINES_ARE_NOT_DETERMINED
-    assert not any("line" in name.lower() and callable(getattr(module, name))
-                   for name in dir(module))
+    assert "perpendicular to its border" in (
+        THE_LINES_RUN_INWARD_FROM_THE_NAKSHATRAS_OWN_BORDER)
 
 
 def test_the_chakras_definition_glosses_both_words():
@@ -3268,3 +3265,105 @@ def test_sarvatobhadra_helpers_check_their_inputs():
     for bad in (0, 31):
         with pytest.raises(InputError):
             tithi_group(bad)
+
+
+# --------------------------------------------------------------------------
+# Example 114 — the three lines drawn, and sixteen squares confirmed
+# --------------------------------------------------------------------------
+
+def test_example_114s_three_lines_reproduce_square_for_square():
+    """"Drawing a horizontal line to the west ... a crossward line to the
+    northwest ... a crossward line to the southwest." Sixteen squares.
+    """
+    from hora.transits.sarvatobhadra import (
+        EXAMPLE_114_LINES,
+        EXAMPLE_114_VERIFIES_SIXTEEN_SQUARES,
+        find,
+        vedha_lines,
+    )
+
+    got = vedha_lines(*find("Punar"))
+    assert got["border"] == "east"
+    assert got["straight"] == "west"
+    assert got["crossward"] == ("northwest", "southwest")
+
+    for direction, expected in EXAMPLE_114_LINES.items():
+        drawn = tuple(square["content"]
+                      for square in got["lines"][direction])
+        assert drawn == expected, direction
+
+    assert sum(len(line) for line in EXAMPLE_114_LINES.values()) == 16
+    assert len(got["obstructs"]) == 16
+    assert "reproduces all sixteen" in EXAMPLE_114_VERIFIES_SIXTEEN_SQUARES
+
+
+def test_the_two_d_squares_are_distinguished_as_the_example_distinguishes_them():
+    from hora.transits.sarvatobhadra import EXAMPLE_114_LINES, FIGURE_3
+
+    assert FIGURE_3[1][4] == "d"
+    assert FIGURE_3[6][7] == "d."
+    assert "d" in EXAMPLE_114_LINES["northwest"]
+    assert "d." in EXAMPLE_114_LINES["southwest"]
+    assert FIGURE_3[1][4] != FIGURE_3[6][7]
+
+
+def test_the_lines_run_inward_from_whichever_border_the_nakshatra_is_on():
+    from hora.transits.sarvatobhadra import (
+        BORDER_DIRECTIONS,
+        BORDER_NAKSHATRAS,
+        border_of,
+        find,
+        vedha_lines,
+    )
+
+    for side, nakshatras in BORDER_NAKSHATRAS.items():
+        for nakshatra in nakshatras:
+            row, column = find(nakshatra)
+            assert border_of(row, column) == side, nakshatra
+            got = vedha_lines(row, column)
+            assert got["border"] == side
+            assert (got["straight"], *got["crossward"]) == (
+                BORDER_DIRECTIONS[side])
+            # every line runs inward and stays on the grid
+            for line in got["lines"].values():
+                assert line, nakshatra
+                for square in line:
+                    assert 0 <= square["row"] <= 8
+                    assert 0 <= square["column"] <= 8
+
+
+def test_a_nakshatras_three_lines_are_of_unequal_length():
+    from hora.transits.sarvatobhadra import (
+        LINES_ARE_UNEQUAL_IN_LENGTH,
+        find,
+        vedha_lines,
+    )
+
+    got = vedha_lines(*find("Punar"))
+    assert [len(got["lines"][d]) for d in ("west", "northwest", "southwest")
+            ] == [8, 5, 3]
+
+    # a nakshatra at the far end of the same border reverses the diagonals
+    other = vedha_lines(*find("Krittika"))
+    assert other["border"] == "east"
+    assert len(other["lines"]["northwest"]) < len(
+        other["lines"]["southwest"])
+    assert "nearer a corner obstructs fewer squares" in (
+        LINES_ARE_UNEQUAL_IN_LENGTH)
+
+
+def test_only_a_border_square_that_is_not_a_corner_draws_lines():
+    from hora.transits.sarvatobhadra import (
+        SarvatobhadraError,
+        border_of,
+        find,
+        vedha_lines,
+    )
+
+    for corner in ((0, 0), (0, 8), (8, 0), (8, 8)):
+        with pytest.raises(SarvatobhadraError, match="corner"):
+            border_of(*corner)
+    with pytest.raises(SarvatobhadraError, match="not on a border"):
+        vedha_lines(4, 4)
+    with pytest.raises(SarvatobhadraError, match="not in Figure 3"):
+        find("Abhijeet")

@@ -4,6 +4,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 
 | ID | Item |
 |---|---|
+| [OI-147](#oi-147) | §26.8's vedha lines were stated but not determined |
 | [OI-143](#oi-143) | §25.6 never said what a remainder of 0 meant |
 | [OI-142](#oi-142) | Chart 60's transit chart carried no date |
 | [OI-5](#oi-5) | Upagrahas |
@@ -1892,3 +1893,25 @@ The route in is the one that costs the most information: Example 111's 8th
 house from Saturn holds **no rekhas**, so the product is 0 whatever the pinda
 is, and every chart with an empty house times to Revati and Pisces. That is
 now a stated behaviour rather than a gap.
+
+
+## OI-147 — §26.8's vedha lines were stated but not determined
+
+**Closed by Example 114**, on the next page. The rule read ambiguously alone —
+"one vertical **or** horizontal line and two crossward lines" says neither
+which of vertical and horizontal a square takes, nor what crossward means. The
+worked case fixes both at once.
+
+Saturn in Punarvasu sits on the **east** border, and the example draws its
+straight line **west**, its crossward lines **northwest** and **southwest**.
+So the straight line is perpendicular to the square's own border and the two
+crossward lines are the grid's diagonals, all three running **inward**.
+
+`vedha_lines` draws them, and `BORDER_DIRECTIONS` carries the other three
+borders by the symmetry the figure is built on — nothing in §26.8 privileges
+one side of a chakra whose name means auspicious from every side.
+
+The example also verifies the transcription: its three lines name **sixteen**
+of Figure 3's squares and all sixteen reproduce in order, including the plain
+**d** of row 1 and the **alveolar d** of row 6, which it distinguishes in
+words. Square (2, 7) is on none of the three, so OI-146 stays open.

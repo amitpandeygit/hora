@@ -132,16 +132,19 @@ VEDHA_RULE = (
     "horizontal line and two crossward lines starting at the nakshatra. "
     "Contents of the squares on the lines have vedha from the planet.")
 
-#: **Finding.** The vedha rule is stated and not yet usable. "One vertical
-#: **or** horizontal line" does not say which of the two a given nakshatra
-#: takes, and "two crossward lines" does not say whether they are the grid's
-#: diagonals through the square or something else. No lines are computed until
-#: a worked case fixes the reading — see OI-146.
-THE_VEDHA_LINES_ARE_NOT_DETERMINED = (
-    "Section 26.8 says a planet obstructs three lines from its nakshatra: "
-    "one vertical or horizontal, and two crossward. Which of vertical and "
-    "horizontal a given border square takes is not stated, so the lines are "
-    "not drawn."
+#: **Finding — Example 114 settles it.** The rule reads ambiguously on its
+#: own: "one vertical **or** horizontal line" does not say which, and
+#: "crossward" is undefined. The worked case fixes both. Saturn in Punarvasu,
+#: on the **east** border, draws its straight line **west** — perpendicular to
+#: its own border, into the grid — and its two crossward lines **northwest**
+#: and **southwest**, the two diagonals that also run inward. So the straight
+#: line is decided by which border the nakshatra sits on, and crossward means
+#: the grid's diagonals.
+THE_LINES_RUN_INWARD_FROM_THE_NAKSHATRAS_OWN_BORDER = (
+    "A nakshatra on the east border draws west, northwest and southwest; the "
+    "straight line is perpendicular to its border and the two crossward "
+    "lines are the diagonals, all three running into the grid. Example 114 "
+    "shows all three for Punarvasu."
 )
 
 
@@ -159,3 +162,117 @@ def tithi_group(tithi: int) -> str | None:
         if index in members:
             return name
     return None
+
+
+# --------------------------------------------------------------------------
+# Example 114 — the three lines, drawn
+# --------------------------------------------------------------------------
+
+#: Which way each border's squares draw, as (straight, crossward, crossward).
+#: Read off Example 114's east-border case and applied to the other three by
+#: the symmetry the figure is built on — the chakra is "sarvatobhadra",
+#: auspicious *from every side*, and nothing in §26.8 privileges one border.
+BORDER_DIRECTIONS: dict[str, tuple[str, str, str]] = {
+    "east": ("west", "northwest", "southwest"),
+    "west": ("east", "northeast", "southeast"),
+    "north": ("south", "southwest", "southeast"),
+    "south": ("north", "northwest", "northeast"),
+}
+
+_STEPS: dict[str, tuple[int, int]] = {
+    "north": (-1, 0), "south": (1, 0), "east": (0, 1), "west": (0, -1),
+    "northeast": (-1, 1), "northwest": (-1, -1),
+    "southeast": (1, 1), "southwest": (1, -1),
+}
+
+EXAMPLE_114 = (
+    "Let us say Saturn is in Punarvasu. We see that Punarvasu is on the "
+    "eastern border.")
+
+#: Example 114's three lines, as it lists their contents.
+EXAMPLE_114_LINES: dict[str, tuple[str, ...]] = {
+    "west": ("h", "Cn", "au", "Bhadra", "am", "Sc", "y", "Moola"),
+    "northwest": ("k", "Ta", "Ar", "d", "P.Bhadra"),
+    "southwest": ("d.", "m", "U.Pha"),
+}
+
+#: **Finding.** Example 114 checks sixteen of Figure 3's squares against the
+#: book's own reading, in three directions, and every one matches — including
+#: the two that would be easy to confuse, the plain **d** at row 1 and the
+#: **alveolar d** at row 6, which the example distinguishes in words.
+EXAMPLE_114_VERIFIES_SIXTEEN_SQUARES = (
+    "The three lines from Punarvasu name sixteen squares, and the "
+    "transcription of Figure 3 reproduces all sixteen in the order the "
+    "example gives them. It calls the row-6 square \"d (alveolar)\", "
+    "distinguishing it from the plain d in row 1."
+)
+
+#: **Finding.** A line stops at the edge of the grid, and the three lines from
+#: one nakshatra reach different distances — eight squares west of Punarvasu,
+#: five northwest, three southwest. So the number of things a graha obstructs
+#: depends on where along its border it sits, which §26.8 never mentions.
+LINES_ARE_UNEQUAL_IN_LENGTH = (
+    "From Punarvasu the westward line crosses eight squares, the northwest "
+    "five and the southwest three. A nakshatra nearer a corner obstructs "
+    "fewer squares on one diagonal and more on the other."
+)
+
+
+def border_of(row: int, column: int) -> str:
+    """Which border a square sits on, for a nakshatra square."""
+    r = validate.in_range("row", int(row), 0, 8)
+    c = validate.in_range("column", int(column), 0, 8)
+    sides = [name for name, test in (("north", r == 0), ("south", r == 8),
+                                     ("west", c == 0), ("east", c == 8))
+             if test]
+    if not sides:
+        raise SarvatobhadraError(
+            f"square ({r}, {c}) is not on a border; only the border squares "
+            f"hold nakshatras")
+    if len(sides) > 1:
+        raise SarvatobhadraError(
+            f"square ({r}, {c}) is a corner and holds a vowel, not a "
+            f"nakshatra")
+    return sides[0]
+
+
+def vedha_lines(row: int, column: int) -> dict:
+    """§26.8's three lines from a nakshatra square, as Example 114 draws them.
+
+    :returns: the border the square sits on, and the three lines by
+        direction, each a list of ``{"row", "column", "content"}`` running
+        inward until it leaves the grid. A square left untranscribed appears
+        with ``content`` ``None`` — see `UNCERTAIN_CELL`.
+    """
+    side = border_of(row, column)
+    r, c = int(row), int(column)
+    lines = {}
+    for direction in BORDER_DIRECTIONS[side]:
+        step_r, step_c = _STEPS[direction]
+        squares = []
+        rr, cc = r + step_r, c + step_c
+        while 0 <= rr <= 8 and 0 <= cc <= 8:
+            squares.append({"row": rr, "column": cc,
+                            "content": FIGURE_3[rr][cc]})
+            rr, cc = rr + step_r, cc + step_c
+        lines[direction] = squares
+    return {
+        "square": {"row": r, "column": c, "content": FIGURE_3[r][c]},
+        "border": side,
+        "straight": BORDER_DIRECTIONS[side][0],
+        "crossward": BORDER_DIRECTIONS[side][1:],
+        "lines": lines,
+        "obstructs": [square["content"]
+                      for direction in BORDER_DIRECTIONS[side]
+                      for square in lines[direction]],
+        "rule": VEDHA_RULE,
+    }
+
+
+def find(content: str) -> tuple[int, int]:
+    """Where a named square sits in Figure 3."""
+    for r in range(9):
+        for c in range(9):
+            if FIGURE_3[r][c] == content:
+                return (r, c)
+    raise SarvatobhadraError(f"{content!r} is not in Figure 3")
