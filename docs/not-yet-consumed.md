@@ -1035,8 +1035,8 @@ what follows is prose and findings.
 
 `core/constants/transit.py`, beside Part 3's own opening. The whole section is
 prose — it announces two threads and states no rule — so all of it is here.
-§26.2 and §26.3 have since arrived, each with its own module; the nakshatra
-thread has not, and a test fails if a module for it appears ahead of a page.
+§26.2, §26.3 and §26.4.1 have since arrived, each with its own module. The
+coverage test still fails if a module appears for a section not yet supplied.
 
 | constant | why it is not consumed |
 |---|---|
@@ -1074,6 +1074,22 @@ findings.
 | `ONLY_THE_SUNS_ROW_HAS_A_CONSTANT_OFFSET` | Ours: why Table 63 cannot be derived. A test measures every row's offsets and the 3rd's five different partners |
 | `MARS_AND_SATURN_SHARE_A_ROW` | Ours: the one row that repeats, and that it follows from chapter 25 rather than being a coincidence |
 | `VEDHA_AND_MURTHI_ARE_BOTH_BRAKES` | §26.3's closing sentence, naming the chapter's two modifiers together |
+
+### Chapter 26 — §26.4.1's taras (7)
+
+`transits/tara.py`. The rule **is** consumed — `tara` counts and grades,
+`tara_bala` tallies, `muhurta_moon_is_clear` applies the muhurta use, and
+§26.4.1's worked case reproduces to the planet — so what follows is prose and
+findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `TARA_MEANS` · `TARA_COUNTING_RULE` · `TARA_RULE` · `TARA_IN_MUHURTA` | The section verbatim. `TARA_RULE` and `TARA_IN_MUHURTA` **are** returned on their results; these hold the wording. The dasa-lord half of `TARA_RULE` needs a dasa lord the caller supplies |
+| `TARA_COUNTING_EXAMPLE` · `TARA_WORKED_CASE` | Fixtures — the Makha-to-Swaati count and Bill Gates's five bad taras, both checked against what the engine derives |
+| `TABLE_64_IS_A_NINE_CYCLE` | Ours: why this table is a formula where Table 63 was data |
+| `A_TARA_GROUP_IS_ONE_VIMSOTTARI_LORDS_HOLDING` | Ours: Table 64's rows and §25.6's companion rule are one partition. A test checks all 243 combinations |
+| `FOUR_GOOD_THREE_BAD_ONE_MIXED` | Ours: the baseline a weak tara bala is weak against — five good, three bad, one mixed |
+| `MAKSHA_IS_A_SLIP_FOR_MAKHA` | Ours: a one-letter slip in the counting list, recorded rather than corrected |
 
 ---
 

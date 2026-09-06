@@ -518,3 +518,195 @@ def test_vedha_helpers_check_their_inputs():
             causes_vedha(bad, 0)
     with pytest.raises(VedhaError, match="graha being judged"):
         vedha(int(Graha.MERCURY), 0.0, {int(Graha.SUN): 10.0})
+
+
+# --------------------------------------------------------------------------
+# §26.4.1 — taras, and Table 64
+# --------------------------------------------------------------------------
+
+def test_table_64_grades_all_27_counts_in_a_nine_cycle():
+    from hora.transits.tara import (
+        TABLE_64_IS_A_NINE_CYCLE,
+        TABLE_64_TARAS,
+        tara_of_count,
+    )
+
+    assert len(TABLE_64_TARAS) == 9
+    counts = [c for row in TABLE_64_TARAS for c in row["counts"]]
+    assert sorted(counts) == list(range(1, 28))
+    assert all(len(row["counts"]) == 3 for row in TABLE_64_TARAS)
+
+    for count in range(1, 28):
+        row = tara_of_count(count)
+        assert count in row["counts"]
+        assert row["position_in_cycle"] == (count - 1) % 9 + 1
+        assert tara_of_count(count)["name"] == (
+            tara_of_count((count - 1) % 9 + 1)["name"])
+    assert "only modulo 9" in TABLE_64_IS_A_NINE_CYCLE
+
+
+def test_janma_tara_is_mixed_and_the_rest_split_five_to_three():
+    from hora.transits.tara import (
+        FOUR_GOOD_THREE_BAD_ONE_MIXED,
+        TABLE_64_TARAS,
+        tara_of_count,
+    )
+
+    assert tara_of_count(1)["name"] == "Janma Tara"
+    assert tara_of_count(1)["good"] is None
+    assert tara_of_count(1)["grade"] == "mixed"
+
+    good = [r["name"] for r in TABLE_64_TARAS if r["good"] is True]
+    bad = [r["name"] for r in TABLE_64_TARAS if r["good"] is False]
+    mixed = [r["name"] for r in TABLE_64_TARAS if r["good"] is None]
+    assert len(good) == 5 and len(bad) == 3 and len(mixed) == 1
+    assert bad == ["Vipat Tara", "Pratyak Tara", "Naidhana/Vadha Tara"]
+    assert "Janma alone is mixed" in FOUR_GOOD_THREE_BAD_ONE_MIXED
+
+
+def test_a_tara_group_is_exactly_one_vimsottari_lords_holding():
+    """§25.6 proved a nakshatra shares its lord with the 10th and 19th from
+    it. Table 64's rows are those triples counted from the natal Moon — the
+    same partition of the 27, and this checks all 243 combinations.
+    """
+    from hora.core.constants.nakshatra import NAKSHATRA_LORD
+    from hora.transits.tara import (
+        A_TARA_GROUP_IS_ONE_VIMSOTTARI_LORDS_HOLDING,
+        TABLE_64_TARAS,
+    )
+
+    for natal in range(27):
+        for row in TABLE_64_TARAS:
+            group = {(natal + count - 1) % 27 for count in row["counts"]}
+            lords = {NAKSHATRA_LORD[n] for n in group}
+            assert len(lords) == 1, (natal, row["name"])
+            lord = lords.pop()
+            assert {n for n in range(27)
+                    if NAKSHATRA_LORD[n] == lord} == group
+    assert "same partition of the 27" in (
+        A_TARA_GROUP_IS_ONE_VIMSOTTARI_LORDS_HOLDING)
+
+
+def test_the_counting_illustration_makes_swati_the_sixth_from_makha():
+    """"Counting constellations from Makha ... Swaati is the 6th." And the
+    list under it opens "Maksha", which is a slip.
+    """
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.tara import (
+        MAKSHA_IS_A_SLIP_FOR_MAKHA,
+        NAKSHATRA_SPAN,
+        TARA_COUNTING_EXAMPLE,
+        tara,
+    )
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    makha, swati = names.index("Magha"), names.index("Swati")
+    got = tara(makha * NAKSHATRA_SPAN + 1.0, swati * NAKSHATRA_SPAN + 1.0)
+    assert got["count"] == 6
+    assert got["tara"] == "Saadhana Tara"
+
+    assert "(1) Maksha" in TARA_COUNTING_EXAMPLE
+    assert TARA_COUNTING_EXAMPLE.count("Makha") == 2
+    assert "not the book's own spelling" in MAKSHA_IS_A_SLIP_FOR_MAKHA
+
+
+def test_bill_gates_natal_moon_is_in_uttarabhadrapada():
+    from hora.charts.book import longitudes
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.tara import TARA_WORKED_CASE, nakshatra_of
+
+    index = nakshatra_of(longitudes(24)["Moon"])
+    assert index == 25                      # the 26th, 1-based
+    assert str(NAKSHATRA_NAMES[index]) == "Uttara Bhadrapada"
+    assert str(TARA_WORKED_CASE["natal_nakshatra"]) == "Uttara Bhadrapada"
+
+
+def test_26_4_1s_worked_case_puts_five_planets_in_bad_taras():
+    """"From Uttarabhadrapada, Krittika is the 5th star ... and Mrigasira is
+    the 7th star ... With 5 planets transiting in bad taras."
+    """
+    from hora.charts.book import longitudes
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.transits.tara import TARA_WORKED_CASE, tara_bala
+
+    computed = compute_chart(
+        from_local(2000, 6, 8, 12, 0, 0.0, utc_offset_hours=-7.0),
+        Place(name="Seattle", latitude=47 + 36 / 60,
+              longitude=-(122 + 20 / 60)),
+        Settings(node_type=NodeType.MEAN))
+    got = tara_bala(longitudes(24)["Moon"],
+                    {g: computed.positions[g].longitude for g in range(7)})
+
+    assert got["of"] == 7
+    assert got["count_in_bad_taras"] == 5 == TARA_WORKED_CASE["in_bad_taras"]
+    assert sorted(got["in_bad_taras"]) == [
+        "Jupiter", "Mars", "Saturn", "Sun", "Venus"]
+    assert sorted(got["in_good_taras"]) == ["Mercury", "Moon"]
+    assert got["unaccounted"] == []
+
+    for block in TARA_WORKED_CASE["placements"]:
+        for graha in block["grahas"]:
+            entry = got["per_graha"][graha]
+            assert entry["transit_nakshatra"] == block["nakshatra"], graha
+            assert entry["count"] == block["count"], graha
+            assert entry["tara"] == block["tara"], graha
+            assert entry["good"] is False
+
+
+def test_a_graha_in_the_natal_moons_own_nakshatra_is_janma_tara():
+    from hora.transits.tara import NAKSHATRA_SPAN, tara
+
+    got = tara(10 * NAKSHATRA_SPAN + 2.0, 10 * NAKSHATRA_SPAN + 9.0)
+    assert got["count"] == 1
+    assert got["tara"] == "Janma Tara"
+    assert got["good"] is None
+    assert got["results"] is None
+
+
+def test_the_tally_leaves_janma_tara_in_neither_column():
+    from hora.core.const import Graha
+    from hora.transits.tara import NAKSHATRA_SPAN, tara_bala
+
+    natal = 10 * NAKSHATRA_SPAN + 2.0
+    got = tara_bala(natal, {
+        int(Graha.SUN): natal + 1.0,                       # Janma
+        int(Graha.MARS): natal + 2 * NAKSHATRA_SPAN,       # Vipat, bad
+        int(Graha.VENUS): natal + NAKSHATRA_SPAN,          # Sampat, good
+    })
+    assert got["unaccounted"] == ["Sun"]
+    assert got["in_bad_taras"] == ["Mars"]
+    assert got["in_good_taras"] == ["Venus"]
+    assert (len(got["in_good_taras"]) + len(got["in_bad_taras"])
+            + len(got["unaccounted"])) == got["of"]
+    assert "neither column" in got["janma_is_mixed"]
+
+
+def test_the_muhurta_use_asks_only_that_the_moon_is_not_in_a_bad_tara():
+    from hora.transits.tara import (
+        NAKSHATRA_SPAN,
+        TARA_IN_MUHURTA,
+        muhurta_moon_is_clear,
+    )
+
+    natal = 0.5
+    assert muhurta_moon_is_clear(natal, NAKSHATRA_SPAN + 1)["clear"] is True
+    assert muhurta_moon_is_clear(natal,
+                                 2 * NAKSHATRA_SPAN + 1)["clear"] is False
+    janma = muhurta_moon_is_clear(natal, 1.0)
+    assert janma["clear"] is True and janma["mixed"] is True
+    assert "new project is launched" in TARA_IN_MUHURTA
+
+
+def test_tara_helpers_check_their_inputs():
+    from hora.core.validate import InputError
+    from hora.transits.tara import TaraError, tara_bala, tara_of_count
+
+    for bad in (0, 28, -1):
+        with pytest.raises(InputError):
+            tara_of_count(bad)
+    with pytest.raises(TaraError, match="at least one"):
+        tara_bala(0.0, {})
+    with pytest.raises(InputError):
+        tara_bala(0.0, {9: 10.0})
