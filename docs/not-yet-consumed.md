@@ -1288,6 +1288,26 @@ see D-77.
 | `BORDER_DIRECTIONS` | Consumed by `vedha_lines`. Listed because the east row is read off Example 114 and the other three follow by the figure's symmetry, which §26.8 never states |
 | `EXAMPLE_114_VERIFIES_SIXTEEN_SQUARES` · `LINES_ARE_UNEQUAL_IN_LENGTH` | Ours: sixteen squares confirmed by the book's own reading, and that a nakshatra near a corner obstructs unevenly |
 
+### Chapter 26 — §26.8's principles and its use (17)
+
+`transits/sarvatobhadra.py`. The special principles are data, not rules the
+code applies: nothing propagates a vedha along a similar vowel or a consonant
+pair, because §26.8 leaves the vowel list open (OI-148) and the pairs reach
+letters the grid has no square for. `special_tithi` **is** consumed and agrees
+with §1.3.8 at a multiplier of 1.
+
+| constant | why it is not consumed |
+|---|---|
+| `CORNER_VOWEL_RULE` · `SIMILAR_VOWEL_RULE` · `UNCOVERED_CONSONANT_RULE` · `PAIRED_CONSONANT_RULE` · `SARVATOBHADRA_READING` · `SPECIAL_TITHI_RULE` | The four principles and the reading, verbatim |
+| `CORNER_VOWELS` · `SIMILAR_VOWELS` · `UNCOVERED_CONSONANTS` · `PAIRED_CONSONANTS` · `NATAL_POINTS_TO_WATCH` · `SARVATOBHADRA_BENEFICS` · `SARVATOBHADRA_MALEFICS` | The data behind them. Checked against Figure 3 and against the book's own graha natures; no rule reads them yet |
+| `THE_CORNERS_ARE_JOINS_IN_THE_NAKSHATRA_SEQUENCE` | Ours: the border is the nakshatras in order with a corner every eighth square, which is why no line reaches one |
+| `THE_SIMILAR_VOWEL_LIST_IS_OPEN` | Ours: ri/rii and lu/luu are the same kind of pair and unnamed — OI-148 |
+| `THE_UNCOVERED_CONSONANTS_ARE_ONE_TRIPLE_PER_BORDER` · `THE_PAIRS_REACH_CONSONANTS_THE_GRID_LACKS` | Ours: three extras per border with g and h doubled, and five pairs of which half are outside the grid |
+| `THE_NAME_IS_THE_ONLY_NON_ASTRONOMICAL_INPUT` | Ours: the third natal point asks for a letter of the native's name, which nothing else in the book does |
+| `THE_SPLIT_IGNORES_THE_CONDITIONAL_BENEFICS` | Ours: §26.8 calls the Moon and Mercury benefics flatly where §3.2.2 makes both conditional |
+| `FOOTNOTE_70` · `FOOTNOTE_70_IS_A_DISCLAIMER_OF_EXPERIENCE` | The footnote, and ours noting it limits the author's acquaintance rather than the technique |
+| `SPECIAL_TITHI_MULTIPLIERS` · `A_MULTIPLIER_OF_ONE_IS_THE_ORDINARY_TITHI` | Consumed by `special_tithi`; the identity with §1.3.8 is asserted over 500 random pairs |
+
 ---
 
 ## How to use this register

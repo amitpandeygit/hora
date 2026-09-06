@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 98 waiting on evidence · 2 parked**
+**5 waiting on Amit · 99 waiting on evidence · 2 parked**
 
 ---
 
@@ -2111,6 +2111,23 @@ alternation, and none is taken from outside the book.
 **Closes when:** a later section gives Ketu's latta, or you confirm he has
 none.
 
+
+### OI-148 — §26.8's similar-vowel list is given as examples, not a set
+
+**Waiting on the book.** "If an vowel has vedha, its similar vowel (**e.g.** a
+and aa, i and ee, u and uu) also has vedha from the same planet."
+
+Three pairs, introduced by *e.g.*, and Figure 3 holds two more of exactly the
+same kind: **ri with rii** and **lu with luu**, short and long forms of one
+vowel just as a is to aa. The section names neither.
+
+So the rule reaches either six vowels or ten, and nothing decides it. Nothing
+is propagated: `SIMILAR_VOWELS` holds the three pairs the book names and no
+function extends a vedha along them, because doing so would have to answer
+this question first.
+
+**Closes when:** the list is given in full, or you accept the short-long
+pattern and the other two pairs with it.
 
 ---
 

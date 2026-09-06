@@ -310,3 +310,227 @@ A_CORNER_NAKSHATRA_OBSTRUCTS_FAR_LESS = (
     "and one northeast. A nakshatra beside a corner has one crossward line "
     "of a single square."
 )
+
+
+# --------------------------------------------------------------------------
+# §26.8's four special principles
+# --------------------------------------------------------------------------
+
+CORNER_VOWEL_RULE = (
+    "A planet in the first quarter of Krittika or the last quarter of "
+    "Bharani has vedha on the vowel \"a\" which is in the northeastern "
+    "corner. A similar thing applies to all the vowels in corners.")
+
+#: Each corner vowel and the two padas that reach it: the **last quarter of
+#: the nakshatra before it** in the border sequence and the **first quarter of
+#: the one after**. The book states the north-east case and says a similar
+#: thing applies to the rest; these three are ours, read off the figure.
+CORNER_VOWELS: dict[str, dict[str, object]] = {
+    "a": {"corner": "northeast", "square": (0, 8),
+          "last_quarter_of": "Bharani", "first_quarter_of": "Krittika"},
+    "aa": {"corner": "southeast", "square": (8, 8),
+           "last_quarter_of": "Asresha", "first_quarter_of": "Makha"},
+    "i": {"corner": "southwest", "square": (8, 0),
+          "last_quarter_of": "Visakha", "first_quarter_of": "Anuradha"},
+    "ee": {"corner": "northwest", "square": (0, 0),
+           "last_quarter_of": "Sravana", "first_quarter_of": "Dhanishtha"},
+}
+
+#: **Finding.** The corner rule is the border sequence closing up. Walking the
+#: border clockwise gives the 28 nakshatras in zodiacal order — Dhanishtha
+#: round to Sravana — with the four corner vowels **inserted between**
+#: consecutive nakshatras, at every eighth square. So a corner vowel is simply
+#: the join between two nakshatras, and the two padas that touch it are the
+#: last of one and the first of the next. That is why no line reaches a
+#: corner, and why the rule needs stating separately.
+THE_CORNERS_ARE_JOINS_IN_THE_NAKSHATRA_SEQUENCE = (
+    "The border reads Dhanishtha, Satabhisha ... Abhijit, Sravana in "
+    "zodiacal order, and the four corner vowels sit between Bharani and "
+    "Krittika, Asresha and Makha, Visakha and Anuradha, and Sravana and "
+    "Dhanishtha — one every eight squares."
+)
+
+SIMILAR_VOWEL_RULE = (
+    "If an vowel has vedha, its similar vowel (e.g. a and aa, i and ee, u "
+    "and uu) also has vedha from the same planet.")
+
+#: The similar-vowel pairs §26.8 names. It gives three "e.g." pairs and no
+#: closed list, so only these three are held.
+SIMILAR_VOWELS: tuple[tuple[str, str], ...] = (
+    ("a", "aa"), ("i", "ee"), ("u", "uu"))
+
+#: **Finding.** The three pairs the section names are exactly the short and
+#: long forms of the same vowel, and they are the only three of Figure 3's
+#: sixteen vowels that have such a partner **in the figure** — ri and rii, and
+#: lu and luu, are also short-long pairs and are **not** named. So the list is
+#: either incomplete or deliberately confined to the three; the section's
+#: "e.g." leaves it open. See OI-148.
+THE_SIMILAR_VOWEL_LIST_IS_OPEN = (
+    "Section 26.8 gives a and aa, i and ee, u and uu as examples. Figure 3 "
+    "also holds ri with rii and lu with luu, which are short and long forms "
+    "of one vowel in the same way, and the section does not name them."
+)
+
+UNCOVERED_CONSONANT_RULE = (
+    "Some consonants are not covered in this chart.")
+
+#: The four nakshatras that carry consonants Figure 3 has no square for.
+UNCOVERED_CONSONANTS: dict[str, tuple[str, ...]] = {
+    "Ardra": ("g", "chh", "ng (nasal)"),
+    "Hasta": ("h", "n (alveolar)", "th (alveolar)"),
+    "Poorvashadha": ("dh (dental)", "ph", "dh (alveolar)"),
+    "Uttara Bhadrapada": ("th (dental)", "jh", "nch (nasal)"),
+}
+
+#: **Finding.** Each of the four carries **three** extra consonants, twelve in
+#: all, and the four nakshatras are spread one to a border — Ardra on the
+#: east, Hasta on the south, Poorvashadha on the west, Uttara Bhadrapada on
+#: the north. Two of the twelve, **g** and **h**, already have squares of
+#: their own in Figure 3, so those two are reachable both by a line and by
+#: this rule.
+THE_UNCOVERED_CONSONANTS_ARE_ONE_TRIPLE_PER_BORDER = (
+    "Ardra, Hasta, Poorvashadha and Uttara Bhadrapada each carry three "
+    "consonants the chart has no square for, and the four sit one to each "
+    "border. g and h are in the figure as well as on this list."
+)
+
+PAIRED_CONSONANT_RULE = (
+    "If a planet has vedha on one of the following pairs of consonants, it "
+    "has vedha on the other one too: b & v; s & sh (palatal); kh & sh "
+    "(alveolar); j & y; ng & tr.")
+
+#: The five consonant pairs that share a vedha.
+PAIRED_CONSONANTS: tuple[tuple[str, str], ...] = (
+    ("b", "v"), ("s", "sh (palatal)"), ("kh", "sh (alveolar)"),
+    ("j", "y"), ("ng", "tr"))
+
+#: **Finding.** Only **four** of the ten paired consonants have a square in
+#: Figure 3 — v, s, kh, j and y, of which j and y are a pair, so the pairing
+#: reaches b, sh twice, ng and tr from outside the grid. `ng` is also on
+#: Ardra's uncovered list, so it can be reached two ways.
+THE_PAIRS_REACH_CONSONANTS_THE_GRID_LACKS = (
+    "Of b, v, s, sh, kh, sh, j, y, ng and tr, only v, s, kh, j and y are "
+    "squares in Figure 3. The pairing is how a planet reaches b, the two "
+    "sh's, ng and tr, none of which the chart draws."
+)
+
+
+# --------------------------------------------------------------------------
+# Using the chakra
+# --------------------------------------------------------------------------
+
+#: The five natal points §26.8 says to watch for vedha, in its order. Each is
+#: named with an alternative, so the chakra is read against a matter and not
+#: only against a birth.
+NATAL_POINTS_TO_WATCH: tuple[dict[str, str], ...] = (
+    {"point": "the constellation occupied by Moon",
+     "alternative": "any special tara"},
+    {"point": "the rasi occupied by lagna",
+     "alternative": "any house of interest"},
+    {"point": "the first/prominent consonant and vowel in the native's name",
+     "alternative": ""},
+    {"point": "the tithi of birth (janma tithi)",
+     "alternative": "a special tithi"},
+    {"point": "the weekday of birth (janma vaara)", "alternative": ""},
+)
+
+#: **Finding.** The third point is the only place in the whole book where a
+#: native's **name** enters a calculation. Everything else in Part 3 is read
+#: from positions; this asks for a letter, which is why the chakra carries
+#: sixteen vowels and nineteen consonants at all.
+THE_NAME_IS_THE_ONLY_NON_ASTRONOMICAL_INPUT = (
+    "Section 26.8 asks for the first or prominent consonant and vowel in the "
+    "native's name. No other technique in the book takes an input that is "
+    "not a position or a moment."
+)
+
+SARVATOBHADRA_READING = (
+    "Vedha by benefics (Moon, Mercury, Jupiter and Venus) is favorable and "
+    "vedha by malefics (Sun, Mars, Saturn, Rahu and Ketu) is unfavorable. If "
+    "several transiting benefics have simultaneous vedha on several natal "
+    "points listed above, then good results may be expected. Malefics, on "
+    "the other hand, give bad results.")
+
+#: §26.8's own split of the nine, which it states without conditions.
+SARVATOBHADRA_BENEFICS: tuple[str, ...] = (
+    "Moon", "Mercury", "Jupiter", "Venus")
+SARVATOBHADRA_MALEFICS: tuple[str, ...] = (
+    "Sun", "Mars", "Saturn", "Rahu", "Ketu")
+
+#: **Finding.** §26.8 puts the **Moon and Mercury** among the benefics flatly,
+#: where §3.2.2 makes both conditional — the Moon by paksha and Mercury by
+#: association — which is why `NATURAL_BENEFIC` holds only Jupiter and Venus.
+#: So this section reads a fixed four-and-five split that the book's own
+#: definition of benefic does not support.
+THE_SPLIT_IGNORES_THE_CONDITIONAL_BENEFICS = (
+    "Section 26.8 names the Moon and Mercury benefics without qualification. "
+    "Section 3.2.2 makes the Moon's nature depend on the paksha and "
+    "Mercury's on his associations, so neither is in NATURAL_BENEFIC."
+)
+
+FOOTNOTE_70 = (
+    "This author's experience in the use of Sarvatobhadra Chakra is very "
+    "very limited.")
+
+#: **Finding.** Footnote 70 is the only place PVR disclaims his own
+#: **experience** of a technique rather than its reliability. Footnotes 72 and
+#: 74 bound what the nakshatra principles can carry; this one says the author
+#: has hardly used the method. It is the strongest caveat in Part 3.
+FOOTNOTE_70_IS_A_DISCLAIMER_OF_EXPERIENCE = (
+    "Footnotes 72 and 74 limit what a technique may be used for. Footnote 70 "
+    "limits the author's own acquaintance with it, which nothing else in "
+    "Part 3 does."
+)
+
+
+# --------------------------------------------------------------------------
+# Special tithis
+# --------------------------------------------------------------------------
+
+SPECIAL_TITHI_RULE = (
+    "To find karma tithi, we multiply the difference between Moon's "
+    "longitude and Sun's longitude with 10 and reduce the product to a value "
+    "between 0º and 360º (by adding or subtracting multiples of 360º). We "
+    "divide it by 12 and add 1 to the quotient. That gives a number between "
+    "1 and 30 and that represents \"karma tithi\". Karma tithi changes 10 "
+    "times as fast as normal tithi. Similarly \"dhana tithi\" (lunar day of "
+    "wealth) changes twice as fast as normal tithi.")
+
+#: The two special tithis §26.8 names, and their multipliers. The section says
+#: "we can find a tithi for several matters" and names only these two, so the
+#: table is open — a caller may pass any multiplier to `special_tithi`.
+SPECIAL_TITHI_MULTIPLIERS: dict[str, int] = {"karma": 10, "dhana": 2}
+
+#: **Finding.** The rule generalises the ordinary tithi rather than replacing
+#: it: a multiplier of **1** is §1.3.8's own tithi, so `special_tithi` with
+#: ``multiplier=1`` and `panchanga.core.tithi_at` must agree everywhere. That
+#: is asserted rather than assumed.
+A_MULTIPLIER_OF_ONE_IS_THE_ORDINARY_TITHI = (
+    "Karma tithi multiplies the Moon-Sun difference by 10 and dhana tithi by "
+    "2. At 1 the formula is section 1.3.8's tithi unchanged."
+)
+
+
+def special_tithi(sun_longitude: float, moon_longitude: float,
+                  multiplier: int = 1) -> dict:
+    """§26.8's tithi for a matter — 1 to 30, the ordinary tithi at 1.
+
+    :param multiplier: 10 for karma tithi, 2 for dhana tithi. The section
+        says a tithi can be found "for several matters" and names only those
+        two, so any positive multiplier is accepted.
+    """
+    factor = validate.in_range("multiplier", int(multiplier), 1, 360)
+    difference = (float(moon_longitude) - float(sun_longitude)) % 360.0
+    reduced = (difference * factor) % 360.0
+    index = int(reduced // 12.0) + 1
+    named = [name for name, value in SPECIAL_TITHI_MULTIPLIERS.items()
+             if value == factor]
+    return {
+        "multiplier": factor,
+        "name": named[0] if named else None,
+        "difference": difference,
+        "reduced": reduced,
+        "tithi": index,
+        "group": tithi_group(index),
+        "changes_faster_by": factor,
+    }

@@ -3453,3 +3453,253 @@ def test_the_tithi_groups_named_on_the_line_carry_their_weekdays():
                 for entry in CENTRE_CELLS.values()}
     assert by_group["Bhadra"] == ("Monday", "Wednesday")
     assert by_group["Jaya"] == ("Thursday",)
+
+
+# --------------------------------------------------------------------------
+# §26.8's four special principles
+# --------------------------------------------------------------------------
+
+def test_the_corners_are_joins_in_the_nakshatra_sequence():
+    """"A planet in the first quarter of Krittika or the last quarter of
+    Bharani has vedha on the vowel a." The border read clockwise is the
+    nakshatras in order with a corner vowel between every eighth pair.
+    """
+    from hora.transits.sarvatobhadra import (
+        CORNER_VOWELS,
+        FIGURE_3,
+        THE_CORNERS_ARE_JOINS_IN_THE_NAKSHATRA_SEQUENCE,
+    )
+
+    ring = ([(0, c) for c in range(9)] + [(r, 8) for r in range(1, 9)]
+            + [(8, c) for c in range(7, -1, -1)]
+            + [(r, 0) for r in range(7, 0, -1)])
+    assert len(ring) == 32
+    sequence = [FIGURE_3[r][c] for r, c in ring]
+
+    corners = [index for index, square in enumerate(sequence)
+               if square in CORNER_VOWELS]
+    assert corners == [0, 8, 16, 24]
+
+    for vowel, entry in CORNER_VOWELS.items():
+        index = sequence.index(vowel)
+        assert sequence[index - 1] .startswith(
+            str(entry["last_quarter_of"])[:4])
+        assert sequence[(index + 1) % 32].startswith(
+            str(entry["first_quarter_of"])[:4])
+    assert CORNER_VOWELS["a"]["last_quarter_of"] == "Bharani"
+    assert CORNER_VOWELS["a"]["first_quarter_of"] == "Krittika"
+    assert "one every eight squares" in (
+        THE_CORNERS_ARE_JOINS_IN_THE_NAKSHATRA_SEQUENCE)
+
+
+def test_no_vedha_line_ever_reaches_a_corner():
+    """Which is why principle (1) has to be stated separately."""
+    from hora.transits.sarvatobhadra import (
+        BORDER_NAKSHATRAS,
+        CORNER_VOWELS,
+        find,
+        vedha_lines,
+    )
+
+    squares = {tuple(entry["square"]) for entry in CORNER_VOWELS.values()}
+    for side in BORDER_NAKSHATRAS.values():
+        for nakshatra in side:
+            got = vedha_lines(*find(nakshatra))
+            reached = {(s["row"], s["column"])
+                       for line in got["lines"].values() for s in line}
+            assert not reached & squares, nakshatra
+
+
+def test_the_similar_vowel_list_is_open():
+    from hora.transits.sarvatobhadra import (
+        SIMILAR_VOWEL_RULE,
+        SIMILAR_VOWELS,
+        THE_SIMILAR_VOWEL_LIST_IS_OPEN,
+        VOWELS,
+    )
+
+    assert SIMILAR_VOWELS == (("a", "aa"), ("i", "ee"), ("u", "uu"))
+    assert "e.g." in SIMILAR_VOWEL_RULE
+    for short, long in SIMILAR_VOWELS:
+        assert short in VOWELS and long in VOWELS
+
+    # two more short-long pairs sit in the figure and are not named
+    unnamed = {("ri", "rii"), ("lu", "luu")}
+    for short, long in unnamed:
+        assert short in VOWELS and long in VOWELS
+        assert (short, long) not in SIMILAR_VOWELS
+    assert "does not name them" in THE_SIMILAR_VOWEL_LIST_IS_OPEN
+
+
+def test_the_uncovered_consonants_are_one_triple_per_border():
+    from hora.transits.sarvatobhadra import (
+        FIGURE_3,
+        THE_UNCOVERED_CONSONANTS_ARE_ONE_TRIPLE_PER_BORDER,
+        UNCOVERED_CONSONANTS,
+        border_of,
+        find,
+    )
+
+    assert len(UNCOVERED_CONSONANTS) == 4
+    assert all(len(extra) == 3 for extra in UNCOVERED_CONSONANTS.values())
+    assert sum(len(e) for e in UNCOVERED_CONSONANTS.values()) == 12
+
+    in_figure = {"Ardra": "Ardra", "Hasta": "Hasta",
+                 "Poorvashadha": "P.Shadha",
+                 "Uttara Bhadrapada": "U.Bhadra"}
+    borders = {border_of(*find(square)) for square in in_figure.values()}
+    assert borders == {"north", "south", "east", "west"}
+
+    squares = {c for row in FIGURE_3 for c in row}
+    extras = [c for triple in UNCOVERED_CONSONANTS.values() for c in triple]
+    assert [c for c in extras if c in squares] == ["g", "h"]
+    assert "g and h are in the figure as well" in (
+        THE_UNCOVERED_CONSONANTS_ARE_ONE_TRIPLE_PER_BORDER)
+
+
+def test_the_consonant_pairs_reach_letters_the_grid_lacks():
+    from hora.transits.sarvatobhadra import (
+        FIGURE_3,
+        PAIRED_CONSONANTS,
+        THE_PAIRS_REACH_CONSONANTS_THE_GRID_LACKS,
+    )
+
+    assert len(PAIRED_CONSONANTS) == 5
+    squares = {c for row in FIGURE_3 for c in row}
+    present = {c for pair in PAIRED_CONSONANTS for c in pair if c in squares}
+    assert present == {"v", "s", "kh", "j", "y"}
+    absent = {c for pair in PAIRED_CONSONANTS for c in pair
+              if c not in squares}
+    assert absent == {"b", "sh (palatal)", "sh (alveolar)", "ng", "tr"}
+    assert "none of which the chart draws" in (
+        THE_PAIRS_REACH_CONSONANTS_THE_GRID_LACKS)
+
+
+# --------------------------------------------------------------------------
+# Using the chakra, and the special tithis
+# --------------------------------------------------------------------------
+
+def test_the_five_natal_points_include_the_only_non_astronomical_input():
+    from hora.transits.sarvatobhadra import (
+        NATAL_POINTS_TO_WATCH,
+        THE_NAME_IS_THE_ONLY_NON_ASTRONOMICAL_INPUT,
+    )
+
+    assert len(NATAL_POINTS_TO_WATCH) == 5
+    points = [entry["point"] for entry in NATAL_POINTS_TO_WATCH]
+    assert "the constellation occupied by Moon" in points[0]
+    assert "native's name" in points[2]
+    assert "janma tithi" in points[3]
+    assert "janma vaara" in points[4]
+
+    alternatives = [entry["alternative"] for entry in NATAL_POINTS_TO_WATCH]
+    assert alternatives[0] == "any special tara"
+    assert alternatives[3] == "a special tithi"
+    assert "not a position or a moment" in (
+        THE_NAME_IS_THE_ONLY_NON_ASTRONOMICAL_INPUT)
+
+
+def test_the_benefic_split_ignores_the_books_own_conditional_cases():
+    from hora.core.const import NATURAL_BENEFIC, NATURAL_MALEFIC, Graha
+    from hora.transits.sarvatobhadra import (
+        SARVATOBHADRA_BENEFICS,
+        SARVATOBHADRA_MALEFICS,
+        THE_SPLIT_IGNORES_THE_CONDITIONAL_BENEFICS,
+    )
+
+    assert len(SARVATOBHADRA_BENEFICS) + len(SARVATOBHADRA_MALEFICS) == 9
+    assert set(SARVATOBHADRA_BENEFICS) == {"Moon", "Mercury", "Jupiter",
+                                           "Venus"}
+    assert {str(Graha[name.upper()]) for name in SARVATOBHADRA_MALEFICS} == {
+        str(g) for g in NATURAL_MALEFIC}
+
+    # but the book's own natural benefics are only two
+    assert {str(g) for g in NATURAL_BENEFIC} == {str(Graha.JUPITER),
+                                                 str(Graha.VENUS)}
+    assert Graha.MOON not in NATURAL_BENEFIC
+    assert Graha.MERCURY not in NATURAL_BENEFIC
+    assert "neither is in NATURAL_BENEFIC" in (
+        THE_SPLIT_IGNORES_THE_CONDITIONAL_BENEFICS)
+
+
+def test_footnote_70_disclaims_the_authors_own_experience():
+    from hora.transits.sarvatobhadra import (
+        FOOTNOTE_70,
+        FOOTNOTE_70_IS_A_DISCLAIMER_OF_EXPERIENCE,
+    )
+    from hora.transits.tara import FOOTNOTE_72, FOOTNOTE_74
+
+    assert "very very limited" in FOOTNOTE_70
+    assert "experience" in FOOTNOTE_70
+    assert "experience" not in FOOTNOTE_72
+    assert "experience" not in FOOTNOTE_74
+    assert "the author's own acquaintance" in (
+        FOOTNOTE_70_IS_A_DISCLAIMER_OF_EXPERIENCE)
+
+
+def test_a_multiplier_of_one_is_the_ordinary_tithi():
+    import random
+
+    from hora.panchanga.core import tithi_at
+    from hora.transits.sarvatobhadra import (
+        A_MULTIPLIER_OF_ONE_IS_THE_ORDINARY_TITHI,
+        special_tithi,
+    )
+
+    random.seed(26)
+    for _ in range(500):
+        sun = random.uniform(0.0, 360.0)
+        moon = random.uniform(0.0, 360.0)
+        assert special_tithi(sun, moon, 1)["tithi"] == tithi_at(sun, moon)
+    assert "section 1.3.8's tithi unchanged" in (
+        A_MULTIPLIER_OF_ONE_IS_THE_ORDINARY_TITHI)
+
+
+def test_karma_tithi_changes_ten_times_as_fast_and_dhana_twice():
+    from hora.transits.sarvatobhadra import (
+        SPECIAL_TITHI_MULTIPLIERS,
+        special_tithi,
+    )
+
+    assert SPECIAL_TITHI_MULTIPLIERS == {"karma": 10, "dhana": 2}
+
+    def changes(multiplier):
+        seen, previous = 0, None
+        for step in range(3600):
+            current = special_tithi(0.0, step * 0.1, multiplier)["tithi"]
+            if previous is not None and current != previous:
+                seen += 1
+            previous = current
+        return seen
+
+    assert changes(1) == 29                # 30 tithis, no wrap
+    assert changes(2) == 59
+    assert changes(10) == 299
+
+    named = special_tithi(0.0, 30.0, 10)
+    assert named["name"] == "karma"
+    assert 1 <= named["tithi"] <= 30
+    assert special_tithi(0.0, 30.0, 2)["name"] == "dhana"
+    assert special_tithi(0.0, 30.0, 3)["name"] is None
+
+
+def test_a_special_tithi_carries_its_group():
+    from hora.transits.sarvatobhadra import TITHI_GROUPS, special_tithi
+
+    for multiplier in (1, 2, 10):
+        for step in range(0, 360, 7):
+            got = special_tithi(0.0, float(step), multiplier)
+            assert 1 <= got["tithi"] <= 30
+            if got["tithi"] == 25:
+                assert got["group"] is None          # D-76
+            else:
+                assert got["group"] in TITHI_GROUPS
+
+
+def test_special_tithi_checks_its_inputs():
+    from hora.core.validate import InputError
+    from hora.transits.sarvatobhadra import special_tithi
+
+    for bad in (0, -1, 361):
+        with pytest.raises(InputError):
+            special_tithi(0.0, 10.0, bad)
