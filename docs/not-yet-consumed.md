@@ -1107,6 +1107,22 @@ them — so what follows is prose and findings.
 | `THE_TWO_CLASSIFICATIONS_ARE_INDEPENDENT` | Ours, and a caution: Vainaasika means destruction and sits in a good tara. Nothing reads one off the other |
 | `THE_TWO_SPECIAL_TRANSITS_OVERLAP_FOR_EIGHT_MONTHS` | Ours: the section dates nothing, so the window was measured. It closes before the ruling the other sections read |
 
+### Chapter 26 — §26.5's nakshatra aspects (7)
+
+`charts/aspects.py`, beside rasi drishti and graha drishti, because that is
+where a reader looks for an aspect scheme. The scheme **is** consumed —
+`nakshatra_drishti`, `nakshatra_aspects` and `graha_aspects_nakshatra` — so
+what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `NAKSHATRA_DRISHTI_RULE` · `NAKSHATRA_DRISHTI_RESULTS` | The section verbatim. The offsets are implemented; the benefic/malefic reading needs a caller's nature lookup |
+| `EVERY_GRAHA_ASPECTS_THE_FIFTEENTH` | Ours: the 15th is this scheme's 7th house, and a test shows 180° from a nakshatra's midpoint is exactly the 14th/15th join |
+| `THREE_GRAHAS_ASPECT_THEIR_OWN_NAKSHATRA` | Ours: Mars, Mercury and Venus aspect the 1st, which graha drishti never does |
+| `THE_SAME_THREE_GRAHAS_ASPECT_MOST_IN_BOTH_SCHEMES` | Ours: the ranking carries over from §10.2 though the offsets do not |
+| `JUPITER_ASPECTS_HIS_OWN_VIMSOTTARI_TRIPLE` | Ours: §25.6's partition again, checked from all 27 nakshatras. Saturn's taking the 19th alone is left as printed |
+| `THE_NODES_ARE_NOT_GIVEN_NAKSHATRA_ASPECTS` | Ours: a gap. Asking for a node's raises rather than defaulting |
+
 ---
 
 ## How to use this register

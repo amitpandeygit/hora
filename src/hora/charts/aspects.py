@@ -63,3 +63,125 @@ def drishti_value(graha: int, from_sign: int, to_sign: int) -> int:
     house = (to_sign - from_sign) % 12 + 1
     table = _PARTIAL.get(graha, _PARTIAL_DEFAULT)
     return table.get(house, 0)
+
+
+# --------------------------------------------------------------------------
+# §26.5 — nakshatra-based aspects
+# --------------------------------------------------------------------------
+# A third drishti scheme, kept beside the other two because that is where a
+# reader looks for aspects. Chapter 26 introduces it while discussing
+# transits, but nothing in the rule is transit-specific.
+
+#: Nakshatras aspected, counted inclusively from the graha's own — so 1 means
+#: the nakshatra it occupies. §26.5 gives no rule for Rahu and Ketu.
+NAKSHATRA_DRISHTI: dict[int, tuple[int, ...]] = {
+    int(Graha.SUN): (14, 15),
+    int(Graha.MOON): (14, 15),
+    int(Graha.MARS): (1, 3, 7, 8, 15),
+    int(Graha.MERCURY): (1, 15),
+    int(Graha.JUPITER): (10, 15, 19),
+    int(Graha.VENUS): (1, 15),
+    int(Graha.SATURN): (3, 5, 15, 19),
+}
+
+NAKSHATRA_DRISHTI_RULE = (
+    "Sun and Moon aspect the 14th and 15th constellations from them. Mars "
+    "aspects the 1st, 3rd, 7th, 8th and 15th constellations from him. "
+    "Mercury and Venus aspect the 1st and 15th constellations from them. "
+    "Jupiter aspects the 10th, 15th and 19th constellations from him. Saturn "
+    "aspects the 3rd, 5th, 15th and 19th constellations from him.")
+
+NAKSHATRA_DRISHTI_RESULTS = (
+    "A natural benefic gives good results related to the constellations "
+    "aspected by it and a natural malefic gives bad results related to the "
+    "constellations aspected by it.")
+
+#: **Finding.** Every graha aspects the **15th**, which is this scheme's
+#: version of every graha aspecting the 7th house. The reason is exact: 180°
+#: from the *middle* of a nakshatra lands precisely on the boundary between
+#: the 14th and the 15th from it, 13.5 nakshatras being half of 27. So the
+#: 14th and 15th are the two that meet at the opposition, and the luminaries
+#: alone take both while everyone else takes the later one.
+EVERY_GRAHA_ASPECTS_THE_FIFTEENTH = (
+    "All seven lists contain the 15th. Half of 27 is 13.5, so 180 degrees "
+    "from the midpoint of a nakshatra falls exactly on the join between the "
+    "14th and the 15th from it; the Sun and Moon aspect both sides of that "
+    "join and the other five take the 15th only."
+)
+
+#: **Finding.** Mars, Mercury and Venus aspect the **1st** — their own
+#: nakshatra — which has no counterpart in graha drishti, where a graha never
+#: aspects the house it stands in. So the two schemes are not the same rule
+#: rescaled.
+THREE_GRAHAS_ASPECT_THEIR_OWN_NAKSHATRA = (
+    "Mars, Mercury and Venus aspect the 1st constellation from themselves. "
+    "No graha aspects its own house under graha drishti, so this has no "
+    "counterpart there."
+)
+
+#: **Finding.** The ranking survives the change of scheme. The three grahas
+#: §10.2 gives special rasi aspects — Mars, Jupiter and Saturn — are exactly
+#: the three that aspect more than two nakshatras here, and Mars leads in
+#: both. The lists themselves do not correspond, so it is the ordering that
+#: carries over, not the offsets.
+THE_SAME_THREE_GRAHAS_ASPECT_MOST_IN_BOTH_SCHEMES = (
+    "Mars aspects five nakshatras, Saturn four and Jupiter three; the Sun, "
+    "Moon, Mercury and Venus aspect two each. Those first three are the "
+    "grahas with special aspects in section 10.2, and Mars leads there too."
+)
+
+#: **Finding.** Jupiter's 10th and 19th are the other two nakshatras of his
+#: own Vimsottari triple — §25.6 proved a nakshatra shares its lord with the
+#: 10th and 19th from it. So Jupiter aspects, wherever he stands, the rest of
+#: the holding his nakshatra belongs to. Saturn takes the 19th but not the
+#: 10th, which the book states without explanation and is left as printed.
+JUPITER_ASPECTS_HIS_OWN_VIMSOTTARI_TRIPLE = (
+    "The 10th and 19th from a nakshatra are the two that share its "
+    "Vimsottari lord, so Jupiter's aspects fall on the rest of his own "
+    "nakshatra's holding. Saturn aspects the 19th alone of that pair."
+)
+
+#: **Gap.** §26.5 lists seven grahas. Neither node is given a nakshatra
+#: aspect, and the section does not say whether they have none or are simply
+#: not covered — the same silence §10.2 leaves for rasi aspects, where
+#: `rahu_ketu_aspects` is a setting. Nothing is assumed here: asking for a
+#: node's nakshatra aspects raises.
+THE_NODES_ARE_NOT_GIVEN_NAKSHATRA_ASPECTS = (
+    "Section 26.5 names the Sun, Moon, Mars, Mercury, Jupiter, Venus and "
+    "Saturn. Rahu and Ketu are absent, and it does not say whether they "
+    "aspect nothing or were left out."
+)
+
+
+def nakshatra_drishti(graha: int) -> tuple[int, ...]:
+    """§26.5's aspected nakshatras for a graha, counted inclusively.
+
+    :raises ValueError: for Rahu, Ketu or anything else the section does not
+        cover — see `THE_NODES_ARE_NOT_GIVEN_NAKSHATRA_ASPECTS`.
+    """
+    index = int(graha)
+    if index not in NAKSHATRA_DRISHTI:
+        raise ValueError(
+            f"section 26.5 gives no nakshatra aspects for graha {index}; it "
+            f"covers the seven planets only")
+    return NAKSHATRA_DRISHTI[index]
+
+
+def nakshatra_aspects(graha: int, from_nakshatra: int) -> tuple[int, ...]:
+    """The nakshatra indexes `graha` aspects from where it stands.
+
+    :param from_nakshatra: 0 = Aswini.
+    """
+    start = int(from_nakshatra)
+    if not 0 <= start <= 26:
+        raise ValueError("nakshatra index must be between 0 and 26")
+    return tuple(sorted((start + offset - 1) % 27
+                        for offset in nakshatra_drishti(graha)))
+
+
+def graha_aspects_nakshatra(graha: int, from_nakshatra: int,
+                            target: int) -> bool:
+    """Does `graha`, standing in `from_nakshatra`, aspect `target`?"""
+    if not 0 <= int(target) <= 26:
+        raise ValueError("nakshatra index must be between 0 and 26")
+    return int(target) in nakshatra_aspects(graha, from_nakshatra)

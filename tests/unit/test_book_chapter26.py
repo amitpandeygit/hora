@@ -918,3 +918,188 @@ def test_special_nakshatra_helpers_check_their_inputs():
     with pytest.raises(InputError):
         special_transits(0.0, {9: 10.0})
     assert len(special_nakshatras(0.0)) == len(SPECIAL_NAKSHATRAS)
+
+
+# --------------------------------------------------------------------------
+# §26.5 — nakshatra-based aspects
+# --------------------------------------------------------------------------
+
+def test_26_5s_five_lists_are_transcribed_as_printed():
+    from hora.charts.aspects import (
+        NAKSHATRA_DRISHTI,
+        NAKSHATRA_DRISHTI_RULE,
+        nakshatra_drishti,
+    )
+    from hora.core.const import Graha
+
+    assert NAKSHATRA_DRISHTI == {
+        int(Graha.SUN): (14, 15),
+        int(Graha.MOON): (14, 15),
+        int(Graha.MARS): (1, 3, 7, 8, 15),
+        int(Graha.MERCURY): (1, 15),
+        int(Graha.JUPITER): (10, 15, 19),
+        int(Graha.VENUS): (1, 15),
+        int(Graha.SATURN): (3, 5, 15, 19),
+    }
+    assert nakshatra_drishti(int(Graha.SUN)) == nakshatra_drishti(
+        int(Graha.MOON))
+    assert nakshatra_drishti(int(Graha.MERCURY)) == nakshatra_drishti(
+        int(Graha.VENUS))
+    for offsets in NAKSHATRA_DRISHTI.values():
+        assert all(1 <= o <= 27 for o in offsets)
+        assert list(offsets) == sorted(set(offsets))
+    assert "14th and 15th constellations" in NAKSHATRA_DRISHTI_RULE
+
+
+def test_every_graha_aspects_the_fifteenth_and_that_is_the_opposition():
+    """Half of 27 is 13.5, so 180 degrees from a nakshatra's midpoint lands
+    exactly on the join between the 14th and 15th from it.
+    """
+    from hora.charts.aspects import (
+        EVERY_GRAHA_ASPECTS_THE_FIFTEENTH,
+        NAKSHATRA_DRISHTI,
+    )
+
+    assert all(15 in offsets for offsets in NAKSHATRA_DRISHTI.values())
+
+    span = 360.0 / 27
+    for index in range(27):
+        midpoint = (index + 0.5) * span
+        opposite = (midpoint + 180.0) % 360.0
+        # the boundary between the 14th and the 15th from `index`
+        boundary = ((index + 14) % 27) * span
+        assert abs(opposite - boundary) < 1e-9, index
+    assert "exactly on the join" in EVERY_GRAHA_ASPECTS_THE_FIFTEENTH
+
+
+def test_only_the_luminaries_take_the_fourteenth():
+    from hora.charts.aspects import NAKSHATRA_DRISHTI
+    from hora.core.const import Graha
+
+    takers = {g for g, offsets in NAKSHATRA_DRISHTI.items() if 14 in offsets}
+    assert takers == {int(Graha.SUN), int(Graha.MOON)}
+
+
+def test_three_grahas_aspect_their_own_nakshatra_which_drishti_never_does():
+    from hora.charts.aspects import (
+        NAKSHATRA_DRISHTI,
+        THREE_GRAHAS_ASPECT_THEIR_OWN_NAKSHATRA,
+        graha_drishti_houses,
+    )
+    from hora.core.const import Graha
+
+    own = {g for g, offsets in NAKSHATRA_DRISHTI.items() if 1 in offsets}
+    assert own == {int(Graha.MARS), int(Graha.MERCURY), int(Graha.VENUS)}
+    for graha in range(7):
+        assert 1 not in graha_drishti_houses(graha)
+    assert "no counterpart there" in THREE_GRAHAS_ASPECT_THEIR_OWN_NAKSHATRA
+
+
+def test_the_same_three_grahas_aspect_most_under_both_schemes():
+    from hora.charts.aspects import (
+        NAKSHATRA_DRISHTI,
+        THE_SAME_THREE_GRAHAS_ASPECT_MOST_IN_BOTH_SCHEMES,
+        graha_drishti_houses,
+    )
+    from hora.core.const import Graha
+
+    many_nakshatras = {g for g, offsets in NAKSHATRA_DRISHTI.items()
+                       if len(offsets) > 2}
+    special_houses = {g for g in range(7)
+                      if len(graha_drishti_houses(g)) > 1}
+    assert many_nakshatras == special_houses == {
+        int(Graha.MARS), int(Graha.JUPITER), int(Graha.SATURN)}
+
+    assert len(NAKSHATRA_DRISHTI[int(Graha.MARS)]) == 5
+    assert len(NAKSHATRA_DRISHTI[int(Graha.SATURN)]) == 4
+    assert len(NAKSHATRA_DRISHTI[int(Graha.JUPITER)]) == 3
+    assert max(len(graha_drishti_houses(g)) for g in range(7)) == len(
+        graha_drishti_houses(int(Graha.MARS)))
+    assert "Mars leads there too" in (
+        THE_SAME_THREE_GRAHAS_ASPECT_MOST_IN_BOTH_SCHEMES)
+
+
+def test_jupiters_tenth_and_nineteenth_are_his_own_vimsottari_triple():
+    """§25.6 proved a nakshatra shares its lord with the 10th and 19th from
+    it, so Jupiter aspects the rest of his own nakshatra's holding — from
+    every one of the 27.
+    """
+    from hora.charts.aspects import (
+        JUPITER_ASPECTS_HIS_OWN_VIMSOTTARI_TRIPLE,
+        NAKSHATRA_DRISHTI,
+        nakshatra_aspects,
+    )
+    from hora.core.const import Graha
+    from hora.core.constants.nakshatra import NAKSHATRA_LORD
+
+    for start in range(27):
+        aspected = nakshatra_aspects(int(Graha.JUPITER), start)
+        same_lord = {n for n in aspected
+                     if NAKSHATRA_LORD[n] == NAKSHATRA_LORD[start]}
+        assert len(same_lord) == 2, start
+        assert same_lord | {start} == {n for n in range(27)
+                                       if NAKSHATRA_LORD[n]
+                                       == NAKSHATRA_LORD[start]}
+
+    # Saturn takes the 19th of that pair and not the 10th
+    assert 19 in NAKSHATRA_DRISHTI[int(Graha.SATURN)]
+    assert 10 not in NAKSHATRA_DRISHTI[int(Graha.SATURN)]
+    assert "Saturn aspects the 19th alone of that pair" in (
+        JUPITER_ASPECTS_HIS_OWN_VIMSOTTARI_TRIPLE)
+
+
+def test_nakshatra_aspects_counts_inclusively_and_wraps():
+    from hora.charts.aspects import graha_aspects_nakshatra, nakshatra_aspects
+    from hora.core.const import Graha
+
+    # Mars aspects the 1st, so he aspects the nakshatra he stands in
+    assert 5 in nakshatra_aspects(int(Graha.MARS), 5)
+    assert graha_aspects_nakshatra(int(Graha.MARS), 5, 5) is True
+    assert graha_aspects_nakshatra(int(Graha.SUN), 5, 5) is False
+
+    # the 15th from Aswini is Swati, index 14
+    assert 14 in nakshatra_aspects(int(Graha.SUN), 0)
+    assert 13 in nakshatra_aspects(int(Graha.SUN), 0)      # the 14th
+    # and it wraps
+    assert nakshatra_aspects(int(Graha.SUN), 26) == tuple(sorted(
+        (26 + off - 1) % 27 for off in (14, 15)))
+
+
+def test_the_nodes_are_refused_rather_than_given_a_default():
+    from hora.charts.aspects import (
+        THE_NODES_ARE_NOT_GIVEN_NAKSHATRA_ASPECTS,
+        nakshatra_aspects,
+        nakshatra_drishti,
+    )
+    from hora.core.const import Graha
+
+    for node in (Graha.RAHU, Graha.KETU):
+        with pytest.raises(ValueError, match="seven planets only"):
+            nakshatra_drishti(int(node))
+        with pytest.raises(ValueError, match="seven planets only"):
+            nakshatra_aspects(int(node), 0)
+    assert "does not say whether they" in (
+        THE_NODES_ARE_NOT_GIVEN_NAKSHATRA_ASPECTS)
+
+
+def test_the_results_rule_is_by_natural_benefic_or_malefic():
+    from hora.charts.aspects import NAKSHATRA_DRISHTI_RESULTS
+    from hora.core.const import NATURAL_BENEFIC, NATURAL_MALEFIC, Graha
+
+    assert "natural benefic" in NAKSHATRA_DRISHTI_RESULTS
+    assert "natural malefic" in NAKSHATRA_DRISHTI_RESULTS
+    # every graha the section covers has a natural nature to read it by
+    covered = {Graha(g) for g in (0, 1, 2, 3, 4, 5, 6)}
+    assert covered <= (NATURAL_BENEFIC | NATURAL_MALEFIC | {Graha.MERCURY,
+                                                            Graha.MOON})
+
+
+def test_nakshatra_aspects_check_their_inputs():
+    from hora.charts.aspects import graha_aspects_nakshatra, nakshatra_aspects
+    from hora.core.const import Graha
+
+    for bad in (-1, 27):
+        with pytest.raises(ValueError, match="between 0 and 26"):
+            nakshatra_aspects(int(Graha.SUN), bad)
+        with pytest.raises(ValueError, match="between 0 and 26"):
+            graha_aspects_nakshatra(int(Graha.SUN), 0, bad)
