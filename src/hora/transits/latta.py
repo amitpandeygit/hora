@@ -16,8 +16,10 @@ so nothing here guesses a kick.
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 from hora.core import validate
-from hora.core.const import NAKSHATRA_NAMES
+from hora.core.const import GRAHA_NAMES, NAKSHATRA_NAMES, RASI_LORD
 
 
 class LattaError(validate.InputError):
@@ -355,3 +357,105 @@ A_GRAHA_CAN_CARRY_TWO_LORDSHIPS_INTO_THE_READING = (
     "latta threatens vehicle, house and marital life together. The event was "
     "the 4th's."
 )
+
+
+# --------------------------------------------------------------------------
+# Exercise 45 — two lattas, two targets, and the house they share
+# --------------------------------------------------------------------------
+
+EXERCISE_45 = (
+    "Consider the chart of Bill Gates (see Chart 24). On 8th June 2000, his "
+    "company received an unfavorable ruling from a US judge in a landmark "
+    "anti-trust lawsuit. Find if any planets had latta on janma nakshatra or "
+    "lagna nakshatra at the time of the ruling. Find the common house "
+    "related to those planets in the natal chart.")
+
+EXERCISE_45_ANSWER = (
+    "Rahu was in Punarvasu at that time. He had latta on the 9th from "
+    "Punarvasu backwards, which is Uttarabhadrapada, i.e. janma nakshatra! "
+    "So Rahu had latta on janma nakshatra. Mars was in Mrigasira at the time "
+    "and he had latta on the 3rd from Mrigasira, which is Punarvasu, i.e. "
+    "lagna nakshatra! Rahu occupies the 6th house in the natal chart and "
+    "Mars owns it. So the setbacks given by their lattas on janma nakshatra "
+    "and lagna nakshatra were related to the 6th house matters - litigation "
+    "and enemies.")
+
+#: **The rule Exercise 45 adds.** Example 113 ranked the two targets. Here
+#: **both** are struck at once — Rahu on the janma nakshatra, Mars on the
+#: lagna nakshatra — and the precedence is not used to discard either. The
+#: two grahas are intersected instead, on the house they are both related to.
+WHEN_BOTH_TARGETS_ARE_STRUCK_THE_GRAHAS_ARE_INTERSECTED = (
+    "Rahu had latta on janma nakshatra and Mars on lagna nakshatra. Rather "
+    "than preferring the janma hit, the reading takes the house both grahas "
+    "are related to in the natal chart and reads that."
+)
+
+#: **Finding.** "Related to" spans two different relations, and the exercise
+#: uses one of each: **Rahu occupies** the 6th and **Mars owns** it. Neither
+#: alone would name the house, and nothing else in §26.7 says what counts as
+#: relating a graha to a house — so `houses_related_to` implements exactly
+#: these two and says so.
+OCCUPATION_AND_OWNERSHIP_BOTH_RELATE_A_GRAHA_TO_A_HOUSE = (
+    "Rahu occupies the 6th house in the natal chart and Mars owns it. One "
+    "graha is there and the other rules it, and the reading treats both as "
+    "relating the graha to the house."
+)
+
+#: **Finding.** This is the **fourth** reading the book gives of one event —
+#: the ruling of 8 June 2000 against Bill Gates's company. §25.6 timed it with
+#: a sodhya pinda, §26.3 read it as a vedha, §26.4.1 as five planets in bad
+#: taras, and §26.7 as two lattas meeting on the 6th house. No other event in
+#: the book is read from four directions.
+THE_RULING_IS_READ_FOUR_TIMES = (
+    "Example 112 reads 8 June 2000 through sodhya-pinda timing, Section "
+    "26.3's worked case through vedha, Section 26.4.1's through tara bala, "
+    "and Exercise 45 through latta. One event, four techniques."
+)
+
+#: The 6th house matters the answer names. "Enemies" is in §7.2's own list for
+#: the 6th; **litigation** is not, exactly as Example 112 found — see OI-55.
+EXERCISE_45_MATTERS = ("litigation", "enemies")
+
+
+def houses_related_to(graha: int, lagna_sign: int,
+                      graha_signs: dict[int, int]) -> dict:
+    """The houses a graha is related to, by §26.7's two relations.
+
+    Occupation and ownership only — those are what Exercise 45 uses, and
+    nothing in the section names a third.
+    """
+    lagna = validate.in_range("lagna sign", int(lagna_sign), 0, 11)
+    index = validate.in_range("graha", int(graha), 0, 8)
+    if index not in graha_signs:
+        raise LattaError(f"no natal sign given for graha {index}")
+
+    occupied = (int(graha_signs[index]) - lagna) % 12 + 1
+    owned = sorted((sign - lagna) % 12 + 1
+                   for sign in range(12)
+                   if int(RASI_LORD[sign]) == index)
+    return {
+        "graha": str(GRAHA_NAMES[index]),
+        "occupies": occupied,
+        "owns": owned,
+        "houses": sorted({occupied, *owned}),
+        "relations": ("occupation", "ownership"),
+    }
+
+
+def common_houses(grahas: Sequence[int], lagna_sign: int,
+                  graha_signs: dict[int, int]) -> dict:
+    """The houses every named graha is related to — Exercise 45's question."""
+    if len(grahas) < 2:
+        raise LattaError(
+            "name at least two grahas; a common house needs something to be "
+            "common to")
+    per_graha = {int(g): houses_related_to(int(g), lagna_sign, graha_signs)
+                 for g in grahas}
+    shared = set.intersection(*(set(entry["houses"])
+                                for entry in per_graha.values()))
+    return {
+        "grahas": [entry["graha"] for entry in per_graha.values()],
+        "per_graha": {entry["graha"]: entry for entry in per_graha.values()},
+        "common": sorted(shared),
+        "relations": OCCUPATION_AND_OWNERSHIP_BOTH_RELATE_A_GRAHA_TO_A_HOUSE,
+    }

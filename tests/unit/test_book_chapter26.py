@@ -2923,3 +2923,167 @@ def test_example_113s_outcome_matches_the_house_it_named():
     assert "5th December 1996" in EXAMPLE_113
     assert "vehicular accident" in EXAMPLE_113_OUTCOME
     assert "vehicles" in str(HOUSE_SIGNIFICATIONS[4]).lower()
+
+
+# --------------------------------------------------------------------------
+# Exercise 45 — two lattas meeting on one house
+# --------------------------------------------------------------------------
+
+def _gates_natal():
+    from hora.charts.book import longitudes
+    from hora.core.const import Graha
+
+    printed = longitudes(24)
+    named = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+             "Merc": Graha.MERCURY, "Jup": Graha.JUPITER,
+             "Ven": Graha.VENUS, "Sat": Graha.SATURN, "Rahu": Graha.RAHU,
+             "Ketu": Graha.KETU}
+    return (printed,
+            {int(graha): int(printed[name] // 30)
+             for name, graha in named.items()})
+
+
+def _gates_ruling_chart():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+
+    return compute_chart(
+        from_local(2000, 6, 8, 12, 0, 0.0, utc_offset_hours=-7.0),
+        Place(name="Seattle", latitude=47 + 36 / 60,
+              longitude=-(122 + 20 / 60)),
+        Settings(node_type=NodeType.MEAN))
+
+
+def test_gatess_two_nakshatra_targets_are_punarvasu_and_uttarabhadrapada():
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.latta import nakshatra_of
+
+    printed, _signs = _gates_natal()
+    assert str(NAKSHATRA_NAMES[nakshatra_of(printed["Asc"])]) == "Punarvasu"
+    assert str(NAKSHATRA_NAMES[nakshatra_of(printed["Moon"])]) == (
+        "Uttara Bhadrapada")
+
+
+def test_rahu_kicks_the_janma_nakshatra_and_mars_the_lagna_nakshatra():
+    """"Rahu had latta on janma nakshatra ... Mars ... i.e. lagna
+    nakshatra!" Both at once, which Example 113 never had.
+    """
+    from hora.core.const import Graha
+    from hora.transits.latta import latta_hits
+
+    printed, _signs = _gates_natal()
+    computed = _gates_ruling_chart()
+
+    rahu = latta_hits("Rahu", computed.positions[int(Graha.RAHU)].longitude,
+                      printed["Moon"], printed["Asc"])
+    assert rahu["from_nakshatra"] == "Punarvasu"
+    assert (rahu["offset"], rahu["direction"]) == (9, "backward")
+    assert rahu["kicks"] == "Uttara Bhadrapada"
+    assert rahu["hits"] == ["natal Moon"]
+    assert rahu["on_janma_nakshatra"] is True
+
+    mars = latta_hits("Mars", computed.positions[int(Graha.MARS)].longitude,
+                      printed["Moon"], printed["Asc"])
+    assert mars["from_nakshatra"] == "Mrigashira"
+    assert (mars["offset"], mars["direction"]) == (3, "forward")
+    assert mars["kicks"] == "Punarvasu"
+    assert mars["hits"] == ["natal lagna"]
+    assert mars["on_janma_nakshatra"] is False
+
+
+def test_the_common_house_of_rahu_and_mars_is_the_sixth():
+    """"Rahu occupies the 6th house in the natal chart and Mars owns it."
+    Two different relations to one house.
+    """
+    from hora.core.const import Graha
+    from hora.transits.latta import (
+        OCCUPATION_AND_OWNERSHIP_BOTH_RELATE_A_GRAHA_TO_A_HOUSE,
+        common_houses,
+        houses_related_to,
+    )
+
+    printed, signs = _gates_natal()
+    lagna = int(printed["Asc"] // 30)
+    assert A[lagna] == "Ge"
+
+    rahu = houses_related_to(int(Graha.RAHU), lagna, signs)
+    mars = houses_related_to(int(Graha.MARS), lagna, signs)
+    assert rahu["occupies"] == 6
+    assert rahu["owns"] == []
+    assert 6 in mars["owns"]
+    assert mars["occupies"] != 6
+
+    got = common_houses([int(Graha.RAHU), int(Graha.MARS)], lagna, signs)
+    assert got["common"] == [6]
+    assert got["relations"] == (
+        OCCUPATION_AND_OWNERSHIP_BOTH_RELATE_A_GRAHA_TO_A_HOUSE)
+
+
+def test_the_common_house_survives_oi_135s_other_co_lord_reading():
+    """Our lord table gives Scorpio and Aquarius to Mars and Saturn. If the
+    node were taken as Aquarius's lord, as the book does in every co-owned
+    8th house it reads, Rahu would gain the 9th and the answer would not
+    change.
+    """
+    from hora.core.const import Graha
+    from hora.transits.latta import common_houses, houses_related_to
+
+    printed, signs = _gates_natal()
+    lagna = int(printed["Asc"] // 30)
+    mars = set(houses_related_to(int(Graha.MARS), lagna, signs)["houses"])
+    rahu = set(houses_related_to(int(Graha.RAHU), lagna, signs)["houses"])
+
+    aquarius_house = (R["Aq"] - lagna) % 12 + 1
+    assert aquarius_house == 9
+    assert (rahu | {aquarius_house}) & mars == {6}
+    assert common_houses([int(Graha.RAHU), int(Graha.MARS)],
+                         lagna, signs)["common"] == [6]
+
+
+def test_when_both_targets_are_struck_the_precedence_is_not_used_to_discard():
+    from hora.transits.latta import (
+        JANMA_NAKSHATRA_OUTRANKS_LAGNA_NAKSHATRA,
+        WHEN_BOTH_TARGETS_ARE_STRUCK_THE_GRAHAS_ARE_INTERSECTED,
+    )
+
+    assert "more important" in JANMA_NAKSHATRA_OUTRANKS_LAGNA_NAKSHATRA
+    assert "Rather than preferring the janma hit" in (
+        WHEN_BOTH_TARGETS_ARE_STRUCK_THE_GRAHAS_ARE_INTERSECTED)
+
+
+def test_the_sixth_house_matters_repeat_example_112s_missing_word():
+    from hora.core.const import HOUSE_SIGNIFICATIONS
+    from hora.transits.latta import EXERCISE_45_MATTERS
+
+    assert EXERCISE_45_MATTERS == ("litigation", "enemies")
+    sixth = str(HOUSE_SIGNIFICATIONS[6]).lower()
+    assert "enemies" in sixth
+    assert "litigation" not in sixth          # OI-55, a second time
+
+
+def test_the_ruling_of_8_june_2000_is_now_read_four_ways():
+    from hora.transits.gochara import EXAMPLE_112_RUNS
+    from hora.transits.latta import THE_RULING_IS_READ_FOUR_TIMES
+    from hora.transits.tara import TARA_WORKED_CASE
+    from hora.transits.vedha import VEDHA_WORKED_CASE
+
+    assert all(run[5] == "Krittika" for run in EXAMPLE_112_RUNS)
+    assert str(VEDHA_WORKED_CASE["date"]) == "June 8, 2000"
+    assert str(TARA_WORKED_CASE["date"]) == "June 8, 2000"
+    assert TARA_WORKED_CASE["in_bad_taras"] == 5
+    assert "One event, four techniques" in THE_RULING_IS_READ_FOUR_TIMES
+
+
+def test_common_houses_checks_its_inputs():
+    from hora.core.const import Graha
+    from hora.core.validate import InputError
+    from hora.transits.latta import LattaError, common_houses, houses_related_to
+
+    _printed, signs = _gates_natal()
+    with pytest.raises(LattaError, match="at least two grahas"):
+        common_houses([int(Graha.MARS)], 0, signs)
+    with pytest.raises(LattaError, match="no natal sign given"):
+        houses_related_to(int(Graha.MARS), 0, {})
+    with pytest.raises(InputError):
+        houses_related_to(int(Graha.MARS), 12, signs)

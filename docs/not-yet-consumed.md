@@ -1254,6 +1254,19 @@ lordships, and the precedence — so what follows is prose and findings.
 | `ACCIDENTS_IS_NOT_IN_THE_EIGHTH_HOUSES_PRINTED_LIST` | Ours: a signification the reading uses and §7.2's 8th does not carry — OI-55's fifth instance |
 | `A_GRAHA_CAN_CARRY_TWO_LORDSHIPS_INTO_THE_READING` | Ours: Jupiter owns the 4th and the 7th, so his latta threatens three matters and the event was the 4th's |
 
+### Chapter 26 — Exercise 45 (7)
+
+`transits/latta.py`. Everything **is** checked — both lattas from the
+ephemeris, both natal nakshatra targets, and the common house, which
+`common_houses` now computes because the exercise asks for it in those words.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXERCISE_45` · `EXERCISE_45_ANSWER` · `EXERCISE_45_MATTERS` | The exercise and its answer verbatim, and the two 6th-house matters it names |
+| `WHEN_BOTH_TARGETS_ARE_STRUCK_THE_GRAHAS_ARE_INTERSECTED` | Ours: Example 113's precedence is not used to discard a hit when both targets fire; the grahas are intersected instead |
+| `OCCUPATION_AND_OWNERSHIP_BOTH_RELATE_A_GRAHA_TO_A_HOUSE` | The two relations, returned by `common_houses`. Held here because §26.7 names no third and none is added |
+| `THE_RULING_IS_READ_FOUR_TIMES` | Ours: 8 June 2000 read through sodhya pinda, vedha, tara bala and latta. No other event in the book gets four |
+
 ---
 
 ## How to use this register
