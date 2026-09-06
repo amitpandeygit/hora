@@ -830,20 +830,81 @@ TABLE_65_SUN: dict[str, object] = {
     ),
 }
 
+#: Table 66, as printed. Its last two rows fall past a page break in the
+#: source and are part of the same table.
+TABLE_66_MOON: dict[str, object] = {
+    "graha": "Moon",
+    "title": "Body Parts in the Transit of Moon",
+    "rows": (
+        {"counts": (1, 2), "part": "Face", "result": "Great fear"},
+        {"counts": (3, 4, 5, 6), "part": "Head", "result": "Well-being"},
+        {"counts": (7, 8), "part": "Back",
+         "result": "Victory over enemies"},
+        {"counts": (9, 10), "part": "Eyes", "result": "Money"},
+        {"counts": (11, 12, 13, 14, 15), "part": "Heart",
+         "result": "Comforts and peace"},
+        {"counts": (16, 17, 18), "part": "Left hand", "result": "Quarrels"},
+        {"counts": (19, 20, 21, 22, 23, 24), "part": "Two feet",
+         "result": "Going abroad"},
+        {"counts": (25, 26, 27), "part": "Right hand",
+         "result": "Financial gains"},
+    ),
+}
+
 BODY_PART_TABLES: dict[int, dict[str, object] | None] = {
     65: TABLE_65_SUN,
-    66: None,
+    66: TABLE_66_MOON,
     67: None,
     68: None,
     69: None,
 }
 
 #: **Ours, not the book's.** §26.6 prints no good/bad column, so this names
-#: the results that are plainly harms. It is safe to do here in a way it was
-#: not for Table 58: every result in this table is unambiguous — there is no
-#: row whose wording pulls against itself, as Venus's 12th did.
+#: the results that are plainly harms. No row's wording pulls against itself
+#: the way Venus's 12th did in Table 58, so reading the plain sense is safe —
+#: but see `BODY_PART_NEUTRAL` for the results that are neither.
 BODY_PART_HARMS: frozenset[str] = frozenset({
-    "Destruction", "Poverty", "Physical ailments", "Death"})
+    "Destruction", "Poverty", "Physical ailments", "Death",
+    "Great fear", "Quarrels"})
+
+#: **Ours.** Results that are neither a harm nor a benefit. Table 66's "Going
+#: abroad" is the first: it is an event, not a verdict, and Exercise 43 read
+#: one native's departure as the **gain** a favourable transit brought. So it
+#: is left ungraded rather than forced onto a side.
+BODY_PART_NEUTRAL: frozenset[str] = frozenset({"Going abroad"})
+
+#: **Finding.** §26.6's results are not all verdicts. Table 65's eight all
+#: read plainly good or bad; Table 66 introduces one that does not — "Going
+#: abroad" — so `harm` is three-valued from here on and a caller must handle
+#: `None`. Nothing decides it for them, because the book does not.
+NOT_EVERY_STANDARD_RESULT_IS_A_VERDICT = (
+    "Going abroad is an event and not a grade. Exercise 43 read a departure "
+    "as the gain a favourable transit gave, so the same result can be "
+    "welcome or not depending on the native, and section 26.6 says nothing."
+)
+
+#: **Finding.** The tables do not share a vocabulary of body parts. Tables 65
+#: and 66 agree on five names — Head, Eyes, Left hand, Right hand, Two feet —
+#: and differ on the rest: the Sun's table says **Mouth/Face** where the
+#: Moon's says **Face**, and each has parts the other lacks (Chest and Private
+#: parts against Back and Heart). A reverse lookup by exact name therefore
+#: misses matches, which is why `grahas_dwelling_in` also reports parts whose
+#: names overlap.
+THE_TABLES_DO_NOT_SHARE_A_BODY_PART_VOCABULARY = (
+    "Table 65 calls it Mouth/Face and Table 66 calls it Face. Five of the "
+    "eight names are shared exactly and three differ in each table, so "
+    "looking a part up by string alone is not enough."
+)
+
+#: **Finding.** Both tables give **Two feet** a block of exactly six counts,
+#: the largest block in each, and read it oppositely — Poverty for the Sun,
+#: Going abroad for the Moon. Recorded as an observation on two tables; three
+#: more are pending before it is worth calling a pattern.
+TWO_FEET_TAKES_SIX_COUNTS_IN_BOTH_TABLES_SO_FAR = (
+    "Two feet spans the 14th to 19th for the Sun and the 19th to 24th for "
+    "the Moon, six counts each and the widest block in both. The results "
+    "differ: Poverty and Going abroad."
+)
 
 #: **Finding.** Table 65 has a different *shape* from Table 64, so neither can
 #: be derived from the other. The taras repeat every nine nakshatras; the body
@@ -927,10 +988,12 @@ def body_part(graha: str, natal_moon_longitude: float,
         "transit_nakshatra": counted["transit_nakshatra"],
         "part": row["part"],
         "result": row["result"],
-        "harm": row["result"] in BODY_PART_HARMS,
+        "harm": (None if row["result"] in BODY_PART_NEUTRAL
+                 else row["result"] in BODY_PART_HARMS),
         "harm_is_ours": (
             "Section 26.6 prints no good/bad column; `harm` reads the plain "
-            "sense of the result and is not the book's grading"),
+            "sense of the result and is not the book's grading. It is None "
+            "for a result that is an event rather than a verdict"),
         "tara": counted["tara"],
         "tara_grade": counted["grade"],
         "the_two_disagree_often": THE_TWO_TABLES_AGREE_NO_BETTER_THAN_CHANCE,
@@ -953,12 +1016,26 @@ def grahas_dwelling_in(part: str) -> dict:
                 found.append({"graha": table["graha"], "table": number,
                               "counts": row["counts"],
                               "result": row["result"]})
+    wanted = {word for word in part.replace("/", " ").lower().split()}
+    similar = []
+    for number, table in BODY_PART_TABLES.items():
+        if table is None:
+            continue
+        for row in _rows_of(table):
+            name = str(row["part"])
+            if name == part:
+                continue
+            if wanted & {w for w in name.replace("/", " ").lower().split()}:
+                similar.append({"part": name, "graha": table["graha"],
+                                "table": number})
     return {
         "part": part,
         "grahas": found,
+        "similar_parts": similar,
         "tables_supplied": [n for n, t in BODY_PART_TABLES.items()
                             if t is not None],
         "tables_pending": list(BODY_PART_TABLES_PENDING),
         "complete": not BODY_PART_TABLES_PENDING,
         "note": THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS,
+        "vocabulary": THE_TABLES_DO_NOT_SHARE_A_BODY_PART_VOCABULARY,
     }
