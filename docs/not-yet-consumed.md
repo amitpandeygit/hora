@@ -1204,6 +1204,21 @@ backwards over the complete set.
 | `TABLE_69_IS_THE_ONLY_ONE_THAT_REPEATS_A_RESULT` | Ours: Comforts three times, where every other table gives each row its own result |
 | `THE_BODY_PART_TABLE_IS_BLOCKS_NOT_A_CYCLE` · `THE_TWO_TABLES_AGREE_NO_BETTER_THAN_CHANCE` · `THE_FIRST_COUNT_IS_GRADED_THREE_WAYS` | Ours: Table 65's shape, its 12-to-12 disagreement with Table 64, and the three different verdicts the 1st count receives |
 
+### Chapter 26 — §26.6's worked example (7)
+
+`transits/tara.py`. Every figure **is** checked — the Visakha pada, the four
+nakshatras, the January-to-March window to the minute, and both murthis — so
+what follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `A_DWELLING_CAN_BE_AFFLICTED_BY_ASPECT_OR_VEDHA` | The section's other modifier path, bringing §26.5 and §26.3 into the body-part reading. The example does not take it, and nothing composes the three in code |
+| `BODY_PART_WORKED_CASE` | The example as a fixture, checked against what the engine derives |
+| `THE_EXAMPLE_STARTS_FROM_THE_SYMPTOM` | Ours: the only worked inverse reading in Part 3, done properly — symptom to part to graha to window |
+| `THE_MURTHI_OVERTURNS_THE_STANDARD_RESULT` | Ours: Table 65 says Victory and the native had pain. The body part says where, the standard result what normally, the murthi how it lands |
+| `ONE_DWELLING_CAN_SPAN_TWO_MURTHIS` | Ours: a nakshatra window and a rasi window do not line up, so the murthi changes inside the dwelling |
+| `THE_WINDOW_IS_GIVEN_IN_WHOLE_DAYS` | Ours: the Sun leaves Satabhisha on the morning of 4 March and the book prints 3 March, so the window names last full days |
+
 ---
 
 ## How to use this register

@@ -1161,3 +1161,81 @@ def grahas_dwelling_in(part: str) -> dict:
         "note": THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS,
         "vocabulary": THE_TABLES_DRAW_EIGHT_PARTS_FROM_A_LARGER_POOL,
     }
+
+
+# --------------------------------------------------------------------------
+# §26.6's worked example — the inverse reading, and the murthi over it
+# --------------------------------------------------------------------------
+
+#: §26.6's second modifier path, which the worked example does not take: a
+#: dwelling can be turned to suffering by **aspect or vedha** as well as by a
+#: murthi. It brings §26.5 and §26.3 into the body-part reading.
+A_DWELLING_CAN_BE_AFFLICTED_BY_ASPECT_OR_VEDHA = (
+    "If a planet dwells in the left hand in transit and some natural "
+    "malefics aspect it or cause vedha on it, then the planet may give "
+    "suffering related to the left hand. Some injuries to the left hand are "
+    "possible then.")
+
+BODY_PART_WORKED_CASE = {
+    "natal_moon": "the 1st quarter of Visakha",
+    "natal_moon_rasi": "Li",
+    "symptom": "persistent pain in his chest",
+    "when": "February 2000",
+    "graha": "Sun",
+    "part": "Chest",
+    "counts": (6, 7, 8, 9),
+    "nakshatras": ("Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha"),
+    "window": "Jan 11-Mar 3, 2000",
+    "murthis": ({"rasi": "Cp", "moon_then": "Ar", "house": 7,
+                 "murthi": "Taamra"},
+                {"rasi": "Aq", "moon_then": "Ta", "house": 8,
+                 "murthi": "Loha"}),
+}
+
+#: **Finding.** The example runs §26.6's second purpose properly: it starts
+#: from a **symptom** — chest pain — reads the tables backwards to the part,
+#: and forwards again to the graha and the window. It is the only worked
+#: instance of an inverse reading in Part 3.
+THE_EXAMPLE_STARTS_FROM_THE_SYMPTOM = (
+    "A native had persistent chest pain in February 2000. Table 65 puts the "
+    "Sun in the chest at the 6th to 9th from janma nakshatra, which from "
+    "Visakha are Uttaraashaadha, Sravana, Dhanishtha and Satabhisha, and the "
+    "Sun was in them from 11 January to 3 March 2000."
+)
+
+#: **Finding, and the chapter composing.** Table 65's standard result for the
+#: Sun in the chest is **Victory** — a benefit — and the native got chest
+#: pain. What turns it is the **murthi**: the Sun was a taamra murthi through
+#: his Capricorn transit and a loha murthi through his Aquarius transit, both
+#: unfavourable for a Libra Moon. So the body part says *where*, the standard
+#: result says *what normally*, and §26.2's murthi says *how it lands*. This
+#: is `THE_MURTHI_SCALES_A_VERDICT_IT_DOES_NOT_MAKE_ONE` applied to a §26.6
+#: result rather than to a chapter 25 one.
+THE_MURTHI_OVERTURNS_THE_STANDARD_RESULT = (
+    "Table 65 gives the Sun in the chest the standard result Victory. The "
+    "example reads chest pain from the same dwelling, because the Sun was a "
+    "copper form and then an iron form for this nativity. The murthi decides "
+    "how the standard result lands."
+)
+
+#: **Finding.** A murthi is fixed per **rasi** transit and the chest window is
+#: a **nakshatra** window, so the two do not line up: the Sun dwelt in the
+#: chest from 11 January to 3 March, and changed murthi in the middle of it,
+#: on entering Aquarius on 13 February. The example carries both — "a
+#: copper/iron form" — rather than picking one.
+ONE_DWELLING_CAN_SPAN_TWO_MURTHIS = (
+    "The Sun's chest window runs across four nakshatras and two rasis, so "
+    "his murthi changes inside it: taamra from the Capricorn ingress and "
+    "loha from the Aquarius ingress. A body-part window is not a murthi "
+    "window."
+)
+
+#: **Finding.** The book's window ends on the day the transit's **last full
+#: day** falls, not on the crossing. The Sun leaves Satabhisha at about 08:40
+#: on 4 March 2000, and §26.6 gives the window as ending 3 March.
+THE_WINDOW_IS_GIVEN_IN_WHOLE_DAYS = (
+    "The Sun enters Uttaraashaadha at about 16:20 on 11 January 2000 and "
+    "leaves Satabhisha at about 08:40 on 4 March. The printed window is "
+    "Jan 11 to Mar 3, so it names whole days and stops at the last complete "
+    "one."
+)

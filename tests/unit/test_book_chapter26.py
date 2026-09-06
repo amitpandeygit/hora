@@ -2344,3 +2344,171 @@ def test_section_26_6_is_complete():
         rows = body_part_table(number)["rows"]
         counts = [c for row in rows for c in row["counts"]]
         assert sorted(counts) == list(range(1, 28)), number
+
+
+# --------------------------------------------------------------------------
+# §26.6's worked example — the symptom read backwards
+# --------------------------------------------------------------------------
+
+def _sun_longitude_at():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_jd
+
+    place = Place(name="New Delhi", latitude=28 + 36 / 60,
+                  longitude=77 + 12 / 60)
+    settings = Settings(node_type=NodeType.MEAN)
+
+    def of(graha):
+        def at(jd):
+            return compute_chart(from_jd(jd), place,
+                                 settings).positions[int(graha)].longitude
+        return at
+
+    return of, Graha
+
+
+def test_a_visakha_first_pada_moon_is_a_libra_moon():
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.tara import BODY_PART_WORKED_CASE, NAKSHATRA_SPAN
+
+    index = [str(n) for n in NAKSHATRA_NAMES].index("Vishakha")
+    start = index * NAKSHATRA_SPAN
+    first_pada_end = start + NAKSHATRA_SPAN / 4
+    assert int(start // 30) == int(first_pada_end // 30) == R["Li"]
+    assert str(BODY_PART_WORKED_CASE["natal_moon_rasi"]) == "Li"
+
+
+def test_the_chest_counts_and_their_nakshatras_are_as_the_example_says():
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.tara import BODY_PART_WORKED_CASE, body_part_table
+
+    chest = next(row for row in body_part_table(65)["rows"]
+                 if row["part"] == "Chest")
+    assert chest["counts"] == (6, 7, 8, 9)
+    assert chest["result"] == "Victory"
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    visakha = names.index("Vishakha")
+    got = tuple(names[(visakha + count - 1) % 27] for count in chest["counts"])
+    assert got == BODY_PART_WORKED_CASE["nakshatras"]
+    assert got == ("Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha")
+
+
+def test_the_suns_chest_window_is_the_printed_january_to_march_window():
+    """The Sun enters Uttaraashaadha late on 11 January and leaves
+    Satabhisha on the morning of 4 March, so the window's last full day is
+    3 March — which is what §26.6 prints.
+    """
+    from hora.core.timeutil import from_local, jd_to_local_str
+    from hora.panchanga.solver import scan_for_crossing
+    from hora.transits.tara import (
+        BODY_PART_WORKED_CASE,
+        NAKSHATRA_SPAN,
+        THE_WINDOW_IS_GIVEN_IN_WHOLE_DAYS,
+    )
+
+    of, Graha = _sun_longitude_at()
+    sun = of(Graha.SUN)
+    window = (from_local(2000, 1, 5, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut,
+              from_local(2000, 3, 10, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut)
+
+    entered = scan_for_crossing(sun, 20 * NAKSHATRA_SPAN, *window)
+    left = scan_for_crossing(sun, 24 * NAKSHATRA_SPAN, *window)
+    assert jd_to_local_str(entered, 5.5).startswith("2000-01-11")
+    assert jd_to_local_str(left, 5.5).startswith("2000-03-04")
+    assert str(BODY_PART_WORKED_CASE["window"]) == "Jan 11-Mar 3, 2000"
+    assert "stops at the last complete one" in THE_WINDOW_IS_GIVEN_IN_WHOLE_DAYS
+
+
+def test_both_murthis_of_the_example_reproduce():
+    """"At the time Sun entered Capricorn ... Moon was in Ar" and "At the
+    time Sun entered Aquarius ... Moon was in Ta."
+    """
+    from hora.core.timeutil import from_local
+    from hora.transits.murthi import murthi, rasi_ingress
+    from hora.transits.tara import BODY_PART_WORKED_CASE
+
+    of, Graha = _sun_longitude_at()
+    natal_moon = R["Li"] * 30.0 + 21.0          # Visakha's 1st pada
+    window = (from_local(2000, 1, 1, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut,
+              from_local(2000, 3, 1, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut)
+
+    for block in BODY_PART_WORKED_CASE["murthis"]:
+        found = rasi_ingress(of(Graha.SUN), R[str(block["rasi"])], *window)
+        assert found["found"] is True
+        moon = of(Graha.MOON)(found["jd"])
+        assert A[int(moon // 30)] == block["moon_then"], block["rasi"]
+        got = murthi(natal_moon, moon)
+        assert got["house"] == block["house"]
+        assert got["murthi"] == block["murthi"]
+        assert got["favourable"] is False
+
+
+def test_the_murthi_overturns_table_65s_standard_result():
+    """Table 65 calls the Sun in the chest Victory; the native had chest
+    pain. The murthi is what turns it.
+    """
+    from hora.transits.murthi import (
+        THE_MURTHI_SCALES_A_VERDICT_IT_DOES_NOT_MAKE_ONE,
+    )
+    from hora.transits.tara import (
+        BODY_PART_HARMS,
+        NAKSHATRA_SPAN,
+        THE_MURTHI_OVERTURNS_THE_STANDARD_RESULT,
+        body_part,
+    )
+
+    natal_moon = R["Li"] * 30.0 + 21.0
+    got = body_part("Sun", natal_moon, 20 * NAKSHATRA_SPAN + 1.0)
+    assert got["count"] == 6
+    assert got["part"] == "Chest"
+    assert got["result"] == "Victory"
+    assert got["harm"] is False
+    assert "Victory" not in BODY_PART_HARMS
+
+    assert "decides how the standard result lands" in (
+        THE_MURTHI_OVERTURNS_THE_STANDARD_RESULT)
+    assert "may not give his full results" in (
+        THE_MURTHI_SCALES_A_VERDICT_IT_DOES_NOT_MAKE_ONE)
+
+
+def test_a_body_part_window_is_not_a_murthi_window():
+    """The chest window spans four nakshatras and two rasis, so the Sun's
+    murthi changes inside it. The example carries both.
+    """
+    from hora.core.timeutil import from_local, jd_to_local_str
+    from hora.transits.murthi import rasi_ingress
+    from hora.transits.tara import (
+        BODY_PART_WORKED_CASE,
+        ONE_DWELLING_CAN_SPAN_TWO_MURTHIS,
+    )
+
+    of, Graha = _sun_longitude_at()
+    aquarius = rasi_ingress(
+        of(Graha.SUN), R["Aq"],
+        from_local(2000, 1, 1, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut,
+        from_local(2000, 3, 1, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut)
+    assert jd_to_local_str(aquarius["jd"], 5.5).startswith("2000-02-13")
+
+    murthis = BODY_PART_WORKED_CASE["murthis"]
+    assert len(murthis) == 2
+    assert {block["murthi"] for block in murthis} == {"Taamra", "Loha"}
+    assert "not a murthi window" in ONE_DWELLING_CAN_SPAN_TWO_MURTHIS
+
+
+def test_the_other_modifier_path_is_aspect_and_vedha():
+    """§26.6's opening sentence brings §26.5 and §26.3 into the body-part
+    reading. The worked example takes the murthi path instead.
+    """
+    from hora.charts.aspects import NAKSHATRA_DRISHTI_RESULTS
+    from hora.transits.tara import A_DWELLING_CAN_BE_AFFLICTED_BY_ASPECT_OR_VEDHA
+    from hora.transits.vedha import VEDHA_RULE
+
+    assert "natural malefics aspect it or cause vedha on it" in (
+        A_DWELLING_CAN_BE_AFFLICTED_BY_ASPECT_OR_VEDHA)
+    assert "injuries to the left hand" in (
+        A_DWELLING_CAN_BE_AFFLICTED_BY_ASPECT_OR_VEDHA)
+    assert "natural malefic" in NAKSHATRA_DRISHTI_RESULTS
+    assert "vedha sthana" in VEDHA_RULE
