@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 98 waiting on evidence · 2 parked**
+**5 waiting on Amit · 100 waiting on evidence · 2 parked**
 
 ---
 
@@ -2110,6 +2110,44 @@ alternation, and none is taken from outside the book.
 
 **Closes when:** a later section gives Ketu's latta, or you confirm he has
 none.
+
+### OI-146 — one square of Figure 3 cannot be read, and the arithmetic names it
+
+**NEEDS YOU.** Figure 3's square at **row 2, column 7** — the row beginning
+Abhijit, seventh square in — reads to us as the vowel **a**. It cannot be one:
+
+- it lies on neither diagonal, and §26.8 says the diagonals hold the vowels;
+- counting it a vowel gives 17 vowels and 19 consonants, against the section's
+  own "16 (vowels) + 20 (consonants) ... = 81".
+
+Both constraints say **consonant**. Which consonant, we will not guess, so the
+cell is `None` in `FIGURE_3` and every count is checked around it — 80 known
+squares plus one, and 19 known consonants plus one.
+
+**A clearer look at that one square would close it.** Nothing else in the
+figure is in doubt: all 28 nakshatras, all 16 diagonal vowels, all 12 rasis
+and all 5 central squares check out, and the section's tally closes exactly
+once that square counts as a consonant.
+
+**Closes when:** you send that square, or a later section names its letter.
+
+### OI-147 — §26.8's vedha lines are stated but not determined
+
+**Waiting on the book.** "We can draw one vertical **or** horizontal line and
+two crossward lines starting at the nakshatra."
+
+Neither half is usable as written. It does not say which of vertical and
+horizontal a given square takes — a nakshatra on the north border has a
+vertical line into the grid and a horizontal one along the border, and both
+are drawable. And "crossward" is not defined: the grid's own diagonals through
+that square is the natural reading, but the figure's diagonals are the vowel
+lines, which would make every planet obstruct vowels.
+
+**What we do:** nothing is drawn. `THE_VEDHA_LINES_ARE_NOT_DETERMINED` records
+the ambiguity and no line function exists, so no obstruction is computed from
+a reading we cannot source.
+
+**Closes when:** a worked case shows the three lines for one nakshatra.
 
 ---
 

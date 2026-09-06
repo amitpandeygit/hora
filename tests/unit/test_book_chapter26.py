@@ -7,6 +7,8 @@ sections arrive: nothing is built ahead of a page.
 """
 from __future__ import annotations
 
+from itertools import pairwise
+
 import pytest
 
 from hora.core.const import RASI_ABBR
@@ -3087,3 +3089,182 @@ def test_common_houses_checks_its_inputs():
         houses_related_to(int(Graha.MARS), 0, {})
     with pytest.raises(InputError):
         houses_related_to(int(Graha.MARS), 12, signs)
+
+
+# --------------------------------------------------------------------------
+# §26.8 — the Sarvatobhadra chakra
+# --------------------------------------------------------------------------
+
+def test_figure_3_is_nine_by_nine_with_one_square_untranscribed():
+    from hora.transits.sarvatobhadra import (
+        FIGURE_3,
+        UNCERTAIN_CELL,
+        UNCERTAIN_CELL_NOTE,
+        cell,
+    )
+
+    assert len(FIGURE_3) == 9
+    assert all(len(row) == 9 for row in FIGURE_3)
+    squares = [c for row in FIGURE_3 for c in row]
+    assert len(squares) == 81
+    assert squares.count(None) == 1
+    assert cell(*UNCERTAIN_CELL) is None
+    assert UNCERTAIN_CELL == (2, 7)
+    assert "The letter is not guessed" in UNCERTAIN_CELL_NOTE
+
+
+def test_each_border_holds_seven_nakshatras_and_abhijit_is_among_them():
+    from hora.transits.sarvatobhadra import (
+        BORDER_NAKSHATRAS,
+        SARVATOBHADRA_COMPOSITION,
+    )
+
+    assert set(BORDER_NAKSHATRAS) == {"north", "south", "east", "west"}
+    assert all(len(side) == 7 for side in BORDER_NAKSHATRAS.values())
+    every = [n for side in BORDER_NAKSHATRAS.values() for n in side]
+    assert len(every) == len(set(every)) == 28
+    assert "Abhijit" in every
+    assert "Abhijit (the last quarter of Uttarashadha)" in (
+        SARVATOBHADRA_COMPOSITION)
+
+
+def test_every_diagonal_square_but_the_centre_holds_a_vowel():
+    from hora.transits.sarvatobhadra import (
+        DIAGONALS_HOLD_THE_VOWELS,
+        FIGURE_3,
+        VOWELS,
+    )
+
+    diagonal = {(r, c) for r in range(9) for c in range(9)
+                if r == c or r + c == 8}
+    diagonal.discard((4, 4))
+    assert len(diagonal) == 16
+    assert {FIGURE_3[r][c] for r, c in diagonal} == set(VOWELS)
+    assert len(VOWELS) == len(set(VOWELS)) == 16
+    assert "except the central square" in DIAGONALS_HOLD_THE_VOWELS
+
+
+def test_the_sections_own_tally_closes_and_names_the_missing_square():
+    """16 vowels + 20 consonants + 12 rasis + 28 nakshatras + 5 central = 81.
+    Everything but the consonants is transcribed, and the tally leaves
+    exactly 20 — of which 19 are read and one is `UNCERTAIN_CELL`.
+    """
+    from hora.transits.sarvatobhadra import (
+        BORDER_NAKSHATRAS,
+        CENTRE_CELLS,
+        FIGURE_3,
+        RASI_CELLS,
+        SARVATOBHADRA_TALLY,
+        VOWELS,
+    )
+
+    nakshatras = {n for side in BORDER_NAKSHATRAS.values() for n in side}
+    accounted = (len(nakshatras) + len(VOWELS) + len(RASI_CELLS)
+                 + len(CENTRE_CELLS))
+    assert accounted == 61
+    assert 81 - accounted == 20
+
+    named = set(nakshatras) | set(VOWELS) | set(RASI_CELLS)
+    centres = set(CENTRE_CELLS)
+    consonants = [FIGURE_3[r][c] for r in range(9) for c in range(9)
+                  if (r, c) not in centres and FIGURE_3[r][c] not in named]
+    assert consonants.count(None) == 1
+    assert len(consonants) == 20
+    assert "= 81" in SARVATOBHADRA_TALLY
+
+
+def test_the_twelve_rasis_sit_where_figure_3_puts_them():
+    from hora.transits.sarvatobhadra import FIGURE_3, RASI_CELLS
+
+    assert len(RASI_CELLS) == 12
+    for rasi, (row, column) in RASI_CELLS.items():
+        assert FIGURE_3[row][column] == rasi
+        assert rasi in A                      # all twelve, no duplicates
+    assert set(RASI_CELLS) == set(A)
+
+
+def test_the_five_central_squares_hold_the_tithi_groups_and_all_seven_days():
+    from hora.transits.sarvatobhadra import CENTRE_CELLS, TITHI_GROUPS
+
+    assert len(CENTRE_CELLS) == 5
+    assert set(CENTRE_CELLS) == {(3, 4), (4, 3), (4, 4), (4, 5), (5, 4)}
+    groups = {str(entry["tithi_group"]) for entry in CENTRE_CELLS.values()}
+    assert groups == set(TITHI_GROUPS)
+
+    weekdays = [day for entry in CENTRE_CELLS.values()
+                for day in entry["weekdays"]]
+    assert sorted(weekdays) == sorted([
+        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+        "Saturday"])
+
+
+def test_the_twenty_fifth_tithi_belongs_to_no_group():
+    """Four groups step by 5 and hold six tithis; Poorna holds five and steps
+    5, 5, 5, 10. D-76.
+    """
+    from hora.transits.sarvatobhadra import (
+        THE_TWENTY_FIFTH_TITHI_IS_MISSING,
+        TITHI_GROUPS,
+        tithi_group,
+    )
+
+    listed = sorted(t for group in TITHI_GROUPS.values() for t in group)
+    assert len(listed) == len(set(listed)) == 29
+    assert set(range(1, 31)) - set(listed) == {25}
+    assert tithi_group(25) is None
+
+    for name, group in TITHI_GROUPS.items():
+        steps = {b - a for a, b in pairwise(group)}
+        if name == "Poorna":
+            assert steps == {5, 10}
+            assert len(group) == 5
+        else:
+            assert steps == {5}
+            assert len(group) == 6
+
+    for tithi, expected in ((1, "Nanda"), (27, "Bhadra"), (28, "Jaya"),
+                            (29, "Rikta"), (30, "Poorna")):
+        assert tithi_group(tithi) == expected
+    assert "in no group at all" in THE_TWENTY_FIFTH_TITHI_IS_MISSING
+
+
+def test_no_vedha_lines_are_drawn_from_the_chakra():
+    """§26.8 says three lines and leaves both halves ambiguous. OI-147."""
+    import hora.transits.sarvatobhadra as module
+    from hora.transits.sarvatobhadra import (
+        THE_VEDHA_LINES_ARE_NOT_DETERMINED,
+        VEDHA_RULE,
+    )
+
+    assert "one vertical or horizontal line" in VEDHA_RULE
+    assert "two crossward lines" in VEDHA_RULE
+    assert "the lines are not drawn" in THE_VEDHA_LINES_ARE_NOT_DETERMINED
+    assert not any("line" in name.lower() and callable(getattr(module, name))
+                   for name in dir(module))
+
+
+def test_the_chakras_definition_glosses_both_words():
+    from hora.transits.sarvatobhadra import (
+        BHADRA_MEANS,
+        SARVATAH_MEANS,
+        SARVATOBHADRA_DEFINITION,
+    )
+
+    assert SARVATAH_MEANS == "everywhere, or entirely"
+    assert BHADRA_MEANS == "auspicious, or well"
+    assert "all-round well-being" in SARVATOBHADRA_DEFINITION
+    assert "auspicious and inauspicious results" in SARVATOBHADRA_DEFINITION
+
+
+def test_sarvatobhadra_helpers_check_their_inputs():
+    from hora.core.validate import InputError
+    from hora.transits.sarvatobhadra import cell, tithi_group
+
+    for bad in (-1, 9):
+        with pytest.raises(InputError):
+            cell(bad, 0)
+        with pytest.raises(InputError):
+            cell(0, bad)
+    for bad in (0, 31):
+        with pytest.raises(InputError):
+            tithi_group(bad)

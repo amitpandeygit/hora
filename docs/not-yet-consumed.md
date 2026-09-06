@@ -1267,6 +1267,21 @@ ephemeris, both natal nakshatra targets, and the common house, which
 | `OCCUPATION_AND_OWNERSHIP_BOTH_RELATE_A_GRAHA_TO_A_HOUSE` | The two relations, returned by `common_houses`. Held here because §26.7 names no third and none is added |
 | `THE_RULING_IS_READ_FOUR_TIMES` | Ours: 8 June 2000 read through sodhya pinda, vedha, tara bala and latta. No other event in the book gets four |
 
+### Chapter 26 — §26.8's Sarvatobhadra chakra (12)
+
+`transits/sarvatobhadra.py`. Figure 3 is transcribed square by square and the
+section's own tally is asserted rather than trusted, so the grid **is**
+consumed by its own checks. One square is deliberately `None` — OI-146 — and
+the vedha lines are not drawn — OI-147.
+
+| constant | why it is not consumed |
+|---|---|
+| `SARVATAH_MEANS` · `BHADRA_MEANS` · `SARVATOBHADRA_DEFINITION` · `SARVATOBHADRA_COMPOSITION` · `SARVATOBHADRA_TALLY` · `DIAGONALS_HOLD_THE_VOWELS` | The section verbatim. The tally and the diagonal rule **are** checked against the grid; these hold the wording |
+| `FIGURE_3` · `BORDER_NAKSHATRAS` · `VOWELS` · `RASI_CELLS` · `CENTRE_CELLS` · `TITHI_GROUPS` | The figure as data. `cell` and `tithi_group` read it; the rest is checked, not computed from |
+| `UNCERTAIN_CELL` · `UNCERTAIN_CELL_NOTE` | Ours: the one square we will not guess, and the two constraints that say it is a consonant |
+| `THE_TWENTY_FIFTH_TITHI_IS_MISSING` | Ours: Poorna's list is short and irregular where the other four are not — D-76 |
+| `VEDHA_RULE` · `THE_VEDHA_LINES_ARE_NOT_DETERMINED` | The rule verbatim and why no line is drawn from it — OI-147 |
+
 ---
 
 ## How to use this register

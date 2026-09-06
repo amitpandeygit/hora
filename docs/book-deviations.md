@@ -2490,3 +2490,32 @@ read as evidence for a whole-sign moolatrikona.
 
 **Closes when:** a section states that moolatrikona may be read by rasi alone,
 or you decide the arcs are the only reading.
+
+---
+
+## D-76 · §26.8's tithi groups leave the 25th tithi in no group
+
+**Status: BOOK DEFECT — held as printed; nothing is added to Poorna's list.**
+
+§26.8 assigns the thirty tithis to five groups, and four of the five are
+regular — six tithis apiece, five apart:
+
+| group | tithis | count | steps |
+|---|---|---|---|
+| Nanda | 1, 6, 11, 16, 21, 26 | 6 | 5 |
+| Bhadra | 2, 7, 12, 17, 22, 27 | 6 | 5 |
+| Jaya | 3, 8, 13, 18, 23, 28 | 6 | 5 |
+| Rikta | 4, 9, 14, 19, 24, 29 | 6 | 5 |
+| **Poorna** | 5, 10, 15, 20, **30** | **5** | 5, 5, 5, **10** |
+
+So the **25th tithi belongs to no group**, and Poorna's is the only list with
+an irregular step. Thirty tithis over five groups is six each, and every other
+row confirms the pattern, so the 25th is Poorna's on any reading — but the
+book does not print it.
+
+**What we do.** `TITHI_GROUPS` holds the five lists exactly as printed, and
+`tithi_group(25)` returns `None` rather than `"Poorna"`. A caller is told the
+book assigns it nowhere instead of being handed an inference.
+
+**Closes when:** a later printing or section gives the 25th a group, or you
+decide Poorna's list may be completed.
