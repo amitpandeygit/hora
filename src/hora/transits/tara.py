@@ -794,14 +794,15 @@ THE_SECOND_PURPOSE_READS_THE_TABLES_BACKWARDS = (
     "a shortlist and not a name."
 )
 
-#: **Finding.** Five tables are promised for seven grahas, so at least two
-#: grahas must share a table or a table must cover something other than one
-#: graha. Which, the section does not say. Nothing is assumed: the tables are
-#: registered by **number** and each says what it covers once supplied.
+#: **Finding.** Five tables were promised for seven grahas and Table 68
+#: answers how: it covers **Mercury, Jupiter and Venus** together. With the
+#: Sun, Moon and Mars taking one table each that is six of the seven, so
+#: Saturn is the only graha left for Table 69 — an inference from what
+#: remains, not something the book has said.
 FIVE_TABLES_FOR_SEVEN_GRAHAS = (
-    "Section 26.6 promises Tables 65 to 69 — five tables — and the transiting "
-    "grahas are seven. The section does not say how the seven are divided "
-    "across the five, so the mapping is read off the tables themselves."
+    "Table 65 is the Sun's, 66 the Moon's and 67 Mars's; Table 68 covers "
+    "Mercury, Jupiter and Venus together. Saturn is the only graha not yet "
+    "given a table, and Table 69 is the only table not yet supplied."
 )
 
 #: Tables 65 to 69, by number. A table moves from ``None`` to its content when
@@ -812,7 +813,7 @@ FIVE_TABLES_FOR_SEVEN_GRAHAS = (
 #: Table 65, as printed. Rows in the table's own order; `counts` are
 #: nakshatras counted inclusively from janma nakshatra.
 TABLE_65_SUN: dict[str, object] = {
-    "graha": "Sun",
+    "grahas": ("Sun",),
     "title": "Body Parts in the Transit of Sun",
     "rows": (
         {"counts": (1,), "part": "Mouth/Face", "result": "Destruction"},
@@ -833,7 +834,7 @@ TABLE_65_SUN: dict[str, object] = {
 #: Table 66, as printed. Its last two rows fall past a page break in the
 #: source and are part of the same table.
 TABLE_66_MOON: dict[str, object] = {
-    "graha": "Moon",
+    "grahas": ("Moon",),
     "title": "Body Parts in the Transit of Moon",
     "rows": (
         {"counts": (1, 2), "part": "Face", "result": "Great fear"},
@@ -855,7 +856,7 @@ TABLE_66_MOON: dict[str, object] = {
 #: two different parts: Mars dwells in both, at different counts and to
 #: different effect.
 TABLE_67_MARS: dict[str, object] = {
-    "graha": "Mars",
+    "grahas": ("Mars",),
     "title": "Body Parts in the Transit of Mars",
     "rows": (
         {"counts": (1, 2), "part": "Mouth/Face", "result": "Death"},
@@ -872,11 +873,30 @@ TABLE_67_MARS: dict[str, object] = {
     ),
 }
 
+#: Table 68, as printed. The first to cover **more than one graha**, and the
+#: first with fewer than eight rows.
+TABLE_68_MERCURY_JUPITER_VENUS: dict[str, object] = {
+    "grahas": ("Mercury", "Jupiter", "Venus"),
+    "title": "Body Parts in the Transit of Mercury, Jupiter and Venus",
+    "rows": (
+        {"counts": (1, 2, 3), "part": "Head", "result": "Grief"},
+        {"counts": (4, 5, 6), "part": "Face", "result": "Gains"},
+        {"counts": (7, 8, 9, 10, 11, 12), "part": "Two hands",
+         "result": "Misfortune"},
+        {"counts": (13, 14, 15, 16, 17), "part": "Stomach",
+         "result": "Amassing of wealth"},
+        {"counts": (18, 19), "part": "Private parts",
+         "result": "Destruction"},
+        {"counts": (20, 21, 22, 23, 24, 25, 26, 27), "part": "Two feet",
+         "result": "Honor and fame"},
+    ),
+}
+
 BODY_PART_TABLES: dict[int, dict[str, object] | None] = {
     65: TABLE_65_SUN,
     66: TABLE_66_MOON,
     67: TABLE_67_MARS,
-    68: None,
+    68: TABLE_68_MERCURY_JUPITER_VENUS,
     69: None,
 }
 
@@ -886,7 +906,7 @@ BODY_PART_TABLES: dict[int, dict[str, object] | None] = {
 #: but see `BODY_PART_NEUTRAL` for the results that are neither.
 BODY_PART_HARMS: frozenset[str] = frozenset({
     "Destruction", "Poverty", "Physical ailments", "Death",
-    "Great fear", "Quarrels", "Separation"})
+    "Great fear", "Quarrels", "Separation", "Grief", "Misfortune"})
 
 #: **Ours.** Results that are neither a harm nor a benefit. Table 66's "Going
 #: abroad" is the first: it is an event, not a verdict, and Exercise 43 read
@@ -926,16 +946,28 @@ MOUTH_FACE_AND_FACE_ARE_DIFFERENT_PARTS = (
     "part."
 )
 
-#: **Finding.** Every table so far gives **Two feet** a block of exactly six
-#: counts, and in each it is the widest block. The counts move and the results
-#: differ — Poverty for the Sun, Going abroad for the Moon, Separation for
-#: Mars — so what repeats is the size alone. Three of five; still an
-#: observation, not yet a rule.
-TWO_FEET_TAKES_SIX_COUNTS_IN_EVERY_TABLE_SO_FAR = (
-    "Two feet spans the 14th to 19th for the Sun, the 19th to 24th for the "
-    "Moon and the 3rd to 8th for Mars — six counts each time and the widest "
-    "block in each table. The results are Poverty, Going abroad and "
-    "Separation."
+#: **Finding, narrowed by Table 68.** Two feet is the **widest block** in
+#: every table so far, which holds across all four. It took exactly **six**
+#: counts in the three single-graha tables and takes **eight** in Table 68,
+#: so the six belonged to those three and not to the rule. The counts move
+#: and the results differ throughout — Poverty, Going abroad, Separation,
+#: Honor and fame.
+TWO_FEET_IS_THE_WIDEST_BLOCK_IN_EVERY_TABLE = (
+    "Two feet takes six counts for the Sun, the Moon and Mars and eight in "
+    "Table 68, and is the largest block in all four. Only its being the "
+    "widest survives; the six did not."
+)
+
+#: **Finding.** Granularity tracks how many grahas share a table. The three
+#: single-graha tables have **eight** rows each and split the hands into left
+#: and right; Table 68, which covers three grahas at once, has **six**, merges
+#: them into "Two hands", drops Eyes altogether and adds Stomach. So the
+#: shared table is the coarser reading — which is what one would expect of a
+#: rule stated once for three grahas, though the book does not say so.
+THE_SHARED_TABLE_IS_THE_COARSER_ONE = (
+    "Tables 65, 66 and 67 have eight rows and name Left hand and Right hand "
+    "separately. Table 68 covers three grahas, has six rows, and says Two "
+    "hands."
 )
 
 #: **Finding.** Table 65 has a different *shape* from Table 64, so neither can
@@ -981,6 +1013,29 @@ def _rows_of(table: dict[str, object]) -> tuple[dict[str, object], ...]:
     return rows
 
 
+#: Words that say *which* or *how many* rather than what. Dropping them keeps
+#: "Two feet" from matching "Two hands" while leaving the hands joined by the
+#: word that matters.
+_PART_QUALIFIERS = frozenset({"two", "left", "right"})
+
+
+def _words(part: str) -> frozenset[str]:
+    """A body part's naming words, singularised, for the near-match in
+    `grahas_dwelling_in`. "Two hands" and "Left hand" must overlap — the
+    tables use both, and a plural is all that separates them — while "Two
+    feet" and "Two hands" must not."""
+    return frozenset(
+        word[:-1] if word.endswith("s") and len(word) > 2 else word
+        for word in part.replace("/", " ").lower().split()
+    ) - _PART_QUALIFIERS
+
+
+def _grahas_of(table: dict[str, object]) -> tuple[str, ...]:
+    grahas = table["grahas"]
+    assert isinstance(grahas, tuple)
+    return grahas
+
+
 def body_part_table(number: int) -> dict:
     """One of §26.6's tables, or a refusal naming what is still pending."""
     index = validate.in_range("table", int(number), 65, 69)
@@ -1001,7 +1056,7 @@ def body_part(graha: str, natal_moon_longitude: float,
         own `graha` field.
     """
     for number, table in BODY_PART_TABLES.items():
-        if table is not None and table["graha"] == graha:
+        if table is not None and graha in _grahas_of(table):
             break
     else:
         pending = ", ".join(str(n) for n in BODY_PART_TABLES_PENDING)
@@ -1015,6 +1070,7 @@ def body_part(graha: str, natal_moon_longitude: float,
     return {
         "graha": graha,
         "table": number,
+        "table_covers": list(_grahas_of(table)),
         "count": counted["count"],
         "natal_nakshatra": counted["natal_nakshatra"],
         "transit_nakshatra": counted["transit_nakshatra"],
@@ -1045,10 +1101,10 @@ def grahas_dwelling_in(part: str) -> dict:
             continue
         for row in _rows_of(table):
             if row["part"] == part:
-                found.append({"graha": table["graha"], "table": number,
-                              "counts": row["counts"],
+                found.append({"grahas": list(_grahas_of(table)),
+                              "table": number, "counts": row["counts"],
                               "result": row["result"]})
-    wanted = {word for word in part.replace("/", " ").lower().split()}
+    wanted = _words(part)
     similar = []
     for number, table in BODY_PART_TABLES.items():
         if table is None:
@@ -1057,8 +1113,9 @@ def grahas_dwelling_in(part: str) -> dict:
             name = str(row["part"])
             if name == part:
                 continue
-            if wanted & {w for w in name.replace("/", " ").lower().split()}:
-                similar.append({"part": name, "graha": table["graha"],
+            if wanted & _words(name):
+                similar.append({"part": name,
+                                "grahas": list(_grahas_of(table)),
                                 "table": number})
     return {
         "part": part,
