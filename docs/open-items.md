@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 97 waiting on evidence · 2 parked**
+**5 waiting on Amit · 98 waiting on evidence · 2 parked**
 
 ---
 
@@ -2089,6 +2089,26 @@ how OI-26 happened — and the footnote's claim is held as the book's, unchecked
 
 **Closes when:** the section defining mrityu bhaga is supplied, or you confirm
 a source for the table.
+
+### OI-145 — §26.7 gives eight lattas and none for Ketu
+
+**Waiting on the book.** The section opens "each planet has latta (kick) on a
+constellation" and then lists eight: four forward — Sun 12th, Mars 3rd,
+Jupiter 6th, Saturn 8th — and four backward — Moon 22nd, Mercury 7th, Venus
+5th, Rahu 9th. **Ketu has none.**
+
+It is not that the nodes are excluded: **Rahu is in**, with a backward kick.
+And the direction alternates exactly down the standard order — Sun forward,
+Moon backward, Mars forward, Mercury backward, Jupiter forward, Venus
+backward, Saturn forward, Rahu backward — which puts Ketu ninth, an odd
+position, and so predicts a **forward** kick for him. The offset it does not
+predict, and the alternation is ours, not the book's.
+
+**What we do:** `latta("Ketu", ...)` raises. No offset is inferred from the
+alternation, and none is taken from outside the book.
+
+**Closes when:** a later section gives Ketu's latta, or you confirm he has
+none.
 
 ---
 

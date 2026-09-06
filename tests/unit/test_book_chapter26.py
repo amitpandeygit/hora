@@ -2573,7 +2573,7 @@ def test_the_harm_is_the_grahas_natal_signification_not_its_nature():
         THE_HARM_IS_READ_FROM_THE_NATAL_SIGNIFICATION)
 
 
-def test_only_the_forward_kicks_have_been_supplied():
+def test_eight_kicks_are_supplied_and_ketu_has_none():
     """The coverage line for §26.7. It fails the moment a kick appears for a
     graha not declared here, so nothing is guessed.
     """
@@ -2584,14 +2584,14 @@ def test_only_the_forward_kicks_have_been_supplied():
         latta,
     )
 
-    assert set(LATTA_KICKS) == {"Sun", "Mars", "Jupiter", "Saturn"}
-    assert LATTA_GRAHAS_PENDING == ("Moon", "Mercury", "Venus", "Rahu",
-                                    "Ketu")
+    assert set(LATTA_KICKS) == {"Sun", "Mars", "Jupiter", "Saturn",
+                                "Moon", "Mercury", "Venus", "Rahu"}
+    assert LATTA_GRAHAS_PENDING == ("Ketu",)
     for graha in LATTA_GRAHAS_PENDING:
         with pytest.raises(LattaError, match="has not given a latta"):
             latta(graha, 100.0)
-    assert all(kick["direction"] == "forward"
-               for kick in LATTA_KICKS.values())
+    assert {kick["direction"] for kick in LATTA_KICKS.values()} == {
+        "forward", "backward"}
 
 
 # --------------------------------------------------------------------------
@@ -2637,17 +2637,26 @@ def test_the_forward_offsets_are_as_printed_and_are_data():
     assert "Mars's 3rd appearing in both" in THE_FORWARD_OFFSETS_ARE_DATA
 
 
-def test_the_forward_heading_implies_a_group_still_to_come():
+def test_the_direction_alternates_down_the_standard_graha_order():
+    """Sun forward, Moon backward, Mars forward, and so on. §26.7 never says
+    so; it lists four and then four.
+    """
     from hora.transits.latta import (
-        LATTA_GRAHAS_PENDING,
-        PUROLATTA_IMPLIES_A_BACKWARD_GROUP,
+        LATTA_KICKS,
+        THE_DIRECTION_ALTERNATES_DOWN_THE_STANDARD_ORDER,
     )
 
-    assert set(LATTA_GRAHAS_PENDING) == {"Moon", "Mercury", "Venus",
-                                         "Rahu", "Ketu"}
-    assert "a backward kick is implied" in PUROLATTA_IMPLIES_A_BACKWARD_GROUP
-    assert "whether Rahu and Ketu have one at all is not stated" in (
-        PUROLATTA_IMPLIES_A_BACKWARD_GROUP)
+    order = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn",
+             "Rahu", "Ketu"]
+    for position, graha in enumerate(order, start=1):
+        kick = LATTA_KICKS.get(graha)
+        if kick is None:
+            assert graha == "Ketu"
+            continue
+        expected = "forward" if position % 2 else "backward"
+        assert kick["direction"] == expected, graha
+    assert "every backward kick to an even one" in (
+        THE_DIRECTION_ALTERNATES_DOWN_THE_STANDARD_ORDER)
 
 
 def test_a_kick_landing_on_a_natal_point_is_reported_with_both_targets():
@@ -2677,3 +2686,108 @@ def test_a_kick_landing_on_a_natal_point_is_reported_with_both_targets():
     assert clear["hits"] == []
     assert clear["kicked"] is False
     assert clear["results"] is None
+
+
+# --------------------------------------------------------------------------
+# Prishtha latta — the backward kicks, and §26.7's applications
+# --------------------------------------------------------------------------
+
+def test_all_four_backward_examples_reproduce():
+    """"If Moon is in Anuradha ... i.e. Dhanishtha", and the three like it."""
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.latta import (
+        PRISHTHA_EXAMPLES,
+        PRISHTHA_LATTA_MEANS,
+        latta,
+    )
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    span = 360.0 / 27
+    assert PRISHTHA_LATTA_MEANS == "backward kick"
+    assert len(PRISHTHA_EXAMPLES) == 4
+    for graha, standing, kicked in PRISHTHA_EXAMPLES:
+        got = latta(graha, names.index(standing) * span + 1.0)
+        assert got["from_nakshatra"] == standing, graha
+        assert got["kicks"] == kicked, graha
+        assert got["direction"] == "backward"
+        assert got["kick"] == "prishtha latta"
+
+
+def test_the_backward_offsets_are_as_printed():
+    from hora.transits.latta import PRISHTHA_OFFSETS, PUROLATTA_OFFSETS
+
+    assert PRISHTHA_OFFSETS == {"Moon": 22, "Mercury": 7, "Venus": 5,
+                                "Rahu": 9}
+    assert not set(PRISHTHA_OFFSETS) & set(PUROLATTA_OFFSETS)
+    both = {**PUROLATTA_OFFSETS, **PRISHTHA_OFFSETS}
+    assert len(both) == 8
+    assert 1 not in both.values()          # never its own nakshatra
+    assert max(both.values()) == 22 and min(both.values()) == 3
+
+
+def test_two_grahas_can_kick_the_same_nakshatra_from_different_places():
+    """Mercury from Punarvasu and Venus from Mrigasira both kick Aswini —
+    the section's own two examples land on one nakshatra.
+    """
+    from hora.core.const import NAKSHATRA_NAMES
+    from hora.transits.latta import PRISHTHA_EXAMPLES, latta
+
+    names = [str(n) for n in NAKSHATRA_NAMES]
+    span = 360.0 / 27
+    landings = {graha: latta(graha, names.index(standing) * span + 1.0)["kicks"]
+                for graha, standing, _ in PRISHTHA_EXAMPLES}
+    assert landings["Mercury"] == landings["Venus"] == "Ashwini"
+
+
+def test_ketu_is_the_one_body_the_section_leaves_out():
+    from hora.transits.latta import (
+        KETU_IS_THE_ONE_BODY_WITH_NO_LATTA,
+        LATTA_KICKS,
+        LATTA_RULE,
+        LattaError,
+        latta,
+    )
+
+    assert "Each planet has latta" in LATTA_RULE
+    assert "Rahu" in LATTA_KICKS
+    assert "Ketu" not in LATTA_KICKS
+    with pytest.raises(LattaError, match="has not given a latta"):
+        latta("Ketu", 100.0)
+    assert "Ketu is given none" in KETU_IS_THE_ONE_BODY_WITH_NO_LATTA
+
+
+def test_the_watch_list_is_one_rule_illustrated_three_times():
+    from hora.transits.latta import (
+        JANMA_AND_LAGNA_NAKSHATRA_DEFINED,
+        LATTA_GENERAL_RESULT,
+        LATTA_WATCH_LIST,
+        THE_WATCH_LIST_IS_ONE_RULE_ILLUSTRATED_THRICE,
+    )
+
+    assert len(LATTA_WATCH_LIST) == 3
+    assert [entry["role"] for entry in LATTA_WATCH_LIST] == [
+        "the 6th lord", "the 7th lord",
+        "an important planet in the 10th house in natal chart"]
+    assert LATTA_WATCH_LIST[0]["threatens"] == (
+        "litigation or disease or enemies")
+    assert "natal significations" in LATTA_GENERAL_RESULT
+    assert "nakshatra occupied by natal Moon" in (
+        JANMA_AND_LAGNA_NAKSHATRA_DEFINED)
+    assert "nakshatra occupied by natal lagna" in (
+        JANMA_AND_LAGNA_NAKSHATRA_DEFINED)
+    assert "picked out by its natal role" in (
+        THE_WATCH_LIST_IS_ONE_RULE_ILLUSTRATED_THRICE)
+
+
+def test_latta_is_the_only_transit_section_told_to_be_memorised():
+    from hora.transits.latta import (
+        LATTA_IS_WORTH_MEMORISING,
+        THE_BOOK_RATES_LATTA_HIGHLY,
+    )
+    from hora.transits.tara import FOOTNOTE_72
+
+    assert "memorize the latta formulas" in LATTA_IS_WORTH_MEMORISING
+    assert "no other transit section says of itself" in (
+        THE_BOOK_RATES_LATTA_HIGHLY)
+    # and it still sits under footnote 72's general warning
+    assert "cannot make predictions just based on them" in FOOTNOTE_72

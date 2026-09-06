@@ -1219,22 +1219,24 @@ what follows is prose and findings.
 | `ONE_DWELLING_CAN_SPAN_TWO_MURTHIS` | Ours: a nakshatra window and a rasi window do not line up, so the murthi changes inside the dwelling |
 | `THE_WINDOW_IS_GIVEN_IN_WHOLE_DAYS` | Ours: the Sun leaves Satabhisha on the morning of 4 March and the book prints 3 March, so the window names last full days |
 
-### Chapter 26 — §26.7 and the forward kicks (9)
+### Chapter 26 — §26.7's lattas (15)
 
-`transits/latta.py`, a module of its own like murthi and vedha. The **forward**
-kicks have arrived and are consumed — `latta` computes them and `latta_hits`
-tests them against the two natal targets. The Moon, Mercury, Venus and the
-nodes have no kick yet, and a test fails the moment one appears without being
-declared.
+`transits/latta.py`, a module of its own like murthi and vedha. **All eight
+kicks the section gives are consumed** — `latta` computes them and
+`latta_hits` tests them against the two natal targets. Ketu has none; a test
+fails the moment a kick appears for him without being declared.
 
 | constant | why it is not consumed |
 |---|---|
 | `LATTA_MEANS` · `LATTA_RULE` · `LATTA_TARGETS` | The section verbatim, and the two natal points a kick can land on |
 | `LATTA_COUNTS_FROM_THE_TRANSIT_NOT_THE_NATAL_POINT` | Ours: the chapter's other counting techniques run the other way, and a test checks their wording |
 | `THE_HARM_IS_READ_FROM_THE_NATAL_SIGNIFICATION` | Ours: the rule reads the graha's natal significations, not its natural nature — unlike §26.5 |
-| `PUROLATTA_MEANS` · `PUROLATTA_OFFSETS` · `PUROLATTA_EXAMPLES` | The forward kicks and the section's own four checks on them. `latta` uses the offsets; the examples are checked against what it derives |
+| `PUROLATTA_MEANS` · `PUROLATTA_OFFSETS` · `PUROLATTA_EXAMPLES` · `PRISHTHA_LATTA_MEANS` · `PRISHTHA_OFFSETS` · `PRISHTHA_EXAMPLES` | Both groups and the section's own eight checks on them. `latta` uses the offsets; the examples are checked against what it derives |
 | `LATTA_KICKS` · `LATTA_GRAHAS_PENDING` · `LATTA_OFFSETS_ARE_NOT_SUPPLIED` | The registry and who is still missing. Consumed by `latta` and by the coverage test |
-| `PUROLATTA_IMPLIES_A_BACKWARD_GROUP` | Ours: the heading and the repeated "forward direction" imply a second group, and the five bodies left over are who it would cover |
+| `THE_DIRECTION_ALTERNATES_DOWN_THE_STANDARD_ORDER` | Ours: forward and backward alternate straight down Sun, Moon, Mars, Mercury and so on. The book lists four and then four and never says it |
+| `KETU_IS_THE_ONE_BODY_WITH_NO_LATTA` | Ours: eight kicks where the opening says each planet has one, and Rahu is in. OI-145 |
+| `LATTA_WATCH_LIST` · `JANMA_AND_LAGNA_NAKSHATRA_DEFINED` · `LATTA_GENERAL_RESULT` · `THE_WATCH_LIST_IS_ONE_RULE_ILLUSTRATED_THRICE` | The three applications and the general rule they illustrate. Each names a graha by a natal role, which the caller resolves |
+| `LATTA_IS_WORTH_MEMORISING` · `THE_BOOK_RATES_LATTA_HIGHLY` | The section's closing line, and ours noting no other transit section rates itself so |
 | `THE_FORWARD_OFFSETS_ARE_DATA` | Ours: four distinct offsets, none of them 1, and no relation to §26.5's aspects but Mars's 3rd |
 
 ---

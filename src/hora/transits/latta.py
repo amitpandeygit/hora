@@ -81,11 +81,33 @@ PUROLATTA_EXAMPLES: tuple[tuple[str, str, str], ...] = (
     ("Saturn", "Krittika", "Magha"),
 )
 
-#: Every kick supplied so far, as graha -> offset and direction. Grows as the
-#: section's other groups arrive.
+PRISHTHA_LATTA_MEANS = "backward kick"
+
+#: The backward kicks, as §26.7 lists them. Each is an **inclusive** count
+#: backward from the graha's own transit nakshatra.
+PRISHTHA_OFFSETS: dict[str, int] = {
+    "Moon": 22,
+    "Mercury": 7,
+    "Venus": 5,
+    "Rahu": 9,
+}
+
+#: §26.7's own check on each backward kick, as (graha, from, kicked).
+PRISHTHA_EXAMPLES: tuple[tuple[str, str, str], ...] = (
+    ("Moon", "Anuradha", "Dhanishta"),
+    ("Mercury", "Punarvasu", "Ashwini"),
+    ("Venus", "Mrigashira", "Ashwini"),
+    ("Rahu", "Punarvasu", "Uttara Bhadrapada"),
+)
+
+#: Every kick the section gives, as graha -> offset and direction.
 LATTA_KICKS: dict[str, dict[str, object]] = {
-    graha: {"offset": offset, "direction": "forward", "name": "purolatta"}
-    for graha, offset in PUROLATTA_OFFSETS.items()
+    **{graha: {"offset": offset, "direction": "forward",
+               "name": "purolatta"}
+       for graha, offset in PUROLATTA_OFFSETS.items()},
+    **{graha: {"offset": offset, "direction": "backward",
+               "name": "prishtha latta"}
+       for graha, offset in PRISHTHA_OFFSETS.items()},
 }
 
 #: The nine bodies §26.6 covers, for measuring what §26.7 has still to give.
@@ -96,16 +118,27 @@ _ALL_BODIES: tuple[str, ...] = (
 LATTA_GRAHAS_PENDING: tuple[str, ...] = tuple(
     graha for graha in _ALL_BODIES if graha not in LATTA_KICKS)
 
-#: **Finding.** Calling this group the **forward** kick implies a backward one,
-#: and the grahas left over are exactly the ones a savya/apasavya split would
-#: put in the other group. Which they are, and whether the nodes are included
-#: at all, the section has not said — `LATTA_GRAHAS_PENDING` names them and
-#: nothing is assumed.
-PUROLATTA_IMPLIES_A_BACKWARD_GROUP = (
-    "The heading is \"Purolatta (forward kick)\" and every one of its four "
-    "rules says \"reckoned in the forward direction\", so a backward kick is "
-    "implied for the rest. The Moon, Mercury and Venus have no kick yet, and "
-    "whether Rahu and Ketu have one at all is not stated."
+#: **Finding.** The direction alternates straight down the standard graha
+#: order. Sun forward, Moon backward, Mars forward, Mercury backward, Jupiter
+#: forward, Venus backward, Saturn forward, Rahu backward — odd positions kick
+#: forward and even positions kick backward, without exception among the eight
+#: the section gives. §26.7 never says so; it simply lists four and then four.
+THE_DIRECTION_ALTERNATES_DOWN_THE_STANDARD_ORDER = (
+    "Taking the grahas in the order Sun, Moon, Mars, Mercury, Jupiter, "
+    "Venus, Saturn, Rahu, the kicks run forward, backward, forward, "
+    "backward and so on. Every forward kick belongs to an odd position and "
+    "every backward kick to an even one."
+)
+
+#: **Gap.** §26.7 opens "each planet has latta" and gives eight kicks. **Ketu
+#: has none.** He sits ninth in the order, an odd position, so the alternation
+#: predicts a forward kick for him and the section supplies nothing. Rahu is
+#: covered, so the omission is not a general exclusion of the nodes. Nothing
+#: is invented — `latta` refuses Ketu. See OI-145.
+KETU_IS_THE_ONE_BODY_WITH_NO_LATTA = (
+    "Four forward kicks and four backward cover the Sun, Moon, Mars, "
+    "Mercury, Jupiter, Venus, Saturn and Rahu. Ketu is given none, though "
+    "the section's opening says each planet has one and Rahu is included."
 )
 
 #: **Finding.** The four forward offsets are 12, 3, 6 and 8 — all different,
@@ -119,9 +152,8 @@ THE_FORWARD_OFFSETS_ARE_DATA = (
 )
 
 LATTA_OFFSETS_ARE_NOT_SUPPLIED = (
-    "Section 26.7 has given the forward kicks only. The Moon, Mercury and "
-    "Venus have no kick yet and the nodes are unmentioned, so a latta is "
-    "computed for the four supplied and refused for the rest."
+    "Section 26.7 gives eight kicks and no kick for Ketu, so a latta is "
+    "computed for the eight and refused for him."
 )
 
 
@@ -186,3 +218,56 @@ def latta_hits(graha: str, transit_longitude: float,
             "in natal chart" if hits else None),
         "significations_are_natal": THE_HARM_IS_READ_FROM_THE_NATAL_SIGNIFICATION,
     }
+
+
+# --------------------------------------------------------------------------
+# §26.7's applications
+# --------------------------------------------------------------------------
+
+#: Which grahas §26.7 says to watch, and what each threatens when its latta
+#: lands on the janma or lagna nakshatra. The graha is named by its **role in
+#: the natal chart**, so a caller resolves the lordship and passes the graha.
+LATTA_WATCH_LIST: tuple[dict[str, str], ...] = (
+    {"role": "the 6th lord",
+     "threatens": "litigation or disease or enemies"},
+    {"role": "the 7th lord",
+     "threatens": "marriage or spouse or relations"},
+    {"role": "an important planet in the 10th house in natal chart",
+     "threatens": "career"},
+)
+
+#: §26.7's definitions of the two targets, given here for the first time.
+JANMA_AND_LAGNA_NAKSHATRA_DEFINED = (
+    "janma nakshatra (nakshatra occupied by natal Moon) or lagna nakshatra "
+    "(nakshatra occupied by natal lagna)")
+
+#: The general statement the three watch-list cases are instances of.
+LATTA_GENERAL_RESULT = (
+    "We usually see some loss related to the natal significations of a "
+    "planet having latta on janma nakshatra or lagna nakshatra in transit.")
+
+LATTA_IS_WORTH_MEMORISING = (
+    "This is an important concept and readers should memorize the latta "
+    "formulas.")
+
+#: **Finding.** §26.7's three cases are one rule with three illustrations, not
+#: three rules: each names a graha by a **natal role** and expects loss in
+#: that role's matters, which is exactly `LATTA_GENERAL_RESULT`. The third is
+#: the loosest — "an important planet in the 10th house" leaves *important*
+#: undefined — and none of the three is a different mechanism.
+THE_WATCH_LIST_IS_ONE_RULE_ILLUSTRATED_THRICE = (
+    "The 6th lord threatens litigation, the 7th lord marriage and a planet "
+    "in the 10th one's career. Each is the general rule — loss in what the "
+    "graha signifies natally — applied to a graha picked out by its natal "
+    "role."
+)
+
+#: **Finding.** §26.7 is the only place in either transit chapter that tells
+#: the reader to commit something to memory. Recorded because it marks how the
+#: book rates the technique, against footnote 72's warning that the nakshatra
+#: principles cannot carry a prediction alone.
+THE_BOOK_RATES_LATTA_HIGHLY = (
+    "Section 26.7 closes \"this is an important concept and readers should "
+    "memorize the latta formulas\", which no other transit section says of "
+    "itself."
+)
