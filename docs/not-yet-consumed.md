@@ -1451,6 +1451,20 @@ three seconds from the exact method. What follows is prose and findings.
 | `THE_NOTE_IS_A_CONSTRAINT_ON_THE_EPHEMERIS` | Ours: the note is about our implementation, and both its claims are measured against it |
 
 
+### Chapter 27 — Exercise 47 (6)
+
+`tajaka/approximate.py`. Both halves **are** checked: the approximate method
+reproduces every printed step of (a), and our solve lands four seconds from
+(b)'s printed answer. What follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXERCISE_47` · `EXERCISE_47_APPROXIMATE` · `EXERCISE_47_EXACT` | The exercise and both halves of its answer verbatim |
+| `EXERCISE_47_ANSWER` | Its own numbers as a fixture — the split, the offset, the weekdays, both times and both solar positions |
+| `THE_EXERCISES_EXACT_ANSWER_IS_A_HAND_CORRECTION` | Ours: solving for the exercise's own printed natal position lands 39 seconds from the answer it prints, where our solve lands 4 |
+| `THE_APPROXIMATION_ERROR_IS_NOT_CONSTANT` | Ours: 72 seconds out in the 34th year and 118 in the 27th, on one nativity — the section's own warning, measured |
+
+
 ---
 
 ## How to use this register

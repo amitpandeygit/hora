@@ -269,3 +269,74 @@ def approximate_varsha_pravesh(birth_local: dt.datetime, birth_weekday: str,
         "place": "the longitude and latitude of the birthplace",
         "accuracy": ACCURACY_REMARK,
     }
+
+
+# --------------------------------------------------------------------------
+# Exercise 47 — the same native's 27th year, both ways
+# --------------------------------------------------------------------------
+
+EXERCISE_47 = (
+    "Find the varsha pravesh data for the 27th year of the native in Example "
+    "118 using (a) the approximate method and (b) the exact method.")
+
+#: The answer's approximate half, step by step as printed.
+EXERCISE_47_APPROXIMATE: tuple[str, ...] = (
+    ("The approximate birthday of the 27th year is 8th March 1993. He "
+     "completes 26 years then."),
+    ("Adding the entries of 20 years and 6 years, we get 4 days 15 hr 58 min "
+     "12 sec."),
+    ("Adding 4 days to Wednesday (weekday of birth), we get Sunday. The "
+     "nearest Sunday to 8th March 1993 is 7th March 1993. So we take 5:40 pm "
+     "on 7th March 1993 as the reference time."),
+    ("Add 15 hr 58 min 12 sec to this reference time. We get 9:38:12 am on "
+     "8th March 1993."),
+)
+
+EXERCISE_47_EXACT = (
+    "Let us find the position of Sun at the above time. At 9:38:12 am (IST) "
+    "on 8th March 1993, Sun is at 23° 50' 29\" in Aq. Natal position is 23° "
+    "50' 25\" in Aq. We have to subtract about 2 minutes of time to get Sun "
+    "4\" behind. The correct varshapravesh data is – 9:36:18 am (IST) on 8th "
+    "March 1993.")
+
+#: The exercise's own numbers, as a fixture.
+EXERCISE_47_ANSWER: dict[str, object] = {
+    "year_entered": 27,
+    "years_completed": 26,
+    "parts": (20, 6),
+    "offset": (4, 15, 58, 12),
+    "birth_weekday": "Wednesday",
+    "target_weekday": "Sunday",
+    "reference": "5:40 pm on 7th March 1993",
+    "approximate": "9:38:12 am on 8th March 1993",
+    "sun_at_approximate": "23 Aq 50 29",
+    "natal_sun": "23 Aq 50 25",
+    "exact": "9:36:18 am on 8th March 1993",
+}
+
+#: **Finding.** The exercise's "exact" answer is itself a hand correction and
+#: carries its own slack. It takes the approximate 9:38:12, notes the Sun is
+#: 4" past his natal place and subtracts "about 2 minutes" to land on 9:36:18.
+#: Solving properly for the exercise's **own** printed natal position of
+#: 23° 50' 25" gives 9:36:56 — thirty-nine seconds from its stated answer. Our
+#: solve against our own natal Sun gives 9:36:14, four seconds from it. So the
+#: printed figure is nearer our answer than it is to a true solve of its own
+#: target, and "about 2 minutes" is what carries the difference.
+THE_EXERCISES_EXACT_ANSWER_IS_A_HAND_CORRECTION = (
+    "Exercise 47 reaches 9:36:18 by subtracting \"about 2 minutes\" from the "
+    "approximate time. A solve for its own printed natal 23 Aq 50 25 gives "
+    "9:36:56. The stated answer is an estimate of the correction, not a "
+    "solution."
+)
+
+#: **Finding.** §27.2 said "In some examples, the error resulting from the
+#: approximation can be higher", and Exercise 47 is that example — on the same
+#: native. The approximation is **72 seconds** out in his 34th year and **118
+#: seconds** out in his 27th, so the error is neither constant nor growing
+#: with age; it is where the true return happens to fall against the weekday
+#: grid the method snaps to.
+THE_APPROXIMATION_ERROR_IS_NOT_CONSTANT = (
+    "For one nativity the approximate method is 72 seconds out in the 34th "
+    "year and 118 seconds out in the 27th. Section 27.2 warns that the error "
+    "can be higher in some examples and its own exercise is one."
+)

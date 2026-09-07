@@ -712,3 +712,149 @@ def test_27_2_is_transcribed_with_its_five_steps():
     assert "nearest date to the birthday" in PROCEDURE[2]
     assert "commencement of new year" in PROCEDURE[3]
     assert "latitude of the birthplace" in PROCEDURE[4]
+
+
+# --------------------------------------------------------------------------
+# Exercise 47 — the same native's 27th year, both ways
+# --------------------------------------------------------------------------
+
+
+def test_exercise_47a_reproduces_the_approximate_method_step_by_step():
+    """26 = 20 + 6, four days on to Sunday, and 9:38:12 am on 8 March 1993."""
+    import datetime as dt
+
+    from hora.tajaka.approximate import (
+        EXERCISE_47_ANSWER,
+        TABLE_71,
+        approximate_varsha_pravesh,
+        decompose,
+        offset_for,
+    )
+
+    assert decompose(26) == (20, 6)
+    assert TABLE_71[20] == (4, 3, 3, 12)
+    assert TABLE_71[6] == (0, 12, 55, 0)
+    got = offset_for(26)
+    assert (got["days"], got["hours"], got["minutes"], got["seconds"]) == (
+        4, 15, 58, 12)
+    assert tuple(EXERCISE_47_ANSWER["offset"]) == (4, 15, 58, 12)
+
+    answer = approximate_varsha_pravesh(_local(1967, 3, 8, 17, 40),
+                                        "Wednesday", 26)
+    assert answer["birthday"] == dt.date(1993, 3, 8)
+    assert answer["target_weekday"] == "Sunday"
+    assert answer["reference"] == _local(1993, 3, 7, 17, 40)
+    assert answer["commencement"] == _local(1993, 3, 8, 9, 38, 12)
+    assert answer["year_entered"] == 27
+
+
+def test_exercise_47bs_sun_position_reproduces():
+    """"At 9:38:12 am (IST) on 8th March 1993, Sun is at 23° 50' 29" in Aq."
+    """
+    from hora.charts import book
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_local
+
+    place = Place(name="birthplace", latitude=E118_LAT, longitude=E118_LON)
+    chart = compute_chart(
+        from_local(1993, 3, 8, 9, 38, 12.0, utc_offset_hours=5.5), place,
+        Settings())
+    printed = book.longitude("23 Aq 50") + 29 / 3600.0
+    assert abs(chart.positions[0].longitude - printed) * 3600 < 2.0
+
+
+def test_exercise_47b_reproduces_the_exact_varsha_pravesh():
+    """"The correct varshapravesh data is – 9:36:18 am (IST) on 8th March
+    1993."  Our solve lands four seconds from it.
+    """
+    from hora.core.timeutil import from_jd
+    from hora.tajaka.annual import varsha_pravesh
+
+    natal, place = _e118()
+    got = varsha_pravesh(_sun_at(place), natal.positions[0].longitude,
+                         natal.instant.jd_ut, 27)
+    assert got["found"]
+    local = from_jd(got["jd"], utc_offset_hours=5.5).local
+    assert (local.year, local.month, local.day) == (1993, 3, 8)
+    printed = _local(1993, 3, 8, 9, 36, 18)
+    assert abs((local - printed).total_seconds()) < 10.0
+
+
+def test_the_exercises_exact_answer_is_a_hand_correction_not_a_solve():
+    """Solving for the exercise's OWN printed natal position lands 39 seconds
+    from the answer it prints. Our own solve lands 4 seconds from it.
+    """
+    from hora.charts import book
+    from hora.core.timeutil import from_jd
+    from hora.tajaka.annual import varsha_pravesh
+    from hora.tajaka.approximate import (
+        THE_EXERCISES_EXACT_ANSWER_IS_A_HAND_CORRECTION,
+    )
+
+    natal, place = _e118()
+    printed_answer = _local(1993, 3, 8, 9, 36, 18)
+    sun_at = _sun_at(place)
+
+    ours = from_jd(varsha_pravesh(sun_at, natal.positions[0].longitude,
+                                  natal.instant.jd_ut, 27)["jd"],
+                   utc_offset_hours=5.5).local
+    theirs = from_jd(varsha_pravesh(sun_at,
+                                    book.longitude("23 Aq 50") + 25 / 3600.0,
+                                    natal.instant.jd_ut, 27)["jd"],
+                     utc_offset_hours=5.5).local
+
+    from_ours = abs((ours - printed_answer).total_seconds())
+    from_theirs = abs((theirs - printed_answer).total_seconds())
+    assert from_ours < 10.0
+    assert from_theirs > 30.0
+    assert from_theirs > from_ours
+    assert "not a solution" in THE_EXERCISES_EXACT_ANSWER_IS_A_HAND_CORRECTION
+
+
+def test_the_approximation_error_is_not_constant_across_one_nativity():
+    """§27.2: "In some examples, the error resulting from the approximation
+    can be higher."  Its own exercise, on its own native, is one.
+    """
+    from hora.core.timeutil import from_jd
+    from hora.tajaka.annual import varsha_pravesh
+    from hora.tajaka.approximate import (
+        ACCURACY_REMARK,
+        THE_APPROXIMATION_ERROR_IS_NOT_CONSTANT,
+        approximate_varsha_pravesh,
+    )
+
+    natal, place = _e118()
+    sun_at = _sun_at(place)
+    errors = {}
+    for completed in (33, 26):
+        approximate = approximate_varsha_pravesh(
+            _local(1967, 3, 8, 17, 40), "Wednesday", completed)["commencement"]
+        exact = from_jd(varsha_pravesh(sun_at, natal.positions[0].longitude,
+                                       natal.instant.jd_ut,
+                                       completed + 1)["jd"],
+                        utc_offset_hours=5.5).local
+        errors[completed] = (approximate - exact).total_seconds()
+
+    assert 60 < errors[33] < 90                # the 34th year, about a minute
+    assert 100 < errors[26] < 140              # the 27th, about two
+    assert errors[26] > errors[33] * 1.5
+    assert "can be higher" in ACCURACY_REMARK
+    assert "72 seconds out in the 34th" in THE_APPROXIMATION_ERROR_IS_NOT_CONSTANT
+
+
+def test_exercise_47_is_transcribed():
+    from hora.tajaka.approximate import (
+        EXERCISE_47,
+        EXERCISE_47_APPROXIMATE,
+        EXERCISE_47_EXACT,
+    )
+
+    assert "27th year of the native in Example 118" in EXERCISE_47
+    assert len(EXERCISE_47_APPROXIMATE) == 4
+    assert "8th March 1993" in EXERCISE_47_APPROXIMATE[0]
+    assert "4 days 15 hr 58 min 12 sec" in EXERCISE_47_APPROXIMATE[1]
+    assert "nearest Sunday" in EXERCISE_47_APPROXIMATE[2]
+    assert "9:38:12 am" in EXERCISE_47_APPROXIMATE[3]
+    assert "subtract about 2 minutes of time" in EXERCISE_47_EXACT
+    assert "9:36:18 am (IST) on 8th March 1993" in EXERCISE_47_EXACT
