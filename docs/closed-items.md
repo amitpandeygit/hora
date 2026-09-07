@@ -4,6 +4,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 
 | ID | Item |
 |---|---|
+| [OI-151](#oi-151) | §27.1's "exact position" is the sidereal longitude |
 | [OI-146](#oi-146) | one square of Figure 3 could not be read |
 | [OI-147](#oi-147) | §26.8's vedha lines were stated but not determined |
 | [OI-143](#oi-143) | §25.6 never said what a remainder of 0 meant |
@@ -1918,6 +1919,23 @@ of Figure 3's squares and all sixteen reproduce in order, including the plain
 words. Square (2, 7) is on none of the three, so OI-146 stays open.
 
 
+## OI-151 — §27.1's "exact position" is the **sidereal** longitude · **CLOSED**
+
+**Closed by Example 118, on the arithmetic.** §27.1 says the year begins when
+the Sun returns to "the position occupied by him at the time of one's birth"
+and never says in which zodiac. Example 118 prints the answer for one native:
+born 8 March 1967 5:40 pm IST at 73 E 04, 26 N 18, his 34th year begins at
+**4:41:21 am on 8 March 2000**.
+
+| target | our varsha pravesh | against the book |
+|---|---|---|
+| natal **sidereal** longitude | 8 Mar 2000, 04:41:12 IST | **9 seconds** |
+| natal **tropical** longitude | 7 Mar 2000, 17:37:52 IST | eleven hours, wrong day |
+
+`varsha_pravesh` solves against the sidereal longitude, which was a
+consistency argument when it was written and is now the book's own. The
+residual nine seconds is the birth time being printed to the minute.
+
 ## OI-146 — one square of Figure 3 could not be read
 
 **Closed by Exercise 46**, which reads the square out loud. Venus in Makha
@@ -1933,3 +1951,4 @@ Exercise 46's lines reproduce square for square.
 What the constraints were really showing is a defect in the section's own
 tally, not in the figure: **a** occupies two squares, so there are 17 vowel
 squares over 16 distinct vowels, and 19 consonant squares, not 20. See D-77.
+

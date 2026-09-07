@@ -148,3 +148,118 @@ def rasi_of(longitude: float) -> str:
     """The rasi a longitude falls in, by name."""
     return str(RASI_NAMES[int(validate.longitude("longitude",
                                                  float(longitude)) // 30)])
+
+
+# --------------------------------------------------------------------------
+# Example 118 — the rule run once, end to end
+# --------------------------------------------------------------------------
+
+EXAMPLE_118 = (
+    "Let us take a native with this birthdata: 8th March 1967, 5:40 pm (IST), "
+    "73 E 04, 26 N 18. Sun occupies 23° 50' 25\" in Aq in his birthchart. "
+    "Suppose we want analyze the one-year period of March 2000-March 2001 "
+    "using Tajaka annual chart.")
+
+EXAMPLE_118_METHOD = (
+    "Then we should find the date and time when Sun enters 23° 50' 25\" in Aq "
+    "in March 2000. We find that Sun enters this position at 4:41:21 am on "
+    "8th March 2000. The native finishes 33 years and enters his 34th year at "
+    "that time.")
+
+EXAMPLE_118_CHART = (
+    "We can erect a chart with the following data: 8th March 2000, 4:41:21 am "
+    "(IST), 73 E 04, 26 N 18. That chart is called the native's Tajaka annual "
+    "chart for 2000-2001. Rasi chart erected with this data is shown in Chart "
+    "66. Along with this rasi chart, we can draw all the divisional charts at "
+    "this time.")
+
+EXAMPLE_118_USE = (
+    "By analyzing this rasi chart and the associated divisional charts, we "
+    "can find out the fortune of the native during the year. The matters "
+    "shown by various divisional charts, houses, rasis, planets, arudha padas "
+    "etc remain the same. To time events within this year, we have annual "
+    "dasas. We will learn them in later chapters.")
+
+#: The example's own numbers, as the fixture a test checks the search against.
+EXAMPLE_118_NATIVITY: dict[str, object] = {
+    "birth": "8th March 1967, 5:40 pm (IST), 73 E 04, 26 N 18",
+    "natal_sun": "23 Aq 50 25",
+    "varsha_pravesh": "8th March 2000, 4:41:21 am (IST)",
+    "years_finished": 33,
+    "year_entered": 34,
+    "chart": 66,
+}
+
+FOOTNOTE_75 = (
+    "Western astrologers also use similar charts and call them \"solar "
+    "return\" charts. Some Indian astrologers call these \"varshaphal\" "
+    "charts. Varshaphal means \"results for one year\".")
+
+FOOTNOTE_76 = (
+    "Even if the native is living on the other side of the globe, we must "
+    "still cast the annual chart for birthplace co-ordinates. So we are using "
+    "the longitude and latitude of his birthplace here.")
+
+#: **Finding.** The example settles the zodiac, which §27.1 never states. Our
+#: search against the natal **sidereal** longitude lands within nine seconds
+#: of the printed 4:41:21 am. The same search against the **tropical**
+#: longitude lands on 7 March at 17:37 — eleven hours early and a different
+#: day. There is no reading of "the exact position" but the sidereal one.
+#: OI-151 is closed by arithmetic, not by preference.
+THE_EXAMPLE_SETTLES_THE_ZODIAC_AS_SIDEREAL = (
+    "Solving for the Sun's return to his natal sidereal longitude gives "
+    "4:41:12 am on 8 March 2000 against the book's 4:41:21. Solving for the "
+    "tropical longitude gives 5:37 pm on 7 March. The sidereal reading is the "
+    "only one that reproduces the example."
+)
+
+#: **Finding.** The example's year count is the one `varsha_pravesh` takes.
+#: "The native finishes 33 years and enters his 34th year at that time" — so
+#: the 34th year begins at the 33rd return, and year 1 is the birth itself.
+#: That convention is the book's, checked rather than assumed.
+THE_NTH_YEAR_BEGINS_AT_THE_N_MINUS_ONE_TH_RETURN = (
+    "Example 118's native finishes 33 years and enters his 34th at the "
+    "return, so the nth year begins at the (n-1)th return and the first year "
+    "begins at birth."
+)
+
+#: **Finding.** Footnote 76 restates §27.1's place rule and sharpens it —
+#: "even if the native is living on the other side of the globe". The section
+#: said "irrespective of the place of living"; the footnote names the extreme
+#: case, which is the only reason to state a rule twice.
+FOOTNOTE_76_RESTATES_THE_PLACE_RULE_AT_ITS_EXTREME = (
+    "Section 27.1 says the birthplace must be used irrespective of where the "
+    "native lives. Footnote 76 says it again for a native on the other side "
+    "of the globe."
+)
+
+#: **Finding.** Footnote 75 names the system's two other names and, with the
+#: opening's provenance paragraph, completes the picture: this is the western
+#: **solar return** chart, called **varshaphal** by some Indian astrologers.
+#: The book has now said three times, in three ways, that the technique is
+#: shared rather than Parasaran.
+FOOTNOTE_75_NAMES_THE_WESTERN_AND_THE_INDIAN_ALIASES = (
+    "Footnote 75 gives \"solar return\" for the western name and "
+    "\"varshaphal\", results for one year, for the Indian one. Part 4's "
+    "opening had already said the system is closer to western astrology and "
+    "has no maharshi behind it."
+)
+
+#: The three names the book now has for one chart, and whose they are.
+ANNUAL_CHART_ALIASES: tuple[dict[str, str], ...] = (
+    {"name": "Tajaka varsha chakra", "from": "the book, §27.1"},
+    {"name": "Tajaka annual chart", "from": "the book, §27.1"},
+    {"name": "solar return chart", "from": "western astrologers, footnote 75"},
+    {"name": "varshaphal chart",
+     "from": "some Indian astrologers, footnote 75"},
+)
+
+#: **Finding.** Example 118's chart is a **pre-dawn** moment — 4:41 am — and
+#: `compute_panchanga` raises for it, exactly as OI-149 predicts. So the
+#: defect footnote 71 named now has a printed book chart as its test case and
+#: not only Chart 56. Every other figure of Chart 66 reproduces.
+CHART_66_IS_A_SECOND_TEST_CASE_FOR_OI_149 = (
+    "Chart 66 is cast for 4:41:21 am, before sunrise. Our /v1/panchanga "
+    "rejects that instant with \"hora index must be between 1 and 24\", which "
+    "is OI-149 on a chart the book prints."
+)

@@ -2541,6 +2541,42 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "needs the later half of it."
         ),
     },
+    66: {
+        "title": "A Tajaka annual chart — Example 118",
+        "birth": "March 8, 2000, 4:41:21 am (IST), 73 E 04, 26 N 18",
+        "birth_data": {
+            "year": 2000, "month": 3, "day": 8, "hour": 4, "minute": 41,
+            "second": 21.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 26 + 18 / 60, "longitude": 73 + 4 / 60},
+        "longitudes": {
+            "Asc": "10 Cp 49", "Sun": "23 Aq 50", "Moon": "15 Pi 13",
+            "Mars": "24 Pi 58", "Merc": "11 Aq 27", "Jup": "10 Ar 10",
+            "Ven": "29 Cp 20", "Sat": "19 Ar 09", "Rahu": "7 Cn 39",
+            "Ketu": "7 Cp 39", "HL": "15 Sg 14", "GL": "3 Vi 42",
+        },
+        "chara_karakas": {
+            "Ven": "AK", "Mars": "AmK", "Sun": "BK", "Moon": "PK",
+            "Rahu": "MK", "Sat": "PiK", "Merc": "GK", "Jup": "DK",
+        },
+        "retrograde": ("Merc",),
+        "drawn": {
+            "Mars": "Pi", "Moon": "Pi", "Sat": "Ar", "Jup": "Ar", "AL": "Ar",
+            "Merc": "Aq", "Sun": "Aq", "Rahu": "Cn", "Ven": "Cp",
+            "Asc": "Cp", "Ketu": "Cp", "HL": "Sg", "GL": "Vi",
+        },
+        "first_seen": "chapter 27, Example 118",
+        "note": (
+            "Not a nativity. This is the **annual chart** of a native born 8 "
+            "March 1967, 5:40 pm IST at the same place, cast for the moment "
+            "the Sun regained his natal 23 Aq 50 25 — his 34th year. The "
+            "birth data above is that moment, and section 27.1 requires the "
+            "birthplace's coordinates for it however far the native has "
+            "moved. Every printed longitude reproduces within an arcminute; "
+            "Rahu and Ketu need the mean node, as OI-68 records, and HL and "
+            "GL come closest under a disc-centre sunrise, as OI-103 records."
+        ),
+    },
 }
 
 
@@ -2599,4 +2635,5 @@ UNNUMBERED_CHARTS: dict[str, dict[str, Any]] = {
             "this chart is a check on the ephemeris, not a transcription."
         ),
     },
+
 }

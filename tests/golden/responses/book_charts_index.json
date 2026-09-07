@@ -448,6 +448,13 @@
         "number": 65,
         "recomputable": true,
         "title": "Exercise 39 \u2014 natal D-24 against the transit rasi chart"
+      },
+      {
+        "birth": "March 8, 2000, 4:41:21 am (IST), 73 E 04, 26 N 18",
+        "first_seen": "chapter 27, Example 118",
+        "number": 66,
+        "recomputable": true,
+        "title": "A Tajaka annual chart \u2014 Example 118"
       }
     ],
     "not_supplied": [
@@ -510,7 +517,8 @@
       62,
       63,
       64,
-      65
+      65,
+      66
     ]
   },
   "status": 200

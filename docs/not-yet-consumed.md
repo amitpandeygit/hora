@@ -1412,6 +1412,25 @@ arcsecond at every return. What follows is the prose and the findings.
 | `FOOTNOTE_75_NOT_SUPPLIED` | Footnote 75 is marked on the page and its text is not printed there |
 
 
+### Chapter 27 — Example 118 and Chart 66 (13)
+
+`tajaka/annual.py`. Every claim **is** checked: the natal Sun to five
+arcseconds, the varsha pravesh to nine seconds of the printed 4:41:21 am, and
+all ten of Chart 66's printed longitudes and all eight of its chara karakas.
+What follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_118` · `EXAMPLE_118_METHOD` · `EXAMPLE_118_CHART` · `EXAMPLE_118_USE` | The example verbatim, including the sentence deferring the annual dasas to later chapters |
+| `EXAMPLE_118_NATIVITY` | The example's own numbers as a fixture — birth, natal Sun, varsha pravesh, year count and chart number |
+| `FOOTNOTE_75` · `FOOTNOTE_76` | The two footnotes verbatim: the western and Indian names, and the place rule restated at its extreme |
+| `ANNUAL_CHART_ALIASES` | The four names one chart now has, with whose each is |
+| `THE_EXAMPLE_SETTLES_THE_ZODIAC_AS_SIDEREAL` | Ours: the sidereal target lands nine seconds from the book and the tropical one eleven hours out on the previous day. Closed OI-151 |
+| `THE_NTH_YEAR_BEGINS_AT_THE_N_MINUS_ONE_TH_RETURN` | Ours: the book's own year count, matching what `varsha_pravesh` takes |
+| `FOOTNOTE_75_NAMES_THE_WESTERN_AND_THE_INDIAN_ALIASES` · `FOOTNOTE_76_RESTATES_THE_PLACE_RULE_AT_ITS_EXTREME` | Ours: what each footnote adds to the section it hangs off |
+| `CHART_66_IS_A_SECOND_TEST_CASE_FOR_OI_149` | Ours: the annual chart is a pre-dawn instant and our panchanga rejects it, so OI-149 now has a printed book chart behind it |
+
+
 ---
 
 ## How to use this register
