@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 101 waiting on evidence · 2 parked**
+**5 waiting on Amit · 102 waiting on evidence · 2 parked**
 
 ---
 
@@ -2187,6 +2187,27 @@ function is built, because it would have to invent both the weighting and the
 weight of an occupation against a vedha.
 
 **Closes when:** the book gives a rule for mixed strikes, or you settle one.
+
+
+### OI-152 — §28.1 rejects the monthly muntha rate and gives no other
+
+**Waiting on the book.** Muntha in an **annual** chart is settled: the natal
+lagna progressed one rasi a year. Muntha in a **monthly** chart is not.
+
+> Some people find muntha in monthly charts by progressing natal lagna by
+> 2°30' per month. This author takes a different stand and the readers may be
+> able to appreciate this after reading the same chapter.
+
+The rejected rate is not arbitrary — 2°30' a month is thirty degrees a year,
+which is §28.1's own annual rule interpolated evenly. So the section declines
+the obvious reading and defers its own to the Sudarsana Chakra Dasa chapter
+without stating it here.
+
+`muntha` therefore takes a year and returns an annual muntha only. No monthly
+muntha is computed under either rate, and a test checks the module exposes no
+function for one.
+
+**Closes when:** the Sudarsana Chakra Dasa chapter states the author's stand.
 
 
 ---

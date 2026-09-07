@@ -1513,6 +1513,22 @@ birthday — **is** checked, over ninety-nine years of one nativity.
 | `CHAPTER_27_IS_COMPLETE` | The chapter's closing inventory — sections, table, chart, example, exercise and footnotes |
 
 
+### Chapter 28 — §28.1's muntha (10)
+
+`tajaka/muntha.py`. The rule **is** built: `muntha_rasi` reproduces the
+section's own worked case — a Scorpio natal lagna in the 32nd year gives the
+8th house and Gemini — and `muntha` reads it against the annual chart's lagna
+by `MUNTHA_HOUSE_RESULTS`. What follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `MUNTHA_RULE` · `MUNTHA_WORKED_CASE` · `MUNTHA_IS_AS_IMPORTANT_AS_LAGNA` · `MONTHLY_MUNTHA_IS_DISPUTED` · `PLANETS_IN_MUNTHA` · `MUNTHA_IN_HOUSES` | The section verbatim, in its five parts |
+| `MUNTHA_OCCUPANT_EXAMPLES` | The two grahas the section illustrates with, and the afflicted case, as data |
+| `THE_MUNTHA_HOUSES_ARE_NOT_THE_HOUSE_CATEGORIES` | Ours: trikonas and dusthanas follow chapter 7, kendras and upachayas split, so four houses must be read from this list |
+| `MUNTHA_REPEATS_ON_A_TWELVE_YEAR_CYCLE` | Ours: one rasi a year returns muntha to the natal lagna in the thirteenth year and puts it there in the first |
+| `THE_DISPUTED_RATE_IS_THE_ANNUAL_RATE_INTERPOLATED` | Ours: 2°30' a month is the annual rule spread evenly, and the author declines it without replacing it. OI-152 |
+
+
 ---
 
 ## How to use this register

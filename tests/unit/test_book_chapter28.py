@@ -1,0 +1,203 @@
+"""Chapter 28 — techniques of Tajaka charts.
+
+§28.1's muntha is arithmetic on rasis: the natal lagna progressed one rasi a
+year. The section works one case and these tests hold it, along with the two
+things it states and defers — why muntha ranks with lagna, and what the
+author's own monthly rate is.
+"""
+from __future__ import annotations
+
+import pytest
+
+
+def test_28_1s_worked_case_reproduces():
+    """"the natal chart has lagna in Sc ... So muntha is in Ge." """
+    from hora.core.const import RASI_ABBR
+    from hora.tajaka.muntha import MUNTHA_WORKED_CASE, muntha_rasi
+
+    scorpio = RASI_ABBR.index("Sc")
+    got = muntha_rasi(scorpio, 32)
+    # "the 8th house from Sc (after expunging multiples of 12 from 32)"
+    assert got["house_from_natal_lagna"] == 8
+    assert RASI_ABBR[got["rasi"]] == "Ge"
+    assert "So muntha is in Ge" in MUNTHA_WORKED_CASE
+    # 32 mod 12 is 8, which is the section's own shortcut.
+    assert 32 % 12 == got["house_from_natal_lagna"]
+
+
+def test_the_first_year_puts_muntha_on_the_natal_lagna():
+    from hora.tajaka.muntha import muntha_house_from_lagna, muntha_rasi
+
+    for lagna in range(12):
+        got = muntha_rasi(lagna, 1)
+        assert got["rasi"] == lagna
+        assert got["house_from_natal_lagna"] == 1
+    assert muntha_house_from_lagna(1) == 1
+
+
+def test_muntha_repeats_on_a_twelve_year_cycle():
+    from hora.tajaka.muntha import (
+        MUNTHA_REPEATS_ON_A_TWELVE_YEAR_CYCLE,
+        muntha_house_from_lagna,
+        muntha_rasi,
+    )
+
+    # A multiple of twelve puts it back, and the twelfth year is the 12th
+    # house rather than the first — the count is inclusive.
+    assert muntha_house_from_lagna(12) == 12
+    assert muntha_house_from_lagna(13) == 1
+    assert muntha_house_from_lagna(24) == 12
+    for year in (1, 13, 25, 37):
+        assert muntha_rasi(4, year)["rasi"] == 4
+    seen = {muntha_rasi(4, year)["rasi"] for year in range(1, 13)}
+    assert len(seen) == 12                    # every rasi once in a cycle
+    assert "back to the natal lagna in the thirteenth year" in (
+        MUNTHA_REPEATS_ON_A_TWELVE_YEAR_CYCLE)
+
+
+def test_every_house_has_a_reading_and_the_grades_are_the_sections_own():
+    from hora.tajaka.muntha import MUNTHA_HOUSE_RESULTS, MUNTHA_IN_HOUSES
+
+    assert sorted(MUNTHA_HOUSE_RESULTS) == list(range(1, 13))
+    grades = {house: row["grade"] for house, row in MUNTHA_HOUSE_RESULTS.items()}
+    assert [h for h, g in grades.items() if g == "excellent"] == [9, 10, 11]
+    assert [h for h, g in grades.items() if g == "good"] == [1, 2, 3, 5]
+    assert [h for h, g in grades.items() if g == "bad"] == [4, 6, 7, 8, 12]
+
+    # The "respectively" lists, in the order the section gives them.
+    assert [MUNTHA_HOUSE_RESULTS[h]["gives"] for h in (9, 10, 11)] == [
+        "prosperity", "status", "gains"]
+    assert [MUNTHA_HOUSE_RESULTS[h]["gives"] for h in (1, 2, 3, 5)] == [
+        "health", "wealth", "success", "fame"]
+    assert [MUNTHA_HOUSE_RESULTS[h]["gives"] for h in (6, 8, 12)] == [
+        "illness", "troubles", "expenditures"]
+    for house in range(1, 13):
+        assert MUNTHA_HOUSE_RESULTS[house]["gives"] in MUNTHA_IN_HOUSES
+
+
+def test_the_muntha_houses_are_not_the_house_categories():
+    """The trikonas and dusthanas follow chapter 7; the kendras and upachayas
+    do not, so four houses have to be read from §28.1's own list.
+    """
+    from hora.core.const import DUSTHANA, KENDRA, TRIKONA, UPACHAYA
+    from hora.tajaka.muntha import (
+        MUNTHA_HOUSE_RESULTS,
+        THE_MUNTHA_HOUSES_ARE_NOT_THE_HOUSE_CATEGORIES,
+    )
+
+    def grade(house: int) -> str:
+        return MUNTHA_HOUSE_RESULTS[house]["grade"]
+
+    assert all(grade(h) in ("good", "excellent") for h in TRIKONA)
+    assert all(grade(h) == "bad" for h in DUSTHANA)
+    # Kendras and upachayas each split.
+    assert {grade(h) for h in KENDRA} == {"good", "bad", "excellent"}
+    assert {grade(h) for h in UPACHAYA} == {"good", "bad", "excellent"}
+    assert grade(4) == grade(7) == "bad"           # kendras, and bad
+    assert grade(6) == "bad"                       # an upachaya, and bad
+    assert "cannot be read off the category" in (
+        THE_MUNTHA_HOUSES_ARE_NOT_THE_HOUSE_CATEGORIES)
+
+
+def test_muntha_is_read_from_the_annual_lagna_not_the_natal_one():
+    """"Position of muntha in various houses with respect to lagna in the
+    annual chart."  Two different annual lagnas, two different readings.
+    """
+    from hora.core.const import RASI_ABBR
+    from hora.tajaka.muntha import muntha
+
+    scorpio, gemini = RASI_ABBR.index("Sc"), RASI_ABBR.index("Ge")
+    # §28.1's own case: muntha in Ge for the 32nd year.
+    from_gemini = muntha(scorpio, 32, gemini)
+    assert from_gemini["house_from_annual_lagna"] == 1
+    assert from_gemini["grade"] == "good"
+    assert from_gemini["gives"] == "health"
+
+    from_capricorn = muntha(scorpio, 32, RASI_ABBR.index("Cp"))
+    assert from_capricorn["rasi"] == from_gemini["rasi"]      # same muntha
+    assert from_capricorn["house_from_annual_lagna"] == 6     # different house
+    assert from_capricorn["grade"] == "bad"
+
+
+def test_the_grahas_in_muntha_are_reported_and_never_graded():
+    """§28.1 says the strength of the planets influencing muntha matters and
+    gives no measure, so occupants are listed and not weighed.
+    """
+    from hora.core.const import RASI_ABBR
+    from hora.tajaka.muntha import MUNTHA_OCCUPANT_EXAMPLES, muntha
+
+    gemini = RASI_ABBR.index("Ge")
+    scorpio = RASI_ABBR.index("Sc")
+    got = muntha(scorpio, 32, gemini, occupants={4: gemini, 6: 0, 0: gemini})
+    assert got["grahas_in_muntha"] == (0, 4)          # Sun and Jupiter
+    assert "no occupant is graded here" in got["strength_note"]
+
+    # Not asked is not the same as nobody there.
+    assert muntha(scorpio, 32, gemini)["grahas_in_muntha"] is None
+    assert muntha(scorpio, 32, gemini,
+                  occupants={6: 0})["grahas_in_muntha"] == ()
+
+    assert len(MUNTHA_OCCUPANT_EXAMPLES) == 3
+    assert MUNTHA_OCCUPANT_EXAMPLES[0]["graha"] == "Jupiter"
+    assert MUNTHA_OCCUPANT_EXAMPLES[-1]["gives"] == (
+        "loss of position, bad name and scandals")
+
+
+def test_the_disputed_monthly_rate_is_the_annual_rate_interpolated():
+    """2°30' a month is 30° a year, which is §28.1's own one rasi a year.
+
+    The author declines that interpolation and does not replace it, so no
+    monthly muntha is computed. See OI-152.
+    """
+    from hora.tajaka.muntha import (
+        MONTHLY_MUNTHA_IS_DISPUTED,
+        THE_DISPUTED_RATE_IS_THE_ANNUAL_RATE_INTERPOLATED,
+    )
+    from hora.tajaka.shashti_hora import SHASHTI_HORA_ARC_DEGREES
+
+    assert 2.5 * 12 == 30.0
+    assert "2°30' per month" in MONTHLY_MUNTHA_IS_DISPUTED
+    assert "takes a different stand" in MONTHLY_MUNTHA_IS_DISPUTED
+    # The same number as the shashti-hora arc, and a different thing.
+    assert SHASHTI_HORA_ARC_DEGREES == 2.5
+    assert "arc of the **Sun**" not in THE_DISPUTED_RATE_IS_THE_ANNUAL_RATE_INTERPOLATED
+    assert "the author declines it" in (
+        THE_DISPUTED_RATE_IS_THE_ANNUAL_RATE_INTERPOLATED)
+
+    # Nothing computes one.
+    import hora.tajaka.muntha as module
+
+    assert not [name for name in dir(module)
+                if "monthly" in name.lower() and callable(getattr(module, name))]
+
+
+def test_muntha_checks_its_inputs():
+    from hora.core import validate
+    from hora.tajaka.muntha import MunthaError, muntha, muntha_rasi
+
+    assert issubclass(MunthaError, validate.InputError)
+    for bad in (-1, 12):
+        with pytest.raises(validate.InputError):
+            muntha_rasi(bad, 5)
+        with pytest.raises(validate.InputError):
+            muntha(0, 5, bad)
+    for bad in (0, 201):
+        with pytest.raises(validate.InputError):
+            muntha_rasi(0, bad)
+
+
+def test_28_1_is_transcribed_with_what_it_defers():
+    from hora.tajaka.muntha import (
+        MUNTHA_IS_AS_IMPORTANT_AS_LAGNA,
+        MUNTHA_RULE,
+        PLANETS_IN_MUNTHA,
+    )
+
+    assert "one rasi per year" in MUNTHA_RULE
+    assert "specific to Tajaka charts" in MUNTHA_RULE
+    assert "as important a reference point in an annual chart as lagna" in (
+        MUNTHA_IS_AS_IMPORTANT_AS_LAGNA)
+    # Both deferrals point at the same later chapter.
+    assert "Sudarsana Chakra Dasa" in MUNTHA_IS_AS_IMPORTANT_AS_LAGNA
+    assert "strength of the planets influencing muntha also matters" in (
+        PLANETS_IN_MUNTHA)
