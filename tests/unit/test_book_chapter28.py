@@ -793,9 +793,9 @@ def test_the_group_of_five_is_named_and_only_three_have_arrived():
     assert len(PANCHA_VARGAS) == 5
     supplied = [row for row in PANCHA_VARGAS if row["supplied"]]
     assert [row["name"] for row in supplied] == [
-        "Kshetra bala", "Uchcha bala", "Hadda bala"]
-    assert [row["maximum"] for row in supplied] == [30.0, 20.0, 15.0]
-    assert len(PANCHA_VARGAS_PENDING) == 3
+        "Kshetra bala", "Uchcha bala", "Hadda bala", "Drekkana bala"]
+    assert [row["maximum"] for row in supplied] == [30.0, 20.0, 15.0, 10.0]
+    assert len(PANCHA_VARGAS_PENDING) == 2
     assert "Final Computation" in PANCHA_VARGAS_PENDING[-1]
 
 
@@ -803,10 +803,10 @@ def test_only_the_supplied_vargas_are_built():
     """The coverage line. It fails the moment a pending source appears."""
     import hora.tajaka.panchavargeeya as module
 
-    for absent in ("drekkana_bala", "navamsa_bala", "pancha_vargeeya_bala",
-                   "hadda_lord", "TABLE_72"):
+    for absent in ("navamsa_bala", "pancha_vargeeya_bala"):
         assert not hasattr(module, absent), absent
-    for present in ("kshetra_bala", "uchcha_bala", "hadda_bala"):
+    for present in ("kshetra_bala", "uchcha_bala", "hadda_bala",
+                    "hadda_lord", "drekkana_bala"):
         assert callable(getattr(module, present))
 
 
@@ -935,23 +935,30 @@ def test_the_wrap_case_the_section_mentions_but_does_not_work():
         assert below["units"] == pytest.approx(above["units"])
 
 
-def test_table_72_is_recorded_as_not_supplied_and_d30_is_not_borrowed():
+def test_table_72_is_transcribed_and_every_row_closes_on_thirty():
+    from hora.core.const import GRAHA_NAMES
     from hora.tajaka.panchavargeeya import (
+        HADDA_LORDS,
         HADDA_RULE,
-        TABLE_72_NOT_SUPPLIED,
-        hadda_bala,
+        TABLE_72_HADDA_LORDS,
+        TABLE_72_TITLE,
     )
 
+    assert TABLE_72_TITLE == "Hadda Lords"
     assert "Table 72 can be used for finding the hadda lords" in HADDA_RULE
     assert "Hadda is similar to D-30" in HADDA_RULE
-    assert "not on the page supplied" in TABLE_72_NOT_SUPPLIED
-    # The relationship is an input because the hadda cannot be found.
-    assert "table_72" in hadda_bala("own")
-    # And D-30's own lords are not repurposed for it.
-    import hora.tajaka.panchavargeeya as module
-
-    assert "trimsamsa" not in dir(module)
-    assert not any("d30" in name.lower() for name in dir(module))
+    assert sorted(TABLE_72_HADDA_LORDS) == list(range(12))
+    for rasi, rows in TABLE_72_HADDA_LORDS.items():
+        assert len(rows) == 5, rasi
+        previous = 0.0
+        for end, lord in rows:
+            assert end > previous, (rasi, end)
+            assert lord in HADDA_LORDS, (rasi, lord)
+            previous = end
+        assert previous == 30.0, rasi
+    assert sorted(HADDA_LORDS) == [2, 3, 4, 5, 6]
+    assert {str(GRAHA_NAMES[g]) for g in HADDA_LORDS} == {
+        "Mars", "Mercury", "Jupiter", "Venus", "Saturn"}
 
 
 def test_28_4_2s_one_letter_slip_is_recorded():
@@ -978,3 +985,121 @@ def test_the_pancha_vargeeya_helpers_check_their_inputs():
             deep_debilitation(node)
     with pytest.raises(PanchaVargeeyaError):
         kshetra_bala("exalted")
+
+
+def test_the_luminaries_can_never_hold_their_own_hadda():
+    """Table 72's sixty haddas are shared among five grahas, and neither
+    luminary is one of them — so hadda bala's own grade is out of reach.
+    """
+    from hora.tajaka.panchavargeeya import (
+        HADDA_LORDS,
+        TABLE_72_HADDA_LORDS,
+        THE_LUMINARIES_CAN_NEVER_HOLD_THEIR_OWN_HADDA,
+        hadda_bala,
+        hadda_lord,
+    )
+
+    every = {lord for rows in TABLE_72_HADDA_LORDS.values()
+             for _end, lord in rows}
+    assert every == set(HADDA_LORDS)
+    assert 0 not in every and 1 not in every
+    # Sixty haddas in all, and no longitude ever hands one to a luminary.
+    assert sum(len(rows) for rows in TABLE_72_HADDA_LORDS.values()) == 60
+    for step in range(3600):
+        assert hadda_lord(step / 10.0)["lord"] in HADDA_LORDS
+    # The best either luminary can take is a friend's 7.5 of 15.
+    assert hadda_bala("friend")["units"] == 7.5
+    assert hadda_bala("own")["units"] == 15.0
+    assert "unreachable for both" in (
+        THE_LUMINARIES_CAN_NEVER_HOLD_THEIR_OWN_HADDA)
+
+
+def test_the_hadda_totals_are_uneven_and_recorded_for_checking():
+    """OI-154. The widths as printed, summed per lord."""
+    from collections import Counter
+
+    from hora.tajaka.panchavargeeya import (
+        TABLE_72_HADDA_LORDS,
+        THE_HADDA_TOTALS_ARE_UNEVEN,
+    )
+
+    spans: Counter = Counter()
+    for rows in TABLE_72_HADDA_LORDS.values():
+        previous = 0.0
+        for end, lord in rows:
+            spans[lord] += end - previous
+            previous = end
+    assert sum(spans.values()) == 360.0
+    assert spans == {5: 83.0, 4: 78.0, 3: 76.0, 2: 67.0, 6: 56.0}
+    for degrees in (83, 78, 76, 67, 56):
+        assert str(degrees) in THE_HADDA_TOTALS_ARE_UNEVEN
+
+
+def test_hadda_lord_finds_the_span_a_longitude_falls_in():
+    from hora.charts import book
+    from hora.tajaka.panchavargeeya import hadda_lord
+
+    # The first hadda of Aries, and the last of Pisces.
+    first = hadda_lord(0.0)
+    assert (first["rasi"], first["hadda_from"], first["hadda_to"]) == (
+        0, 0.0, 6.0)
+    assert first["lord_name"] == "Jupiter"
+    last = hadda_lord(359.99)
+    assert (last["rasi"], last["hadda_from"], last["hadda_to"]) == (
+        11, 28.0, 30.0)
+    assert last["lord_name"] == "Saturn"
+
+    # §28.4.2's own Jupiter, at 8 Vi 30.
+    jupiter = hadda_lord(book.longitude("8 Vi 30"))
+    assert jupiter["rasi"] == 5
+    assert (jupiter["hadda_from"], jupiter["hadda_to"]) == (7.0, 17.0)
+    assert jupiter["lord_name"] == "Venus"
+
+    # A boundary belongs to the hadda it opens, not the one it closes.
+    assert hadda_lord(6.0)["hadda_from"] == 6.0
+    assert hadda_lord(5.999)["hadda_to"] == 6.0
+
+
+def test_28_4_4s_drekkana_bala_and_the_thirty_over_n_series():
+    from hora.tajaka.panchavargeeya import (
+        DREKKANA_BALA_RULE,
+        DREKKANA_BALA_UNITS,
+        HADDA_BALA_UNITS,
+        KSHETRA_BALA_UNITS,
+        THE_PLACE_BALAS_ARE_THIRTY_OVER_N,
+        UCHCHA_BALA_MAXIMUM,
+        drekkana_bala,
+    )
+
+    assert DREKKANA_BALA_UNITS == {"own": 10.0, "friend": 5.0, "enemy": 2.5}
+    assert "drekkana chart (D-3)" in DREKKANA_BALA_RULE
+    for grade in ("own", "friend", "enemy"):
+        assert drekkana_bala(grade)["units"] == DREKKANA_BALA_UNITS[grade]
+    # Thirty over one, two and three.
+    tops = [KSHETRA_BALA_UNITS["own"], HADDA_BALA_UNITS["own"],
+            DREKKANA_BALA_UNITS["own"]]
+    assert tops == [30.0, 15.0, 10.0]
+    for n, top in enumerate(tops, 1):
+        assert top == pytest.approx(30.0 / n)
+    # And each halves twice within itself.
+    for units in (KSHETRA_BALA_UNITS, HADDA_BALA_UNITS, DREKKANA_BALA_UNITS):
+        assert units["own"] == units["friend"] * 2 == units["enemy"] * 4
+    # Uchcha's twenty is outside the series.
+    assert UCHCHA_BALA_MAXIMUM not in tops
+    assert "belongs to no such series" in THE_PLACE_BALAS_ARE_THIRTY_OVER_N
+
+
+def test_the_neutral_gap_repeats_in_all_three_place_balas():
+    from hora.tajaka.panchavargeeya import (
+        THE_NEUTRAL_GAP_REPEATS_IN_ALL_THREE_PLACE_BALAS,
+        drekkana_bala,
+        hadda_bala,
+        kshetra_bala,
+    )
+
+    for scorer in (kshetra_bala, hadda_bala, drekkana_bala):
+        got = scorer("neutral")
+        assert got["undecided"] is True
+        assert got["units"] is None
+    assert "None of the three prices a neutral's" in (
+        THE_NEUTRAL_GAP_REPEATS_IN_ALL_THREE_PLACE_BALAS)

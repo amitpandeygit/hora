@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 103 waiting on evidence · 2 parked**
+**5 waiting on Amit · 104 waiting on evidence · 2 parked**
 
 ---
 
@@ -2230,6 +2230,36 @@ for any grade the section never names.
 
 **Closes when:** §28.4.6's final computation names the scheme and the missing
 grade, or you settle both.
+
+
+### OI-154 — Table 72's hadda widths do not match the usual Egyptian bounds
+
+**Waiting on JHora.** Our transcription of Table 72 is self-consistent: every
+one of the twelve rows has five haddas running 0 to 30, and the table closes on
+360 degrees. Summing the widths per lord gives
+
+| lord | Table 72 as we read it | usually quoted for the Egyptian bounds |
+|---|---|---|
+| Venus | 83 | 82 |
+| Jupiter | 78 | 79 |
+| Mercury | 76 | 76 |
+| Mars | 67 | 66 |
+| Saturn | 56 | 57 |
+
+Four of the five differ by exactly one degree, two up and two down, so one or
+two cell boundaries are involved rather than a different scheme. Three
+possibilities and nothing here decides between them: the book's table differs
+from the common set, a boundary is misprinted, or our reading of a cell is
+wrong.
+
+It matters for parity. If JHora uses the common set, our hadda lord will differ
+from its own on a few degrees of the zodiac, and hadda bala with it.
+
+**Not changed.** `TABLE_72_HADDA_LORDS` holds the table as we read it and
+nothing is adjusted toward the common set.
+
+**Closes when:** the table is checked against JHora, or against a second
+printing.
 
 
 ---

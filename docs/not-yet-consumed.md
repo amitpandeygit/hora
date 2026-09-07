@@ -1578,20 +1578,25 @@ follows is prose and findings.
 | `SOURCE_FOUR_IS_BLOCKED_BY_OI_149` | Ours: the one worked example of harsha bala cannot be scored through `compute_panchanga`, because its year begins before sunrise |
 
 
-### Chapter 28 — §28.4.1 to §28.4.3 (12)
+### Chapter 28 — §28.4.1 to §28.4.4 (17)
 
-`tajaka/panchavargeeya.py`. Three of the five sources **are** built:
-`kshetra_bala`, `uchcha_bala` and `hadda_bala`, and §28.4.2's worked case
-reproduces to the printed hundredth. Drekkana bala, navamsa bala and the final
-computation have not arrived and the coverage test fails if one appears. What
-follows is prose and findings.
+`tajaka/panchavargeeya.py`. Four of the five sources **are** built:
+`kshetra_bala`, `uchcha_bala`, `hadda_bala` with Table 72 behind it, and
+`drekkana_bala`. §28.4.2's worked case reproduces to the printed hundredth.
+Navamsa bala and the final computation have not arrived and the coverage test
+fails if either appears. What follows is prose and findings.
 
 | constant | why it is not consumed |
 |---|---|
 | `PANCHA_VARGEEYA_RULE` · `FOOTNOTE_81` · `KSHETRA_BALA_RULE` · `UCHCHA_BALA_RULE` · `UCHCHA_BALA_METHOD` · `UCHCHA_BALA_WORKED_CASE` · `HADDA_RULE` · `HADDA_BALA_RULE` | The three sections and the footnote verbatim |
 | `PANCHA_MEANS` · `PANCHA_VARGEEYA_MEANS` | The footnote's gloss, as two phrases |
 | `PANCHA_VARGAS` · `PANCHA_VARGAS_PENDING` | The five sources as data, and the three sections still to come |
-| `TABLE_72_NOT_SUPPLIED` | Table 72 is cited and not printed, so no hadda can be found from a longitude |
+| `TABLE_72_HADDA_LORDS` · `TABLE_72_TITLE` · `HADDA_LORDS` | Table 72 as printed, its title, and the five grahas that lord a hadda |
+| `DREKKANA_BALA_RULE` · `DREKKANA_BALA_UNITS` | Section 28.4.4 verbatim, and its three grades |
+| `THE_LUMINARIES_CAN_NEVER_HOLD_THEIR_OWN_HADDA` | Ours: the Sun and Moon lord none of the sixty haddas, so hadda bala's own grade is out of reach for both |
+| `THE_HADDA_TOTALS_ARE_UNEVEN` | Ours: the widths per lord as printed, four of five a degree from the usual Egyptian figures. OI-154 |
+| `THE_PLACE_BALAS_ARE_THIRTY_OVER_N` | Ours: kshetra 30, hadda 15, drekkana 10 — thirty over one, two and three, with uchcha's 20 outside the series |
+| `THE_NEUTRAL_GAP_REPEATS_IN_ALL_THREE_PLACE_BALAS` | Ours: the gap OI-153 records is the shape of the whole family, not a slip in one section |
 | `THE_NEUTRAL_GRADE_IS_NOT_PRICED` | Ours: neither section values a neutral's place, which chapter 3's relationships produce routinely. OI-153 |
 | `HADDA_IS_KSHETRA_HALVED` | Ours: hadda bala is kshetra bala's scale halved at every grade |
 | `THE_EXALTATION_DEGREES_ARE_CHAPTER_THREES` | Ours: the first table Part 4 reuses from the rest of the book instead of defining its own |

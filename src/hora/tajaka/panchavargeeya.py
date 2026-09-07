@@ -36,15 +36,15 @@ PANCHA_VARGAS: tuple[dict[str, object], ...] = (
      "supplied": True},
     {"section": "28.4.3", "name": "Hadda bala", "from": "the hadda",
      "maximum": 15.0, "supplied": True},
-    {"section": "28.4.4", "name": "Drekkana bala", "from": "the drekkana",
-     "maximum": None, "supplied": False},
+    {"section": "28.4.4", "name": "Drekkana bala",
+     "from": "the drekkana chart", "maximum": 10.0, "supplied": True},
     {"section": "28.4.5", "name": "Navamsa bala", "from": "the navamsa",
      "maximum": None, "supplied": False},
 )
 
 #: The sections still to come, including the one that adds the five up.
 PANCHA_VARGAS_PENDING: tuple[str, ...] = (
-    "28.4.4 Drekkana Bala", "28.4.5 Navamsa Bala", "28.4.6 Final Computation")
+    "28.4.5 Navamsa Bala", "28.4.6 Final Computation")
 
 
 # --------------------------------------------------------------------------
@@ -137,15 +137,49 @@ HADDA_BALA_RULE = (
 HADDA_BALA_UNITS: dict[str, float] = {
     "own": 15.0, "friend": 7.5, "enemy": 3.75}
 
-#: **Not supplied.** Table 72 is cited by §28.4.3 and is not on the page. No
-#: hadda lord can be found from a longitude, so `hadda_bala` takes the
-#: relationship to the hadda lord as an argument and there is no function to
-#: derive it. §28.4.3's own comparison — "Hadda is similar to D-30" — is a
-#: comparison and not a definition; D-30's lords are not borrowed for it.
-TABLE_72_NOT_SUPPLIED = (
-    "Section 28.4.3 says Table 72 gives the hadda lords. The table is not on "
-    "the page supplied, so nothing here divides a rasi into haddas or names "
-    "their lords."
+#: Table 72 as printed: for each rasi, the five haddas as (end degree, lord),
+#: the first beginning at zero. Every row runs 0 to 30 and the whole table is
+#: 360 degrees, both of which are asserted rather than trusted.
+TABLE_72_HADDA_LORDS: dict[int, tuple[tuple[float, int], ...]] = {
+    0:  ((6.0, 4), (12.0, 5), (20.0, 3), (25.0, 2), (30.0, 6)),    # Aries
+    1:  ((8.0, 5), (14.0, 3), (22.0, 4), (27.0, 6), (30.0, 2)),    # Taurus
+    2:  ((6.0, 3), (12.0, 5), (17.0, 4), (24.0, 2), (30.0, 6)),    # Gemini
+    3:  ((7.0, 2), (13.0, 5), (19.0, 3), (26.0, 4), (30.0, 6)),    # Cancer
+    4:  ((6.0, 4), (11.0, 5), (18.0, 6), (24.0, 3), (30.0, 2)),    # Leo
+    5:  ((7.0, 3), (17.0, 5), (21.0, 4), (28.0, 2), (30.0, 6)),    # Virgo
+    6:  ((6.0, 6), (14.0, 3), (21.0, 4), (28.0, 5), (30.0, 2)),    # Libra
+    7:  ((7.0, 2), (11.0, 5), (19.0, 3), (24.0, 4), (30.0, 6)),    # Scorpio
+    8:  ((12.0, 4), (17.0, 5), (21.0, 3), (26.0, 2), (30.0, 6)),   # Sagittarius
+    9:  ((7.0, 3), (14.0, 4), (22.0, 5), (26.0, 6), (30.0, 2)),    # Capricorn
+    10: ((7.0, 3), (13.0, 5), (20.0, 4), (25.0, 2), (30.0, 6)),    # Aquarius
+    11: ((12.0, 5), (16.0, 4), (19.0, 3), (28.0, 2), (30.0, 6)),   # Pisces
+}
+
+TABLE_72_TITLE = "Hadda Lords"
+
+#: The five grahas Table 72 uses. The luminaries are not among them.
+HADDA_LORDS: tuple[int, ...] = (2, 3, 4, 5, 6)
+
+#: **Finding.** Table 72 never gives a hadda to the **Sun or the Moon**, so
+#: neither can ever stand in its own hadda and hadda bala's 15 units are out
+#: of their reach. The most either can score is a friend's 7.5. That is the
+#: same shape as §28.3's ceiling on the Sun, Venus and Saturn — a structural
+#: limit the section does not mention.
+THE_LUMINARIES_CAN_NEVER_HOLD_THEIR_OWN_HADDA = (
+    "Table 72's sixty haddas are shared among Mars, Mercury, Jupiter, Venus "
+    "and Saturn. The Sun and the Moon lord none of them, so hadda bala's own "
+    "grade is unreachable for both."
+)
+
+#: **Finding.** The five lords do not share the zodiac evenly. Summing the
+#: widths of Table 72 as printed gives **Venus 83°, Jupiter 78°, Mercury 76°,
+#: Mars 67° and Saturn 56°**. Those four of five differ by a degree from the
+#: figures usually quoted for the Egyptian bounds, which is recorded for
+#: checking against JHora rather than corrected. See OI-154.
+THE_HADDA_TOTALS_ARE_UNEVEN = (
+    "Table 72 gives Venus 83 degrees of the zodiac, Jupiter 78, Mercury 76, "
+    "Mars 67 and Saturn 56. Every rasi row runs 0 to 30 and the whole table "
+    "closes on 360."
 )
 
 #: **Finding.** Hadda bala is exactly half of kshetra bala at every grade —
@@ -199,12 +233,11 @@ def kshetra_bala(relation: str) -> dict:
 def hadda_bala(relation: str) -> dict:
     """§28.4.3's strength from the hadda a planet occupies.
 
-    The hadda itself cannot be found here — Table 72 is not supplied — so the
-    relationship to its lord is supplied by the caller.
+    :param relation: the planet's relationship to the **hadda lord**, which
+        `hadda_lord` finds from a longitude.
     """
     return {**_graded(HADDA_BALA_UNITS, relation, "hadda"),
-            "source": "Hadda bala", "rule": HADDA_BALA_RULE,
-            "table_72": TABLE_72_NOT_SUPPLIED}
+            "source": "Hadda bala", "rule": HADDA_BALA_RULE}
 
 
 def deep_debilitation(graha: int) -> float:
@@ -240,3 +273,70 @@ def uchcha_bala(graha: int, longitude: float) -> dict:
         "undecided": False,
         "rule": UCHCHA_BALA_METHOD,
     }
+
+
+def hadda_lord(longitude: float) -> dict:
+    """The hadda a longitude falls in, and its lord, from Table 72."""
+    place = validate.longitude("longitude", float(longitude))
+    rasi = int(place // 30)
+    within = place - rasi * 30.0
+    start = 0.0
+    for end, lord in TABLE_72_HADDA_LORDS[rasi]:
+        if within < end:
+            return {
+                "longitude": place,
+                "rasi": rasi,
+                "degrees_in_rasi": within,
+                "hadda_from": start,
+                "hadda_to": end,
+                "lord": lord,
+                "lord_name": str(GRAHA_NAMES[lord]),
+                "rule": HADDA_RULE,
+            }
+        start = end
+    raise PanchaVargeeyaError(                      # pragma: no cover
+        f"{place} falls in no hadda of Table 72, which cannot happen")
+
+
+# --------------------------------------------------------------------------
+# §28.4.4 — drekkana bala
+# --------------------------------------------------------------------------
+
+DREKKANA_BALA_RULE = (
+    "Drekkana bala shows the strength in drekkana chart (D-3). A planet in "
+    "own rasi in D-3 gets 10 units of Drekkana bala. A planet in a friend's "
+    "rasi in D-3 gets 5 units of Drekkana bala. A planet in an enemy's rasi "
+    "in D-3 gets 2.5 units of Drekkana bala.")
+
+DREKKANA_BALA_UNITS: dict[str, float] = {
+    "own": 10.0, "friend": 5.0, "enemy": 2.5}
+
+#: **Finding.** The three place balas are one scale divided by one, two and
+#: three: kshetra 30, hadda 15, drekkana 10. Each also halves from own to
+#: friend's to enemy's, so the whole family is 30 over n, then halved twice.
+#: Uchcha bala's 20 is outside the series, and it is the one source that does
+#: not read a relationship.
+THE_PLACE_BALAS_ARE_THIRTY_OVER_N = (
+    "Kshetra bala's own grade is 30, hadda bala's 15 and drekkana bala's 10 "
+    "— thirty divided by one, two and three. Uchcha bala's 20 belongs to no "
+    "such series, and it is the only source of the five that does not grade "
+    "a relationship."
+)
+
+#: **Finding.** All three place balas leave a **neutral** unpriced, so the gap
+#: OI-153 records is not a slip in one section but the shape of the whole
+#: family. Three sections state three grades each and none states a fourth.
+THE_NEUTRAL_GAP_REPEATS_IN_ALL_THREE_PLACE_BALAS = (
+    "Kshetra, hadda and drekkana bala each grade own, a friend's and an "
+    "enemy's place. None of the three prices a neutral's."
+)
+
+
+def drekkana_bala(relation: str) -> dict:
+    """§28.4.4's strength from the rasi a planet occupies in D-3.
+
+    :param relation: ``own``, ``friend`` or ``enemy``, judged in the drekkana
+        chart. ``neutral`` returns undecided — see OI-153.
+    """
+    return {**_graded(DREKKANA_BALA_UNITS, relation, "drekkana"),
+            "source": "Drekkana bala", "rule": DREKKANA_BALA_RULE}
