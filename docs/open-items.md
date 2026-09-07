@@ -2139,29 +2139,19 @@ rule the code gets wrong, and Chart 56 is the test case:
 > at 12:22 am. However, a new day starts at sunrise for Hindus. So it was still
 > Thursday.
 
-Two things go wrong for a birth between midnight and sunrise.
+Two things go wrong for a birth between midnight and sunrise. **It raises** —
+`day_structure` searches from **local midnight**, so a 00:22 birth gets that
+morning's sunrise seven hours *later*, `hora_at` gets a negative elapsed time
+and `hora_lord` raises. And **the vaara would be a day late**: the Hindu day
+running at 00:22 began at the previous sunrise, whose weekday is what footnote
+71 says. The fix is one line of intent — take the last sunrise **at or before**
+the instant.
 
-1. **It raises.** `day_structure` searches for sunrise from **local midnight**
-   of the calendar date, so for a 00:22 birth it returns that morning's
-   sunrise, seven hours *later*. `hora_at` then gets a negative elapsed time
-   and `hora_lord` raises `ValueError("hora index must be between 1 and 24")`.
-   `compute_panchanga(from_local(1960, 11, 25, 0, 22, ...), 38.88, -77.03)`
-   fails outright.
-2. **The vaara would be a day late.** The code takes the weekday of
-   `day.sunrise`, which for that birth is Friday 25 November. The Hindu day
-   running at 00:22 began at the **previous** sunrise, 24 November 07:00, and
-   its weekday is **Thursday** — which is what the footnote says and what a
-   search backwards from the instant gives.
-
-The fix is one line of intent: `day_structure` should take the last sunrise
-**at or before** the instant, not the first sunrise after local midnight.
-
-**Third occurrence, and the first that blocks a worked example.** Chart 66 is
-cast for 4:41 am, so `/v1/panchanga` rejects it. §28.3's fourth source of
-harsha bala turns on whether the year began by day or night, which makes
-Example 119 unscoreable through the ordinary route; `tajaka.harsha.
-year_began_in_daytime` reads sunrise and sunset from the ephemeris instead and
-says why. That is a workaround in one module, not a fix.
+**Three book charts now, and the third blocks a worked example.** Chart 56,
+Chart 66 (4:41 am), and §28.3's fourth source of harsha bala turns on day or
+night — so Example 119 is unscoreable through the ordinary route.
+`tajaka.harsha.year_began_in_daytime` reads sunrise and sunset directly and
+says why. A workaround in one module, not a fix.
 
 **Not changed.** `day_structure` feeds `/v1/panchanga` and everything under it
 — tithi, nakshatra, yoga, karana, hora and the vaara itself — so moving it
