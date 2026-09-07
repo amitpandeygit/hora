@@ -2197,12 +2197,13 @@ lagna progressed one rasi a year. Muntha in a **monthly** chart is not.
 
 The rejected rate is not arbitrary — 2°30' a month is thirty degrees a year,
 which is §28.1's own annual rule interpolated evenly. So the section declines
-the obvious reading and defers its own to the Sudarsana Chakra Dasa chapter
-without stating it here.
+the obvious reading and defers its own without stating it. `muntha` returns an
+annual muntha only.
 
-`muntha` therefore takes a year and returns an annual muntha only. No monthly
-muntha is computed under either rate, and a test checks the module exposes no
-function for one.
+**§28.7 now needs it**, listing "Lord of Muntha" as a candidate in a *monthly*
+chart. Either the year's muntha carries through all twelve months or a monthly
+one is meant under a rule not given. `lord_of_the_month` takes the muntha rasi
+as an argument.
 
 **Closes when:** the Sudarsana Chakra Dasa chapter states the author's stand.
 
@@ -2295,23 +2296,16 @@ leaves `overall` as ``None`` with the reason attached.
 **Waiting on the book.** The lord of the year is picked by a cascade, and two
 steps of it are underdetermined.
 
-**1. The opening sentence and the procedure can disagree.** §28.6 opens with
-
-> If a candidate is strong as per panchavargeeya bala and has a benefic aspect
-> on lagna, it becomes the lord of the year.
-
-and then gives an operational paragraph that shortlists on the benefic aspect
-alone and ranks the shortlist by pancha vargeeya bala. Those pick differently
-when a candidate of merely *ordinary* strength has a benefic aspect and the
-highest bala while another is *strong* with a benefic aspect and a lower one.
-The opening sentence takes the second; the procedure takes the first.
+**1. The opening sentence and the procedure can disagree.** The opening says a
+candidate that is *strong* and has a benefic aspect becomes the lord; the
+operational paragraph shortlists on the aspect alone and ranks by bala. They
+pick differently when an *ordinary* candidate has a benefic aspect and the
+highest bala while a *strong* one has a lower.
 
 **2. The last two fallbacks test different things.** The third asks whether
-"none of the planets has **an** aspect on lagna" and the fourth whether "none
-of the candidates has a **strong** aspect on lagna". §28.2 grades aspects
-strong, weak and neutral, so a chart whose candidates aspect lagna only weakly
-answers the third no and the fourth yes, and the section gives no order
-between them.
+"none of the planets has **an** aspect on lagna", the fourth whether "none has
+a **strong** aspect". §28.2 grades aspects strong, weak and neutral, so a
+weak aspect answers the third no and the fourth yes, with no order between.
 
 `varsheswara` follows the operational paragraph, reports which step it stopped
 at, and returns no lord where the section settles none — including when two

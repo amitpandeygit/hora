@@ -1658,6 +1658,22 @@ findings.
 | `EXAMPLE_120_RULES_OUT_THE_PLANETS_OWN_VIEW` | Ours: Mars's 13.7 needs his navamsa scored as an enemy's, which the planet's own view of the rasi lord does not give. OI-153 |
 
 
+### Chapter 28 — §28.7's lord of the month (9)
+
+`tajaka/varsheswara.py`. The rules **are** built: `month_candidates` finds the
+six and `lord_of_the_month` runs §28.6's cascade over them unchanged, which is
+what "the rest of the rules are the same" asks for. What follows is prose and
+findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `MONTH_LORD_RULE` · `MONTH_LORD_CANDIDATES` · `MONTH_LORD_REST` | The section verbatim, with the six candidates as data |
+| `THE_SIX_ARE_THE_FIVE_WITH_ONE_ADDED` | Ours: (1), (4) and (5) say monthly where 28.6 said annual, (2) and (3) are unchanged, and (6) is new |
+| `CANDIDATE_SIX_INHERITS_28_6S_FAILURES` | Ours: the lord of the year is another cascade's output and can be absent, which the section does not read |
+| `CANDIDATE_THREE_RESTS_ON_OI_152` | Ours: a monthly muntha is exactly what 28.1 declines to define |
+| `THE_TIE_BREAK_COUNTS_SIX_CATEGORIES_HERE` | Ours: 28.6's tie-break names five categories and a month has six |
+
+
 ---
 
 ## How to use this register

@@ -1936,3 +1936,151 @@ def test_example_120_is_transcribed_with_its_slip():
     assert "Mars is the lord of the year" in EXAMPLE_120_CONCLUSION
     assert "He is also has" in EXAMPLE_120_CONCLUSION
     assert "Nothing turns on it" in EXAMPLE_120_HAS_A_SLIP_IN_ITS_CONCLUSION
+
+
+# --------------------------------------------------------------------------
+# §28.7 — the lord of the month
+# --------------------------------------------------------------------------
+
+
+def test_the_six_candidates_are_the_five_with_one_added():
+    from hora.tajaka.varsheswara import (
+        MONTH_LORD_CANDIDATES,
+        MONTH_LORD_REST,
+        MONTH_LORD_RULE,
+        THE_SIX_ARE_THE_FIVE_WITH_ONE_ADDED,
+        VARSHESWARA_CANDIDATES,
+    )
+
+    assert "six candidates now" in MONTH_LORD_RULE
+    assert MONTH_LORD_REST == "The rest of the rules are the same."
+    assert len(MONTH_LORD_CANDIDATES) == 6
+    assert [row["number"] for row in MONTH_LORD_CANDIDATES] == list("123456")
+
+    # (2) and (3) are word for word the same as §28.6's.
+    for number in ("2", "3"):
+        year = next(r for r in VARSHESWARA_CANDIDATES if r["number"] == number)
+        month = next(r for r in MONTH_LORD_CANDIDATES if r["number"] == number)
+        assert year["candidate"] == month["candidate"]
+    # (1), (4) and (5) say monthly where §28.6 said annual.
+    for number in ("1", "4", "5"):
+        year = next(r for r in VARSHESWARA_CANDIDATES if r["number"] == number)
+        month = next(r for r in MONTH_LORD_CANDIDATES if r["number"] == number)
+        assert "annual" in year["candidate"]
+        assert "monthly" in month["candidate"]
+        assert year["candidate"].replace("annual", "monthly").replace(
+            "year", "month") == month["candidate"]
+    assert MONTH_LORD_CANDIDATES[5]["candidate"] == "Lord of the year"
+    assert "(6), the lord of the year, is new" in (
+        THE_SIX_ARE_THE_FIVE_WITH_ONE_ADDED)
+
+
+def test_the_six_candidates_are_found_and_name_the_monthly_chart():
+    from hora.tajaka.varsheswara import candidates, month_candidates
+
+    kwargs = {"sun_rasi": 0, "moon_rasi": 11, "natal_lagna_rasi": 4,
+              "muntha_rasi": 1, "daytime": False}
+    year = candidates(annual_lagna_rasi=9, **kwargs)
+    month = month_candidates(monthly_lagna_rasi=9, year_lord=2, **kwargs)
+    assert len(month) == 6
+    assert [row["graha"] for row in month[:5]] == [
+        row["graha"] for row in year]
+    for row in month[:5]:
+        assert "annual" not in row["because"]
+    assert "monthly chart" in month[0]["because"]
+    assert "monthly lagna" in month[3]["because"]
+    assert "monthly lagna" in month[4]["because"]
+    assert month[5] == {"category": "6", "graha": 2, "graha_name": "Mars",
+                        "because": "lord of the year"}
+
+
+def test_candidate_six_is_absent_when_the_year_settled_no_lord():
+    from hora.tajaka.varsheswara import (
+        CANDIDATE_SIX_INHERITS_28_6S_FAILURES,
+        lord_of_the_month,
+        month_candidates,
+    )
+
+    kwargs = {"sun_rasi": 0, "moon_rasi": 11, "natal_lagna_rasi": 4,
+              "muntha_rasi": 1, "monthly_lagna_rasi": 9, "daytime": False}
+    assert len(month_candidates(year_lord=None, **kwargs)) == 5
+    assert len(month_candidates(year_lord=2, **kwargs)) == 6
+
+    got = lord_of_the_month(year_lord=None, rasis={g: 11 for g in range(7)},
+                            pancha_vargeeya={g: 10.0 for g in range(7)},
+                            **kwargs)
+    assert got["year_lord_missing"] is True
+    assert got["categories"] == 5
+    assert "gives no reading for the case where there is none" in (
+        CANDIDATE_SIX_INHERITS_28_6S_FAILURES)
+
+
+def test_the_month_runs_28_6s_cascade_unchanged():
+    """"The rest of the rules are the same" — so the same code path."""
+    from hora.tajaka.varsheswara import lord_of_the_month, varsheswara
+
+    shared = {"rasis": {g: 8 for g in range(7)},
+              "pancha_vargeeya": {g: 5.0 for g in range(7)} | {4: 18.0}}
+    year = varsheswara(sun_rasi=0, moon_rasi=8, natal_lagna_rasi=8,
+                       muntha_rasi=8, annual_lagna_rasi=0, daytime=False,
+                       **shared)
+    month = lord_of_the_month(sun_rasi=0, moon_rasi=8, natal_lagna_rasi=8,
+                              muntha_rasi=8, monthly_lagna_rasi=0,
+                              daytime=False, year_lord=None, **shared)
+    assert year["step"] == month["step"] == "benefic aspect on lagna"
+    assert year["lord_name"] == month["lord_name"] == "Jupiter"
+
+
+def test_candidate_three_rests_on_oi_152():
+    """§28.7 wants the lord of muntha in a monthly chart, and §28.1 declines
+    to define a monthly muntha.
+    """
+    from hora.tajaka.muntha import MONTHLY_MUNTHA_IS_DISPUTED
+    from hora.tajaka.varsheswara import (
+        CANDIDATE_THREE_RESTS_ON_OI_152,
+        MONTH_LORD_CANDIDATES,
+        lord_of_the_month,
+    )
+
+    assert MONTH_LORD_CANDIDATES[2]["candidate"] == "Lord of Muntha"
+    assert "takes a different stand" in MONTHLY_MUNTHA_IS_DISPUTED
+    assert "in monthly charts" in MONTHLY_MUNTHA_IS_DISPUTED
+
+    # The muntha rasi is an argument, never derived.
+    got = lord_of_the_month(sun_rasi=0, moon_rasi=11, natal_lagna_rasi=4,
+                            muntha_rasi=1, monthly_lagna_rasi=9,
+                            daytime=False, year_lord=2,
+                            rasis={g: 11 for g in range(7)},
+                            pancha_vargeeya={g: 10.0 for g in range(7)})
+    assert got["muntha_caveat"] == CANDIDATE_THREE_RESTS_ON_OI_152
+    assert "is unstated" in CANDIDATE_THREE_RESTS_ON_OI_152
+
+    import hora.tajaka.varsheswara as module
+
+    assert not hasattr(module, "monthly_muntha")
+
+
+def test_the_tie_break_counts_six_categories_for_a_month():
+    from hora.tajaka.varsheswara import (
+        SELECTION_PROCEDURE,
+        THE_TIE_BREAK_COUNTS_SIX_CATEGORIES_HERE,
+        lord_of_the_month,
+    )
+
+    assert "more of the five categories" in SELECTION_PROCEDURE
+    # Mars takes candidates (1), (5) and (6); the Sun (2) and (3). Every
+    # graha sits in Pisces, the 11th from a Capricorn lagna, so all have the
+    # same weak benefic sextile and the same bala — only the count separates
+    # them, and it has to count over six.
+    got = lord_of_the_month(sun_rasi=0, moon_rasi=0, natal_lagna_rasi=4,
+                            muntha_rasi=4, monthly_lagna_rasi=9,
+                            daytime=False, year_lord=2,
+                            rasis={g: 11 for g in range(7)},
+                            pancha_vargeeya={g: 12.0 for g in range(7)})
+    assert got["categories"] == 6
+    assert got["step"] == "benefic aspect on lagna"
+    assert got["lord_name"] == "Mars"
+    assert sorted(got["lord"]["categories"]) == ["1", "5", "6"]
+    # Over five categories Mars would have only two and tie with the Sun.
+    assert len([c for c in got["lord"]["categories"] if c != "6"]) == 2
+    assert "counts over six" in THE_TIE_BREAK_COUNTS_SIX_CATEGORIES_HERE

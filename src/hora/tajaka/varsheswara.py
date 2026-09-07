@@ -169,12 +169,16 @@ def aspect_on_lagna(candidate_rasi: int, lagna_rasi: int) -> dict:
 
 
 def candidates(*, sun_rasi: int, moon_rasi: int, natal_lagna_rasi: int,
-               muntha_rasi: int, annual_lagna_rasi: int,
-               daytime: bool) -> tuple[dict, ...]:
+               muntha_rasi: int, annual_lagna_rasi: int, daytime: bool,
+               chart: str = "annual") -> tuple[dict, ...]:
     """§28.6's five candidates for one annual chart, in its own order.
 
     The same graha may appear more than once; the cascade's tie-break counts
     how many of the five categories each one takes.
+
+    :param chart: "annual" or "monthly". §28.7 repeats these five with the
+        word changed in candidates (1), (4) and (5) — exactly the three that
+        name the chart — and (2) and (3) left alone.
     """
     luminary = validate.in_range(
         "sun_rasi" if daytime else "moon_rasi",
@@ -186,15 +190,15 @@ def candidates(*, sun_rasi: int, moon_rasi: int, natal_lagna_rasi: int,
     picks = (
         ("1", int(RASI_LORD[luminary]),
          (f"lord of {RASI_NAMES[luminary]}, held by the "
-          f"{'Sun' if daytime else 'Moon'} in the annual chart")),
+          f"{'Sun' if daytime else 'Moon'} in the {chart} chart")),
         ("2", int(RASI_LORD[natal]),
          f"lord of the natal lagna {RASI_NAMES[natal]}"),
         ("3", int(RASI_LORD[muntha]),
          f"lord of the muntha {RASI_NAMES[muntha]}"),
         ("4", int(RASI_LORD[annual]),
-         f"lord of the annual lagna {RASI_NAMES[annual]}"),
+         f"lord of the {chart} lagna {RASI_NAMES[annual]}"),
         ("5", triraasi_lord(annual, daytime=daytime)["lord"],
-         f"triraasi lord of the annual lagna {RASI_NAMES[annual]}"),
+         f"triraasi lord of the {chart} lagna {RASI_NAMES[annual]}"),
     )
     return tuple({"category": number, "graha": graha,
                   "graha_name": str(GRAHA_NAMES[graha]), "because": why}
@@ -213,13 +217,25 @@ def varsheswara(*, sun_rasi: int, moon_rasi: int, natal_lagna_rasi: int,
         where §28.4 left it undecided. A candidate whose bala is unknown
         cannot be ranked, and the result says so rather than dropping it.
     """
-    from hora.tajaka.panchavargeeya import pancha_vargeeya_grade
-
     found = candidates(sun_rasi=sun_rasi, moon_rasi=moon_rasi,
                        natal_lagna_rasi=natal_lagna_rasi,
                        muntha_rasi=muntha_rasi,
                        annual_lagna_rasi=annual_lagna_rasi, daytime=daytime)
-    annual = int(annual_lagna_rasi)
+    return _run_cascade(found, int(annual_lagna_rasi), rasis,
+                        pancha_vargeeya)
+
+
+def _run_cascade(found: tuple[dict, ...], lagna_rasi: int,
+                 rasis: dict[int, int],
+                 pancha_vargeeya: dict[int, float | None]) -> dict:
+    """§28.6's selection, shared by the year and the month.
+
+    §28.7 says "the rest of the rules are the same", so the cascade is
+    written once and given a different candidate list.
+    """
+    from hora.tajaka.panchavargeeya import pancha_vargeeya_grade
+
+    annual = int(lagna_rasi)
     seen: dict[int, dict] = {}
     for entry in found:
         graha = int(entry["graha"])
@@ -369,3 +385,123 @@ EXAMPLE_120_HAS_A_SLIP_IN_ITS_CONCLUSION = (
     "The conclusion prints \"He is also has the strongest panchavargeeya "
     "bala\" for \"He also has\". Nothing turns on it."
 )
+
+
+# --------------------------------------------------------------------------
+# §28.7 — the lord of the month
+# --------------------------------------------------------------------------
+
+MONTH_LORD_RULE = (
+    "We find the lord of the month in a monthly chart in the same manner. We "
+    "have six candidates now:")
+
+MONTH_LORD_REST = "The rest of the rules are the same."
+
+#: §28.7's six candidates, verbatim and in order.
+MONTH_LORD_CANDIDATES: tuple[dict[str, str], ...] = (
+    {"number": "1",
+     "candidate": "Lord of the rasi occupied by Sun or Moon in the monthly "
+                  "chart, based on whether the new month starts during the "
+                  "day or the night"},
+    {"number": "2", "candidate": "Lord of natal lagna"},
+    {"number": "3", "candidate": "Lord of Muntha"},
+    {"number": "4", "candidate": "Lord of lagna in the monthly chart"},
+    {"number": "5", "candidate": "Triraasi lord of lagna in the monthly chart "
+                                 "(see Table 73)"},
+    {"number": "6", "candidate": "Lord of the year"},
+)
+
+#: **Finding.** The six are §28.6's five with "annual" replaced by "monthly"
+#: in three of them and one new candidate added. Candidates (2) and (3) are
+#: word for word the same, so the natal lagna and the muntha are read the same
+#: way for a month as for a year, and (6) brings the year's own lord into the
+#: month's contest.
+THE_SIX_ARE_THE_FIVE_WITH_ONE_ADDED = (
+    "Candidates (1), (4) and (5) say monthly chart where section 28.6 said "
+    "annual chart; (2) and (3) are unchanged; (6), the lord of the year, is "
+    "new."
+)
+
+#: **Finding.** Candidate (6) is the output of another cascade, so it carries
+#: every way that cascade can fail. If §28.6 returns no lord — because two
+#: candidates tie on both tests, or because one has no pancha vargeeya bala —
+#: then §28.7 has five candidates and not six, and the section does not say
+#: what to do about it.
+CANDIDATE_SIX_INHERITS_28_6S_FAILURES = (
+    "The lord of the year is itself chosen by a cascade that can end without "
+    "a lord. Section 28.7 lists it as a candidate and gives no reading for "
+    "the case where there is none."
+)
+
+#: **Finding.** Candidate (3) needs a muntha for a **monthly** chart, and that
+#: is exactly what §28.1 declines to define: it records that "some people"
+#: progress the natal lagna by 2°30' a month and says "this author takes a
+#: different stand" without stating it. So §28.7's third candidate rests on
+#: OI-152. Two readings are open — the year's own muntha carried through all
+#: twelve months, or a monthly one under a rule not given — and the section
+#: chooses neither. `lord_of_the_month` takes the muntha rasi as an argument
+#: and does not derive it.
+CANDIDATE_THREE_RESTS_ON_OI_152 = (
+    "Section 28.7 asks for the lord of muntha in a monthly chart. Section "
+    "28.1 gives muntha for an annual chart, records a monthly rate it "
+    "rejects, and never gives its own. Whether the month uses the year's "
+    "muntha or one of its own is unstated."
+)
+
+#: **Finding.** §28.6's tie-break reads "the one becoming a candidate in more
+#: of the **five** categories listed above", and §28.7 has six. "The rest of
+#: the rules are the same" carries the rule across, so the count is read from
+#: the list in force rather than from the printed word.
+THE_TIE_BREAK_COUNTS_SIX_CATEGORIES_HERE = (
+    "Section 28.6's tie-break names five categories and section 28.7 has six. "
+    "The rule transfers with the list, so a month's tie-break counts over six."
+)
+
+
+def month_candidates(*, sun_rasi: int, moon_rasi: int, natal_lagna_rasi: int,
+                     muntha_rasi: int, monthly_lagna_rasi: int,
+                     daytime: bool, year_lord: int | None) -> tuple[dict, ...]:
+    """§28.7's six candidates for one monthly chart.
+
+    :param year_lord: the lord of the year from §28.6, or ``None`` when that
+        cascade settled none. Omitted, candidate (6) is absent and the result
+        says so rather than inventing one.
+    :param muntha_rasi: supplied by the caller, because §28.1 does not define
+        a monthly muntha — see `CANDIDATE_THREE_RESTS_ON_OI_152`.
+    """
+    monthly = candidates(sun_rasi=sun_rasi, moon_rasi=moon_rasi,
+                         natal_lagna_rasi=natal_lagna_rasi,
+                         muntha_rasi=muntha_rasi,
+                         annual_lagna_rasi=monthly_lagna_rasi,
+                         daytime=daytime, chart="monthly")
+    if year_lord is None:
+        return monthly
+    lord = validate.in_range("year_lord", int(year_lord), 0, 6)
+    return (*monthly, {"category": "6", "graha": lord,
+                       "graha_name": str(GRAHA_NAMES[lord]),
+                       "because": "lord of the year"})
+
+
+def lord_of_the_month(*, sun_rasi: int, moon_rasi: int, natal_lagna_rasi: int,
+                      muntha_rasi: int, monthly_lagna_rasi: int,
+                      daytime: bool, year_lord: int | None,
+                      rasis: dict[int, int],
+                      pancha_vargeeya: dict[int, float | None]) -> dict:
+    """§28.7's lord of the month. The section gives no Sanskrit name for it.
+
+    "The rest of the rules are the same", so §28.6's cascade is run unchanged
+    over the six candidates.
+    """
+    found = month_candidates(
+        sun_rasi=sun_rasi, moon_rasi=moon_rasi,
+        natal_lagna_rasi=natal_lagna_rasi, muntha_rasi=muntha_rasi,
+        monthly_lagna_rasi=monthly_lagna_rasi, daytime=daytime,
+        year_lord=year_lord)
+    out = _run_cascade(found, int(monthly_lagna_rasi), rasis, pancha_vargeeya)
+    return {**out,
+            "year_lord": year_lord,
+            "year_lord_missing": year_lord is None,
+            "categories": len(found),
+            "rule": MONTH_LORD_RULE,
+            "same_rules": MONTH_LORD_REST,
+            "muntha_caveat": CANDIDATE_THREE_RESTS_ON_OI_152}
