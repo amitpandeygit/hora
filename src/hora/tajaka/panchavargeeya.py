@@ -38,13 +38,12 @@ PANCHA_VARGAS: tuple[dict[str, object], ...] = (
      "maximum": 15.0, "supplied": True},
     {"section": "28.4.4", "name": "Drekkana bala",
      "from": "the drekkana chart", "maximum": 10.0, "supplied": True},
-    {"section": "28.4.5", "name": "Navamsa bala", "from": "the navamsa",
-     "maximum": None, "supplied": False},
+    {"section": "28.4.5", "name": "Navamsa bala",
+     "from": "the navamsa chart", "maximum": 5.0, "supplied": True},
 )
 
 #: The sections still to come, including the one that adds the five up.
-PANCHA_VARGAS_PENDING: tuple[str, ...] = (
-    "28.4.5 Navamsa Bala", "28.4.6 Final Computation")
+PANCHA_VARGAS_PENDING: tuple[str, ...] = ()
 
 
 # --------------------------------------------------------------------------
@@ -311,16 +310,17 @@ DREKKANA_BALA_RULE = (
 DREKKANA_BALA_UNITS: dict[str, float] = {
     "own": 10.0, "friend": 5.0, "enemy": 2.5}
 
-#: **Finding.** The three place balas are one scale divided by one, two and
-#: three: kshetra 30, hadda 15, drekkana 10. Each also halves from own to
-#: friend's to enemy's, so the whole family is 30 over n, then halved twice.
-#: Uchcha bala's 20 is outside the series, and it is the one source that does
-#: not read a relationship.
-THE_PLACE_BALAS_ARE_THIRTY_OVER_N = (
-    "Kshetra bala's own grade is 30, hadda bala's 15 and drekkana bala's 10 "
-    "— thirty divided by one, two and three. Uchcha bala's 20 belongs to no "
-    "such series, and it is the only source of the five that does not grade "
-    "a relationship."
+#: **Finding.** With all five in hand the weights are **6 : 4 : 3 : 2 : 1** —
+#: kshetra 30, uchcha 20, hadda 15, drekkana 10, navamsa 5, every one a
+#: multiple of five. They sum to 80, which §28.4.6 divides by four to reach
+#: 20. The first three place balas alone look like thirty over one, two and
+#: three, and navamsa breaks that: it is thirty over **six**, not over four.
+#: The multiples-of-five reading is the one that holds for all five.
+THE_FIVE_SOURCES_ARE_IN_THE_RATIO_SIX_FOUR_THREE_TWO_ONE = (
+    "Kshetra 30, uchcha 20, hadda 15, drekkana 10 and navamsa 5 are six, "
+    "four, three, two and one units of five. The four place balas alone run "
+    "30, 15, 10 and 5, which is thirty over one, two, three and six rather "
+    "than over one to four."
 )
 
 #: **Finding.** All three place balas leave a **neutral** unpriced, so the gap
@@ -340,3 +340,139 @@ def drekkana_bala(relation: str) -> dict:
     """
     return {**_graded(DREKKANA_BALA_UNITS, relation, "drekkana"),
             "source": "Drekkana bala", "rule": DREKKANA_BALA_RULE}
+
+
+# --------------------------------------------------------------------------
+# §28.4.5 — navamsa bala
+# --------------------------------------------------------------------------
+
+NAVAMSA_BALA_RULE = (
+    "Navamsa bala shows the strength in navamsa chart (D-9). A planet in own "
+    "rasi in D-9 gets 5 units of Navamsa bala. A planet in a friend's rasi in "
+    "D-9 gets 2.5 units of Navamsa bala. A planet in an enemy's rasi in D-9 "
+    "gets 1.25 units of Navamsa bala.")
+
+NAVAMSA_BALA_UNITS: dict[str, float] = {
+    "own": 5.0, "friend": 2.5, "enemy": 1.25}
+
+
+def navamsa_bala(relation: str) -> dict:
+    """§28.4.5's strength from the rasi a planet occupies in D-9.
+
+    :param relation: ``own``, ``friend`` or ``enemy``, judged in the navamsa
+        chart. ``neutral`` returns undecided — see OI-153.
+    """
+    return {**_graded(NAVAMSA_BALA_UNITS, relation, "navamsa"),
+            "source": "Navamsa bala", "rule": NAVAMSA_BALA_RULE}
+
+
+# --------------------------------------------------------------------------
+# §28.4.6 — the final computation
+# --------------------------------------------------------------------------
+
+FINAL_COMPUTATION_RULE = (
+    "We find the sum of kshetra bala, uchcha bala, hadda bala, drekkana bala "
+    "and navamsa bala and divide the sum by 4. The result is called \"Pancha "
+    "Vargeeya Bala\". If it is below 5, the planet is weak. If it is between "
+    "5 and 10, the planet has ordinary strength. If it is between 10 and 15, "
+    "the planet is strong. If it is between 15 and 20, the planet is very "
+    "strong. If it is above 20, the planet is extraordinarily strong.")
+
+PANCHA_VARGEEYA_DIVISOR = 4
+
+#: The sum of the five maxima, before the divisor.
+PANCHA_VARGEEYA_RAW_MAXIMUM = 80.0
+
+#: And after it — the ceiling on a pancha vargeeya bala.
+PANCHA_VARGEEYA_MAXIMUM = 20.0
+
+#: §28.4.6's five bands, as ``(lower, upper, verdict)`` with the lower bound
+#: inclusive. See `THE_TOP_GRADE_CANNOT_BE_REACHED` for why the fourth band
+#: has to close on 20 rather than stop short of it.
+PANCHA_VARGEEYA_GRADES: tuple[tuple[float, float, str], ...] = (
+    (0.0, 5.0, "weak"),
+    (5.0, 10.0, "ordinary strength"),
+    (10.0, 15.0, "strong"),
+    (15.0, 20.0, "very strong"),
+)
+
+PANCHA_VARGEEYA_TOP_GRADE = "extraordinarily strong"
+
+#: **Finding.** The top grade cannot occur. The five maxima are 30, 20, 15,
+#: 10 and 5, which sum to 80, and §28.4.6 divides by four — so a pancha
+#: vargeeya bala can never exceed **exactly 20**. "Extraordinarily strong"
+#: needs a value *above* 20 and no chart can produce one. That also forces
+#: the reading of the bands: "between 15 and 20" must include 20, or the one
+#: attainable maximum would have no grade at all.
+THE_TOP_GRADE_CANNOT_BE_REACHED = (
+    "The five sources cap at 30, 20, 15, 10 and 5, so their sum caps at 80 "
+    "and the quotient at 20. Section 28.4.6 reserves extraordinarily strong "
+    "for a value above 20, which nothing can reach."
+)
+
+#: **Finding.** The divisor of four is what puts the composite on uchcha
+#: bala's own scale: 80 over 4 is 20, and uchcha bala's maximum is 20. The
+#: four place balas contribute 60 of the 80 between them and uchcha the other
+#: 20, so a quarter of a planet's pancha vargeeya bala comes from its
+#: distance to exaltation and three quarters from where it sits.
+THE_DIVISOR_PUTS_THE_TOTAL_ON_UCHCHA_BALAS_SCALE = (
+    "Eighty divided by four is twenty, which is uchcha bala's own maximum. "
+    "Uchcha bala supplies a quarter of the eighty and the four place balas "
+    "the other three quarters."
+)
+
+#: **Finding.** §28.4.6 states its bands with open language — "below 5",
+#: "between 5 and 10" — and never says which side owns an endpoint. Taking
+#: the lower bound as inclusive is the only reading under which every value
+#: from 0 to the attainable maximum has exactly one grade; any other leaves
+#: 5, 10, 15 or 20 unassigned. The choice is arithmetic, not preference.
+THE_BAND_ENDPOINTS_ARE_SETTLED_BY_ARITHMETIC = (
+    "Section 28.4.6 says below 5, between 5 and 10, between 10 and 15, "
+    "between 15 and 20, above 20. Reading each lower bound as inclusive and "
+    "closing the fourth band on 20 is the only way every attainable value "
+    "has one grade."
+)
+
+
+def pancha_vargeeya_grade(units: float) -> str:
+    """§28.4.6's verdict for a pancha vargeeya bala."""
+    value = validate.non_negative("units", float(units))
+    for lower, upper, verdict in PANCHA_VARGEEYA_GRADES:
+        # The last band closes on its upper bound so that 20, the one
+        # attainable maximum, has a grade. Every other band is half-open.
+        closed = upper == PANCHA_VARGEEYA_MAXIMUM
+        if lower <= value and (value <= upper if closed else value < upper):
+            return verdict
+    return PANCHA_VARGEEYA_TOP_GRADE
+
+
+def pancha_vargeeya_bala(*, kshetra: float | None, uchcha: float | None,
+                         hadda: float | None, drekkana: float | None,
+                         navamsa: float | None) -> dict:
+    """§28.4.6 — the five sources summed and divided by four.
+
+    Any source may be ``None``, which is what the place balas return for a
+    neutral (OI-153). The total is then reported as a range rather than a
+    number, and no grade is given.
+    """
+    parts = {"kshetra": kshetra, "uchcha": uchcha, "hadda": hadda,
+             "drekkana": drekkana, "navamsa": navamsa}
+    ceilings = {"kshetra": 30.0, "uchcha": 20.0, "hadda": 15.0,
+                "drekkana": 10.0, "navamsa": 5.0}
+    missing = tuple(name for name, value in parts.items() if value is None)
+    known = sum(float(value) for value in parts.values() if value is not None)
+    most = known + sum(ceilings[name] for name in missing)
+    return {
+        "sources": parts,
+        "divisor": PANCHA_VARGEEYA_DIVISOR,
+        "raw_sum": known,
+        "units": known / PANCHA_VARGEEYA_DIVISOR,
+        "at_least": known / PANCHA_VARGEEYA_DIVISOR,
+        "at_most": most / PANCHA_VARGEEYA_DIVISOR,
+        "maximum": PANCHA_VARGEEYA_MAXIMUM,
+        "undecided": bool(missing),
+        "undecided_sources": missing,
+        "grade": (None if missing
+                  else pancha_vargeeya_grade(known / PANCHA_VARGEEYA_DIVISOR)),
+        "rule": FINAL_COMPUTATION_RULE,
+    }

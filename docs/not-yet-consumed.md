@@ -1578,13 +1578,11 @@ follows is prose and findings.
 | `SOURCE_FOUR_IS_BLOCKED_BY_OI_149` | Ours: the one worked example of harsha bala cannot be scored through `compute_panchanga`, because its year begins before sunrise |
 
 
-### Chapter 28 — §28.4.1 to §28.4.4 (17)
+### Chapter 28 — §28.4, all six sections (24)
 
-`tajaka/panchavargeeya.py`. Four of the five sources **are** built:
-`kshetra_bala`, `uchcha_bala`, `hadda_bala` with Table 72 behind it, and
-`drekkana_bala`. §28.4.2's worked case reproduces to the printed hundredth.
-Navamsa bala and the final computation have not arrived and the coverage test
-fails if either appears. What follows is prose and findings.
+`tajaka/panchavargeeya.py`. All five sources and the final computation **are**
+built, and §28.4.2's worked case reproduces to the printed hundredth. What
+follows is prose and findings.
 
 | constant | why it is not consumed |
 |---|---|
@@ -1595,7 +1593,12 @@ fails if either appears. What follows is prose and findings.
 | `DREKKANA_BALA_RULE` · `DREKKANA_BALA_UNITS` | Section 28.4.4 verbatim, and its three grades |
 | `THE_LUMINARIES_CAN_NEVER_HOLD_THEIR_OWN_HADDA` | Ours: the Sun and Moon lord none of the sixty haddas, so hadda bala's own grade is out of reach for both |
 | `THE_HADDA_TOTALS_ARE_UNEVEN` | Ours: the widths per lord as printed, four of five a degree from the usual Egyptian figures. OI-154 |
-| `THE_PLACE_BALAS_ARE_THIRTY_OVER_N` | Ours: kshetra 30, hadda 15, drekkana 10 — thirty over one, two and three, with uchcha's 20 outside the series |
+| `NAVAMSA_BALA_RULE` · `NAVAMSA_BALA_UNITS` · `FINAL_COMPUTATION_RULE` | Sections 28.4.5 and 28.4.6 verbatim, with navamsa's three grades |
+| `PANCHA_VARGEEYA_DIVISOR` · `PANCHA_VARGEEYA_RAW_MAXIMUM` · `PANCHA_VARGEEYA_MAXIMUM` · `PANCHA_VARGEEYA_GRADES` · `PANCHA_VARGEEYA_TOP_GRADE` | The divisor, the two ceilings and the five bands as data |
+| `THE_FIVE_SOURCES_ARE_IN_THE_RATIO_SIX_FOUR_THREE_TWO_ONE` | Ours: 30, 20, 15, 10, 5 are six, four, three, two and one units of five; the place balas alone are thirty over one, two, three and six |
+| `THE_TOP_GRADE_CANNOT_BE_REACHED` | Ours: the sum caps at 80 and the quotient at exactly 20, so "above 20" is unreachable by any chart |
+| `THE_DIVISOR_PUTS_THE_TOTAL_ON_UCHCHA_BALAS_SCALE` | Ours: eighty over four is twenty, which is uchcha bala's own maximum |
+| `THE_BAND_ENDPOINTS_ARE_SETTLED_BY_ARITHMETIC` | Ours: inclusive lower bounds and a closed fourth band are the only reading under which every attainable value has a grade |
 | `THE_NEUTRAL_GAP_REPEATS_IN_ALL_THREE_PLACE_BALAS` | Ours: the gap OI-153 records is the shape of the whole family, not a slip in one section |
 | `THE_NEUTRAL_GRADE_IS_NOT_PRICED` | Ours: neither section values a neutral's place, which chapter 3's relationships produce routinely. OI-153 |
 | `HADDA_IS_KSHETRA_HALVED` | Ours: hadda bala is kshetra bala's scale halved at every grade |

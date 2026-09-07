@@ -793,20 +793,21 @@ def test_the_group_of_five_is_named_and_only_three_have_arrived():
     assert len(PANCHA_VARGAS) == 5
     supplied = [row for row in PANCHA_VARGAS if row["supplied"]]
     assert [row["name"] for row in supplied] == [
-        "Kshetra bala", "Uchcha bala", "Hadda bala", "Drekkana bala"]
-    assert [row["maximum"] for row in supplied] == [30.0, 20.0, 15.0, 10.0]
-    assert len(PANCHA_VARGAS_PENDING) == 2
-    assert "Final Computation" in PANCHA_VARGAS_PENDING[-1]
+        "Kshetra bala", "Uchcha bala", "Hadda bala", "Drekkana bala",
+        "Navamsa bala"]
+    assert [row["maximum"] for row in supplied] == [30.0, 20.0, 15.0, 10.0,
+                                                    5.0]
+    assert PANCHA_VARGAS_PENDING == ()
+    assert all(row["supplied"] for row in PANCHA_VARGAS)
 
 
 def test_only_the_supplied_vargas_are_built():
     """The coverage line. It fails the moment a pending source appears."""
     import hora.tajaka.panchavargeeya as module
 
-    for absent in ("navamsa_bala", "pancha_vargeeya_bala"):
-        assert not hasattr(module, absent), absent
     for present in ("kshetra_bala", "uchcha_bala", "hadda_bala",
-                    "hadda_lord", "drekkana_bala"):
+                    "hadda_lord", "drekkana_bala", "navamsa_bala",
+                    "pancha_vargeeya_bala", "pancha_vargeeya_grade"):
         assert callable(getattr(module, present))
 
 
@@ -1060,33 +1061,56 @@ def test_hadda_lord_finds_the_span_a_longitude_falls_in():
     assert hadda_lord(5.999)["hadda_to"] == 6.0
 
 
-def test_28_4_4s_drekkana_bala_and_the_thirty_over_n_series():
+def test_28_4_4s_drekkana_bala_and_28_4_5s_navamsa_bala():
     from hora.tajaka.panchavargeeya import (
         DREKKANA_BALA_RULE,
         DREKKANA_BALA_UNITS,
-        HADDA_BALA_UNITS,
-        KSHETRA_BALA_UNITS,
-        THE_PLACE_BALAS_ARE_THIRTY_OVER_N,
-        UCHCHA_BALA_MAXIMUM,
+        NAVAMSA_BALA_RULE,
+        NAVAMSA_BALA_UNITS,
         drekkana_bala,
+        navamsa_bala,
     )
 
     assert DREKKANA_BALA_UNITS == {"own": 10.0, "friend": 5.0, "enemy": 2.5}
+    assert NAVAMSA_BALA_UNITS == {"own": 5.0, "friend": 2.5, "enemy": 1.25}
     assert "drekkana chart (D-3)" in DREKKANA_BALA_RULE
+    assert "navamsa chart (D-9)" in NAVAMSA_BALA_RULE
     for grade in ("own", "friend", "enemy"):
         assert drekkana_bala(grade)["units"] == DREKKANA_BALA_UNITS[grade]
-    # Thirty over one, two and three.
-    tops = [KSHETRA_BALA_UNITS["own"], HADDA_BALA_UNITS["own"],
-            DREKKANA_BALA_UNITS["own"]]
-    assert tops == [30.0, 15.0, 10.0]
-    for n, top in enumerate(tops, 1):
-        assert top == pytest.approx(30.0 / n)
-    # And each halves twice within itself.
-    for units in (KSHETRA_BALA_UNITS, HADDA_BALA_UNITS, DREKKANA_BALA_UNITS):
+        assert navamsa_bala(grade)["units"] == NAVAMSA_BALA_UNITS[grade]
+
+
+def test_the_five_sources_are_in_the_ratio_six_four_three_two_one():
+    """And the neat thirty-over-n of the first three does not survive
+    navamsa, which is thirty over six rather than over four.
+    """
+    from hora.tajaka.panchavargeeya import (
+        DREKKANA_BALA_UNITS,
+        HADDA_BALA_UNITS,
+        KSHETRA_BALA_UNITS,
+        NAVAMSA_BALA_UNITS,
+        THE_FIVE_SOURCES_ARE_IN_THE_RATIO_SIX_FOUR_THREE_TWO_ONE,
+        UCHCHA_BALA_MAXIMUM,
+    )
+
+    maxima = [KSHETRA_BALA_UNITS["own"], UCHCHA_BALA_MAXIMUM,
+              HADDA_BALA_UNITS["own"], DREKKANA_BALA_UNITS["own"],
+              NAVAMSA_BALA_UNITS["own"]]
+    assert maxima == [30.0, 20.0, 15.0, 10.0, 5.0]
+    assert [value / 5.0 for value in maxima] == [6.0, 4.0, 3.0, 2.0, 1.0]
+    assert sum(maxima) == 80.0
+
+    # The place balas alone: thirty over one, two, three and six.
+    places = [KSHETRA_BALA_UNITS["own"], HADDA_BALA_UNITS["own"],
+              DREKKANA_BALA_UNITS["own"], NAVAMSA_BALA_UNITS["own"]]
+    assert [30.0 / value for value in places] == [1.0, 2.0, 3.0, 6.0]
+    assert 30.0 / places[-1] != 4.0
+    # And every one still halves twice within itself.
+    for units in (KSHETRA_BALA_UNITS, HADDA_BALA_UNITS, DREKKANA_BALA_UNITS,
+                  NAVAMSA_BALA_UNITS):
         assert units["own"] == units["friend"] * 2 == units["enemy"] * 4
-    # Uchcha's twenty is outside the series.
-    assert UCHCHA_BALA_MAXIMUM not in tops
-    assert "belongs to no such series" in THE_PLACE_BALAS_ARE_THIRTY_OVER_N
+    assert "rather than over one to four" in (
+        THE_FIVE_SOURCES_ARE_IN_THE_RATIO_SIX_FOUR_THREE_TWO_ONE)
 
 
 def test_the_neutral_gap_repeats_in_all_three_place_balas():
@@ -1095,11 +1119,156 @@ def test_the_neutral_gap_repeats_in_all_three_place_balas():
         drekkana_bala,
         hadda_bala,
         kshetra_bala,
+        navamsa_bala,
     )
 
-    for scorer in (kshetra_bala, hadda_bala, drekkana_bala):
+    for scorer in (kshetra_bala, hadda_bala, drekkana_bala, navamsa_bala):
         got = scorer("neutral")
         assert got["undecided"] is True
         assert got["units"] is None
     assert "None of the three prices a neutral's" in (
         THE_NEUTRAL_GAP_REPEATS_IN_ALL_THREE_PLACE_BALAS)
+
+
+# --------------------------------------------------------------------------
+# §28.4.6 — the final computation
+# --------------------------------------------------------------------------
+
+
+def test_the_five_are_summed_and_divided_by_four():
+    from hora.tajaka.panchavargeeya import (
+        FINAL_COMPUTATION_RULE,
+        PANCHA_VARGEEYA_DIVISOR,
+        PANCHA_VARGEEYA_MAXIMUM,
+        PANCHA_VARGEEYA_RAW_MAXIMUM,
+        pancha_vargeeya_bala,
+    )
+
+    assert PANCHA_VARGEEYA_DIVISOR == 4
+    assert "divide the sum by 4" in FINAL_COMPUTATION_RULE
+    got = pancha_vargeeya_bala(kshetra=30.0, uchcha=20.0, hadda=15.0,
+                               drekkana=10.0, navamsa=5.0)
+    assert got["raw_sum"] == PANCHA_VARGEEYA_RAW_MAXIMUM == 80.0
+    assert got["units"] == PANCHA_VARGEEYA_MAXIMUM == 20.0
+    assert got["undecided"] is False
+
+
+def test_the_top_grade_cannot_be_reached_by_any_chart():
+    """"If it is above 20, the planet is extraordinarily strong."  The five
+    maxima cap the quotient at exactly 20.
+    """
+    from hora.tajaka.panchavargeeya import (
+        PANCHA_VARGEEYA_MAXIMUM,
+        PANCHA_VARGEEYA_TOP_GRADE,
+        THE_TOP_GRADE_CANNOT_BE_REACHED,
+        drekkana_bala,
+        hadda_bala,
+        kshetra_bala,
+        navamsa_bala,
+        pancha_vargeeya_bala,
+        uchcha_bala,
+    )
+
+    # The best each source can give, taken from the functions themselves.
+    best = pancha_vargeeya_bala(
+        kshetra=kshetra_bala("own")["units"],
+        uchcha=max(uchcha_bala(4, step / 4.0)["units"]
+                   for step in range(1440)),
+        hadda=hadda_bala("own")["units"],
+        drekkana=drekkana_bala("own")["units"],
+        navamsa=navamsa_bala("own")["units"])
+    assert best["units"] == pytest.approx(PANCHA_VARGEEYA_MAXIMUM, abs=1e-6)
+    assert best["grade"] == "very strong"
+    assert best["grade"] != PANCHA_VARGEEYA_TOP_GRADE
+    assert "which nothing can reach" in THE_TOP_GRADE_CANNOT_BE_REACHED
+
+
+def test_the_bands_are_read_so_that_every_attainable_value_has_a_grade():
+    from hora.tajaka.panchavargeeya import (
+        PANCHA_VARGEEYA_GRADES,
+        PANCHA_VARGEEYA_MAXIMUM,
+        THE_BAND_ENDPOINTS_ARE_SETTLED_BY_ARITHMETIC,
+        pancha_vargeeya_grade,
+    )
+
+    assert [row[2] for row in PANCHA_VARGEEYA_GRADES] == [
+        "weak", "ordinary strength", "strong", "very strong"]
+    assert pancha_vargeeya_grade(4.999) == "weak"
+    assert pancha_vargeeya_grade(5.0) == "ordinary strength"
+    assert pancha_vargeeya_grade(10.0) == "strong"
+    assert pancha_vargeeya_grade(15.0) == "very strong"
+    # The one attainable maximum is graded rather than falling through.
+    assert pancha_vargeeya_grade(PANCHA_VARGEEYA_MAXIMUM) == "very strong"
+    # Every hundredth from zero to the maximum has exactly one grade.
+    for step in range(2001):
+        assert pancha_vargeeya_grade(step / 100.0)
+    assert "the only way every attainable value has one grade" in (
+        THE_BAND_ENDPOINTS_ARE_SETTLED_BY_ARITHMETIC)
+
+
+def test_the_divisor_puts_the_total_on_uchcha_balas_scale():
+    from hora.tajaka.panchavargeeya import (
+        PANCHA_VARGEEYA_DIVISOR,
+        PANCHA_VARGEEYA_MAXIMUM,
+        PANCHA_VARGEEYA_RAW_MAXIMUM,
+        THE_DIVISOR_PUTS_THE_TOTAL_ON_UCHCHA_BALAS_SCALE,
+        UCHCHA_BALA_MAXIMUM,
+    )
+
+    assert PANCHA_VARGEEYA_RAW_MAXIMUM / PANCHA_VARGEEYA_DIVISOR == (
+        PANCHA_VARGEEYA_MAXIMUM)
+    assert PANCHA_VARGEEYA_MAXIMUM == UCHCHA_BALA_MAXIMUM
+    # Uchcha is a quarter of the eighty; the four place balas are the rest.
+    assert UCHCHA_BALA_MAXIMUM / PANCHA_VARGEEYA_RAW_MAXIMUM == 0.25
+    assert "the other three quarters" in (
+        THE_DIVISOR_PUTS_THE_TOTAL_ON_UCHCHA_BALAS_SCALE)
+
+
+def test_an_undecided_source_gives_a_range_and_no_grade():
+    """A neutral place leaves one source unpriced (OI-153), and the total
+    then has to be a range.
+    """
+    from hora.tajaka.panchavargeeya import drekkana_bala, pancha_vargeeya_bala
+
+    got = pancha_vargeeya_bala(kshetra=30.0, uchcha=20.0, hadda=7.5,
+                               drekkana=drekkana_bala("neutral")["units"],
+                               navamsa=2.5)
+    assert got["undecided"] is True
+    assert got["undecided_sources"] == ("drekkana",)
+    assert got["grade"] is None
+    assert got["at_least"] == 15.0
+    assert got["at_most"] == 17.5           # the missing ten, over four
+    # Nothing undecided, and the grade comes back.
+    decided = pancha_vargeeya_bala(kshetra=30.0, uchcha=20.0, hadda=7.5,
+                                   drekkana=2.5, navamsa=2.5)
+    assert decided["undecided"] is False
+    assert decided["units"] == pytest.approx(15.625)
+    assert decided["grade"] == "very strong"
+
+
+def test_mercurys_best_case_still_falls_short_of_the_maximum():
+    """At 15 Vi Mercury is in his own rasi and at his deep exaltation point —
+    the only graha for whom those coincide — and even so three sources are
+    not his own.
+    """
+    from hora.charts.relationship import natural
+    from hora.charts.vargas import d3_drekkana, d9_navamsa
+    from hora.core.const import RASI_LORD
+    from hora.tajaka.panchavargeeya import (
+        DEEP_EXALTATION,
+        hadda_lord,
+        uchcha_bala,
+    )
+
+    mercury, longitude = 3, 165.0
+    assert DEEP_EXALTATION[mercury] == longitude
+    assert int(RASI_LORD[int(longitude // 30)]) == mercury      # own rasi
+    assert uchcha_bala(mercury, longitude)["units"] == 20.0
+
+    # The hadda there is Venus's, not his.
+    assert hadda_lord(longitude)["lord"] != mercury
+    for varga in (d3_drekkana, d9_navamsa):
+        assert int(RASI_LORD[varga(longitude).sign]) != mercury
+    # So at best he takes a friend's grade in those, never his own.
+    assert natural(mercury, hadda_lord(longitude)["lord"]) in (
+        "friend", "neutral", "enemy")
