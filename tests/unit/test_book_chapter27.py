@@ -1257,3 +1257,120 @@ def test_a_shashti_hora_with_no_crossing_says_so():
     assert got["found"] is False
     assert got["jd"] is None
     assert "no crossing" in got["reason"]
+
+
+# --------------------------------------------------------------------------
+# §27.5 — the chapter's conclusion
+# --------------------------------------------------------------------------
+
+
+def test_27_5_summarises_all_three_kinds_of_chart():
+    from hora.core.const import CHAPTER_27_CONCLUSION
+
+    assert "re-enters every year the same longitude" in CHAPTER_27_CONCLUSION
+    assert "that exact moment" in CHAPTER_27_CONCLUSION
+    for kind in ("annual", "monthly charts", "sixty-hour charts"):
+        assert kind in CHAPTER_27_CONCLUSION
+
+
+def test_around_is_the_right_word_for_the_date_and_too_kind_for_the_hour():
+    """"the commencement of new year is *around* one's birthday" — measured
+    over ninety-nine years of one nativity.
+    """
+    from collections import Counter
+
+    from hora.core.const import THE_DATE_IS_STEADY_AND_THE_HOUR_IS_NOT
+    from hora.core.timeutil import from_jd
+    from hora.tajaka.annual import varsha_pravesh
+
+    natal, place = _e118()
+    sun_at = _sun_at(place)
+    dates: Counter = Counter()
+    hours = []
+    for year in range(2, 101):
+        got = varsha_pravesh(sun_at, E118_NATAL_SUN_PRINTED,
+                             natal.instant.jd_ut, year)
+        assert got["found"], year
+        local = from_jd(got["jd"], utc_offset_hours=5.5).local
+        dates[(local.month, local.day)] += 1
+        hours.append(local.hour + local.minute / 60.0)
+
+    # The date is nearly always the western birthday, and never far from it.
+    assert set(dates) <= {(3, 7), (3, 8), (3, 9)}
+    assert dates[(3, 8)] > 70
+    # The hour is anything at all, which is why the exact moment matters.
+    assert min(hours) < 1.0
+    assert max(hours) > 23.0
+    assert "takes every hour of the day" in THE_DATE_IS_STEADY_AND_THE_HOUR_IS_NOT
+
+
+def test_the_lunar_birthday_techniques_are_a_named_exclusion():
+    from hora.core.const import (
+        LUNAR_BIRTHDAYS_ARE_OUT_OF_SCOPE,
+        THE_LUNAR_RETURN_IS_A_NAMED_EXCLUSION,
+    )
+
+    assert "beyond the scope of this book" in LUNAR_BIRTHDAYS_ARE_OUT_OF_SCOPE
+    assert "restrict ourselves to solar birthday" in (
+        LUNAR_BIRTHDAYS_ARE_OUT_OF_SCOPE)
+    assert "tithi" in LUNAR_BIRTHDAYS_ARE_OUT_OF_SCOPE
+    assert "No tithi-based annual chart is built" in (
+        THE_LUNAR_RETURN_IS_A_NAMED_EXCLUSION)
+
+    # And nothing in the Tajaka package computes a lunar return.
+    import pkgutil
+
+    import hora.tajaka
+
+    for module in pkgutil.iter_modules(hora.tajaka.__path__):
+        assert "tithi" not in module.name
+        assert "lunar" not in module.name
+
+
+def test_the_three_chapter_conclusions_do_different_work():
+    from hora.core.const import (
+        CHAPTER_26_CONCLUSION,
+        CHAPTER_27_CONCLUSION,
+        LUNAR_BIRTHDAYS_ARE_OUT_OF_SCOPE,
+        THE_THREE_CONCLUSIONS_DO_DIFFERENT_WORK,
+        THE_TWENTY_SEVEN_GROUP_CRITERION,
+    )
+    from hora.transits.gochara import THE_CONCLUSION_INTRODUCES_NOTHING_NEW
+
+    # §25.7 restated; §26.9 added a rule; §27.5 draws a boundary.
+    assert "No rule appears here for the first time" in (
+        THE_CONCLUSION_INTRODUCES_NOTHING_NEW)
+    assert THE_TWENTY_SEVEN_GROUP_CRITERION in CHAPTER_26_CONCLUSION
+    assert "beyond the scope" not in CHAPTER_26_CONCLUSION
+    assert "beyond the scope" in LUNAR_BIRTHDAYS_ARE_OUT_OF_SCOPE
+    assert "beyond the scope" not in CHAPTER_27_CONCLUSION
+    assert "Only 26.9 introduced a rule" in (
+        THE_THREE_CONCLUSIONS_DO_DIFFERENT_WORK)
+
+
+def test_chapter_27_is_complete_end_to_end():
+    """The chapter's closing inventory. Every span it claims is asserted."""
+    from hora.core.const import CHAPTER_27_IS_COMPLETE
+    from hora.core.constants.book_charts import BOOK_CHARTS
+    from hora.tajaka import annual, approximate, monthly, shashti_hora
+
+    # §27.1 to §27.5: the casting, the table, the months, the sixty-hours.
+    assert annual.VARSHA_PRAVESH_RULE and annual.BIRTHPLACE_RULE
+    assert len(approximate.TABLE_71) == 19
+    assert len(approximate.PROCEDURE) == 5
+    assert monthly.YEAR_AND_MONTH_ARE_SOLAR_ARCS
+    assert shashti_hora.SHASHTI_HORAS_PER_YEAR == 144
+
+    # Chart 66, Example 118 and Exercise 47.
+    assert 66 in BOOK_CHARTS
+    assert annual.EXAMPLE_118 and annual.EXAMPLE_118_NATIVITY
+    assert approximate.EXERCISE_47 and approximate.EXERCISE_47_ANSWER
+
+    # Footnotes 75 to 78, one per section that carries one.
+    assert annual.FOOTNOTE_75 and annual.FOOTNOTE_76
+    assert approximate.FOOTNOTE_77 and shashti_hora.FOOTNOTE_78
+
+    assert "Closed here: OI-151" in CHAPTER_27_IS_COMPLETE
+    assert "Opened here: D-78" in CHAPTER_27_IS_COMPLETE
+    assert "footnote 74's bar on death readings still stands" in (
+        CHAPTER_27_IS_COMPLETE)

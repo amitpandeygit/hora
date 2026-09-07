@@ -195,3 +195,78 @@ THE_OPENING_PROMISES_THE_CASTING_AND_27_1_GIVES_IT = (
     "Section 27.1 gives the moment and the place. Neither page says how to "
     "read the resulting chart, so nothing yet lifts footnote 74's bar."
 )
+
+
+# --------------------------------------------------------------------------
+# §27.5 — chapter 27's conclusion
+# --------------------------------------------------------------------------
+
+CHAPTER_27_CONCLUSION = (
+    "In this chapter, we learnt what Tajaka annual and monthly charts are and "
+    "how they are cast. When Sun re-enters every year the same longitude "
+    "occupied by him at the time of one's birth, it signals the commencement "
+    "of a new year in the native's life. We can cast a chart for that exact "
+    "moment and predict events in the next one year based on that chart. We "
+    "can also cast monthly charts and sixty-hour charts."
+)
+
+THE_SOLAR_YEAR_IS_ONLY_AROUND_THE_BIRTHDAY = (
+    "These new years are based on the solar years and the commencement of new "
+    "year is around one's birthday as per the modern western calendar."
+)
+
+LUNAR_BIRTHDAYS_ARE_OUT_OF_SCOPE = (
+    "However, many Indians – especially south Indians – celebrate birthday as "
+    "per the lunar calendar. In fact, most Hindu holidays are based on the "
+    "lunar calendar. For example, birthdays of Lord Rama and Lord Krishna are "
+    "celebrated based on the tithi and not based on the solar calendar. Lunar "
+    "calendar is of great importance in Indian culture. Correspondingly, "
+    "there are techniques based on the birthday as per lunar calendar. "
+    "However, those techniques are beyond the scope of this book and we will "
+    "restrict ourselves to solar birthday and Tajaka annual charts."
+)
+
+#: **Finding.** "Around" is italicised, and it is the right word for the date
+#: and much too generous for the time. Solving Example 118's native's varsha
+#: pravesh for ninety-nine successive years puts it on his calendar birthday
+#: **79 times**, a day later 19 times and a day earlier once — so the date is
+#: nearly always right. The clock time sweeps the **whole twenty-four hours**
+#: across those years. That is why an annual chart's ascendant bears no
+#: relation to the natal one and why §27.1 insists on the exact moment.
+THE_DATE_IS_STEADY_AND_THE_HOUR_IS_NOT = (
+    "Over ninety-nine years one nativity's varsha pravesh falls on the "
+    "western birthday 79 times, the day after 19 times and the day before "
+    "once. Its clock time takes every hour of the day across the same span."
+)
+
+#: **Finding.** A whole family of techniques is named and excluded: the
+#: **tithi-based** birthday and everything built on it. It is the fifth such
+#: declaration in the book — the hora chart, Kendradi rasi dasa, shadbala and
+#: the unlisted special lagnas are the others — and the only one that closes
+#: off a calendar rather than a technique. Nothing here computes a lunar
+#: return, and none is invented.
+THE_LUNAR_RETURN_IS_A_NAMED_EXCLUSION = (
+    "Section 27.5 names techniques based on the lunar-calendar birthday, says "
+    "they are beyond the scope of the book, and restricts the part to the "
+    "solar birthday. No tithi-based annual chart is built."
+)
+
+#: **Finding.** Three chapter conclusions, three different jobs. §25.7 restated
+#: what its chapter had already said. §26.9 added a criterion — a test on
+#: techniques that no earlier section stated. §27.5 draws a **boundary**: it
+#: summarises and then says what the part will not cover. None of the three
+#: does the same work as another.
+THE_THREE_CONCLUSIONS_DO_DIFFERENT_WORK = (
+    "Section 25.7 restated its chapter, section 26.9 added a coarseness test, "
+    "and section 27.5 declares a scope boundary. Only 26.9 introduced a rule."
+)
+
+#: Chapter 27 end to end.
+CHAPTER_27_IS_COMPLETE = (
+    "§27.1 to §27.5, Table 71, Chart 66, Example 118, Exercise 47 and "
+    "Footnotes 75 to 78, checked against the printed pages. The exact and "
+    "approximate annual methods, the monthly charts and the sixty-hour "
+    "charts are all built and reproduce the chapter's own figures. Closed "
+    "here: OI-151. Opened here: D-78. Nothing yet reads an annual chart, so "
+    "footnote 74's bar on death readings still stands."
+)

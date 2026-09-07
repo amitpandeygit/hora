@@ -1497,6 +1497,22 @@ findings.
 | `THE_ROUND_FIGURE_NEVER_GOVERNS` | Ours: D-78's year, section 27.3's equal months and section 27.4's sixty hours are the same shape three times, and the arc rule wins each time |
 
 
+### Chapter 27 — §27.5's conclusion (7)
+
+`core/constants/tajaka.py`, beside Part 4's opening. The whole section is
+prose: it summarises the chapter and declares a scope boundary. The one
+measurable claim in it — that a Tajaka year begins *around* the western
+birthday — **is** checked, over ninety-nine years of one nativity.
+
+| constant | why it is not consumed |
+|---|---|
+| `CHAPTER_27_CONCLUSION` · `THE_SOLAR_YEAR_IS_ONLY_AROUND_THE_BIRTHDAY` · `LUNAR_BIRTHDAYS_ARE_OUT_OF_SCOPE` | The section verbatim, in its three parts |
+| `THE_DATE_IS_STEADY_AND_THE_HOUR_IS_NOT` | Ours: the date lands on the birthday 79 times in 99 years and the clock time takes every hour of the day |
+| `THE_LUNAR_RETURN_IS_A_NAMED_EXCLUSION` | Ours: the fifth "beyond the scope" declaration in the book, and the only one closing off a calendar rather than a technique |
+| `THE_THREE_CONCLUSIONS_DO_DIFFERENT_WORK` | Ours: 25.7 restated, 26.9 added a criterion, 27.5 draws a boundary |
+| `CHAPTER_27_IS_COMPLETE` | The chapter's closing inventory — sections, table, chart, example, exercise and footnotes |
+
+
 ---
 
 ## How to use this register
