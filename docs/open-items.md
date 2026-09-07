@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 102 waiting on evidence · 2 parked**
+**5 waiting on Amit · 103 waiting on evidence · 2 parked**
 
 ---
 
@@ -2205,6 +2205,31 @@ muntha is computed under either rate, and a test checks the module exposes no
 function for one.
 
 **Closes when:** the Sudarsana Chakra Dasa chapter states the author's stand.
+
+
+### OI-153 — §28.4.1 and §28.4.3 do not price a neutral's rasi or hadda
+
+**Waiting on the book.** Both sections grade three places and stop:
+
+> A planet in own rasi gets 30 units ... a friend's rasi gets 15 ... an
+> enemy's rasi gets 7.5.
+
+Chapter 3's natural relationship has **three** grades — friend, neutral, enemy
+— and the compound has **five**, adding great friend and great enemy. So a
+planet in a neutral's rasi is a case the book's own relationship scheme
+produces routinely and pancha vargeeya bala never values.
+
+Nor is it clear which scheme is meant. §28.4 says "a friend's rasi" without
+saying natural, temporary or compound, and the three disagree for most charts.
+
+The halving — 30, 15, 7.5 and 15, 7.5, 3.75 — invites an interpolation, and
+interpolating is exactly the wrong move: it would invent a fourth grade the
+section does not have and pick a relationship scheme it does not name.
+`kshetra_bala` and `hadda_bala` return **undecided** for a neutral and raise
+for any grade the section never names.
+
+**Closes when:** §28.4.6's final computation names the scheme and the missing
+grade, or you settle both.
 
 
 ---

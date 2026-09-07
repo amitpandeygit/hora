@@ -1578,6 +1578,26 @@ follows is prose and findings.
 | `SOURCE_FOUR_IS_BLOCKED_BY_OI_149` | Ours: the one worked example of harsha bala cannot be scored through `compute_panchanga`, because its year begins before sunrise |
 
 
+### Chapter 28 — §28.4.1 to §28.4.3 (12)
+
+`tajaka/panchavargeeya.py`. Three of the five sources **are** built:
+`kshetra_bala`, `uchcha_bala` and `hadda_bala`, and §28.4.2's worked case
+reproduces to the printed hundredth. Drekkana bala, navamsa bala and the final
+computation have not arrived and the coverage test fails if one appears. What
+follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `PANCHA_VARGEEYA_RULE` · `FOOTNOTE_81` · `KSHETRA_BALA_RULE` · `UCHCHA_BALA_RULE` · `UCHCHA_BALA_METHOD` · `UCHCHA_BALA_WORKED_CASE` · `HADDA_RULE` · `HADDA_BALA_RULE` | The three sections and the footnote verbatim |
+| `PANCHA_MEANS` · `PANCHA_VARGEEYA_MEANS` | The footnote's gloss, as two phrases |
+| `PANCHA_VARGAS` · `PANCHA_VARGAS_PENDING` | The five sources as data, and the three sections still to come |
+| `TABLE_72_NOT_SUPPLIED` | Table 72 is cited and not printed, so no hadda can be found from a longitude |
+| `THE_NEUTRAL_GRADE_IS_NOT_PRICED` | Ours: neither section values a neutral's place, which chapter 3's relationships produce routinely. OI-153 |
+| `HADDA_IS_KSHETRA_HALVED` | Ours: hadda bala is kshetra bala's scale halved at every grade |
+| `THE_EXALTATION_DEGREES_ARE_CHAPTER_THREES` | Ours: the first table Part 4 reuses from the rest of the book instead of defining its own |
+| `BU_IS_A_SLIP_FOR_BY` | A one-letter slip in the method sentence, recorded rather than corrected |
+
+
 ---
 
 ## How to use this register

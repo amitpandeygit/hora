@@ -771,3 +771,210 @@ def test_example_119s_two_slips_are_recorded_not_corrected():
     assert "is in the masculine planet" in EXAMPLE_119_STEPS[2]
     assert "prescibed" in EXAMPLE_119_STEPS[2]
     assert "Neither changes a number" in EXAMPLE_119_HAS_TWO_SLIPS_IN_STEP_THREE
+
+
+# --------------------------------------------------------------------------
+# §28.4 — pancha vargeeya bala: kshetra, uchcha and hadda
+# --------------------------------------------------------------------------
+
+
+def test_the_group_of_five_is_named_and_only_three_have_arrived():
+    from hora.tajaka.panchavargeeya import (
+        FOOTNOTE_81,
+        PANCHA_MEANS,
+        PANCHA_VARGAS,
+        PANCHA_VARGAS_PENDING,
+        PANCHA_VARGEEYA_MEANS,
+    )
+
+    assert PANCHA_MEANS == "five"
+    assert PANCHA_VARGEEYA_MEANS == "from the group of five"
+    assert "from the group of five" in FOOTNOTE_81
+    assert len(PANCHA_VARGAS) == 5
+    supplied = [row for row in PANCHA_VARGAS if row["supplied"]]
+    assert [row["name"] for row in supplied] == [
+        "Kshetra bala", "Uchcha bala", "Hadda bala"]
+    assert [row["maximum"] for row in supplied] == [30.0, 20.0, 15.0]
+    assert len(PANCHA_VARGAS_PENDING) == 3
+    assert "Final Computation" in PANCHA_VARGAS_PENDING[-1]
+
+
+def test_only_the_supplied_vargas_are_built():
+    """The coverage line. It fails the moment a pending source appears."""
+    import hora.tajaka.panchavargeeya as module
+
+    for absent in ("drekkana_bala", "navamsa_bala", "pancha_vargeeya_bala",
+                   "hadda_lord", "TABLE_72"):
+        assert not hasattr(module, absent), absent
+    for present in ("kshetra_bala", "uchcha_bala", "hadda_bala"):
+        assert callable(getattr(module, present))
+
+
+def test_kshetra_and_hadda_grade_three_places_and_halve_each_step():
+    from hora.tajaka.panchavargeeya import (
+        HADDA_BALA_UNITS,
+        HADDA_IS_KSHETRA_HALVED,
+        KSHETRA_BALA_UNITS,
+        hadda_bala,
+        kshetra_bala,
+    )
+
+    assert KSHETRA_BALA_UNITS == {"own": 30.0, "friend": 15.0, "enemy": 7.5}
+    assert HADDA_BALA_UNITS == {"own": 15.0, "friend": 7.5, "enemy": 3.75}
+    for units in (KSHETRA_BALA_UNITS, HADDA_BALA_UNITS):
+        assert units["own"] == units["friend"] * 2
+        assert units["friend"] == units["enemy"] * 2
+    for grade in ("own", "friend", "enemy"):
+        assert hadda_bala(grade)["units"] * 2 == kshetra_bala(grade)["units"]
+    assert "half the" in HADDA_IS_KSHETRA_HALVED
+
+
+def test_a_neutrals_place_is_undecided_and_not_a_zero():
+    """OI-153. Both sections grade own, friend's and enemy's and stop, while
+    chapter 3's relationships produce a neutral.
+    """
+    from hora.charts.relationship import natural
+    from hora.core.const import COMPOUND_RELATION_NAMES
+    from hora.tajaka.panchavargeeya import (
+        THE_NEUTRAL_GRADE_IS_NOT_PRICED,
+        PanchaVargeeyaError,
+        hadda_bala,
+        kshetra_bala,
+    )
+
+    # Chapter 3 really does produce a neutral, and the compound five grades.
+    assert "neutral" in {natural(0, other) for other in range(1, 7)}
+    assert set(COMPOUND_RELATION_NAMES) == {
+        "great_friend", "friend", "neutral", "enemy", "great_enemy"}
+
+    for scorer in (kshetra_bala, hadda_bala):
+        got = scorer("neutral")
+        assert got["undecided"] is True
+        assert got["units"] is None
+        assert "no value in either" in got["reason"]
+        # And an unnamed grade is refused rather than defaulted.
+        with pytest.raises(PanchaVargeeyaError):
+            scorer("great_friend")
+    assert "grade own, a friend's and an enemy's place and stop" in (
+        THE_NEUTRAL_GRADE_IS_NOT_PRICED)
+
+
+def test_the_deep_exaltation_points_are_chapter_threes():
+    from hora.core.const import DEBILITATION_DEG, EXALTATION_DEG
+    from hora.tajaka.panchavargeeya import (
+        DEEP_EXALTATION,
+        THE_EXALTATION_DEGREES_ARE_CHAPTER_THREES,
+        deep_debilitation,
+    )
+
+    assert sorted(DEEP_EXALTATION) == list(range(7))
+    for graha, degree in DEEP_EXALTATION.items():
+        assert degree == EXALTATION_DEG[graha], graha
+        assert deep_debilitation(graha) == DEBILITATION_DEG[graha], graha
+    assert "to the degree" in THE_EXALTATION_DEGREES_ARE_CHAPTER_THREES
+
+
+def test_28_4_2s_worked_case_reproduces_to_the_printed_hundredth():
+    """"Jupiter is at 8Vi30 ... his uchcha bala is 12.94 (out of 20)." """
+    from hora.charts import book
+    from hora.tajaka.panchavargeeya import UCHCHA_BALA_WORKED_CASE, uchcha_bala
+
+    got = uchcha_bala(4, book.longitude("8 Vi 30"))
+    assert got["longitude"] == pytest.approx(158.5)
+    assert got["deep_debilitation"] == pytest.approx(275.0)
+    assert got["difference"] == pytest.approx(116.5)
+    assert round(got["fraction"], 4) == 0.6472
+    assert round(got["units"], 2) == 12.94
+    assert "12.94 (out of 20)" in UCHCHA_BALA_WORKED_CASE
+
+
+def test_uchcha_bala_runs_from_twenty_at_exaltation_to_zero_at_debilitation():
+    from hora.tajaka.panchavargeeya import (
+        DEEP_EXALTATION,
+        UCHCHA_BALA_MAXIMUM,
+        deep_debilitation,
+        uchcha_bala,
+    )
+
+    for graha, exalted in DEEP_EXALTATION.items():
+        assert uchcha_bala(graha, exalted)["units"] == pytest.approx(
+            UCHCHA_BALA_MAXIMUM)
+        assert uchcha_bala(graha, deep_debilitation(graha))["units"] == (
+            pytest.approx(0.0))
+        # Ninety degrees either side of the debilitation point is half.
+        for side in (-90.0, 90.0):
+            halfway = (deep_debilitation(graha) + side) % 360.0
+            assert uchcha_bala(graha, halfway)["units"] == pytest.approx(
+                UCHCHA_BALA_MAXIMUM / 2)
+        # Never outside the range, wherever the planet is.
+        for step in range(0, 360, 7):
+            units = uchcha_bala(graha, float(step))["units"]
+            assert 0.0 <= units <= UCHCHA_BALA_MAXIMUM
+
+
+def test_the_wrap_case_the_section_mentions_but_does_not_work():
+    """"Because this is less than 180°, we don't have to subtract it from
+    360°."  The case it points at and skips, checked.
+    """
+    from hora.tajaka.panchavargeeya import (
+        UCHCHA_BALA_WORKED_CASE,
+        deep_debilitation,
+        uchcha_bala,
+    )
+
+    assert "subtract it from 360" in UCHCHA_BALA_WORKED_CASE
+    # Jupiter's debilitation is 275; a planet at 20 gives a raw gap of 255.
+    got = uchcha_bala(4, 20.0)
+    assert got["difference"] == pytest.approx(105.0)      # 360 - 255
+    assert got["difference"] <= 180.0
+    # And the symmetry the wrap enforces: equal distances either way score
+    # alike.
+    for offset in (30.0, 120.0, 179.0):
+        below = uchcha_bala(4, (deep_debilitation(4) - offset) % 360.0)
+        above = uchcha_bala(4, (deep_debilitation(4) + offset) % 360.0)
+        assert below["units"] == pytest.approx(above["units"])
+
+
+def test_table_72_is_recorded_as_not_supplied_and_d30_is_not_borrowed():
+    from hora.tajaka.panchavargeeya import (
+        HADDA_RULE,
+        TABLE_72_NOT_SUPPLIED,
+        hadda_bala,
+    )
+
+    assert "Table 72 can be used for finding the hadda lords" in HADDA_RULE
+    assert "Hadda is similar to D-30" in HADDA_RULE
+    assert "not on the page supplied" in TABLE_72_NOT_SUPPLIED
+    # The relationship is an input because the hadda cannot be found.
+    assert "table_72" in hadda_bala("own")
+    # And D-30's own lords are not repurposed for it.
+    import hora.tajaka.panchavargeeya as module
+
+    assert "trimsamsa" not in dir(module)
+    assert not any("d30" in name.lower() for name in dir(module))
+
+
+def test_28_4_2s_one_letter_slip_is_recorded():
+    from hora.tajaka.panchavargeeya import BU_IS_A_SLIP_FOR_BY, UCHCHA_BALA_METHOD
+
+    assert "Bu multiplying" in UCHCHA_BALA_METHOD
+    assert "Nothing turns on it" in BU_IS_A_SLIP_FOR_BY
+
+
+def test_the_pancha_vargeeya_helpers_check_their_inputs():
+    from hora.core import validate
+    from hora.tajaka.panchavargeeya import (
+        PanchaVargeeyaError,
+        deep_debilitation,
+        kshetra_bala,
+        uchcha_bala,
+    )
+
+    assert issubclass(PanchaVargeeyaError, validate.InputError)
+    for node in (7, 8):
+        with pytest.raises(validate.InputError):
+            uchcha_bala(node, 100.0)
+        with pytest.raises(validate.InputError):
+            deep_debilitation(node)
+    with pytest.raises(PanchaVargeeyaError):
+        kshetra_bala("exalted")
