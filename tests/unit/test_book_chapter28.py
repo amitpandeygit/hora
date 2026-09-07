@@ -1272,3 +1272,213 @@ def test_mercurys_best_case_still_falls_short_of_the_maximum():
     # So at best he takes a friend's grade in those, never his own.
     assert natural(mercury, hadda_lord(longitude)["lord"]) in (
         "friend", "neutral", "enemy")
+
+
+# --------------------------------------------------------------------------
+# §28.5 — dwaadasa vargeeya bala
+# --------------------------------------------------------------------------
+
+
+def test_the_twelve_charts_are_d1_to_d12_consecutively():
+    from hora.charts.vargas import VARGA_REGISTRY
+    from hora.tajaka.dwadasavargeeya import (
+        DWAADASA_MEANS,
+        DWAADASAVARGEEYA_MEANS,
+        DWADASA_VARGAS,
+        DWADASA_VARGEEYA_CHARTS,
+        FOOTNOTE_82,
+    )
+
+    assert DWADASA_VARGAS == tuple(f"D{n}" for n in range(1, 13))
+    assert len(DWADASA_VARGAS) == 12
+    for code in DWADASA_VARGAS:
+        assert code in VARGA_REGISTRY, code
+        assert code.replace("D", "D-") in DWADASA_VARGEEYA_CHARTS
+    assert DWAADASA_MEANS == "twelve"
+    assert DWAADASAVARGEEYA_MEANS == "from the 12 groups"
+    assert "from the 12 groups" in FOOTNOTE_82
+
+
+def test_four_of_the_twelve_belong_to_no_group_the_book_has_named():
+    from hora.charts.vargas import VARGA_GROUPS
+    from hora.tajaka.dwadasavargeeya import (
+        DWADASA_VARGAS,
+        THE_TWELVE_ARE_NOT_ANY_EARLIER_GROUP,
+    )
+
+    already = set().union(*VARGA_GROUPS.values())
+    outside = sorted(set(DWADASA_VARGAS) - already, key=lambda c: int(c[1:]))
+    assert outside == ["D5", "D6", "D8", "D11"]
+    # And the twelve are not themselves one of the named groups.
+    assert set(DWADASA_VARGAS) not in [set(v) for v in VARGA_GROUPS.values()]
+    assert "taken consecutively, not a selection" in (
+        THE_TWELVE_ARE_NOT_ANY_EARLIER_GROUP)
+
+
+def test_the_five_conditions_are_tested_in_the_sections_own_order():
+    from hora.core.const import DEBILITATION_RASI, EXALTATION_RASI, RASI_LORD
+    from hora.tajaka.dwadasavargeeya import (
+        STRONG_IN_A_CHART,
+        WEAK_IN_A_CHART,
+        strength_in_rasi,
+    )
+
+    assert len(STRONG_IN_A_CHART) == 3
+    assert len(WEAK_IN_A_CHART) == 2
+
+    for graha in range(7):
+        exalted = int(EXALTATION_RASI[graha])
+        fallen = int(DEBILITATION_RASI[graha])
+        assert strength_in_rasi(graha, exalted)["verdict"] == "strong"
+        assert strength_in_rasi(graha, exalted)["because"] == (
+            "its exaltation rasi")
+        assert strength_in_rasi(graha, fallen)["verdict"] == "weak"
+        own = [r for r in range(12) if int(RASI_LORD[r]) == graha]
+        for rasi in own:
+            assert strength_in_rasi(graha, rasi)["verdict"] == "strong"
+
+    # Every rasi gets exactly one of the three verdicts, for every graha.
+    for graha in range(7):
+        verdicts = {strength_in_rasi(graha, rasi)["verdict"]
+                    for rasi in range(12)}
+        assert verdicts <= {"strong", "weak", "neither"}
+
+
+def test_a_neutrals_rasi_is_neither_and_that_is_coherent_here():
+    """The gap OI-153 leaves open in §28.4 does not arise in §28.5."""
+    from hora.charts.relationship import natural
+    from hora.core.const import RASI_LORD
+    from hora.tajaka.dwadasavargeeya import (
+        THE_NEUTRAL_CASE_IS_COHERENT_HERE,
+        strength_in_rasi,
+    )
+    from hora.tajaka.panchavargeeya import kshetra_bala
+
+    found = False
+    for graha in range(7):
+        for rasi in range(12):
+            owner = int(RASI_LORD[rasi])
+            if owner == graha or natural(graha, owner) != "neutral":
+                continue
+            got = strength_in_rasi(graha, rasi)
+            if got["verdict"] == "neither":
+                found = True
+                assert "counts neither way" in got["because"]
+    assert found, "no neutral-owned rasi was reachable"
+
+    # §28.4 has to call the same case undecided; §28.5 does not.
+    assert kshetra_bala("neutral")["undecided"] is True
+    assert "needed one and did not give it" in THE_NEUTRAL_CASE_IS_COHERENT_HERE
+
+
+def test_the_count_runs_over_twelve_charts_and_the_difference_is_the_bala():
+    from hora.charts.vargas import varga
+    from hora.tajaka.dwadasavargeeya import (
+        DWADASA_VARGAS,
+        dwadasavargeeya_bala,
+        strength_in_rasi,
+    )
+
+    got = dwadasavargeeya_bala(4, 165.0)
+    assert len(got["charts"]) == 12
+    assert [row["chart"] for row in got["charts"]] == list(DWADASA_VARGAS)
+    assert got["strong"] + got["weak"] + got["neither"] == 12
+    assert got["units"] == got["strong"] - got["weak"]
+    assert -12 <= got["units"] <= 12
+    # Each row is the varga's own sign, judged by the same rule.
+    for row in got["charts"]:
+        assert row["rasi"] == varga(165.0, row["chart"]).sign
+        assert row["verdict"] == strength_in_rasi(4, row["rasi"])["verdict"]
+
+
+def test_a_tie_gets_no_verdict_and_ties_are_common():
+    """OI-155. The section reads a majority both ways and never a level
+    count, which happens for roughly one longitude in twelve.
+    """
+    from hora.tajaka.dwadasavargeeya import (
+        A_TIE_HAS_NO_VERDICT,
+        dwadasavargeeya_bala,
+    )
+
+    ties = 0
+    samples = 0
+    for graha in range(7):
+        for step in range(0, 3600, 7):
+            got = dwadasavargeeya_bala(graha, step / 10.0)
+            samples += 1
+            if got["tie"]:
+                ties += 1
+                assert got["overall"] is None
+                assert got["units"] == 0
+                assert got["tie_note"] == A_TIE_HAS_NO_VERDICT
+            else:
+                assert got["overall"] in ("strong", "weak")
+                assert got["tie_note"] is None
+    assert ties > 0
+    assert 0.03 < ties / samples < 0.20        # nearly one in twelve
+    assert "gives no reading for equal counts" in A_TIE_HAS_NO_VERDICT
+
+
+def test_exaltation_is_by_rasi_here_and_by_degree_in_28_4_2():
+    from hora.core.const import EXALTATION_RASI
+    from hora.tajaka.dwadasavargeeya import (
+        EXALTATION_IS_BY_RASI_HERE_AND_BY_DEGREE_IN_28_4_2,
+        strength_in_rasi,
+    )
+    from hora.tajaka.panchavargeeya import DEEP_EXALTATION, uchcha_bala
+
+    for graha in range(7):
+        rasi = int(EXALTATION_RASI[graha])
+        # Anywhere in the rasi counts here...
+        for degree in (0.5, 15.0, 29.5):
+            assert strength_in_rasi(graha, rasi)["verdict"] == "strong"
+            # ...but uchcha bala moves with the degree.
+            longitude = rasi * 30 + degree
+            assert uchcha_bala(graha, longitude)["units"] < 20.0 or (
+                longitude == DEEP_EXALTATION[graha])
+    assert "without reconciling them" in (
+        EXALTATION_IS_BY_RASI_HERE_AND_BY_DEGREE_IN_28_4_2)
+
+
+def test_the_natural_relationship_is_used_and_the_reason_is_recorded():
+    from hora.charts.relationship import compound_in_chart, natural
+    from hora.tajaka.dwadasavargeeya import (
+        THE_NATURAL_RELATIONSHIP_IS_THE_ONLY_STABLE_ONE_HERE,
+        strength_in_rasi,
+    )
+
+    # The natural relationship needs only the two grahas...
+    assert natural(0, 6) == natural(0, 6)
+    # ...where a compound one needs a chart, so it would differ per varga.
+    assert callable(compound_in_chart)
+    # A rasi owned by a natural friend is strong; by a natural enemy, weak.
+    from hora.core.const import RASI_LORD
+
+    for graha in range(7):
+        for rasi in range(12):
+            owner = int(RASI_LORD[rasi])
+            got = strength_in_rasi(graha, rasi)
+            if got["because"] == "a rasi owned by a friend":
+                assert natural(graha, owner) == "friend"
+            if got["because"] == "a rasi owned by an enemy":
+                assert natural(graha, owner) == "enemy"
+    assert "the natural one does not" in (
+        THE_NATURAL_RELATIONSHIP_IS_THE_ONLY_STABLE_ONE_HERE)
+
+
+def test_the_nodes_cannot_be_scored():
+    from hora.core import validate
+    from hora.tajaka.dwadasavargeeya import (
+        THE_NODES_CANNOT_BE_SCORED,
+        DwadasaVargeeyaError,
+        dwadasavargeeya_bala,
+        strength_in_rasi,
+    )
+
+    assert issubclass(DwadasaVargeeyaError, validate.InputError)
+    for node in (7, 8):
+        with pytest.raises(validate.InputError):
+            strength_in_rasi(node, 0)
+        with pytest.raises(validate.InputError):
+            dwadasavargeeya_bala(node, 100.0)
+    assert "own nothing" in THE_NODES_CANNOT_BE_SCORED

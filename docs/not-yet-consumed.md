@@ -1606,6 +1606,25 @@ follows is prose and findings.
 | `BU_IS_A_SLIP_FOR_BY` | A one-letter slip in the method sentence, recorded rather than corrected |
 
 
+### Chapter 28 — §28.5's dwaadasa vargeeya bala (12)
+
+`tajaka/dwadasavargeeya.py`. The rule **is** built: `strength_in_rasi` applies
+the section's five conditions in its own order and `dwadasavargeeya_bala`
+counts across D-1 to D-12. What follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `DWADASA_VARGEEYA_CHARTS` · `DWADASA_VARGEEYA_RULE` · `FOOTNOTE_82` | The section and its footnote verbatim |
+| `DWAADASA_MEANS` · `DWAADASAVARGEEYA_MEANS` | The footnote's gloss, as two phrases |
+| `STRONG_IN_A_CHART` · `WEAK_IN_A_CHART` | The three strong conditions and the two weak ones, as data |
+| `THE_TWELVE_ARE_NOT_ANY_EARLIER_GROUP` | Ours: D-5, D-6, D-8 and D-11 belong to no group the book has named |
+| `EXALTATION_IS_BY_RASI_HERE_AND_BY_DEGREE_IN_28_4_2` | Ours: one chapter uses exaltation both ways and never reconciles them |
+| `THE_NEUTRAL_CASE_IS_COHERENT_HERE` | Ours: the gap OI-153 leaves open in 28.4 does not arise in a difference of counts |
+| `A_TIE_HAS_NO_VERDICT` | Ours: level counts happen for about one longitude in twelve and the section reads only a majority. OI-155 |
+| `THE_NATURAL_RELATIONSHIP_IS_THE_ONLY_STABLE_ONE_HERE` | Ours: a compound relationship would differ between the twelve charts, so the natural one is used and the reason recorded |
+| `THE_NODES_CANNOT_BE_SCORED` | Ours: the fourth strength in Part 4 to cover the seven classical grahas only |
+
+
 ---
 
 ## How to use this register

@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 104 waiting on evidence · 2 parked**
+**5 waiting on Amit · 105 waiting on evidence · 2 parked**
 
 ---
 
@@ -2260,6 +2260,29 @@ nothing is adjusted toward the common set.
 
 **Closes when:** the table is checked against JHora, or against a second
 printing.
+
+
+### OI-155 — §28.5 reads a majority both ways and never a tie
+
+**Waiting on the book.** The overall verdict has two clauses and they do not
+cover the middle:
+
+> If a planet is strong in more charts, it is strong overall. If a planet is
+> weak in more charts, it is weak overall.
+
+Equal counts get nothing. That is not a corner case: a planet can be strong,
+weak **or neither** in each of the twelve charts, so level counts are ordinary.
+Sampling every seventh tenth-degree of the zodiac for all seven grahas, ties
+come up for about **one longitude in twelve** — from 2.9% for the Moon to 13.4%
+for Jupiter.
+
+The bala itself is fine at a tie: the difference is zero, which is a number.
+It is only the word — strong overall or weak overall — that has no third case.
+Calling a tie "neither" or "average" would be inventing a grade the section
+does not have, so `dwadasavargeeya_bala` returns the difference always and
+leaves `overall` as ``None`` with the reason attached.
+
+**Closes when:** a later section reads a level count, or you settle it.
 
 
 ---
