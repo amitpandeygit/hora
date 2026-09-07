@@ -1465,6 +1465,23 @@ reproduces every printed step of (a), and our solve lands four seconds from
 | `THE_APPROXIMATION_ERROR_IS_NOT_CONSTANT` | Ours: 72 seconds out in the 34th year and 118 in the 27th, on one nativity — the section's own warning, measured |
 
 
+### Chapter 27 — §27.3's monthly charts (9)
+
+`tajaka/monthly.py`. The rule **is** built: `maasa_pravesh` solves for the
+natal degree in each successive rasi, and the section's own second month —
+23 Pi 50' 25" on 7 April 2000 at 10:38:06 am — reproduces within seconds.
+What follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `MONTHLY_CHART_RULE` · `MAASA_PRAVESH_NAME` · `YEAR_AND_MONTH_ARE_SOLAR_ARCS` · `THIRTY_DEGREES_EXACTLY` · `NO_APPROXIMATE_METHOD` | The section verbatim, including its reason for having no approximate method |
+| `MONTHLY_CHART_NAMES` | The two names for one chart |
+| `THE_FIRST_MONTH_BEGINS_WITH_THE_YEAR` | Ours: why month 1 returns the varsha pravesh instead of searching |
+| `THE_MONTHS_ARE_UNEQUAL_AND_THE_YEARS_ARE_NOT` | Ours: the section's reason measured — month lengths spread nearly two days, year lengths twenty-two minutes |
+| `THE_LONGEST_MONTH_HOLDS_APHELION` | Ours: the pattern is the Earth's orbit, so it cannot be tabulated against a month number |
+| `THE_WORKAROUND_STILL_NEEDS_ONE_EXACT_YEAR` | Ours: the suggested shortcut still solves twelve times, once |
+
+
 ---
 
 ## How to use this register

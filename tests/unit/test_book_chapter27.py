@@ -7,6 +7,8 @@ ephemeris here; the section's worked example checks them against the book.
 """
 from __future__ import annotations
 
+from itertools import pairwise
+
 import pytest
 
 TZ = 5.5
@@ -858,3 +860,219 @@ def test_exercise_47_is_transcribed():
     assert "9:38:12 am" in EXERCISE_47_APPROXIMATE[3]
     assert "subtract about 2 minutes of time" in EXERCISE_47_EXACT
     assert "9:36:18 am (IST) on 8th March 1993" in EXERCISE_47_EXACT
+
+
+# --------------------------------------------------------------------------
+# §27.3 — casting monthly charts
+# --------------------------------------------------------------------------
+
+E118_NATAL_SUN_PRINTED = 300 + 23 + 50 / 60 + 25 / 3600
+E118_VARSHA_34 = (2000, 3, 8, 4, 41, 21.0)
+
+
+def _varsha_34_jd():
+    from hora.core.timeutil import from_local
+
+    return from_local(*E118_VARSHA_34, utc_offset_hours=5.5).jd_ut
+
+
+def test_27_3_defines_a_year_and_a_month_as_solar_arcs():
+    from hora.tajaka.monthly import (
+        MAASA_PRAVESH_NAME,
+        MONTHLY_CHART_NAMES,
+        MONTHLY_CHART_RULE,
+        THIRTY_DEGREES_EXACTLY,
+        YEAR_AND_MONTH_ARE_SOLAR_ARCS,
+    )
+
+    assert "Sun moves by 360" in YEAR_AND_MONTH_ARE_SOLAR_ARCS
+    assert "Sun moves by 30" in YEAR_AND_MONTH_ARE_SOLAR_ARCS
+    assert "maasa pravesh" in MAASA_PRAVESH_NAME
+    for name in MONTHLY_CHART_NAMES:
+        assert name in MONTHLY_CHART_RULE
+    assert "moves by exactly 30" in THIRTY_DEGREES_EXACTLY
+
+
+def test_the_month_targets_are_the_natal_degree_in_each_rasi():
+    """"when Sun enters 23° 50' 25" in different rasis"."""
+    from hora.core import validate
+    from hora.core.const import RASI_ABBR
+    from hora.tajaka.monthly import MonthlyError, month_target
+
+    assert issubclass(MonthlyError, validate.InputError)
+    degrees = [month_target(E118_NATAL_SUN_PRINTED, m) % 30
+               for m in range(1, 13)]
+    # The same degree in every rasi, to the limit of float arithmetic.
+    assert max(degrees) - min(degrees) < 1e-9
+    rasis = [RASI_ABBR[int(month_target(E118_NATAL_SUN_PRINTED, m) // 30)]
+             for m in range(1, 13)]
+    assert rasis[:3] == ["Aq", "Pi", "Ar"]       # the section's own three
+    assert len(set(rasis)) == 12
+    for bad in (0, 13):
+        with pytest.raises(validate.InputError):
+            month_target(E118_NATAL_SUN_PRINTED, bad)
+
+
+def test_the_first_month_is_the_varsha_pravesh_itself():
+    from hora.tajaka.monthly import (
+        THE_FIRST_MONTH_BEGINS_WITH_THE_YEAR,
+        maasa_pravesh,
+    )
+
+    _natal, place = _e118()
+    varsha = _varsha_34_jd()
+    got = maasa_pravesh(_sun_at(place), E118_NATAL_SUN_PRINTED, varsha, 1)
+    assert got["is_varsha_pravesh"] is True
+    assert got["jd"] == varsha
+    assert got["searched"] is None
+    assert "The first maasa pravesh is the varsha pravesh" in (
+        THE_FIRST_MONTH_BEGINS_WITH_THE_YEAR)
+
+
+def test_27_3s_second_month_reproduces_to_within_seconds():
+    """"Sun enters 23° 50' 25" in Pi on 7th April 2000 at 10:38:06 am."""
+    from hora.core.timeutil import from_jd
+    from hora.tajaka.monthly import maasa_pravesh
+
+    _natal, place = _e118()
+    got = maasa_pravesh(_sun_at(place), E118_NATAL_SUN_PRINTED,
+                        _varsha_34_jd(), 2)
+    assert got["found"]
+    assert got["rasi"] == "Pisces"
+    local = from_jd(got["jd"], utc_offset_hours=5.5).local
+    printed = _local(2000, 4, 7, 10, 38, 6)
+    assert abs((local - printed).total_seconds()) < 10.0
+
+
+def test_the_twelve_months_run_forward_and_close_on_the_next_year():
+    """Twelve maasa praveshas, in order, and the thirteenth boundary is the
+    next varsha pravesh — the year is the twelve months and nothing else.
+    """
+    from hora.tajaka.annual import varsha_pravesh
+    from hora.tajaka.monthly import maasa_praveshas
+
+    natal, place = _e118()
+    sun_at = _sun_at(place)
+    months = maasa_praveshas(sun_at, E118_NATAL_SUN_PRINTED, _varsha_34_jd())
+    assert len(months) == 12
+    assert all(entry["found"] for entry in months)
+    jds = [entry["jd"] for entry in months]
+    assert jds == sorted(jds)
+
+    next_year = varsha_pravesh(sun_at, E118_NATAL_SUN_PRINTED,
+                               natal.instant.jd_ut, 35)
+    assert next_year["found"]
+    twelfth = next_year["jd"] - jds[-1]
+    assert 29.0 < twelfth < 32.0                 # a twelfth month, not a gap
+    assert 365.0 < next_year["jd"] - jds[0] < 365.5
+
+
+def test_the_months_are_unequal_where_the_years_are_not():
+    """§27.3's own reason for having no approximate method, measured.
+
+    "the time Sun takes to move by 30° varies considerably from month to
+    month" against "Sun takes approximately the same time for moving by 360°".
+    """
+    from hora.tajaka.annual import varsha_pravesh
+    from hora.tajaka.monthly import (
+        NO_APPROXIMATE_METHOD,
+        THE_MONTHS_ARE_UNEQUAL_AND_THE_YEARS_ARE_NOT,
+        maasa_praveshas,
+    )
+
+    natal, place = _e118()
+    sun_at = _sun_at(place)
+    months = maasa_praveshas(sun_at, E118_NATAL_SUN_PRINTED, _varsha_34_jd())
+    following = varsha_pravesh(sun_at, E118_NATAL_SUN_PRINTED,
+                               natal.instant.jd_ut, 35)["jd"]
+    edges = [entry["jd"] for entry in months] + [following]
+    lengths = [b - a for a, b in pairwise(edges)]
+    assert len(lengths) == 12
+    month_spread = max(lengths) - min(lengths)
+    assert month_spread > 1.9                    # nearly two days
+
+    years = []
+    previous = None
+    for year in range(30, 41):
+        jd = varsha_pravesh(sun_at, E118_NATAL_SUN_PRINTED,
+                            natal.instant.jd_ut, year)["jd"]
+        if previous is not None:
+            years.append(jd - previous)
+        previous = jd
+    year_spread = max(years) - min(years)
+    assert year_spread < 0.02                    # under half an hour
+
+    # Two orders of magnitude apart, which is the section's whole argument.
+    assert month_spread / year_spread > 100
+    assert "varies considerably from month to month" in NO_APPROXIMATE_METHOD
+    assert "two orders" not in THE_MONTHS_ARE_UNEQUAL_AND_THE_YEARS_ARE_NOT
+    assert "29.46 to 31.44" in THE_MONTHS_ARE_UNEQUAL_AND_THE_YEARS_ARE_NOT
+
+
+def test_the_longest_month_holds_aphelion_and_the_shortest_perihelion():
+    """The pattern is the Earth's orbit, not the zodiac, so it cannot be
+    tabulated against a month number.
+
+    Checked by the mechanism rather than by a date: the longest month is the
+    one over which the Sun moves slowest, and the shortest the one over which
+    he moves fastest.
+    """
+    import datetime as dt
+
+    from hora.core.timeutil import from_jd
+    from hora.tajaka.annual import varsha_pravesh
+    from hora.tajaka.monthly import (
+        THE_LONGEST_MONTH_HOLDS_APHELION,
+        maasa_praveshas,
+    )
+
+    natal, place = _e118()
+    sun_at = _sun_at(place)
+    months = maasa_praveshas(sun_at, E118_NATAL_SUN_PRINTED, _varsha_34_jd())
+    following = varsha_pravesh(sun_at, E118_NATAL_SUN_PRINTED,
+                               natal.instant.jd_ut, 35)["jd"]
+    edges = [entry["jd"] for entry in months] + [following]
+    lengths = [b - a for a, b in pairwise(edges)]
+
+    longest = lengths.index(max(lengths))
+    shortest = lengths.index(min(lengths))
+    # Every month covers exactly 30 degrees, so its length is inverse to the
+    # Sun's mean speed across it. That is the whole mechanism.
+    assert 30.0 / lengths[longest] < 30.0 / lengths[shortest]
+
+    def spans(index: int, when: dt.date) -> bool:
+        start = from_jd(edges[index], utc_offset_hours=5.5).local.date()
+        end = from_jd(edges[index + 1], utc_offset_hours=5.5).local.date()
+        return start <= when <= end
+
+    assert spans(longest, dt.date(2000, 7, 4))       # aphelion
+    assert spans(shortest, dt.date(2001, 1, 3))      # perihelion
+    assert "aphelion and perihelion" in THE_LONGEST_MONTH_HOLDS_APHELION
+
+
+def test_the_workaround_still_needs_one_exact_year():
+    from hora.tajaka.monthly import (
+        NO_APPROXIMATE_METHOD,
+        THE_WORKAROUND_STILL_NEEDS_ONE_EXACT_YEAR,
+    )
+
+    assert "exactly cast 12 monthly charts for the first year" in (
+        NO_APPROXIMATE_METHOD)
+    assert "using the approximate method given for annual charts" in (
+        NO_APPROXIMATE_METHOD)
+    assert "once per month, once" in THE_WORKAROUND_STILL_NEEDS_ONE_EXACT_YEAR
+
+
+def test_a_month_with_no_crossing_says_so_rather_than_guessing():
+    from hora.tajaka.monthly import maasa_pravesh
+
+    _natal, place = _e118()
+
+    def never(_jd: float) -> float:
+        return 0.0
+
+    got = maasa_pravesh(never, E118_NATAL_SUN_PRINTED, _varsha_34_jd(), 6)
+    assert got["found"] is False
+    assert got["jd"] is None
+    assert "no crossing" in got["reason"]
+    assert _sun_at(place) is not None
