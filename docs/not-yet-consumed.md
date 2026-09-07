@@ -1482,6 +1482,21 @@ What follows is prose and findings.
 | `THE_WORKAROUND_STILL_NEEDS_ONE_EXACT_YEAR` | Ours: the suggested shortcut still solves twelve times, once |
 
 
+### Chapter 27 — §27.4's sixty-hour charts (8)
+
+`tajaka/shashti_hora.py`. The rule **is** built: `shashti_hora` solves for
+each 2°30' step, and the section's own second one — 26 Pi 20' 25" at 11:40:51
+pm on 9 April 2000 — reproduces within seconds. What follows is prose and
+findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `SHASHTI_HORA_RULE` · `SHASHTI_HORA_IS_AN_ARC` · `FOOTNOTE_78` | The section and its footnote verbatim |
+| `SHASHTI_HORA_NAMES` | The three names one chart has, two from the section and one from the footnote |
+| `SIXTY_HOURS_IS_A_NAME_AND_THE_ARC_IS_THE_RULE` | Ours: 144 x 2.5 days is 360 and the year is 365.26, so across one year the 144 periods run 58.86 to 62.94 hours and none is sixty — including the section's own first one at 61.05 |
+| `THE_ROUND_FIGURE_NEVER_GOVERNS` | Ours: D-78's year, section 27.3's equal months and section 27.4's sixty hours are the same shape three times, and the arc rule wins each time |
+
+
 ---
 
 ## How to use this register

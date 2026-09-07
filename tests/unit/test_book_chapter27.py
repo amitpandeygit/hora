@@ -1076,3 +1076,184 @@ def test_a_month_with_no_crossing_says_so_rather_than_guessing():
     assert got["jd"] is None
     assert "no crossing" in got["reason"]
     assert _sun_at(place) is not None
+
+
+# --------------------------------------------------------------------------
+# §27.4 — casting sixty-hour charts
+# --------------------------------------------------------------------------
+
+E118_MAASA_2 = (2000, 4, 7, 10, 38, 6.0)
+
+
+def _maasa_2_jd():
+    from hora.core.timeutil import from_local
+
+    return from_local(*E118_MAASA_2, utc_offset_hours=5.5).jd_ut
+
+
+def test_27_4_defines_the_shashti_hora_as_an_arc_and_names_it_three_ways():
+    from hora.tajaka.shashti_hora import (
+        FOOTNOTE_78,
+        SHASHTI_HORA_ARC_DEGREES,
+        SHASHTI_HORA_IS_AN_ARC,
+        SHASHTI_HORA_NAMES,
+        SHASHTI_HORA_RULE,
+        SHASHTI_HORAS_PER_MONTH,
+        SHASHTI_HORAS_PER_YEAR,
+    )
+
+    assert SHASHTI_HORA_ARC_DEGREES == 2.5
+    assert SHASHTI_HORAS_PER_MONTH == 12
+    assert SHASHTI_HORAS_PER_YEAR == 144
+    assert SHASHTI_HORAS_PER_MONTH * 12 == SHASHTI_HORAS_PER_YEAR
+    assert "12 shashti-horas" in SHASHTI_HORA_RULE
+    assert "2°30'" in SHASHTI_HORA_RULE
+    assert "exactly 12 such charts in a one-month period" in (
+        SHASHTI_HORA_IS_AN_ARC)
+    assert SHASHTI_HORA_NAMES[:2] == ("Tajaka shashti-hora chakra",
+                                      "Tajaka sixty-hour chart")
+    assert SHASHTI_HORA_NAMES[2] in FOOTNOTE_78
+
+
+def test_the_shashti_hora_targets_step_by_two_and_a_half_degrees():
+    from hora.core import validate
+    from hora.tajaka.monthly import month_target
+    from hora.tajaka.shashti_hora import (
+        ShashtiHoraError,
+        shashti_hora_target,
+    )
+
+    assert issubclass(ShashtiHoraError, validate.InputError)
+    # The first shashti-hora of a month is the month's own beginning.
+    assert shashti_hora_target(E118_NATAL_SUN_PRINTED, 2, 1) == (
+        month_target(E118_NATAL_SUN_PRINTED, 2))
+    # "when Sun is advanced by 2°30', i.e. when Sun enters 26° 20' 25" in Pi"
+    second = shashti_hora_target(E118_NATAL_SUN_PRINTED, 2, 2)
+    assert second % 30 == pytest.approx(26 + 20 / 60 + 25 / 3600, abs=1e-9)
+    assert int(second // 30) == 11                       # Pisces
+    # Twelve of them span exactly one rasi's worth of motion.
+    last = shashti_hora_target(E118_NATAL_SUN_PRINTED, 2, 12)
+    assert (last - month_target(E118_NATAL_SUN_PRINTED, 2)) % 360 == (
+        pytest.approx(27.5))
+    for bad in (0, 13):
+        with pytest.raises(validate.InputError):
+            shashti_hora_target(E118_NATAL_SUN_PRINTED, 2, bad)
+
+
+def test_27_4s_second_shashti_hora_reproduces_to_within_seconds():
+    """"This happens at 11:40:51 pm (IST) on 9th April 2000." """
+    from hora.core.timeutil import from_jd
+    from hora.tajaka.shashti_hora import shashti_hora
+
+    _natal, place = _e118()
+    got = shashti_hora(_sun_at(place), E118_NATAL_SUN_PRINTED,
+                       _maasa_2_jd(), 2, 2)
+    assert got["found"]
+    assert got["rasi"] == "Pisces"
+    local = from_jd(got["jd"], utc_offset_hours=5.5).local
+    printed = _local(2000, 4, 9, 23, 40, 51)
+    assert abs((local - printed).total_seconds()) < 10.0
+
+
+def test_the_first_shashti_hora_is_the_maasa_pravesh_itself():
+    """"The first shashti-hora of the month also starts then." """
+    from hora.tajaka.shashti_hora import shashti_hora
+
+    _natal, place = _e118()
+    got = shashti_hora(_sun_at(place), E118_NATAL_SUN_PRINTED,
+                       _maasa_2_jd(), 2, 1)
+    assert got["is_maasa_pravesh"] is True
+    assert got["jd"] == _maasa_2_jd()
+    assert got["searched"] is None
+
+
+def test_twelve_shashti_horas_fill_the_month_and_none_of_them_is_sixty_hours():
+    """The section's own example month, measured.
+
+    "Each shashti-hora period consists of 60 hours" — its first is 61.05, and
+    every one of the twelve is over sixty. The twelve add up to the month.
+    """
+    from hora.tajaka.monthly import maasa_pravesh
+    from hora.tajaka.shashti_hora import (
+        SIXTY_HOURS_IS_A_NAME_AND_THE_ARC_IS_THE_RULE,
+        shashti_horas,
+    )
+
+    _natal, place = _e118()
+    sun_at = _sun_at(place)
+    horas = shashti_horas(sun_at, E118_NATAL_SUN_PRINTED, _maasa_2_jd(), 2)
+    assert len(horas) == 12
+    assert all(entry["found"] for entry in horas)
+
+    third_month = maasa_pravesh(sun_at, E118_NATAL_SUN_PRINTED,
+                                _varsha_34_jd(), 3)
+    edges = [entry["jd"] for entry in horas] + [third_month["jd"]]
+    assert edges == sorted(edges)
+    hours = [(b - a) * 24 for a, b in pairwise(edges)]
+    assert len(hours) == 12
+
+    assert min(hours) > 60.0                     # not one is even sixty
+    assert hours[0] == pytest.approx(61.05, abs=0.05)
+    # And they sum to the month, which is what makes them a division of it.
+    assert sum(hours) / 24 == pytest.approx(third_month["jd"]
+                                            - _maasa_2_jd(), abs=1e-6)
+    assert "disagree by about one and a half percent" in (
+        SIXTY_HOURS_IS_A_NAME_AND_THE_ARC_IS_THE_RULE)
+
+
+def test_across_a_whole_year_no_shashti_hora_is_sixty_hours():
+    """144 of them, and the spread is four hours wide.
+
+    12 x 2.5 days is 30 and a month is not; 144 x 2.5 is 360 and a year is
+    365.26. The nominal figure is short by one and a half percent.
+    """
+    from hora.tajaka.annual import varsha_pravesh
+    from hora.tajaka.shashti_hora import (
+        SHASHTI_HORA_ARC_DEGREES,
+        SHASHTI_HORAS_PER_YEAR,
+        THE_ROUND_FIGURE_NEVER_GOVERNS,
+    )
+
+    natal, place = _e118()
+    sun_at = _sun_at(place)
+    start = _varsha_34_jd()
+
+    edges, previous = [start], start
+    for step in range(1, SHASHTI_HORAS_PER_YEAR + 1):
+        from hora.panchanga.solver import scan_for_crossing
+
+        target = (E118_NATAL_SUN_PRINTED
+                  + SHASHTI_HORA_ARC_DEGREES * step) % 360.0
+        found = scan_for_crossing(sun_at, target, previous + 1.5,
+                                  previous + 4.0, step=0.1)
+        assert found is not None, step
+        edges.append(found)
+        previous = found
+
+    hours = [(b - a) * 24 for a, b in pairwise(edges)]
+    assert len(hours) == SHASHTI_HORAS_PER_YEAR
+    assert not any(abs(value - 60.0) < 1 / 60 for value in hours)
+    assert min(hours) == pytest.approx(58.86, abs=0.1)
+    assert max(hours) == pytest.approx(62.94, abs=0.1)
+    assert sum(hours) / 24 == pytest.approx(365.26, abs=0.01)
+
+    # The nominal year the "2.5 days" implies, against the real one.
+    assert SHASHTI_HORAS_PER_YEAR * 2.5 == 360.0
+    following = varsha_pravesh(sun_at, E118_NATAL_SUN_PRINTED,
+                               natal.instant.jd_ut, 35)
+    assert following["jd"] - start == pytest.approx(sum(hours) / 24,
+                                                    abs=1e-4)
+    assert "The arc rule is what every worked example uses" in (
+        THE_ROUND_FIGURE_NEVER_GOVERNS)
+
+
+def test_a_shashti_hora_with_no_crossing_says_so():
+    from hora.tajaka.shashti_hora import shashti_hora
+
+    def never(_jd: float) -> float:
+        return 0.0
+
+    got = shashti_hora(never, E118_NATAL_SUN_PRINTED, _maasa_2_jd(), 2, 7)
+    assert got["found"] is False
+    assert got["jd"] is None
+    assert "no crossing" in got["reason"]
