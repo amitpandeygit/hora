@@ -1529,6 +1529,23 @@ by `MUNTHA_HOUSE_RESULTS`. What follows is prose and findings.
 | `THE_DISPUTED_RATE_IS_THE_ANNUAL_RATE_INTERPOLATED` | Ours: 2°30' a month is the annual rule spread evenly, and the author declines it without replacing it. OI-152 |
 
 
+### Chapter 28 — §28.2's Tajaka aspects (10)
+
+`tajaka/aspects.py`. The rules **are** built: `aspects_from` gives the six
+aspects by house, `deeptamsa` the orb per graha, and `aspect_span` reproduces
+the section's own example — Venus at 13 Li aspects 6° to 20° in Gemini. What
+follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `TAJAKA_ASPECTS_INTRO` · `DEEPTAMSA_RULE` · `DEEPTAMSA_MEANS` · `FOOTNOTE_79` | The section and its footnote verbatim |
+| `THE_SIXTH_AND_EIGHTH_RECEIVE_NO_ASPECT` | Ours: the two houses left out are the 150° pair, western astrology's quincunx, and `aspect_on_house` returns None for them |
+| `THE_CONJUNCTION_IS_MALEFIC_HERE_AND_NOWHERE_ELSE` | Ours: the first place in the book a conjunction is graded malefic, where 11.7.1 counts it as a way a Raaja Yoga forms |
+| `THE_ORB_IS_PER_PLANET_AND_IS_A_HALF_WIDTH` | Ours: one orb serves all six aspects and it is measured either side, which the 6–20 in the example settles |
+| `THE_NODES_HAVE_NO_DEEPTAMSA` | Ours: the seven classical planets only, as section 26.5 did for nakshatra aspects |
+| `THREE_ASPECT_SYSTEMS_AND_NO_RECONCILIATION` | Ours: graha drishti, nakshatra drishti and the Tajaka aspects give different answers and the book states no rule for using them together |
+
+
 ---
 
 ## How to use this register

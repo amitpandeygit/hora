@@ -201,3 +201,215 @@ def test_28_1_is_transcribed_with_what_it_defers():
     assert "Sudarsana Chakra Dasa" in MUNTHA_IS_AS_IMPORTANT_AS_LAGNA
     assert "strength of the planets influencing muntha also matters" in (
         PLANETS_IN_MUNTHA)
+
+
+# --------------------------------------------------------------------------
+# §28.2 — the Tajaka aspects, and deeptamsa
+# --------------------------------------------------------------------------
+
+
+def test_the_six_aspects_are_transcribed_with_their_natures_and_strengths():
+    from hora.tajaka.aspects import TAJAKA_ASPECTS, TAJAKA_ASPECTS_INTRO
+
+    assert "we consider the following aspects" in TAJAKA_ASPECTS_INTRO
+    assert len(TAJAKA_ASPECTS) == 6
+    named = {entry["name"]: entry for entry in TAJAKA_ASPECTS}
+    assert named["Trinal aspect"]["houses"] == (5, 9)
+    assert named["Sextile aspect"]["houses"] == (3, 11)
+    assert named["Square aspect"]["houses"] == (4, 10)
+    assert named["Conjunction"]["houses"] == (1,)
+    assert named["Opposition"]["houses"] == (7,)
+    assert named["Semi-sextile aspect"]["houses"] == (2, 12)
+
+    assert named["Trinal aspect"]["nature"] == "benefic"
+    assert named["Trinal aspect"]["strength"] == "strong"
+    assert named["Sextile aspect"]["strength"] == "weak"
+    assert named["Square aspect"]["nature"] == "malefic"
+    assert named["Square aspect"]["strength"] == "weak"
+    assert named["Semi-sextile aspect"]["nature"] == "neutral"
+    for entry in TAJAKA_ASPECTS:
+        for house in entry["houses"]:
+            assert f"{house}" in entry["text"] or house == 1
+
+
+def test_the_house_distances_are_the_western_angles():
+    """Each aspect's houses are 30 degrees apart per house, and the pairs are
+    symmetric about the planet.
+    """
+    from hora.tajaka.aspects import TAJAKA_ASPECTS
+
+    for entry in TAJAKA_ASPECTS:
+        houses = entry["houses"]
+        degrees = entry["degrees"]
+        for house in houses:
+            forward = (house - 1) * 30
+            assert min(forward, 360 - forward) == degrees, entry["name"]
+        if len(houses) == 2:
+            assert sum(houses) == 14           # symmetric about the planet
+
+
+def test_the_sixth_and_eighth_houses_receive_no_aspect():
+    """Ten of twelve houses are covered. The two left out are at 150 degrees,
+    which is western astrology's quincunx.
+    """
+    from hora.tajaka.aspects import (
+        THE_SIXTH_AND_EIGHTH_RECEIVE_NO_ASPECT,
+        aspect_on_house,
+        aspects_from,
+    )
+
+    missing = [house for house in range(1, 13)
+               if aspect_on_house(house) is None]
+    assert missing == [6, 8]
+    for house in missing:
+        forward = (house - 1) * 30
+        assert min(forward, 360 - forward) == 150
+
+    # And every other multiple of thirty up to 180 is present.
+    covered = {aspect_on_house(h)["degrees"] for h in range(1, 13)
+               if aspect_on_house(h) is not None}
+    assert covered == {0, 30, 60, 90, 120, 180}
+
+    reached = {row["house"] for row in aspects_from(0)}
+    assert reached == set(range(1, 13)) - {6, 8}
+    assert "the quincunx" in THE_SIXTH_AND_EIGHTH_RECEIVE_NO_ASPECT
+
+
+def test_the_conjunction_is_malefic_here_and_an_association_elsewhere():
+    from hora.tajaka.aspects import (
+        THE_CONJUNCTION_IS_MALEFIC_HERE_AND_NOWHERE_ELSE,
+        aspect_on_house,
+    )
+
+    own = aspect_on_house(1)
+    assert own["name"] == "Conjunction"
+    assert own["nature"] == "malefic"
+    assert own["strength"] == "strong"
+    # Graded with the opposition, and nothing else is a strong malefic.
+    opposition = aspect_on_house(7)
+    assert (opposition["nature"], opposition["strength"]) == (
+        own["nature"], own["strength"])
+
+    # §11.7.1 counts a conjunction as one of the ways a Raaja Yoga forms.
+    from hora.core.const import RAAJA_ASSOCIATIONS
+
+    assert "conjunction" in {row["key"] for row in RAAJA_ASSOCIATIONS}
+    assert "an association whose nature comes from the planets" in (
+        THE_CONJUNCTION_IS_MALEFIC_HERE_AND_NOWHERE_ELSE)
+
+
+def test_deeptamsa_is_per_planet_and_the_nodes_have_none():
+    from hora.core import validate
+    from hora.tajaka.aspects import (
+        DEEPTAMSA,
+        DEEPTAMSA_MEANS,
+        DEEPTAMSA_RULE,
+        THE_NODES_HAVE_NO_DEEPTAMSA,
+        TajakaAspectError,
+        deeptamsa,
+    )
+
+    assert issubclass(TajakaAspectError, validate.InputError)
+    assert DEEPTAMSA_MEANS == "the orb of an aspect"
+    assert sorted(DEEPTAMSA) == [0, 1, 2, 3, 4, 5, 6]
+    assert [DEEPTAMSA[g] for g in range(7)] == [15, 12, 8, 7, 9, 7, 9]
+    for graha, value in DEEPTAMSA.items():
+        assert f"{int(value)}°" in DEEPTAMSA_RULE
+        assert deeptamsa(graha) == value
+    for node in (7, 8):
+        with pytest.raises(TajakaAspectError):
+            deeptamsa(node)
+    assert "Deeptamsa is the same for all kinds of aspects" in DEEPTAMSA_RULE
+    assert "not given one" in THE_NODES_HAVE_NO_DEEPTAMSA
+
+
+def test_28_2s_venus_example_reproduces_exactly():
+    """"If Venus is at 13° in Li ... Venus mainly influences 6°-20° in Ge." """
+    from hora.charts import book
+    from hora.tajaka.aspects import (
+        THE_ORB_IS_PER_PLANET_AND_IS_A_HALF_WIDTH,
+        aspect_span,
+    )
+
+    venus, gemini_from_libra = 5, 9
+    got = aspect_span(venus, book.longitude("13 Li 00"), gemini_from_libra)
+    assert got["aspect"] == "Trinal aspect"
+    assert got["exact_rasi"] == "Gemini"
+    assert got["exact"] % 30 == pytest.approx(13.0)
+    assert got["deeptamsa"] == 7.0
+    assert got["from"] % 30 == pytest.approx(6.0)
+    assert got["to"] % 30 == pytest.approx(20.0)
+    # Fourteen degrees wide, so the orb is a half-width.
+    assert (got["to"] - got["from"]) % 360 == pytest.approx(14.0)
+    assert "moderate aspectual influence on the entire rasi" in (
+        got["whole_rasi_note"])
+    assert "6 to 20 Ge" in THE_ORB_IS_PER_PLANET_AND_IS_A_HALF_WIDTH
+
+
+def test_one_orb_serves_all_six_aspects():
+    """"Deeptamsa is the same for all kinds of aspects." """
+    from hora.tajaka.aspects import aspect_span
+
+    orbs = {aspect_span(5, 193.0, house)["deeptamsa"]
+            for house in range(1, 13)}
+    assert orbs == {7.0}
+    # Including the two houses that carry no aspect.
+    for house in (6, 8):
+        blank = aspect_span(5, 193.0, house)
+        assert blank["aspect"] is None
+        assert blank["exact"] is None
+        assert blank["deeptamsa"] == 7.0
+        assert "quincunx" in blank["reason"]
+
+
+def test_three_aspect_systems_and_the_book_reconciles_none_of_them():
+    """A planet can aspect a rasi in one scheme and not another."""
+    from hora.charts.aspects import graha_drishti_houses
+    from hora.tajaka.aspects import (
+        THREE_ASPECT_SYSTEMS_AND_NO_RECONCILIATION,
+        aspect_on_house,
+    )
+
+    # Graha drishti is asymmetric between planets; the Tajaka set is not.
+    assert graha_drishti_houses(4) != graha_drishti_houses(6)
+    tajaka = {house for house in range(1, 13)
+              if aspect_on_house(house) is not None}
+    assert all(set(graha_drishti_houses(g)) != tajaka for g in range(7))
+
+    # Every planet aspects the 7th in both schemes, and only there do they
+    # always agree.
+    assert all(7 in graha_drishti_houses(g) for g in range(7))
+    assert aspect_on_house(7)["name"] == "Opposition"
+
+    # The 5th and 9th are a strong benefic here and Jupiter's alone there.
+    assert 5 in graha_drishti_houses(4) and 9 in graha_drishti_houses(4)
+    assert 5 not in graha_drishti_houses(6)
+    assert aspect_on_house(5)["nature"] == "benefic"
+    assert "states no rule for using them together" in (
+        THREE_ASPECT_SYSTEMS_AND_NO_RECONCILIATION)
+
+
+def test_footnote_79_qualifies_the_whole_system():
+    """The second time Part 4 says its material has no maharshi behind it."""
+    from hora.core.const import TAJAKA_PROVENANCE
+    from hora.tajaka.aspects import FOOTNOTE_79
+
+    assert "similar to the ones used in western astrology" in FOOTNOTE_79
+    assert "graha and rasi aspects were mentioned by maharshis" in FOOTNOTE_79
+    assert "needs to be further researched" in FOOTNOTE_79
+    assert "current understanding of scholars may be incomplete" in FOOTNOTE_79
+    assert "Rishi prokta" in FOOTNOTE_79
+    # Part 4's opening said the same of the system as a whole.
+    assert "no references to it in the works of Parasara" in TAJAKA_PROVENANCE
+
+
+def test_the_aspect_helpers_check_their_inputs():
+    from hora.core import validate
+    from hora.tajaka.aspects import aspect_on_house, aspects_from
+
+    for bad in (0, 13):
+        with pytest.raises(validate.InputError):
+            aspect_on_house(bad)
+    for bad in (-1, 12):
+        with pytest.raises(validate.InputError):
+            aspects_from(bad)
