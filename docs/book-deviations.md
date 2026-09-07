@@ -2522,6 +2522,41 @@ decide Poorna's list may be completed.
 
 ---
 
+## D-78 · §27.2's stated year and Table 71 are built on different year lengths
+
+**Status: BOOK DEFECT — Table 71 is stored as printed and nothing is
+recomputed from the stated figure.**
+
+§27.2 states the year the table rests on:
+
+> A sidereal solar year has 365 days 6 hours 9 minutes and 12 seconds. Based on
+> this, the amount of time to be added to the birthdata to find the varsha
+> pravesh data is given in Table 71.
+
+Only the age-1 row is based on it. Solving each of the other eighteen rows for
+the year length it implies gives the same answer every time:
+
+| rows | implied year | excess over 365 days |
+|---|---|---|
+| age 1 | 365.2563889 d | 6h 9m 12s — the stated figure |
+| ages 2 to 100 | 365.2563623 d | **6h 9m 9.7s** |
+
+The second figure is the true sidereal year to within a fifth of a second; our
+own `SIDEREAL_YEAR_DAYS` is 365.2563604. So the sentence rounds the year up by
+about **2.3 seconds**, and the age-1 row was computed from the rounding rather
+than from the year the rest of the table uses.
+
+It is not negligible at the top of the table. The gap accumulates to **3m 47s
+by age 100**, and §27.2's own note says the lagna magnifies a solar error 360
+times — so a reader building the table from the stated figure instead of using
+it as printed would be nearly a whole rasi out on the ascendant.
+
+**What we do:** `TABLE_71` holds the nineteen rows exactly as printed, and no
+function derives an offset from `STATED_SIDEREAL_YEAR_DAYS`. The constant is
+kept only so the discrepancy can be asserted rather than described.
+
+---
+
 ## D-77 · §26.8's tally of 16 vowels and 20 consonants does not match Figure 3
 
 **Status: BOOK DEFECT — the figure is held as printed; the tally is not used.**

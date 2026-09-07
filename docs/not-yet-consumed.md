@@ -1431,6 +1431,26 @@ What follows is prose and findings.
 | `CHART_66_IS_A_SECOND_TEST_CASE_FOR_OI_149` | Ours: the annual chart is a pre-dawn instant and our panchanga rejects it, so OI-149 now has a printed book chart behind it |
 
 
+### Chapter 27 — §27.2's approximate method (12)
+
+`tajaka/approximate.py`. The method **is** built: `decompose`, `offset_for`
+and `approximate_varsha_pravesh` reproduce every printed intermediate of the
+section's revisit of Example 118 — the 30+3 split, the 6d 11h 2m 24s sum, the
+Tuesday, the 7 March reference and the 4:42:24 am answer — and land one minute
+three seconds from the exact method. What follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `SECTION_INTRO` · `PROCEDURE` · `FOOTNOTE_77` · `ACCURACY_REMARK` · `AYANAMSA_NOTE` | The section verbatim: the intro, the five steps, the sunrise footnote, the accuracy claim and the note on ayanamsa |
+| `TABLE_71_TITLE` | The table's printed title |
+| `STATED_SIDEREAL_YEAR_DAYS` | Kept only so D-78 can be asserted; no function derives an offset from it |
+| `LAGNA_IS_360_TIMES_FASTER_THAN_SUN` | The note's amplification factor, checked against the ephemeris and not used to compute anything |
+| `THE_STATED_YEAR_AND_THE_TABLE_DISAGREE` | Ours: the stated year fits only the age-1 row; the other eighteen imply a year 2.3 seconds shorter. D-78 |
+| `THE_DAYS_COLUMN_IS_MODULO_SEVEN` | Ours: why age 6 shows zero days, and why step (3) is a weekday step |
+| `FOOTNOTE_77_IS_THE_SECOND_STATEMENT_OF_THE_SUNRISE_RULE` | Ours: the second footnote to state the rule `day_structure` gets wrong, and here it is load-bearing. OI-149 |
+| `THE_NOTE_IS_A_CONSTRAINT_ON_THE_EPHEMERIS` | Ours: the note is about our implementation, and both its claims are measured against it |
+
+
 ---
 
 ## How to use this register

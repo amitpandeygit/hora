@@ -461,3 +461,254 @@ def test_example_118_is_transcribed_with_what_it_defers():
     # The reading is deferred, which is why nothing reads an annual chart yet.
     assert "annual dasas" in EXAMPLE_118_USE
     assert "We will learn them in later chapters" in EXAMPLE_118_USE
+
+
+#: §27.2 works entirely in the birthplace's own clock and never converts, so
+#: the datetimes here are deliberately naive. One helper carries the waiver.
+def _local(year, month, day, hour, minute, second=0):
+    import datetime as dt
+
+    return dt.datetime(year, month, day, hour, minute, second)  # noqa: DTZ001
+
+
+# --------------------------------------------------------------------------
+# §27.2 — the approximate method, Table 71, and the note on ayanamsa
+# --------------------------------------------------------------------------
+
+
+def test_table_71_is_transcribed_with_its_nineteen_ages():
+    from hora.tajaka.approximate import TABLE_71
+
+    assert sorted(TABLE_71) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                                20, 30, 40, 50, 60, 70, 80, 90, 100]
+    for age, (days, hours, minutes, seconds) in TABLE_71.items():
+        assert 0 <= days <= 6, age
+        assert 0 <= hours <= 23 and 0 <= minutes <= 59 and 0 <= seconds <= 59
+    # The days column is a weekday offset, which is why age 6 shows zero.
+    assert TABLE_71[6][0] == 0
+
+
+def test_the_stated_year_and_the_table_disagree_from_age_two_onwards():
+    """BOOK DEFECT, D-78. The section says the table is built on a year of
+    365d 6h 9m 12s. Every row but the first implies 365d 6h 9m 9.7s.
+    """
+    from hora.tajaka.approximate import (
+        STATED_SIDEREAL_YEAR_DAYS,
+        TABLE_71,
+        THE_STATED_YEAR_AND_THE_TABLE_DISAGREE,
+    )
+
+    def implied(age: int) -> float:
+        _days, hours, minutes, seconds = TABLE_71[age]
+        fraction = (hours * 3600 + minutes * 60 + seconds) / 86400.0
+        whole = round(age * 365.2563625 - fraction)
+        return (whole + fraction) / age
+
+    assert implied(1) == pytest.approx(STATED_SIDEREAL_YEAR_DAYS, abs=1e-9)
+    others = [implied(age) for age in TABLE_71 if age != 1]
+    # The larger rows pin the year to a fifth of a second; the small ones
+    # carry the table's own rounding to whole seconds.
+    large = [implied(age) for age in TABLE_71 if age >= 30]
+    assert (max(large) - min(large)) * 86400 < 0.15
+    # ...and none of them agrees with the sentence above the table.
+    for value in others:
+        assert value < STATED_SIDEREAL_YEAR_DAYS
+    gap = (STATED_SIDEREAL_YEAR_DAYS - sum(others) / len(others)) * 86400
+    assert gap == pytest.approx(2.27, abs=0.1)
+    assert gap * 100 == pytest.approx(227, abs=10)      # 3m 47s by age 100
+    assert "Only the age-1 row follows the stated figure" in (
+        THE_STATED_YEAR_AND_THE_TABLE_DISAGREE)
+
+
+def test_the_tables_own_year_is_the_real_sidereal_year():
+    """What the eighteen rows are actually built from, to a quarter-second."""
+    from hora.core.constants.timespan import SIDEREAL_YEAR_DAYS
+    from hora.tajaka.approximate import TABLE_71
+
+    _days, hours, minutes, seconds = TABLE_71[100]
+    fraction = (hours * 3600 + minutes * 60 + seconds) / 86400.0
+    implied = (round(100 * 365.2563625 - fraction) + fraction) / 100
+    assert (implied - SIDEREAL_YEAR_DAYS) * 86400 == pytest.approx(0.18,
+                                                                   abs=0.05)
+
+
+def test_the_decomposition_is_the_sections_own():
+    """"suppose someone finished 46 years. Then add the values given for 40
+    years and 6 years."
+    """
+    from hora.core import validate
+    from hora.tajaka.approximate import ApproximateError, decompose
+
+    assert issubclass(ApproximateError, validate.InputError)
+
+    assert decompose(46) == (40, 6)
+    assert decompose(33) == (30, 3)
+    assert decompose(100) == (100,)
+    assert decompose(7) == (7,)
+    assert decompose(0) == ()
+    assert decompose(119) == (100, 10, 9)
+    with pytest.raises(validate.InputError):
+        decompose(200)
+
+
+def test_the_offsets_add_the_way_the_table_says_they_do():
+    """Example 118's own sum, digit for digit: 33 = 30 + 3 gives 6d 11h 2m 24s.
+    """
+    from hora.tajaka.approximate import TABLE_71, offset_for
+
+    assert TABLE_71[30] == (2, 16, 34, 54)
+    assert TABLE_71[3] == (3, 18, 27, 30)
+    got = offset_for(33)
+    assert got["parts"] == (30, 3)
+    assert (got["days"], got["hours"], got["minutes"], got["seconds"]) == (
+        6, 11, 2, 24)
+    assert got["in_table"] is False
+
+
+def test_the_approximate_method_reproduces_example_118_step_by_step():
+    """Every printed intermediate, not only the answer."""
+    import datetime as dt
+
+    from hora.tajaka.approximate import approximate_varsha_pravesh
+
+    # "Birthday (8th March 1967) is a Wednesday."
+    assert dt.date(1967, 3, 8).strftime("%A") == "Wednesday"
+
+    got = approximate_varsha_pravesh(_local(1967, 3, 8, 17, 40),
+                                     "Wednesday", 33)
+    assert got["years_completed"] == 33
+    assert got["year_entered"] == 34
+    assert got["birthday"] == dt.date(2000, 3, 8)
+    # "Adding 6 days to it, we get a Tuesday."
+    assert got["target_weekday"] == "Tuesday"
+    # "It is 7th March 2000 ... we now take 5:40 pm on 7th March 2000."
+    assert got["reference"] == _local(2000, 3, 7, 17, 40)
+    assert got["days_from_birthday"] == -1
+    # "We get 4:42:24 am on 8th March 2000."
+    assert got["commencement"] == _local(2000, 3, 8, 4, 42, 24)
+
+
+def test_the_approximation_is_wrong_by_one_minute_as_the_section_says():
+    """"the time found here is wrong only by 1 minute." Against the exact
+    method, not against the book's printed figure.
+    """
+
+    from hora.core.timeutil import from_jd
+    from hora.tajaka.annual import varsha_pravesh
+    from hora.tajaka.approximate import (
+        ACCURACY_REMARK,
+        approximate_varsha_pravesh,
+    )
+
+    natal, place = _e118()
+    exact = varsha_pravesh(_sun_at(place), natal.positions[0].longitude,
+                           natal.instant.jd_ut, 34)
+    solved = from_jd(exact["jd"], utc_offset_hours=5.5).local
+    approximate = approximate_varsha_pravesh(
+        _local(1967, 3, 8, 17, 40), "Wednesday", 33)["commencement"]
+    error = abs((approximate - solved).total_seconds())
+    assert 60.0 <= error < 120.0, error
+    assert "wrong only by 1 minute" in ACCURACY_REMARK
+
+
+def test_the_method_needs_the_hindu_weekday_and_says_so():
+    """Footnote 77, and why the weekday is an argument rather than derived."""
+
+    from hora.tajaka.approximate import (
+        FOOTNOTE_77,
+        FOOTNOTE_77_IS_THE_SECOND_STATEMENT_OF_THE_SUNRISE_RULE,
+        ApproximateError,
+        approximate_varsha_pravesh,
+    )
+    from hora.transits.sarvatobhadra import FOOTNOTE_71
+
+    assert "changes at sunrise and not at 12:00 midnight" in FOOTNOTE_77
+    assert "a new day starts at sunrise" in FOOTNOTE_71
+    assert "wrong weekday and the wrong reference date" in (
+        FOOTNOTE_77_IS_THE_SECOND_STATEMENT_OF_THE_SUNRISE_RULE)
+
+    with pytest.raises(ApproximateError):
+        approximate_varsha_pravesh(_local(1967, 3, 8, 17, 40),
+                                   "Budhavara", 33)
+
+    # Taking the wrong weekday moves the whole answer by a day.
+    right = approximate_varsha_pravesh(_local(1967, 3, 8, 17, 40),
+                                       "Wednesday", 33)["commencement"]
+    wrong = approximate_varsha_pravesh(_local(1967, 3, 8, 17, 40),
+                                       "Tuesday", 33)["commencement"]
+    assert abs((right - wrong).days) >= 1
+
+
+def test_our_ayanamsa_is_nonlinear_as_the_note_requires():
+    """"As long as one takes the correct nonlinear nature of ayanamsa change
+    into account, there will not be any considerable discrepancy."
+
+    Measured on our own ephemeris: the rate is not constant.
+    """
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_local
+    from hora.tajaka.approximate import (
+        AYANAMSA_NOTE,
+        THE_NOTE_IS_A_CONSTRAINT_ON_THE_EPHEMERIS,
+    )
+
+    place = Place(name="b", latitude=26 + 18 / 60, longitude=73 + 4 / 60)
+    values = {year: compute_chart(
+        from_local(year, 3, 8, 12, 0, 0.0, utc_offset_hours=5.5), place,
+        Settings()).ayanamsa for year in (1900, 1950, 2000, 2050, 2100)}
+    rates = [(values[b] - values[a]) * 3600 / (b - a)
+             for a, b in ((1900, 1950), (1950, 2000), (2000, 2050),
+                          (2050, 2100))]
+    assert all(50.2 < rate < 50.4 for rate in rates)
+    assert rates == sorted(rates)                 # rising, so not linear
+    assert max(rates) - min(rates) > 0.02
+    assert "nonlinear nature of ayanamsa" in AYANAMSA_NOTE
+    assert "nonlinear nature of ayanamsa change" in (
+        THE_NOTE_IS_A_CONSTRAINT_ON_THE_EPHEMERIS)
+
+
+def test_the_lagna_really_does_move_360_times_faster_than_the_sun():
+    """The note's amplification factor, measured over a day and within it.
+
+    The 360 is a daily average. Instantaneously the ratio swings widely with
+    the rising sign, which makes the amplification worse in places, never
+    better.
+    """
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_jd, from_local
+    from hora.tajaka.approximate import LAGNA_IS_360_TIMES_FASTER_THAN_SUN
+
+    place = Place(name="b", latitude=26 + 18 / 60, longitude=73 + 4 / 60)
+    start = from_local(2000, 3, 8, 4, 41, 21.0, utc_offset_hours=5.5).jd_ut
+
+    def chart(jd: float):
+        return compute_chart(from_jd(jd, utc_offset_hours=5.5), place,
+                             Settings())
+
+    daily = 360.0 / ((chart(start + 1.0).positions[0].longitude
+                      - chart(start).positions[0].longitude) % 360)
+    assert daily == pytest.approx(LAGNA_IS_360_TIMES_FASTER_THAN_SUN, abs=1.0)
+
+    ratios = []
+    for hour in range(0, 24, 2):
+        before = chart(start + hour / 24)
+        after = chart(start + hour / 24 + 1 / 1440)
+        ratios.append(((after.lagna_longitude - before.lagna_longitude) % 360)
+                      / ((after.positions[0].longitude
+                          - before.positions[0].longitude) % 360))
+    assert min(ratios) < LAGNA_IS_360_TIMES_FASTER_THAN_SUN < max(ratios)
+
+
+def test_27_2_is_transcribed_with_its_five_steps():
+    from hora.tajaka.approximate import PROCEDURE, SECTION_INTRO
+
+    assert "laborious calculation to do manually" in SECTION_INTRO
+    assert "365 days 6 hours 9 minutes and 12 seconds" in SECTION_INTRO
+    assert len(PROCEDURE) == 5
+    assert PROCEDURE[0].startswith("Find the birthday as per western calendar")
+    assert "40 years and 6 years" in PROCEDURE[1]
+    assert "nearest date to the birthday" in PROCEDURE[2]
+    assert "commencement of new year" in PROCEDURE[3]
+    assert "latitude of the birthplace" in PROCEDURE[4]
