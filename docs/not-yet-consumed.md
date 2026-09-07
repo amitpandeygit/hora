@@ -1373,6 +1373,30 @@ chapter.
 | `CHAPTER_26_IS_COMPLETE` | The chapter's closing inventory — sections, tables, figure, examples, exercises, footnotes and the charts it reuses |
 
 
+### Part 4 — the Tajaka opening (18)
+
+`core/constants/tajaka.py`, beside Part 3's own opening. The whole page is
+prose: it defines the solar return, states the provenance, names the two chart
+kinds and promises the casting. No formula, ayanamsa convention or place rule
+is given, so nothing is computed from it and no Tajaka module exists — the
+coverage test fails the moment one appears ahead of its section.
+
+| constant | why it is not consumed |
+|---|---|
+| `TAJAKA_IS_USEFUL_FOR_PRECISE_PREDICTIONS` · `TAJAKA_PROVENANCE` | The two opening paragraphs verbatim: the claim for the system, and the book's case for including it |
+| `SOLAR_RETURN_RULE` · `ANNUAL_CHART_NAMES` · `ANNUAL_CHART_SCOPE` | The definition of a Tajaka year, the two names for its chart, and what the chart is for |
+| `MASA_CHAKRA_RULE` · `TAJAKA_CHART_KINDS` · `DASAS_WITHIN_THE_YEAR` · `PART_4_SCOPE` | The monthly chart, the two kinds as data, the dasas promised inside the year, and what the part says it will explain |
+| `TAJAKA_AUTHORITIES` | Who is silent on the system and who is not, as data |
+| `TAJAKA_IS_ADMITTED_ON_PRECEDENT_NOT_AUTHORITY` | Ours: the only technique in the book argued for by precedent rather than by a maharshi. Bears on the precedence ladder |
+| `THE_MISSING_PARASARA_IS_MARKED_AS_SPECULATION` | Ours: the author italicises his own speculation about a lost portion and refuses to make it a provenance |
+| `THE_NATAL_CHART_VETOES_AND_IS_NOT_VETOED` | Ours: the gate runs one way, so an annual reading is never evidence on its own |
+| `THE_ANNUAL_CHART_IS_THE_CHART_SENSITIVE_METHOD_26_9_ASKED_FOR` | Ours: a solar return is cast for one person's own instant, which is what section 26.9 demanded and could not name |
+| `PART_4_NAMES_NONE_OF_ITS_DASAS` | Ours: the third opening running to promise techniques and name none |
+| `THE_YEAR_IS_CALLED_365_DAYS_AND_A_SOLAR_RETURN_IS_LONGER` | Ours: the page says 365 days and the return interval is about 365.2564; which the special dasas divide is not stated. Recorded, not decided |
+| `TAJAKA_WAS_PROMISED_BY` | The four earlier passages that deferred to this part, as data |
+| `THE_CASTING_IS_PROMISED_AND_NOT_YET_GIVEN` | Ours: why nothing here is built, and why footnote 74's bar is not lifted |
+
+
 ---
 
 ## How to use this register
