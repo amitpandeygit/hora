@@ -413,3 +413,191 @@ def test_the_aspect_helpers_check_their_inputs():
     for bad in (-1, 12):
         with pytest.raises(validate.InputError):
             aspects_from(bad)
+
+
+# --------------------------------------------------------------------------
+# §28.3 — harsha bala
+# --------------------------------------------------------------------------
+
+
+def test_the_four_sources_are_transcribed_and_each_is_worth_five():
+    from hora.tajaka.harsha import (
+        BALA_MEANS,
+        FOOTNOTE_80,
+        HARSHA_MAXIMUM,
+        HARSHA_MEANS,
+        HARSHA_SOURCES,
+        HARSHA_UNITS_PER_SOURCE,
+    )
+
+    assert len(HARSHA_SOURCES) == 4
+    assert HARSHA_UNITS_PER_SOURCE == 5
+    assert HARSHA_MAXIMUM == len(HARSHA_SOURCES) * HARSHA_UNITS_PER_SOURCE
+    assert "exaltation or own sign" in HARSHA_SOURCES[1]
+    assert "Feminine planets" in HARSHA_SOURCES[2]
+    assert "starts in the daytime" in HARSHA_SOURCES[3]
+    assert HARSHA_MEANS == "cheerful" and BALA_MEANS == "strength"
+    assert "strength of cheerfulness" in FOOTNOTE_80
+
+
+def test_source_one_gives_each_planet_exactly_one_house():
+    from hora.tajaka.harsha import HARSHA_HOUSES, HARSHA_SOURCES, harsha_bala
+
+    assert sorted(HARSHA_HOUSES) == list(range(7))
+    assert len(set(HARSHA_HOUSES.values())) == 7      # no house shared
+    for graha, house in HARSHA_HOUSES.items():
+        scored = harsha_bala(graha, house, dignified=False, daytime=True)
+        assert scored["sources"][0]["units"] == 5
+        elsewhere = [h for h in range(1, 13) if h != house]
+        for other in elsewhere:
+            assert harsha_bala(graha, other, dignified=False,
+                               daytime=True)["sources"][0]["units"] == 0
+    for house in HARSHA_HOUSES.values():
+        assert str(house) in HARSHA_SOURCES[0]
+
+
+def test_the_harsha_houses_are_the_planetary_joys():
+    """An observation about the seven numbers, recorded and used for nothing.
+    """
+    from hora.tajaka.harsha import (
+        HARSHA_HOUSES,
+        THE_HARSHA_HOUSES_ARE_THE_PLANETARY_JOYS,
+    )
+
+    assert HARSHA_HOUSES == {0: 9, 1: 3, 2: 6, 3: 1, 4: 11, 5: 5, 6: 12}
+    assert "the planets' joys" in THE_HARSHA_HOUSES_ARE_THE_PLANETARY_JOYS
+    assert "footnote 80 glosses harsha as cheerful" in (
+        THE_HARSHA_HOUSES_ARE_THE_PLANETARY_JOYS)
+
+
+def test_the_gender_houses_partition_all_twelve():
+    from hora.tajaka.harsha import (
+        FEMININE_HOUSES,
+        HARSHA_FEMININE,
+        HARSHA_MASCULINE,
+        MASCULINE_HOUSES,
+    )
+
+    assert set(FEMININE_HOUSES) | set(MASCULINE_HOUSES) == set(range(1, 13))
+    assert not set(FEMININE_HOUSES) & set(MASCULINE_HOUSES)
+    assert len(FEMININE_HOUSES) == len(MASCULINE_HOUSES) == 6
+    assert set(HARSHA_FEMININE) | set(HARSHA_MASCULINE) == set(range(7))
+    assert not set(HARSHA_FEMININE) & set(HARSHA_MASCULINE)
+    assert len(HARSHA_FEMININE) == 4 and len(HARSHA_MASCULINE) == 3
+
+
+def test_the_gender_split_is_not_chapter_threes():
+    """BOOK DEVIATION, D-79. §28.3 calls Mercury and Saturn feminine; §3's
+    own table makes both neuter.
+    """
+    from hora.core.const import GRAHA_SEX, SEX_NAMES
+    from hora.tajaka.harsha import (
+        THE_GENDER_SPLIT_IS_NOT_CHAPTER_THREES,
+        is_feminine,
+    )
+
+    neuter = SEX_NAMES.index("neuter")
+    chapter_three_neuter = {int(g) for g, sex in GRAHA_SEX.items()
+                            if sex == neuter}
+    assert chapter_three_neuter == {3, 6}             # Mercury and Saturn
+    for graha in chapter_three_neuter:
+        assert is_feminine(graha) is True
+
+    female = SEX_NAMES.index("female")
+    chapter_three_female = {int(g) for g, sex in GRAHA_SEX.items()
+                            if sex == female}
+    assert chapter_three_female == {1, 5}             # Moon and Venus only
+    assert "makes Mercury and Saturn neuter" in (
+        THE_GENDER_SPLIT_IS_NOT_CHAPTER_THREES)
+
+
+def test_sources_three_and_four_both_turn_on_gender():
+    from hora.tajaka.harsha import (
+        HARSHA_FEMININE,
+        HARSHA_MASCULINE,
+        SOURCES_THREE_AND_FOUR_BOTH_TURN_ON_GENDER,
+        harsha_bala,
+    )
+
+    # In a daytime year exactly the three masculine planets take source (4).
+    daytime = {graha: harsha_bala(graha, 1, dignified=False,
+                                  daytime=True)["sources"][3]["units"]
+               for graha in range(7)}
+    assert {g for g, units in daytime.items() if units == 5} == set(
+        HARSHA_MASCULINE)
+    night = {graha: harsha_bala(graha, 1, dignified=False,
+                                daytime=False)["sources"][3]["units"]
+             for graha in range(7)}
+    assert {g for g, units in night.items() if units == 5} == set(
+        HARSHA_FEMININE)
+    assert "take none of it" in SOURCES_THREE_AND_FOUR_BOTH_TURN_ON_GENDER
+
+
+def test_three_planets_can_never_be_exceedingly_strong():
+    """The Sun's joy house is feminine and he is masculine; Venus's and
+    Saturn's are masculine and they are feminine. Fifteen is their ceiling.
+    """
+    from hora.tajaka.harsha import (
+        HARSHA_GRADES,
+        THREE_PLANETS_CAN_NEVER_SCORE_TWENTY,
+        harsha_bala,
+    )
+
+    best = {}
+    for graha in range(7):
+        best[graha] = max(
+            harsha_bala(graha, house, dignified=dignified,
+                        daytime=daytime)["units"]
+            for house in range(1, 13)
+            for dignified in (True, False)
+            for daytime in (True, False))
+    assert {g for g, top in best.items() if top == 15} == {0, 5, 6}
+    assert {g for g, top in best.items() if top == 20} == {1, 2, 3, 4}
+    assert HARSHA_GRADES[20] == "exceedingly strong"
+    assert HARSHA_GRADES[15] == "fully strong"
+    assert "tops out at fifteen" in THREE_PLANETS_CAN_NEVER_SCORE_TWENTY
+
+
+def test_every_attainable_total_has_a_grade():
+    from hora.tajaka.harsha import HARSHA_GRADE_RULE, HARSHA_GRADES, harsha_bala
+
+    totals = {harsha_bala(graha, house, dignified=dignified,
+                          daytime=daytime)["units"]
+              for graha in range(7) for house in range(1, 13)
+              for dignified in (True, False) for daytime in (True, False)}
+    assert totals <= set(HARSHA_GRADES)
+    assert totals == {0, 5, 10, 15, 20}
+    for grade in HARSHA_GRADES.values():
+        assert grade in HARSHA_GRADE_RULE
+
+
+def test_an_unsupplied_dignity_is_undecided_and_not_a_zero():
+    from hora.tajaka.harsha import harsha_bala
+
+    got = harsha_bala(0, 9, dignified=None, daytime=True)
+    assert got["undecided"] is True
+    assert got["grade"] is None
+    assert got["sources"][1]["units"] is None
+    assert "undecided" in got["sources"][1]["detail"]
+    assert (got["at_least"], got["at_most"]) == (10, 15)
+
+    # Said to be undignified, the same chart is decided and scores less.
+    decided = harsha_bala(0, 9, dignified=False, daytime=True)
+    assert decided["undecided"] is False
+    assert decided["units"] == 10
+    assert decided["grade"] == "average strength"
+
+
+def test_harsha_bala_checks_its_inputs():
+    from hora.core import validate
+    from hora.tajaka.harsha import HarshaError, harsha_bala, is_feminine
+
+    assert issubclass(HarshaError, validate.InputError)
+    for node in (7, 8):
+        with pytest.raises(validate.InputError):
+            is_feminine(node)
+        with pytest.raises(validate.InputError):
+            harsha_bala(node, 1, dignified=True, daytime=True)
+    for bad in (0, 13):
+        with pytest.raises(validate.InputError):
+            harsha_bala(0, bad, dignified=True, daytime=True)

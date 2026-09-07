@@ -2522,6 +2522,40 @@ decide Poorna's list may be completed.
 
 ---
 
+## D-79 · §28.3 calls Mercury and Saturn feminine; §3's table calls them neuter
+
+**Status: BOOK DEVIATION — harsha bala uses §28.3's grouping, and §3's table
+is untouched.**
+
+Harsha bala needs a two-way split of the seven planets, and §28.3 supplies one:
+
+> Feminine planets (Moon, Mercury, Venus and Saturn) get 5 units in the 1st,
+> 2nd, 3rd 7th, 8th and 9th houses. Masculine planets (Sun, Mars and Jupiter)
+> get 5 units in the 4th, 5th, 6th, 10th, 11th and 12th houses.
+
+Chapter 3's own table of graha attributes has three groups, not two:
+
+| graha | §3 (`GRAHA_SEX`) | §28.3 |
+|---|---|---|
+| Sun, Mars, Jupiter | male | masculine |
+| Moon, Venus | female | feminine |
+| **Mercury, Saturn** | **neuter** | **feminine** |
+
+Both are the same author. §28.3 is not correcting §3 — it needs a binary split
+for a technique that has no third case, and puts the two neuters on the
+feminine side without remarking on it.
+
+**What we do:** `harsha.is_feminine` follows §28.3, because §28.3 is the
+section that defines harsha bala. `GRAHA_SEX` is not changed, and nothing else
+in the engine reads the harsha grouping.
+
+**Where it bites:** it is not cosmetic. Sources (3) and (4) both key on this
+split, so ten of a planet's twenty possible units turn on it. Under §3's
+reading Mercury and Saturn would belong to neither group and could score
+neither source.
+
+---
+
 ## D-78 · §27.2's stated year and Table 71 are built on different year lengths
 
 **Status: BOOK DEFECT — Table 71 is stored as printed and nothing is

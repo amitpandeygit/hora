@@ -1546,6 +1546,21 @@ follows is prose and findings.
 | `THREE_ASPECT_SYSTEMS_AND_NO_RECONCILIATION` | Ours: graha drishti, nakshatra drishti and the Tajaka aspects give different answers and the book states no rule for using them together |
 
 
+### Chapter 28 — §28.3's harsha bala (10)
+
+`tajaka/harsha.py`. The rule **is** built: `harsha_bala` adds the four sources
+and grades the total. What follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `HARSHA_BALA_RULE` · `HARSHA_SOURCES` · `HARSHA_GRADE_RULE` · `FOOTNOTE_80` | The section and its footnote verbatim, with the four sources as data |
+| `HARSHA_MEANS` · `BALA_MEANS` | The footnote's gloss, as two words |
+| `THE_HARSHA_HOUSES_ARE_THE_PLANETARY_JOYS` | Ours: an observation about the seven house numbers, recorded and used for nothing |
+| `SOURCES_THREE_AND_FOUR_BOTH_TURN_ON_GENDER` | Ours: ten of the twenty units turn on one classification |
+| `THREE_PLANETS_CAN_NEVER_SCORE_TWENTY` | Ours: the Sun, Venus and Saturn have their joy house in the wrong gender half, so the top grade is out of their reach |
+| `THE_GENDER_SPLIT_IS_NOT_CHAPTER_THREES` | Ours: section 28.3 calls Mercury and Saturn feminine where chapter 3's table calls them neuter. D-79 |
+
+
 ---
 
 ## How to use this register
