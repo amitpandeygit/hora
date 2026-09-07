@@ -1625,6 +1625,23 @@ counts across D-1 to D-12. What follows is prose and findings.
 | `THE_NODES_CANNOT_BE_SCORED` | Ours: the fourth strength in Part 4 to cover the seven classical grahas only |
 
 
+### Chapter 28 — §28.6's lord of the year (11)
+
+`tajaka/varsheswara.py`. The rules **are** built: `candidates` finds the five,
+`triraasi_lord` reads Table 73, `aspect_on_lagna` applies §28.2, and
+`varsheswara` runs the cascade and says which step it stopped at. What follows
+is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `VARSHESWARA_RULE` · `VARSHESWARA_CANDIDATES` · `SELECTION_RULE` · `SELECTION_PROCEDURE` · `SELECTION_FALLBACKS` · `TABLE_73_TITLE` | The section verbatim, with the five candidates as data |
+| `THE_LAST_FOUR_RASIS_HAVE_ONE_TRIRAASI_LORD` | Ours: Sagittarius to Pisces have the same lord in both columns, so the day/night distinction stops mattering for a third of lagnas |
+| `THE_SUN_AND_MERCURY_GET_HALF_A_SHARE` | Ours: the twenty-four cells go four apiece to five grahas and two apiece to the Sun and Mercury |
+| `THE_CASCADE_USES_28_2_AND_28_4_6S_OWN_VOCABULARY` | Ours: the first section to use the chapter's own aspects and its own strength grades together |
+| `NO_ASPECT_ON_LAGNA_MEANS_THE_SIXTH_OR_EIGHTH` | Ours: 28.2's two unaspected houses are what make the third fallback reachable, and only narrowly |
+| `THE_LAST_TWO_STEPS_TEST_DIFFERENT_THINGS` | Ours: "an aspect" against "a strong aspect", which a weak aspect answers oppositely. OI-156 |
+
+
 ---
 
 ## How to use this register

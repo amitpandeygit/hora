@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 105 waiting on evidence · 2 parked**
+**5 waiting on Amit · 106 waiting on evidence · 2 parked**
 
 ---
 
@@ -2283,6 +2283,37 @@ does not have, so `dwadasavargeeya_bala` returns the difference always and
 leaves `overall` as ``None`` with the reason attached.
 
 **Closes when:** a later section reads a level count, or you settle it.
+
+
+### OI-156 — §28.6's cascade does not close, in two places
+
+**Waiting on the book.** The lord of the year is picked by a cascade, and two
+steps of it are underdetermined.
+
+**1. The opening sentence and the procedure can disagree.** §28.6 opens with
+
+> If a candidate is strong as per panchavargeeya bala and has a benefic aspect
+> on lagna, it becomes the lord of the year.
+
+and then gives an operational paragraph that shortlists on the benefic aspect
+alone and ranks the shortlist by pancha vargeeya bala. Those pick differently
+when a candidate of merely *ordinary* strength has a benefic aspect and the
+highest bala while another is *strong* with a benefic aspect and a lower one.
+The opening sentence takes the second; the procedure takes the first.
+
+**2. The last two fallbacks test different things.** The third asks whether
+"none of the planets has **an** aspect on lagna" and the fourth whether "none
+of the candidates has a **strong** aspect on lagna". §28.2 grades aspects
+strong, weak and neutral, so a chart whose candidates aspect lagna only weakly
+answers the third no and the fourth yes, and the section gives no order
+between them.
+
+`varsheswara` follows the operational paragraph, reports which step it stopped
+at, and returns no lord where the section settles none — including when two
+candidates share both the highest bala and the same number of categories,
+which §28.6 also leaves open.
+
+**Closes when:** a worked example runs the cascade, or you settle both.
 
 
 ---

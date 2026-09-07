@@ -1482,3 +1482,240 @@ def test_the_nodes_cannot_be_scored():
         with pytest.raises(validate.InputError):
             dwadasavargeeya_bala(node, 100.0)
     assert "own nothing" in THE_NODES_CANNOT_BE_SCORED
+
+
+# --------------------------------------------------------------------------
+# §28.6 — the lord of the year
+# --------------------------------------------------------------------------
+
+
+def test_the_five_candidates_are_transcribed_in_the_sections_order():
+    from hora.tajaka.varsheswara import (
+        VARSHESWARA_CANDIDATES,
+        VARSHESWARA_RULE,
+    )
+
+    assert "most important planet during the year" in VARSHESWARA_RULE
+    assert "His dasa brings important results" in VARSHESWARA_RULE
+    assert len(VARSHESWARA_CANDIDATES) == 5
+    assert [row["number"] for row in VARSHESWARA_CANDIDATES] == list("12345")
+    assert "day or the night" in VARSHESWARA_CANDIDATES[0]["candidate"]
+    assert VARSHESWARA_CANDIDATES[1]["candidate"] == "Lord of natal lagna"
+    assert VARSHESWARA_CANDIDATES[2]["candidate"] == "Lord of Muntha"
+    assert "Table 73" in VARSHESWARA_CANDIDATES[4]["candidate"]
+
+
+def test_table_73_is_transcribed_and_has_a_lord_in_both_columns():
+    from hora.tajaka.varsheswara import (
+        TABLE_73_TITLE,
+        TABLE_73_TRIRAASI_LORDS,
+        triraasi_lord,
+    )
+
+    assert TABLE_73_TITLE == "Triraasi Lords"
+    assert sorted(TABLE_73_TRIRAASI_LORDS) == list(range(12))
+    for rasi, (day, night) in TABLE_73_TRIRAASI_LORDS.items():
+        assert 0 <= day <= 6 and 0 <= night <= 6, rasi
+        assert triraasi_lord(rasi, daytime=True)["lord"] == day
+        assert triraasi_lord(rasi, daytime=False)["lord"] == night
+    # The section's own first row: Aries is the Sun by day and Jupiter by night.
+    assert TABLE_73_TRIRAASI_LORDS[0] == (0, 4)
+
+
+def test_the_last_four_rasis_have_one_triraasi_lord():
+    from hora.core.const import RASI_ABBR
+    from hora.tajaka.varsheswara import (
+        TABLE_73_TRIRAASI_LORDS,
+        THE_LAST_FOUR_RASIS_HAVE_ONE_TRIRAASI_LORD,
+        triraasi_lord,
+    )
+
+    same = [rasi for rasi, (day, night) in TABLE_73_TRIRAASI_LORDS.items()
+            if day == night]
+    assert same == [8, 9, 10, 11]
+    assert [RASI_ABBR[r] for r in same] == ["Sg", "Cp", "Aq", "Pi"]
+    for rasi in same:
+        assert triraasi_lord(rasi, daytime=True)["same_both_ways"] is True
+    for rasi in range(8):
+        assert triraasi_lord(rasi, daytime=True)["same_both_ways"] is False
+    assert "The other eight rasis have different ones" in (
+        THE_LAST_FOUR_RASIS_HAVE_ONE_TRIRAASI_LORD)
+
+
+def test_the_sun_and_mercury_get_half_a_share_of_table_73():
+    from collections import Counter
+
+    from hora.tajaka.varsheswara import (
+        TABLE_73_TRIRAASI_LORDS,
+        THE_SUN_AND_MERCURY_GET_HALF_A_SHARE,
+    )
+
+    cells: Counter = Counter()
+    for day, night in TABLE_73_TRIRAASI_LORDS.values():
+        cells[day] += 1
+        cells[night] += 1
+    assert sum(cells.values()) == 24
+    assert set(cells) == set(range(7))            # every graha appears
+    assert cells[0] == cells[3] == 2              # Sun and Mercury
+    for graha in (1, 2, 4, 5, 6):
+        assert cells[graha] == 4
+    assert "four cells each and the Sun and Mercury two each" in (
+        THE_SUN_AND_MERCURY_GET_HALF_A_SHARE)
+
+
+def test_no_aspect_on_lagna_means_the_sixth_or_eighth_house():
+    from hora.tajaka.varsheswara import (
+        NO_ASPECT_ON_LAGNA_MEANS_THE_SIXTH_OR_EIGHTH,
+        aspect_on_lagna,
+    )
+
+    blank = []
+    for candidate in range(12):
+        got = aspect_on_lagna(candidate, 0)
+        if got["aspect"] is None:
+            blank.append(got["house_to_lagna"])
+    assert sorted(blank) == [6, 8]
+    # And a trine on lagna is a strong benefic, as §28.2 has it.
+    trine = aspect_on_lagna(0, 4)                 # lagna is the 5th from it
+    assert trine["aspect"] == "Trinal aspect"
+    assert (trine["nature"], trine["strength"]) == ("benefic", "strong")
+    assert "unless lagna is the 6th or 8th from it" in (
+        NO_ASPECT_ON_LAGNA_MEANS_THE_SIXTH_OR_EIGHTH)
+
+
+def test_the_five_candidates_are_found_for_chart_66():
+    """Example 118's native in his 34th year, with muntha from §28.1 and the
+    day-or-night from the ephemeris.
+    """
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import RASI_ABBR
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_local
+    from hora.tajaka.harsha import year_began_in_daytime
+    from hora.tajaka.muntha import muntha_rasi
+    from hora.tajaka.varsheswara import candidates
+
+    place = Place(name="birthplace", latitude=E118_LAT, longitude=E118_LON)
+    instant = from_local(*CHART_66, utc_offset_hours=5.5)
+    annual = compute_chart(instant, place, Settings())
+    natal = compute_chart(
+        from_local(1967, 3, 8, 17, 40, 0.0, utc_offset_hours=5.5), place,
+        Settings())
+    daytime = year_began_in_daytime(instant.jd_ut, E118_LAT,
+                                    E118_LON)["daytime"]
+    assert daytime is False
+    assert RASI_ABBR[natal.lagna_rasi] == "Le"
+    assert RASI_ABBR[annual.lagna_rasi] == "Cp"
+
+    muntha = muntha_rasi(natal.lagna_rasi, 34)
+    rasis = {graha: int(annual.positions[graha].longitude // 30)
+             for graha in range(7)}
+    found = candidates(sun_rasi=rasis[0], moon_rasi=rasis[1],
+                       natal_lagna_rasi=natal.lagna_rasi,
+                       muntha_rasi=muntha["rasi"],
+                       annual_lagna_rasi=annual.lagna_rasi, daytime=daytime)
+    assert [row["graha_name"] for row in found] == [
+        "Jupiter", "Sun", "Venus", "Saturn", "Mars"]
+    # Night, so candidate (1) is the Moon's dispositor and not the Sun's.
+    assert "held by the Moon" in found[0]["because"]
+
+
+def test_the_cascade_shortlists_by_aspect_and_ranks_by_bala():
+    from hora.tajaka.varsheswara import varsheswara
+
+    # Lagna in Aries; a benefic aspect on it comes from the 5th, 9th, 3rd
+    # or 11th house back, so a candidate in Sagittarius trines it.
+    got = varsheswara(
+        sun_rasi=0, moon_rasi=8, natal_lagna_rasi=8, muntha_rasi=8,
+        annual_lagna_rasi=0, daytime=False,
+        rasis={0: 8, 1: 8, 2: 8, 3: 8, 4: 8, 5: 8, 6: 8},
+        pancha_vargeeya={g: 5.0 for g in range(7)} | {4: 18.0})
+    assert got["step"] == "benefic aspect on lagna"
+    assert got["lord_name"] == "Jupiter"
+    assert got["lord"]["grade"] == "very strong"
+    assert got["undecided"] is None
+
+
+def test_a_tie_on_bala_is_broken_by_the_number_of_categories():
+    from hora.tajaka.varsheswara import varsheswara
+
+    # Mars is candidate (2), (3) and (4); Jupiter only (5). Equal balas.
+    got = varsheswara(
+        sun_rasi=0, moon_rasi=0, natal_lagna_rasi=0, muntha_rasi=7,
+        annual_lagna_rasi=0, daytime=False,
+        rasis={g: 8 for g in range(7)},
+        pancha_vargeeya={g: 12.0 for g in range(7)})
+    assert got["step"] == "benefic aspect on lagna"
+    assert got["lord_name"] == "Mars"
+    assert len(got["lord"]["categories"]) >= 3
+
+
+def test_an_unranked_candidate_stops_the_cascade_rather_than_being_dropped():
+    """A pancha vargeeya bala left undecided by OI-153 cannot be ranked."""
+    from hora.tajaka.varsheswara import varsheswara
+
+    got = varsheswara(
+        sun_rasi=0, moon_rasi=8, natal_lagna_rasi=8, muntha_rasi=8,
+        annual_lagna_rasi=0, daytime=False,
+        rasis={g: 8 for g in range(7)},
+        pancha_vargeeya={g: 5.0 for g in range(7)} | {4: None})
+    assert 4 in got["unranked"]
+    assert got["lord"] is None
+    assert "cannot be made" in got["undecided"]
+
+
+def test_the_last_two_fallbacks_test_different_things():
+    """OI-156. "an aspect on lagna" against "a strong aspect on lagna"."""
+    from hora.tajaka.varsheswara import (
+        SELECTION_FALLBACKS,
+        THE_LAST_TWO_STEPS_TEST_DIFFERENT_THINGS,
+        aspect_on_lagna,
+    )
+
+    assert "none of the planets has an aspect on lagna" in SELECTION_FALLBACKS
+    assert "none of the candidates has a strong aspect on lagna" in (
+        SELECTION_FALLBACKS)
+    # A weak aspect on lagna exists, so the two conditions really do differ.
+    weak = aspect_on_lagna(0, 2)                  # lagna is the 3rd from it
+    assert weak["aspect"] == "Sextile aspect"
+    assert weak["strength"] == "weak"
+    assert weak["nature"] == "benefic"
+    assert "the section gives no order between them" in (
+        THE_LAST_TWO_STEPS_TEST_DIFFERENT_THINGS)
+
+
+def test_the_cascade_uses_the_chapters_own_earlier_machinery():
+    from hora.tajaka.aspects import TAJAKA_ASPECTS
+    from hora.tajaka.panchavargeeya import PANCHA_VARGEEYA_GRADES
+    from hora.tajaka.varsheswara import (
+        SELECTION_PROCEDURE,
+        SELECTION_RULE,
+        THE_CASCADE_USES_28_2_AND_28_4_6S_OWN_VOCABULARY,
+    )
+
+    assert "benefic aspect on lagna" in SELECTION_PROCEDURE
+    assert "panchavargeeya bala" in SELECTION_PROCEDURE
+    # "strong" and "very strong" are §28.4.6's grades, not new words.
+    grades = {row[2] for row in PANCHA_VARGEEYA_GRADES}
+    assert "strong" in grades and "very strong" in grades
+    assert "strong as per panchavargeeya bala" in SELECTION_RULE
+    # And "benefic" is §28.2's classification.
+    assert "benefic" in {entry["nature"] for entry in TAJAKA_ASPECTS}
+    assert "section 28.2's classification" in (
+        THE_CASCADE_USES_28_2_AND_28_4_6S_OWN_VOCABULARY)
+
+
+def test_the_varsheswara_helpers_check_their_inputs():
+    from hora.core import validate
+    from hora.tajaka.varsheswara import (
+        VarsheswaraError,
+        aspect_on_lagna,
+        triraasi_lord,
+    )
+
+    assert issubclass(VarsheswaraError, validate.InputError)
+    for bad in (-1, 12):
+        with pytest.raises(validate.InputError):
+            triraasi_lord(bad, daytime=True)
+        with pytest.raises(validate.InputError):
+            aspect_on_lagna(bad, 0)
