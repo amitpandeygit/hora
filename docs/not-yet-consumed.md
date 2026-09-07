@@ -1561,6 +1561,23 @@ and grades the total. What follows is prose and findings.
 | `THE_GENDER_SPLIT_IS_NOT_CHAPTER_THREES` | Ours: section 28.3 calls Mercury and Saturn feminine where chapter 3's table calls them neuter. D-79 |
 
 
+### Chapter 28 — Example 119 (7)
+
+`tajaka/harsha.py`. Every claim **is** checked against Chart 66: the seven
+houses, that only the Moon holds a prescribed house, that nobody is exalted or
+in an own sign, that the year began at night, and all seven totals. What
+follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_119` · `EXAMPLE_119_STEPS` · `EXAMPLE_119_TOTAL` | The example verbatim, with its two typographical slips kept as printed |
+| `EXAMPLE_119_UNITS` | Its own answer as a fixture, checked graha by graha |
+| `EXAMPLE_119_HAS_TWO_SLIPS_IN_STEP_THREE` | Ours: an intruded "in the" and "prescibed" for "prescribed", neither changing a number |
+| `THE_EXAMPLE_QUOTES_THE_APPROXIMATE_TIME` | Ours: it says 4:42 am where 27.1 solved 4:41:21 and Chart 66 is drawn for 4:41; 4:42 is 27.2's approximate answer |
+| `THE_MOON_MISSES_TWENTY_BY_ONE_SOURCE` | Ours: her 15 is a miss on source (2), not the structural ceiling three other planets have |
+| `SOURCE_FOUR_IS_BLOCKED_BY_OI_149` | Ours: the one worked example of harsha bala cannot be scored through `compute_panchanga`, because its year begins before sunrise |
+
+
 ---
 
 ## How to use this register

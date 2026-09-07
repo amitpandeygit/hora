@@ -2156,6 +2156,13 @@ Two things go wrong for a birth between midnight and sunrise.
 The fix is one line of intent: `day_structure` should take the last sunrise
 **at or before** the instant, not the first sunrise after local midnight.
 
+**Third occurrence, and the first that blocks a worked example.** Chart 66 is
+cast for 4:41 am, so `/v1/panchanga` rejects it. §28.3's fourth source of
+harsha bala turns on whether the year began by day or night, which makes
+Example 119 unscoreable through the ordinary route; `tajaka.harsha.
+year_began_in_daytime` reads sunrise and sunset from the ephemeris instead and
+says why. That is a workaround in one module, not a fix.
+
 **Not changed.** `day_structure` feeds `/v1/panchanga` and everything under it
 — tithi, nakshatra, yoga, karana, hora and the vaara itself — so moving it
 moves live output for every pre-sunrise instant. Evidence is here and the

@@ -601,3 +601,173 @@ def test_harsha_bala_checks_its_inputs():
     for bad in (0, 13):
         with pytest.raises(validate.InputError):
             harsha_bala(0, bad, dignified=True, daytime=True)
+
+
+# --------------------------------------------------------------------------
+# Example 119 — harsha bala for Chart 66
+# --------------------------------------------------------------------------
+
+E118_LAT, E118_LON = 26 + 18 / 60, 73 + 4 / 60
+CHART_66 = (2000, 3, 8, 4, 41, 21.0)
+
+
+def _chart_66():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_local
+
+    return compute_chart(
+        from_local(*CHART_66, utc_offset_hours=5.5),
+        Place(name="birthplace", latitude=E118_LAT, longitude=E118_LON),
+        Settings())
+
+
+def test_the_houses_of_chart_66_are_what_example_119_uses():
+    """"Venus in 1st, Mercury in 2nd, Moon in 3rd ... Jupiter in 4th"."""
+    chart = _chart_66()
+    lagna = chart.lagna_rasi
+    houses = {graha: (int(chart.positions[graha].longitude // 30) - lagna) % 12
+              + 1 for graha in range(7)}
+    assert houses == {0: 2, 1: 3, 2: 3, 3: 2, 4: 4, 5: 1, 6: 4}
+
+
+def test_source_one_finds_only_the_moon():
+    """"Only Moon is in the prescribed house (the 3rd house in Moon's case)."
+    """
+    from hora.tajaka.harsha import EXAMPLE_119_STEPS, harsha_bala
+
+    chart = _chart_66()
+    lagna = chart.lagna_rasi
+    scored = {}
+    for graha in range(7):
+        house = (int(chart.positions[graha].longitude // 30) - lagna) % 12 + 1
+        scored[graha] = harsha_bala(graha, house, dignified=False,
+                                    daytime=False)["sources"][0]["units"]
+    assert [g for g, units in scored.items() if units == 5] == [1]
+    assert "Only Moon is in the prescribed house" in EXAMPLE_119_STEPS[0]
+
+
+def test_source_two_finds_nobody_exalted_or_in_own_sign():
+    """"No planet is in exaltation or own sign."  Checked against the
+    engine's own dignity rather than taken from the page.
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.tajaka.harsha import EXAMPLE_119_STEPS
+
+    chart = _chart_66()
+    for graha in range(7):
+        dignity = sign_dignity(graha, chart.positions[graha].longitude)
+        assert dignity not in ("exalted", "own"), (graha, dignity)
+    assert EXAMPLE_119_STEPS[1] == "No planet is in exaltation or own sign."
+
+
+def test_the_year_began_in_the_night_and_the_panchanga_cannot_say_so():
+    """Source (4), and the defect that blocks the ordinary route to it.
+
+    Example 118's year begins at 4:41 am. `/v1/panchanga` rejects that
+    instant — OI-149 — so day or night is read from sunrise and sunset.
+    """
+    from fastapi.testclient import TestClient
+
+    from hora.api.main import app
+    from hora.core.timeutil import from_local
+    from hora.tajaka.harsha import (
+        SOURCE_FOUR_IS_BLOCKED_BY_OI_149,
+        year_began_in_daytime,
+    )
+
+    instant = from_local(*CHART_66, utc_offset_hours=5.5)
+    got = year_began_in_daytime(instant.jd_ut, E118_LAT, E118_LON)
+    assert got["daytime"] is False
+    # The instant sits after a sunset and before the next sunrise.
+    assert got["last_sunset_jd"] < instant.jd_ut
+    assert got["last_sunrise_jd"] < got["last_sunset_jd"]
+
+    rejected = TestClient(app).post("/v1/panchanga", json={
+        "year": 2000, "month": 3, "day": 8, "hour": 4, "minute": 41,
+        "second": 21, "tz_name": "Asia/Kolkata",
+        "place": {"latitude": E118_LAT, "longitude": E118_LON, "name": "b"}})
+    assert rejected.status_code != 200
+    assert "cannot be answered" not in SOURCE_FOUR_IS_BLOCKED_BY_OI_149
+    assert "rejects any instant before sunrise" in (
+        SOURCE_FOUR_IS_BLOCKED_BY_OI_149)
+
+
+def test_example_119s_totals_reproduce_for_all_seven_planets():
+    """"15 for Moon, 10 for Mercury and Venus, 5 for Jupiter and Saturn and
+    zero for Sun and Mars."
+    """
+    from hora.charts.dignity import sign_dignity
+    from hora.core.timeutil import from_local
+    from hora.tajaka.harsha import (
+        EXAMPLE_119_TOTAL,
+        EXAMPLE_119_UNITS,
+        harsha_bala,
+        year_began_in_daytime,
+    )
+
+    chart = _chart_66()
+    lagna = chart.lagna_rasi
+    daytime = year_began_in_daytime(
+        from_local(*CHART_66, utc_offset_hours=5.5).jd_ut,
+        E118_LAT, E118_LON)["daytime"]
+
+    ours = {}
+    for graha in range(7):
+        longitude = chart.positions[graha].longitude
+        house = (int(longitude // 30) - lagna) % 12 + 1
+        ours[graha] = harsha_bala(
+            graha, house,
+            dignified=sign_dignity(graha, longitude) in ("exalted", "own"),
+            daytime=daytime)["units"]
+    assert ours == EXAMPLE_119_UNITS
+    assert EXAMPLE_119_UNITS[1] == 15
+    assert {g for g, units in EXAMPLE_119_UNITS.items() if units == 10} == {
+        3, 5}
+    assert {g for g, units in EXAMPLE_119_UNITS.items() if units == 0} == {
+        0, 2}
+    assert "15 for Moon" in EXAMPLE_119_TOTAL
+
+
+def test_the_moon_misses_twenty_by_one_source_and_not_by_a_ceiling():
+    from hora.tajaka.harsha import (
+        EXAMPLE_119_UNITS,
+        THE_MOON_MISSES_TWENTY_BY_ONE_SOURCE,
+        harsha_bala,
+    )
+
+    # She takes 1, 3 and 4 and fails only 2.
+    scored = harsha_bala(1, 3, dignified=False, daytime=False)
+    assert [row["units"] for row in scored["sources"]] == [5, 0, 5, 5]
+    assert scored["units"] == EXAMPLE_119_UNITS[1] == 15
+    # And the Moon is one of the four that can reach twenty.
+    assert harsha_bala(1, 3, dignified=True, daytime=False)["units"] == 20
+    assert "a miss rather than a ceiling" in (
+        THE_MOON_MISSES_TWENTY_BY_ONE_SOURCE)
+
+
+def test_the_example_quotes_the_approximate_varsha_pravesh_time():
+    from hora.tajaka.harsha import (
+        EXAMPLE_119_STEPS,
+        THE_EXAMPLE_QUOTES_THE_APPROXIMATE_TIME,
+    )
+
+    assert "4:42 am" in EXAMPLE_119_STEPS[3]
+    # 4:42:24 is §27.2's approximate answer; 4:41:21 is §27.1's exact one.
+    from hora.tajaka.annual import EXAMPLE_118_NATIVITY
+    from hora.tajaka.approximate import EXERCISE_47_ANSWER
+
+    assert "4:41:21" in str(EXAMPLE_118_NATIVITY["varsha_pravesh"])
+    assert EXERCISE_47_ANSWER["approximate"]           # the method exists
+    assert "source (4) is unaffected" in THE_EXAMPLE_QUOTES_THE_APPROXIMATE_TIME
+
+
+def test_example_119s_two_slips_are_recorded_not_corrected():
+    from hora.tajaka.harsha import (
+        EXAMPLE_119_HAS_TWO_SLIPS_IN_STEP_THREE,
+        EXAMPLE_119_STEPS,
+    )
+
+    assert "is in the masculine planet" in EXAMPLE_119_STEPS[2]
+    assert "prescibed" in EXAMPLE_119_STEPS[2]
+    assert "Neither changes a number" in EXAMPLE_119_HAS_TWO_SLIPS_IN_STEP_THREE

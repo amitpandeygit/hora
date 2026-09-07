@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from hora.core import validate
 from hora.core.const import GRAHA_NAMES
+from hora.core.settings import Settings
 
 HARSHA_BALA_RULE = (
     "Harsha bala of seven planets is found by adding the strengths given by "
@@ -203,3 +204,126 @@ def harsha_bala(graha: int, house: int, *, dignified: bool | None,
         "grade": None if undecided else HARSHA_GRADES[total],
         "grade_rule": HARSHA_GRADE_RULE,
     }
+
+
+#: **Finding.** Source (4) needs day or night for the varsha pravesh, and
+#: Example 118's is **4:41 am** — before sunrise. `compute_panchanga` raises
+#: for any such instant (OI-149), so the one worked example of harsha bala in
+#: the book cannot be scored through the normal path. `year_began_in_daytime`
+#: therefore reads sunrise and sunset from the ephemeris directly. It is a
+#: workaround for a defect and says so; nothing in `panchanga` is changed.
+SOURCE_FOUR_IS_BLOCKED_BY_OI_149 = (
+    "Harsha bala's fourth source turns on whether the year began by day or by "
+    "night, and Example 118's year begins at 4:41 am. Our compute_panchanga "
+    "rejects any instant before sunrise, so the day-or-night question is "
+    "answered from the ephemeris's own sunrise and sunset here."
+)
+
+
+def year_began_in_daytime(jd_ut: float, latitude: float, longitude: float,
+                          *, altitude: float = 0.0,
+                          settings: Settings | None = None) -> dict:
+    """Whether `jd_ut` falls between a sunrise and the following sunset.
+
+    Written against the ephemeris rather than `panchanga.day_structure`,
+    which cannot answer for a pre-dawn instant — see
+    `SOURCE_FOUR_IS_BLOCKED_BY_OI_149` and OI-149.
+
+    :returns: ``daytime``, and the sunrise and sunset that bracket the
+        instant, so the caller can check the answer rather than trust it.
+    """
+    from hora.core.ephemeris import get_ephemeris
+
+    ephemeris = get_ephemeris(settings if settings is not None else Settings())
+    # Step back far enough that both a sunrise and a sunset precede the
+    # instant even inside a polar-free latitude's longest day.
+    start = float(jd_ut) - 2.0
+    last_rise = last_set = None
+    probe = start
+    while probe < float(jd_ut):
+        rise = ephemeris.sunrise(probe, latitude, longitude, altitude)
+        fall = ephemeris.sunset(probe, latitude, longitude, altitude)
+        if rise is not None and rise < float(jd_ut):
+            last_rise = rise if last_rise is None else max(last_rise, rise)
+        if fall is not None and fall < float(jd_ut):
+            last_set = fall if last_set is None else max(last_set, fall)
+        probe += 1.0
+    if last_rise is None or last_set is None:
+        raise HarshaError(
+            "no sunrise and sunset were found in the two days before this "
+            "instant; section 28.3's fourth source cannot be answered")
+    return {
+        "jd_ut": float(jd_ut),
+        "daytime": last_rise > last_set,
+        "last_sunrise_jd": last_rise,
+        "last_sunset_jd": last_set,
+        "why": SOURCE_FOUR_IS_BLOCKED_BY_OI_149,
+    }
+
+
+# --------------------------------------------------------------------------
+# Example 119 — harsha bala for Chart 66
+# --------------------------------------------------------------------------
+
+EXAMPLE_119 = (
+    "Let us find Harsha bala of planets for the annual chart of Example 118.")
+
+#: The example's four steps, verbatim. Two typographical slips in step (3)
+#: are kept as printed — see `EXAMPLE_119_HAS_TWO_SLIPS_IN_STEP_THREE`.
+EXAMPLE_119_STEPS: tuple[str, ...] = (
+    ("Only Moon is in the prescribed house (the 3rd house in Moon's case). He "
+     "gets 5 units."),
+    "No planet is in exaltation or own sign.",
+    ("Venus in 1st, Mercury in 2nd, Moon in 3rd are the feminine planets in "
+     "prescribed houses. Jupiter in 4th is in the masculine planet in the "
+     "prescibed house."),
+    ("Because the new year started at 4:42 am, i.e. during the night, we give "
+     "5 units each to the feminine planets – Moon, Mercury, Venus and "
+     "Saturn."),
+)
+
+EXAMPLE_119_TOTAL = (
+    "Adding all the sources, we get 15 for Moon, 10 for Mercury and Venus, 5 "
+    "for Jupiter and Saturn and zero for Sun and Mars.")
+
+#: The example's own answer, by graha id.
+EXAMPLE_119_UNITS: dict[int, int] = {
+    0: 0,    # Sun
+    1: 15,   # Moon
+    2: 0,    # Mars
+    3: 10,   # Mercury
+    4: 5,    # Jupiter
+    5: 10,   # Venus
+    6: 5,    # Saturn
+}
+
+#: **Book defect.** Step (3) reads "Jupiter in 4th is in the masculine planet
+#: in the prescibed house" — an intruded "in the" and "prescibed" for
+#: "prescribed". The sense is plain and the arithmetic is unaffected;
+#: recorded rather than silently corrected.
+EXAMPLE_119_HAS_TWO_SLIPS_IN_STEP_THREE = (
+    "Step (3) prints \"is in the masculine planet\" for \"is the masculine "
+    "planet\", and \"prescibed\" for \"prescribed\". Neither changes a "
+    "number."
+)
+
+#: **Finding.** The example says the year "started at 4:42 am" where Example
+#: 118 solved it to **4:41:21** and Chart 66 is drawn for 4:41. The 4:42 is
+#: §27.2's **approximate** figure, which was 4:42:24. Nothing turns on it —
+#: both are hours before sunrise and both are night — but the two methods'
+#: answers are being used interchangeably a page apart.
+THE_EXAMPLE_QUOTES_THE_APPROXIMATE_TIME = (
+    "Example 118 gives 4:41:21 am and Chart 66 is drawn for 4:41 am. Example "
+    "119 says 4:42 am, which is section 27.2's approximate answer. Both are "
+    "well before sunrise, so source (4) is unaffected."
+)
+
+#: **Finding.** The Moon scores 15 here and 15 is not her ceiling — she is
+#: one of the four planets that can reach 20. She misses only source (2), so
+#: this chart's strongest planet is one dignity short of the top grade, and
+#: the three planets that can never reach 20 are not the reason.
+THE_MOON_MISSES_TWENTY_BY_ONE_SOURCE = (
+    "The Moon takes sources (1), (3) and (4) and fails only (2), no planet "
+    "in the chart being exalted or in its own sign. Her 15 is a miss rather "
+    "than a ceiling."
+)
