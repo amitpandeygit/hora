@@ -175,25 +175,24 @@ def test_three_earlier_passages_were_waiting_on_this_part():
     assert any("OI-116" in row["where"] for row in TAJAKA_WAS_PROMISED_BY)
 
 
-def test_nothing_is_computed_from_this_page():
-    """The casting is promised, not given. No module may exist for it yet, and
-    footnote 74's bar is not lifted by the part's arrival.
+def test_the_opening_defers_the_casting_and_27_1_supplies_it():
+    """The opening page gives no moment, place or ayanamsa rule. Section 27.1
+    gives the first two. Neither says how to READ an annual chart, so footnote
+    74's bar on death readings still stands.
     """
-    import importlib
-
-    from hora.core.const import THE_CASTING_IS_PROMISED_AND_NOT_YET_GIVEN
+    from hora.core.const import (
+        PART_4_SCOPE,
+        THE_OPENING_PROMISES_THE_CASTING_AND_27_1_GIVES_IT,
+    )
+    from hora.tajaka.annual import BIRTHPLACE_RULE, VARSHA_PRAVESH_RULE
     from hora.transits.tara import (
         THE_TECHNIQUE_NEEDS_DASAS_AND_TAJAKA_TO_BE_USED_AT_ALL,
     )
 
-    for module in ("hora.tajaka", "hora.charts.tajaka", "hora.dasha.tajaka"):
-        try:
-            importlib.import_module(module)
-        except ModuleNotFoundError:
-            continue
-        raise AssertionError(f"{module} exists before the casting arrived")
-
-    assert "no annual chart is computed from this page" in (
-        THE_CASTING_IS_PROMISED_AND_NOT_YET_GIVEN)
+    assert "explains the casting" in PART_4_SCOPE
+    assert "exact moment" in VARSHA_PRAVESH_RULE
+    assert "birthplace" in BIRTHPLACE_RULE
+    assert "nothing yet lifts footnote 74's bar" in (
+        THE_OPENING_PROMISES_THE_CASTING_AND_27_1_GIVES_IT)
     assert "never sufficient on its own" in (
         THE_TECHNIQUE_NEEDS_DASAS_AND_TAJAKA_TO_BE_USED_AT_ALL)

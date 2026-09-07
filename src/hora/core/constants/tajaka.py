@@ -185,13 +185,13 @@ TAJAKA_WAS_PROMISED_BY: tuple[dict[str, str], ...] = (
      "wants": "Sudarsana Chakra dasa, deferred to Tajaka Analysis"},
 )
 
-#: **Finding.** Nothing built so far may consume this page. It defines the
-#: annual chart and promises the casting method — "This part explains the
-#: casting" — without giving it, so a solar return cannot be computed from
-#: what is here. In particular footnote 74's bar on death readings is **not**
-#: lifted by the arrival of Part 4's first page.
-THE_CASTING_IS_PROMISED_AND_NOT_YET_GIVEN = (
-    "The opening states what a solar return is and says the part will explain "
-    "the casting. No formula, ayanamsa convention or place rule is given "
-    "here, so no annual chart is computed from this page."
+#: **Finding.** The opening page itself computes nothing: it says the part
+#: will explain the casting and gives no moment rule, no place rule and no
+#: ayanamsa convention. §27.1 supplies all three. What the opening promises
+#: and §27.1 still does not give is a way to **read** an annual chart, so
+#: footnote 74's bar on death readings is not lifted by either page.
+THE_OPENING_PROMISES_THE_CASTING_AND_27_1_GIVES_IT = (
+    "The opening states what a solar return is and defers the casting. "
+    "Section 27.1 gives the moment and the place. Neither page says how to "
+    "read the resulting chart, so nothing yet lifts footnote 74's bar."
 )

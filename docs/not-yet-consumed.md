@@ -1394,7 +1394,22 @@ coverage test fails the moment one appears ahead of its section.
 | `PART_4_NAMES_NONE_OF_ITS_DASAS` | Ours: the third opening running to promise techniques and name none |
 | `THE_YEAR_IS_CALLED_365_DAYS_AND_A_SOLAR_RETURN_IS_LONGER` | Ours: the page says 365 days and the return interval is about 365.2564; which the special dasas divide is not stated. Recorded, not decided |
 | `TAJAKA_WAS_PROMISED_BY` | The four earlier passages that deferred to this part, as data |
-| `THE_CASTING_IS_PROMISED_AND_NOT_YET_GIVEN` | Ours: why nothing here is built, and why footnote 74's bar is not lifted |
+| `THE_OPENING_PROMISES_THE_CASTING_AND_27_1_GIVES_IT` | Ours: the opening defers the casting and section 27.1 gives it; neither says how to read the chart, so footnote 74's bar stands |
+
+
+### Chapter 27 — §27.1's casting rule (8)
+
+`tajaka/annual.py`. The rule **is** built: `varsha_pravesh` solves for the
+instant and the tests check the Sun is at his natal longitude to under an
+arcsecond at every return. What follows is the prose and the findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `SUN_MOVES_30_DEGREES_A_MONTH` · `VARSHA_PRAVESH_RULE` · `BIRTHPLACE_RULE` · `VARSHA_PRAVESH_NAME` | The section verbatim: the approximation, the rule the book italicises, the place rule, and the gloss |
+| `VARSHA_PRAVESH_MEANS` | The two words and their meanings, as data |
+| `THE_PLACE_IS_THE_BIRTHPLACE_AND_NOT_THE_RESIDENCE` | Ours: why `varsha_pravesh` takes no place at all — only the moment is recomputed |
+| `THE_RETURN_IS_SOLVED_FOR_NOT_STEPPED_TO` | Ours: neither the birthday nor a 365-day step gives the instant the section demands |
+| `FOOTNOTE_75_NOT_SUPPLIED` | Footnote 75 is marked on the page and its text is not printed there |
 
 
 ---

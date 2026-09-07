@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 101 waiting on evidence · 2 parked**
+**5 waiting on Amit · 102 waiting on evidence · 2 parked**
 
 ---
 
@@ -2187,6 +2187,27 @@ function is built, because it would have to invent both the weighting and the
 weight of an occupation against a vedha.
 
 **Closes when:** the book gives a rule for mixed strikes, or you settle one.
+
+
+### OI-151 — §27.1 says "the exact position" and does not say in which zodiac
+
+**Waiting on the book.** The varsha pravesh is the instant the Sun returns to
+"the position occupied by him at the time of one's birth". A position is a
+longitude, and a longitude is sidereal or tropical. The section does not say.
+
+It is not a small difference. Fixing the **sidereal** longitude makes the
+interval a sidereal year, 365.2564 days. Fixing the **tropical** one makes it a
+tropical year, 365.2422 days — about twenty minutes shorter. The two returns
+separate by roughly twenty minutes per year of age, which by fifty is some
+seventeen hours and a different ascendant, a different Moon and a different
+everything else in the annual chart.
+
+`varsha_pravesh` solves against the natal **sidereal** longitude, because this
+engine is sidereal in every other calculation and a tropical target here would
+be the only place it was not. That is a consistency argument, not the book's.
+
+**Closes when:** section 27's worked example arrives and its printed varsha
+pravesh picks one, or you settle it.
 
 
 ---
