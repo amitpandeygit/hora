@@ -2207,29 +2207,34 @@ function for one.
 **Closes when:** the Sudarsana Chakra Dasa chapter states the author's stand.
 
 
-### OI-153 — §28.4.1 and §28.4.3 do not price a neutral's rasi or hadda
+### OI-153 — §28.4's grades: a neutral has no price, and whose view is it?
 
-**Waiting on the book.** Both sections grade three places and stop:
+**Two questions, one section.** Kshetra, hadda, drekkana and navamsa bala each
+grade own, a friend's and an enemy's place and stop.
 
-> A planet in own rasi gets 30 units ... a friend's rasi gets 15 ... an
-> enemy's rasi gets 7.5.
+**A neutral has no value.** Chapter 3's natural relationship has three grades
+and the compound five, so a neutral's rasi is a case the book's own scheme
+produces routinely and §28.4 never prices. The four functions return
+**undecided** for it and raise for any grade the section never names;
+interpolating would invent a grade.
 
-Chapter 3's natural relationship has **three** grades — friend, neutral, enemy
-— and the compound has **five**, adding great friend and great enemy. So a
-planet in a neutral's rasi is a case the book's own relationship scheme
-produces routinely and pancha vargeeya bala never values.
+**NEEDS YOU — and Example 120 rules out our default.** It prints Mars's pancha
+vargeeya bala as **13.7**. Of the eighty-one combinations of the section's
+grades, exactly one possible for Chart 66 reaches it, and it scores Mars's
+navamsa rasi — Aquarius, Saturn's — as an **enemy's**. Chapter 3 is asymmetric
+there: Mars sees Saturn as *neutral*, Saturn sees Mars as an *enemy*. Reading
+from the planet's own side gives 13.42 and an undecided navamsa, so that
+reading is out. Two survive and one number cannot separate them:
 
-Nor is it clear which scheme is meant. §28.4 says "a friend's rasi" without
-saying natural, temporary or compound, and the three disagree for most charts.
+1. the **natural** relationship from the **rasi lord's** side, or
+2. the **compound** relationship from the planet's side — Mars and Saturn are
+   temporary enemies in that D-9, and compound(neutral, enemy) is enemy.
 
-The halving — 30, 15, 7.5 and 15, 7.5, 3.75 — invites an interpolation, and
-interpolating is exactly the wrong move: it would invent a fourth grade the
-section does not have and pick a relationship scheme it does not name.
-`kshetra_bala` and `hadda_bala` return **undecided** for a neutral and raise
-for any grade the section never names.
+Nothing is changed. `dwadasavargeeya.strength_in_rasi` still reads §28.5 from
+the planet's side, and whether §28.5 follows §28.4 here is itself unstated.
 
-**Closes when:** §28.4.6's final computation names the scheme and the missing
-grade, or you settle both.
+**Closes when:** a second worked bala separates the two readings, or you settle
+the direction and the missing grade.
 
 
 ### OI-154 — Table 72's hadda widths do not match the usual Egyptian bounds

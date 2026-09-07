@@ -476,3 +476,30 @@ def pancha_vargeeya_bala(*, kshetra: float | None, uchcha: float | None,
                   else pancha_vargeeya_grade(known / PANCHA_VARGEEYA_DIVISOR)),
         "rule": FINAL_COMPUTATION_RULE,
     }
+
+
+#: **Finding, and it contradicts our own default.** Example 120 prints one
+#: pancha vargeeya bala — Mars's, at **13.7** — and it is enough to rule out
+#: the obvious reading of "a rasi owned by an enemy". For Chart 66's Mars at
+#: 24 Pi 58 the five sources are kshetra (Pisces, Jupiter's) 15, uchcha
+#: 13.67, hadda (his own) 15, drekkana (Scorpio, his own) 10, and a navamsa
+#: in **Aquarius, Saturn's**. Of the eighty-one combinations of the section's
+#: own grades, exactly one that is possible for this chart reaches 13.7, and
+#: it needs the navamsa scored as an **enemy's** rasi at 1.25.
+#:
+#: Chapter 3's natural relationship is asymmetric there: Mars sees Saturn as
+#: **neutral** and Saturn sees Mars as an **enemy**. So reading it from the
+#: planet's own side — which is what `dwadasavargeeya` does — gives 13.42 and
+#: an undecided navamsa, not 13.7.
+#:
+#: Two readings survive and this one number cannot separate them: the natural
+#: relationship taken from the **rasi lord's** side, or the **compound**
+#: relationship from the planet's side, since Mars and Saturn are temporary
+#: enemies in that D-9 and compound(neutral, enemy) is enemy. See OI-153.
+EXAMPLE_120_RULES_OUT_THE_PLANETS_OWN_VIEW = (
+    "Mars's pancha vargeeya bala of 13.7 in Example 120 needs his navamsa "
+    "rasi scored as an enemy's. Chapter 3 makes Saturn neutral to Mars and "
+    "Mars an enemy to Saturn, so the planet's own view of the rasi lord is "
+    "ruled out. The lord's view and the compound relationship both fit, and "
+    "one printed number cannot choose between them."
+)

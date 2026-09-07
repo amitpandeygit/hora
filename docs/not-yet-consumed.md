@@ -1642,6 +1642,22 @@ is prose and findings.
 | `THE_LAST_TWO_STEPS_TEST_DIFFERENT_THINGS` | Ours: "an aspect" against "a strong aspect", which a weak aspect answers oppositely. OI-156 |
 
 
+### Chapter 28 — Example 120 (8)
+
+`tajaka/varsheswara.py` and one finding in `tajaka/panchavargeeya.py`. Every
+claim **is** checked against Chart 66: the five candidacies, all five aspects
+on the Capricorn lagna, and the lord itself. What follows is prose and
+findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `EXAMPLE_120` · `EXAMPLE_120_CANDIDACIES` · `EXAMPLE_120_CONCLUSION` | The example verbatim, with its grammatical slip kept |
+| `EXAMPLE_120_CANDIDATES` · `EXAMPLE_120_ASPECTS` · `EXAMPLE_120_LORD` · `EXAMPLE_120_MARS_BALA` | Its own answers as fixtures — the five candidacies, the five aspects, the lord and Mars's printed bala |
+| `THE_EXAMPLE_STOPS_AT_THE_SHORTLIST` | Ours: one candidate has a benefic aspect, so nothing in the example turns on the ranking, the tie-break or any fallback — OI-156 stays untested |
+| `EXAMPLE_120_HAS_A_SLIP_IN_ITS_CONCLUSION` | An intruded "is" in the conclusion, recorded rather than corrected |
+| `EXAMPLE_120_RULES_OUT_THE_PLANETS_OWN_VIEW` | Ours: Mars's 13.7 needs his navamsa scored as an enemy's, which the planet's own view of the rasi lord does not give. OI-153 |
+
+
 ---
 
 ## How to use this register

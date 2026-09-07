@@ -303,3 +303,69 @@ def varsheswara(*, sun_rasi: int, moon_rasi: int, natal_lagna_rasi: int,
         "fallbacks": SELECTION_FALLBACKS,
         "cascade_caveat": THE_LAST_TWO_STEPS_TEST_DIFFERENT_THINGS,
     }
+
+
+# --------------------------------------------------------------------------
+# Example 120 — the lord of the year for Chart 66
+# --------------------------------------------------------------------------
+
+EXAMPLE_120 = (
+    "Let us consider the annual chart in Example 118. Let us find the "
+    "candidates for the lord of the year:")
+
+#: The example's five candidacies, verbatim and in order.
+EXAMPLE_120_CANDIDACIES: tuple[str, ...] = (
+    ("The new year started at 4:41 am, i.e. night time. So we should take "
+     "Moon and find the lord of the rasi occupied by him. Moon is in Pisces "
+     "owned by Jupiter. So Jupiter gets the first candidacy."),
+    "Natal lagna is in Leo. So Sun gets the second candidacy.",
+    "Muntha is in Taurus. So Venus gets the third candidacy.",
+    ("Lagna in the annual chart is in Capricorn. So Saturn gets the fourth "
+     "candidacy."),
+    ("Triraasi lord for lagna in Cp at night time is Mars, from Table 73. So "
+     "Mars gets the fifth candidacy."),
+)
+
+EXAMPLE_120_CONCLUSION = (
+    "The candidates are – Jupiter, Sun, Venus, Saturn and Mars. Of those, "
+    "Venus occupies lagna and Jupiter and Saturn have a square aspect on "
+    "lagna. All of them are malefic aspects. Sun has a semi-sextile aspect, "
+    "which is neutral. Mars has a sextile aspect on Capricorn lagna from "
+    "Pisces. He is also has the strongest panchavargeeya bala (13.7). So we "
+    "conclude easily that Mars is the lord of the year.")
+
+#: The example's own answers, as a fixture: candidate number to graha id.
+EXAMPLE_120_CANDIDATES: dict[str, int] = {
+    "1": 4, "2": 0, "3": 5, "4": 6, "5": 2}
+
+#: And its reading of each candidate's aspect on the Capricorn lagna.
+EXAMPLE_120_ASPECTS: dict[int, tuple[str, str]] = {
+    5: ("Conjunction", "malefic"),
+    4: ("Square aspect", "malefic"),
+    6: ("Square aspect", "malefic"),
+    0: ("Semi-sextile aspect", "neutral"),
+    2: ("Sextile aspect", "benefic"),
+}
+
+EXAMPLE_120_LORD = 2
+EXAMPLE_120_MARS_BALA = 13.7
+
+#: **Finding.** The example never exercises the cascade past its first step.
+#: Exactly one candidate has a benefic aspect on lagna, so the shortlist has
+#: one member and the ranking by pancha vargeeya bala decides nothing — the
+#: book cites Mars's 13.7 as corroboration, not as the deciding test. So
+#: neither of OI-156's ambiguities is touched by the only worked example
+#: §28.6 has.
+THE_EXAMPLE_STOPS_AT_THE_SHORTLIST = (
+    "Only Mars has a benefic aspect on the Capricorn lagna, so the shortlist "
+    "has one member and nothing in Example 120 turns on the ranking, the "
+    "tie-break or any of the fallbacks."
+)
+
+#: **Book defect.** The conclusion reads "He is also has the strongest
+#: panchavargeeya bala" — an intruded "is". Recorded rather than corrected,
+#: as the other slips are.
+EXAMPLE_120_HAS_A_SLIP_IN_ITS_CONCLUSION = (
+    "The conclusion prints \"He is also has the strongest panchavargeeya "
+    "bala\" for \"He also has\". Nothing turns on it."
+)

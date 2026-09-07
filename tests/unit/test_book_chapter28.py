@@ -1719,3 +1719,220 @@ def test_the_varsheswara_helpers_check_their_inputs():
             triraasi_lord(bad, daytime=True)
         with pytest.raises(validate.InputError):
             aspect_on_lagna(bad, 0)
+
+
+# --------------------------------------------------------------------------
+# Example 120 — the lord of the year for Chart 66
+# --------------------------------------------------------------------------
+
+
+def _annual_and_natal():
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.settings import Settings
+    from hora.core.timeutil import from_local
+
+    place = Place(name="birthplace", latitude=E118_LAT, longitude=E118_LON)
+    annual = compute_chart(from_local(*CHART_66, utc_offset_hours=5.5), place,
+                           Settings())
+    natal = compute_chart(
+        from_local(1967, 3, 8, 17, 40, 0.0, utc_offset_hours=5.5), place,
+        Settings())
+    return annual, natal
+
+
+def test_example_120s_five_candidacies_reproduce():
+    from hora.core.const import RASI_ABBR
+    from hora.tajaka.muntha import muntha_rasi
+    from hora.tajaka.varsheswara import EXAMPLE_120_CANDIDATES, candidates
+
+    annual, natal = _annual_and_natal()
+    rasis = {graha: int(annual.positions[graha].longitude // 30)
+             for graha in range(7)}
+    assert RASI_ABBR[rasis[1]] == "Pi"           # the Moon, for a night year
+    assert RASI_ABBR[natal.lagna_rasi] == "Le"
+    muntha = muntha_rasi(natal.lagna_rasi, 34)
+    assert muntha["rasi_name"] == "Taurus"
+    assert RASI_ABBR[annual.lagna_rasi] == "Cp"
+
+    found = candidates(sun_rasi=rasis[0], moon_rasi=rasis[1],
+                       natal_lagna_rasi=natal.lagna_rasi,
+                       muntha_rasi=muntha["rasi"],
+                       annual_lagna_rasi=annual.lagna_rasi, daytime=False)
+    assert {row["category"]: row["graha"] for row in found} == (
+        EXAMPLE_120_CANDIDATES)
+    assert [row["graha_name"] for row in found] == [
+        "Jupiter", "Sun", "Venus", "Saturn", "Mars"]
+
+
+def test_example_120s_five_aspects_on_lagna_reproduce():
+    """Venus conjoins, Jupiter and Saturn square, the Sun semi-sextiles and
+    Mars sextiles the Capricorn lagna.
+    """
+    from hora.tajaka.varsheswara import EXAMPLE_120_ASPECTS, aspect_on_lagna
+
+    annual, _natal = _annual_and_natal()
+    lagna = annual.lagna_rasi
+    for graha, (name, nature) in EXAMPLE_120_ASPECTS.items():
+        where = int(annual.positions[graha].longitude // 30)
+        got = aspect_on_lagna(where, lagna)
+        assert got["aspect"] == name, graha
+        assert got["nature"] == nature, graha
+    # "All of them are malefic aspects" — Venus, Jupiter and Saturn.
+    malefic = {g for g, (_n, nature) in EXAMPLE_120_ASPECTS.items()
+               if nature == "malefic"}
+    assert malefic == {4, 5, 6}
+    # And Mars alone is benefic.
+    benefic = {g for g, (_n, nature) in EXAMPLE_120_ASPECTS.items()
+               if nature == "benefic"}
+    assert benefic == {2}
+
+
+def test_example_120s_lord_of_the_year_reproduces():
+    from hora.tajaka.muntha import muntha_rasi
+    from hora.tajaka.varsheswara import (
+        EXAMPLE_120_LORD,
+        EXAMPLE_120_MARS_BALA,
+        varsheswara,
+    )
+
+    annual, natal = _annual_and_natal()
+    rasis = {graha: int(annual.positions[graha].longitude // 30)
+             for graha in range(7)}
+    muntha = muntha_rasi(natal.lagna_rasi, 34)
+    got = varsheswara(sun_rasi=rasis[0], moon_rasi=rasis[1],
+                      natal_lagna_rasi=natal.lagna_rasi,
+                      muntha_rasi=muntha["rasi"],
+                      annual_lagna_rasi=annual.lagna_rasi, daytime=False,
+                      rasis=rasis,
+                      pancha_vargeeya={0: 8.4, 1: 6.2,
+                                       2: EXAMPLE_120_MARS_BALA, 3: 5.3,
+                                       4: 9.2, 5: 9.0, 6: 5.0})
+    assert got["step"] == "benefic aspect on lagna"
+    assert got["lord"]["graha"] == EXAMPLE_120_LORD == 2
+    assert got["lord_name"] == "Mars"
+    assert got["undecided"] is None
+
+
+def test_the_example_never_exercises_the_cascade_past_the_shortlist():
+    from hora.tajaka.muntha import muntha_rasi
+    from hora.tajaka.varsheswara import (
+        THE_EXAMPLE_STOPS_AT_THE_SHORTLIST,
+        varsheswara,
+    )
+
+    annual, natal = _annual_and_natal()
+    rasis = {graha: int(annual.positions[graha].longitude // 30)
+             for graha in range(7)}
+    got = varsheswara(sun_rasi=rasis[0], moon_rasi=rasis[1],
+                      natal_lagna_rasi=natal.lagna_rasi,
+                      muntha_rasi=muntha_rasi(natal.lagna_rasi, 34)["rasi"],
+                      annual_lagna_rasi=annual.lagna_rasi, daytime=False,
+                      rasis=rasis,
+                      pancha_vargeeya={g: 10.0 for g in range(7)})
+    # One member, so the ranking cannot decide anything.
+    assert len(got["shortlist"]) == 1
+    assert got["lord_name"] == "Mars"
+    assert "nothing in Example 120 turns on the ranking" in (
+        THE_EXAMPLE_STOPS_AT_THE_SHORTLIST)
+
+
+def test_example_120_rules_out_reading_the_relationship_from_the_planet():
+    """OI-153. Mars's 13.7 needs his navamsa rasi scored as an enemy's, and
+    chapter 3 makes Saturn only neutral to Mars.
+    """
+    from hora.charts.relationship import compound, natural, temporary
+    from hora.charts.vargas import d3_drekkana, d9_navamsa
+    from hora.core.const import RASI_LORD
+    from hora.tajaka.panchavargeeya import (
+        EXAMPLE_120_RULES_OUT_THE_PLANETS_OWN_VIEW,
+        drekkana_bala,
+        hadda_bala,
+        hadda_lord,
+        kshetra_bala,
+        navamsa_bala,
+        pancha_vargeeya_bala,
+        uchcha_bala,
+    )
+    from hora.tajaka.varsheswara import EXAMPLE_120_MARS_BALA
+
+    annual, _natal = _annual_and_natal()
+    mars, longitude = 2, annual.positions[2].longitude
+    uchcha = uchcha_bala(mars, longitude)["units"]
+
+    # Four of the five are not in dispute.
+    assert int(RASI_LORD[int(longitude // 30)]) == 4          # Jupiter's Pisces
+    assert natural(mars, 4) == "friend"
+    assert hadda_lord(longitude)["lord"] == mars              # his own hadda
+    assert int(RASI_LORD[d3_drekkana(longitude).sign]) == mars
+
+    navamsa_owner = int(RASI_LORD[d9_navamsa(longitude).sign])
+    assert navamsa_owner == 6                                 # Saturn's
+    # Asymmetric, and that is the whole point.
+    assert natural(mars, 6) == "neutral"
+    assert natural(6, mars) == "enemy"
+
+    def total(navamsa_grade):
+        return pancha_vargeeya_bala(
+            kshetra=kshetra_bala("friend")["units"], uchcha=uchcha,
+            hadda=hadda_bala("own")["units"],
+            drekkana=drekkana_bala("own")["units"],
+            navamsa=navamsa_bala(navamsa_grade)["units"])
+
+    # The planet's own view leaves it undecided and short of the printed value.
+    from_planet = total(natural(mars, 6))
+    assert from_planet["undecided"] is True
+    assert round(from_planet["at_least"], 1) != EXAMPLE_120_MARS_BALA
+
+    # The lord's view reaches it exactly.
+    from_lord = total(natural(6, mars))
+    assert round(from_lord["units"], 1) == EXAMPLE_120_MARS_BALA
+
+    # And so does the compound relationship, which is why one number cannot
+    # choose between them.
+    navamsa_signs = {g: d9_navamsa(annual.positions[g].longitude).sign
+                     for g in (mars, 6)}
+    together = compound(natural(mars, 6),
+                        temporary(navamsa_signs[mars], navamsa_signs[6]))
+    assert together == "enemy"
+    assert round(total(together)["units"], 1) == EXAMPLE_120_MARS_BALA
+    assert "one printed number cannot choose between them" in (
+        EXAMPLE_120_RULES_OUT_THE_PLANETS_OWN_VIEW)
+
+
+def test_only_one_possible_combination_of_grades_reaches_13_7():
+    """The uniqueness that makes the finding above evidence rather than a
+    guess: with kshetra fixed at a friend's 15, nothing else lands on 13.7.
+    """
+    from hora.tajaka.panchavargeeya import uchcha_bala
+
+    annual, _natal = _annual_and_natal()
+    uchcha = uchcha_bala(2, annual.positions[2].longitude)["units"]
+    hits = [
+        (k, h, d, n)
+        for k in (30.0, 15.0, 7.5)
+        for h in (15.0, 7.5, 3.75)
+        for d in (10.0, 5.0, 2.5)
+        for n in (5.0, 2.5, 1.25)
+        if abs((k + uchcha + h + d + n) / 4 - 13.7) < 0.05
+    ]
+    assert len(hits) == 4
+    # Mars is in Pisces, so kshetra cannot be his own 30 — which leaves one.
+    possible = [row for row in hits if row[0] != 30.0]
+    assert possible == [(15.0, 15.0, 10.0, 1.25)]
+
+
+def test_example_120_is_transcribed_with_its_slip():
+    from hora.tajaka.varsheswara import (
+        EXAMPLE_120,
+        EXAMPLE_120_CANDIDACIES,
+        EXAMPLE_120_CONCLUSION,
+        EXAMPLE_120_HAS_A_SLIP_IN_ITS_CONCLUSION,
+    )
+
+    assert "annual chart in Example 118" in EXAMPLE_120
+    assert len(EXAMPLE_120_CANDIDACIES) == 5
+    assert "4:41 am, i.e. night time" in EXAMPLE_120_CANDIDACIES[0]
+    assert "from Table 73" in EXAMPLE_120_CANDIDACIES[4]
+    assert "Mars is the lord of the year" in EXAMPLE_120_CONCLUSION
+    assert "He is also has" in EXAMPLE_120_CONCLUSION
+    assert "Nothing turns on it" in EXAMPLE_120_HAS_A_SLIP_IN_ITS_CONCLUSION
