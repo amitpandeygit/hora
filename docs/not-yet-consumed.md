@@ -1700,6 +1700,24 @@ elsewhere reproduce. What follows is prose and findings.
 | `CHART_66_TRUNCATES_WHERE_EXAMPLE_121_ROUNDS` | Ours: the diagram truncates arcminutes and the example rounds them, five for five. D-80 |
 | `EXAMPLE_121_MISNAMES_VANIK_ONCE` | A stray "samartha saham" in the vanik paragraph's arithmetic line |
 
+### Chapter 28 — §28.8.2's use of sahams (9)
+
+`tajaka/saham_use.py`. What the section makes computable **is** built:
+`saham_dispositor` and `annual_rule_terms` give the annual rule's two lords,
+`jupiter_on_vivaha` answers the marriage rule under both aspect schemes, and
+`saturn_or_rahu_near` returns the separation. What follows is prose and
+findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `USE_IN_ANNUAL_CHART` · `USE_IN_NATAL_CHART` · `ARABIAN_PARTS_NOTE` · `TAJAKA_ORIGIN_SPECULATION` | The section verbatim, including its closing note on where Tajaka came from |
+| `THE_RULE_NAMES_NEITHER_THE_SAHAM_NOR_THE_YOGA` | Ours: the annual rule asks for a "good yoga" between two lords and defines neither "important saham" nor "good yoga" |
+| `THE_TWO_LORDS_CAN_BE_ONE_GRAHA` | Ours: the saham's dispositor is the lagna lord in 22 of 144 lagna-saham pairs, and a graha forms no yoga with itself |
+| `ONE_RULE_NEEDS_AN_ORB_AND_ONE_DOES_NOT` | Ours: "close to" needs an orb the book never gives; "occupies or aspects" is a rasi test and needs none |
+| `TWO_SECTIONS_READ_VIVAHA_SAHAM_DIFFERENTLY` | Ours: §25.3 gives the 7th lord or Venus, §28.8.2 gives Jupiter, for one event |
+| `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
+| `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
+
 ---
 
 ## How to use this register

@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 105 waiting on evidence · 2 parked**
+**6 waiting on Amit · 106 waiting on evidence · 2 parked**
 
 ---
 
@@ -18,6 +18,7 @@ until the book is finished, not only the five below. Record; never re-raise.
 | OI-36 | Shorten `ABHIJIT_END` to `21 × NAKSHATRA_SPAN`, per §1.3.6 | `abhijit_active` on `/v1/panchanga` — a live field, ~21.6 hours a year |
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
+| OI-158 | Read §28.8.2's "Jupiter aspects natal vivaha saham" as chapter 10's graha drishti | The marriage rule. Graha drishti fires in 1 chart of 3; §28.2's Tajaka aspects fire in 5 of 6, which leaves it almost no content |
 | OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Seventeen** charts reproduce with mean and none with true; under `true` Chart 41's Rahu is **98'** out and Chart 39's **96'**, both a whole sign wrong |
 
 Order I would take them: OI-39 is the only unambiguous defect and the only one
@@ -2297,6 +2298,25 @@ candidates share both the highest bala and the same number of categories,
 which §28.6 also leaves open.
 
 **Closes when:** a worked example runs the cascade, or you settle both.
+
+### OI-158 — §28.8.2's Jupiter aspect does not say which scheme
+
+**Waiting on you.** "When Jupiter occupies or aspects natal vivaha saham in
+transit, one may get married." The sentence says *natal* chart, which points at
+chapter 10's graha drishti. But §28.2 defined a different set of Tajaka aspects
+for the same planet three pages earlier, and this is a Tajaka chapter.
+
+| reading | rasis Jupiter reaches, of 12 | rule fires in |
+|---|---|---|
+| chapter 10's graha drishti | 4, counting his own | 1 chart in 3 |
+| §28.2's Tajaka aspects | 10 | 5 charts in 6 |
+
+The Tajaka reading leaves the rule with almost no content, which is evidence
+for graha drishti and not proof of it. `jupiter_on_vivaha` returns **both** and
+flags the charts where they disagree rather than picking one.
+
+**Closes when:** you settle it, or a worked example reads a saham aspect.
+
 
 ---
 

@@ -1020,10 +1020,13 @@ THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED = (
 # §25.4 Transits and divisional charts — PVR's own research
 # --------------------------------------------------------------------------
 
-#: **Provenance, and the only section in the book to carry one.** §25.4 says
-#: outright that it is not classical. Recorded because it changes what a
-#: disagreement with this section would mean, not what we implement — see
-#: docs/precedence.md.
+#: **Provenance, and the only section in the book to label its own
+#: technique.** §25.4 says outright that it is not classical. Recorded because
+#: it changes what a disagreement with this section would mean, not what we
+#: implement — see docs/precedence.md. §28.8.2 also discusses provenance, but
+#: of the Tajaka *system* rather than of anything the book itself wrote, and
+#: nothing is computed from it — see
+#: `tajaka.saham_use.THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED`.
 SECTION_25_4_IS_THE_AUTHORS_OWN_RESEARCH = (
     "Though the motivation for the approach described here comes from some "
     "principles described in classics, the actual approach is essentially "
