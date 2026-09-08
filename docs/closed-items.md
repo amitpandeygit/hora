@@ -4,6 +4,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 
 | ID | Item |
 |---|---|
+| [OI-116](#oi-116) | Example 54's Rajya saham could not be computed |
 | [OI-151](#oi-151) | §27.1's "exact position" is the sidereal longitude |
 | [OI-146](#oi-146) | one square of Figure 3 could not be read |
 | [OI-147](#oi-147) | §26.8's vedha lines were stated but not determined |
@@ -1918,6 +1919,23 @@ of Figure 3's squares and all sixteen reproduce in order, including the plain
 **d** of row 1 and the **alveolar d** of row 6, which it distinguishes in
 words. Square (2, 7) is on none of the three, so OI-146 stays open.
 
+
+## OI-116 — Example 54's Rajya saham could not be computed · **CLOSED**
+
+**Closed by §28.8.1 and Table 74.** Example 54 read "Rajya saham and GL are
+also in Libra" as one of three reasons Mercury could bring rulership. GL
+checked out; the saham could not, because nothing computed one and the example
+gave no formula. Chart 19's record marked the claim unchecked rather than
+quietly dropping it.
+
+Table 74 supplies it: **Rajya = Saturn − Sun + Lagna**, row 11, with §28.8.1's
+thirty-degree correction and the general day-and-night swap. `tajaka.sahams`
+computes all thirty-six.
+
+Two things came with it. Rajya shares its formula with **Pitri** exactly, so
+the kingdom-point and the father-point are one longitude in every chart. And
+five of Table 74's rows need a house as a longitude, which §28.8 never defines
+— that is OI-157, and Rajya is not one of the five.
 
 ## OI-151 — §27.1's "exact position" is the **sidereal** longitude · **CLOSED**
 

@@ -1674,6 +1674,27 @@ findings.
 | `THE_TIE_BREAK_COUNTS_SIX_CATEGORIES_HERE` | Ours: 28.6's tie-break names five categories and a month has six |
 
 
+### Chapter 28 — §28.8.1's sahams (15)
+
+`tajaka/sahams.py`. The rules **are** built: `saham_point` applies the A − B +
+C formula with §28.8.1's thirty-degree correction, `formula_for` reads all
+thirty-six rows of Table 74 with the day-and-night swap, and `sahams` resolves
+the five that depend on other sahams in order. Two sahams the book prints
+elsewhere reproduce. What follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `SAHAM_DEFINITION` · `SAHAM_FORMULA_RULE` · `SAHAM_WORKED_GLOSS` · `DAY_AND_NIGHT_RULE` · `TABLE_74_TITLE` | The section and the table's heading verbatim |
+| `VIDYA_HAS_NO_ROW_NUMBER` | A printing slip in Table 74: vidya saham shares row 21's number |
+| `SAHAMS_COINCIDE_STRUCTURALLY` · `SAHAM_COLLISIONS` | Ours: distinct rows reduce to the same three terms, so some sahams are always equal — two pairs by day, three by night |
+| `FIVE_SAHAMS_DEPEND_ON_OTHERS` | Ours: five rows take another saham as a term, which fixes an evaluation order the table does not state |
+| `ROGA_USES_THE_LAGNA_TWICE` | Ours: roga saham is Lagna − Moon + Lagna, the only row to repeat a term |
+| `THE_CORRECTION_IS_A_THIRTY_DEGREE_STEP` | Ours: the correction is a whole sign, not an orb or a reflection |
+| `A_HOUSES_LONGITUDE_IS_NOT_DEFINED` | Ours: five rows take "the Nth house" as a longitude and the book never says whether that is the cusp or the sign's start. OI-157 |
+| `PUNYA_AND_VIDYA_EXCHANGE_AT_NIGHT` | Ours: the two rows are each other's night forms, so the pair is closed under the swap |
+| `TWO_PRINTED_SAHAMS_REPRODUCE` | Ours: Chart 19's Rajya at 6 Li 20 and Chart 53's vivaha at 0 Cp 41, both needing the night formula — the check, recorded |
+| `THE_CORRECTION_HAS_NO_WORKED_VALUE` | Ours: both printed sahams skip the correction, so it is built from words alone with no number behind it |
+
 ---
 
 ## How to use this register

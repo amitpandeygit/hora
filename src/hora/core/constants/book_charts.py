@@ -822,9 +822,9 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "pins one: the Moon reaches Aries and the Ascendant Aquarius "
             "together only between about **07:57 and 09:36 IST**, where its "
             "AL also comes out Gemini as drawn. It carries the register's "
-            "first printed **saham** -- vivaha saham at 1 Cp -- which we "
-            "cannot compute, sahams being deferred to the Tajaka part, so it "
-            "is held as a fixture for when that part arrives. See OI-116."
+            "first printed **saham** -- vivaha saham at 1 Cp -- which "
+            "§28.8.1's Table 74 now reproduces: a 9:41 pm birth, so Saturn "
+            "- Venus + Lagna, giving **0 Cp 41**. OI-116 closed."
         ),
     },
     52: {
@@ -2048,9 +2048,9 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
         "note": (
             "Unlike Charts 17 and 18 the drawn diagram is the rasi chart "
             "itself. Every body recomputes within an arcminute. Example 54 "
-            "also places Rajya saham in Libra; sahams are a Tajika concept "
-            "the book defers to a later part and we do not compute them, so "
-            "that one claim is unchecked — see docs/open-items.md OI-116."
+            "also places Rajya saham in Libra, and §28.8.1's Table 74 now "
+            "reproduces it: a 12:58 am birth, so Sun - Saturn + Lagna, "
+            "giving **6 Li 20**. OI-116 closed."
         ),
     },
     18: {

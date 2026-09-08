@@ -791,8 +791,10 @@ OTHER_REFERENCES: tuple[dict[str, object], ...] = (
     {"reference": "arudha padas",
      "stands_for": "the appearance of their houses' matters",
      "computable": True},
+    # False when §25.3 was read, sahams being deferred to the Tajaka part.
+    # Table 74 in §28.8.1 supplies all thirty-six of them.
     {"reference": "sahams", "stands_for": "significant points in the zodiac",
-     "computable": False},
+     "computable": True},
 )
 
 #: §25.3's opening, and its use of the ashtakavarga — from **lagna**, where
@@ -944,9 +946,9 @@ SAHAM_TRANSIT_EXAMPLES: tuple[dict[str, object], ...] = (
 #: even with the point we would not know how near is near. Both must arrive
 #: before this is more than recorded. See OI-116.
 SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB = (
-    "§25.3 reads transits against vivaha saham and kali saham. Sahams are "
-    "deferred to the Tajaka part and are not computed, and \"close to\" is "
-    "given no orb."
+    "§25.3 reads transits against vivaha saham and kali saham. Table 74 "
+    "supplies both, so they are computed now — see hora.tajaka.sahams — but "
+    "\"close to\" is still given no orb."
 )
 
 
@@ -1006,9 +1008,11 @@ A_GRAHA_CAN_ASPECT_ITS_OWN_NATAL_POSITION = (
 #: 1.4° to 1.5° — consistent with a saham printed to the whole degree, and not
 #: a confirmation, because we cannot compute the saham to compare against.
 THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED = (
-    "Transit Mercury is at about 2.5 Cp through the wedding window, so it "
-    "stands 1.4° to 1.5° from a vivaha saham printed at 1 Cp. The book says "
-    "\"about 1° away\". The saham itself is not computed."
+    "The vivaha saham is now computed from Table 74 — Saturn − Venus + "
+    "Lagna on Chart 53, a night birth, giving 0 Cp 41 against the printed "
+    "1 Cp. Transit Mercury stands 1.21° from it at the start of the wedding "
+    "day and 2.76° by its end, against the book's \"about 1° away\". The "
+    "claim holds at the day's beginning; no time is given."
 )
 
 

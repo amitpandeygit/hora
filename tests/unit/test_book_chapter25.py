@@ -1278,8 +1278,8 @@ def test_25_2_closes_by_pointing_past_the_moon():
 # ---------------------------------------------------------------------------
 
 def test_25_3_names_the_rest_of_25_1s_reference_points():
-    """§25.1 promised "several"; §25.2 gave one. Six more, and only sahams
-    cannot be produced today.
+    """§25.1 promised "several"; §25.2 gave one. Six more. Sahams were the
+    one we could not produce when §25.3 was read; §28.8.1 supplies them.
     """
     from hora.transits.gochara import (
         ASHTAKAVARGA_JUDGES_A_TRANSIT_FROM_LAGNA,
@@ -1291,7 +1291,7 @@ def test_25_3_names_the_rest_of_25_1s_reference_points():
                      "arudha padas", "sahams"]
     uncomputable = [row["reference"] for row in OTHER_REFERENCES
                     if not row["computable"]]
-    assert uncomputable == ["sahams"]
+    assert uncomputable == []
 
     assert "hub of vitality" in ASHTAKAVARGA_JUDGES_A_TRANSIT_FROM_LAGNA
     assert "from lagna" in ASHTAKAVARGA_JUDGES_A_TRANSIT_FROM_LAGNA
@@ -1415,9 +1415,10 @@ def test_arudha_pada_transits_name_two():
     assert "occupying or aspecting arudha padas" in ARUDHA_PADA_TRANSITS
 
 
-def test_the_saham_rules_cannot_be_built_and_say_so():
-    """Sahams are a Tajaka topic the book defers, and "close to" is given no
-    orb. Two reasons, both recorded. OI-116.
+def test_the_saham_rules_lacked_a_table_and_still_lack_an_orb():
+    """Two reasons §25.3's saham rules could not be built: the table was
+    deferred to the Tajaka part, and "close to" is given no orb. §28.8.1's
+    Table 74 removes the first. The second stands. OI-116 closed.
     """
     from hora.transits.gochara import (
         OTHER_REFERENCES,
@@ -1429,11 +1430,12 @@ def test_the_saham_rules_cannot_be_built_and_say_so():
     assert [row["saham"] for row in SAHAM_TRANSIT_EXAMPLES] == ["vivaha", "kali"]
     assert "close to" in SAHAMS_ARE_USEFUL
     assert "no orb" in SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB
-    assert "Tajaka" in SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB
+    assert "Table 74" in SAHAM_TRANSITS_NEED_TAJAKA_AND_AN_ORB
 
+    # Deferred when §25.3 was read; Table 74 supplies them.
     sahams = next(row for row in OTHER_REFERENCES
                   if row["reference"] == "sahams")
-    assert sahams["computable"] is False
+    assert sahams["computable"] is True
 
 
 def test_natal_lordship_qualifies_the_master_rule():
@@ -1690,11 +1692,12 @@ def test_the_saham_claim_is_consistent_but_cannot_be_checked():
         mercury = computed.positions[int(Graha.MERCURY)].longitude
         assert 1.3 < abs(mercury - saham) < 1.6
 
-    # and the reference itself is still uncomputable
+    # The saham is no longer a printed value we cannot check: Table 74
+    # computes it, and test_book_chapter28_sahams.py measures the gap.
     sahams = next(row for row in OTHER_REFERENCES
                   if row["reference"] == "sahams")
-    assert sahams["computable"] is False
-    assert "not computed" in THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED
+    assert sahams["computable"] is True
+    assert "0 Cp 41" in THE_SAHAM_CLAIM_IS_CONSISTENT_BUT_UNCHECKED
 
 
 # ---------------------------------------------------------------------------

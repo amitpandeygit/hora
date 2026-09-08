@@ -1075,22 +1075,6 @@ degree of Libra as fatal, which is a check for whenever the table appears.
 
 **Closes when:** a chapter gives the mritya bhaga degrees, or you supply them.
 
-### OI-116 — Example 54 uses Rajya saham; we compute no sahams
-
-**Waiting on a later part of the book.**
-
-Example 54 reads "Rajya saham and GL are also in Libra" as one of three reasons
-Mercury could bring rulership. GL checks out; the saham cannot, because sahams
-are Tajika sensitive points and nothing here computes them. The example does
-not give the formula, and Part 2's own map defers Sudarsana Chakra dasa to
-"Tajaka Analysis", so the sahams belong to that part too.
-
-Guessing a formula from a passing mention would be exactly the wrong move, so
-Chart 19's record marks that claim unchecked rather than quietly dropping it.
-
-**Closes when:** the Tajaka part defines the sahams, or you supply the Rajya
-saham formula from another source.
-
 ### OI-115 — §16.2 uses savana years; our default is sidereal
 
 **NEEDS YOU. Every Vimsottari date in chapter 16 turns on it.** §16.2's
@@ -2313,6 +2297,27 @@ candidates share both the highest bala and the same number of categories,
 which §28.6 also leaves open.
 
 **Closes when:** a worked example runs the cascade, or you settle both.
+
+
+### OI-157 — Table 74 uses a house as a longitude and never defines one
+
+**Waiting on the book.** Five of Table 74's sahams take a **house** as a term:
+
+| saham | formula |
+|---|---|
+| Mrityu | 8th house − Moon + Lagna |
+| Paradesa | 9th house − 9th lord + Lagna |
+| Artha | 2nd house − 2nd lord + Lagna |
+| Santapa | Saturn − Moon + 6th house |
+| Apamrityu | 8th house − Mars + Lagna |
+
+§28.8 never says what a house's longitude is. In a whole-sign chart a house is
+a rasi, not a point, and the readings available — the start of the rasi, the
+bhava madhya, an Ascendant-based cusp — are up to a rasi apart. `sahams` takes
+the house longitudes as an input and returns those five **undecided** without
+one, rather than picking a reading.
+
+**Closes when:** §28.8 or a worked saham fixes what a house's longitude means.
 
 
 ---
