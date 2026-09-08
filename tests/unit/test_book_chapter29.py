@@ -1584,3 +1584,180 @@ def test_manahoo_is_the_first_cancelling_yoga_in_the_chapter():
                         spoiler=int(Graha.SATURN), spoiler_longitude=109.0)
     assert got["ithasala_type"] == "Vartamaana"
     assert got["cancels_the_ithasala"] is True
+
+
+# --------------------------------------------------------------------------
+# §29.2.8 Kamboola yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_kamboola_rule_is_transcribed():
+    assert "If Moon has an ithasala with one of the planets (or both)" in (
+        yogas.KAMBOOLA_RULE)
+    assert "adds power to the ithasala yoga" in yogas.KAMBOOLA_RULE
+    assert "strength of Moon and other planets" in yogas.KAMBOOLA_RULE
+
+
+def test_the_kamboola_example_reproduces():
+    """Mars 23 Sc and Jupiter 26 Pi have a trinal ithasala; the Moon at
+    22 Le makes one with Mars and none with Jupiter.
+    """
+    want = yogas.KAMBOOLA_EXAMPLE
+    got = yogas.kamboola(
+        faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+        faster_longitude=float(want["faster_longitude"]),
+        slower_longitude=float(want["slower_longitude"]),
+        moon_longitude=float(want["moon_longitude"]))
+    assert got["pair_ithasala"] == want["pair_ithasala"]
+    assert got["moon_ithasala_types"] == (want["moon_to_faster"],
+                                          want["moon_to_slower"])
+    assert got["reaches_faster"] is True
+    assert got["reaches_slower"] is False
+    assert got["present"] is want["present"]
+    assert got["strengthens"] is True
+
+
+def test_the_pairs_own_aspect_is_the_trinal_the_book_names():
+    base = yogas.ithasala(faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+                          faster_longitude=233.0, slower_longitude=356.0)
+    assert base["house_from_faster"] == 5
+    assert base["aspect"] == "Trinal aspect"
+    assert base["separation_from_exact"] == pytest.approx(3.0)
+    assert base["type"] == "Vartamaana"
+
+
+def test_the_moon_to_mars_leg_is_a_poorna():
+    """22° against 23° is one degree, poorna's threshold. The book says only
+    "an ithasala yoga".
+    """
+    leg = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.MARS),
+                         faster_longitude=142.0, slower_longitude=233.0)
+    assert leg["house_from_faster"] == 4
+    assert leg["aspect"] == "Square aspect"
+    assert leg["separation_from_exact"] == pytest.approx(1.0)
+    assert leg["type"] == "Poorna"
+
+
+def test_the_example_never_shows_its_own_or_both_case():
+    """The Moon at 22 Le is the 8th from Jupiter in Pi, which §28.2 leaves
+    aspectless, so that leg cannot form at all.
+    """
+    from hora.tajaka.aspects import aspect_on_house
+
+    leg = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                         faster_longitude=142.0, slower_longitude=356.0)
+    assert leg["house_from_faster"] == 8
+    assert aspect_on_house(8) is None
+    assert leg["aspect"] is None
+    assert leg["type"] is None
+    assert yogas.KAMBOOLA_EXAMPLE["moon_to_slower"] is None
+    assert "never worked" in yogas.THE_EXAMPLE_DOES_NOT_SHOW_THE_BOTH_CASE
+
+
+def test_the_moon_can_reach_both_planets():
+    """The rule's parenthesis, built even though the example does not show it.
+    """
+    got = yogas.kamboola(faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+                         faster_longitude=210.0 + 23.0,
+                         slower_longitude=210.0 + 26.0,
+                         moon_longitude=120.0 + 22.0)
+    assert got["reaches_both"] is True
+    assert all(t is not None for t in got["moon_ithasala_types"])
+    assert got["present"] is True
+
+
+def test_no_ithasala_in_the_pair_means_no_kamboola():
+    """There has to be something to strengthen."""
+    got = yogas.kamboola(faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+                         faster_longitude=210.0 + 28.0, slower_longitude=356.0,
+                         moon_longitude=142.0)
+    assert got["pair_ithasala"] is None
+    assert got["reaches_faster"] is True
+    assert got["present"] is False
+
+
+def test_the_moon_must_be_behind_the_planet_she_reaches():
+    """She is footnote 83's fastest body, so she is always the faster party."""
+    assert yogas.speed_rank(int(Graha.MOON)) == 7
+    for graha in range(7):
+        if graha == int(Graha.MOON):
+            continue
+        assert yogas.faster_of(int(Graha.MOON), graha) == int(Graha.MOON)
+
+    ahead = yogas.kamboola(faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+                           faster_longitude=233.0, slower_longitude=356.0,
+                           moon_longitude=120.0 + 26.0)
+    assert ahead["moon_ithasala_types"] == (None, None)
+    assert ahead["present"] is False
+    assert "never retrograde" in yogas.THE_MOON_IS_ALWAYS_THE_FASTER_PARTY
+
+
+def test_the_moon_inside_the_pair_is_declined_not_answered():
+    """§29.2.7 wrote a paragraph for the same situation; §29.2.8 did not."""
+    got = yogas.kamboola(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                         faster_longitude=4.0, slower_longitude=69.0,
+                         moon_longitude=4.0)
+    assert got["pair_ithasala"] is not None
+    assert got["moon_is_in_the_pair"] is True
+    assert got["present"] is False
+    assert got["undecided"] == yogas.THE_MOON_INSIDE_THE_PAIR_IS_NOT_REACHED
+
+
+def test_the_moon_is_a_nakta_connector_or_a_kamboola_never_both():
+    """Nakta needs the pair to have no ithasala; kamboola needs them to have
+    one. The Moon always qualifies on speed for either.
+    """
+    random.seed(2981)
+    both = seen_nakta = seen_kamboola = 0
+    for _ in range(3000):
+        a, b = random.sample([g for g in range(7) if g != int(Graha.MOON)], 2)
+        first_at, second_at = random.uniform(0, 360), random.uniform(0, 360)
+        moon_at = random.uniform(0, 360)
+        assert yogas.connector_role(a, b, int(Graha.MOON)) == "Nakta"
+        as_nakta = yogas.nakta(first=a, second=b, connector=int(Graha.MOON),
+                               first_longitude=first_at,
+                               second_longitude=second_at,
+                               connector_longitude=moon_at)
+        pair = yogas.ithasala(faster=a, slower=b, faster_longitude=first_at,
+                              slower_longitude=second_at) if (
+            yogas.faster_of(a, b) == a) else yogas.ithasala(
+            faster=b, slower=a, faster_longitude=second_at,
+            slower_longitude=first_at)
+        as_kamboola = yogas.kamboola(
+            faster=pair["faster"], slower=pair["slower"],
+            faster_longitude=first_at if pair["faster"] == a else second_at,
+            slower_longitude=second_at if pair["slower"] == b else first_at,
+            moon_longitude=moon_at)
+        seen_nakta += as_nakta["present_as_worded"]
+        seen_kamboola += as_kamboola["present"]
+        both += as_nakta["present_as_worded"] and as_kamboola["present"]
+    assert both == 0
+    assert seen_nakta > 0 and seen_kamboola > 0
+    assert "mutually exclusive" in (
+        yogas.THE_MOON_IS_A_NAKTA_OR_A_KAMBOOLA_NEVER_BOTH)
+
+
+def test_kamboola_is_manahoos_mirror():
+    """The chapter's only two yogas that name a graha."""
+    assert yogas.MANAHOO_SPOILERS == (int(Graha.SATURN), int(Graha.MARS))
+    assert "chapter's only two yogas that name a graha" in (
+        yogas.KAMBOOLA_IS_MANAHOOS_MIRROR)
+
+    shared = {"faster": int(Graha.MARS), "slower": int(Graha.JUPITER),
+              "faster_longitude": 233.0, "slower_longitude": 356.0}
+    strengthened = yogas.kamboola(**shared, moon_longitude=142.0)
+    cancelled = yogas.manahoo(**shared, spoiler=int(Graha.SATURN),
+                              spoiler_longitude=234.0)
+    assert strengthened["strengthens"] is True
+    assert cancelled["cancels_the_ithasala"] is True
+
+
+def test_how_much_power_is_added_is_not_scored():
+    """OI-166. Chapter 28 has two strengths and §29.2.8 names neither."""
+    got = yogas.kamboola(faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+                         faster_longitude=233.0, slower_longitude=356.0,
+                         moon_longitude=142.0)
+    assert got["power_added"] is None
+    assert got["undecided"] == yogas.HOW_MUCH_POWER_IS_ADDED_IS_NOT_SAID
+    assert "gives no measure and no scale" in (
+        yogas.HOW_MUCH_POWER_IS_ADDED_IS_NOT_SAID)

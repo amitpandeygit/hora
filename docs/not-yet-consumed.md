@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.7 (65)
+### Chapter 29 — §29.1 to §29.2.8 (72)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1772,6 +1772,13 @@ footnote can. What follows is prose and findings.
 | `THE_ORB_IS_THE_FASTER_PLANETS_NOT_THE_SPOILERS` | Ours: "the deeptaamsa of the latter" is the faster planet's, and the two differ by up to five degrees |
 | `BOTH_SPOILERS_IN_THE_PAIR_IS_NOT_REACHED` | Ours: a Mars-Saturn ithasala leaves no spoiler and the section covers only one of them being in the pair. OI-165 |
 | `THE_ASPECT_READING_IS_NAMED_AND_DECLINED` · `ONE_SPOILER_IS_ENOUGH` | The two variants the Notes price and reject |
+| `KAMBOOLA_RULE` · `KAMBOOLA_EXAMPLE` | §29.2.8 verbatim and its worked case as data |
+| `KAMBOOLA_IS_MANAHOOS_MIRROR` | Ours: one cancels and one strengthens, and they are the chapter's only two yogas that name a graha |
+| `THE_MOON_IS_ALWAYS_THE_FASTER_PARTY` | Ours: the Moon is footnote 83's fastest and never retrograde, so kamboola has no retrogression case |
+| `THE_MOON_IS_A_NAKTA_OR_A_KAMBOOLA_NEVER_BOTH` | Ours: the Moon always qualifies as a nakta connector, and the two yogas' first conditions exclude each other |
+| `HOW_MUCH_POWER_IS_ADDED_IS_NOT_SAID` | Ours: the added power varies with a strength the section never names. OI-166 |
+| `THE_MOON_INSIDE_THE_PAIR_IS_NOT_REACHED` | Ours: §29.2.7 wrote a paragraph for its own version of this case and §29.2.8 did not |
+| `THE_EXAMPLE_DOES_NOT_SHOW_THE_BOTH_CASE` | Ours: the Moon is the 8th from Jupiter, so the rule's "or both" is stated and never worked |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

@@ -1504,6 +1504,155 @@ def manahoo(*, faster: int, slower: int, faster_longitude: float,
     }
 
 
+# --------------------------------------------------------------------------
+# §29.2.8 Kamboola yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.8, verbatim.
+KAMBOOLA_RULE = (
+    "Suppose two planets have an ithasala yoga. If Moon has an ithasala with "
+    "one of the planets (or both), then we have Kamboola yoga. This yoga adds "
+    "power to the ithasala yoga. The power added varies based on the strength "
+    "of Moon and other planets."
+)
+
+#: §29.2.8's worked example, as the book states it.
+KAMBOOLA_EXAMPLE: dict[str, object] = {
+    "faster": "Mars", "faster_at": "23 Sc", "faster_longitude": 233.0,
+    "slower": "Jupiter", "slower_at": "26 Pi", "slower_longitude": 356.0,
+    "pair_aspect": "Trinal aspect",
+    "pair_ithasala": "Vartamaana",
+    "moon_at": "22 Le", "moon_longitude": 142.0,
+    "moon_to_faster": "Poorna",
+    "moon_to_slower": None,
+    "present": True,
+}
+
+#: **Finding.** Kamboola is manahoo's mirror and the chapter does not say so.
+#: §29.2.7 takes an ithasala away when a named malefic reaches the faster
+#: planet; §29.2.8 strengthens one when a named benefic reaches either planet.
+#: Both turn on a graha's identity rather than on a placement, and they are
+#: the only two in the chapter that do.
+KAMBOOLA_IS_MANAHOOS_MIRROR = (
+    "Manahoo cancels an ithasala when Saturn or Mars conjoins the faster "
+    "planet; kamboola strengthens one when the Moon makes an ithasala with "
+    "either planet. They are the chapter's only two yogas that name a graha."
+)
+
+#: **Finding.** The Moon is footnote 83's fastest body, so she is the faster
+#: party in every ithasala she can be part of, and she is never retrograde.
+#: §29.2.3's Special Notes therefore collapse for her: the condition is simply
+#: that the Moon is **less advanced** than the planet she reaches. Kamboola is
+#: the one yoga in the chapter with no retrogression case at all.
+THE_MOON_IS_ALWAYS_THE_FASTER_PARTY = (
+    "The Moon is the fastest body in footnote 83 and is never retrograde, so "
+    "a kamboola leg needs only that she is less advanced than the planet she "
+    "reaches. No retrogression case arises."
+)
+
+#: **Finding.** The Moon in ithasala with **both** planets is the one
+#: configuration that could be a nakta as well — she is faster than every
+#: other graha, so she always qualifies as a nakta connector. The two cannot
+#: both hold: nakta needs the pair to have **no** ithasala and kamboola needs
+#: them to have one. So the Moon connecting two planets is a nakta or a
+#: kamboola according to what the pair already has, and never both.
+THE_MOON_IS_A_NAKTA_OR_A_KAMBOOLA_NEVER_BOTH = (
+    "The Moon is faster than every other graha, so she can always be a nakta "
+    "connector. Nakta needs the first pair to have no ithasala and kamboola "
+    "needs them to have one, so the two are mutually exclusive."
+)
+
+#: **Gap.** "The power added varies based on the strength of Moon and other
+#: planets." The section gives no measure. Chapter 28 supplies two — §28.4's
+#: pancha vargeeya bala and §28.5's dwaadasa vargeeya bala — and §29.2.8 names
+#: neither, nor says what a given strength turns into. Nothing is scored here.
+#: See OI-166.
+HOW_MUCH_POWER_IS_ADDED_IS_NOT_SAID = (
+    "Section 29.2.8 says the power added varies with the strength of the "
+    "Moon and other planets, and gives no measure and no scale. Chapter 28 "
+    "supplies two strengths and this section names neither."
+)
+
+#: **Gap.** The section never reaches the Moon being **one of the two planets**
+#: in the ithasala. §29.2.7 wrote a paragraph for exactly that case — "we
+#: obviously need the other planet" — and §29.2.8 has no counterpart.
+#: `kamboola` reports `moon_is_in_the_pair` and declines to answer.
+THE_MOON_INSIDE_THE_PAIR_IS_NOT_REACHED = (
+    "Section 29.2.8 does not say what happens when the Moon is herself one of "
+    "the two planets in the ithasala. Section 29.2.7 wrote a paragraph for "
+    "the same situation and this one does not."
+)
+
+#: **Finding.** The example does not exercise its own "(or both)". The Moon at
+#: 22° Le is the **8th** from Jupiter in Pisces, which §28.2 leaves
+#: aspectless, so the Jupiter leg cannot form at all — and the book says
+#: "He has an ithasala yoga with Mars", naming only the one. The parenthesis
+#: is stated and never shown.
+THE_EXAMPLE_DOES_NOT_SHOW_THE_BOTH_CASE = (
+    "The Moon at 22 Le is the 8th from Jupiter at 26 Pi, which section 28.2 "
+    "gives no aspect, so only the Mars leg forms. The rule's \"or both\" is "
+    "never worked."
+)
+
+
+def kamboola(*, faster: int, slower: int, faster_longitude: float,
+             slower_longitude: float, moon_longitude: float,
+             faster_retrograde: bool = False,
+             slower_retrograde: bool = False) -> dict:
+    """§29.2.8 — the Moon in ithasala with one or both of an ithasala pair.
+
+    No retrogression flag for the Moon: she never turns. See
+    `THE_MOON_IS_ALWAYS_THE_FASTER_PARTY`.
+    """
+    base = ithasala(faster=faster, slower=slower,
+                    faster_longitude=faster_longitude,
+                    slower_longitude=slower_longitude,
+                    faster_retrograde=faster_retrograde,
+                    slower_retrograde=slower_retrograde)
+    quick, slow = int(base["faster"]), int(base["slower"])
+    lon = {int(faster): float(faster_longitude),
+           int(slower): float(slower_longitude)}
+    retro = {int(faster): bool(faster_retrograde),
+             int(slower): bool(slower_retrograde)}
+
+    moon = int(Graha.MOON)
+    in_the_pair = moon in (quick, slow)
+
+    legs: list[dict | None] = []
+    for other in (quick, slow):
+        if other == moon:
+            legs.append(None)
+            continue
+        legs.append(ithasala(faster=moon, slower=other,
+                             faster_longitude=float(moon_longitude),
+                             slower_longitude=lon[other],
+                             slower_retrograde=retro[other]))
+
+    types = tuple(None if leg is None else leg["type"] for leg in legs)
+    reached = tuple(t is not None for t in types)
+    return {
+        "yoga": "Kamboola",
+        "faster": quick, "faster_name": str(GRAHA_NAMES[quick]),
+        "slower": slow, "slower_name": str(GRAHA_NAMES[slow]),
+        "pair_ithasala": base["type"],
+        "moon_is_in_the_pair": in_the_pair,
+        "moon_aspects": tuple(
+            None if leg is None else leg["aspect"] for leg in legs),
+        "moon_ithasala_types": types,
+        "reaches_faster": reached[0],
+        "reaches_slower": reached[1],
+        "reaches_both": all(reached),
+        "present": bool(base["type"] is not None and not in_the_pair
+                        and any(reached)),
+        "strengthens": bool(base["type"] is not None and not in_the_pair
+                            and any(reached)),
+        "power_added": None,
+        "undecided": (THE_MOON_INSIDE_THE_PAIR_IS_NOT_REACHED if in_the_pair
+                      else HOW_MUCH_POWER_IS_ADDED_IS_NOT_SAID),
+        "rule": KAMBOOLA_RULE,
+    }
+
+
 def pairs_in_speed_order() -> tuple[tuple[int, int], ...]:
     """Every graha pair footnote 83 can rank, slower first."""
     out = []

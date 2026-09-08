@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**6 waiting on Amit · 113 waiting on evidence · 2 parked**
+**6 waiting on Amit · 114 waiting on evidence · 2 parked**
 
 ---
 
@@ -2456,6 +2456,22 @@ rather than answered.
 
 **Closes when:** a later section or a worked example puts Mars and Saturn in
 one ithasala.
+
+
+### OI-166 — §29.2.8 gives kamboola's added power no measure
+
+**Waiting on the book.** "This yoga adds power to the ithasala yoga. The power
+added varies based on the strength of Moon and other planets."
+
+Chapter 28 supplies two strengths — §28.4's pancha vargeeya bala and §28.5's
+dwaadasa vargeeya bala — and §29.2.8 names neither, gives no scale, and does
+not say what "other planets" means beyond the Moon. Nothing turns a strength
+into an amount of power.
+
+`kamboola` returns `power_added` as ``None`` and reports the yoga as present or
+absent only, rather than inventing a multiplier.
+
+**Closes when:** a later section or a worked example scores the addition.
 
 
 ---
