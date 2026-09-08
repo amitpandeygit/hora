@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.3, types and Special Notes (34)
+### Chapter 29 — §29.1 to §29.2.4 (43)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1750,6 +1750,12 @@ footnote can. What follows is prose and findings.
 | `A_TIGHT_DIFFERENCE_CAN_BE_THE_WORST_CASE` | Ours: retrograde Mercury ten arcminutes from Mars reads as the chapter's strongest yoga and is failure |
 | `RETROGRESSION_NARROWS_THE_WINDOW` | Ours: the section asks for a smaller difference under retrogression and gives no figure. OI-162 |
 | `BOTH_RETROGRADE_IS_NOT_WORKED` | Ours: the section never works both planets retrograde; the clause extends to it by the section's own argument |
+| `EESARPHA_RULE` · `EESARPHA_RESULTS` · `EESARPHA_SPECIAL_NOTES` · `EESARPHA_READINGS` · `EESARPHA_EXAMPLE` | §29.2.4 verbatim, its two readings and its worked case as data |
+| `EESARPHA_IS_THE_NEGATION_OF_THE_SAME_CLAUSE` | Ours: §29.2.4 is §29.2.3's clause with the sign turned round, case for case, and neither section says so |
+| `THE_EXACT_ASPECT_IS_NEITHER_YOGA` | Ours: at equal advancements neither definition applies, and that is the sookshma drishti both are written around. OI-163 |
+| `THE_FIFTH_LORD_IS_IN_BOTH_READINGS` | Ours: the 5th lord is offered for children and again for loss of power, the only reference to appear twice |
+| `THE_SECTION_SPELLS_ITS_OWN_YOGA_THREE_WAYS` | Eesarpha, Easarpha and eesaarpha, in one section |
+| `THE_STATION_CASE_IS_NAMED_BUT_NOT_WORKED_HERE` | Ours: the Special Notes point at "about to become retrograde" and work only the retrograde cases |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

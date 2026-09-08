@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**6 waiting on Amit · 110 waiting on evidence · 2 parked**
+**6 waiting on Amit · 111 waiting on evidence · 2 parked**
 
 ---
 
@@ -2389,6 +2389,25 @@ arc, and the case the section works — retrograde Mercury two degrees from Mars
 caller is told the reading is wider than the section intends.
 
 **Closes when:** a later section or a worked example gives the narrower figure.
+
+
+### OI-163 — the exact aspect belongs to neither ithasala nor eesarpha
+
+**Waiting on the book.** §29.2.3 needs the faster planet **less** advanced;
+§29.2.4 needs it **more** advanced. At equal advancements neither holds — and
+that is exactly the *sookshma drishti*, the exact aspect §29.2.3 says an
+ithasala is heading towards and §29.2.4's Special Notes describe the pair
+reaching.
+
+So the instant a Tajaka pair fulfils itself, the chart has no yoga between
+them. The book never reaches the case: both its examples are a few degrees off
+exact, and it gives the exact aspect a name without giving it a verdict.
+
+`ithasala` and `eesarpha` both report absent at equal advancements and set
+`advancements_are_equal`, rather than rounding the moment into one of the two.
+
+**Closes when:** a later §29.2 section names the exact aspect as a yoga, or a
+worked example lands on it.
 
 
 ---

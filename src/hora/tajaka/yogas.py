@@ -783,6 +783,169 @@ THE_THREE_TYPE_EXAMPLES_REPRODUCE = (
 )
 
 
+# --------------------------------------------------------------------------
+# §29.2.4 Eesarpha yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.4, verbatim.
+EESARPHA_RULE = (
+    "Easarpha yoga is the opposite of ithasala. If two planets have an aspect "
+    "and the faster moving planet has a higher advancement in its rasi than "
+    "the slower moving planet, then we have eesarpha yoga."
+)
+
+#: The Results paragraph, verbatim.
+EESARPHA_RESULTS = (
+    "This is a bad yoga. This results in failures and disappointments. If "
+    "lagna lord has eesarpha yoga with 5th lord or putra saham lord or "
+    "Jupiter, some disappointments related to children are possible. If lagna "
+    "lord has an eesarpha with 10th lord or 5th lord or raajya saham lord or "
+    "Sun in the chart of a president or prime minister or king, loss of power "
+    "is a possibility during the year."
+)
+
+#: The Special Notes, verbatim.
+EESARPHA_SPECIAL_NOTES = (
+    "We made some comments under ithasala yoga about planets that are "
+    "retrograde or about to become retrograde. If the faster moving planet is "
+    "retrograde and less advanced in its rasi, then we have eesaarpha yoga. "
+    "If the faster moving planet in an aspect is retrograde and more advanced "
+    "in its rasi, then we do not have eesarpha yoga. We have an ithasala yoga "
+    "instead."
+)
+
+#: The Results paragraph's two readings, as data. Each is the lagna lord
+#: against one of several stand-ins for the matter — the same four ways in
+#: §29.2.3's Results gave, minus the house lord in the first case.
+EESARPHA_READINGS: tuple[dict[str, object], ...] = (
+    {"matter": "children", "one_side": "lagna lord",
+     "other_side": ("the 5th lord", "the putra saham lord", "Jupiter"),
+     "shows": "some disappointments related to children are possible",
+     "only_for": None},
+    {"matter": "loss of power", "one_side": "lagna lord",
+     "other_side": ("the 10th lord", "the 5th lord",
+                    "the raajya saham lord", "the Sun"),
+     "shows": "loss of power is a possibility during the year",
+     "only_for": "a president or prime minister or king"},
+)
+
+#: §29.2.4's worked example, as the book states it.
+EESARPHA_EXAMPLE: dict[str, object] = {
+    "faster": "Moon", "faster_at": "23 Le", "faster_longitude": 143.0,
+    "slower": "Venus", "slower_at": "19 Li", "slower_longitude": 199.0,
+    "aspect": "Sextile aspect",
+    "both_within_the_others_orb": True,
+    "faster_advancement": 23.0, "slower_advancement": 19.0,
+    "present": True,
+}
+
+#: **Finding.** Eesarpha is the same clause as ithasala with the sign turned
+#: round. §29.2.3's Special Notes gave convergence as "behind exclusive-or
+#: retrograde"; §29.2.4 and its own Special Notes give exactly the negation,
+#: case for case — faster ahead and direct, or faster behind and retrograde.
+#: The two sections are one test with two names, and neither says so.
+EESARPHA_IS_THE_NEGATION_OF_THE_SAME_CLAUSE = (
+    "Eesarpha holds when the two advancements are diverging, which is the "
+    "negation of ithasala's condition term by term. One clause answers both "
+    "sections."
+)
+
+#: **Finding.** The two yogas do not cover everything they aspect. When the
+#: two advancements are **equal** the faster planet is neither less nor more
+#: advanced, so neither definition applies — and that is precisely the
+#: **exact aspect**, the sookshma drishti that §29.2.3 says an ithasala is
+#: heading towards. The moment of fulfilment falls in the gap between the two
+#: rules. `ithasala` and `eesarpha` both report absent there rather than
+#: rounding it into one of them. See OI-163.
+THE_EXACT_ASPECT_IS_NEITHER_YOGA = (
+    "At equal advancements the faster planet is neither less nor more "
+    "advanced, so the chart has neither ithasala nor eesarpha. That is the "
+    "exact aspect - the sookshma drishti - both sections are written around."
+)
+
+#: **Book defect.** The section spells its own yoga three ways: **Eesarpha**
+#: in the heading, **Easarpha** in its first sentence, and **eesaarpha** in
+#: the Special Notes. Recorded, not corrected; `EESARPHA_RULE` and
+#: `EESARPHA_SPECIAL_NOTES` keep each spelling where the book has it.
+THE_SECTION_SPELLS_ITS_OWN_YOGA_THREE_WAYS = (
+    "The heading reads Eesarpha, the first sentence Easarpha, and the "
+    "Special Notes eesaarpha."
+)
+
+#: **Finding.** The **5th lord** appears in both of the Results paragraph's
+#: readings — for children in the first and for loss of power in the second,
+#: beside the 10th lord. Nothing else appears twice, and the second list is
+#: otherwise about authority. Recorded rather than read as a slip for the 9th
+#: or the 11th, because the section gives no reason either way.
+THE_FIFTH_LORD_IS_IN_BOTH_READINGS = (
+    "The 5th lord is offered for children and again for loss of power. It is "
+    "the only reference in either list to appear twice."
+)
+
+#: **Gap.** The Special Notes open by pointing back at "planets that are
+#: retrograde **or about to become retrograde**" and then work only the two
+#: retrograde cases. A faster planet that is direct, ahead, and about to
+#: station would turn back and start closing on the slower one, so the
+#: eesarpha would become an ithasala — and the section neither says so nor
+#: gives a window for "soon". `eesarpha` takes the same `faster_stations_at`
+#: as `ithasala` and reports it without inventing a threshold.
+THE_STATION_CASE_IS_NAMED_BUT_NOT_WORKED_HERE = (
+    "Section 29.2.4's Special Notes name the about-to-station case and work "
+    "only the retrograde ones. A faster planet ahead and about to turn back "
+    "would end an eesarpha, and no window is given for how soon counts."
+)
+
+
+def eesarpha(*, faster: int, slower: int, faster_longitude: float,
+             slower_longitude: float, faster_retrograde: bool = False,
+             slower_retrograde: bool = False,
+             faster_stations_at: float | None = None) -> dict:
+    """§29.2.4 — "the opposite of ithasala".
+
+    Every geometric term is `ithasala`'s, because the two sections are one
+    test: an aspect, both planets inside the other's deeptamsa, and the two
+    advancements **diverging** instead of converging.
+    """
+    other = ithasala(faster=faster, slower=slower,
+                     faster_longitude=faster_longitude,
+                     slower_longitude=slower_longitude,
+                     faster_retrograde=faster_retrograde,
+                     slower_retrograde=slower_retrograde,
+                     faster_stations_at=faster_stations_at)
+    equal = other["faster_advancement"] == other["slower_advancement"]
+    diverging = (not other["converging"]) and not equal
+    present_within_orb = (
+        None if other["aspects_within_faster_deeptamsa"] is None
+        else bool(other["aspects_by_house"] and diverging
+                  and other["aspects_within_faster_deeptamsa"]
+                  and other["aspects_within_slower_deeptamsa"]))
+    return {
+        "yoga": "Eesarpha",
+        "faster": other["faster"], "faster_name": other["faster_name"],
+        "slower": other["slower"], "slower_name": other["slower_name"],
+        "house_from_faster": other["house_from_faster"],
+        "aspect": other["aspect"],
+        "aspects_by_house": other["aspects_by_house"],
+        "faster_advancement": other["faster_advancement"],
+        "slower_advancement": other["slower_advancement"],
+        "faster_is_more_advanced": (
+            other["faster_advancement"] > other["slower_advancement"]),
+        "advancements_are_equal": equal,
+        "faster_retrograde": bool(faster_retrograde),
+        "slower_retrograde": bool(slower_retrograde),
+        "diverging": diverging,
+        "separation_from_exact": other["separation_from_exact"],
+        "binding_deeptamsa": other["binding_deeptamsa"],
+        "present_by_house": bool(other["aspects_by_house"] and diverging),
+        "present_within_orb": present_within_orb,
+        # The counterpart, so a caller sees which of the two it has.
+        "ithasala_instead": other["type"],
+        "undecided": other["undecided"],
+        "rule": EESARPHA_RULE,
+        "gives": EESARPHA_RESULTS,
+    }
+
+
 def pairs_in_speed_order() -> tuple[tuple[int, int], ...]:
     """Every graha pair footnote 83 can rank, slower first."""
     out = []

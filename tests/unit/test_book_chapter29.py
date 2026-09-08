@@ -863,3 +863,186 @@ def test_the_narrower_window_under_retrogression_has_no_figure():
                             faster_longitude=_longitude("23 Vi"),
                             slower_longitude=_longitude("21 Cp"))
     assert direct["retrogression_narrows_the_window"] is None
+
+
+# --------------------------------------------------------------------------
+# §29.2.4 Eesarpha yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_eesarpha_rule_and_results_are_transcribed():
+    assert "opposite of ithasala" in yogas.EESARPHA_RULE
+    assert "higher advancement in its rasi" in yogas.EESARPHA_RULE
+    assert "failures and disappointments" in yogas.EESARPHA_RESULTS
+    assert "president or prime minister or king" in yogas.EESARPHA_RESULTS
+    assert "We have an ithasala yoga instead" in yogas.EESARPHA_SPECIAL_NOTES
+
+
+def test_the_two_readings_are_data():
+    matters = [row["matter"] for row in yogas.EESARPHA_READINGS]
+    assert matters == ["children", "loss of power"]
+    assert yogas.EESARPHA_READINGS[0]["other_side"] == (
+        "the 5th lord", "the putra saham lord", "Jupiter")
+    assert yogas.EESARPHA_READINGS[1]["only_for"] == (
+        "a president or prime minister or king")
+    for row in yogas.EESARPHA_READINGS:
+        assert row["one_side"] == "lagna lord"
+        assert str(row["shows"]) in yogas.EESARPHA_RESULTS
+
+
+def test_both_sahams_the_results_name_are_in_table_74():
+    """Putra saham and raajya saham — 13 and 11."""
+    from hora.tajaka.sahams import TABLE_74_SAHAMS
+
+    numbers = {str(row["name"]): row["number"] for row in TABLE_74_SAHAMS}
+    assert numbers["Putra"] == 13
+    assert numbers["Rajya"] == 11
+
+
+def test_the_fifth_lord_appears_in_both_readings():
+    first, second = yogas.EESARPHA_READINGS
+    assert "the 5th lord" in first["other_side"]
+    assert "the 5th lord" in second["other_side"]
+    shared = set(first["other_side"]) & set(second["other_side"])
+    assert shared == {"the 5th lord"}
+    assert "the only reference in either list to appear twice" in (
+        yogas.THE_FIFTH_LORD_IS_IN_BOTH_READINGS)
+
+
+def test_the_eesarpha_example_reproduces():
+    """Moon 23 Le, Venus 19 Li: a sextile, both inside the other's orb, and
+    the Moon the more advanced.
+    """
+    want = yogas.EESARPHA_EXAMPLE
+    got = yogas.eesarpha(
+        faster=int(Graha.MOON), slower=int(Graha.VENUS),
+        faster_longitude=float(want["faster_longitude"]),
+        slower_longitude=float(want["slower_longitude"]))
+    assert got["aspect"] == want["aspect"]
+    assert got["faster_advancement"] == pytest.approx(
+        float(want["faster_advancement"]))
+    assert got["slower_advancement"] == pytest.approx(
+        float(want["slower_advancement"]))
+    assert got["faster_is_more_advanced"] is True
+    assert got["separation_from_exact"] == pytest.approx(4.0)
+    assert got["present_within_orb"] is want["present"]
+    assert got["ithasala_instead"] is None
+
+
+def test_the_example_is_29_2_3s_example_with_the_moon_moved_on():
+    """Same pair, same aspect, same orbs — the Moon at 23° instead of 14°."""
+    ith = yogas.ITHASALA_EXAMPLE
+    ees = yogas.EESARPHA_EXAMPLE
+    assert ees["slower_longitude"] == ith["slower_longitude"]
+    assert ees["aspect"] == ith["aspect"]
+    assert float(ees["faster_longitude"]) - float(ith["faster_longitude"]) == 9.0
+
+
+def test_all_four_special_note_cases_come_out_right():
+    """Retrograde and less advanced is eesarpha; retrograde and more advanced
+    is ithasala instead. Both directions of both flags.
+    """
+    cases = ((True, True, "eesarpha"), (True, False, "ithasala"),
+             (False, False, "eesarpha"), (False, True, "ithasala"))
+    for retrograde, behind, want in cases:
+        faster_at = 4.0 if behind else 9.0
+        slower_at = 69.0 if behind else 64.0       # 5° apart, inside both orbs
+        got = yogas.eesarpha(
+            faster=int(Graha.MOON), slower=int(Graha.SATURN),
+            faster_longitude=faster_at, slower_longitude=slower_at,
+            faster_retrograde=retrograde)
+        other = yogas.ithasala(
+            faster=int(Graha.MOON), slower=int(Graha.SATURN),
+            faster_longitude=faster_at, slower_longitude=slower_at,
+            faster_retrograde=retrograde)
+        if want == "eesarpha":
+            assert got["present_within_orb"] is True, (retrograde, behind)
+            assert other["type"] is None, (retrograde, behind)
+        else:
+            assert got["present_within_orb"] is False, (retrograde, behind)
+            assert other["type"] is not None, (retrograde, behind)
+            assert got["ithasala_instead"] == other["type"]
+
+
+def test_eesarpha_is_the_negation_of_ithasalas_clause():
+    """Over random pairs: given an aspect and unequal advancements, exactly
+    one of the two yogas holds by house, whatever the flags.
+    """
+    random.seed(2941)
+    both = neither = 0
+    for _ in range(4000):
+        a, b = random.sample(range(7), 2)
+        kwargs = {"faster": a, "slower": b,
+                  "faster_longitude": random.uniform(0, 360),
+                  "slower_longitude": random.uniform(0, 360),
+                  "faster_retrograde": random.random() < 0.3,
+                  "slower_retrograde": random.random() < 0.3}
+        ith = yogas.ithasala(**kwargs)
+        ees = yogas.eesarpha(**kwargs)
+        if not ith["aspects_by_house"]:
+            assert not ith["present_by_house"] and not ees["present_by_house"]
+            continue
+        both += ith["present_by_house"] and ees["present_by_house"]
+        neither += not (ith["present_by_house"] or ees["present_by_house"])
+    assert both == 0
+    assert neither == 0          # equal advancements never come up at random
+    assert "negation of ithasala's condition" in (
+        yogas.EESARPHA_IS_THE_NEGATION_OF_THE_SAME_CLAUSE)
+
+
+def test_the_exact_aspect_is_neither_yoga():
+    """Equal advancements: the faster planet is neither less nor more
+    advanced, so no definition reaches it — and that is the sookshma drishti
+    an ithasala is heading towards. OI-163.
+    """
+    ith = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.SATURN),
+                         faster_longitude=10.0, slower_longitude=70.0)
+    ees = yogas.eesarpha(faster=int(Graha.MOON), slower=int(Graha.SATURN),
+                         faster_longitude=10.0, slower_longitude=70.0)
+    assert ith["aspects_by_house"] is True
+    assert ith["separation_from_exact"] == pytest.approx(0.0)
+    assert ith["type"] is None
+    assert ees["advancements_are_equal"] is True
+    assert ees["present_by_house"] is False
+    assert ees["present_within_orb"] is False
+    assert "neither ithasala nor eesarpha" in yogas.THE_EXACT_ASPECT_IS_NEITHER_YOGA
+    assert yogas.SOOKSHMA_DRISHTI in yogas.THE_EXACT_ASPECT_IS_NEITHER_YOGA
+
+
+def test_eesarpha_needs_the_orb_the_same_way_ithasala_does():
+    """The example checks it in the same words, so the same reading holds:
+    both planets inside the other's deeptamsa.
+    """
+    assert yogas.EESARPHA_EXAMPLE["both_within_the_others_orb"] is True
+    wide = yogas.eesarpha(faster=int(Graha.MERCURY), slower=int(Graha.SATURN),
+                          faster_longitude=25.0, slower_longitude=60.0 + 1.0)
+    assert wide["faster_is_more_advanced"] is True
+    assert wide["present_by_house"] is True
+    assert wide["present_within_orb"] is False
+    assert wide["separation_from_exact"] > wide["binding_deeptamsa"]
+
+
+def test_an_eesarpha_with_a_node_leaves_the_orb_undecided():
+    got = yogas.eesarpha(faster=int(Graha.RAHU), slower=int(Graha.SATURN),
+                         faster_longitude=100.0, slower_longitude=5.0)
+    assert got["present_by_house"] is True
+    assert got["present_within_orb"] is None
+    assert got["undecided"] == yogas.A_NODES_ITHASALA_CANNOT_BE_ORBED
+
+
+def test_the_section_spells_its_own_yoga_three_ways():
+    assert "Easarpha yoga is the opposite" in yogas.EESARPHA_RULE
+    assert "eesarpha yoga" in yogas.EESARPHA_RULE
+    assert "eesaarpha yoga" in yogas.EESARPHA_SPECIAL_NOTES
+    assert "the Special Notes eesaarpha" in (
+        yogas.THE_SECTION_SPELLS_ITS_OWN_YOGA_THREE_WAYS)
+
+
+def test_the_station_case_is_named_here_and_not_worked():
+    """The Special Notes point back at "about to become retrograde" and then
+    work only the two retrograde cases.
+    """
+    assert "about to become retrograde" in yogas.EESARPHA_SPECIAL_NOTES
+    assert "station" not in yogas.EESARPHA_SPECIAL_NOTES
+    assert "no window is given" in (
+        yogas.THE_STATION_CASE_IS_NAMED_BUT_NOT_WORKED_HERE)
