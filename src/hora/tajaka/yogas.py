@@ -272,15 +272,27 @@ A_NODES_ITHASALA_CANNOT_BE_ORBED = (
     "orb to be tested against."
 )
 
-#: **Gap.** §28.2 gives each graha its **own** deeptamsa, and an aspect
-#: between two grahas has two of them — Venus's 7° and Jupiter's 9°, say. The
-#: section never says whose governs, and the two disagree for any separation
-#: between the smaller orb and the larger. `ithasala` answers under each and
-#: sums neither. See OI-161.
+#: **Settled by §29.2.3's example.** §28.2 gives each graha its **own**
+#: deeptamsa, and an aspect between two grahas has two of them — Venus's 7°
+#: and Jupiter's 9°, say. The rule does not say whose governs; the example
+#: does, in one clause: "**Both** the planets are within the deeptaamsa (orb)
+#: **of the other**." Both orbs must hold, so the effective orb is the
+#: **smaller** of the two, and it is neither summed nor averaged.
+#: `ithasala` already required both, so the example confirms the reading
+#: rather than changing it. OI-161 narrowed to the nodes.
 WHOSE_DEEPTAMSA_GOVERNS_IS_NOT_SAID = (
-    "An ithasala's two grahas have two different deeptamsas and section "
-    "29.2.3 does not say which one the aspect must fall inside. The readings "
-    "differ for any separation between the smaller orb and the larger."
+    "An ithasala's two grahas have two different deeptamsas. The example "
+    "requires each planet to be within the other's, so both must hold and "
+    "the smaller of the two governs."
+)
+
+#: **Finding.** Requiring both orbs makes the test the smaller deeptamsa, and
+#: §28.2's range is 7° to 15°, so which graha is in the pair decides the width
+#: by better than a factor of two. A Sun–Moon ithasala has 12° to play with
+#: and a Mercury–Venus one has 7°.
+THE_SMALLER_DEEPTAMSA_GOVERNS = (
+    "Because each planet must be inside the other's orb, an ithasala is "
+    "tested against the smaller of the two deeptamsas."
 )
 
 #: **Finding.** The orb test and the advancement test read **the same
@@ -296,14 +308,16 @@ THE_ORB_AND_THE_ADVANCEMENT_ARE_ONE_NUMBER = (
     "inside the orb."
 )
 
-#: **Gap.** "If two planets have an aspect" — §28.2 defines the Tajaka
-#: aspects by house distance *and* gives each graha a deeptamsa within which
-#: the aspect "mainly" falls. §29.2.3 does not say whether the aspect must be
-#: inside that orb. `ithasala` answers both ways and says when they differ.
+#: **Settled by §29.2.3's example.** "If two planets have an aspect" left it
+#: open whether §28.2's deeptamsa had to be satisfied or whether the house
+#: distance alone was enough. The example checks the orb as one of its three
+#: conditions, before and separately from the advancement test, so the orb is
+#: required. `present_by_house` is kept beside `present_within_orb` because
+#: the two differ often and a caller reading the wrong one would not be told.
 WHETHER_THE_ASPECT_NEEDS_THE_ORB_IS_NOT_SAID = (
-    "Section 29.2.3 requires an aspect between the two planets without "
-    "saying whether section 28.2's deeptamsa must be satisfied. The two "
-    "readings disagree whenever the planets aspect by house but not by orb."
+    "Section 29.2.3's rule does not say whether section 28.2's deeptamsa "
+    "must be satisfied. Its example checks the orb before declaring the "
+    "yoga, so it is required."
 )
 
 
@@ -371,8 +385,11 @@ def ithasala(*, faster: int, slower: int, faster_longitude: float,
         # so rather than handed one of them.
         "present_within_orb": None if within_orb is None
                               else bool(within_orb and applying),
-        "undecided": None if orbs_agree in (None, True)
-                     else WHOSE_DEEPTAMSA_GOVERNS_IS_NOT_SAID,
+        # The example settles whose orb governs — both — so a disagreement
+        # between the two is an answer, not an undecided. What is still
+        # undecided is a node, which section 28.2 gives no orb at all.
+        "undecided": (A_NODES_ITHASALA_CANNOT_BE_ORBED
+                      if within_orb is None else None),
         "rule": ITHASALA_RULE,
     }
 
@@ -428,6 +445,29 @@ THE_NODES_ARE_THE_ONE_PLACE_THE_ORDER_IS_WRONG = (
     "Footnote 83 lists Rahu and Ketu as faster than Saturn. The nodes move "
     "3.18 arcminutes a day and Saturn averages 4.17, so the nodes are the "
     "slowest bodies in the list, not the second slowest."
+)
+
+
+#: §29.2.3's worked example, as the book states it.
+ITHASALA_EXAMPLE: dict[str, object] = {
+    "faster": "Moon", "faster_at": "14 Le", "faster_longitude": 134.0,
+    "slower": "Venus", "slower_at": "19 Li", "slower_longitude": 199.0,
+    "aspect": "Sextile aspect",
+    "both_within_the_others_orb": True,
+    "faster_advancement": 14.0,
+    "slower_advancement": 19.0,
+    "present": True,
+}
+
+#: **Finding.** The example states four things and every one of them is
+#: checkable: the aspect is a sextile (Leo to Libra is the 3rd, which §28.2
+#: calls a sextile), both planets are inside the other's deeptamsa (5° apart,
+#: against Venus's 7° and the Moon's 12°), the advancements are 14° and 19°,
+#: and the Moon is the faster by footnote 83. All four reproduce.
+THE_EXAMPLE_CHECKS_OUT_ON_ALL_FOUR_CLAIMS = (
+    "Leo to Libra is the 3rd house, which section 28.2 makes a sextile. The "
+    "separation is 5 degrees against orbs of 7 and 12. The advancements are "
+    "14 and 19. The Moon is the faster. The yoga is present."
 )
 
 

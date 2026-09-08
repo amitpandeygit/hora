@@ -321,7 +321,8 @@ def test_the_orb_and_the_advancement_are_the_same_number():
 
 def test_the_two_deeptamsas_are_both_answered_and_neither_is_summed():
     """Venus's orb is 7° and Jupiter's 9°, so a separation of 8° is inside
-    one and outside the other. OI-161.
+    one and outside the other. The example requires both, so the yoga is
+    absent — but the caller is still shown each answer.
     """
     got = yogas.ithasala(faster=int(Graha.VENUS), slower=int(Graha.JUPITER),
                          faster_longitude=180 + 13, slower_longitude=60 + 21)
@@ -331,8 +332,8 @@ def test_the_two_deeptamsas_are_both_answered_and_neither_is_summed():
     assert got["aspects_within_faster_deeptamsa"] is False
     assert got["aspects_within_slower_deeptamsa"] is True
     assert got["deeptamsas_agree"] is False
-    assert got["undecided"] is not None
-    assert "does not say which one" in yogas.WHOSE_DEEPTAMSA_GOVERNS_IS_NOT_SAID
+    assert got["present_within_orb"] is False
+    assert "both must hold" in yogas.WHOSE_DEEPTAMSA_GOVERNS_IS_NOT_SAID
 
 
 def test_an_ithasala_with_a_node_has_no_orb_to_be_tested_against():
@@ -369,3 +370,94 @@ def test_the_marriage_example_is_the_third_rule_for_one_event():
         yogas.ITHASALA_MARRIAGE_EXAMPLE["other_side"])
     # This one reads the saham's lord, where the other two read the point.
     assert "with its lord" in yogas.A_THIRD_RULE_FOR_THE_SAME_MARRIAGE
+
+
+# --------------------------------------------------------------------------
+# §29.2.3's worked example
+# --------------------------------------------------------------------------
+
+
+def test_the_ithasala_example_reproduces_on_all_four_claims():
+    """Moon 14 Le, Venus 19 Li. Sextile; both inside the other's orb;
+    advancements 14 and 19; the Moon the faster. Ithasala.
+    """
+    want = yogas.ITHASALA_EXAMPLE
+    got = yogas.ithasala(
+        faster=int(Graha.MOON), slower=int(Graha.VENUS),
+        faster_longitude=float(want["faster_longitude"]),
+        slower_longitude=float(want["slower_longitude"]))
+
+    assert got["faster_name"] == want["faster"]
+    assert got["slower_name"] == want["slower"]
+    assert got["aspect"] == want["aspect"]
+    assert got["faster_advancement"] == pytest.approx(
+        want["faster_advancement"])
+    assert got["slower_advancement"] == pytest.approx(
+        want["slower_advancement"])
+    assert got["aspects_within_faster_deeptamsa"] is True
+    assert got["aspects_within_slower_deeptamsa"] is True
+    assert got["faster_is_less_advanced"] is True
+    assert got["present_within_orb"] is want["present"]
+    assert "All four reproduce" not in yogas.ITHASALA_RULE
+    assert "The yoga is present" in yogas.THE_EXAMPLE_CHECKS_OUT_ON_ALL_FOUR_CLAIMS
+
+
+def test_the_examples_longitudes_are_where_the_book_puts_them():
+    from hora.core.const import RASI_ABBR
+
+    want = yogas.ITHASALA_EXAMPLE
+    for key, printed in (("faster_longitude", "14 Le"),
+                         ("slower_longitude", "19 Li")):
+        value = float(want[key])
+        degree, rasi = printed.split()
+        assert int(value % 30) == int(degree)
+        assert RASI_ABBR[int(value // 30)] == rasi
+
+
+def test_the_example_settles_whose_deeptamsa_governs():
+    """"Both the planets are within the deeptaamsa (orb) of the other."
+    Both, so the smaller of the two governs. OI-161, narrowed.
+    """
+    assert yogas.ITHASALA_EXAMPLE["both_within_the_others_orb"] is True
+    assert "both must hold and" in yogas.WHOSE_DEEPTAMSA_GOVERNS_IS_NOT_SAID
+    assert "smaller of the two deeptamsas" in yogas.THE_SMALLER_DEEPTAMSA_GOVERNS
+
+    # 8° apart: inside Jupiter's 9° and outside Venus's 7°, so not an
+    # ithasala under the example's reading, whichever way it is put.
+    from hora.tajaka.aspects import deeptamsa
+
+    near = yogas.ithasala(faster=int(Graha.VENUS), slower=int(Graha.JUPITER),
+                          faster_longitude=180 + 13, slower_longitude=60 + 21)
+    assert near["separation_from_exact"] == pytest.approx(8.0)
+    assert near["present_by_house"] is True
+    assert near["present_within_orb"] is False
+    assert min(deeptamsa(int(Graha.VENUS)),
+               deeptamsa(int(Graha.JUPITER))) == 7.0
+
+
+def test_the_example_settles_that_the_orb_is_required():
+    """The rule says only "have an aspect". The example checks the orb before
+    declaring the yoga.
+    """
+    assert "so it is required" in (
+        yogas.WHETHER_THE_ASPECT_NEEDS_THE_ORB_IS_NOT_SAID)
+    # And the two readings do come apart: a wide separation aspects by house
+    # and fails the orb.
+    wide = yogas.ithasala(faster=int(Graha.MERCURY), slower=int(Graha.SATURN),
+                          faster_longitude=1.0, slower_longitude=60 + 25.0)
+    assert wide["aspects_by_house"] is True
+    assert wide["faster_is_less_advanced"] is True
+    assert wide["present_by_house"] is True
+    assert wide["present_within_orb"] is False
+
+
+def test_only_the_node_hole_is_left_in_the_orb_rule():
+    """Two of OI-161's three holes are closed by the example. §28.2 still
+    gives Rahu and Ketu no deeptamsa.
+    """
+    got = yogas.ithasala(faster=int(Graha.RAHU), slower=int(Graha.SATURN),
+                         faster_longitude=5.0, slower_longitude=100.0)
+    assert got["present_by_house"] is True
+    assert got["present_within_orb"] is None
+    assert got["deeptamsa_of_faster"] is None
+    assert got["undecided"] == yogas.A_NODES_ITHASALA_CANNOT_BE_ORBED

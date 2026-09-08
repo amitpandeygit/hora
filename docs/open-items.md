@@ -2354,21 +2354,22 @@ different ithasalas in a large minority of charts.
 readings separate.
 
 
-### OI-161 — §29.2.3 does not say whose deeptamsa an ithasala must satisfy
+### OI-161 — an ithasala involving a node has no orb to be tested against
 
-**Waiting on the book.** An ithasala needs an aspect. §28.2 gives each graha its
-own deeptamsa — Venus 7°, Jupiter 9° — so a pair has two orbs and any
-separation between them satisfies one reading and not the other. The section
-says only "if two planets have an aspect".
+**Waiting on the book.** §29.2.3's example settled most of this entry. It said
+"**Both** the planets are within the deeptaamsa (orb) **of the other**", which
+answers two of the three holes: the orb **is** required, and **both** must
+hold, so the smaller of the two deeptamsas governs and neither is summed nor
+averaged. `ithasala` already required both, so nothing changed.
 
-Two further holes in the same sentence: it does not say whether the orb is
-required at all, and §28.2 gives the nodes no deeptamsa while footnote 83 ranks
-them, so an ithasala involving a node has no orb to test.
+What is left is the nodes. Footnote 83 ranks Rahu and Ketu in the speed order,
+so they can be a party to an ithasala, and §28.2 gives them no deeptamsa at
+all. `ithasala` returns `present_by_house` for such a pair and leaves
+`present_within_orb` **undecided** with that reason, rather than borrowing an
+orb from a neighbour.
 
-`ithasala` answers under each orb separately, sums and averages neither, and
-flags the pairs where the two disagree.
-
-**Closes when:** a later §29.2 section or a worked example applies an orb.
+**Closes when:** a later section gives the nodes a deeptamsa, or a worked
+ithasala uses one.
 
 
 ---
