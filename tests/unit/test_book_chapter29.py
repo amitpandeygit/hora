@@ -2343,3 +2343,165 @@ def test_radda_cancels_from_inside_the_pair():
     assert got["present"] is True
     assert "needs only the condition of a planet already in the ithasala" in (
         yogas.RADDA_CANCELS_FROM_INSIDE_THE_PAIR)
+
+
+# --------------------------------------------------------------------------
+# §29.2.12 Duhphali-Kutta yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_duhphali_kutta_rule_is_transcribed():
+    assert "(a) the faster planet in an ithasala is exalted" in (
+        yogas.DUHPHALI_KUTTA_RULE)
+    assert "(b) the slower planet is not exalted" in yogas.DUHPHALI_KUTTA_RULE
+    assert yogas.DUHPHALI_KUTTA_RESULTS in yogas.DUHPHALI_KUTTA_RULE
+    assert yogas.GOOD_BALA_GRADES == ("strong", "very strong",
+                                      "extraordinarily strong")
+
+
+def test_the_example_is_the_exact_mirror_of_the_rule():
+    """Saturn, the slower planet, is the strong one; Mars, the faster, is the
+    weak one. The rule asks for the opposite. OI-169.
+    """
+    want = yogas.DUHPHALI_KUTTA_EXAMPLE
+    got = yogas.duhphali_kutta(
+        faster=int(Graha.MARS), slower=int(Graha.SATURN),
+        faster_longitude=float(want["faster_longitude"]),
+        slower_longitude=float(want["slower_longitude"]),
+        faster_bala=3.0, slower_bala=12.0)
+    assert got["ithasala_type"] == want["ithasala"]
+    assert got["slower_side"]["exalted"] is True
+    assert got["slower_side"]["qualifies_as_the_strong_side"] is True
+    assert got["faster_side"]["qualifies_as_the_weak_side"] is True
+    assert got["present_as_worked"] is True
+    assert got["present_as_worded"] is False
+    assert got["readings_agree"] is False
+    assert got["undecided"] == yogas.THE_RULE_AND_ITS_EXAMPLE_ARE_MIRROR_IMAGES
+    assert "the slower planet" in str(want["book_says"])
+
+
+def test_the_example_is_right_about_which_planet_is_faster():
+    """It is not a labelling slip: footnote 83 does put Mars above Saturn."""
+    assert yogas.faster_of(int(Graha.MARS), int(Graha.SATURN)) == int(Graha.MARS)
+    assert yogas.speed_rank(int(Graha.MARS)) > yogas.speed_rank(int(Graha.SATURN))
+    assert "The two are exact mirrors" in (
+        yogas.THE_RULE_AND_ITS_EXAMPLE_ARE_MIRROR_IMAGES)
+
+
+def test_the_pairs_ithasala_holds():
+    base = yogas.ithasala(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                          faster_longitude=78.0, slower_longitude=200.0)
+    assert base["house_from_faster"] == 5
+    assert base["aspect"] == "Trinal aspect"
+    assert base["separation_from_exact"] == pytest.approx(2.0)
+    assert base["type"] == "Vartamaana"
+
+
+def test_saturn_is_exalted_in_libra_and_mars_is_not_dignified_in_gemini():
+    from hora.core.constants.graha import EXALTATION_RASI
+
+    assert int(EXALTATION_RASI[int(Graha.SATURN)]) == 6          # Libra
+    assert int(EXALTATION_RASI[int(Graha.MARS)]) == 9            # Capricorn
+    mars = yogas._duhphali_side(int(Graha.MARS), 78.0, 3.0)
+    assert mars["exalted"] is False and mars["own_rasi"] is False
+
+
+def test_the_rule_reads_the_other_way_round_when_the_chart_is_mirrored():
+    """Swap the two balas and the rule is satisfied and the example is not."""
+    got = yogas.duhphali_kutta(
+        faster=int(Graha.MARS), slower=int(Graha.SATURN),
+        faster_longitude=78.0, slower_longitude=150.0 + 20.0,
+        faster_bala=12.0, slower_bala=3.0)
+    assert got["ithasala_type"] is not None
+    assert got["present_as_worded"] is True
+    assert got["present_as_worked"] is False
+
+
+def test_weak_is_a_band_name_and_good_is_not():
+    """§28.4.6 names five bands; "weak" is one and "good" is not. The example
+    calls the same bala good and then strong.
+    """
+    from hora.tajaka.panchavargeeya import (
+        PANCHA_VARGEEYA_GRADES,
+        PANCHA_VARGEEYA_TOP_GRADE,
+    )
+
+    bands = [row[2] for row in PANCHA_VARGEEYA_GRADES] + [
+        PANCHA_VARGEEYA_TOP_GRADE]
+    assert "weak" in bands
+    assert "good" not in bands
+    assert set(yogas.GOOD_BALA_GRADES) <= set(bands)
+    assert yogas.DUHPHALI_KUTTA_EXAMPLE["slower_bala"] == "good"
+    assert "is exalted and strong" in str(
+        yogas.DUHPHALI_KUTTA_EXAMPLE["book_says"])
+    assert "good is read as" in (
+        yogas.GOOD_IS_NOT_A_BAND_NAME_BUT_THE_EXAMPLE_SUPPLIES_ONE)
+
+
+def test_the_middle_band_satisfies_neither_condition():
+    """Ordinary strength, 5 to 10, is neither good nor weak."""
+    side = yogas._duhphali_side(int(Graha.MARS), 78.0, 7.0)
+    assert side["bala_grade"] == "ordinary strength"
+    assert side["has_good_bala"] is False
+    assert side["has_weak_bala"] is False
+    assert side["qualifies_as_the_strong_side"] is False
+    assert side["qualifies_as_the_weak_side"] is False
+    assert side["in_the_middle_band"] is True
+    assert "The rule says nothing about it" in (
+        yogas.THE_MIDDLE_BAND_SATISFIES_NEITHER_CONDITION)
+
+
+def test_condition_b_is_stricter_than_the_negation_of_condition_a():
+    """Over every band, being not-strong is not the same as being weak."""
+    from hora.tajaka.panchavargeeya import pancha_vargeeya_grade
+
+    for bala in (2.0, 7.0, 12.0, 17.0, 22.0):
+        side = yogas._duhphali_side(int(Graha.MARS), 78.0, bala)
+        not_a = not side["qualifies_as_the_strong_side"]
+        b = side["qualifies_as_the_weak_side"]
+        assert b <= not_a                       # (b) implies not-(a)
+        if pancha_vargeeya_grade(bala) == "ordinary strength":
+            assert not_a and not b              # and is strictly stronger
+
+
+def test_condition_a_is_a_disjunction():
+    """Exalted or own rasi or a good bala — any one of the three."""
+    # Own rasi with a weak bala still qualifies as the strong side.
+    own = yogas._duhphali_side(int(Graha.MARS), 210.0 + 5.0, 2.0)
+    assert own["own_rasi"] is True
+    assert own["has_good_bala"] is False
+    assert own["qualifies_as_the_strong_side"] is True
+    # And it is then disqualified from being the weak side.
+    assert own["qualifies_as_the_weak_side"] is False
+
+
+def test_this_is_the_only_strength_29_2_ever_names():
+    """§29.2.8 and §29.2.9 asked for strength and named no measure. OI-166."""
+    assert "panchavargeeya bala" in yogas.DUHPHALI_KUTTA_RULE
+    assert "strength of Moon and other planets" in yogas.KAMBOOLA_RULE
+    assert "panchavargeeya" not in yogas.KAMBOOLA_RULE
+    assert "ithasala with a strong planet" in yogas.GAIRI_KAMBOOLA_RULE
+    assert "panchavargeeya" not in yogas.GAIRI_KAMBOOLA_RULE
+    assert "no other section in" in (
+        yogas.PANCHA_VARGEEYA_BALA_IS_THE_ONE_STRENGTH_29_2_NAMES)
+
+
+def test_a_missing_bala_leaves_the_grade_unknown():
+    got = yogas.duhphali_kutta(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                               faster_longitude=78.0, slower_longitude=200.0)
+    assert got["balas_supplied"] is False
+    assert got["faster_side"]["bala_grade"] is None
+    assert got["faster_side"]["has_weak_bala"] is False
+    # Saturn is still exalted, so the strong side holds without a bala.
+    assert got["slower_side"]["qualifies_as_the_strong_side"] is True
+    assert got["present_as_worked"] is False        # Mars cannot be shown weak
+
+
+def test_no_ithasala_means_no_duhphali_kutta():
+    got = yogas.duhphali_kutta(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                               faster_longitude=60.0 + 25.0,
+                               slower_longitude=200.0,
+                               faster_bala=3.0, slower_bala=12.0)
+    assert got["ithasala_type"] is None
+    assert got["present_as_worded"] is False
+    assert got["present_as_worked"] is False

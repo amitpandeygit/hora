@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.11 (95)
+### Chapter 29 — §29.1 to §29.2.12 (102)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1796,6 +1796,10 @@ footnote can. What follows is prose and findings.
 | `THE_HARMS_ARE_THE_HOUSES_THE_WEAK_PLANET_OWNS` | Ours: Saturn's 10th and 11th from Aries, read the same way §29.2.10 read Jupiter's |
 | `OTHERWISE_WEAK_HAS_NO_TEST` | Ours: three triggers decidable, the fourth unmeasured, as in §29.2.8 and §29.2.9. OI-166 |
 | `RADDA_CANCELS_FROM_INSIDE_THE_PAIR` | Ours: the third cancelling yoga, and the only one needing nothing outside the ithasala |
+| `DUHPHALI_KUTTA_RULE` · `DUHPHALI_KUTTA_RESULTS` · `DUHPHALI_KUTTA_EXAMPLE` · `GOOD_BALA_GRADES` | §29.2.12 verbatim and its worked case as data |
+| `THE_RULE_AND_ITS_EXAMPLE_ARE_MIRROR_IMAGES` | Ours: the rule wants the faster strong and the example has the slower strong, and the example is right about which is which. OI-169 |
+| `PANCHA_VARGEEYA_BALA_IS_THE_ONE_STRENGTH_29_2_NAMES` | Ours: the only measure the chapter ever names, and evidence on OI-166 |
+| `GOOD_IS_NOT_A_BAND_NAME_BUT_THE_EXAMPLE_SUPPLIES_ONE` · `THE_MIDDLE_BAND_SATISFIES_NEITHER_CONDITION` | Ours: "good" is not one of §28.4.6's five bands, and the middle band satisfies neither condition. OI-170 |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

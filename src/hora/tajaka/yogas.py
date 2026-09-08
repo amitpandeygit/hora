@@ -24,7 +24,10 @@ from hora.tajaka.aspects import (
     aspects_from,
     deeptamsa,
 )
-from hora.tajaka.panchavargeeya import hadda_lord
+from hora.tajaka.panchavargeeya import (
+    hadda_lord,
+    pancha_vargeeya_grade,
+)
 
 CHAPTER_TITLE = "Tajaka Yogas"
 
@@ -2235,6 +2238,160 @@ def radda(*, faster: int, slower: int, faster_longitude: float,
         "combustion_undecided": (None if sun_longitude is not None else
                                  "the Sun's longitude was not supplied"),
         "rule": RADDA_RULE,
+    }
+
+
+# --------------------------------------------------------------------------
+# §29.2.12 Duhphali-Kutta yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.12's rule, verbatim.
+DUHPHALI_KUTTA_RULE = (
+    "If (a) the faster planet in an ithasala is exalted or occupies own rasi "
+    "or has a good panchavargeeya bala and (b) the slower planet is not "
+    "exalted, not in own rasi and weak in panchavargeeya bala, then it goes "
+    "by a special name - Duhphali-Kutta yoga. This yoga shows realization of "
+    "ambitions and dreams."
+)
+
+DUHPHALI_KUTTA_RESULTS = "realization of ambitions and dreams"
+
+#: §29.2.12's worked example, verbatim in substance.
+DUHPHALI_KUTTA_EXAMPLE: dict[str, object] = {
+    "faster": "Mars", "faster_at": "18 Ge", "faster_longitude": 78.0,
+    "faster_bala": "low",
+    "slower": "Saturn", "slower_at": "20 Li", "slower_longitude": 200.0,
+    "slower_bala": "good",
+    "aspect": "Trinal aspect", "ithasala": "Vartamaana",
+    "slower_exalted": True,
+    "book_says": ("Because Saturn, the slower planet, is exalted and strong "
+                  "and Mars, the faster planet, is weak, this becomes "
+                  "Duhphali-Kutta yoga."),
+}
+
+#: **Book defect, and it is the plainest one in the chapter.** The rule wants
+#: the **faster** planet strong and the **slower** planet weak. The example has
+#: it the other way round and says so in as many words: "Because Saturn, **the
+#: slower planet**, is exalted and strong and Mars, **the faster planet**, is
+#: weak, this becomes Duhphali-Kutta yoga."
+#:
+#: The example is not mislabelled — it names which planet is faster and which
+#: slower, and it is right about both: footnote 83 puts Mars above Saturn. The
+#: chart itself is the mirror of the rule, so no relabelling reconciles them;
+#: one of the two has (a) and (b) exchanged. `duhphali_kutta` answers under
+#: each and picks neither. See OI-169.
+THE_RULE_AND_ITS_EXAMPLE_ARE_MIRROR_IMAGES = (
+    "The rule requires the faster planet strong and the slower weak. The "
+    "example has Saturn, the slower planet, exalted and strong and Mars, the "
+    "faster planet, weak, and calls it the yoga. The two are exact mirrors."
+)
+
+#: **Finding, and it is evidence on OI-166.** §29.2.12 is the first yoga in
+#: the chapter to name a **strength**: pancha vargeeya bala, §28.4's. §29.2.8
+#: asked for "the strength of Moon and other planets" and §29.2.9 for "a
+#: strong planet", and neither said which of chapter 28's two balas it meant.
+#: This section says. It does not settle those sections, but it is the only
+#: measure §29.2 ever names.
+PANCHA_VARGEEYA_BALA_IS_THE_ONE_STRENGTH_29_2_NAMES = (
+    "Section 29.2.12 names pancha vargeeya bala. Sections 29.2.8 and 29.2.9 "
+    "asked for strength without naming a measure, and no other section in "
+    "the chapter names one."
+)
+
+#: **Finding.** "Weak in panchavargeeya bala" is a band name — §28.4.6 calls
+#: a bala below 5 **weak** — so condition (b) is exact. "A good
+#: panchavargeeya bala" is **not** one of the five band names, but the example
+#: supplies the reading: it calls Saturn's "good" bala **strong** a sentence
+#: later, and "strong" is §28.4.6's 10-to-15 band. So "good" is taken as strong
+#: or better.
+GOOD_IS_NOT_A_BAND_NAME_BUT_THE_EXAMPLE_SUPPLIES_ONE = (
+    "Section 28.4.6 names five bands and \"good\" is not one of them. The "
+    "example calls the same bala good and then strong, so good is read as "
+    "the strong band or better."
+)
+
+#: The bands §29.2.12's "good panchavargeeya bala" is read to mean.
+GOOD_BALA_GRADES: tuple[str, ...] = (
+    "strong", "very strong", "extraordinarily strong")
+
+#: **Finding.** Condition (b) is **stricter** than the negation of (a). Not-(a)
+#: is "not exalted, not in own rasi and not good"; (b) is "not exalted, not in
+#: own rasi and **weak**". §28.4.6's middle band — ordinary strength, 5 to 10 —
+#: is neither good nor weak, so a planet sitting there fails both conditions
+#: and the yoga is simply silent about it. A quarter of the bala range falls
+#: in that gap.
+THE_MIDDLE_BAND_SATISFIES_NEITHER_CONDITION = (
+    "A planet with ordinary strength, section 28.4.6's five-to-ten band, is "
+    "neither good enough for condition (a) nor weak enough for condition "
+    "(b). The rule says nothing about it."
+)
+
+
+def _duhphali_side(graha: int, longitude: float,
+                   bala: float | None) -> dict:
+    """One planet measured against §29.2.12's two conditions."""
+    rasi = int(validate.longitude("longitude", float(longitude)) // 30)
+    exalted = rasi == int(EXALTATION_RASI[int(graha)])
+    own = int(RASI_LORD[rasi]) == int(graha)
+    grade = None if bala is None else pancha_vargeeya_grade(float(bala))
+    good = grade in GOOD_BALA_GRADES
+    weak = grade == "weak"
+    return {
+        "graha": int(graha), "graha_name": str(GRAHA_NAMES[int(graha)]),
+        "rasi": rasi, "exalted": exalted, "own_rasi": own,
+        "bala": None if bala is None else float(bala),
+        "bala_grade": grade,
+        "has_good_bala": good, "has_weak_bala": weak,
+        # (a) is a disjunction and (b) a conjunction, as the section writes them.
+        "qualifies_as_the_strong_side": bool(exalted or own or good),
+        "qualifies_as_the_weak_side": bool(not exalted and not own and weak),
+        "in_the_middle_band": grade == "ordinary strength",
+    }
+
+
+def duhphali_kutta(*, faster: int, slower: int, faster_longitude: float,
+                   slower_longitude: float, faster_bala: float | None = None,
+                   slower_bala: float | None = None,
+                   faster_retrograde: bool = False,
+                   slower_retrograde: bool = False) -> dict:
+    """§29.2.12 — an ithasala with one party strong and the other weak.
+
+    Which party must be which is answered **both** ways: the rule and its own
+    example are mirror images. See `THE_RULE_AND_ITS_EXAMPLE_ARE_MIRROR_IMAGES`
+    and OI-169.
+    """
+    base = ithasala(faster=faster, slower=slower,
+                    faster_longitude=faster_longitude,
+                    slower_longitude=slower_longitude,
+                    faster_retrograde=faster_retrograde,
+                    slower_retrograde=slower_retrograde)
+    quick, slow = int(base["faster"]), int(base["slower"])
+    seats = {int(faster): float(faster_longitude),
+             int(slower): float(slower_longitude)}
+    balas = {int(faster): faster_bala, int(slower): slower_bala}
+
+    quick_side = _duhphali_side(quick, seats[quick], balas[quick])
+    slow_side = _duhphali_side(slow, seats[slow], balas[slow])
+
+    as_worded = bool(base["type"] is not None
+                     and quick_side["qualifies_as_the_strong_side"]
+                     and slow_side["qualifies_as_the_weak_side"])
+    as_worked = bool(base["type"] is not None
+                     and slow_side["qualifies_as_the_strong_side"]
+                     and quick_side["qualifies_as_the_weak_side"])
+    return {
+        "yoga": "Duhphali-Kutta",
+        "ithasala_type": base["type"],
+        "faster_side": quick_side,
+        "slower_side": slow_side,
+        "present_as_worded": as_worded,
+        "present_as_worked": as_worked,
+        "readings_agree": as_worded == as_worked,
+        "undecided": (None if as_worded == as_worked
+                      else THE_RULE_AND_ITS_EXAMPLE_ARE_MIRROR_IMAGES),
+        "balas_supplied": faster_bala is not None and slower_bala is not None,
+        "gives": DUHPHALI_KUTTA_RESULTS,
+        "rule": DUHPHALI_KUTTA_RULE,
     }
 
 

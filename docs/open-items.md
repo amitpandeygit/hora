@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**6 waiting on Amit · 116 waiting on evidence · 2 parked**
+**7 waiting on Amit · 118 waiting on evidence · 2 parked**
 
 ---
 
@@ -19,6 +19,7 @@ until the book is finished, not only the five below. Record; never re-raise.
 | OI-37 | Make the 1st tithi `Pratipat`, the book's first-listed name | `full_name` on `/v1/tithi/compute` and `/v1/util/tables/tithis` — breaking response change; no calculation moves |
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
 | OI-158 | Read §28.8.2's "Jupiter aspects natal vivaha saham" as chapter 10's graha drishti | The marriage rule. Graha drishti fires in 1 chart of 3; §28.2's Tajaka aspects fire in 5 of 6, which leaves it almost no content |
+| OI-169 | Read §29.2.12 as its rule states it, faster strong and slower weak, rather than as its example works it | Duhphali-Kutta. The two are exact mirrors and the book's own example contradicts its own rule |
 | OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Seventeen** charts reproduce with mean and none with true; under `true` Chart 41's Rahu is **98'** out and Chart 39's **96'**, both a whole sign wrong |
 
 Order I would take them: OI-39 is the only unambiguous defect and the only one
@@ -2477,6 +2478,10 @@ which the section does not say.
 planet as an input and never decides whether it is strong. Neither invents a
 multiplier or a threshold.
 
+**Evidence, 29.2.12.** That section names **pancha vargeeya bala** outright,
+and it is the only measure §29.2 ever names. Not a settlement of these two, but
+the only candidate the chapter itself supplies.
+
 **Closes when:** a later section or a worked example scores the addition, or
 names the strength it means.
 
@@ -2528,6 +2533,47 @@ sees which planet's retrogression did it and can weigh the two sections.
 
 **Closes when:** you settle it, or a worked example runs an ithasala with a
 retrograde planet to a result.
+
+
+### OI-169 — §29.2.12's rule and its example are exact mirrors
+
+**Waiting on you or on the book.** The rule: "(a) the **faster** planet in an
+ithasala is exalted or occupies own rasi or has a good panchavargeeya bala and
+(b) the **slower** planet is not exalted, not in own rasi and weak in
+panchavargeeya bala."
+
+The example: "Because Saturn, **the slower planet**, is exalted and strong and
+Mars, **the faster planet**, is weak, this becomes Duhphali-Kutta yoga."
+
+This is not a labelling slip. The example names which planet is faster and
+which slower and is right about both — footnote 83 puts Mars above Saturn — and
+the chart itself is the mirror of the rule, so no relabelling reconciles them.
+One of the two has (a) and (b) exchanged and the section gives no way to tell
+which.
+
+`duhphali_kutta` returns `present_as_worded` and `present_as_worked` separately
+and sets `readings_agree`. On the book's own example they differ.
+
+**Closes when:** you settle it, or a second worked case falls on one side.
+
+
+### OI-170 — "a good panchavargeeya bala" is not one of §28.4.6's bands
+
+**Waiting on the book.** §28.4.6 names five bands — weak, ordinary strength,
+strong, very strong, extraordinarily strong. §29.2.12's condition (b) uses
+**weak**, which is one of them exactly. Condition (a) uses **good**, which is
+not.
+
+The example supplies a reading rather than a definition: it calls Saturn's
+bala "good" in the setup and "strong" a sentence later, and *strong* is
+§28.4.6's 10-to-15 band. `GOOD_BALA_GRADES` follows that — strong or better.
+
+The consequence is a hole the section does not mention: **ordinary strength**,
+the 5-to-10 band, is neither good nor weak, so a planet there satisfies neither
+condition. A quarter of the bala range falls in it.
+
+**Closes when:** a later section prices "good", or a worked case puts a planet
+in the middle band.
 
 
 ---
