@@ -262,17 +262,40 @@ THE_CORRECTION_IS_A_THIRTY_DEGREE_STEP = (
     "saham is discontinuous at both ends of that arc."
 )
 
-#: **Finding.** Three rows need a **house's longitude** — the 8th, 9th, 2nd,
-#: 11th and 6th — and §28.8 never says what that means. In a whole-sign chart
-#: a house is a rasi, not a point; a cusp, a midpoint and a sign start are
-#: three different longitudes and the choice moves the saham by up to a rasi.
-#: See OI-157. `sahams` takes house longitudes as an input and refuses to
-#: guess one.
+#: **Settled by Example 121.** Five rows need a **house's longitude** — the
+#: 2nd, 6th, 8th, 9th and 11th — and §28.8 never says what that means. Example
+#: 121 shows it: with lagna at 10 Cp 50 it puts the 2nd house at **10 Aq 50**,
+#: which is the lagna carried forward exactly thirty degrees. Houses are equal
+#: from the **lagna's own degree**, not from the start of its rasi and not
+#: from a cusp system. `house_longitude` builds them; `sahams` still takes
+#: them as an input so a caller may pass something else, but it no longer
+#: needs to. OI-157 closed.
 A_HOUSES_LONGITUDE_IS_NOT_DEFINED = (
-    "Table 74 uses the 2nd, 6th, 8th, 9th and 11th houses as longitudes. "
-    "Section 28.8 does not say whether that is a cusp, a midpoint or the "
-    "start of a rasi, and the three differ by up to thirty degrees."
+    "Table 74 uses the 2nd, 6th, 8th, 9th and 11th houses as longitudes and "
+    "section 28.8 does not say what that means. Example 121 fixes it: the "
+    "2nd house is the lagna plus thirty degrees, to the arcminute."
 )
+
+#: **Finding.** The rule Example 121 fixes, as arithmetic. It is equal houses
+#: from the lagna **point**, which is what §6 called the bhava madhya reading
+#: — not the whole-sign rasi the chart is drawn in.
+HOUSES_ARE_EQUAL_FROM_THE_LAGNA_DEGREE = (
+    "The nth house's longitude is the lagna plus thirty degrees times n minus "
+    "one. Example 121's lagna at 280 degrees 50 minutes gives a 2nd house at "
+    "310 degrees 50 minutes, which is what the example prints."
+)
+
+
+def house_longitude(lagna: float, house: int) -> float:
+    """The `house`th house's longitude under Example 121's rule."""
+    seat = validate.longitude("lagna", float(lagna))
+    number = validate.in_range("house", int(house), 1, 12)
+    return (seat + 30.0 * (number - 1)) % 360.0
+
+
+def house_longitudes(lagna: float) -> dict[int, float]:
+    """Every house longitude Table 74 asks for, under Example 121's rule."""
+    return {n: house_longitude(lagna, n) for n in houses_needed()}
 
 
 def _needs(entry: dict, kind: str) -> tuple:
@@ -409,7 +432,9 @@ def _resolve(term: tuple, *, longitudes: dict[str, float],
         rasi = int(longitudes[term[1]] // 30)
         return longitudes[str(GRAHA_NAMES[int(RASI_LORD[rasi])])]
     if kind == "house":
-        if houses is None or int(term[1]) not in houses:
+        if houses is None:
+            return house_longitude(lagna, int(term[1]))
+        if int(term[1]) not in houses:
             raise SahamError(
                 f"the {term[1]}th house's longitude is needed and was not "
                 f"supplied; {A_HOUSES_LONGITUDE_IS_NOT_DEFINED}")
@@ -423,10 +448,12 @@ def sahams(*, longitudes: dict[str, float], lagna: float, daytime: bool,
 
     :param longitudes: the seven classical grahas by name, in the chart the
         sahams are being read for.
-    :param houses: the 2nd, 6th, 8th, 9th and 11th houses as longitudes. §28.8
-        never says what a house's longitude is, so they are an input; the five
-        rows that need one are returned undecided when it is missing rather
-        than computed from a guess. See OI-157.
+    :param houses: the 2nd, 6th, 8th, 9th and 11th houses as longitudes.
+        §28.8 never says what a house's longitude is, but **Example 121
+        does** — the lagna plus thirty degrees per house — so leaving this
+        ``None`` uses that rule rather than returning those five undecided.
+        Pass a mapping to override it; a mapping that omits a house Table 74
+        needs still returns that saham undecided. See OI-157, closed.
     """
     for name in _GRAHA_IDS:
         if name not in longitudes:
@@ -486,12 +513,74 @@ TWO_PRINTED_SAHAMS_REPRODUCE = (
     "are night births and both need the night formula."
 )
 
-#: **Not confirmed.** In both of those the C term already lay on the arc, so
-#: neither adds the thirty degrees. The correction is implemented from
-#: §28.8.1's words alone, and no printed saham in the book exercises it. It is
-#: the one part of the section with no worked value behind it.
+#: **Was: not confirmed. Now confirmed by Example 121.** In both of those the
+#: C term already lay on the arc, so neither added the thirty degrees. Example
+#: 121's **samartha saham** does: lagna 280°50\' is not on the arc from Mars
+#: 354°58\' to Saturn 19°10\', so 305°2\' becomes **335°2\' = 5 Pi 02**, which
+#: is what the book prints. The correction now has a worked value.
 THE_CORRECTION_HAS_NO_WORKED_VALUE = (
-    "Both sahams the book prints have C between B and A, so neither takes "
-    "the thirty-degree correction. Nothing in the book shows the correction "
-    "applied to a number."
+    "The two sahams printed outside chapter 28 both have C between B and A, "
+    "so neither takes the correction. Example 121's samartha saham does: it "
+    "prints 5 Pi 02, which is 305 degrees 2 minutes plus the thirty."
 )
+
+#: **Finding.** Example 121 works three sahams on Chart 66 and each exercises
+#: something different: **artha** the "same for day & night" note and a house
+#: as a longitude, **samartha** the thirty-degree correction, and **vanik**
+#: the plain night swap. All three reproduce to the arcminute from the
+#: example's own printed inputs.
+EXAMPLE_121_COVERS_THREE_DIFFERENT_RULES = (
+    "Artha exercises the day-and-night exemption and a house longitude, "
+    "samartha the thirty-degree correction, and vanik the ordinary night "
+    "swap. Three sahams, three rules, all reproducing."
+)
+
+#: **Book defect.** Chart 66's diagram and Example 121 disagree by an
+#: arcminute on four of the five longitudes the example uses, and the reason
+#: is mechanical: the **diagram truncates arcminutes and the example rounds
+#: them**. Our own values sit between the two — Lagna 10 Cp 49.59\', Saturn
+#: 19 Ar 9.59\', Moon 15 Pi 13.89\', Mercury 11 Aq 27.60\' — so each printing
+#: is right about its own convention, and Mars at 24 Pi 58.22\' agrees with
+#: both because its fraction is under a half. Five for five. Recorded rather
+#: than corrected; the sahams are computed from the diagram, and the example's
+#: numbers are reproduced separately from the example's own inputs.
+CHART_66_TRUNCATES_WHERE_EXAMPLE_121_ROUNDS = (
+    "Chart 66's diagram truncates arcminutes and Example 121 rounds them. "
+    "The four values whose true fraction is over a half differ by one "
+    "arcminute between the two printings, and Mars, whose fraction is under "
+    "a half, agrees with both."
+)
+
+#: **Book defect.** The vanik paragraph of Example 121 opens its arithmetic
+#: with "So samartha saham = 311°28\' - 345°14\' + 280°50\'". Those are vanik
+#: saham's terms and the paragraph's own conclusion calls it vanik. A stray
+#: word carried down from the paragraph above.
+EXAMPLE_121_MISNAMES_VANIK_ONCE = (
+    "The third paragraph writes \"samartha saham\" where it means vanik "
+    "saham, in the line setting out the arithmetic. Its terms and its "
+    "conclusion are both vanik's."
+)
+
+#: Example 121's three answers, as the book prints them.
+EXAMPLE_121_SAHAMS: tuple[dict[str, object], ...] = (
+    {"saham": "Artha", "means": "money", "printed": "2 Sc 30",
+     "longitude": 212.5, "correction": 0.0,
+     "exercises": "the same-for-day-and-night note, and a house longitude"},
+    {"saham": "Samartha", "means": "enterprise/ability", "printed": "5 Pi 02",
+     "longitude": 335.0 + 2.0 / 60.0, "correction": 30.0,
+     "exercises": "the thirty-degree correction"},
+    {"saham": "Vanik", "means": "commerce", "printed": "7 Sg 04",
+     "longitude": 247.0 + 4.0 / 60.0, "correction": 0.0,
+     "exercises": "the ordinary night swap"},
+)
+
+#: Example 121's own printed inputs, which differ from Chart 66's diagram by
+#: an arcminute — see `CHART_66_TRUNCATES_WHERE_EXAMPLE_121_ROUNDS`.
+EXAMPLE_121_INPUTS: dict[str, float] = {
+    "lagna": 280.0 + 50.0 / 60.0,
+    "second_house": 310.0 + 50.0 / 60.0,
+    "Saturn": 19.0 + 10.0 / 60.0,
+    "Mars": 354.0 + 58.0 / 60.0,
+    "Moon": 345.0 + 14.0 / 60.0,
+    "Mercury": 311.0 + 28.0 / 60.0,
+}

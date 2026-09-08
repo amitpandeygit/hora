@@ -2628,3 +2628,36 @@ verbatim constant and is **not** used as a check on the grid; the tests assert
 the real counts and this entry.
 
 **Closes when:** you confirm the reading, or a later printing corrects it.
+
+
+---
+
+## D-80 · Chart 66's diagram truncates arcminutes; Example 121 rounds them
+
+**Status: BOOK DEVIATION — both printings are kept as printed. Our own values
+sit between them and agree with each convention on its own terms.**
+
+Example 121 works three sahams on Chart 66 and restates the longitudes it
+needs. Four of the five disagree with the diagram by exactly one arcminute:
+
+| body | Chart 66's diagram | Example 121 | ours |
+|---|---|---|---|
+| Lagna | 10 Cp 49 | 10 Cp **50** | 10 Cp 49.59' |
+| Saturn | 19 Ar 09 | 19 Ar **10** | 19 Ar 9.59' |
+| Moon | 15 Pi 13 | 15 Pi **14** | 15 Pi 13.89' |
+| Mercury | 11 Aq 27 | 11 Aq **28** | 11 Aq 27.60' |
+| Mars | 24 Pi 58 | 24 Pi 58 | 24 Pi 58.22' |
+
+The cause is mechanical: the **diagram truncates the arcminute and the example
+rounds it**. Every body whose true fraction is over a half differs; Mars, at
+.22', agrees with both. Five for five, so this is a formatting difference
+between two renderings of one chart, not a disagreement about a position.
+
+**What we do.** Nothing is corrected. `BOOK_CHARTS[66]` keeps the diagram's
+values, `EXAMPLE_121_INPUTS` keeps the example's, and both are tested — the
+example's three answers reproduce to the arcminute from its own inputs, and to
+within 2.5 arcminutes from the diagram's, which is what a one-arcminute input
+difference on a three-term formula gives.
+
+**Closes when:** you confirm the reading, or a later printing makes the two
+printings agree.

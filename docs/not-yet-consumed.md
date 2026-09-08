@@ -1674,7 +1674,7 @@ findings.
 | `THE_TIE_BREAK_COUNTS_SIX_CATEGORIES_HERE` | Ours: 28.6's tie-break names five categories and a month has six |
 
 
-### Chapter 28 — §28.8.1's sahams (15)
+### Chapter 28 — §28.8.1's sahams and Example 121 (21)
 
 `tajaka/sahams.py`. The rules **are** built: `saham_point` applies the A − B +
 C formula with §28.8.1's thirty-degree correction, `formula_for` reads all
@@ -1690,10 +1690,15 @@ elsewhere reproduce. What follows is prose and findings.
 | `FIVE_SAHAMS_DEPEND_ON_OTHERS` | Ours: five rows take another saham as a term, which fixes an evaluation order the table does not state |
 | `ROGA_USES_THE_LAGNA_TWICE` | Ours: roga saham is Lagna − Moon + Lagna, the only row to repeat a term |
 | `THE_CORRECTION_IS_A_THIRTY_DEGREE_STEP` | Ours: the correction is a whole sign, not an orb or a reflection |
-| `A_HOUSES_LONGITUDE_IS_NOT_DEFINED` | Ours: five rows take "the Nth house" as a longitude and the book never says whether that is the cusp or the sign's start. OI-157 |
+| `A_HOUSES_LONGITUDE_IS_NOT_DEFINED` | Ours: five rows take "the Nth house" as a longitude and §28.8 never says what that is — Example 121 does, so this now records what was missing and what filled it. OI-157 closed |
+| `HOUSES_ARE_EQUAL_FROM_THE_LAGNA_DEGREE` | Ours: the rule Example 121 fixes, stated as arithmetic; `house_longitude` implements it |
 | `PUNYA_AND_VIDYA_EXCHANGE_AT_NIGHT` | Ours: the two rows are each other's night forms, so the pair is closed under the swap |
 | `TWO_PRINTED_SAHAMS_REPRODUCE` | Ours: Chart 19's Rajya at 6 Li 20 and Chart 53's vivaha at 0 Cp 41, both needing the night formula — the check, recorded |
-| `THE_CORRECTION_HAS_NO_WORKED_VALUE` | Ours: both printed sahams skip the correction, so it is built from words alone with no number behind it |
+| `THE_CORRECTION_HAS_NO_WORKED_VALUE` | Ours: the two sahams printed outside chapter 28 skip the correction; Example 121's samartha does not, so it is no longer unbacked |
+| `EXAMPLE_121_SAHAMS` · `EXAMPLE_121_INPUTS` | Its three answers and its own printed longitudes, as fixtures |
+| `EXAMPLE_121_COVERS_THREE_DIFFERENT_RULES` | Ours: artha exercises the day-and-night exemption and a house longitude, samartha the correction, vanik the plain swap |
+| `CHART_66_TRUNCATES_WHERE_EXAMPLE_121_ROUNDS` | Ours: the diagram truncates arcminutes and the example rounds them, five for five. D-80 |
+| `EXAMPLE_121_MISNAMES_VANIK_ONCE` | A stray "samartha saham" in the vanik paragraph's arithmetic line |
 
 ---
 

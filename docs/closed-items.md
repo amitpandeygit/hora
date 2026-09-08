@@ -5,6 +5,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | ID | Item |
 |---|---|
 | [OI-116](#oi-116) | Example 54's Rajya saham could not be computed |
+| [OI-157](#oi-157) | Table 74 used a house as a longitude and never defined one |
 | [OI-151](#oi-151) | §27.1's "exact position" is the sidereal longitude |
 | [OI-146](#oi-146) | one square of Figure 3 could not be read |
 | [OI-147](#oi-147) | §26.8's vedha lines were stated but not determined |
@@ -1970,3 +1971,28 @@ What the constraints were really showing is a defect in the section's own
 tally, not in the figure: **a** occupies two squares, so there are 17 vowel
 squares over 16 distinct vowels, and 19 consonant squares, not 20. See D-77.
 
+
+
+## OI-157 — Table 74 used a house as a longitude and never defined one · **CLOSED**
+
+**Closed by Example 121.** Five of Table 74's sahams take a **house** as a
+term — Mrityu and Apamrityu the 8th, Paradesa the 9th, Artha the 2nd, Santapa
+the 6th — and §28.8 never said what a house's longitude was. In a whole-sign
+chart a house is a rasi, not a point, and the readings available were up to a
+rasi apart.
+
+Example 121 works artha saham out loud on Chart 66 and states both numbers:
+
+> Lagna is at 10 Cp 50, *i.e.* 280°50'. The 2nd house is at 10 Aq 50, *i.e.*
+> 310°50'.
+
+310°50' − 280°50' = **exactly 30°00'**. The house is the lagna carried forward
+one sign, degree for degree and minute for minute. Not the start of the lagna's
+rasi (which would be 300°00' for the 2nd), and not a cusp system — equal houses
+from the **lagna's own longitude**.
+
+`house_longitude` and `house_longitudes` in `tajaka/sahams.py` build them, and
+`sahams` now uses that rule when no houses are passed, where it previously
+returned those five undecided. An explicit mapping still overrides it, and a
+mapping that omits a house Table 74 needs still returns that saham undecided,
+so nothing silently falls back.

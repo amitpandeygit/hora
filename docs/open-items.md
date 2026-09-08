@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**5 waiting on Amit · 106 waiting on evidence · 2 parked**
+**5 waiting on Amit · 105 waiting on evidence · 2 parked**
 
 ---
 
@@ -2297,28 +2297,6 @@ candidates share both the highest bala and the same number of categories,
 which §28.6 also leaves open.
 
 **Closes when:** a worked example runs the cascade, or you settle both.
-
-
-### OI-157 — Table 74 uses a house as a longitude and never defines one
-
-**Waiting on the book.** Five of Table 74's sahams take a **house** as a term:
-
-| saham | formula |
-|---|---|
-| Mrityu | 8th house − Moon + Lagna |
-| Paradesa | 9th house − 9th lord + Lagna |
-| Artha | 2nd house − 2nd lord + Lagna |
-| Santapa | Saturn − Moon + 6th house |
-| Apamrityu | 8th house − Mars + Lagna |
-
-§28.8 never says what a house's longitude is. In a whole-sign chart a house is
-a rasi, not a point, and the readings available — the start of the rasi, the
-bhava madhya, an Ascendant-based cusp — are up to a rasi apart. `sahams` takes
-the house longitudes as an input and returns those five **undecided** without
-one, rather than picking a reading.
-
-**Closes when:** §28.8 or a worked saham fixes what a house's longitude means.
-
 
 ---
 

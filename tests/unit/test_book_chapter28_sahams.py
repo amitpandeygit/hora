@@ -367,9 +367,10 @@ def test_the_collisions_are_what_the_finding_says():
     assert "meeting the general swap" in SAHAMS_COINCIDE_STRUCTURALLY
 
 
-def test_a_missing_house_longitude_leaves_five_sahams_undecided():
-    """OI-157. §28.8 never says what a house's longitude is, so it is an
-    input and the rows that need one say so when it is absent.
+def test_an_incomplete_house_mapping_leaves_those_sahams_undecided():
+    """OI-157, closed. `houses=None` now takes Example 121's rule, but an
+    explicit mapping is taken at its word: a house it omits is still missing,
+    and the rows needing it say so rather than falling back.
     """
     from hora.tajaka.sahams import (
         A_HOUSES_LONGITUDE_IS_NOT_DEFINED,
@@ -377,7 +378,8 @@ def test_a_missing_house_longitude_leaves_five_sahams_undecided():
     )
 
     longitudes, lagna, _houses = _chart_66_inputs()
-    got = sahams(longitudes=longitudes, lagna=lagna, daytime=False)
+    got = sahams(longitudes=longitudes, lagna=lagna, daytime=False,
+                 houses={})
     blank = [name for name, row in got.items() if row["longitude"] is None]
     assert sorted(blank) == ["Apamrityu", "Artha", "Labha", "Mrityu",
                              "Paradesa", "Santapa"]
@@ -385,7 +387,7 @@ def test_a_missing_house_longitude_leaves_five_sahams_undecided():
         assert "was not supplied" in got[name]["undecided"]
     # The other thirty are unaffected.
     assert len(got) - len(blank) == 30
-    assert "up to thirty degrees" in A_HOUSES_LONGITUDE_IS_NOT_DEFINED
+    assert "Example 121 fixes it" in A_HOUSES_LONGITUDE_IS_NOT_DEFINED
 
 
 def test_sahams_checks_its_inputs():
@@ -466,8 +468,8 @@ def test_example_104s_saham_claim_can_now_be_checked():
     assert 1.0 < gap < 1.5
 
 
-def test_the_correction_has_no_worked_value_in_the_book():
-    """Both printed sahams have C on the arc, so neither exercises the +30."""
+def test_neither_saham_outside_chapter_28_exercises_the_correction():
+    """Both have C on the arc, so neither takes the +30. Example 121 does."""
     from hora.charts import book
     from hora.tajaka.sahams import (
         THE_CORRECTION_HAS_NO_WORKED_VALUE,
@@ -481,5 +483,192 @@ def test_the_correction_has_no_worked_value_in_the_book():
                          fifty_three["Asc"])
     assert rajya["correction"] == 0.0
     assert vivaha["correction"] == 0.0
-    assert "Nothing in the book shows the correction applied" in (
+    # Example 121's samartha saham does exercise it — see below.
+    assert "The two sahams printed outside chapter 28" in (
         THE_CORRECTION_HAS_NO_WORKED_VALUE)
+
+
+# --------------------------------------------------------------------------
+# Example 121 — three sahams worked on Chart 66
+# --------------------------------------------------------------------------
+
+
+def test_example_121_reproduces_from_its_own_printed_inputs():
+    """All three, to the arcminute, with the correction on one of them."""
+    from hora.tajaka.sahams import (
+        EXAMPLE_121_INPUTS,
+        EXAMPLE_121_SAHAMS,
+        saham_point,
+    )
+
+    v = EXAMPLE_121_INPUTS
+    terms = {
+        "Artha": (v["second_house"], v["Saturn"], v["lagna"]),
+        "Samartha": (v["Saturn"], v["Mars"], v["lagna"]),
+        "Vanik": (v["Mercury"], v["Moon"], v["lagna"]),
+    }
+    for row in EXAMPLE_121_SAHAMS:
+        a, b, c = terms[str(row["saham"])]
+        point = saham_point(a, b, c)
+        assert point["correction"] == row["correction"], row["saham"]
+        assert point["longitude"] == pytest.approx(row["longitude"],
+                                                   abs=1 / 3600), row["saham"]
+
+
+def test_example_121_fixes_what_a_houses_longitude_means():
+    """Lagna 10 Cp 50 and 2nd house 10 Aq 50 — exactly thirty degrees on,
+    from the lagna's own degree. OI-157's answer.
+    """
+    from hora.tajaka.sahams import (
+        EXAMPLE_121_INPUTS,
+        HOUSES_ARE_EQUAL_FROM_THE_LAGNA_DEGREE,
+        house_longitude,
+        house_longitudes,
+        houses_needed,
+    )
+
+    lagna = EXAMPLE_121_INPUTS["lagna"]
+    assert house_longitude(lagna, 2) == pytest.approx(
+        EXAMPLE_121_INPUTS["second_house"], abs=1e-9)
+    # not the start of the lagna's rasi, and not the start of the 2nd rasi
+    assert house_longitude(lagna, 2) != pytest.approx(300.0)
+    assert house_longitude(lagna, 1) == pytest.approx(lagna)
+    assert set(house_longitudes(lagna)) == set(houses_needed())
+    assert "plus thirty degrees times n minus" in (
+        HOUSES_ARE_EQUAL_FROM_THE_LAGNA_DEGREE)
+
+
+def test_a_missing_houses_mapping_now_uses_example_121s_rule():
+    """It returned five sahams undecided before Example 121 supplied the
+    rule. Passing an incomplete mapping still refuses, so an explicit
+    override cannot silently fall back.
+    """
+    from hora.tajaka.sahams import house_longitudes, sahams
+
+    lagna = 280.0 + 50.0 / 60.0
+    lon = dict.fromkeys(
+        ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"), 10.0)
+
+    derived = sahams(longitudes=lon, lagna=lagna, daytime=False)
+    assert all(row["undecided"] is None for row in derived.values())
+
+    passed = sahams(longitudes=lon, lagna=lagna, daytime=False,
+                    houses=house_longitudes(lagna))
+    assert {n: r["longitude"] for n, r in passed.items()} == {
+        n: r["longitude"] for n, r in derived.items()}
+
+    partial = sahams(longitudes=lon, lagna=lagna, daytime=False,
+                     houses={2: 310.0})
+    assert partial["Artha"]["undecided"] is None
+    assert partial["Mrityu"]["undecided"] is not None
+
+
+def test_artha_saham_does_not_swap_at_night():
+    """"this formula should be used for both day & night" — the note in
+    parentheses beats the general rule, and the example turns on it.
+    """
+    from hora.tajaka.sahams import TABLE_74_SAHAMS, formula_for
+
+    artha = next(r for r in TABLE_74_SAHAMS if r["name"] == "Artha")
+    assert artha["night"] == "same"
+    assert formula_for(artha, daytime=False) == formula_for(artha,
+                                                            daytime=True)
+    assert formula_for(artha, daytime=True)[0] == ("house", 2)
+
+
+def test_example_121s_correction_case_is_the_only_worked_one():
+    """Samartha adds the thirty; artha and vanik do not."""
+    from hora.tajaka.sahams import (
+        EXAMPLE_121_SAHAMS,
+        THE_CORRECTION_HAS_NO_WORKED_VALUE,
+    )
+
+    corrected = [r["saham"] for r in EXAMPLE_121_SAHAMS
+                 if r["correction"] == 30.0]
+    assert corrected == ["Samartha"]
+    assert "Example 121's samartha saham does" in (
+        THE_CORRECTION_HAS_NO_WORKED_VALUE)
+
+
+def test_chart_66s_diagram_truncates_where_example_121_rounds():
+    """Four of the five differ by an arcminute, and our own computed values
+    sit between the two conventions. Mars, under a half, agrees with both.
+    """
+    from hora.charts.chart import Place, compute_chart
+    from hora.core.const import Graha
+    from hora.core.settings import NodeType, Settings
+    from hora.core.timeutil import from_local
+    from hora.tajaka.sahams import CHART_66_TRUNCATES_WHERE_EXAMPLE_121_ROUNDS
+
+    computed = compute_chart(
+        from_local(2000, 3, 8, 4, 41, 21.0, utc_offset_hours=5.5),
+        Place(name="x", latitude=26 + 18 / 60, longitude=73 + 4 / 60),
+        Settings(node_type=NodeType.MEAN))
+    true = {
+        "lagna": computed.lagna_longitude,
+        "Saturn": computed.positions[Graha.SATURN].longitude,
+        "Mars": computed.positions[Graha.MARS].longitude,
+        "Moon": computed.positions[Graha.MOON].longitude,
+        "Mercury": computed.positions[Graha.MERCURY].longitude,
+    }
+    diagram = {"lagna": (10, 49), "Saturn": (19, 9), "Mars": (24, 58),
+               "Moon": (15, 13), "Mercury": (11, 27)}
+    example = {"lagna": (10, 50), "Saturn": (19, 10), "Mars": (24, 58),
+               "Moon": (15, 14), "Mercury": (11, 28)}
+    for name, value in true.items():
+        minutes = (value % 1) * 60
+        assert int(value % 30) == diagram[name][0] == example[name][0]
+        assert int(minutes) == diagram[name][1], name
+        assert round(minutes) == example[name][1], name
+        # and the whole story is the fraction crossing a half
+        assert (minutes % 1 >= 0.5) == (
+            diagram[name][1] != example[name][1]), name
+
+    assert "truncates arcminutes and Example 121 rounds" in (
+        CHART_66_TRUNCATES_WHERE_EXAMPLE_121_ROUNDS)
+
+
+def test_example_121_on_chart_66s_own_numbers_lands_within_two_arcminutes():
+    """The diagram's truncated values, run through our own code end to end.
+    Every answer is within two arcminutes of the example's, which is what a
+    one-arcminute input difference on a three-term formula gives.
+    """
+    from hora.charts import book
+    from hora.core.const import RASI_ABBR
+    from hora.tajaka.sahams import EXAMPLE_121_SAHAMS, sahams
+
+    printed = book.longitudes(66)
+    lon = {"Sun": printed["Sun"], "Moon": printed["Moon"],
+           "Mars": printed["Mars"], "Mercury": printed["Merc"],
+           "Jupiter": printed["Jup"], "Venus": printed["Ven"],
+           "Saturn": printed["Sat"]}
+    out = sahams(longitudes=lon, lagna=printed["Asc"], daytime=False)
+    for row in EXAMPLE_121_SAHAMS:
+        got = out[str(row["saham"])]
+        assert got["correction"] == row["correction"], row["saham"]
+        gap = abs(got["longitude"] - float(row["longitude"]))
+        assert gap < 2.5 / 60, (row["saham"], gap * 60)
+        assert RASI_ABBR[got["rasi"]] == str(row["printed"]).split()[1]
+
+
+def test_the_annual_chart_of_example_118_is_a_night_chart():
+    """Example 121 says so three times, and the instant is 4:41 am — before
+    sunrise, not after. Checked against the ephemeris, not against the clock.
+    """
+    from hora.core.timeutil import from_local
+    from hora.tajaka.harsha import year_began_in_daytime
+
+    answer = year_began_in_daytime(
+        from_local(2000, 3, 8, 4, 41, 21.0, utc_offset_hours=5.5).jd_ut,
+        latitude=26 + 18 / 60, longitude=73 + 4 / 60)
+    assert answer["daytime"] is False
+
+
+def test_example_121_misnames_vanik_once():
+    from hora.tajaka.sahams import (
+        EXAMPLE_121_COVERS_THREE_DIFFERENT_RULES,
+        EXAMPLE_121_MISNAMES_VANIK_ONCE,
+    )
+
+    assert "where it means vanik" in EXAMPLE_121_MISNAMES_VANIK_ONCE
+    assert "Three sahams, three rules" in EXAMPLE_121_COVERS_THREE_DIFFERENT_RULES
