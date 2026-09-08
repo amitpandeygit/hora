@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.4 (43)
+### Chapter 29 — §29.1 to §29.2.5 (49)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1756,6 +1756,11 @@ footnote can. What follows is prose and findings.
 | `THE_FIFTH_LORD_IS_IN_BOTH_READINGS` | Ours: the 5th lord is offered for children and again for loss of power, the only reference to appear twice |
 | `THE_SECTION_SPELLS_ITS_OWN_YOGA_THREE_WAYS` | Eesarpha, Easarpha and eesaarpha, in one section |
 | `THE_STATION_CASE_IS_NAMED_BUT_NOT_WORKED_HERE` | Ours: the Special Notes point at "about to become retrograde" and work only the retrograde cases |
+| `NAKTA_RULE` · `NAKTA_EXAMPLE` | §29.2.5 verbatim, its slip intact, and its worked case as data |
+| `THE_RULE_AND_ITS_EXAMPLE_DISAGREE_ON_THE_FIRST_PAIR` | Ours: the rule wants an aspect and the example has none. OI-164 |
+| `AS_WORDED_NAKTA_NEEDS_A_WIDE_ASPECT` | Ours: the rule's own condition is only satisfiable outside the orb and outside bhavishya's further degree |
+| `WHICH_ITHASALA_THE_CONNECTOR_NEEDS_IS_NOT_SAID` | Ours: "forms ithasala with both" does not say whether a bhavishya counts |
+| `THE_SPEED_CONDITION_IS_THE_ITHASALA_CONDITION` | Ours: a planet faster than both is automatically the faster party in both legs, so the two requirements are one |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

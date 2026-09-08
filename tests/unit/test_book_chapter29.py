@@ -1046,3 +1046,168 @@ def test_the_station_case_is_named_here_and_not_worked():
     assert "station" not in yogas.EESARPHA_SPECIAL_NOTES
     assert "no window is given" in (
         yogas.THE_STATION_CASE_IS_NAMED_BUT_NOT_WORKED_HERE)
+
+
+# --------------------------------------------------------------------------
+# §29.2.5 Nakta yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_nakta_rule_is_transcribed_with_its_slip_intact():
+    assert "no ithasala yoga or eesarpha yoga" in yogas.NAKTA_RULE
+    assert "moves faster than both the planets" in yogas.NAKTA_RULE
+    assert "forms ithasala yoga with both" in yogas.NAKTA_RULE
+    # "shows by the 3rd planet" for "shown by", kept as printed.
+    assert "someone shows by the 3rd planet" in yogas.NAKTA_RULE
+
+
+def test_the_nakta_example_reproduces():
+    """Venus 13 Ge, Mars 15 Sc, Moon 11 Cn. The Moon aspects both, is behind
+    both, and is faster than both.
+    """
+    want = yogas.NAKTA_EXAMPLE
+    got = yogas.nakta(
+        first=int(Graha.VENUS), second=int(Graha.MARS),
+        connector=int(Graha.MOON),
+        first_longitude=float(want["first_longitude"]),
+        second_longitude=float(want["second_longitude"]),
+        connector_longitude=float(want["connector_longitude"]))
+    assert got["first_pair_aspect"] is want["first_pair_aspect"]
+    assert got["connector_aspects"] == (want["connector_to_first"],
+                                        want["connector_to_second"])
+    assert got["connector_is_faster_than_both"] is True
+    assert got["connector_ithasala_types"] == ("Vartamaana", "Vartamaana")
+    assert got["connector_carries"] is True
+    assert got["present_as_worked"] is True
+
+
+def test_the_examples_two_planets_have_no_aspect_at_all():
+    """Ge to Sc is the 6th, which §28.2 leaves aspectless. The example says
+    so and the rule says the opposite.
+    """
+    from hora.tajaka.aspects import aspect_on_house
+
+    assert aspect_on_house(6) is None
+    got = yogas.nakta(first=int(Graha.VENUS), second=int(Graha.MARS),
+                      connector=int(Graha.MOON), first_longitude=73.0,
+                      second_longitude=225.0, connector_longitude=101.0)
+    assert got["first_pair_aspect"] is None
+    assert got["first_pair_qualifies_as_worked"] is True
+    assert got["first_pair_qualifies_as_worded"] is False
+    assert got["readings_agree"] is False
+    assert got["undecided"] is not None
+    assert "have no aspect at all" in (
+        yogas.THE_RULE_AND_ITS_EXAMPLE_DISAGREE_ON_THE_FIRST_PAIR)
+
+
+def test_the_examples_lordships_and_placements_all_hold():
+    """Venus lagna lord in the 2nd, Mars 7th lord in the 7th, Moon owning the
+    3rd — from a Taurus lagna, every one of them.
+    """
+    from hora.core.const import RASI_LORD
+
+    rasi = {"Ta": 1, "Ge": 2, "Cn": 3, "Sc": 7}
+    lagna = rasi["Ta"]
+    sits = {"Venus": rasi["Ge"], "Mars": rasi["Sc"], "Moon": rasi["Cn"]}
+    for row in yogas.NAKTA_EXAMPLE["lordships"]:
+        name = str(row["graha"])
+        owned = (lagna + int(row["owns"]) - 1) % 12
+        assert str(_GRAHA[name].name).title() == str(
+            __import__("hora.core.const", fromlist=["GRAHA_NAMES"]
+                       ).GRAHA_NAMES[int(RASI_LORD[owned])])
+        assert (sits[name] - lagna) % 12 + 1 == int(row["sits_in"])
+
+
+def test_as_worded_nakta_needs_an_aspect_wider_than_the_orb():
+    """§29.2.4 showed an aspect inside the orb always gives one yoga or the
+    other, so the rule's own condition needs a wide aspect.
+    """
+    # Mercury 1 Ar and Saturn 25 Ge: a sextile by house, 24° apart, far
+    # outside the binding orb of 7° and outside bhavishya's further degree,
+    # so no ithasala of any of the three kinds and no eesarpha.
+    got = yogas.nakta(first=int(Graha.MERCURY), second=int(Graha.SATURN),
+                      connector=int(Graha.MOON), first_longitude=1.0,
+                      second_longitude=60.0 + 25.0, connector_longitude=0.5)
+    assert got["first_pair_aspect"] == "Sextile aspect"
+    assert got["first_pair_has_ithasala"] is None
+    assert got["first_pair_has_eesarpha"] is False
+    assert got["first_pair_qualifies_as_worded"] is True
+    assert got["first_pair_qualifies_as_worked"] is False
+    assert "an aspect wider than that" in (
+        yogas.AS_WORDED_NAKTA_NEEDS_A_WIDE_ASPECT)
+
+
+def test_a_close_aspect_can_never_satisfy_the_rule_as_worded():
+    """The complement of §29.2.4's partition, over random pairs."""
+    random.seed(2951)
+    checked = 0
+    for _ in range(3000):
+        a, b = random.sample(range(7), 2)
+        connector = next(g for g in (int(Graha.MOON), int(Graha.MERCURY),
+                                     int(Graha.VENUS)) if g not in (a, b))
+        got = yogas.nakta(first=a, second=b, connector=connector,
+                          first_longitude=random.uniform(0, 360),
+                          second_longitude=random.uniform(0, 360),
+                          connector_longitude=random.uniform(0, 360))
+        if not got["first_pair_qualifies_as_worded"]:
+            continue
+        checked += 1
+        assert got["first_pair_aspect"] is not None
+        assert got["first_pair_has_ithasala"] is None
+        assert got["first_pair_has_eesarpha"] is False
+    assert checked > 50
+
+
+def test_the_connector_must_be_faster_than_both():
+    """Swap the Moon for Saturn and nothing carries."""
+    got = yogas.nakta(first=int(Graha.VENUS), second=int(Graha.MARS),
+                      connector=int(Graha.SATURN), first_longitude=73.0,
+                      second_longitude=225.0, connector_longitude=101.0)
+    assert got["connector_is_faster_than_both"] is False
+    assert got["connector_carries"] is False
+    assert got["connector_ithasala_types"] == (None, None)
+    assert got["present_as_worked"] is False
+
+
+def test_the_speed_condition_and_the_two_ithasalas_are_one_condition():
+    """A planet faster than both is the faster party in both legs, always."""
+    random.seed(2952)
+    for _ in range(1500):
+        trio = random.sample(range(7), 3)
+        trio.sort(key=yogas.speed_rank)
+        first, second, connector = trio[0], trio[1], trio[2]
+        got = yogas.nakta(first=first, second=second, connector=connector,
+                          first_longitude=random.uniform(0, 360),
+                          second_longitude=random.uniform(0, 360),
+                          connector_longitude=random.uniform(0, 360))
+        assert got["connector_is_faster_than_both"] is True
+    assert "one condition stated twice" in (
+        yogas.THE_SPEED_CONDITION_IS_THE_ITHASALA_CONDITION)
+
+
+def test_a_bhavishya_leg_still_counts_as_an_ithasala():
+    """"Forms ithasala with both" is not narrowed to vartamaana, and a
+    bhavishya has not formed yet. Reported, not filtered.
+    """
+    assert "whether a bhavishya counts" in (
+        yogas.WHICH_ITHASALA_THE_CONNECTOR_NEEDS_IS_NOT_SAID)
+    # Moon 3° Ar; Venus at 11° Ge is 8° on, outside Venus's 7° orb by 1°.
+    got = yogas.nakta(first=int(Graha.VENUS), second=int(Graha.MARS),
+                      connector=int(Graha.MOON), first_longitude=60.0 + 11.0,
+                      second_longitude=120.0 + 10.0, connector_longitude=3.0)
+    assert got["connector_ithasala_types"] == ("Bhavishya", "Vartamaana")
+    assert got["connector_carries"] is True
+
+
+def test_nakta_needs_three_different_grahas():
+    with pytest.raises(yogas.TajakaYogaError, match="three different grahas"):
+        yogas.nakta(first=int(Graha.VENUS), second=int(Graha.VENUS),
+                    connector=int(Graha.MOON), first_longitude=1.0,
+                    second_longitude=2.0, connector_longitude=3.0)
+
+
+def test_nakta_refuses_a_first_pair_footnote_83_cannot_rank():
+    with pytest.raises(yogas.TajakaYogaError, match="cannot rank"):
+        yogas.nakta(first=int(Graha.RAHU), second=int(Graha.KETU),
+                    connector=int(Graha.MOON), first_longitude=1.0,
+                    second_longitude=2.0, connector_longitude=3.0)

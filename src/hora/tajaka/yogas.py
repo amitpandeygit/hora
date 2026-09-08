@@ -946,6 +946,190 @@ def eesarpha(*, faster: int, slower: int, faster_longitude: float,
     }
 
 
+# --------------------------------------------------------------------------
+# §29.2.5 Nakta yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.5, verbatim, including "shows by" for "shown by".
+NAKTA_RULE = (
+    "Suppose two planets have an aspect, but there is no ithasala yoga or "
+    "eesarpha yoga. Then, we say that there is Nakta yoga between the two "
+    "planets, if a planet that moves faster than both the planets has an "
+    "aspect with both and forms ithasala yoga with both. This shows "
+    "fulfillment of the matters represented by the first 2 planets with the "
+    "help of someone shows by the 3rd planet."
+)
+
+#: §29.2.5's worked example, as the book states it. Every placement in it is
+#: checkable and every one of them holds.
+NAKTA_EXAMPLE: dict[str, object] = {
+    "lagna_rasi": "Ta",
+    "first": "Venus", "first_at": "13 Ge", "first_longitude": 73.0,
+    "second": "Mars", "second_at": "15 Sc", "second_longitude": 225.0,
+    "connector": "Moon", "connector_at": "11 Cn",
+    "connector_longitude": 101.0,
+    "first_pair_aspect": None,
+    "connector_to_first": "Semi-sextile aspect",
+    "connector_to_second": "Trinal aspect",
+    "lordships": (
+        {"graha": "Venus", "owns": 1, "sits_in": 2, "matter": "family"},
+        {"graha": "Mars", "owns": 7, "sits_in": 7, "matter": "marriage"},
+        {"graha": "Moon", "owns": 3, "sits_in": 3,
+         "matter": "younger brother or sister"},
+    ),
+    "shows": "getting married in the year, with the help of someone",
+}
+
+#: **Finding, and the section contradicts its own example.** The rule opens
+#: "Suppose two planets **have an aspect**, but there is no ithasala yoga or
+#: eesarpha yoga." The example's two planets have **no aspect at all**: Venus
+#: in Ge and Mars in Sc are the 6th from each other, which §28.2 leaves
+#: aspectless, and the example says so outright — "They have no aspect."
+#:
+#: Both readings are coherent and they are different tests:
+#:
+#: * **as worded** — the two aspect by house and the aspect is outside the
+#:   binding deeptamsa, so neither yoga forms. §29.2.4 showed that an aspect
+#:   inside the orb always gives one or the other, so this is the only way the
+#:   sentence can be satisfied at all;
+#: * **as worked** — the two do not aspect, and a faster planet carries the
+#:   light between them. That is the classical translation of light, and it is
+#:   what the example demonstrates.
+#:
+#: `nakta` answers both and does not choose. See OI-164.
+THE_RULE_AND_ITS_EXAMPLE_DISAGREE_ON_THE_FIRST_PAIR = (
+    "Section 29.2.5's rule requires the two planets to have an aspect with "
+    "neither ithasala nor eesarpha. Its example's two planets are the 6th "
+    "from each other and have no aspect at all."
+)
+
+#: **Finding.** The rule's own wording is only satisfiable outside the orb.
+#: §29.2.4 established that an aspect with unequal advancements gives an
+#: ithasala or an eesarpha, always. So "an aspect with neither" needs the
+#: separation to exceed the binding deeptamsa — and, since a **bhavishya** is
+#: one of §29.2.3's three ithasalas, to exceed it by more than a degree when
+#: the pair is converging. The one remaining case is exactly equal
+#: advancements, which is OI-163's gap. Read strictly, nakta as worded is a
+#: rule about wide aspects.
+AS_WORDED_NAKTA_NEEDS_A_WIDE_ASPECT = (
+    "An aspect inside the binding deeptamsa always gives an ithasala or an "
+    "eesarpha, and a converging pair within a further degree gives a "
+    "bhavishya, so the rule's opening condition needs an aspect wider than "
+    "that, or exactly equal advancements."
+)
+
+#: **Gap.** "Forms ithasala yoga with both" does not say which kind. A
+#: bhavishya is an ithasala by §29.2.3's own numbering, and it is the one that
+#: has not formed yet. `nakta` reports the type it found on each leg so a
+#: caller can require vartamaana if it wants to.
+WHICH_ITHASALA_THE_CONNECTOR_NEEDS_IS_NOT_SAID = (
+    "The third planet must form ithasala with both and the section does not "
+    "say whether a bhavishya counts, though a bhavishya has not formed yet."
+)
+
+#: **Finding.** The connector has to be faster than **both**, which footnote
+#: 83 settles outright, and it has to be the faster party in both ithasalas —
+#: which is the same statement. So the speed condition is not an extra test:
+#: it is what makes the two ithasalas point the same way.
+THE_SPEED_CONDITION_IS_THE_ITHASALA_CONDITION = (
+    "A planet faster than both is automatically the faster party in both "
+    "ithasalas, so the speed requirement and the two ithasalas are one "
+    "condition stated twice."
+)
+
+
+def nakta(*, first: int, second: int, connector: int,
+          first_longitude: float, second_longitude: float,
+          connector_longitude: float,
+          first_retrograde: bool = False, second_retrograde: bool = False,
+          connector_retrograde: bool = False) -> dict:
+    """§29.2.5, for one pair and one planet that might carry between them.
+
+    The first condition is answered two ways, because the rule and the
+    example disagree about it — see
+    `THE_RULE_AND_ITS_EXAMPLE_DISAGREE_ON_THE_FIRST_PAIR` and OI-164.
+    """
+    for name, graha in (("first", first), ("second", second),
+                        ("connector", connector)):
+        validate.in_range(name, int(graha), 0, 8)
+    if len({int(first), int(second), int(connector)}) != 3:
+        raise TajakaYogaError("nakta needs three different grahas")
+
+    quicker = faster_of(int(first), int(second))
+    if quicker is None:
+        raise TajakaYogaError(
+            "footnote 83 cannot rank the first two grahas, so neither "
+            "ithasala between them can be read")
+    slower_one = int(second) if quicker == int(first) else int(first)
+    lon = {int(first): float(first_longitude),
+           int(second): float(second_longitude),
+           int(connector): float(connector_longitude)}
+    retro = {int(first): bool(first_retrograde),
+             int(second): bool(second_retrograde),
+             int(connector): bool(connector_retrograde)}
+
+    between = ithasala(faster=quicker, slower=slower_one,
+                       faster_longitude=lon[quicker],
+                       slower_longitude=lon[slower_one],
+                       faster_retrograde=retro[quicker],
+                       slower_retrograde=retro[slower_one])
+    apart = eesarpha(faster=quicker, slower=slower_one,
+                     faster_longitude=lon[quicker],
+                     slower_longitude=lon[slower_one],
+                     faster_retrograde=retro[quicker],
+                     slower_retrograde=retro[slower_one])
+
+    faster_than_both = (speed_rank(int(connector)) > speed_rank(int(first))
+                        and speed_rank(int(connector)) > speed_rank(int(second)))
+
+    legs = []
+    for other in (int(first), int(second)):
+        leg = ithasala(faster=int(connector), slower=other,
+                       faster_longitude=lon[int(connector)],
+                       slower_longitude=lon[other],
+                       faster_retrograde=retro[int(connector)],
+                       slower_retrograde=retro[other]) if faster_than_both else None
+        legs.append(leg)
+
+    carries = bool(faster_than_both
+                   and all(leg is not None and leg["type"] is not None
+                           for leg in legs))
+
+    # "No ithasala yoga" is read to exclude a bhavishya too: §29.2.3 numbers
+    # it as one of the three ithasalas, so a bhavishya pair has an ithasala
+    # yoga even though it is outside the orb.
+    neither_yoga = between["type"] is None and not apart["present_within_orb"]
+    as_worded = bool(between["aspects_by_house"] and neither_yoga)
+    as_worked = not between["aspects_by_house"]
+
+    return {
+        "yoga": "Nakta",
+        "first": int(first), "first_name": str(GRAHA_NAMES[int(first)]),
+        "second": int(second), "second_name": str(GRAHA_NAMES[int(second)]),
+        "connector": int(connector),
+        "connector_name": str(GRAHA_NAMES[int(connector)]),
+        "first_pair_aspect": between["aspect"],
+        "first_pair_has_ithasala": between["type"],
+        "first_pair_has_eesarpha": apart["present_within_orb"],
+        "first_pair_qualifies_as_worded": as_worded,
+        "first_pair_qualifies_as_worked": as_worked,
+        "connector_is_faster_than_both": faster_than_both,
+        "connector_aspects": tuple(
+            None if leg is None else leg["aspect"] for leg in legs),
+        "connector_ithasala_types": tuple(
+            None if leg is None else leg["type"] for leg in legs),
+        "connector_carries": carries,
+        "present_as_worded": bool(as_worded and carries),
+        "present_as_worked": bool(as_worked and carries),
+        "readings_agree": as_worded == as_worked,
+        "undecided": (None if as_worded == as_worked
+                      else THE_RULE_AND_ITS_EXAMPLE_DISAGREE_ON_THE_FIRST_PAIR),
+        "shows": ("fulfillment of the matters represented by the first 2 "
+                  "planets with the help of someone shown by the 3rd planet"),
+        "rule": NAKTA_RULE,
+    }
+
+
 def pairs_in_speed_order() -> tuple[tuple[int, int], ...]:
     """Every graha pair footnote 83 can rank, slower first."""
     out = []

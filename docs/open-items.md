@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**6 waiting on Amit · 111 waiting on evidence · 2 parked**
+**6 waiting on Amit · 112 waiting on evidence · 2 parked**
 
 ---
 
@@ -2408,6 +2408,31 @@ exact, and it gives the exact aspect a name without giving it a verdict.
 
 **Closes when:** a later §29.2 section names the exact aspect as a yoga, or a
 worked example lands on it.
+
+
+### OI-164 — §29.2.5's nakta rule and its own example disagree
+
+**Waiting on the book.** The rule opens: "Suppose two planets **have an
+aspect**, but there is no ithasala yoga or eesarpha yoga." The example's two
+planets have **no aspect at all** — Venus in Ge and Mars in Sc are the 6th from
+each other, which §28.2 leaves aspectless, and the example says so outright:
+"They have no aspect."
+
+Both are coherent and they are different tests:
+
+| reading | the first pair | what it is |
+|---|---|---|
+| **as worded** | aspect by house, wider than the orb and than bhavishya's further degree | a rule about wide aspects |
+| **as worked** | no aspect between them | the classical translation of light |
+
+The wording is only satisfiable at all outside the orb, because §29.2.4
+established that an aspect inside it always gives one yoga or the other.
+
+`nakta` returns `present_as_worded` and `present_as_worked` separately, sets
+`readings_agree`, and never picks. On the book's own example they differ.
+
+**Closes when:** a second worked nakta lands on an aspecting pair, or a later
+section restates the condition.
 
 
 ---
