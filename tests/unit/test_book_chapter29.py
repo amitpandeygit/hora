@@ -1211,3 +1211,172 @@ def test_nakta_refuses_a_first_pair_footnote_83_cannot_rank():
         yogas.nakta(first=int(Graha.RAHU), second=int(Graha.KETU),
                     connector=int(Graha.MOON), first_longitude=1.0,
                     second_longitude=2.0, connector_longitude=3.0)
+
+
+# --------------------------------------------------------------------------
+# §29.2.6 Yamaya yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_yamaya_rule_is_nakta_with_one_word_changed():
+    assert "moves slower than both the planets" in yogas.YAMAYA_RULE
+    assert "after obstacles and delays" in yogas.YAMAYA_RULE
+    # The same slip, repeated verbatim.
+    assert "someone shows by the 3rd planet" in yogas.YAMAYA_RULE
+
+    # The two rules differ only in the speed word and the closing clause.
+    swapped = yogas.YAMAYA_RULE.replace("Yamaya", "Nakta").replace(
+        "moves slower than", "moves faster than").replace(
+        " planet, after obstacles and delays.", " planet.")
+    assert swapped == yogas.NAKTA_RULE
+    assert "slower for faster" in yogas.YAMAYA_IS_NAKTA_WITH_THE_SPEED_REVERSED
+
+
+def test_the_yamaya_example_reproduces():
+    """Jupiter 16 Cn against Venus 13 Ge and Mars 15 Sc: a semi-sextile and a
+    trinal, and Jupiter ahead of both because he is the slower party.
+    """
+    want = yogas.YAMAYA_EXAMPLE
+    got = yogas.yamaya(
+        first=int(Graha.VENUS), second=int(Graha.MARS),
+        connector=int(Graha.JUPITER),
+        first_longitude=float(want["first_longitude"]),
+        second_longitude=float(want["second_longitude"]),
+        connector_longitude=float(want["connector_longitude"]))
+    assert got["first_pair_aspect"] is want["first_pair_aspect"]
+    assert got["connector_aspects"] == (want["connector_to_first"],
+                                        want["connector_to_second"])
+    assert got["connector_is_slower_than_both"] is True
+    assert got["connector_carries"] is True
+    assert got["present_as_worked"] is True
+    assert "after obstacles and delays" in str(got["shows"])
+
+
+def test_the_jupiter_to_mars_leg_is_exactly_a_poorna():
+    """16° against 15° is one degree, which is poorna's threshold on the nose.
+    """
+    got = yogas.yamaya(first=int(Graha.VENUS), second=int(Graha.MARS),
+                       connector=int(Graha.JUPITER), first_longitude=73.0,
+                       second_longitude=225.0, connector_longitude=106.0)
+    assert got["connector_ithasala_types"] == ("Vartamaana", "Poorna")
+
+    leg = yogas.ithasala(faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+                         faster_longitude=225.0, slower_longitude=106.0)
+    assert leg["separation_from_exact"] == pytest.approx(1.0)
+    assert leg["separation_from_exact"] == yogas.POORNA_DEGREES
+
+
+def test_the_yamaya_example_is_the_nakta_example_with_jupiter_substituted():
+    nakta_case, yamaya_case = yogas.NAKTA_EXAMPLE, yogas.YAMAYA_EXAMPLE
+    for key in ("lagna_rasi", "first", "first_at", "first_longitude",
+                "second", "second_at", "second_longitude",
+                "first_pair_aspect", "connector_to_first",
+                "connector_to_second"):
+        assert nakta_case[key] == yamaya_case[key], key
+    assert nakta_case["connector"] == "Moon"
+    assert yamaya_case["connector"] == "Jupiter"
+
+
+def test_jupiter_owns_the_eleventh_from_taurus():
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    eleventh = (1 + 11 - 1) % 12
+    assert str(GRAHA_NAMES[int(RASI_LORD[eleventh])]) == "Jupiter"
+    row = next(r for r in yogas.YAMAYA_EXAMPLE["lordships"]
+               if r["graha"] == "Jupiter")
+    assert row["owns"] == 11
+    assert row["matter"] == "elder siblings or friends"
+
+
+def test_the_connector_looks_the_other_way_in_a_yamaya():
+    """A nakta's connector is behind both; a yamaya's is ahead of both. The
+    two examples differ in exactly that.
+    """
+    assert float(yogas.NAKTA_EXAMPLE["connector_longitude"]) % 30 == 11.0
+    assert float(yogas.YAMAYA_EXAMPLE["connector_longitude"]) % 30 == 16.0
+    for case in (yogas.NAKTA_EXAMPLE, yogas.YAMAYA_EXAMPLE):
+        advancements = [float(case[k]) % 30 for k in
+                        ("first_longitude", "second_longitude")]
+        connector = float(case["connector_longitude"]) % 30
+        if case["connector"] == "Moon":
+            assert all(connector < x for x in advancements)
+        else:
+            assert all(connector > x for x in advancements)
+    assert "must be more advanced than both" in (
+        yogas.THE_CONNECTOR_LOOKS_THE_OTHER_WAY_IN_A_YAMAYA)
+
+
+def test_a_yamaya_connector_that_is_behind_carries_nothing():
+    """Put Jupiter at 11° instead of 16° and both legs fail, because as the
+    slower party he now has an eesarpha with each.
+    """
+    got = yogas.yamaya(first=int(Graha.VENUS), second=int(Graha.MARS),
+                       connector=int(Graha.JUPITER), first_longitude=73.0,
+                       second_longitude=225.0, connector_longitude=101.0)
+    assert got["connector_is_slower_than_both"] is True
+    assert got["connector_ithasala_types"] == (None, None)
+    assert got["connector_carries"] is False
+
+
+def test_the_moon_cannot_make_a_yamaya_and_jupiter_cannot_make_a_nakta():
+    """Each section's own connector is disqualified by the other's rule."""
+    shared = {"first": int(Graha.VENUS), "second": int(Graha.MARS),
+              "first_longitude": 73.0, "second_longitude": 225.0}
+    assert yogas.yamaya(**shared, connector=int(Graha.MOON),
+                        connector_longitude=101.0)["connector_speed_holds"] is (
+        False)
+    assert yogas.nakta(**shared, connector=int(Graha.JUPITER),
+                       connector_longitude=106.0)["connector_speed_holds"] is (
+        False)
+
+
+def test_a_third_of_every_possible_connector_has_no_yoga():
+    """Faster than both, slower than both, or between — and between is a case
+    §29.2 never names.
+    """
+    tally = {"Nakta": 0, "Yamaya": 0, None: 0}
+    for a, b in itertools.combinations(range(7), 2):
+        for c in range(7):
+            if c in (a, b):
+                continue
+            tally[yogas.connector_role(a, b, c)] += 1
+    assert tally == {"Nakta": 35, "Yamaya": 35, None: 35}
+    assert "35 have no yoga at all" in (
+        yogas.A_CONNECTOR_BETWEEN_THE_TWO_HAS_NO_YOGA)
+
+
+def test_connector_role_agrees_with_both_functions():
+    random.seed(2961)
+    for _ in range(1200):
+        a, b, c = random.sample(range(7), 3)
+        role = yogas.connector_role(a, b, c)
+        shared = {"first": a, "second": b, "connector": c,
+                  "first_longitude": random.uniform(0, 360),
+                  "second_longitude": random.uniform(0, 360),
+                  "connector_longitude": random.uniform(0, 360)}
+        assert yogas.nakta(**shared)["connector_speed_holds"] is (
+            role == "Nakta")
+        assert yogas.yamaya(**shared)["connector_speed_holds"] is (
+            role == "Yamaya")
+
+
+def test_yamaya_carries_oi_164_the_same_way_nakta_does():
+    got = yogas.yamaya(first=int(Graha.VENUS), second=int(Graha.MARS),
+                       connector=int(Graha.JUPITER), first_longitude=73.0,
+                       second_longitude=225.0, connector_longitude=106.0)
+    assert got["first_pair_qualifies_as_worded"] is False
+    assert got["first_pair_qualifies_as_worked"] is True
+    assert got["readings_agree"] is False
+    assert got["undecided"] == (
+        yogas.THE_RULE_AND_ITS_EXAMPLE_DISAGREE_ON_THE_FIRST_PAIR)
+
+
+def test_yamaya_rejects_the_same_bad_inputs_as_nakta():
+    with pytest.raises(yogas.TajakaYogaError, match="three different grahas"):
+        yogas.yamaya(first=int(Graha.VENUS), second=int(Graha.VENUS),
+                     connector=int(Graha.JUPITER), first_longitude=1.0,
+                     second_longitude=2.0, connector_longitude=3.0)
+    with pytest.raises(yogas.TajakaYogaError, match="cannot rank"):
+        yogas.yamaya(first=int(Graha.RAHU), second=int(Graha.KETU),
+                     connector=int(Graha.JUPITER), first_longitude=1.0,
+                     second_longitude=2.0, connector_longitude=3.0)

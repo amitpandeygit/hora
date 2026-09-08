@@ -1038,22 +1038,24 @@ THE_SPEED_CONDITION_IS_THE_ITHASALA_CONDITION = (
 )
 
 
-def nakta(*, first: int, second: int, connector: int,
-          first_longitude: float, second_longitude: float,
-          connector_longitude: float,
-          first_retrograde: bool = False, second_retrograde: bool = False,
-          connector_retrograde: bool = False) -> dict:
-    """§29.2.5, for one pair and one planet that might carry between them.
+def _translation_yoga(*, name: str, connector_is_faster: bool,
+                      first: int, second: int, connector: int,
+                      first_longitude: float, second_longitude: float,
+                      connector_longitude: float,
+                      first_retrograde: bool, second_retrograde: bool,
+                      connector_retrograde: bool, rule: str,
+                      shows: str) -> dict:
+    """§29.2.5 and §29.2.6, which are one test with the speed reversed.
 
-    The first condition is answered two ways, because the rule and the
-    example disagree about it — see
-    `THE_RULE_AND_ITS_EXAMPLE_DISAGREE_ON_THE_FIRST_PAIR` and OI-164.
+    Written once so nakta and yamaya cannot drift apart. The only thing that
+    differs between them is whether the third planet must be faster or slower
+    than the other two — and, in the results, the obstacles and delays.
     """
-    for name, graha in (("first", first), ("second", second),
-                        ("connector", connector)):
-        validate.in_range(name, int(graha), 0, 8)
+    for label, graha in (("first", first), ("second", second),
+                         ("connector", connector)):
+        validate.in_range(label, int(graha), 0, 8)
     if len({int(first), int(second), int(connector)}) != 3:
-        raise TajakaYogaError("nakta needs three different grahas")
+        raise TajakaYogaError(f"{name.lower()} needs three different grahas")
 
     quicker = faster_of(int(first), int(second))
     if quicker is None:
@@ -1079,21 +1081,29 @@ def nakta(*, first: int, second: int, connector: int,
                      faster_retrograde=retro[quicker],
                      slower_retrograde=retro[slower_one])
 
-    faster_than_both = (speed_rank(int(connector)) > speed_rank(int(first))
-                        and speed_rank(int(connector)) > speed_rank(int(second)))
+    rank = speed_rank(int(connector))
+    if connector_is_faster:
+        speed_ok = (rank > speed_rank(int(first))
+                    and rank > speed_rank(int(second)))
+    else:
+        speed_ok = (rank < speed_rank(int(first))
+                    and rank < speed_rank(int(second)))
 
-    legs = []
+    legs: list[dict | None] = []
     for other in (int(first), int(second)):
-        leg = ithasala(faster=int(connector), slower=other,
-                       faster_longitude=lon[int(connector)],
-                       slower_longitude=lon[other],
-                       faster_retrograde=retro[int(connector)],
-                       slower_retrograde=retro[other]) if faster_than_both else None
-        legs.append(leg)
+        if not speed_ok:
+            legs.append(None)
+            continue
+        quick = int(connector) if connector_is_faster else other
+        slow = other if connector_is_faster else int(connector)
+        legs.append(ithasala(faster=quick, slower=slow,
+                             faster_longitude=lon[quick],
+                             slower_longitude=lon[slow],
+                             faster_retrograde=retro[quick],
+                             slower_retrograde=retro[slow]))
 
-    carries = bool(faster_than_both
-                   and all(leg is not None and leg["type"] is not None
-                           for leg in legs))
+    carries = bool(speed_ok and all(
+        leg is not None and leg["type"] is not None for leg in legs))
 
     # "No ithasala yoga" is read to exclude a bhavishya too: §29.2.3 numbers
     # it as one of the three ithasalas, so a bhavishya pair has an ithasala
@@ -1103,17 +1113,18 @@ def nakta(*, first: int, second: int, connector: int,
     as_worked = not between["aspects_by_house"]
 
     return {
-        "yoga": "Nakta",
+        "yoga": name,
         "first": int(first), "first_name": str(GRAHA_NAMES[int(first)]),
         "second": int(second), "second_name": str(GRAHA_NAMES[int(second)]),
         "connector": int(connector),
         "connector_name": str(GRAHA_NAMES[int(connector)]),
+        "connector_must_be": "faster" if connector_is_faster else "slower",
         "first_pair_aspect": between["aspect"],
         "first_pair_has_ithasala": between["type"],
         "first_pair_has_eesarpha": apart["present_within_orb"],
         "first_pair_qualifies_as_worded": as_worded,
         "first_pair_qualifies_as_worked": as_worked,
-        "connector_is_faster_than_both": faster_than_both,
+        "connector_speed_holds": speed_ok,
         "connector_aspects": tuple(
             None if leg is None else leg["aspect"] for leg in legs),
         "connector_ithasala_types": tuple(
@@ -1124,10 +1135,149 @@ def nakta(*, first: int, second: int, connector: int,
         "readings_agree": as_worded == as_worked,
         "undecided": (None if as_worded == as_worked
                       else THE_RULE_AND_ITS_EXAMPLE_DISAGREE_ON_THE_FIRST_PAIR),
-        "shows": ("fulfillment of the matters represented by the first 2 "
-                  "planets with the help of someone shown by the 3rd planet"),
-        "rule": NAKTA_RULE,
+        "shows": shows,
+        "rule": rule,
     }
+
+
+def nakta(*, first: int, second: int, connector: int,
+          first_longitude: float, second_longitude: float,
+          connector_longitude: float,
+          first_retrograde: bool = False, second_retrograde: bool = False,
+          connector_retrograde: bool = False) -> dict:
+    """§29.2.5, for one pair and one **faster** planet carrying between them.
+
+    The first condition is answered two ways, because the rule and the
+    example disagree about it — see
+    `THE_RULE_AND_ITS_EXAMPLE_DISAGREE_ON_THE_FIRST_PAIR` and OI-164.
+    """
+    got = _translation_yoga(
+        name="Nakta", connector_is_faster=True, first=first, second=second,
+        connector=connector, first_longitude=first_longitude,
+        second_longitude=second_longitude,
+        connector_longitude=connector_longitude,
+        first_retrograde=first_retrograde, second_retrograde=second_retrograde,
+        connector_retrograde=connector_retrograde, rule=NAKTA_RULE,
+        shows=("fulfillment of the matters represented by the first 2 "
+               "planets with the help of someone shown by the 3rd planet"))
+    got["connector_is_faster_than_both"] = got["connector_speed_holds"]
+    return got
+
+
+# --------------------------------------------------------------------------
+# §29.2.6 Yamaya yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.6, verbatim. It is §29.2.5's paragraph with "slower" for "faster"
+#: and one clause added at the end, and it repeats "shows by" for "shown by".
+YAMAYA_RULE = (
+    "Suppose two planets have an aspect, but there is no ithasala yoga or "
+    "eesarpha yoga. Then, we say that there is Yamaya yoga between the two "
+    "planets, if a planet that moves slower than both the planets has an "
+    "aspect with both and forms ithasala yoga with both. This shows "
+    "fulfillment of the matters represented by the first 2 planets with the "
+    "help of someone shows by the 3rd planet, after obstacles and delays."
+)
+
+#: §29.2.6's worked example, as the book states it. It is §29.2.5's chart with
+#: Jupiter at 16 Cn in place of the Moon at 11 Cn.
+YAMAYA_EXAMPLE: dict[str, object] = {
+    "lagna_rasi": "Ta",
+    "first": "Venus", "first_at": "13 Ge", "first_longitude": 73.0,
+    "second": "Mars", "second_at": "15 Sc", "second_longitude": 225.0,
+    "connector": "Jupiter", "connector_at": "16 Cn",
+    "connector_longitude": 106.0,
+    "first_pair_aspect": None,
+    "connector_to_first": "Semi-sextile aspect",
+    "connector_to_second": "Trinal aspect",
+    "lordships": (
+        {"graha": "Venus", "owns": 1, "sits_in": 2, "matter": "family"},
+        {"graha": "Mars", "owns": 7, "sits_in": 7, "matter": "marriage"},
+        {"graha": "Jupiter", "owns": 11, "sits_in": 3,
+         "matter": "elder siblings or friends"},
+    ),
+    "shows": ("getting married in the year, with the help of someone, after "
+              "obstacles and delays"),
+}
+
+#: **Finding.** §29.2.6 is §29.2.5 with one word changed. The rule is the same
+#: sentence with "slower" for "faster"; the example is the same chart with
+#: Jupiter at 16 Cn where the Moon was at 11 Cn; the opening condition carries
+#: the same contradiction with its own example, and the closing clause repeats
+#: the same "shows by" for "shown by". `nakta` and `yamaya` are written as one
+#: function so they cannot drift apart.
+YAMAYA_IS_NAKTA_WITH_THE_SPEED_REVERSED = (
+    "Section 29.2.6 restates section 29.2.5 with slower for faster and adds "
+    "\"after obstacles and delays\" to the result. The chart, the aspects "
+    "and the reading are otherwise the same."
+)
+
+#: **Finding.** The direction the third planet has to look changes with its
+#: speed, and both sections state it as one condition. In a nakta the
+#: connector is the **faster** party in both legs, so it must be **behind**
+#: both; in a yamaya it is the **slower** party in both, so it must be
+#: **ahead** of both. The book's two examples show exactly that — the Moon at
+#: 11° behind Venus's 13° and Mars's 15°, Jupiter at 16° ahead of both.
+THE_CONNECTOR_LOOKS_THE_OTHER_WAY_IN_A_YAMAYA = (
+    "A nakta's third planet is faster and so must be less advanced than both; "
+    "a yamaya's is slower and so must be more advanced than both. The two "
+    "examples differ in exactly that."
+)
+
+#: **Finding.** A third planet whose speed falls **between** the other two is
+#: neither a nakta's nor a yamaya's, however well it aspects them. The chapter
+#: names no yoga for it and does not say the case exists. Counted over the
+#: seven classical grahas: of the 105 ways to pick a pair and a third planet,
+#: **35 are nakta, 35 are yamaya and 35 are neither** — an exact third of
+#: every possible connector falls in a gap the chapter does not mention.
+A_CONNECTOR_BETWEEN_THE_TWO_HAS_NO_YOGA = (
+    "A third planet faster than one of the pair and slower than the other is "
+    "neither a nakta connector nor a yamaya connector. Of the 105 ways to "
+    "pick a pair and a third graha from the seven, 35 are nakta, 35 are "
+    "yamaya and 35 have no yoga at all."
+)
+
+
+def yamaya(*, first: int, second: int, connector: int,
+           first_longitude: float, second_longitude: float,
+           connector_longitude: float,
+           first_retrograde: bool = False, second_retrograde: bool = False,
+           connector_retrograde: bool = False) -> dict:
+    """§29.2.6, for one pair and one **slower** planet carrying between them.
+
+    Everything but the speed condition and the result is `nakta`'s, because
+    the two sections are one test — see
+    `YAMAYA_IS_NAKTA_WITH_THE_SPEED_REVERSED`. The first condition carries
+    the same disagreement with its own example: OI-164.
+    """
+    got = _translation_yoga(
+        name="Yamaya", connector_is_faster=False, first=first, second=second,
+        connector=connector, first_longitude=first_longitude,
+        second_longitude=second_longitude,
+        connector_longitude=connector_longitude,
+        first_retrograde=first_retrograde, second_retrograde=second_retrograde,
+        connector_retrograde=connector_retrograde, rule=YAMAYA_RULE,
+        shows=("fulfillment of the matters represented by the first 2 "
+               "planets with the help of someone shown by the 3rd planet, "
+               "after obstacles and delays"))
+    got["connector_is_slower_than_both"] = got["connector_speed_holds"]
+    return got
+
+
+def connector_role(first: int, second: int, connector: int) -> str | None:
+    """Which of the two translation yogas a third planet could make, if any.
+
+    ``"Nakta"`` when it is faster than both, ``"Yamaya"`` when slower than
+    both, and ``None`` when its speed falls between them — a case §29.2 does
+    not name. See `A_CONNECTOR_BETWEEN_THE_TWO_HAS_NO_YOGA`.
+    """
+    rank = speed_rank(int(connector))
+    ranks = (speed_rank(int(first)), speed_rank(int(second)))
+    if rank > max(ranks):
+        return "Nakta"
+    if rank < min(ranks):
+        return "Yamaya"
+    return None
 
 
 def pairs_in_speed_order() -> tuple[tuple[int, int], ...]:

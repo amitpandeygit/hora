@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.5 (49)
+### Chapter 29 — §29.1 to §29.2.6 (54)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1761,6 +1761,10 @@ footnote can. What follows is prose and findings.
 | `AS_WORDED_NAKTA_NEEDS_A_WIDE_ASPECT` | Ours: the rule's own condition is only satisfiable outside the orb and outside bhavishya's further degree |
 | `WHICH_ITHASALA_THE_CONNECTOR_NEEDS_IS_NOT_SAID` | Ours: "forms ithasala with both" does not say whether a bhavishya counts |
 | `THE_SPEED_CONDITION_IS_THE_ITHASALA_CONDITION` | Ours: a planet faster than both is automatically the faster party in both legs, so the two requirements are one |
+| `YAMAYA_RULE` · `YAMAYA_EXAMPLE` | §29.2.6 verbatim and its worked case as data |
+| `YAMAYA_IS_NAKTA_WITH_THE_SPEED_REVERSED` | Ours: one word changed in the rule, one planet swapped in the example, one clause added to the result |
+| `THE_CONNECTOR_LOOKS_THE_OTHER_WAY_IN_A_YAMAYA` | Ours: a nakta's connector must be behind both and a yamaya's ahead of both, which is what the two examples show |
+| `A_CONNECTOR_BETWEEN_THE_TWO_HAS_NO_YOGA` | Ours: of the 105 ways to pick a pair and a third graha, 35 fall between the two and §29.2 names no yoga for them |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

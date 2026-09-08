@@ -2410,7 +2410,7 @@ exact, and it gives the exact aspect a name without giving it a verdict.
 worked example lands on it.
 
 
-### OI-164 — §29.2.5's nakta rule and its own example disagree
+### OI-164 — the nakta and yamaya rules disagree with their own examples
 
 **Waiting on the book.** The rule opens: "Suppose two planets **have an
 aspect**, but there is no ithasala yoga or eesarpha yoga." The example's two
@@ -2431,8 +2431,12 @@ established that an aspect inside it always gives one yoga or the other.
 `nakta` returns `present_as_worded` and `present_as_worked` separately, sets
 `readings_agree`, and never picks. On the book's own example they differ.
 
-**Closes when:** a second worked nakta lands on an aspecting pair, or a later
-section restates the condition.
+§29.2.6's yamaya opens with the same sentence and reuses the same chart, so
+the same disagreement runs through both sections. `nakta` and `yamaya` are one
+function and answer it identically.
+
+**Closes when:** a worked nakta or yamaya lands on an aspecting pair, or a
+later section restates the condition.
 
 
 ---
