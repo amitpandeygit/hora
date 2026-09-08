@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.12 (102)
+### Chapter 29 — §29.1 to §29.2.13 (110)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1800,6 +1800,12 @@ footnote can. What follows is prose and findings.
 | `THE_RULE_AND_ITS_EXAMPLE_ARE_MIRROR_IMAGES` | Ours: the rule wants the faster strong and the example has the slower strong, and the example is right about which is which. OI-169 |
 | `PANCHA_VARGEEYA_BALA_IS_THE_ONE_STRENGTH_29_2_NAMES` | Ours: the only measure the chapter ever names, and evidence on OI-166 |
 | `GOOD_IS_NOT_A_BAND_NAME_BUT_THE_EXAMPLE_SUPPLIES_ONE` · `THE_MIDDLE_BAND_SATISFIES_NEITHER_CONDITION` | Ours: "good" is not one of §28.4.6's five bands, and the middle band satisfies neither condition. OI-170 |
+| `DUTTOTA_RULE` · `DUTTOTA_RESULTS` · `DUTTOTA_WEAK_TESTS` · `DUTTOTA_STRONG_TESTS` · `DUTTOTA_EXAMPLE` | §29.2.13 verbatim, its two test lists and its worked case as data |
+| `DUTTOTA_IS_THE_FIRST_RESTORING_YOGA` | Ours: three yogas cancel and one strengthens; this is the first to give back something already destroyed |
+| `THE_TWO_SECTIONS_DEFINE_WEAK_DIFFERENTLY` | Ours: radda's four tests and duttota's three share only debilitation |
+| `THE_RULE_WANTS_TWO_WEAK_PLANETS_AND_THE_EXAMPLE_SHOWS_ONE` | Ours: Mars at 19 Li is neutral, not weak, and the example never says otherwise. OI-171 |
+| `HIGH_AND_GOOD_ARE_THE_SAME_UNNAMED_BAND` | Ours: §29.2.12's "good" and §29.2.13's "high" are the same non-band, read the same way. OI-170 |
+| `THE_SAME_HOUSES_CARRY_THE_OPPOSITE_RESULT` | Ours: Saturn's 10th and 11th from Aries are damaged in §29.2.11 and promised in §29.2.13 |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

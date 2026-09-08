@@ -2505,3 +2505,214 @@ def test_no_ithasala_means_no_duhphali_kutta():
     assert got["ithasala_type"] is None
     assert got["present_as_worded"] is False
     assert got["present_as_worked"] is False
+
+
+# --------------------------------------------------------------------------
+# §29.2.13 Duttota yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_duttota_rule_and_its_two_test_lists_are_transcribed():
+    assert "two planets in an ithasala are weak" in yogas.DUTTOTA_RULE
+    assert "one of them has an ithasala yoga with a strong planet" in (
+        yogas.DUTTOTA_RULE)
+    assert yogas.DUTTOTA_WEAK_TESTS == (
+        "debilitated", "inimical rasi", "low panchavargeeya bala")
+    assert yogas.DUTTOTA_STRONG_TESTS == (
+        "exalted", "own rasi", "high panchavargeeya bala")
+    assert yogas.DUTTOTA_RESULTS in yogas.DUTTOTA_RULE
+
+
+def test_the_duttota_example_reproduces():
+    """Aries lagna. Mars 19 Li opposes Saturn 20 Ar in a poorna ithasala;
+    Saturn is debilitated; exalted Venus at 18 Pi reaches Saturn.
+    """
+    want = yogas.DUTTOTA_EXAMPLE
+    got = yogas.duttota(
+        faster=int(Graha.MARS), slower=int(Graha.SATURN),
+        faster_longitude=float(want["faster_longitude"]),
+        slower_longitude=float(want["slower_longitude"]),
+        rescuer=int(Graha.VENUS),
+        rescuer_longitude=float(want["rescuer_longitude"]), lagna_rasi=0)
+    assert got["ithasala_type"] == want["pair_ithasala"]
+    assert got["slower_side"]["debilitated"] is True
+    assert got["strong_side"]["exalted"] is want["rescuer_exalted"]
+    assert got["rescue_aspects"][int(Graha.SATURN)] == want["rescue_aspect"]
+    assert got["rescue_types"][int(Graha.SATURN)] == want["rescue_ithasala"]
+    assert got["rescued"] is True
+    assert got["present_as_worked"] is True
+    assert got["houses"] == want["owns"] == (10, 11)
+
+
+def test_the_pair_is_an_opposition_and_a_poorna():
+    base = yogas.ithasala(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                          faster_longitude=199.0, slower_longitude=20.0)
+    assert base["house_from_faster"] == 7
+    assert base["aspect"] == "Opposition"
+    assert base["separation_from_exact"] == pytest.approx(1.0)
+    assert base["type"] == "Poorna"
+
+
+def test_the_rescue_leg_is_venus_to_saturn():
+    """Ar to Pi is the 12th and Pi to Ar the 2nd — a semi-sextile either way,
+    which is what the example calls it.
+    """
+    leg = yogas.ithasala(faster=int(Graha.VENUS), slower=int(Graha.SATURN),
+                         faster_longitude=348.0, slower_longitude=20.0)
+    assert leg["house_from_faster"] == 2
+    assert leg["aspect"] == "Semi-sextile aspect"
+    assert leg["separation_from_exact"] == pytest.approx(2.0)
+    assert leg["binding_deeptamsa"] == 7.0
+    assert leg["type"] == "Vartamaana"
+
+
+def test_the_rule_wants_two_weak_planets_and_the_example_shows_one():
+    """Mars at 19 Li is not debilitated, not in an enemy's rasi and has no
+    bala given. OI-171.
+    """
+    from hora.core.constants.graha import DEBILITATION_RASI
+
+    mars = yogas._duttota_side(int(Graha.MARS), 199.0, None)
+    assert int(DEBILITATION_RASI[int(Graha.MARS)]) == 3          # Cancer
+    assert mars["debilitated"] is False
+    assert mars["relation_to_the_rasi_lord"] == "sama"
+    assert mars["inimical_rasi"] is False
+    assert mars["weak"] is False
+
+    got = yogas.duttota(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                        faster_longitude=199.0, slower_longitude=20.0,
+                        rescuer=int(Graha.VENUS), rescuer_longitude=348.0)
+    assert got["both_weak"] is False
+    assert got["any_weak"] is True
+    assert got["present_as_worded"] is False
+    assert got["present_as_worked"] is True
+    assert got["readings_agree"] is False
+    assert got["undecided"] == (
+        yogas.THE_RULE_WANTS_TWO_WEAK_PLANETS_AND_THE_EXAMPLE_SHOWS_ONE)
+
+
+def test_saturn_is_weak_on_two_of_the_three_tests():
+    """The book names the debilitation. Aries is also Mars's rasi, and Mars is
+    Saturn's enemy, so the inimical test fires too.
+    """
+    from hora.core.constants.graha import (
+        NATURAL_RELATION,
+        NATURAL_RELATION_NAMES,
+    )
+
+    assert NATURAL_RELATION_NAMES[
+        NATURAL_RELATION[int(Graha.SATURN)][int(Graha.MARS)]] == "satru"
+    saturn = yogas._duttota_side(int(Graha.SATURN), 20.0, None)
+    assert saturn["weak_by"] == ("debilitated", "inimical_rasi")
+    assert yogas.DUTTOTA_EXAMPLE["weak_because"] == "debilitated"
+
+
+def test_both_weak_satisfies_the_rule_as_worded():
+    """Put Mars in Gemini, Mercury's rasi and Mars's enemy's."""
+    from hora.core.constants.graha import (
+        NATURAL_RELATION,
+        NATURAL_RELATION_NAMES,
+    )
+
+    assert NATURAL_RELATION_NAMES[
+        NATURAL_RELATION[int(Graha.MARS)][int(Graha.MERCURY)]] == "satru"
+    got = yogas.duttota(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                        faster_longitude=60.0 + 19.0, slower_longitude=20.0,
+                        rescuer=int(Graha.VENUS), rescuer_longitude=348.0)
+    assert got["faster_side"]["inimical_rasi"] is True
+    assert got["both_weak"] is True
+    assert got["present_as_worded"] is True
+    assert got["readings_agree"] is True
+
+
+def test_the_two_sections_define_weak_differently():
+    """Only debilitation is on both lists."""
+    radda_tests = {str(row["trigger"]) for row in yogas.RADDA_TRIGGERS}
+    assert radda_tests == {"debilitation", "retrogression", "combustion",
+                           "otherwise weak"}
+    duttota_tests = set(yogas.DUTTOTA_WEAK_TESTS)
+    assert "retrogression" not in duttota_tests
+    assert "inimical rasi" not in radda_tests
+    assert "Only debilitation is on both lists" in (
+        yogas.THE_TWO_SECTIONS_DEFINE_WEAK_DIFFERENTLY)
+
+    # A retrograde Mercury in his own Virgo is a radda trigger and duttota
+    # calls him strong — the two sections disagree about the same planet.
+    retro = yogas._duttota_side(int(Graha.MERCURY), 150.0 + 15.0, None)
+    assert retro["weak"] is False
+    assert retro["own_rasi"] is True and retro["strong"] is True
+    negated = yogas.radda(faster=int(Graha.MERCURY), slower=int(Graha.SATURN),
+                          faster_longitude=150.0 + 15.0,
+                          slower_longitude=210.0 + 20.0,
+                          faster_retrograde=True)
+    assert negated["parties"][int(Graha.MERCURY)]["triggers"] == ("retrograde",)
+
+
+def test_duttota_restores_what_radda_destroyed():
+    """The chapter's first restoring yoga, and the example runs the chain."""
+    pair = {"faster": int(Graha.MARS), "slower": int(Graha.SATURN),
+            "faster_longitude": 199.0, "slower_longitude": 20.0}
+    stands = yogas.ithasala(**pair)
+    assert stands["type"] == "Poorna"
+
+    destroyed = yogas.radda(**pair, lagna_rasi=0)
+    assert destroyed["negates_the_ithasala"] is True
+    assert destroyed["destroys_houses"] == (10, 11)
+
+    restored = yogas.duttota(**pair, rescuer=int(Graha.VENUS),
+                             rescuer_longitude=348.0, lagna_rasi=0)
+    assert restored["present_as_worked"] is True
+    assert restored["houses"] == (10, 11)
+    assert "Duttota restores" in yogas.DUTTOTA_IS_THE_FIRST_RESTORING_YOGA
+
+
+def test_the_same_houses_carry_the_opposite_result():
+    """§29.2.11 read Saturn's 10th and 11th as damaged; §29.2.13 reads them as
+    promised, from the same lagna and the same ownership.
+    """
+    assert yogas.RADDA_EXAMPLES[1]["owns"] == yogas.DUTTOTA_EXAMPLE["owns"]
+    assert yogas.RADDA_EXAMPLES[1]["lagna_rasi"] == (
+        yogas.DUTTOTA_EXAMPLE["lagna_rasi"]) == "Ar"
+    assert "career and material gains promised" in (
+        yogas.THE_SAME_HOUSES_CARRY_THE_OPPOSITE_RESULT)
+
+
+def test_high_and_good_are_read_the_same_way():
+    """§29.2.12 said "good", §29.2.13 says "high", and neither is a band."""
+    strong = yogas._duttota_side(int(Graha.MARS), 199.0, 12.0)
+    assert strong["bala_grade"] == "strong"
+    assert strong["high_bala"] is True
+    middling = yogas._duttota_side(int(Graha.MARS), 199.0, 7.0)
+    assert middling["high_bala"] is False
+    assert middling["low_bala"] is False
+    assert "both are read as the strong band or better" in (
+        yogas.HIGH_AND_GOOD_ARE_THE_SAME_UNNAMED_BAND)
+
+
+def test_a_weak_rescuer_rescues_nothing():
+    """Move Venus out of Pisces and the yoga fails."""
+    got = yogas.duttota(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                        faster_longitude=199.0, slower_longitude=20.0,
+                        rescuer=int(Graha.VENUS),
+                        rescuer_longitude=300.0 + 18.0)
+    assert got["strong_side"]["strong"] is False
+    assert got["rescued"] is False
+    assert got["present_as_worked"] is False
+
+
+def test_the_rescuer_must_reach_one_of_the_pair():
+    """Exalted Venus with no ithasala to either planet does nothing."""
+    got = yogas.duttota(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                        faster_longitude=199.0, slower_longitude=20.0,
+                        rescuer=int(Graha.VENUS),
+                        rescuer_longitude=330.0 + 28.0)
+    assert got["strong_side"]["exalted"] is True
+    assert got["reaches"] == ()
+    assert got["rescued"] is False
+
+
+def test_the_rescuer_must_be_a_third_planet():
+    with pytest.raises(yogas.TajakaYogaError, match="third planet"):
+        yogas.duttota(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                      faster_longitude=199.0, slower_longitude=20.0,
+                      rescuer=int(Graha.MARS), rescuer_longitude=199.0)

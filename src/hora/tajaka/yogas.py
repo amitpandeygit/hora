@@ -16,6 +16,8 @@ from hora.core.constants.graha import (
     COMBUSTION_ORB,
     DEBILITATION_RASI,
     EXALTATION_RASI,
+    NATURAL_RELATION,
+    NATURAL_RELATION_NAMES,
 )
 from hora.core.constants.house import APOKLIMA, KENDRA, PANAPHARA
 from hora.tajaka.aspects import (
@@ -2392,6 +2394,217 @@ def duhphali_kutta(*, faster: int, slower: int, faster_longitude: float,
         "balas_supplied": faster_bala is not None and slower_bala is not None,
         "gives": DUHPHALI_KUTTA_RESULTS,
         "rule": DUHPHALI_KUTTA_RULE,
+    }
+
+
+# --------------------------------------------------------------------------
+# §29.2.13 Duttota yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.13's rule, verbatim.
+DUTTOTA_RULE = (
+    "If two planets in an ithasala are weak (debilitated or occupying "
+    "inimical rasis, having a low panchavargeeya bala) and one of them has an "
+    "ithasala yoga with a strong planet (exalted or occupying own rasi, "
+    "having a high panchavargeeya bala), then we have Duttota yoga. This yoga "
+    "gives good results."
+)
+
+DUTTOTA_RESULTS = "good results"
+
+#: §29.2.13's three tests for weakness and three for strength, as data. They
+#: are not §29.2.11's list — see `THE_TWO_SECTIONS_DEFINE_WEAK_DIFFERENTLY`.
+DUTTOTA_WEAK_TESTS: tuple[str, ...] = (
+    "debilitated", "inimical rasi", "low panchavargeeya bala")
+DUTTOTA_STRONG_TESTS: tuple[str, ...] = (
+    "exalted", "own rasi", "high panchavargeeya bala")
+
+#: §29.2.13's worked example, as the book states it. It is §29.2.11's chart
+#: with Mars moved and Venus added.
+DUTTOTA_EXAMPLE: dict[str, object] = {
+    "lagna_rasi": "Ar",
+    "faster": "Mars", "faster_at": "19 Li", "faster_longitude": 199.0,
+    "slower": "Saturn", "slower_at": "20 Ar", "slower_longitude": 20.0,
+    "pair_aspect": "Opposition", "pair_ithasala": "Poorna",
+    "weak_one": "Saturn", "weak_because": "debilitated",
+    "rescuer": "Venus", "rescuer_at": "18 Pi",
+    "rescuer_longitude": 348.0, "rescuer_exalted": True,
+    "rescue_aspect": "Semi-sextile aspect", "rescue_ithasala": "Vartamaana",
+    "owns": (10, 11),
+    "book_says": "the final result is Duttota yoga and good results",
+}
+
+#: **Finding.** Duttota is the chapter's first **restoring** yoga. Manahoo,
+#: khallasara and radda take a reading away and kamboola adds to one; this one
+#: gives back something already destroyed. The example works the whole chain in
+#: three steps: an ithasala, turned to radda by a debilitated Saturn, turned
+#: back to good results by Saturn's own ithasala with an exalted Venus.
+DUTTOTA_IS_THE_FIRST_RESTORING_YOGA = (
+    "Manahoo, khallasara and radda cancel and kamboola strengthens. Duttota "
+    "restores: it takes an ithasala already turned to radda and gives good "
+    "results back."
+)
+
+#: **Finding.** §29.2.11 and §29.2.13 both turn on a planet being weak and
+#: they list different things. Radda's four are debilitation, **retrogression**,
+#: **combustion** and "otherwise weak"; duttota's three are debilitation,
+#: **an inimical rasi** and a low pancha vargeeya bala. Only debilitation is in
+#: both. So a retrograde planet makes a radda that duttota's own test would not
+#: call weak, and a planet in an enemy's rasi is weak here and not there.
+THE_TWO_SECTIONS_DEFINE_WEAK_DIFFERENTLY = (
+    "Radda's weakness is debilitation, retrogression, combustion or "
+    "otherwise weak. Duttota's is debilitation, an inimical rasi or a low "
+    "pancha vargeeya bala. Only debilitation is on both lists."
+)
+
+#: **Finding, and the example does not show it.** The rule says "**two**
+#: planets in an ithasala are weak" — both of them. The example establishes
+#: only one: Saturn is debilitated, and it says nothing about Mars. Mars at
+#: 19° Li is not debilitated (that is Cancer), not in an inimical rasi —
+#: chapter 3 makes Venus **sama** to Mars, so Libra is neutral, not an enemy's
+#: — and no bala is given for him. So the worked case is a **one weak planet**
+#: case and the rule asks for two. `duttota` answers both. See OI-171.
+THE_RULE_WANTS_TWO_WEAK_PLANETS_AND_THE_EXAMPLE_SHOWS_ONE = (
+    "The rule requires two weak planets in the ithasala. The example shows "
+    "Saturn debilitated and says nothing about Mars, who is in a neutral "
+    "rasi and not debilitated."
+)
+
+#: **Finding.** The strong planet's three tests are §29.2.12's condition (a)
+#: word for word — exalted, own rasi, a high pancha vargeeya bala — with
+#: "high" where that section said "good". Neither is one of §28.4.6's five
+#: band names, and the same reading is applied to both. See OI-170.
+HIGH_AND_GOOD_ARE_THE_SAME_UNNAMED_BAND = (
+    "Section 29.2.12 asks for a good pancha vargeeya bala and section "
+    "29.2.13 for a high one. Neither is one of section 28.4.6's five band "
+    "names and both are read as the strong band or better."
+)
+
+#: **Finding, for the third time.** The example reads its result off the
+#: **houses the weak planet owns from the lagna** — Saturn's 10th and 11th
+#: from Aries, career and material gains — in the same sentence §29.2.11 used
+#: for the same chart. There it was bad results and here it is good ones, from
+#: the identical ownership. Three sections now do this and none states it as a
+#: rule.
+THE_SAME_HOUSES_CARRY_THE_OPPOSITE_RESULT = (
+    "Section 29.2.11 read Saturn's 10th and 11th from Aries as career and "
+    "material gains damaged; section 29.2.13 reads the same two houses as "
+    "career and material gains promised."
+)
+
+
+def _duttota_side(graha: int, longitude: float, bala: float | None) -> dict:
+    """One planet under §29.2.13's three weak tests and three strong ones."""
+    place = validate.longitude("longitude", float(longitude))
+    rasi = int(place // 30)
+    lord = int(RASI_LORD[rasi])
+    relation = (None if lord == int(graha)
+                else int(NATURAL_RELATION[int(graha)][lord]))
+    grade = None if bala is None else pancha_vargeeya_grade(float(bala))
+    weak_tests = {
+        "debilitated": rasi == int(DEBILITATION_RASI[int(graha)]),
+        "inimical_rasi": relation == 0,
+        "low_bala": grade == "weak",
+    }
+    strong_tests = {
+        "exalted": rasi == int(EXALTATION_RASI[int(graha)]),
+        "own_rasi": lord == int(graha),
+        "high_bala": grade in GOOD_BALA_GRADES,
+    }
+    return {
+        "graha": int(graha), "graha_name": str(GRAHA_NAMES[int(graha)]),
+        "rasi": rasi, "rasi_lord": lord,
+        "relation_to_the_rasi_lord": (
+            None if relation is None else NATURAL_RELATION_NAMES[relation]),
+        "bala": None if bala is None else float(bala),
+        "bala_grade": grade,
+        **weak_tests, **strong_tests,
+        "weak": any(weak_tests.values()),
+        "strong": any(strong_tests.values()),
+        "weak_by": tuple(k for k, v in weak_tests.items() if v),
+        "strong_by": tuple(k for k, v in strong_tests.items() if v),
+    }
+
+
+def duttota(*, faster: int, slower: int, faster_longitude: float,
+            slower_longitude: float, rescuer: int, rescuer_longitude: float,
+            faster_bala: float | None = None, slower_bala: float | None = None,
+            rescuer_bala: float | None = None,
+            faster_retrograde: bool = False, slower_retrograde: bool = False,
+            rescuer_retrograde: bool = False,
+            lagna_rasi: int | None = None) -> dict:
+    """§29.2.13 — a weak ithasala rescued by a strong third planet.
+
+    The rule wants **both** planets of the pair weak and its example shows
+    one, so both readings are returned. See
+    `THE_RULE_WANTS_TWO_WEAK_PLANETS_AND_THE_EXAMPLE_SHOWS_ONE` and OI-171.
+    """
+    if int(rescuer) in (int(faster), int(slower)):
+        raise TajakaYogaError(
+            "the strong planet must be a third planet, not one of the pair")
+
+    base = ithasala(faster=faster, slower=slower,
+                    faster_longitude=faster_longitude,
+                    slower_longitude=slower_longitude,
+                    faster_retrograde=faster_retrograde,
+                    slower_retrograde=slower_retrograde)
+    quick, slow = int(base["faster"]), int(base["slower"])
+    seats = {int(faster): float(faster_longitude),
+             int(slower): float(slower_longitude)}
+    balas = {int(faster): faster_bala, int(slower): slower_bala}
+    retros = {int(faster): bool(faster_retrograde),
+              int(slower): bool(slower_retrograde)}
+
+    sides = {g: _duttota_side(g, seats[g], balas[g]) for g in (quick, slow)}
+    strong = _duttota_side(int(rescuer), float(rescuer_longitude),
+                           rescuer_bala)
+
+    rescues = {}
+    for other in (quick, slow):
+        quicker = faster_of(int(rescuer), other)
+        if quicker is None:                              # pragma: no cover
+            raise TajakaYogaError("footnote 83 cannot rank the strong planet "
+                                  f"against {GRAHA_NAMES[other]}")
+        slower_one = other if quicker == int(rescuer) else int(rescuer)
+        lon = {int(rescuer): float(rescuer_longitude), other: seats[other]}
+        rets = {int(rescuer): bool(rescuer_retrograde), other: retros[other]}
+        rescues[other] = ithasala(
+            faster=quicker, slower=slower_one, faster_longitude=lon[quicker],
+            slower_longitude=lon[slower_one],
+            faster_retrograde=rets[quicker], slower_retrograde=rets[slower_one])
+
+    reached = tuple(g for g in (quick, slow)
+                    if rescues[g]["type"] is not None)
+    rescued = bool(strong["strong"] and reached)
+    both_weak = all(sides[g]["weak"] for g in (quick, slow))
+    any_weak = any(sides[g]["weak"] for g in (quick, slow))
+    houses: tuple[int, ...] = ()
+    if lagna_rasi is not None:
+        weak_ones = [g for g in (quick, slow) if sides[g]["weak"]]
+        houses = tuple(sorted({
+            h for g in weak_ones for h in range(1, 13)
+            if int(RASI_LORD[(int(lagna_rasi) + h - 1) % 12]) == g}))
+
+    return {
+        "yoga": "Duttota",
+        "ithasala_type": base["type"],
+        "faster_side": sides[quick], "slower_side": sides[slow],
+        "both_weak": both_weak, "any_weak": any_weak,
+        "strong_side": strong,
+        "reaches": reached,
+        "rescue_types": {g: rescues[g]["type"] for g in (quick, slow)},
+        "rescue_aspects": {g: rescues[g]["aspect"] for g in (quick, slow)},
+        "rescued": rescued,
+        "present_as_worded": bool(base["type"] is not None and both_weak
+                                  and rescued),
+        "present_as_worked": bool(base["type"] is not None and any_weak
+                                  and rescued),
+        "readings_agree": both_weak == any_weak,
+        "undecided": (None if both_weak == any_weak
+                      else THE_RULE_WANTS_TWO_WEAK_PLANETS_AND_THE_EXAMPLE_SHOWS_ONE),
+        "houses": houses,
+        "gives": DUTTOTA_RESULTS,
+        "rule": DUTTOTA_RULE,
     }
 
 

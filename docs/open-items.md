@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**7 waiting on Amit · 118 waiting on evidence · 2 parked**
+**7 waiting on Amit · 119 waiting on evidence · 2 parked**
 
 ---
 
@@ -2574,6 +2574,27 @@ condition. A quarter of the bala range falls in it.
 
 **Closes when:** a later section prices "good", or a worked case puts a planet
 in the middle band.
+
+
+### OI-171 — §29.2.13 asks for two weak planets and shows one
+
+**Waiting on the book.** The rule: "If **two** planets in an ithasala are weak
+(debilitated or occupying inimical rasis, having a low panchavargeeya bala) and
+one of them has an ithasala yoga with a strong planet..."
+
+The example establishes one. Saturn at 20° Ar is debilitated — and, as it
+happens, in Mars's rasi, which is an enemy's, so two of the three tests fire.
+Mars at 19° Li is **not** debilitated (that is Cancer), **not** in an inimical
+rasi — chapter 3 makes Venus *sama* to Mars, so Libra is neutral — and no bala
+is given for him. The example never claims Mars is weak.
+
+So the worked case is a one-weak-planet case and the rule asks for two.
+
+`duttota` returns `present_as_worded` (both weak) and `present_as_worked` (at
+least one weak) separately and sets `readings_agree`. On the book's own example
+they differ.
+
+**Closes when:** a second worked duttota states the second planet's condition.
 
 
 ---
