@@ -2000,3 +2000,151 @@ def test_strength_is_taken_as_given_and_never_decided():
         yogas.WHICH_STRENGTH_MAKES_A_PLANET_STRONG_IS_NOT_SAID)
     assert "gives no measure of strength" in (
         yogas.WHICH_STRENGTH_MAKES_A_PLANET_STRONG_IS_NOT_SAID)
+
+
+# --------------------------------------------------------------------------
+# §29.2.10 Khallasara yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_khallasara_rule_is_transcribed():
+    assert "in the rasi between Moon and another planet X" in (
+        yogas.KHALLASARA_RULE)
+    assert "without ithasala with either planet" in yogas.KHALLASARA_RULE
+    assert "destroys the signification of X" in yogas.KHALLASARA_RULE
+
+
+def test_the_khallasara_example_reproduces():
+    """Virgo lagna, Moon 1 Ar, Mercury 15 Ta, Jupiter 29 Ge."""
+    want = yogas.KHALLASARA_EXAMPLE
+    got = yogas.khallasara(
+        lagna_rasi=5, moon_longitude=float(want["moon_longitude"]),
+        lord_longitude=float(want["lord_longitude"]),
+        x=int(Graha.JUPITER), x_longitude=float(want["x_longitude"]))
+    assert got["lagna_lord_name"] == want["lagna_lord"]
+    assert got["rasis"] == (0, 1, 2)
+    assert got["moon_leg_aspect"] == want["moon_leg_aspect"]
+    assert got["x_leg_aspect"] == want["x_leg_aspect"]
+    assert got["no_ithasala_with_either"] is True
+    assert got["present_on_the_arc"] is want["present"]
+    assert got["present_if_consecutive"] is want["present"]
+
+
+def test_the_lagna_lord_is_derived_from_the_lagna():
+    """Virgo's lord is Mercury, and the section says "lagna lord" without
+    naming him in the rule.
+    """
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    assert str(GRAHA_NAMES[int(RASI_LORD[5])]) == "Mercury"
+    got = yogas.khallasara(lagna_rasi=5, moon_longitude=1.0,
+                           lord_longitude=45.0, x=int(Graha.JUPITER),
+                           x_longitude=89.0)
+    assert got["lagna_lord"] == int(Graha.MERCURY)
+
+
+def test_the_harms_are_the_houses_x_owns_from_the_lagna():
+    """Jupiter owns the 4th and the 7th from Virgo, and the five matters the
+    example lists are those two houses'.
+    """
+    want = yogas.KHALLASARA_EXAMPLE
+    got = yogas.khallasara(lagna_rasi=5, moon_longitude=1.0,
+                           lord_longitude=45.0, x=int(Graha.JUPITER),
+                           x_longitude=89.0)
+    assert got["destroys_houses"] == want["x_owns"] == (4, 7)
+    assert want["destroys"] == ("mother", "education", "house", "vehicles",
+                                "marriage")
+    assert "mother, education, house and vehicles from the 4th" in (
+        yogas.THE_HARMS_ARE_THE_HOUSES_X_OWNS)
+
+
+def test_both_legs_fail_on_width_and_not_on_a_missing_aspect():
+    """Fourteen degrees against a binding orb of seven, twice."""
+    moon_leg = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.MERCURY),
+                              faster_longitude=1.0, slower_longitude=45.0)
+    x_leg = yogas.ithasala(faster=int(Graha.MERCURY), slower=int(Graha.JUPITER),
+                           faster_longitude=45.0, slower_longitude=89.0)
+    for leg in (moon_leg, x_leg):
+        assert leg["aspect"] == "Semi-sextile aspect"
+        assert leg["faster_is_less_advanced"] is True
+        assert leg["separation_from_exact"] == pytest.approx(14.0)
+        assert leg["binding_deeptamsa"] == 7.0
+        assert leg["type"] is None                 # not even a bhavishya
+    assert "satisfied by width" not in yogas.KHALLASARA_RULE
+    assert "each has an aspect and no ithasala" in (
+        yogas.THE_LEGS_FAIL_ON_WIDTH_NOT_ON_ASPECT)
+
+
+def test_an_ithasala_on_either_leg_kills_the_yoga():
+    """Bring Mercury to 5° Ta and the Moon reaches him."""
+    got = yogas.khallasara(lagna_rasi=5, moon_longitude=1.0,
+                           lord_longitude=30.0 + 5.0, x=int(Graha.JUPITER),
+                           x_longitude=89.0)
+    assert got["moon_leg"] is not None
+    assert got["no_ithasala_with_either"] is False
+    assert got["present_on_the_arc"] is False
+
+
+def test_between_is_answered_three_ways():
+    """The example satisfies all three, so it separates none. OI-167."""
+    got = yogas.khallasara(lagna_rasi=5, moon_longitude=1.0,
+                           lord_longitude=45.0, x=int(Graha.JUPITER),
+                           x_longitude=89.0)
+    assert got["between_on_the_arc_from_the_moon"] is True
+    assert got["the_single_rasi_between"] is True
+    # Not on the arc the other way: Ge to Ar the long way skips Taurus.
+    assert got["between_on_the_arc_from_x"] is False
+    assert "The example is all three at once" in (
+        yogas.BETWEEN_CAN_BE_READ_THREE_WAYS)
+
+
+def test_the_readings_come_apart_when_the_planets_are_further_off():
+    """Moon in Ar, Mercury in Ge, Jupiter in Le: on the arc but not
+    consecutive.
+    """
+    got = yogas.khallasara(lagna_rasi=5, moon_longitude=1.0,
+                           lord_longitude=60.0 + 15.0, x=int(Graha.JUPITER),
+                           x_longitude=120.0 + 29.0)
+    assert got["between_on_the_arc_from_the_moon"] is True
+    assert got["the_single_rasi_between"] is False
+    assert got["readings_agree"] is False
+    assert got["undecided"] == yogas.BETWEEN_CAN_BE_READ_THREE_WAYS
+    assert got["present_on_the_arc"] != got["present_if_consecutive"]
+
+
+def test_the_arc_reading_fires_far_more_often_than_the_strict_one():
+    """Counted over every arrangement of three rasis."""
+    on_the_arc = consecutive = 0
+    for moon in range(12):
+        for lord in range(12):
+            for other in range(12):
+                got = yogas.khallasara(
+                    lagna_rasi=5, moon_longitude=moon * 30.0 + 1.0,
+                    lord_longitude=lord * 30.0 + 15.0, x=int(Graha.JUPITER),
+                    x_longitude=other * 30.0 + 29.0)
+                on_the_arc += got["between_on_the_arc_from_the_moon"]
+                consecutive += got["the_single_rasi_between"]
+    assert consecutive == 24            # 12 forward + 12 backward
+    assert on_the_arc == 660
+    assert on_the_arc > 25 * consecutive
+    assert "fires far" in yogas.THE_READING_CHANGES_HOW_OFTEN_IT_FIRES
+
+
+def test_x_cannot_be_the_moon_or_the_lagna_lord():
+    for graha in (Graha.MOON, Graha.MERCURY):
+        with pytest.raises(yogas.TajakaYogaError, match="third planet"):
+            yogas.khallasara(lagna_rasi=5, moon_longitude=1.0,
+                             lord_longitude=45.0, x=int(graha),
+                             x_longitude=89.0)
+
+
+def test_khallasara_is_the_first_yoga_to_need_the_lagna():
+    """Every earlier yoga in §29.2 reads planets against planets."""
+    assert "Khallasara needs the lagna" in (
+        yogas.KHALLASARA_IS_THE_FIRST_YOGA_TO_NEED_THE_LAGNA)
+    # And it destroys significations, where §29.2.7 destroyed a yoga.
+    got = yogas.khallasara(lagna_rasi=5, moon_longitude=1.0,
+                           lord_longitude=45.0, x=int(Graha.JUPITER),
+                           x_longitude=89.0)
+    assert got["destroys_houses"] == (4, 7)
+    assert "destroys the signification of X" in got["rule"]

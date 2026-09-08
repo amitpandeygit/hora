@@ -1859,6 +1859,175 @@ def gairi_kamboola(*, faster: int, slower: int, faster_longitude: float,
     }
 
 
+# --------------------------------------------------------------------------
+# §29.2.10 Khallasara yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.10, verbatim.
+KHALLASARA_RULE = (
+    "If lagna lord is in the rasi between Moon and another planet X without "
+    "ithasala with either planet, then Khallasara yoga results. This yoga "
+    "destroys the signification of X."
+)
+
+#: §29.2.10's worked example, as the book states it.
+KHALLASARA_EXAMPLE: dict[str, object] = {
+    "lagna_rasi": "Vi", "lagna_lord": "Mercury",
+    "moon_at": "1 Ar", "moon_longitude": 1.0,
+    "lord_at": "15 Ta", "lord_longitude": 45.0,
+    "x": "Jupiter", "x_at": "29 Ge", "x_longitude": 89.0,
+    "moon_leg_aspect": "Semi-sextile aspect",
+    "x_leg_aspect": "Semi-sextile aspect",
+    "destroys": ("mother", "education", "house", "vehicles", "marriage"),
+    "x_owns": (4, 7),
+    "present": True,
+}
+
+#: **Finding.** The example's list of harms is its own arithmetic. Jupiter
+#: from a Virgo lagna owns **Sagittarius, the 4th** and **Pisces, the 7th**,
+#: and the section's five disappointments are exactly those two houses'
+#: matters: mother, education, house and vehicles from the 4th, marriage from
+#: the 7th. "The signification of X" means the houses X owns from the lagna,
+#: and the example shows it without saying it.
+THE_HARMS_ARE_THE_HOUSES_X_OWNS = (
+    "Jupiter owns the 4th and the 7th from a Virgo lagna, and the five "
+    "matters the example names are those two houses': mother, education, "
+    "house and vehicles from the 4th, marriage from the 7th."
+)
+
+#: **Finding.** Khallasara is the chapter's second cancelling yoga and it
+#: cancels something no other yoga built: §29.2.7 removes an ithasala, and
+#: this removes a **planet's significations** with no ithasala anywhere in
+#: sight. It is also the first yoga in the chapter to need the **lagna** —
+#: every earlier one reads planets against planets.
+KHALLASARA_IS_THE_FIRST_YOGA_TO_NEED_THE_LAGNA = (
+    "Every yoga before this one reads planets against planets. Khallasara "
+    "needs the lagna, because it turns on the lagna lord, and it destroys a "
+    "planet's significations rather than a yoga."
+)
+
+#: **Ambiguity.** "In the rasi between Moon and another planet X" can be read
+#: three ways and the example satisfies all three, so it separates none of
+#: them:
+#:
+#: * **the arc from the Moon to X** — the lagna lord's rasi lies strictly
+#:   inside it, going zodiacally from the Moon;
+#: * **the arc from X to the Moon** — the same, the other way round;
+#: * **the single rasi between** — "**the** rasi between" read strictly, so
+#:   the three are in consecutive signs, which is what the example has.
+#:
+#: `khallasara` answers each and never picks. See OI-167.
+BETWEEN_CAN_BE_READ_THREE_WAYS = (
+    "The lagna lord's rasi can be between the Moon's and X's on the arc from "
+    "the Moon, on the arc from X, or as the one rasi separating three "
+    "consecutive signs. The example is all three at once."
+)
+
+#: **Finding.** Under the widest reading the yoga is not rare at all: for any
+#: Moon and any X more than one rasi apart, every rasi on the arc between them
+#: qualifies, and the two ithasala conditions are easy to fail — an aspect
+#: outside the binding deeptamsa is enough, as the example's own fourteen
+#: degrees show. Read strictly as three consecutive signs it is much rarer.
+#: The reading changes how often the yoga fires, not only which charts.
+THE_READING_CHANGES_HOW_OFTEN_IT_FIRES = (
+    "On the arc reading any rasi between the two qualifies; on the strict "
+    "reading the three must be in consecutive signs. The first fires far "
+    "more often than the second."
+)
+
+#: **Finding.** Both of the example's legs fail the ithasala for the same
+#: reason and it is not a missing aspect: the Moon and Mercury are a
+#: semi-sextile, and so are Mercury and Jupiter, but both are **fourteen
+#: degrees** apart against a binding deeptamsa of seven — and fourteen is
+#: outside bhavishya's further degree too. So "without ithasala" is being
+#: satisfied by width, not by absence of aspect.
+THE_LEGS_FAIL_ON_WIDTH_NOT_ON_ASPECT = (
+    "Both legs of the example are semi-sextiles fourteen degrees wide "
+    "against a binding deeptamsa of seven, so each has an aspect and no "
+    "ithasala."
+)
+
+
+def _strictly_between(start: int, middle: int, end: int) -> bool:
+    """Whether `middle` lies strictly inside the zodiacal arc start -> end."""
+    span = (int(end) - int(start)) % 12
+    step = (int(middle) - int(start)) % 12
+    return 0 < step < span
+
+
+def khallasara(*, lagna_rasi: int, moon_longitude: float,
+               lord_longitude: float, x: int, x_longitude: float,
+               lagna_lord: int | None = None,
+               x_retrograde: bool = False) -> dict:
+    """§29.2.10 — the lagna lord marooned between the Moon and another planet.
+
+    "Between" is answered three ways because the section's wording allows
+    three and its example separates none — see `BETWEEN_CAN_BE_READ_THREE_WAYS`
+    and OI-167.
+    """
+    seat = validate.in_range("lagna_rasi", int(lagna_rasi), 0, 11)
+    lord = int(RASI_LORD[seat]) if lagna_lord is None else int(lagna_lord)
+    validate.in_range("x", int(x), 0, 8)
+    moon = int(Graha.MOON)
+    if int(x) in (moon, lord):
+        raise TajakaYogaError(
+            "X must be a third planet, not the Moon or the lagna lord")
+
+    moon_at = validate.longitude("moon_longitude", float(moon_longitude))
+    lord_at = validate.longitude("lord_longitude", float(lord_longitude))
+    x_at = validate.longitude("x_longitude", float(x_longitude))
+    rasis = (int(moon_at // 30), int(lord_at // 30), int(x_at // 30))
+
+    forward = _strictly_between(rasis[0], rasis[1], rasis[2])
+    backward = _strictly_between(rasis[2], rasis[1], rasis[0])
+    consecutive = ((rasis[1] - rasis[0]) % 12 == 1
+                   and (rasis[2] - rasis[1]) % 12 == 1) or (
+                  (rasis[1] - rasis[2]) % 12 == 1
+                  and (rasis[0] - rasis[1]) % 12 == 1)
+
+    legs = {}
+    for other, other_at, retro in ((moon, moon_at, False),
+                                   (int(x), x_at, bool(x_retrograde))):
+        quick = faster_of(lord, other)
+        if quick is None:                                # pragma: no cover
+            raise TajakaYogaError("footnote 83 cannot rank the lagna lord "
+                                  f"against {GRAHA_NAMES[other]}")
+        slow = other if quick == lord else lord
+        lon = {lord: lord_at, other: other_at}
+        retros = {lord: False, other: retro}
+        legs[other] = ithasala(
+            faster=quick, slower=slow, faster_longitude=lon[quick],
+            slower_longitude=lon[slow], faster_retrograde=retros[quick],
+            slower_retrograde=retros[slow])
+
+    no_ithasala = all(leg["type"] is None for leg in legs.values())
+    houses = tuple(h for h in range(1, 13)
+                   if int(RASI_LORD[(seat + h - 1) % 12]) == int(x))
+    return {
+        "yoga": "Khallasara",
+        "lagna_rasi": seat,
+        "lagna_lord": lord, "lagna_lord_name": str(GRAHA_NAMES[lord]),
+        "x": int(x), "x_name": str(GRAHA_NAMES[int(x)]),
+        "rasis": rasis,
+        "between_on_the_arc_from_the_moon": forward,
+        "between_on_the_arc_from_x": backward,
+        "the_single_rasi_between": consecutive,
+        "moon_leg": legs[moon]["type"],
+        "moon_leg_aspect": legs[moon]["aspect"],
+        "x_leg": legs[int(x)]["type"],
+        "x_leg_aspect": legs[int(x)]["aspect"],
+        "no_ithasala_with_either": no_ithasala,
+        "present_on_the_arc": bool(forward and no_ithasala),
+        "present_if_consecutive": bool(consecutive and no_ithasala),
+        "readings_agree": forward == consecutive,
+        "undecided": (None if forward == consecutive
+                      else BETWEEN_CAN_BE_READ_THREE_WAYS),
+        # "the signification of X" — the houses X owns from this lagna.
+        "destroys_houses": houses,
+        "rule": KHALLASARA_RULE,
+    }
+
+
 def pairs_in_speed_order() -> tuple[tuple[int, int], ...]:
     """Every graha pair footnote 83 can rank, slower first."""
     out = []

@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**6 waiting on Amit · 114 waiting on evidence · 2 parked**
+**6 waiting on Amit · 115 waiting on evidence · 2 parked**
 
 ---
 
@@ -2479,6 +2479,28 @@ multiplier or a threshold.
 
 **Closes when:** a later section or a worked example scores the addition, or
 names the strength it means.
+
+
+### OI-167 — §29.2.10's "the rasi between" can be read three ways
+
+**Waiting on the book.** "If lagna lord is in the rasi between Moon and another
+planet X..." The example — Moon 1 Ar, Mercury 15 Ta, Jupiter 29 Ge — satisfies
+every reading at once, so it separates none of them:
+
+| reading | the example | how often it fires |
+|---|---|---|
+| strictly inside the arc from the Moon to X | yes | 660 of 1728 rasi arrangements |
+| strictly inside the arc from X to the Moon | no | the same, mirrored |
+| **the** rasi between, so three consecutive signs | yes | 24 of 1728 |
+
+The choice is not cosmetic: the arc reading fires more than twenty-five times
+as often as the strict one.
+
+`khallasara` returns `present_on_the_arc` and `present_if_consecutive`
+separately, reports the backward arc as its own flag, and sets `readings_agree`.
+
+**Closes when:** a second worked khallasara puts the three planets further
+apart than consecutive signs.
 
 
 ---

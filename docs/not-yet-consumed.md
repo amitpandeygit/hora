@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.9 (80)
+### Chapter 29 — §29.1 to §29.2.10 (87)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1785,6 +1785,11 @@ footnote can. What follows is prose and findings.
 | `THE_STRONG_PLANETS_ITHASALA_IS_ALSO_IN_WAITING` | Ours: "He also has ithasala with Venus" is an eesarpha where the Moon stands and an ithasala once she enters Libra |
 | `CROSSING_A_RASI_PUTS_THE_MOON_BEHIND_EVERYTHING` | Ours: at 0° her advancement is zero, so after the crossing only the aspect and the orb are left to test |
 | `WHICH_STRENGTH_MAKES_A_PLANET_STRONG_IS_NOT_SAID` | Ours: "a strong planet" with no measure, the same hole §29.2.8 left. OI-166 |
+| `KHALLASARA_RULE` · `KHALLASARA_EXAMPLE` | §29.2.10 verbatim and its worked case as data |
+| `THE_HARMS_ARE_THE_HOUSES_X_OWNS` | Ours: the five matters named are the 4th's and the 7th's, which are the houses Jupiter owns from Virgo |
+| `KHALLASARA_IS_THE_FIRST_YOGA_TO_NEED_THE_LAGNA` | Ours: every earlier yoga reads planets against planets, and this destroys significations rather than a yoga |
+| `BETWEEN_CAN_BE_READ_THREE_WAYS` · `THE_READING_CHANGES_HOW_OFTEN_IT_FIRES` | Ours: the example satisfies all three readings, and they differ by a factor of twenty-five. OI-167 |
+| `THE_LEGS_FAIL_ON_WIDTH_NOT_ON_ASPECT` | Ours: both legs are semi-sextiles fourteen degrees wide against a binding orb of seven |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---
