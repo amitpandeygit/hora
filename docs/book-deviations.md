@@ -2732,3 +2732,29 @@ window 1°35'–25°35', Venus's 14°20'–28°20', the separation 7°45', and t
 0°45' the book computes by hand for the Moon to reach vartamaana.
 
 **Closes when:** you confirm the reading, or a later printing corrects it.
+
+
+---
+
+## D-83 · §29.2.7's example calls a trinal aspect a sextile
+
+**Status: BOOK DEVIATION — the aspect is named wrongly and the example's
+verdict is right anyway. Held as printed.**
+
+The manahoo example opens: "Suppose Jupiter is at 21° in Pi and Moon is at 18°
+in Cn, then they have a **sextile** aspect and an ithasala yoga."
+
+Cancer to Pisces is the **9th** house, which §28.2 makes a **trinal** aspect.
+Counted the other way, Pisces to Cancer is the 5th, which §28.2 also makes a
+trinal. §28.2 gives a sextile on the 3rd and the 11th only, and neither
+direction of this pair is either. There is no reading on which it is a sextile.
+
+Nothing turns on it. §29.2.3 requires *an* aspect and not a particular one, so
+the ithasala stands, Saturn at 19° Cn still cancels it, and the example's
+conclusion is correct throughout.
+
+**What we do.** `MANAHOO_EXAMPLE` records both the name the book gives and the
+aspect it actually is, and the test asserts the trinal. Nothing is corrected in
+the transcription.
+
+**Closes when:** you confirm the reading, or a later printing corrects it.

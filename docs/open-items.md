@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**6 waiting on Amit · 112 waiting on evidence · 2 parked**
+**6 waiting on Amit · 113 waiting on evidence · 2 parked**
 
 ---
 
@@ -2437,6 +2437,25 @@ function and answer it identically.
 
 **Closes when:** a worked nakta or yamaya lands on an aspecting pair, or a
 later section restates the condition.
+
+
+### OI-165 — §29.2.7 does not reach an ithasala between Mars and Saturn
+
+**Waiting on the book.** Manahoo needs Saturn or Mars conjunct the faster
+planet of an ithasala. The third paragraph covers one of them being **in** the
+pair: "we obviously need the other planet to give Manahoo yoga."
+
+It does not reach the pair being **both** of them. Mars faster and Saturn
+slower is an ordinary ithasala — Mars is rank 3 in footnote 83 and Saturn rank
+0 — and then neither spoiler is left. Two readings are available and the
+section supports neither: such an ithasala cannot be cancelled at all, or the
+two malefics spoil it between themselves by being there.
+
+`manahoo` sets `no_spoiler_left` and returns absent, so the case is visible
+rather than answered.
+
+**Closes when:** a later section or a worked example puts Mars and Saturn in
+one ithasala.
 
 
 ---

@@ -15,6 +15,7 @@ from hora.core.constants.house import APOKLIMA, KENDRA, PANAPHARA
 from hora.tajaka.aspects import (
     TajakaAspectError,
     aspect_on_house,
+    aspects_from,
     deeptamsa,
 )
 
@@ -1278,6 +1279,229 @@ def connector_role(first: int, second: int, connector: int) -> str | None:
     if rank < min(ranks):
         return "Yamaya"
     return None
+
+
+# --------------------------------------------------------------------------
+# §29.2.7 Manahoo yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.7's rule, verbatim.
+MANAHOO_RULE = (
+    "Suppose two planets have an ithasala yoga. If Saturn or Mars is in "
+    "conjunction with the faster moving planet and stays within the "
+    "deeptaamsa of the latter, then Manahoo yoga results. This yoga cancels "
+    "the ithasala yoga and gives failures, disappointments, quarrels, loss "
+    "of wealth etc."
+)
+
+#: The rule's third paragraph, verbatim.
+MANAHOO_NEEDS_THE_OTHER_MALEFIC = (
+    "If Mars or Saturn is one of the two planets in ithasala yoga, then we "
+    "obviously need the other planet to give Manahoo yoga."
+)
+
+#: The Notes, verbatim. They give a wider reading, price it, and reject it.
+MANAHOO_NOTES = (
+    "Some people suggest that an aspect of Saturn or Mars within the "
+    "deeptaamsa of the faster moving planet is sufficient to give Manahoo "
+    "yoga. In the above example, Saturn need not be in Cn according to this. "
+    "Saturn or Mars in 6-30 degrees (Moon's deeptaamsa) in Cn, Le, Vi, Li, "
+    "Sc, Cp, Pi, Ar, Ta and Ge will have an aspect with Moon - faster moving "
+    "planet in Moon-Jupiter ithasala - within Moon's deeptaamsa. So Manahoo "
+    "yoga results. However, readers are advised to consider only "
+    "conjunction. Some authors have suggested that both Mars and Saturn must "
+    "be involved, but one of them is enough to spoil ithasala yoga and give "
+    "Manahoo yoga."
+)
+
+MANAHOO_RESULTS = "failures, disappointments, quarrels, loss of wealth"
+
+#: The two grahas that can spoil an ithasala. Nothing else does.
+MANAHOO_SPOILERS: tuple[int, ...] = (int(Graha.SATURN), int(Graha.MARS))
+
+#: §29.2.7's worked example, as the book states it.
+MANAHOO_EXAMPLE: dict[str, object] = {
+    "faster": "Moon", "faster_at": "18 Cn", "faster_longitude": 108.0,
+    "slower": "Jupiter", "slower_at": "21 Pi", "slower_longitude": 351.0,
+    "book_calls_the_aspect": "sextile",
+    "aspect_is_really": "Trinal aspect",
+    "spoiler": "Saturn", "spoiler_at": "19 Cn", "spoiler_longitude": 109.0,
+    "ithasala_without_the_spoiler": "Vartamaana",
+    "manahoo": True,
+}
+
+#: The Notes' own worked window, as data: where a spoiler would reach the
+#: Moon at 18° Cn under the **aspect** reading the section then rejects.
+MANAHOO_NOTES_WINDOW: dict[str, object] = {
+    "faster": "Moon", "faster_at": "18 Cn", "deeptamsa": 12.0,
+    "degrees": (6.0, 30.0),
+    "rasis": ("Cn", "Le", "Vi", "Li", "Sc", "Cp", "Pi", "Ar", "Ta", "Ge"),
+}
+
+#: **Finding, and it checks our own aspect table.** The Notes work out where
+#: Saturn or Mars would reach the Moon at 18° Cn under the aspect reading, and
+#: every figure is right: 6°–30° is 18° plus and minus the Moon's twelve, and
+#: the ten rasis listed are exactly the ten §28.2 gives the Moon from Cancer —
+#: all twelve but Sg and Aq, which are the 6th and the 8th. The section
+#: computes independently what `aspects_from` computes, and they agree rasi
+#: for rasi.
+THE_NOTES_WINDOW_CONFIRMS_THE_ASPECT_TABLE = (
+    "The Notes list Cn, Le, Vi, Li, Sc, Cp, Pi, Ar, Ta and Ge as the rasis a "
+    "spoiler could aspect the Moon from. Those are exactly the ten section "
+    "28.2 gives, the 6th and the 8th being the two it leaves out."
+)
+
+#: **Book defect.** The example says Jupiter at 21° Pi and the Moon at 18° Cn
+#: "have a **sextile** aspect". Cancer to Pisces is the **9th** house, which
+#: §28.2 makes a **trinal**; counted the other way it is the 5th, which is
+#: also a trinal. There is no reading on which it is a sextile. The ithasala
+#: is unaffected — §29.2.3 needs an aspect, not a particular one — so the
+#: example's conclusion stands and only the name is wrong.
+THE_EXAMPLE_MISNAMES_A_TRINAL_AS_A_SEXTILE = (
+    "Cancer to Pisces is the 9th house and section 28.2 makes it a trinal "
+    "aspect. The example calls it a sextile. The ithasala needs an aspect "
+    "and not a particular one, so the verdict is unchanged."
+)
+
+#: **Finding.** Manahoo is the chapter's first **cancelling** yoga: every
+#: earlier section adds a reading and this one removes one. It also asks for
+#: something none of them do — a graha's identity. Ishkavala counts houses,
+#: ithasala compares degrees, nakta and yamaya rank speeds; manahoo names two
+#: planets outright.
+MANAHOO_IS_THE_FIRST_CANCELLING_YOGA = (
+    "Every yoga in the chapter before this one adds a reading. Manahoo takes "
+    "one away, and it is the first to turn on which graha it is rather than "
+    "on where a graha stands."
+)
+
+#: **Finding.** The rule measures the conjunction against the **faster**
+#: planet's deeptamsa and not the spoiler's, which the phrase "the latter"
+#: settles. It matters: Saturn's own orb is 9° and Mars's 8°, while the faster
+#: planet can be the Moon at 12° or Mercury at 7°, so the window is up to five
+#: degrees wider or narrower than the spoiler's own.
+THE_ORB_IS_THE_FASTER_PLANETS_NOT_THE_SPOILERS = (
+    "The spoiler must stay within the deeptaamsa of the faster moving planet "
+    "in the ithasala, not within its own. The two differ by up to five "
+    "degrees."
+)
+
+#: **Gap.** The third paragraph covers Mars or Saturn being **one** of the
+#: pair. It does not reach the pair being **both** of them — Mars faster and
+#: Saturn slower is a perfectly ordinary ithasala, and then neither spoiler is
+#: left. `manahoo` reports that as no spoiler available rather than as an
+#: absent yoga. See OI-165.
+BOTH_SPOILERS_IN_THE_PAIR_IS_NOT_REACHED = (
+    "If the ithasala is between Mars and Saturn themselves, neither is left "
+    "to spoil it. The section covers one of them being in the pair and not "
+    "both."
+)
+
+#: **Variant, priced and rejected by the book itself.** The Notes give a wider
+#: reading — an **aspect** within the faster planet's deeptamsa, not only a
+#: conjunction — and then say "readers are advised to consider only
+#: conjunction". `manahoo` follows that: `present` is the conjunction reading,
+#: and `present_by_aspect` carries the variant beside it so the difference is
+#: visible rather than lost. §28.2 reaches ten rasis of twelve, so the variant
+#: fires far more often.
+THE_ASPECT_READING_IS_NAMED_AND_DECLINED = (
+    "The Notes offer an aspect of the spoiler within the faster planet's "
+    "deeptaamsa as sufficient and then advise considering only conjunction. "
+    "The conjunction reading is the one applied."
+)
+
+#: **Variant, rejected.** "Some authors have suggested that both Mars and
+#: Saturn must be involved, but one of them is enough."
+ONE_SPOILER_IS_ENOUGH = (
+    "Some authors require both Mars and Saturn. Section 29.2.7 says one is "
+    "enough to spoil the ithasala."
+)
+
+
+def manahoo_window(faster: int, faster_longitude: float) -> dict:
+    """Where a spoiler would reach the faster planet under the Notes' reading.
+
+    The wider reading the Notes describe and then decline, worked out: the
+    degree range in each rasi the faster planet aspects. Built so the
+    section's own list can be checked against §28.2 rather than trusted.
+    """
+    orb = deeptamsa(int(faster))
+    here = validate.longitude("faster_longitude", float(faster_longitude))
+    seat = advancement(here)
+    return {
+        "faster": int(faster), "faster_name": str(GRAHA_NAMES[int(faster)]),
+        "deeptamsa": orb,
+        "degrees": (seat - orb, seat + orb),
+        "rasis": tuple(int(row["rasi"]) for row in aspects_from(int(here // 30))),
+        "reading": THE_ASPECT_READING_IS_NAMED_AND_DECLINED,
+    }
+
+
+def manahoo(*, faster: int, slower: int, faster_longitude: float,
+            slower_longitude: float, spoiler: int, spoiler_longitude: float,
+            faster_retrograde: bool = False,
+            slower_retrograde: bool = False) -> dict:
+    """§29.2.7 — Saturn or Mars conjoining the faster planet of an ithasala.
+
+    `present` is the conjunction reading, which is the one §29.2.7's Notes
+    advise. `present_by_aspect` is the wider reading the Notes describe and
+    then decline, carried alongside so the difference can be seen.
+    """
+    spoils = validate.in_range("spoiler", int(spoiler), 0, 8)
+    if spoils not in MANAHOO_SPOILERS:
+        raise TajakaYogaError(
+            f"only Saturn and Mars give manahoo; got "
+            f"{GRAHA_NAMES[spoils]}")
+
+    base = ithasala(faster=faster, slower=slower,
+                    faster_longitude=faster_longitude,
+                    slower_longitude=slower_longitude,
+                    faster_retrograde=faster_retrograde,
+                    slower_retrograde=slower_retrograde)
+    quick, slow = int(base["faster"]), int(base["slower"])
+    quick_longitude = (float(faster_longitude) if quick == int(faster)
+                       else float(slower_longitude))
+
+    in_the_pair = spoils in (quick, slow)
+    other = [g for g in MANAHOO_SPOILERS if g != spoils]
+    pair_holds_both = all(g in (quick, slow) for g in MANAHOO_SPOILERS)
+
+    here = validate.longitude("spoiler_longitude", float(spoiler_longitude))
+    seat = validate.longitude("faster_longitude", quick_longitude)
+    orb = deeptamsa(quick)
+    conjunct = int(here // 30) == int(seat // 30)
+    gap = abs(((here - seat + 180.0) % 360.0) - 180.0)
+    within = gap <= orb
+
+    house = int((int(here // 30) - int(seat // 30)) % 12) + 1
+    aspect = aspect_on_house(house)
+    exact = (seat + 30.0 * (house - 1)) % 360.0
+    aspect_gap = abs(((here - exact + 180.0) % 360.0) - 180.0)
+
+    eligible = base["type"] is not None and not in_the_pair
+    return {
+        "yoga": "Manahoo",
+        "spoiler": spoils, "spoiler_name": str(GRAHA_NAMES[spoils]),
+        "ithasala_type": base["type"],
+        "faster": quick, "faster_name": str(GRAHA_NAMES[quick]),
+        "slower": slow, "slower_name": str(GRAHA_NAMES[slow]),
+        "spoiler_is_in_the_pair": in_the_pair,
+        "the_other_spoiler": None if not in_the_pair else other[0],
+        "no_spoiler_left": pair_holds_both,
+        "faster_deeptamsa": orb,
+        "conjunct": conjunct,
+        "separation_from_faster": gap,
+        "within_faster_deeptamsa": within,
+        "present": bool(eligible and conjunct and within),
+        # The Notes' wider reading, described and declined there.
+        "aspects_faster": aspect is not None,
+        "aspect": None if aspect is None else aspect["name"],
+        "separation_from_exact_aspect": aspect_gap,
+        "present_by_aspect": bool(eligible and aspect is not None
+                                  and aspect_gap <= orb),
+        "cancels_the_ithasala": bool(eligible and conjunct and within),
+        "gives": MANAHOO_RESULTS,
+        "rule": MANAHOO_RULE,
+    }
 
 
 def pairs_in_speed_order() -> tuple[tuple[int, int], ...]:

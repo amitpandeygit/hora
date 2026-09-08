@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.6 (54)
+### Chapter 29 — §29.1 to §29.2.7 (65)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1765,6 +1765,13 @@ footnote can. What follows is prose and findings.
 | `YAMAYA_IS_NAKTA_WITH_THE_SPEED_REVERSED` | Ours: one word changed in the rule, one planet swapped in the example, one clause added to the result |
 | `THE_CONNECTOR_LOOKS_THE_OTHER_WAY_IN_A_YAMAYA` | Ours: a nakta's connector must be behind both and a yamaya's ahead of both, which is what the two examples show |
 | `A_CONNECTOR_BETWEEN_THE_TWO_HAS_NO_YOGA` | Ours: of the 105 ways to pick a pair and a third graha, 35 fall between the two and §29.2 names no yoga for them |
+| `MANAHOO_RULE` · `MANAHOO_NEEDS_THE_OTHER_MALEFIC` · `MANAHOO_NOTES` · `MANAHOO_RESULTS` · `MANAHOO_EXAMPLE` · `MANAHOO_NOTES_WINDOW` | §29.2.7 verbatim, its example and the Notes' worked window as data |
+| `THE_NOTES_WINDOW_CONFIRMS_THE_ASPECT_TABLE` | Ours: the Notes' ten rasis are exactly §28.2's ten, computed independently by the book and by us |
+| `THE_EXAMPLE_MISNAMES_A_TRINAL_AS_A_SEXTILE` | Cancer to Pisces is the 9th, a trinal; the verdict is unaffected. D-83 |
+| `MANAHOO_IS_THE_FIRST_CANCELLING_YOGA` | Ours: the first yoga in the chapter to remove a reading, and the first to turn on a graha's identity |
+| `THE_ORB_IS_THE_FASTER_PLANETS_NOT_THE_SPOILERS` | Ours: "the deeptaamsa of the latter" is the faster planet's, and the two differ by up to five degrees |
+| `BOTH_SPOILERS_IN_THE_PAIR_IS_NOT_REACHED` | Ours: a Mars-Saturn ithasala leaves no spoiler and the section covers only one of them being in the pair. OI-165 |
+| `THE_ASPECT_READING_IS_NAMED_AND_DECLINED` · `ONE_SPOILER_IS_ENOUGH` | The two variants the Notes price and reject |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

@@ -1380,3 +1380,207 @@ def test_yamaya_rejects_the_same_bad_inputs_as_nakta():
         yogas.yamaya(first=int(Graha.RAHU), second=int(Graha.KETU),
                      connector=int(Graha.JUPITER), first_longitude=1.0,
                      second_longitude=2.0, connector_longitude=3.0)
+
+
+# --------------------------------------------------------------------------
+# §29.2.7 Manahoo yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_manahoo_rule_and_notes_are_transcribed():
+    assert "Saturn or Mars is in conjunction with the faster moving planet" in (
+        yogas.MANAHOO_RULE)
+    assert "cancels the ithasala yoga" in yogas.MANAHOO_RULE
+    assert yogas.MANAHOO_RESULTS in yogas.MANAHOO_RULE
+    assert "we obviously need the other planet" in (
+        yogas.MANAHOO_NEEDS_THE_OTHER_MALEFIC)
+    assert "advised to consider only conjunction" in yogas.MANAHOO_NOTES
+    assert "one of them is enough" in yogas.MANAHOO_NOTES
+    assert yogas.MANAHOO_SPOILERS == (int(Graha.SATURN), int(Graha.MARS))
+
+
+def test_the_manahoo_example_reproduces():
+    """Moon 18 Cn behind Jupiter 21 Pi is an ithasala; Saturn at 19 Cn is
+    conjunct the Moon and inside her twelve degrees, so it cancels.
+    """
+    want = yogas.MANAHOO_EXAMPLE
+    got = yogas.manahoo(
+        faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+        faster_longitude=float(want["faster_longitude"]),
+        slower_longitude=float(want["slower_longitude"]),
+        spoiler=int(Graha.SATURN),
+        spoiler_longitude=float(want["spoiler_longitude"]))
+    assert got["ithasala_type"] == want["ithasala_without_the_spoiler"]
+    assert got["conjunct"] is True
+    assert got["separation_from_faster"] == pytest.approx(1.0)
+    assert got["faster_deeptamsa"] == 12.0
+    assert got["within_faster_deeptamsa"] is True
+    assert got["present"] is want["manahoo"]
+    assert got["cancels_the_ithasala"] is True
+
+
+def test_the_example_misnames_a_trinal_as_a_sextile():
+    """Cancer to Pisces is the 9th, which §28.2 makes a trinal. Counted the
+    other way it is the 5th, also a trinal. There is no sextile in it.
+    """
+    from hora.tajaka.aspects import aspect_on_house
+
+    base = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                          faster_longitude=108.0, slower_longitude=351.0)
+    assert base["house_from_faster"] == 9
+    assert base["aspect"] == "Trinal aspect"
+    assert aspect_on_house(5)["name"] == "Trinal aspect"
+    assert aspect_on_house(9)["name"] == "Trinal aspect"
+    assert yogas.MANAHOO_EXAMPLE["book_calls_the_aspect"] == "sextile"
+    assert yogas.MANAHOO_EXAMPLE["aspect_is_really"] == "Trinal aspect"
+
+    # The verdict is unaffected: §29.2.3 needs an aspect, not a named one.
+    assert base["type"] == "Vartamaana"
+    assert "the verdict is unchanged" in (
+        yogas.THE_EXAMPLE_MISNAMES_A_TRINAL_AS_A_SEXTILE)
+
+
+def test_the_notes_window_reproduces_rasi_for_rasi_and_in_order():
+    """6°-30° is 18° plus and minus the Moon's twelve, and the ten rasis are
+    exactly the ten §28.2 gives her from Cancer.
+    """
+    from hora.core.const import RASI_ABBR
+
+    want = yogas.MANAHOO_NOTES_WINDOW
+    got = yogas.manahoo_window(int(Graha.MOON), 108.0)
+    assert got["deeptamsa"] == want["deeptamsa"]
+    assert got["degrees"] == want["degrees"]
+    assert tuple(RASI_ABBR[r] for r in got["rasis"]) == want["rasis"]
+    assert len(got["rasis"]) == 10
+
+    # The two the section leaves out are the 6th and the 8th from Cancer.
+    missing = {"Sg", "Aq"}
+    assert set(RASI_ABBR) - set(want["rasis"]) == missing
+    assert "the 6th and the 8th being the two it leaves out" in (
+        yogas.THE_NOTES_WINDOW_CONFIRMS_THE_ASPECT_TABLE)
+
+
+def test_the_orb_is_the_faster_planets_not_the_spoilers():
+    """"the deeptaamsa of the latter". Mercury's 7° against Saturn's 9°."""
+    from hora.tajaka.aspects import deeptamsa
+
+    assert deeptamsa(int(Graha.SATURN)) == 9.0
+    assert deeptamsa(int(Graha.MERCURY)) == 7.0
+
+    # Saturn 8° from Mercury: inside Saturn's own orb, outside Mercury's.
+    got = yogas.manahoo(faster=int(Graha.MERCURY), slower=int(Graha.JUPITER),
+                        faster_longitude=10.0, slower_longitude=60.0 + 15.0,
+                        spoiler=int(Graha.SATURN), spoiler_longitude=18.0)
+    assert got["faster_deeptamsa"] == 7.0
+    assert got["separation_from_faster"] == pytest.approx(8.0)
+    assert got["conjunct"] is True
+    assert got["within_faster_deeptamsa"] is False
+    assert got["present"] is False
+    assert "not within its own" in yogas.THE_ORB_IS_THE_FASTER_PLANETS_NOT_THE_SPOILERS
+
+
+def test_a_spoiler_conjunct_the_slower_planet_does_nothing():
+    """The rule names the faster planet and only the faster planet."""
+    got = yogas.manahoo(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                        faster_longitude=108.0, slower_longitude=351.0,
+                        spoiler=int(Graha.SATURN), spoiler_longitude=352.0)
+    assert got["conjunct"] is False
+    assert got["present"] is False
+    assert got["cancels_the_ithasala"] is False
+
+
+def test_no_ithasala_means_no_manahoo():
+    """There has to be something to cancel."""
+    got = yogas.manahoo(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                        faster_longitude=90.0 + 25.0, slower_longitude=351.0,
+                        spoiler=int(Graha.SATURN), spoiler_longitude=116.0)
+    assert got["ithasala_type"] is None
+    assert got["conjunct"] is True
+    assert got["within_faster_deeptamsa"] is True
+    assert got["present"] is False
+
+
+def test_a_spoiler_inside_the_pair_cannot_spoil_it():
+    """"we obviously need the other planet"."""
+    got = yogas.manahoo(faster=int(Graha.MOON), slower=int(Graha.SATURN),
+                        faster_longitude=4.0, slower_longitude=69.0,
+                        spoiler=int(Graha.SATURN), spoiler_longitude=69.0)
+    assert got["ithasala_type"] is not None
+    assert got["spoiler_is_in_the_pair"] is True
+    assert got["the_other_spoiler"] == int(Graha.MARS)
+    assert got["present"] is False
+
+
+def test_a_mars_saturn_ithasala_has_no_spoiler_left():
+    """Neither of the two is available. OI-165."""
+    for spoiler in yogas.MANAHOO_SPOILERS:
+        got = yogas.manahoo(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                            faster_longitude=4.0, slower_longitude=69.0,
+                            spoiler=spoiler, spoiler_longitude=5.0)
+        assert got["ithasala_type"] is not None
+        assert got["no_spoiler_left"] is True
+        assert got["present"] is False
+    assert "The section covers one of them being in the pair and not both" in (
+        yogas.BOTH_SPOILERS_IN_THE_PAIR_IS_NOT_REACHED)
+
+
+def test_only_saturn_and_mars_are_accepted_as_spoilers():
+    for graha in (Graha.SUN, Graha.MOON, Graha.MERCURY, Graha.JUPITER,
+                  Graha.VENUS, Graha.RAHU, Graha.KETU):
+        with pytest.raises(yogas.TajakaYogaError, match="only Saturn and Mars"):
+            yogas.manahoo(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                          faster_longitude=108.0, slower_longitude=351.0,
+                          spoiler=int(graha), spoiler_longitude=109.0)
+
+
+def test_the_aspect_reading_is_carried_but_not_applied():
+    """The Notes describe it and then decline it. Saturn at 19° Ta aspects
+    the Moon at 18° Cn within her orb but is not conjunct her.
+    """
+    got = yogas.manahoo(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                        faster_longitude=108.0, slower_longitude=351.0,
+                        spoiler=int(Graha.SATURN),
+                        spoiler_longitude=30.0 + 19.0)
+    assert got["conjunct"] is False
+    assert got["present"] is False
+    assert got["aspects_faster"] is True
+    assert got["separation_from_exact_aspect"] == pytest.approx(1.0)
+    assert got["present_by_aspect"] is True
+    assert "The conjunction reading is the one applied" in (
+        yogas.THE_ASPECT_READING_IS_NAMED_AND_DECLINED)
+
+
+def test_the_aspect_reading_fires_far_more_often_than_the_conjunction_one():
+    """Ten rasis of twelve against one. Counted, because the section says
+    only that it is wider.
+    """
+    conjunction = aspecting = 0
+    for degree in range(360):
+        got = yogas.manahoo(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                            faster_longitude=108.0, slower_longitude=351.0,
+                            spoiler=int(Graha.SATURN),
+                            spoiler_longitude=float(degree))
+        conjunction += got["present"]
+        aspecting += got["present_by_aspect"]
+    assert conjunction == 24            # 18 +/- 12, clipped to Cancer
+    assert aspecting == 240
+    assert aspecting == 10 * conjunction
+
+
+def test_one_spoiler_is_enough():
+    assert "one is enough to spoil the ithasala" in yogas.ONE_SPOILER_IS_ENOUGH
+    for spoiler in yogas.MANAHOO_SPOILERS:
+        got = yogas.manahoo(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                            faster_longitude=108.0, slower_longitude=351.0,
+                            spoiler=spoiler, spoiler_longitude=109.0)
+        assert got["present"] is True
+
+
+def test_manahoo_is_the_first_cancelling_yoga_in_the_chapter():
+    assert "takes one away" in yogas.MANAHOO_IS_THE_FIRST_CANCELLING_YOGA
+    # Every earlier yoga reports presence; this one reports a cancellation.
+    got = yogas.manahoo(faster=int(Graha.MOON), slower=int(Graha.JUPITER),
+                        faster_longitude=108.0, slower_longitude=351.0,
+                        spoiler=int(Graha.SATURN), spoiler_longitude=109.0)
+    assert got["ithasala_type"] == "Vartamaana"
+    assert got["cancels_the_ithasala"] is True
