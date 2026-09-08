@@ -1761,3 +1761,242 @@ def test_how_much_power_is_added_is_not_scored():
     assert got["undecided"] == yogas.HOW_MUCH_POWER_IS_ADDED_IS_NOT_SAID
     assert "gives no measure and no scale" in (
         yogas.HOW_MUCH_POWER_IS_ADDED_IS_NOT_SAID)
+
+
+# --------------------------------------------------------------------------
+# §29.2.9 Gairi-Kamboola yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_gairi_kamboola_rule_is_transcribed():
+    assert "in the last degree of a rasi" in yogas.GAIRI_KAMBOOLA_RULE
+    assert "Kamboola yoga in waiting" in yogas.GAIRI_KAMBOOLA_RULE
+    assert "ithasala with a strong planet" in yogas.GAIRI_KAMBOOLA_RULE
+    assert "own navamsa, drekkana or hadda" in yogas.GAIRI_KAMBOOLA_RULE
+    assert yogas.GAIRI_KAMBOOLA_RESULTS in yogas.GAIRI_KAMBOOLA_RULE
+    assert yogas.LAST_DEGREE_OF_A_RASI == 29.0
+
+
+def test_the_gairi_kamboola_example_reproduces():
+    """Mars 1 Cp and Jupiter 2 Pi are a sextile ithasala; the Moon at
+    29°10' Vi reaches neither now and reaches Mars on entering Libra.
+    """
+    want = yogas.GAIRI_KAMBOOLA_EXAMPLE
+    got = yogas.gairi_kamboola(
+        faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+        faster_longitude=float(want["faster_longitude"]),
+        slower_longitude=float(want["slower_longitude"]),
+        moon_longitude=float(want["moon_longitude"]),
+        strong_planet=int(Graha.VENUS),
+        strong_planet_longitude=float(want["strong_planet_longitude"]))
+    assert got["pair_ithasala"] == want["pair_ithasala"]
+    assert got["moon_in_last_degree"] is True
+    assert got["already_has_a_kamboola"] is False
+    assert got["reaches_after_moving"] == (True, False)
+    assert got["moon_enters"] == 6                      # Libra
+    assert got["moon_disqualified"] is False
+    assert got["present"] is want["present"]
+
+
+def test_the_pairs_aspect_is_the_sextile_the_book_names():
+    """Cp to Pi is the 3rd, and §28.2 does make that a sextile — unlike
+    §29.2.7's example, which named one where there was a trinal.
+    """
+    base = yogas.ithasala(faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+                          faster_longitude=271.0, slower_longitude=332.0)
+    assert base["house_from_faster"] == 3
+    assert base["aspect"] == "Sextile aspect"
+    assert base["type"] == "Poorna"
+
+
+def test_the_moon_reaches_neither_planet_where_she_stands():
+    """The book says so: "Moon has no ithasala with Mars or Jupiter"."""
+    moon = 150.0 + 29.0 + 10.0 / 60.0
+    for other, longitude in ((Graha.MARS, 271.0), (Graha.JUPITER, 332.0)):
+        leg = yogas.ithasala(faster=int(Graha.MOON), slower=int(other),
+                             faster_longitude=moon, slower_longitude=longitude)
+        assert leg["aspect"] is not None
+        assert leg["faster_is_less_advanced"] is False
+        assert leg["type"] is None
+
+
+def test_the_moon_reaches_mars_and_not_jupiter_on_entering_libra():
+    """Li to Cp is the 4th, a square; Li to Pi is the 6th, aspectless."""
+    to_mars = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.MARS),
+                             faster_longitude=180.0, slower_longitude=271.0)
+    assert to_mars["house_from_faster"] == 4
+    assert to_mars["aspect"] == "Square aspect"
+    assert to_mars["type"] == "Poorna"
+
+    to_jupiter = yogas.ithasala(faster=int(Graha.MOON),
+                                slower=int(Graha.JUPITER),
+                                faster_longitude=180.0, slower_longitude=332.0)
+    assert to_jupiter["house_from_faster"] == 6
+    assert to_jupiter["aspect"] is None
+    assert to_jupiter["type"] is None
+
+
+def test_all_three_dignity_checks_reproduce():
+    """Mercury's navamsa, Venus's drekkana, Saturn's hadda — and none of them
+    the Moon's own, which is what the condition asks.
+    """
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR
+
+    want = yogas.GAIRI_KAMBOOLA_EXAMPLE
+    got = yogas.moon_is_disqualified(float(want["moon_longitude"]))
+    assert (RASI_ABBR[got["navamsa"]],
+            str(GRAHA_NAMES[got["navamsa_lord"]])) == want["moon_navamsa"]
+    assert (RASI_ABBR[got["drekkana"]],
+            str(GRAHA_NAMES[got["drekkana_lord"]])) == want["moon_drekkana"]
+    assert str(GRAHA_NAMES[got["hadda_lord"]]) == want["moon_hadda"]
+    assert got["disqualified"] is False
+    assert "none of the three is her own" in (
+        yogas.THE_THREE_DIGNITY_CHECKS_REPRODUCE)
+
+
+def test_each_disqualifier_is_answered_separately():
+    """Four conditions, four flags. The Moon in Taurus is exalted; in Scorpio
+    debilitated; in Cancer she owns the sign, so early Cancer is her own
+    navamsa and her own drekkana.
+    """
+    exalted = yogas.moon_is_disqualified(30.0 + 5.0)
+    assert exalted["exalted"] is True and exalted["disqualified"] is True
+
+    fallen = yogas.moon_is_disqualified(210.0 + 5.0)
+    assert fallen["debilitated"] is True and fallen["disqualified"] is True
+
+    # Cancer 0°: navamsa Cancer (movable sign starts from itself) and the
+    # first drekkana is the sign itself — both the Moon's own.
+    own = yogas.moon_is_disqualified(90.0 + 0.5)
+    assert own["own_navamsa"] is True
+    assert own["own_drekkana"] is True
+    assert own["disqualified"] is True
+
+
+def test_a_disqualified_moon_kills_the_yoga():
+    """Move the example's Moon to the last degree of Taurus, where she is
+    exalted. Everything else is unchanged.
+    """
+    got = yogas.gairi_kamboola(
+        faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+        faster_longitude=271.0, slower_longitude=332.0,
+        moon_longitude=30.0 + 29.0 + 10.0 / 60.0,
+        strong_planet=int(Graha.VENUS), strong_planet_longitude=63.0)
+    assert got["moon_in_last_degree"] is True
+    assert got["moon_disqualified"] is True
+    assert got["moon_dignity"]["exalted"] is True
+    assert got["present"] is False
+
+
+def test_the_moon_must_not_be_the_strong_one():
+    """Two of the four disqualifiers are dignities, so the section is not
+    asking for a weak Moon by accident — it wants the strength elsewhere.
+    """
+    assert "The strength has to come from the other planet" in (
+        yogas.THE_MOON_MUST_NOT_BE_THE_STRONG_ONE)
+    dignified = yogas.moon_is_disqualified(30.0 + 5.0)
+    assert dignified["exalted"] is True
+
+
+def test_the_strong_planets_ithasala_is_also_in_waiting():
+    """"He also has ithasala with Venus" is false where the Moon stands and
+    true once she enters Libra.
+    """
+    moon, venus = 150.0 + 29.0 + 10.0 / 60.0, 183.0
+    now = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.VENUS),
+                         faster_longitude=moon, slower_longitude=venus)
+    assert now["aspect"] == "Semi-sextile aspect"
+    assert now["faster_is_less_advanced"] is False
+    assert now["type"] is None
+    apart = yogas.eesarpha(faster=int(Graha.MOON), slower=int(Graha.VENUS),
+                           faster_longitude=moon, slower_longitude=venus)
+    assert apart["faster_is_more_advanced"] is True
+
+    later = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.VENUS),
+                           faster_longitude=180.0, slower_longitude=venus)
+    assert later["aspect"] == "Conjunction"
+    assert later["separation_from_exact"] == pytest.approx(3.0)
+    assert later["type"] == "Vartamaana"
+    assert "only after entering Libra" in (
+        yogas.THE_STRONG_PLANETS_ITHASALA_IS_ALSO_IN_WAITING)
+
+
+def test_the_example_reports_the_venus_leg_as_waiting_not_present():
+    want = yogas.GAIRI_KAMBOOLA_EXAMPLE
+    got = yogas.gairi_kamboola(
+        faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+        faster_longitude=271.0, slower_longitude=332.0,
+        moon_longitude=float(want["moon_longitude"]),
+        strong_planet=int(Graha.VENUS), strong_planet_longitude=183.0)
+    assert got["strong_planet_ithasala_now"] is None
+    assert got["strong_planet_ithasala_after_moving"] == "Vartamaana"
+    assert got["has_the_strong_leg"] is True
+
+
+def test_crossing_a_rasi_puts_the_moon_behind_everything():
+    """At 0° her advancement is zero, so she is less advanced than every
+    planet at once and only the aspect and the orb are left to check.
+    """
+    random.seed(2991)
+    for _ in range(1500):
+        other = random.choice([g for g in range(7) if g != int(Graha.MOON)])
+        other_at = random.uniform(0, 360)
+        leg = yogas.ithasala(faster=int(Graha.MOON), slower=other,
+                             faster_longitude=180.0,
+                             slower_longitude=other_at)
+        if advancement_is_zero := (other_at % 30 == 0):
+            assert leg["faster_is_less_advanced"] is False
+            continue
+        assert advancement_is_zero is False
+        assert leg["faster_is_less_advanced"] is True
+        expected = (leg["aspect"] is not None
+                    and leg["separation_from_exact"] <= leg["binding_deeptamsa"])
+        assert leg["vartamaana"] is expected
+    assert "less advanced than every planet" in (
+        yogas.CROSSING_A_RASI_PUTS_THE_MOON_BEHIND_EVERYTHING)
+
+
+def test_a_moon_not_in_the_last_degree_gives_no_gairi_kamboola():
+    got = yogas.gairi_kamboola(
+        faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+        faster_longitude=271.0, slower_longitude=332.0,
+        moon_longitude=150.0 + 20.0,
+        strong_planet=int(Graha.VENUS), strong_planet_longitude=183.0)
+    assert got["moon_advancement"] == pytest.approx(20.0)
+    assert got["moon_in_last_degree"] is False
+    assert got["present"] is False
+
+
+def test_no_pair_ithasala_means_no_gairi_kamboola():
+    got = yogas.gairi_kamboola(
+        faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+        faster_longitude=270.0 + 20.0, slower_longitude=332.0,
+        moon_longitude=150.0 + 29.0 + 10.0 / 60.0,
+        strong_planet=int(Graha.VENUS), strong_planet_longitude=183.0)
+    assert got["pair_ithasala"] is None
+    assert got["present"] is False
+
+
+def test_the_strong_leg_is_required():
+    """Drop the strong planet and the yoga fails, as the rule says it must."""
+    got = yogas.gairi_kamboola(
+        faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+        faster_longitude=271.0, slower_longitude=332.0,
+        moon_longitude=150.0 + 29.0 + 10.0 / 60.0)
+    assert got["has_the_strong_leg"] is False
+    assert got["present"] is False
+
+
+def test_strength_is_taken_as_given_and_never_decided():
+    """OI-166 again: §29.2.8 left the power unmeasured and §29.2.9 leaves
+    "strong" unmeasured in the same way.
+    """
+    got = yogas.gairi_kamboola(
+        faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+        faster_longitude=271.0, slower_longitude=332.0,
+        moon_longitude=150.0 + 29.0 + 10.0 / 60.0,
+        strong_planet=int(Graha.VENUS), strong_planet_longitude=183.0)
+    assert got["strength_undecided"] == (
+        yogas.WHICH_STRENGTH_MAKES_A_PLANET_STRONG_IS_NOT_SAID)
+    assert "gives no measure of strength" in (
+        yogas.WHICH_STRENGTH_MAKES_A_PLANET_STRONG_IS_NOT_SAID)

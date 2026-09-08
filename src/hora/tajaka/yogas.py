@@ -9,8 +9,10 @@ from __future__ import annotations
 
 import itertools
 
+from hora.charts.vargas import d3_drekkana, d9_navamsa
 from hora.core import validate
-from hora.core.const import GRAHA_NAMES, NAVAGRAHA, Graha
+from hora.core.const import GRAHA_NAMES, NAVAGRAHA, RASI_LORD, Graha
+from hora.core.constants.graha import DEBILITATION_RASI, EXALTATION_RASI
 from hora.core.constants.house import APOKLIMA, KENDRA, PANAPHARA
 from hora.tajaka.aspects import (
     TajakaAspectError,
@@ -18,6 +20,7 @@ from hora.tajaka.aspects import (
     aspects_from,
     deeptamsa,
 )
+from hora.tajaka.panchavargeeya import hadda_lord
 
 CHAPTER_TITLE = "Tajaka Yogas"
 
@@ -1650,6 +1653,209 @@ def kamboola(*, faster: int, slower: int, faster_longitude: float,
         "undecided": (THE_MOON_INSIDE_THE_PAIR_IS_NOT_REACHED if in_the_pair
                       else HOW_MUCH_POWER_IS_ADDED_IS_NOT_SAID),
         "rule": KAMBOOLA_RULE,
+    }
+
+
+# --------------------------------------------------------------------------
+# §29.2.9 Gairi-Kamboola yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.9, verbatim.
+GAIRI_KAMBOOLA_RULE = (
+    "If Moon is in the last degree of a rasi and he will form ithasala with "
+    "one of the planets in an ithasala after moving to the next rasi, it is "
+    "called Gairi-Kamboola yoga. It is essentially Kamboola yoga in waiting. "
+    "Moon must also form an ithasala with a strong planet for this yoga to be "
+    "effective. Moreover, Moon should not be exalted or debilitated or occupy "
+    "his own navamsa, drekkana or hadda. This yoga shows realization of the "
+    "matter with help from others, after some delay."
+)
+
+GAIRI_KAMBOOLA_RESULTS = (
+    "realization of the matter with help from others, after some delay")
+
+#: "The last degree of a rasi" — the section gives no other figure, so the
+#: last whole degree is what is applied: 29° to 30°. The example's Moon at
+#: 29°10' sits inside it and the section says "Moon is in the last degree
+#: of Vi".
+LAST_DEGREE_OF_A_RASI = 29.0
+
+#: §29.2.9's worked example, as the book states it.
+GAIRI_KAMBOOLA_EXAMPLE: dict[str, object] = {
+    "faster": "Mars", "faster_at": "1 Cp", "faster_longitude": 271.0,
+    "slower": "Jupiter", "slower_at": "2 Pi", "slower_longitude": 332.0,
+    "pair_aspect": "Sextile aspect",
+    "pair_ithasala": "Poorna",
+    "moon_at": "29 Vi 10", "moon_longitude": 150.0 + 29.0 + 10.0 / 60.0,
+    "strong_planet": "Venus", "strong_planet_at": "3 Li",
+    "strong_planet_longitude": 183.0,
+    "moon_navamsa": ("Vi", "Mercury"),
+    "moon_drekkana": ("Ta", "Venus"),
+    "moon_hadda": "Saturn",
+    "reaches_now": (),
+    "reaches_after_moving": ("Mars",),
+    "present": True,
+}
+
+#: **Finding.** All three of the section's dignity checks reproduce exactly.
+#: The Moon at 29°10' Vi is in **Mercury's** navamsa (Virgo), **Venus's**
+#: drekkana (Taurus) and **Saturn's** hadda, which is what the example says,
+#: and none of the three is her own — which is the condition. She is in Virgo,
+#: so she is neither exalted nor debilitated either. The example is listing a
+#: passing test, not describing the chart for its own sake.
+THE_THREE_DIGNITY_CHECKS_REPRODUCE = (
+    "The Moon at 29 degrees 10 minutes of Virgo falls in Mercury's navamsa, "
+    "Venus's drekkana and Saturn's hadda, exactly as the example says, and "
+    "none of the three is her own."
+)
+
+#: **Finding.** The four disqualifiers are not a strength test in disguise:
+#: two of them are the **strongest** positions a graha can hold. A Moon that
+#: is exalted, or in her own navamsa, drekkana or hadda is dignified, and the
+#: section throws the yoga out for it. Read with "Moon must also form an
+#: ithasala with a strong planet", the section wants the strength to come from
+#: **elsewhere** — the Moon is a carrier here, not a source.
+THE_MOON_MUST_NOT_BE_THE_STRONG_ONE = (
+    "Gairi-kamboola is refused when the Moon is exalted or in her own "
+    "navamsa, drekkana or hadda, and requires an ithasala with a strong "
+    "planet. The strength has to come from the other planet."
+)
+
+#: **Finding, and the section's own example needs it.** "He also has ithasala
+#: with Venus" is **not true where the Moon stands**. At 29°10' Vi against
+#: Venus at 3° Li she is the faster planet and the **more** advanced, which is
+#: an eesarpha by §29.2.4, not an ithasala. It becomes true the moment she
+#: enters Libra: at 0° Li she is conjunct Venus, three degrees behind him, and
+#: inside his seven. So the Venus leg is in waiting too, like everything else
+#: in the yoga, and the section's present tense is loose rather than wrong.
+#: `gairi_kamboola` answers both positions.
+THE_STRONG_PLANETS_ITHASALA_IS_ALSO_IN_WAITING = (
+    "At 29 degrees 10 minutes of Virgo the Moon is ahead of Venus at 3 "
+    "degrees of Libra, which is an eesarpha. She forms the ithasala with him "
+    "only after entering Libra, as she does with Mars."
+)
+
+#: **Finding.** Moving the Moon to the start of the next rasi resets her
+#: advancement to zero, which puts her behind **every** planet at once. So
+#: after the move the only question left on each leg is whether she aspects
+#: the planet and whether its own degree is inside the binding deeptamsa. The
+#: yoga's whole test collapses to that.
+CROSSING_A_RASI_PUTS_THE_MOON_BEHIND_EVERYTHING = (
+    "At zero degrees of a rasi the Moon is less advanced than every planet, "
+    "so after the crossing a leg needs only an aspect and the other planet's "
+    "own degree inside the orb."
+)
+
+#: **Gap.** "Moon must also form an ithasala with a **strong** planet." No
+#: measure, exactly as §29.2.8 left the added power unmeasured. The example
+#: says only "Venus, who is very strong", and Venus at 3° Li is in his own
+#: sign, which the section does not say either. `gairi_kamboola` takes the
+#: strong planet as an input and never decides whether it is strong. See
+#: OI-166, which is the same hole.
+WHICH_STRENGTH_MAKES_A_PLANET_STRONG_IS_NOT_SAID = (
+    "Section 29.2.9 requires an ithasala with a strong planet and gives no "
+    "measure of strength, as section 29.2.8 gave none for the power added."
+)
+
+
+def moon_is_disqualified(moon_longitude: float) -> dict:
+    """§29.2.9's four disqualifiers, each answered separately."""
+    here = validate.longitude("moon_longitude", float(moon_longitude))
+    moon = int(Graha.MOON)
+    rasi = int(here // 30)
+    navamsa = int(d9_navamsa(here).sign)
+    drekkana = int(d3_drekkana(here).sign)
+    hadda = int(hadda_lord(here)["lord"])
+    checks = {
+        "exalted": rasi == int(EXALTATION_RASI[moon]),
+        "debilitated": rasi == int(DEBILITATION_RASI[moon]),
+        "own_navamsa": int(RASI_LORD[navamsa]) == moon,
+        "own_drekkana": int(RASI_LORD[drekkana]) == moon,
+        "own_hadda": hadda == moon,
+    }
+    return {
+        **checks,
+        "navamsa": navamsa, "navamsa_lord": int(RASI_LORD[navamsa]),
+        "drekkana": drekkana, "drekkana_lord": int(RASI_LORD[drekkana]),
+        "hadda_lord": hadda,
+        "disqualified": any(checks.values()),
+    }
+
+
+def gairi_kamboola(*, faster: int, slower: int, faster_longitude: float,
+                   slower_longitude: float, moon_longitude: float,
+                   strong_planet: int | None = None,
+                   strong_planet_longitude: float | None = None,
+                   faster_retrograde: bool = False,
+                   slower_retrograde: bool = False) -> dict:
+    """§29.2.9 — kamboola in waiting, with the Moon at the end of a rasi.
+
+    `strong_planet` is taken as given: the section requires an ithasala with a
+    strong planet and never says what makes one strong. See
+    `WHICH_STRENGTH_MAKES_A_PLANET_STRONG_IS_NOT_SAID` and OI-166.
+    """
+    here = validate.longitude("moon_longitude", float(moon_longitude))
+    in_last_degree = advancement(here) >= LAST_DEGREE_OF_A_RASI
+    after = (float(int(here // 30) + 1) * 30.0) % 360.0
+
+    base = ithasala(faster=faster, slower=slower,
+                    faster_longitude=faster_longitude,
+                    slower_longitude=slower_longitude,
+                    faster_retrograde=faster_retrograde,
+                    slower_retrograde=slower_retrograde)
+    lon = {int(faster): float(faster_longitude),
+           int(slower): float(slower_longitude)}
+    retro = {int(faster): bool(faster_retrograde),
+             int(slower): bool(slower_retrograde)}
+    moon = int(Graha.MOON)
+
+    def leg(other: int, moon_at: float) -> dict | None:
+        if other == moon:
+            return None
+        return ithasala(faster=moon, slower=other, faster_longitude=moon_at,
+                        slower_longitude=lon[other],
+                        slower_retrograde=retro[other])
+
+    pair = (int(base["faster"]), int(base["slower"]))
+    now = tuple(leg(other, here) for other in pair)
+    later = tuple(leg(other, after) for other in pair)
+    reaches_later = tuple(
+        x is not None and x["type"] is not None for x in later)
+    already = any(x is not None and x["type"] is not None for x in now)
+
+    strong_now = strong_later = None
+    if strong_planet is not None and strong_planet_longitude is not None:
+        strong_now = ithasala(faster=moon, slower=int(strong_planet),
+                              faster_longitude=here,
+                              slower_longitude=float(strong_planet_longitude))
+        strong_later = ithasala(
+            faster=moon, slower=int(strong_planet), faster_longitude=after,
+            slower_longitude=float(strong_planet_longitude))
+
+    dignity = moon_is_disqualified(here)
+    strong_leg = (strong_later is not None and strong_later["type"] is not None)
+    return {
+        "yoga": "Gairi-Kamboola",
+        "pair_ithasala": base["type"],
+        "moon_in_last_degree": in_last_degree,
+        "moon_advancement": advancement(here),
+        "moon_enters": int(after // 30),
+        "already_has_a_kamboola": already,
+        "reaches_after_moving": reaches_later,
+        "will_reach_one_of_the_pair": any(reaches_later),
+        "moon_dignity": dignity,
+        "moon_disqualified": dignity["disqualified"],
+        "strong_planet_ithasala_now": (
+            None if strong_now is None else strong_now["type"]),
+        "strong_planet_ithasala_after_moving": (
+            None if strong_later is None else strong_later["type"]),
+        "has_the_strong_leg": strong_leg,
+        "present": bool(base["type"] is not None and in_last_degree
+                        and any(reaches_later)
+                        and not dignity["disqualified"] and strong_leg),
+        "strength_undecided": WHICH_STRENGTH_MAKES_A_PLANET_STRONG_IS_NOT_SAID,
+        "gives": GAIRI_KAMBOOLA_RESULTS,
+        "rule": GAIRI_KAMBOOLA_RULE,
     }
 
 

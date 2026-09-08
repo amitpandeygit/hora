@@ -2458,7 +2458,7 @@ rather than answered.
 one ithasala.
 
 
-### OI-166 — §29.2.8 gives kamboola's added power no measure
+### OI-166 — §29.2.8 and §29.2.9 measure no strength
 
 **Waiting on the book.** "This yoga adds power to the ithasala yoga. The power
 added varies based on the strength of Moon and other planets."
@@ -2468,10 +2468,17 @@ dwaadasa vargeeya bala — and §29.2.8 names neither, gives no scale, and does
 not say what "other planets" means beyond the Moon. Nothing turns a strength
 into an amount of power.
 
-`kamboola` returns `power_added` as ``None`` and reports the yoga as present or
-absent only, rather than inventing a multiplier.
+§29.2.9 has the same hole from the other side: gairi-kamboola requires "an
+ithasala with a **strong** planet" and gives no measure either. Its example
+says only "Venus, who is very strong" — Venus at 3° Li is in his own sign,
+which the section does not say.
 
-**Closes when:** a later section or a worked example scores the addition.
+`kamboola` returns `power_added` as ``None``; `gairi_kamboola` takes the strong
+planet as an input and never decides whether it is strong. Neither invents a
+multiplier or a threshold.
+
+**Closes when:** a later section or a worked example scores the addition, or
+names the strength it means.
 
 
 ---
