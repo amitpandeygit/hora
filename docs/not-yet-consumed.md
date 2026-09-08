@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.3, with the three types (26)
+### Chapter 29 — §29.1 to §29.2.3, types and Special Notes (34)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1745,6 +1745,11 @@ footnote can. What follows is prose and findings.
 | `BHAVISHYA_CANNOT_REACH_THE_END_OF_A_RASI` | Ours: the sign-change worry cannot arise, because a bhavishya puts the faster planet below 23° of its rasi |
 | `THE_BHAVISHYA_EXAMPLE_SWAPS_TWO_RASI_NAMES` | Le written for Li and then Li for Le; every number is right |
 | `THE_THREE_TYPE_EXAMPLES_REPRODUCE` | Ours: all three, and every printed window, to the arcminute |
+| `THE_REAL_CRITERION` · `SOOKSHMA_DRISHTI` · `ADAPT_THE_RULES_UNDER_RETROGRESSION` · `RETROGRESSION_CASES` | The Special Notes verbatim and their four worked cases as data |
+| `ONLY_THE_FASTER_PLANETS_DIRECTION_DECIDES` | Ours: four cases of prose reduce to one clause — behind exclusive-or retrograde — and the slower planet's direction never enters it |
+| `A_TIGHT_DIFFERENCE_CAN_BE_THE_WORST_CASE` | Ours: retrograde Mercury ten arcminutes from Mars reads as the chapter's strongest yoga and is failure |
+| `RETROGRESSION_NARROWS_THE_WINDOW` | Ours: the section asks for a smaller difference under retrogression and gives no figure. OI-162 |
+| `BOTH_RETROGRADE_IS_NOT_WORKED` | Ours: the section never works both planets retrograde; the clause extends to it by the section's own argument |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

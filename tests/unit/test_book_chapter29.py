@@ -648,3 +648,218 @@ def test_the_bhavishya_example_swaps_two_rasi_names():
     assert "Le for Li, then Li for Le" not in yogas.ITHASALA_RULE
     assert "the two rasi names are exchanged" in (
         yogas.THE_BHAVISHYA_EXAMPLE_SWAPS_TWO_RASI_NAMES)
+
+
+# --------------------------------------------------------------------------
+# §29.2.3's Special Notes — retrogression
+# --------------------------------------------------------------------------
+
+_RASI = {"Ar": 0, "Ta": 1, "Ge": 2, "Cn": 3, "Le": 4, "Vi": 5,
+         "Li": 6, "Sc": 7, "Sg": 8, "Cp": 9, "Aq": 10, "Pi": 11}
+_GRAHA = {"Sun": Graha.SUN, "Moon": Graha.MOON, "Mars": Graha.MARS,
+          "Mercury": Graha.MERCURY, "Jupiter": Graha.JUPITER,
+          "Venus": Graha.VENUS, "Saturn": Graha.SATURN}
+
+
+def _longitude(printed: str) -> float:
+    """"18 Li 10" -> 198.1666..."""
+    parts = printed.split()
+    minutes = float(parts[2]) / 60.0 if len(parts) > 2 else 0.0
+    return _RASI[parts[1]] * 30.0 + float(parts[0]) + minutes
+
+
+def test_the_special_notes_restate_the_criterion():
+    assert "reach the same advancement in their rasis" in yogas.THE_REAL_CRITERION
+    assert "sookshma drishti" in yogas.THE_REAL_CRITERION
+    assert yogas.SOOKSHMA_DRISHTI == "sookshma drishti"
+    assert "retrograde or about to become retrograde" in (
+        yogas.ADAPT_THE_RULES_UNDER_RETROGRESSION)
+
+
+def test_all_four_retrogression_cases_give_the_books_verdict():
+    for case in yogas.RETROGRESSION_CASES:
+        got = yogas.ithasala(
+            faster=int(_GRAHA[str(case["faster"])]),
+            slower=int(_GRAHA[str(case["slower"])]),
+            faster_longitude=_longitude(str(case["faster_at"])),
+            slower_longitude=_longitude(str(case["slower_at"])),
+            faster_retrograde=bool(case["faster_retrograde"]),
+            slower_retrograde=bool(case["slower_retrograde"]),
+            faster_stations_at=case.get("stations_at"))
+        assert got["approaching"] is case["has_ithasala"], case["case"]
+        assert (got["type"] is not None) is case["has_ithasala"], case["case"]
+
+
+def test_the_three_named_aspects_in_the_special_notes_are_right():
+    """The section names a trinal aspect three times and it is one each
+    time: Ge to Li, Vi to Cp, and Vi to Cp again.
+    """
+    for faster_at, slower_at in (("18 Ge", "18 Li 10"),
+                                 ("23 Vi", "21 Cp"),
+                                 ("18 Vi", "18 Cp 45")):
+        got = yogas.ithasala(
+            faster=int(Graha.MERCURY), slower=int(Graha.MARS),
+            faster_longitude=_longitude(faster_at),
+            slower_longitude=_longitude(slower_at))
+        assert got["aspect"] == "Trinal aspect", (faster_at, slower_at)
+
+
+def test_a_retrograde_faster_planet_behind_is_not_an_ithasala():
+    """The section's sharpest case: 10 arcminutes apart in a trinal aspect,
+    which reads as a textbook poorna and is failure.
+    """
+    direct = yogas.ithasala(faster=int(Graha.MERCURY), slower=int(Graha.MARS),
+                            faster_longitude=_longitude("18 Ge"),
+                            slower_longitude=_longitude("18 Li 10"))
+    assert direct["type"] == "Poorna"
+    assert direct["separation_from_exact"] == pytest.approx(10 / 60)
+
+    retro = yogas.ithasala(faster=int(Graha.MERCURY), slower=int(Graha.MARS),
+                           faster_longitude=_longitude("18 Ge"),
+                           slower_longitude=_longitude("18 Li 10"),
+                           faster_retrograde=True)
+    assert retro["faster_is_less_advanced"] is True
+    assert retro["converging"] is False
+    assert retro["type"] is None
+    assert (retro["vartamaana"], retro["poorna"], retro["bhavishya"]) == (
+        False, False, False)
+    assert "dogged with failure" in str(yogas.RETROGRESSION_CASES[0]["book_says"])
+    assert "the more convincing the false reading" in (
+        yogas.A_TIGHT_DIFFERENCE_CAN_BE_THE_WORST_CASE)
+
+
+def test_a_retrograde_faster_planet_ahead_is_an_ithasala():
+    """Mars 21 Cp, retrograde Mercury 23 Vi. The faster planet is more
+    advanced and they still converge, near 22°.
+    """
+    got = yogas.ithasala(faster=int(Graha.MERCURY), slower=int(Graha.MARS),
+                         faster_longitude=_longitude("23 Vi"),
+                         slower_longitude=_longitude("21 Cp"),
+                         faster_retrograde=True)
+    assert got["faster_is_less_advanced"] is False
+    assert got["converging"] is True
+    assert got["type"] == "Vartamaana"
+    assert got["separation_from_exact"] == pytest.approx(2.0)
+
+
+def test_a_retrograde_slower_planet_changes_nothing_but_the_speed():
+    """Moon 18 Ar, retrograde Mercury 24 Ge. The verdict is the same either
+    way; the section's point is that it happens sooner.
+    """
+    kwargs = {"faster": int(Graha.MOON), "slower": int(Graha.MERCURY),
+              "faster_longitude": _longitude("18 Ar"),
+              "slower_longitude": _longitude("24 Ge")}
+    retro = yogas.ithasala(**kwargs, slower_retrograde=True)
+    direct = yogas.ithasala(**kwargs)
+    assert retro["converging"] is direct["converging"] is True
+    assert retro["type"] == direct["type"] == "Vartamaana"
+    assert retro["slower_retrograde"] is True
+    assert "faster realization" in str(yogas.RETROGRESSION_CASES[1]["book_says"])
+
+
+def test_only_the_faster_planets_direction_decides_convergence():
+    """The whole retrogression rule in one clause, over every combination."""
+    for faster_behind in (True, False):
+        for faster_retro in (True, False):
+            for slower_retro in (True, False):
+                # 10° apart either way, in a sextile.
+                faster_at = 4.0 if faster_behind else 14.0
+                slower_at = 74.0 if faster_behind else 64.0
+                got = yogas.ithasala(
+                    faster=int(Graha.MOON), slower=int(Graha.SATURN),
+                    faster_longitude=faster_at, slower_longitude=slower_at,
+                    faster_retrograde=faster_retro,
+                    slower_retrograde=slower_retro)
+                assert got["faster_is_less_advanced"] is faster_behind
+                assert got["converging"] is (faster_behind != faster_retro)
+    assert "The slower planet's direction changes only how soon" in (
+        yogas.ONLY_THE_FASTER_PLANETS_DIRECTION_DECIDES)
+
+
+def test_both_retrograde_is_answered_by_the_same_clause():
+    """The section never works it. The argument extends unchanged."""
+    behind = yogas.ithasala(faster=int(Graha.MERCURY), slower=int(Graha.SATURN),
+                            faster_longitude=4.0, slower_longitude=74.0,
+                            faster_retrograde=True, slower_retrograde=True)
+    ahead = yogas.ithasala(faster=int(Graha.MERCURY), slower=int(Graha.SATURN),
+                           faster_longitude=14.0, slower_longitude=64.0,
+                           faster_retrograde=True, slower_retrograde=True)
+    assert behind["converging"] is False
+    assert ahead["converging"] is True
+    assert "never both at once" in yogas.BOTH_RETROGRADE_IS_NOT_WORKED
+
+
+def test_a_planet_that_stations_first_never_reaches_the_meeting():
+    """Mercury 18 Vi, Mars 18°45' Cp, neither retrograde: a poorna on the
+    numbers. Mercury turns back at 18°05'.
+    """
+    kwargs = {"faster": int(Graha.MERCURY), "slower": int(Graha.MARS),
+              "faster_longitude": _longitude("18 Vi"),
+              "slower_longitude": _longitude("18 Cp 45")}
+    unaware = yogas.ithasala(**kwargs)
+    assert unaware["type"] == "Poorna"
+    assert unaware["separation_from_exact"] == pytest.approx(45 / 60)
+
+    aware = yogas.ithasala(**kwargs, faster_stations_at=18.0 + 5.0 / 60.0)
+    assert aware["converging"] is True
+    assert aware["stationed_before_the_meeting"] is True
+    assert aware["approaching"] is False
+    assert aware["type"] is None
+
+    # A station beyond the slower planet does not block anything.
+    later = yogas.ithasala(**kwargs, faster_stations_at=25.0)
+    assert later["stationed_before_the_meeting"] is False
+    assert later["type"] == "Poorna"
+
+
+def test_the_station_test_works_backwards_for_a_retrograde_faster_planet():
+    kwargs = {"faster": int(Graha.MERCURY), "slower": int(Graha.MARS),
+              "faster_longitude": _longitude("23 Vi"),
+              "slower_longitude": _longitude("21 Cp"),
+              "faster_retrograde": True}
+    blocked = yogas.ithasala(**kwargs, faster_stations_at=22.0)
+    assert blocked["stationed_before_the_meeting"] is True
+    assert blocked["type"] is None
+    clear = yogas.ithasala(**kwargs, faster_stations_at=15.0)
+    assert clear["stationed_before_the_meeting"] is False
+    assert clear["type"] == "Vartamaana"
+
+
+def test_a_station_outside_a_rasi_is_rejected():
+    for bad in (-1.0, 30.0, 45.0):
+        with pytest.raises(yogas.TajakaYogaError, match="advancement in a rasi"):
+            yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.SATURN),
+                           faster_longitude=4.0, slower_longitude=64.0,
+                           faster_stations_at=bad)
+
+
+def test_the_defaults_leave_the_earlier_rule_untouched():
+    """Both flags default to direct, so everything built before the Special
+    Notes answers exactly as it did.
+    """
+    random.seed(2928)
+    for _ in range(2000):
+        a, b = random.sample(range(7), 2)
+        got = yogas.ithasala(faster=a, slower=b,
+                             faster_longitude=random.uniform(0, 360),
+                             slower_longitude=random.uniform(0, 360))
+        assert got["faster_retrograde"] is False
+        assert got["slower_retrograde"] is False
+        assert got["converging"] is got["faster_is_less_advanced"]
+        assert got["approaching"] is got["faster_is_less_advanced"]
+
+
+def test_the_narrower_window_under_retrogression_has_no_figure():
+    """OI-162. The thresholds are left at one degree and the flag says so."""
+    got = yogas.ithasala(faster=int(Graha.MERCURY), slower=int(Graha.MARS),
+                         faster_longitude=_longitude("23 Vi"),
+                         slower_longitude=_longitude("21 Cp"),
+                         faster_retrograde=True)
+    assert got["retrogression_narrows_the_window"] is not None
+    assert "gives no figure" in yogas.RETROGRESSION_NARROWS_THE_WINDOW
+    assert yogas.POORNA_DEGREES == 1.0
+
+    direct = yogas.ithasala(faster=int(Graha.MERCURY), slower=int(Graha.MARS),
+                            faster_longitude=_longitude("23 Vi"),
+                            slower_longitude=_longitude("21 Cp"))
+    assert direct["retrogression_narrows_the_window"] is None

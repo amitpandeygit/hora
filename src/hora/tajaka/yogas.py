@@ -321,13 +321,154 @@ WHETHER_THE_ASPECT_NEEDS_THE_ORB_IS_NOT_SAID = (
 )
 
 
+# --------------------------------------------------------------------------
+# §29.2.3's Special Notes — retrogression
+# --------------------------------------------------------------------------
+
+#: The Special Notes' restatement of the criterion, verbatim. It replaces the
+#: test with the reason behind it.
+THE_REAL_CRITERION = (
+    "The main criterion of ithasala is that the faster moving planet should "
+    "be behind. This means that the two planets will reach the same "
+    "advancement in their rasis and have an exact aspect (sookshma drishti) "
+    "very soon."
+)
+
+#: The four cases the Special Notes work, as data. `has_ithasala` is the
+#: section's own verdict on each. Case four converges in direction and is
+#: still not an ithasala, because the faster planet turns back first.
+#:
+#: The section's own name for the exact aspect the two are heading towards.
+SOOKSHMA_DRISHTI = "sookshma drishti"
+
+#: The four cases the Special Notes work, as data. `converging` is the
+#: section's verdict on each.
+RETROGRESSION_CASES: tuple[dict[str, object], ...] = (
+    {"case": "the faster planet is retrograde and behind",
+     "faster": "Mercury", "faster_at": "18 Ge", "faster_retrograde": True,
+     "slower": "Mars", "slower_at": "18 Li 10", "slower_retrograde": False,
+     "has_ithasala": False,
+     "book_says": ("They are not going to reach the same longitude anytime "
+                   "soon. Despite indications of success, one may be dogged "
+                   "with failure under this combination.")},
+    {"case": "the slower planet is retrograde",
+     "faster": "Moon", "faster_at": "18 Ar", "faster_retrograde": False,
+     "slower": "Mercury", "slower_at": "24 Ge", "slower_retrograde": True,
+     "has_ithasala": True,
+     "book_says": ("It, in fact, shows a faster realization, as the two "
+                   "planets will reach the same advancement faster.")},
+    {"case": "the faster planet is retrograde and ahead",
+     "faster": "Mercury", "faster_at": "23 Vi", "faster_retrograde": True,
+     "slower": "Mars", "slower_at": "21 Cp", "slower_retrograde": False,
+     "has_ithasala": True,
+     "book_says": ("However, both the planets move towards the other and so "
+                   "there is an ithasala yoga.")},
+    {"case": "neither is retrograde and the faster is about to station",
+     "faster": "Mercury", "faster_at": "18 Vi", "faster_retrograde": False,
+     "slower": "Mars", "slower_at": "18 Cp 45", "slower_retrograde": False,
+     "stations_at": 18.0 + 5.0 / 60.0, "has_ithasala": False,
+     "book_says": ("Mercury will start going backward after reaching "
+                   "18 degrees 5 minutes. So there is no ithasala.")},
+)
+
+#: The section's closing instruction, verbatim.
+ADAPT_THE_RULES_UNDER_RETROGRESSION = (
+    "Thus an erudite astrologer should make proper modifications to the "
+    "rules when a planet is retrograde or about to become retrograde."
+)
+
+#: **Finding, and the whole of the retrogression rule in one clause.** The
+#: Special Notes work four cases in prose. They reduce to: the two are
+#: converging when the faster planet is behind **exclusive-or** the faster
+#: planet is retrograde. The **slower** planet's direction never enters it —
+#: it changes how fast they meet, which is why the section says a retrograde
+#: slower planet "shows a faster realization", but never whether they meet.
+#: The section states the two halves separately and does not put them
+#: together.
+ONLY_THE_FASTER_PLANETS_DIRECTION_DECIDES = (
+    "The two advancements converge when the faster planet is behind or when "
+    "it is retrograde, but not both and not neither. The slower planet's "
+    "direction changes only how soon they meet."
+)
+
+#: **Finding.** The section's sharpest warning: a retrograde faster planet
+#: just behind the slower looks like the strongest yoga in the chapter and is
+#: the opposite of one. Retrograde Mercury at 18° Ge and Mars at 18°10' Li are
+#: 10 arcminutes apart in a trinal aspect — a textbook poorna ithasala on the
+#: numbers — and the book calls it failure. `ithasala` reports no type at all
+#: for it, because convergence gates every type.
+A_TIGHT_DIFFERENCE_CAN_BE_THE_WORST_CASE = (
+    "Retrograde Mercury at 18 Ge and Mars at 18 Li 10 differ by ten "
+    "arcminutes in a trinal aspect and are not an ithasala at all. The "
+    "closer the difference, the more convincing the false reading."
+)
+
+#: **Gap.** "A planet's speed reduces under retrogression and the difference
+#: in advancements has to be smaller." The section asks for a tighter window
+#: under retrogression and gives no number for it, where poorna's threshold
+#: and bhavishya's are both stated as one degree. Nothing is narrowed here;
+#: the flag says retrogression is in play and the thresholds are unchanged.
+#: See OI-162.
+RETROGRESSION_NARROWS_THE_WINDOW = (
+    "Section 29.2.3 says the difference in advancements has to be smaller "
+    "when a planet is retrograde, and gives no figure. The one-degree "
+    "thresholds are left as printed."
+)
+
+#: **Beyond the book.** The Special Notes never work the case where **both**
+#: planets are retrograde. The same argument covers it — the gap then closes
+#: at the difference of the two speeds again, so the faster planet must be
+#: ahead — and `ithasala` answers it that way. Recorded as an extension of
+#: the section's reasoning, not as something the section says.
+BOTH_RETROGRADE_IS_NOT_WORKED = (
+    "The Special Notes work a retrograde faster planet and a retrograde "
+    "slower planet separately and never both at once. The clause extends to "
+    "it unchanged, by the argument the section itself uses."
+)
+
+
+def _stationed_before_the_meeting(*, faster_advancement: float,
+                                  slower_advancement: float,
+                                  stations_at: float | None,
+                                  faster_retrograde: bool) -> bool:
+    """The Special Notes' last case: the faster planet turns back too early.
+
+    A planet that stations between where it is and where the two would meet
+    never reaches the meeting, so there is no ithasala however close the two
+    advancements look.
+    """
+    if stations_at is None:
+        return False
+    station = float(stations_at)
+    if not 0.0 <= station < 30.0:
+        raise TajakaYogaError(
+            f"faster_stations_at is an advancement in a rasi, so it must be "
+            f"in [0, 30); got {station}")
+    if faster_retrograde:
+        # Moving backwards towards a slower planet below it.
+        return slower_advancement < station < faster_advancement
+    return faster_advancement <= station < slower_advancement
+
+
 def ithasala(*, faster: int, slower: int, faster_longitude: float,
-             slower_longitude: float) -> dict:
+             slower_longitude: float, faster_retrograde: bool = False,
+             slower_retrograde: bool = False,
+             faster_stations_at: float | None = None) -> dict:
     """§29.2.3, for one pair of grahas.
 
     `faster` and `slower` are not trusted: footnote 83 decides which is which
     and the answer says so, because a caller that has them the wrong way
     round would otherwise get a silently inverted yoga.
+
+    The Special Notes replace "the faster planet is behind" with the reason
+    behind it — the two advancements must be **converging** — and the two part
+    company under retrogression. Both flags default to direct, so a caller
+    that does not pass them gets the rule as §29.2.3 first stated it.
+
+    :param faster_stations_at: the advancement, in its own rasi, at which the
+        faster planet turns retrograde, if it is about to. The Special Notes'
+        last case: a planet that stations before reaching the meeting point
+        never gets there.
     """
     first = validate.in_range("faster", int(faster), 0, 8)
     second = validate.in_range("slower", int(slower), 0, 8)
@@ -363,6 +504,15 @@ def ithasala(*, faster: int, slower: int, faster_longitude: float,
                   else within["faster"] == within["slower"])
 
     applying = advancement(lon[quick]) < advancement(lon[slow])
+    # The Special Notes' criterion. Only the faster planet's direction
+    # decides it; see ONLY_THE_FASTER_PLANETS_DIRECTION_DECIDES.
+    converging = applying != bool(faster_retrograde)
+    blocked = _stationed_before_the_meeting(
+        faster_advancement=advancement(lon[quick]),
+        slower_advancement=advancement(lon[slow]),
+        stations_at=faster_stations_at,
+        faster_retrograde=bool(faster_retrograde))
+    approaching = converging and not blocked
     orb_values = [v for v in orbs.values() if v is not None]
     binding = min(orb_values) if orb_values else None
 
@@ -370,7 +520,7 @@ def ithasala(*, faster: int, slower: int, faster_longitude: float,
     poorna: bool | None
     bhavishya: bool | None
     to_go: float | None
-    if aspect is None or not applying:
+    if aspect is None or not approaching:
         vartamaana = poorna = bhavishya = False
         to_go = None
     elif binding is None:
@@ -407,11 +557,19 @@ def ithasala(*, faster: int, slower: int, faster_longitude: float,
         "faster_advancement": advancement(lon[quick]),
         "slower_advancement": advancement(lon[slow]),
         "faster_is_less_advanced": applying,
-        "present_by_house": bool(aspect is not None and applying),
+        "faster_retrograde": bool(faster_retrograde),
+        "slower_retrograde": bool(slower_retrograde),
+        "converging": converging,
+        "stationed_before_the_meeting": blocked,
+        "approaching": approaching,
+        "retrogression_narrows_the_window": (
+            RETROGRESSION_NARROWS_THE_WINDOW
+            if (faster_retrograde or slower_retrograde) else None),
+        "present_by_house": bool(aspect is not None and approaching),
         # Present under both orbs. When the two disagree the caller is told
         # so rather than handed one of them.
         "present_within_orb": None if within_orb is None
-                              else bool(within_orb and applying),
+                              else bool(within_orb and approaching),
         "binding_deeptamsa": binding,
         "vartamaana": vartamaana,
         "poorna": poorna,

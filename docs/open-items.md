@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**6 waiting on Amit · 109 waiting on evidence · 2 parked**
+**6 waiting on Amit · 110 waiting on evidence · 2 parked**
 
 ---
 
@@ -2370,6 +2370,25 @@ orb from a neighbour.
 
 **Closes when:** a later section gives the nodes a deeptamsa, or a worked
 ithasala uses one.
+
+
+### OI-162 — retrogression is said to narrow the window and no figure is given
+
+**Waiting on the book.** §29.2.3's Special Notes say of a retrograde planet: "a
+planet's speed reduces under retrogression and the difference in advancements
+has to be smaller." Poorna's threshold is one degree and bhavishya's is one
+degree, both stated outright. This narrowing is stated only in words.
+
+It matters most where the section's own warning bites. A retrograde planet
+covers a fraction of its direct daily motion, so "soon" means a much smaller
+arc, and the case the section works — retrograde Mercury two degrees from Mars
+— sits comfortably inside a seven-degree orb that may be far too wide for it.
+
+`ithasala` leaves both one-degree thresholds as printed and sets
+`retrogression_narrows_the_window` whenever either planet is retrograde, so a
+caller is told the reading is wider than the section intends.
+
+**Closes when:** a later section or a worked example gives the narrower figure.
 
 
 ---
