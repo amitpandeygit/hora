@@ -2148,3 +2148,198 @@ def test_khallasara_is_the_first_yoga_to_need_the_lagna():
                            x_longitude=89.0)
     assert got["destroys_houses"] == (4, 7)
     assert "destroys the signification of X" in got["rule"]
+
+
+# --------------------------------------------------------------------------
+# §29.2.11 Radda yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_radda_rule_and_its_four_triggers_are_transcribed():
+    assert "debilitation or retrogression or combustion or otherwise weak" in (
+        yogas.RADDA_RULE)
+    assert "negates ithasala and gives bad results" in yogas.RADDA_RULE
+    names = [row["trigger"] for row in yogas.RADDA_TRIGGERS]
+    assert names == ["debilitation", "retrogression", "combustion",
+                     "otherwise weak"]
+    assert [row["computable"] for row in yogas.RADDA_TRIGGERS] == [
+        True, True, True, False]
+
+
+def test_the_debilitation_example_reproduces():
+    """Aries lagna, Mars 15 Sg and Saturn 20 Ar are a trinal ithasala, and
+    Saturn is debilitated in Aries.
+    """
+    want = yogas.RADDA_EXAMPLES[1]
+    got = yogas.radda(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                      faster_longitude=float(want["faster_longitude"]),
+                      slower_longitude=float(want["slower_longitude"]),
+                      lagna_rasi=0)
+    assert got["ithasala_type"] == want["ithasala"]
+    assert got["parties"][int(Graha.SATURN)]["debilitated"] is True
+    assert got["triggered_by"] == (int(Graha.SATURN),)
+    assert got["present"] is True
+    assert got["negates_the_ithasala"] is True
+
+
+def test_the_pairs_aspect_is_the_trinal_the_ithasala_needs():
+    base = yogas.ithasala(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                          faster_longitude=255.0, slower_longitude=20.0)
+    assert base["house_from_faster"] == 5
+    assert base["aspect"] == "Trinal aspect"
+    assert base["separation_from_exact"] == pytest.approx(5.0)
+    assert base["binding_deeptamsa"] == 8.0
+    assert base["type"] == "Vartamaana"
+
+
+def test_the_harms_are_the_houses_the_weak_planet_owns():
+    """Saturn owns the 10th and 11th from Aries: career and material gains.
+    §29.2.10 read its harms the same way.
+    """
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    for house in (10, 11):
+        assert str(GRAHA_NAMES[int(RASI_LORD[(0 + house - 1) % 12])]) == "Saturn"
+    got = yogas.radda(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                      faster_longitude=255.0, slower_longitude=20.0,
+                      lagna_rasi=0)
+    assert got["destroys_houses"] == yogas.RADDA_EXAMPLES[1]["owns"] == (10, 11)
+    assert "Section 29.2.10 read its harms the same way" in (
+        yogas.THE_HARMS_ARE_THE_HOUSES_THE_WEAK_PLANET_OWNS)
+
+
+def test_the_retrogression_example_has_no_ithasala_to_negate():
+    """Retrograde Mercury 5 Vi and Mars 7 Sc: a sextile, and Mercury behind
+    but retrograde, so the pair is diverging.
+    """
+    want = yogas.RADDA_EXAMPLES[0]
+    got = yogas.radda(faster=int(Graha.MERCURY), slower=int(Graha.MARS),
+                      faster_longitude=float(want["faster_longitude"]),
+                      slower_longitude=float(want["slower_longitude"]),
+                      faster_retrograde=True)
+    assert got["ithasala_type"] is want["ithasala"]
+    assert got["no_ithasala_to_negate"] is True
+    assert got["eesarpha_instead"] is want["eesarpha"]
+    assert got["triggered_by"] == (int(Graha.MERCURY),)
+    assert got["present"] is False              # nothing to negate
+    assert got["overlap"] is not None
+
+
+def test_the_book_names_this_overlap_and_leaves_it():
+    """"Whether one calls it Eesarpha or Radda yoga depends on one's
+    interpretation, but the results are going to be bad in either case."
+    """
+    assert "depends on one's interpretation" in yogas.RADDA_OVERLAPS_EESARPHA
+    assert "bad in either case" in yogas.RADDA_OVERLAPS_EESARPHA
+    assert "No other section in the chapter admits an overlap" in (
+        yogas.THE_BOOK_NAMES_THIS_OVERLAP_AND_LEAVES_IT)
+
+
+def test_radda_contradicts_29_2_3_on_a_retrograde_slower_planet():
+    """§29.2.3 called it "no problem" and "a faster realization"; §29.2.11
+    negates the same ithasala. OI-168.
+    """
+    kwargs = {"faster": int(Graha.MOON), "slower": int(Graha.MERCURY),
+              "faster_longitude": 18.0, "slower_longitude": 60.0 + 24.0}
+    stands = yogas.ithasala(**kwargs, slower_retrograde=True)
+    assert stands["type"] is not None           # §29.2.3: the ithasala holds
+    assert "faster realization" in str(yogas.RETROGRESSION_CASES[1]["book_says"])
+
+    negated = yogas.radda(**kwargs, slower_retrograde=True)
+    assert negated["ithasala_type"] == stands["type"]
+    assert negated["triggered_by"] == (int(Graha.MERCURY),)
+    assert negated["negates_the_ithasala"] is True
+    assert "the ones the second destroys" in (
+        yogas.RADDA_CONTRADICTS_THE_ITHASALA_NOTES_ON_RETROGRESSION)
+
+
+def test_29_2_3s_retrograde_faster_case_is_also_negated():
+    """The case §29.2.3's Special Notes built specially — retrograde and more
+    advanced — is an ithasala there and a radda here.
+    """
+    kwargs = {"faster": int(Graha.MERCURY), "slower": int(Graha.MARS),
+              "faster_longitude": _longitude("23 Vi"),
+              "slower_longitude": _longitude("21 Cp"),
+              "faster_retrograde": True}
+    stands = yogas.ithasala(**kwargs)
+    assert stands["type"] == "Vartamaana"
+    negated = yogas.radda(**kwargs)
+    assert negated["negates_the_ithasala"] is True
+
+
+def test_debilitation_is_read_for_either_party():
+    """The rule says "involves a planet", not which one."""
+    # Mars debilitated in Cancer, as the faster party.
+    got = yogas.radda(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                      faster_longitude=90.0 + 15.0, slower_longitude=150.0 + 20.0)
+    assert got["parties"][int(Graha.MARS)]["debilitated"] is True
+    assert got["triggered_by"] == (int(Graha.MARS),)
+
+
+def test_combustion_needs_the_sun_and_says_so_when_it_is_missing():
+    """The section names combustion and gives no orb; chapter 3 supplies one."""
+    from hora.core.constants.graha import COMBUSTION_ORB
+
+    without = yogas.radda(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                          faster_longitude=255.0, slower_longitude=20.0)
+    assert without["combustion_undecided"] is not None
+    assert without["parties"][int(Graha.MARS)]["combust"] is None
+
+    # Mars 3° from the Sun, inside chapter 3's direct orb.
+    orb = COMBUSTION_ORB[int(Graha.MARS)][0]
+    assert orb > 3.0
+    burnt = yogas.radda(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                        faster_longitude=255.0, slower_longitude=20.0,
+                        sun_longitude=252.0)
+    assert burnt["combustion_undecided"] is None
+    assert burnt["parties"][int(Graha.MARS)]["combust"] is True
+    assert burnt["parties"][int(Graha.MARS)]["combustion_separation"] == (
+        pytest.approx(3.0))
+    assert int(Graha.MARS) in burnt["triggered_by"]
+    assert burnt["present"] is True
+    assert next(row for row in yogas.RADDA_TRIGGERS
+                if row["trigger"] == "combustion")["orb_from"] == (
+        "chapter 3, not this section")
+
+
+def test_a_retrograde_planet_uses_the_wider_combustion_orb():
+    from hora.core.constants.graha import COMBUSTION_ORB
+
+    direct, retro = COMBUSTION_ORB[int(Graha.MERCURY)]
+    assert retro != direct
+    gap = (direct + retro) / 2.0
+    moving = yogas.radda(faster=int(Graha.MERCURY), slower=int(Graha.SATURN),
+                         faster_longitude=100.0, slower_longitude=160.0,
+                         sun_longitude=100.0 - gap, faster_retrograde=True)
+    still = yogas.radda(faster=int(Graha.MERCURY), slower=int(Graha.SATURN),
+                        faster_longitude=100.0, slower_longitude=160.0,
+                        sun_longitude=100.0 - gap)
+    assert moving["parties"][int(Graha.MERCURY)]["combust"] is (retro > direct)
+    assert still["parties"][int(Graha.MERCURY)]["combust"] is (direct > retro)
+
+
+def test_otherwise_weak_is_an_input_and_never_decided():
+    """OI-166's family. Three triggers are decidable and the fourth is not."""
+    got = yogas.radda(faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+                      faster_longitude=233.0, slower_longitude=356.0,
+                      slower_otherwise_weak=True)
+    assert got["ithasala_type"] is not None
+    assert got["parties"][int(Graha.JUPITER)]["triggers"] == ("otherwise_weak",)
+    assert got["present"] is True
+    assert "has no measure" in yogas.OTHERWISE_WEAK_HAS_NO_TEST
+
+    clean = yogas.radda(faster=int(Graha.MARS), slower=int(Graha.JUPITER),
+                        faster_longitude=233.0, slower_longitude=356.0)
+    assert clean["triggered_by"] == ()
+    assert clean["present"] is False
+
+
+def test_radda_cancels_from_inside_the_pair():
+    """Manahoo needs a third planet, khallasara needs the lagna lord, radda
+    needs nothing but the two already there.
+    """
+    got = yogas.radda(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                      faster_longitude=255.0, slower_longitude=20.0)
+    assert got["present"] is True
+    assert "needs only the condition of a planet already in the ithasala" in (
+        yogas.RADDA_CANCELS_FROM_INSIDE_THE_PAIR)

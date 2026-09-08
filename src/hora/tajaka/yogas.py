@@ -12,7 +12,11 @@ import itertools
 from hora.charts.vargas import d3_drekkana, d9_navamsa
 from hora.core import validate
 from hora.core.const import GRAHA_NAMES, NAVAGRAHA, RASI_LORD, Graha
-from hora.core.constants.graha import DEBILITATION_RASI, EXALTATION_RASI
+from hora.core.constants.graha import (
+    COMBUSTION_ORB,
+    DEBILITATION_RASI,
+    EXALTATION_RASI,
+)
 from hora.core.constants.house import APOKLIMA, KENDRA, PANAPHARA
 from hora.tajaka.aspects import (
     TajakaAspectError,
@@ -2025,6 +2029,212 @@ def khallasara(*, lagna_rasi: int, moon_longitude: float,
         # "the signification of X" — the houses X owns from this lagna.
         "destroys_houses": houses,
         "rule": KHALLASARA_RULE,
+    }
+
+
+# --------------------------------------------------------------------------
+# §29.2.11 Radda yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.11's rule, verbatim.
+RADDA_RULE = (
+    "If an ithasala yoga involves a planet in debilitation or retrogression "
+    "or combustion or otherwise weak, it turns into Radda yoga. This yoga "
+    "negates ithasala and gives bad results."
+)
+
+#: The second paragraph, verbatim. The book names an overlap with §29.2.4 and
+#: declines to settle it.
+RADDA_OVERLAPS_EESARPHA = (
+    "About planets in retrogression, one should remember the comments made "
+    "under ithasala yoga. If retrograde Mercury is at 5 degrees in Vi and "
+    "Mars is at 7 degrees in Sc, there is no ithasala. Whether one calls it "
+    "Eesarpha or Radda yoga depends on one's interpretation, but the results "
+    "are going to be bad in either case."
+)
+
+#: The four conditions, as data. Three are computable and the fourth is not.
+RADDA_TRIGGERS: tuple[dict[str, object], ...] = (
+    {"trigger": "debilitation", "computable": True},
+    {"trigger": "retrogression", "computable": True},
+    {"trigger": "combustion", "computable": True,
+     "orb_from": "chapter 3, not this section"},
+    {"trigger": "otherwise weak", "computable": False},
+)
+
+#: §29.2.11's two worked cases, as the book states them.
+RADDA_EXAMPLES: tuple[dict[str, object], ...] = (
+    {"case": "retrogression, and there is no ithasala to negate",
+     "faster": "Mercury", "faster_at": "5 Vi", "faster_longitude": 155.0,
+     "faster_retrograde": True,
+     "slower": "Mars", "slower_at": "7 Sc", "slower_longitude": 217.0,
+     "aspect": "Sextile aspect", "ithasala": None, "eesarpha": True,
+     "book_says": ("Whether one calls it Eesarpha or Radda yoga depends on "
+                   "one's interpretation")},
+    {"case": "debilitation, with an ithasala to negate",
+     "lagna_rasi": "Ar",
+     "faster": "Mars", "faster_at": "15 Sg", "faster_longitude": 255.0,
+     "faster_retrograde": False,
+     "slower": "Saturn", "slower_at": "20 Ar", "slower_longitude": 20.0,
+     "aspect": "Trinal aspect", "ithasala": "Vartamaana",
+     "debilitated": "Saturn", "owns": (10, 11),
+     "book_says": "they can be related to career and material gains"},
+)
+
+#: **Finding, and it contradicts §29.2.3 outright.** §29.2.3's Special Notes
+#: worked retrogression carefully and reached two positive verdicts: a
+#: retrograde **slower** planet "is no problem" and "in fact shows a faster
+#: realization", and a retrograde **faster** planet that is more advanced
+#: still gives an ithasala. §29.2.11 says an ithasala involving a planet in
+#: retrogression turns into radda and gives **bad results**. Both cannot hold:
+#: the first says the ithasala stands and is better, the second says it is
+#: negated. The book's own bridge — "one should remember the comments made
+#: under ithasala yoga" — works only the case where there was no ithasala to
+#: begin with. See OI-168.
+RADDA_CONTRADICTS_THE_ITHASALA_NOTES_ON_RETROGRESSION = (
+    "Section 29.2.3 says a retrograde slower planet shows a faster "
+    "realization and that a retrograde faster planet ahead still gives an "
+    "ithasala. Section 29.2.11 says an ithasala involving a retrograde "
+    "planet is negated. The two cases the first section built are the ones "
+    "the second destroys."
+)
+
+#: **Finding.** The book names an overlap between two of its own yogas and
+#: declines to settle it: retrograde Mercury at 5° Vi and Mars at 7° Sc is an
+#: eesarpha by §29.2.4 and, on the other reading, a radda. "Whether one calls
+#: it Eesarpha or Radda yoga depends on one's interpretation, but the results
+#: are going to be bad in either case." It is the only place in §29.2 where
+#: the book says two of its yogas cannot be told apart — and the reason it can
+#: afford to is that both are bad.
+THE_BOOK_NAMES_THIS_OVERLAP_AND_LEAVES_IT = (
+    "Section 29.2.11 says its own second paragraph could be read as eesarpha "
+    "or as radda and that the result is bad either way. No other section in "
+    "the chapter admits an overlap."
+)
+
+#: **Finding, for the second time.** Like §29.2.10, the example reads the harm
+#: off the **houses the weak planet owns from the lagna**: Saturn from an
+#: Aries lagna owns Capricorn, the 10th, and Aquarius, the 11th, and the book
+#: names career and material gains. Two sections in a row do this and neither
+#: states it as a rule.
+THE_HARMS_ARE_THE_HOUSES_THE_WEAK_PLANET_OWNS = (
+    "Saturn owns the 10th and the 11th from an Aries lagna, and the example "
+    "names career and material gains. Section 29.2.10 read its harms the "
+    "same way."
+)
+
+#: **Gap.** "Or otherwise weak" is the fourth trigger and the only one with no
+#: test. Debilitation, retrogression and combustion are all decidable — the
+#: combustion orb comes from chapter 3, not from here — and "otherwise weak"
+#: is the same unmeasured strength §29.2.8 and §29.2.9 leant on. `radda` takes
+#: it as an input per planet and never decides it. See OI-166.
+OTHERWISE_WEAK_HAS_NO_TEST = (
+    "Three of radda's four triggers are decidable and the fourth, "
+    "\"otherwise weak\", has no measure, like the strength sections 29.2.8 "
+    "and 29.2.9 asked for and did not define."
+)
+
+#: **Finding.** Radda is the chapter's **third** cancelling yoga and the three
+#: cancel by different means: manahoo by a named malefic reaching the faster
+#: planet, khallasara by the lagna lord's position, radda by a party's own
+#: condition. Radda is the only one that needs nothing but the two planets
+#: already in the ithasala.
+RADDA_CANCELS_FROM_INSIDE_THE_PAIR = (
+    "Manahoo needs a third planet and khallasara needs the lagna lord. Radda "
+    "needs only the condition of a planet already in the ithasala."
+)
+
+
+def _is_combust(graha: int, longitude: float, sun_longitude: float,
+                retrograde: bool) -> dict:
+    """Chapter 3's combustion, which §29.2.11 names without an orb."""
+    orbs = COMBUSTION_ORB.get(int(graha))
+    if orbs is None or int(graha) == int(Graha.SUN):
+        return {"combust": False, "separation": None, "orb": None}
+    gap = abs(((float(longitude) - float(sun_longitude) + 180.0) % 360.0)
+              - 180.0)
+    orb = float(orbs[1] if retrograde else orbs[0])
+    return {"combust": gap <= orb, "separation": gap, "orb": orb}
+
+
+def radda(*, faster: int, slower: int, faster_longitude: float,
+          slower_longitude: float, faster_retrograde: bool = False,
+          slower_retrograde: bool = False, sun_longitude: float | None = None,
+          faster_otherwise_weak: bool = False,
+          slower_otherwise_weak: bool = False,
+          lagna_rasi: int | None = None) -> dict:
+    """§29.2.11 — an ithasala negated by a weak planet inside it.
+
+    `faster_otherwise_weak` and `slower_otherwise_weak` are inputs: the fourth
+    trigger has no test in the book. See `OTHERWISE_WEAK_HAS_NO_TEST`.
+    """
+    base = ithasala(faster=faster, slower=slower,
+                    faster_longitude=faster_longitude,
+                    slower_longitude=slower_longitude,
+                    faster_retrograde=faster_retrograde,
+                    slower_retrograde=slower_retrograde)
+    apart = eesarpha(faster=faster, slower=slower,
+                     faster_longitude=faster_longitude,
+                     slower_longitude=slower_longitude,
+                     faster_retrograde=faster_retrograde,
+                     slower_retrograde=slower_retrograde)
+
+    seats = {int(faster): float(faster_longitude),
+             int(slower): float(slower_longitude)}
+    retros = {int(faster): bool(faster_retrograde),
+              int(slower): bool(slower_retrograde)}
+    weaks = {int(faster): bool(faster_otherwise_weak),
+             int(slower): bool(slower_otherwise_weak)}
+
+    parties = {}
+    for graha, longitude in seats.items():
+        rasi = int(validate.longitude("longitude", longitude) // 30)
+        combust = ({"combust": None, "separation": None, "orb": None}
+                   if sun_longitude is None
+                   else _is_combust(graha, longitude, float(sun_longitude),
+                                    retros[graha]))
+        checks = {
+            "debilitated": rasi == int(DEBILITATION_RASI[graha]),
+            "retrograde": retros[graha],
+            "combust": combust["combust"],
+            "otherwise_weak": weaks[graha],
+        }
+        owns = () if lagna_rasi is None else tuple(
+            h for h in range(1, 13)
+            if int(RASI_LORD[(int(lagna_rasi) + h - 1) % 12]) == graha)
+        parties[graha] = {
+            **checks,
+            "combustion_separation": combust["separation"],
+            "combustion_orb": combust["orb"],
+            "triggers": tuple(k for k, v in checks.items() if v),
+            "owns_houses": owns,
+        }
+
+    triggered = tuple(g for g, row in parties.items() if row["triggers"])
+    present = bool(base["type"] is not None and triggered)
+    destroyed: list[int] = []
+    for graha in triggered:
+        owned = parties[graha]["owns_houses"]
+        assert isinstance(owned, tuple)
+        destroyed.extend(int(h) for h in owned)
+    return {
+        "yoga": "Radda",
+        "faster": int(base["faster"]), "slower": int(base["slower"]),
+        "ithasala_type": base["type"],
+        "parties": parties,
+        "triggered_by": triggered,
+        "present": present,
+        "negates_the_ithasala": present,
+        # The overlap the book names and declines to settle.
+        "no_ithasala_to_negate": base["type"] is None,
+        "eesarpha_instead": apart["present_within_orb"],
+        "overlap": (THE_BOOK_NAMES_THIS_OVERLAP_AND_LEAVES_IT
+                    if base["type"] is None and apart["present_within_orb"]
+                    and triggered else None),
+        "destroys_houses": tuple(sorted(set(destroyed))),
+        "combustion_undecided": (None if sun_longitude is not None else
+                                 "the Sun's longitude was not supplied"),
+        "rule": RADDA_RULE,
     }
 
 

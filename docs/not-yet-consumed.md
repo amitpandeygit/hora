@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.10 (87)
+### Chapter 29 — §29.1 to §29.2.11 (95)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1790,6 +1790,12 @@ footnote can. What follows is prose and findings.
 | `KHALLASARA_IS_THE_FIRST_YOGA_TO_NEED_THE_LAGNA` | Ours: every earlier yoga reads planets against planets, and this destroys significations rather than a yoga |
 | `BETWEEN_CAN_BE_READ_THREE_WAYS` · `THE_READING_CHANGES_HOW_OFTEN_IT_FIRES` | Ours: the example satisfies all three readings, and they differ by a factor of twenty-five. OI-167 |
 | `THE_LEGS_FAIL_ON_WIDTH_NOT_ON_ASPECT` | Ours: both legs are semi-sextiles fourteen degrees wide against a binding orb of seven |
+| `RADDA_RULE` · `RADDA_OVERLAPS_EESARPHA` · `RADDA_TRIGGERS` · `RADDA_EXAMPLES` | §29.2.11 verbatim, its four triggers and its two worked cases as data |
+| `RADDA_CONTRADICTS_THE_ITHASALA_NOTES_ON_RETROGRESSION` | Ours: §29.2.3's two positive retrogression verdicts are the ones §29.2.11 destroys. OI-168 |
+| `THE_BOOK_NAMES_THIS_OVERLAP_AND_LEAVES_IT` | Ours: the only place in the chapter the book says two of its yogas cannot be told apart |
+| `THE_HARMS_ARE_THE_HOUSES_THE_WEAK_PLANET_OWNS` | Ours: Saturn's 10th and 11th from Aries, read the same way §29.2.10 read Jupiter's |
+| `OTHERWISE_WEAK_HAS_NO_TEST` | Ours: three triggers decidable, the fourth unmeasured, as in §29.2.8 and §29.2.9. OI-166 |
+| `RADDA_CANCELS_FROM_INSIDE_THE_PAIR` | Ours: the third cancelling yoga, and the only one needing nothing outside the ithasala |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

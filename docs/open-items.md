@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**6 waiting on Amit · 115 waiting on evidence · 2 parked**
+**6 waiting on Amit · 116 waiting on evidence · 2 parked**
 
 ---
 
@@ -2501,6 +2501,33 @@ separately, reports the backward arc as its own flag, and sets `readings_agree`.
 
 **Closes when:** a second worked khallasara puts the three planets further
 apart than consecutive signs.
+
+
+### OI-168 — §29.2.11 negates the retrogression cases §29.2.3 built
+
+**Waiting on the book.** §29.2.3's Special Notes worked retrogression at
+length and reached two **positive** verdicts:
+
+* a retrograde **slower** planet "is no problem. It, in fact, shows a faster
+  realization";
+* a retrograde **faster** planet that is more advanced "we do have an ithasala
+  yoga" — a case the section built specially against the reader's expectation.
+
+§29.2.11 then says an ithasala involving a planet in retrogression "turns into
+Radda yoga. This yoga **negates** ithasala and gives bad results." Both cannot
+hold: the first says the ithasala stands and is better, the second says it is
+destroyed.
+
+The book's own bridge — "one should remember the comments made under ithasala
+yoga" — works only the case where retrogression stopped the ithasala forming at
+all, which is the paragraph it introduces. It does not reach either verdict
+above.
+
+`radda` applies §29.2.11 as written and reports `triggered_by`, so a caller
+sees which planet's retrogression did it and can weigh the two sections.
+
+**Closes when:** you settle it, or a worked example runs an ithasala with a
+retrograde planet to a result.
 
 
 ---
