@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.13 (110)
+### Chapter 29 — §29.1 to §29.2.14 (116)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1806,6 +1806,10 @@ footnote can. What follows is prose and findings.
 | `THE_RULE_WANTS_TWO_WEAK_PLANETS_AND_THE_EXAMPLE_SHOWS_ONE` | Ours: Mars at 19 Li is neutral, not weak, and the example never says otherwise. OI-171 |
 | `HIGH_AND_GOOD_ARE_THE_SAME_UNNAMED_BAND` | Ours: §29.2.12's "good" and §29.2.13's "high" are the same non-band, read the same way. OI-170 |
 | `THE_SAME_HOUSES_CARRY_THE_OPPOSITE_RESULT` | Ours: Saturn's 10th and 11th from Aries are damaged in §29.2.11 and promised in §29.2.13 |
+| `THAMBIRA_RULE` · `THAMBIRA_RESULTS` · `THAMBIRA_EXAMPLE` | §29.2.14 verbatim and its worked case as data |
+| `THAMBIRA_IS_GAIRI_KAMBOOLA_WITHOUT_THE_CONDITIONS` · `EVERY_GAIRI_KAMBOOLA_IS_ALSO_A_THAMBIRA` | Ours: the same crossing against different backgrounds, and one contains the other |
+| `THE_SLOWER_CONDITION_IS_FORCED_BY_THE_CROSSING` | Ours: at 0° the mover is behind everything, so the other planet is the slower one by construction |
+| `THE_RESULT_IS_AGAIN_READ_OFF_THE_HOUSES_OWNED` | Ours: Venus's 2nd and 7th from Aries, the fourth section running to do this |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

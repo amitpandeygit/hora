@@ -2716,3 +2716,153 @@ def test_the_rescuer_must_be_a_third_planet():
         yogas.duttota(faster=int(Graha.MARS), slower=int(Graha.SATURN),
                       faster_longitude=199.0, slower_longitude=20.0,
                       rescuer=int(Graha.MARS), rescuer_longitude=199.0)
+
+
+# --------------------------------------------------------------------------
+# §29.2.14 Thambira yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_thambira_rule_is_transcribed():
+    assert "in the last degree of a rasi" in yogas.THAMBIRA_RULE
+    assert "after moving to the next rasi with a slower moving planet" in (
+        yogas.THAMBIRA_RULE)
+    assert yogas.THAMBIRA_RESULTS in yogas.THAMBIRA_RULE
+
+
+def test_the_thambira_example_reproduces():
+    """Aries lagna. Venus 29 Ta 10 has a square and no ithasala with Mars
+    2 Le, and a sextile vartamaana once he enters Gemini.
+    """
+    want = yogas.THAMBIRA_EXAMPLE
+    got = yogas.thambira(
+        mover=int(Graha.VENUS),
+        mover_longitude=float(want["mover_longitude"]),
+        other=int(Graha.MARS), other_longitude=float(want["other_longitude"]),
+        lagna_rasi=0)
+    assert got["mover_in_last_degree"] is True
+    assert got["aspect_now"] == want["aspect_now"]
+    assert got["ithasala_now"] is want["ithasala_now"]
+    assert got["aspect_after_moving"] == want["aspect_after"]
+    assert got["ithasala_after_moving"] == want["ithasala_after"]
+    assert got["other_is_slower"] is True
+    assert got["present"] is True
+
+
+def test_the_mover_enters_gemini():
+    from hora.core.const import RASI_ABBR
+
+    got = yogas.thambira(mover=int(Graha.VENUS),
+                         mover_longitude=30.0 + 29.0 + 10.0 / 60.0,
+                         other=int(Graha.MARS), other_longitude=122.0)
+    assert RASI_ABBR[got["mover_enters"]] == yogas.THAMBIRA_EXAMPLE[
+        "mover_enters"]
+
+
+def test_the_result_is_again_read_off_the_houses_owned():
+    """Venus owns the 2nd and 7th from Aries: family and marital life."""
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    for house in (2, 7):
+        assert str(GRAHA_NAMES[int(RASI_LORD[(0 + house - 1) % 12])]) == "Venus"
+    got = yogas.thambira(mover=int(Graha.VENUS),
+                         mover_longitude=30.0 + 29.0 + 10.0 / 60.0,
+                         other=int(Graha.MARS), other_longitude=122.0,
+                         lagna_rasi=0)
+    assert got["houses"] == yogas.THAMBIRA_EXAMPLE["owns"] == (2, 7)
+    assert "family and marital life" in str(yogas.THAMBIRA_EXAMPLE["shows"])
+    assert "Four sections running" in (
+        yogas.THE_RESULT_IS_AGAIN_READ_OFF_THE_HOUSES_OWNED)
+
+
+def test_the_slower_condition_is_forced_by_the_crossing():
+    """At 0° the mover is behind every planet, so it can only be the faster
+    party — which makes the other planet the slower one by construction.
+    """
+    random.seed(2141)
+    for _ in range(1500):
+        mover, other = random.sample(range(7), 2)
+        got = yogas.thambira(
+            mover=mover, mover_longitude=random.randrange(12) * 30.0 + 29.5,
+            other=other, other_longitude=random.uniform(0, 360))
+        if not got["other_is_slower"]:
+            # A faster other planet can never give the crossing an ithasala.
+            assert got["ithasala_after_moving"] is None
+            assert got["present"] is False
+    assert "has to be the slower one" in (
+        yogas.THE_SLOWER_CONDITION_IS_FORCED_BY_THE_CROSSING)
+
+
+def test_a_mover_not_in_the_last_degree_gives_no_thambira():
+    got = yogas.thambira(mover=int(Graha.VENUS), mover_longitude=30.0 + 20.0,
+                         other=int(Graha.MARS), other_longitude=122.0)
+    assert got["mover_in_last_degree"] is False
+    assert got["present"] is False
+
+
+def test_an_ithasala_that_already_exists_is_not_a_thambira():
+    """The yoga is one in waiting: it needs there to be nothing yet."""
+    got = yogas.thambira(mover=int(Graha.VENUS), mover_longitude=90.0 + 29.5,
+                         other=int(Graha.MARS), other_longitude=210.0 + 29.8)
+    if got["ithasala_now"] is not None:
+        assert got["present"] is False
+
+
+def test_the_crossing_must_actually_produce_an_ithasala():
+    """Move Mars to a rasi Venus will not aspect from Gemini — the 6th, Sc."""
+    got = yogas.thambira(mover=int(Graha.VENUS),
+                         mover_longitude=30.0 + 29.0 + 10.0 / 60.0,
+                         other=int(Graha.MARS), other_longitude=210.0 + 2.0)
+    assert got["aspect_after_moving"] is None
+    assert got["ithasala_after_moving"] is None
+    assert got["present"] is False
+
+
+def test_every_gairi_kamboola_crossing_satisfies_thambiras_speed_condition():
+    """The Moon is faster than every graha, so the planet she reaches is
+    always slower — which is exactly what §29.2.14 asks.
+    """
+    for other in range(7):
+        if other == int(Graha.MOON):
+            continue
+        got = yogas.thambira(mover=int(Graha.MOON), mover_longitude=179.5,
+                             other=other, other_longitude=95.0)
+        assert got["other_is_slower"] is True
+    assert "Only the Moon can make a gairi-kamboola" in (
+        yogas.EVERY_GAIRI_KAMBOOLA_IS_ALSO_A_THAMBIRA)
+
+
+def test_the_gairi_kamboola_example_is_also_a_thambira():
+    """§29.2.9's Moon at 29 Vi 10 reaching Mars at 1 Cp on entering Libra."""
+    want = yogas.GAIRI_KAMBOOLA_EXAMPLE
+    got = yogas.thambira(
+        mover=int(Graha.MOON), mover_longitude=float(want["moon_longitude"]),
+        other=int(Graha.MARS),
+        other_longitude=float(want["faster_longitude"]))
+    assert got["ithasala_now"] is None
+    assert got["ithasala_after_moving"] == "Poorna"
+    assert got["present"] is True
+
+
+def test_thambira_drops_every_condition_gairi_kamboola_added():
+    """A dignified mover is refused by §29.2.9 and accepted by §29.2.14."""
+    exalted_moon = 30.0 + 29.5                     # Taurus, the Moon exalted
+    refused = yogas.moon_is_disqualified(exalted_moon)
+    assert refused["exalted"] is True
+
+    got = yogas.thambira(mover=int(Graha.MOON), mover_longitude=exalted_moon,
+                         other=int(Graha.SATURN), other_longitude=120.0 + 2.0)
+    assert got["mover_in_last_degree"] is True
+    assert got["ithasala_after_moving"] is not None
+    assert got["present"] is True
+    assert "no dignity test" in (
+        yogas.THAMBIRA_IS_GAIRI_KAMBOOLA_WITHOUT_THE_CONDITIONS)
+
+
+def test_thambira_needs_two_different_rankable_grahas():
+    with pytest.raises(yogas.TajakaYogaError, match="two different grahas"):
+        yogas.thambira(mover=int(Graha.VENUS), mover_longitude=59.5,
+                       other=int(Graha.VENUS), other_longitude=122.0)
+    with pytest.raises(yogas.TajakaYogaError, match="cannot rank"):
+        yogas.thambira(mover=int(Graha.RAHU), mover_longitude=59.5,
+                       other=int(Graha.KETU), other_longitude=122.0)

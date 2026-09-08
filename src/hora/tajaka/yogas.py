@@ -2608,6 +2608,137 @@ def duttota(*, faster: int, slower: int, faster_longitude: float,
     }
 
 
+# --------------------------------------------------------------------------
+# §29.2.14 Thambira yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.14's rule, verbatim.
+THAMBIRA_RULE = (
+    "If a planet is in the last degree of a rasi and it forms ithasala yoga "
+    "after moving to the next rasi with a slower moving planet, it is called "
+    "Thambira yoga. This shows realization of hopes after delay and hard work."
+)
+
+THAMBIRA_RESULTS = "realization of hopes after delay and hard work"
+
+#: §29.2.14's worked example, as the book states it.
+THAMBIRA_EXAMPLE: dict[str, object] = {
+    "lagna_rasi": "Ar",
+    "mover": "Venus", "mover_at": "29 Ta 10",
+    "mover_longitude": 30.0 + 29.0 + 10.0 / 60.0,
+    "other": "Mars", "other_at": "2 Le", "other_longitude": 122.0,
+    "aspect_now": "Square aspect", "ithasala_now": None,
+    "aspect_after": "Sextile aspect", "ithasala_after": "Vartamaana",
+    "mover_enters": "Ge",
+    "owns": (2, 7),
+    "shows": "good events related to family and marital life after some hard work",
+}
+
+#: **Finding.** Thambira is §29.2.9's gairi-kamboola with the Moon generalised
+#: to any planet and every extra condition dropped. Gairi-kamboola needs the
+#: **Moon** specifically, needs the slower planet to already be in an ithasala
+#: with a third, needs a further ithasala with a strong planet, and refuses a
+#: dignified Moon. Thambira needs none of that. The two are the same crossing
+#: seen against different backgrounds: one is an **ithasala** in waiting, the
+#: other a **kamboola** in waiting.
+THAMBIRA_IS_GAIRI_KAMBOOLA_WITHOUT_THE_CONDITIONS = (
+    "Gairi-kamboola is the Moon crossing into an ithasala that strengthens a "
+    "pair's existing ithasala. Thambira is any planet crossing into an "
+    "ithasala of its own, with no pair, no strong planet and no dignity test."
+)
+
+#: **Finding.** Every gairi-kamboola is also a thambira. The Moon is footnote
+#: 83's fastest body, so the planet she reaches is always slower than she is,
+#: which is exactly what §29.2.14 requires. The reverse does not hold: any
+#: other planet can make a thambira and none can make a gairi-kamboola.
+EVERY_GAIRI_KAMBOOLA_IS_ALSO_A_THAMBIRA = (
+    "The Moon is faster than every graha, so a gairi-kamboola's crossing "
+    "always satisfies thambira's slower-planet condition. Only the Moon can "
+    "make a gairi-kamboola and any planet can make a thambira."
+)
+
+#: **Finding.** "With a slower moving planet" is not an extra restriction —
+#: the geometry forces it. At the start of its new rasi the moving planet's
+#: advancement is **zero**, so it is behind everything; for an ithasala it
+#: must therefore be the faster party, which means the other planet must be
+#: the slower one. A faster other planet would have to be at exactly 0° too.
+#: The section states a condition its own arithmetic already guarantees.
+THE_SLOWER_CONDITION_IS_FORCED_BY_THE_CROSSING = (
+    "A planet entering a rasi stands at zero degrees and is less advanced "
+    "than every other planet, so it can only be the faster party in an "
+    "ithasala. The other planet has to be the slower one."
+)
+
+#: **Finding, for the fourth section running.** The example reads its result
+#: off the houses the moving planet owns from the lagna: Venus from an Aries
+#: lagna owns Taurus, the **2nd**, and Libra, the **7th**, and the book says
+#: "family and marital life". §29.2.10, §29.2.11 and §29.2.13 did the same and
+#: none of the four states it as a rule.
+THE_RESULT_IS_AGAIN_READ_OFF_THE_HOUSES_OWNED = (
+    "Venus owns the 2nd and the 7th from an Aries lagna, and the example "
+    "names family and marital life. Four sections running have read a result "
+    "off the houses a planet owns."
+)
+
+
+def thambira(*, mover: int, mover_longitude: float, other: int,
+             other_longitude: float, other_retrograde: bool = False,
+             lagna_rasi: int | None = None) -> dict:
+    """§29.2.14 — a planet at the end of a rasi that will form an ithasala.
+
+    `mover` is the planet in the last degree. Its own retrogression is not an
+    input: a retrograde planet is not about to cross into the next rasi.
+    """
+    validate.in_range("mover", int(mover), 0, 8)
+    validate.in_range("other", int(other), 0, 8)
+    if int(mover) == int(other):
+        raise TajakaYogaError("thambira needs two different grahas")
+
+    here = validate.longitude("mover_longitude", float(mover_longitude))
+    in_last_degree = advancement(here) >= LAST_DEGREE_OF_A_RASI
+    after = (float(int(here // 30) + 1) * 30.0) % 360.0
+
+    quicker = faster_of(int(mover), int(other))
+    if quicker is None:
+        raise TajakaYogaError(
+            "footnote 83 cannot rank the two grahas, so no ithasala between "
+            "them can be read")
+    other_is_slower = quicker == int(mover)
+
+    def leg(at: float) -> dict:
+        lon = {int(mover): at, int(other): float(other_longitude)}
+        retros = {int(mover): False, int(other): bool(other_retrograde)}
+        slow = int(other) if quicker == int(mover) else int(mover)
+        return ithasala(faster=quicker, slower=slow,
+                        faster_longitude=lon[quicker],
+                        slower_longitude=lon[slow],
+                        faster_retrograde=retros[quicker],
+                        slower_retrograde=retros[slow])
+
+    now, later = leg(here), leg(after)
+    houses = () if lagna_rasi is None else tuple(
+        h for h in range(1, 13)
+        if int(RASI_LORD[(int(lagna_rasi) + h - 1) % 12]) == int(mover))
+    return {
+        "yoga": "Thambira",
+        "mover": int(mover), "mover_name": str(GRAHA_NAMES[int(mover)]),
+        "other": int(other), "other_name": str(GRAHA_NAMES[int(other)]),
+        "mover_advancement": advancement(here),
+        "mover_in_last_degree": in_last_degree,
+        "mover_enters": int(after // 30),
+        "other_is_slower": other_is_slower,
+        "aspect_now": now["aspect"], "ithasala_now": now["type"],
+        "aspect_after_moving": later["aspect"],
+        "ithasala_after_moving": later["type"],
+        "present": bool(in_last_degree and other_is_slower
+                        and now["type"] is None
+                        and later["type"] is not None),
+        "houses": houses,
+        "gives": THAMBIRA_RESULTS,
+        "rule": THAMBIRA_RULE,
+    }
+
+
 def pairs_in_speed_order() -> tuple[tuple[int, int], ...]:
     """Every graha pair footnote 83 can rank, slower first."""
     out = []
