@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**6 waiting on Amit · 106 waiting on evidence · 2 parked**
+**6 waiting on Amit · 109 waiting on evidence · 2 parked**
 
 ---
 
@@ -2316,6 +2316,59 @@ for graha drishti and not proof of it. `jupiter_on_vivaha` returns **both** and
 flags the charts where they disagree rather than picking one.
 
 **Closes when:** you settle it, or a worked example reads a saham aspect.
+
+
+### OI-159 — §29.2.1 and §29.2.2 do not say which bodies are "planets"
+
+**Waiting on the book.** Ishkavala needs every planet outside the apoklimas and
+induvara every planet inside them. Neither says whether Rahu and Ketu count.
+Footnote 83, three paragraphs later, puts them in the same chapter's speed
+order, which argues for including them.
+
+It is not a fine point. Over four thousand random charts:
+
+| bodies | ishkavala | induvara |
+|---|---|---|
+| the seven grahas | 6.2% | 0.03% |
+| the seven and the nodes | 4.1% | 0% |
+
+`ishkavala` and `induvara` take the occupied houses as an input and never
+decide which bodies produced them.
+
+**Closes when:** a later §29.2 section or a worked example counts the bodies.
+
+
+### OI-160 — footnote 83's speed order is a list, not a measurement
+
+**Waiting on JHora.** Ithasala turns on which of two planets is faster.
+Footnote 83 fixes that once for all charts, and real speeds cross it: measured
+over thirty years of samples, **22 of the 36 pairs invert at some point** —
+Mercury is slower than Venus 37% of the time, slower than the Sun 34%, Jupiter
+slower than Saturn 24%, Venus slower than the Sun 24%.
+
+The footnote is the book's own answer and `faster_of` follows it. Whether JHora
+reads the list or the instantaneous speed is unchecked, and the two give
+different ithasalas in a large minority of charts.
+
+**Closes when:** JHora is available, or a worked ithasala uses a pair the two
+readings separate.
+
+
+### OI-161 — §29.2.3 does not say whose deeptamsa an ithasala must satisfy
+
+**Waiting on the book.** An ithasala needs an aspect. §28.2 gives each graha its
+own deeptamsa — Venus 7°, Jupiter 9° — so a pair has two orbs and any
+separation between them satisfies one reading and not the other. The section
+says only "if two planets have an aspect".
+
+Two further holes in the same sentence: it does not say whether the orb is
+required at all, and §28.2 gives the nodes no deeptamsa while footnote 83 ranks
+them, so an ithasala involving a node has no orb to test.
+
+`ithasala` answers under each orb separately, sums and averages neither, and
+flags the pairs where the two disagree.
+
+**Closes when:** a later §29.2 section or a worked example applies an orb.
 
 
 ---

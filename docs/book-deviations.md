@@ -2661,3 +2661,45 @@ difference on a three-term formula gives.
 
 **Closes when:** you confirm the reading, or a later printing makes the two
 printings agree.
+
+
+---
+
+## D-81 · Footnote 83 puts Rahu and Ketu faster than Saturn; they are slower
+
+**Status: BOOK DEVIATION — the footnote's order is followed as printed, and
+the measurement is recorded beside it.**
+
+Footnote 83 gives ithasala its speed order: "Saturn, Rahu/Ketu, Jupiter, Mars,
+Sun, Venus, Mercury and Moon", increasing. Measured against our own ephemeris
+over thirty years of samples, mean daily motion is:
+
+| body | mean daily motion | footnote's place |
+|---|---|---|
+| **Rahu / Ketu** | **3.18'** | 2nd slowest |
+| Saturn | 4.17' | slowest |
+| Jupiter | 7.95' | 3rd |
+| Mars | 34.06' | 4th |
+| Sun | 59.14' | 5th |
+| Venus | 62.54' | 6th |
+| Mercury | 73.09' | 7th |
+| Moon | 790.63' | fastest |
+
+The order is **exactly right for all seven classical grahas** — six
+consecutive comparisons, all correct — and wrong only for the nodes, which
+move 3.18' a day against Saturn's 4.17' and are therefore the slowest bodies
+in the list, not the second slowest. The mean node's rate is a constant, so
+this is not a sampling artefact; the true node averages 3.54', still slower
+than Saturn.
+
+It may be a convention rather than a slip: the nodes are always retrograde and
+their "speed" is a signed quantity the footnote does not discuss. Either way
+the claim as written is checkable and false.
+
+**What we do.** `faster_of` follows the footnote as printed, so any ithasala
+involving a node ranks it above Saturn. Nothing is silently corrected. The
+measurement is held in
+`tajaka.yogas.THE_NODES_ARE_THE_ONE_PLACE_THE_ORDER_IS_WRONG` and tested.
+
+**Closes when:** you confirm the reading, or JHora shows which order it uses —
+see OI-160, which is the larger question of the list against true speed.

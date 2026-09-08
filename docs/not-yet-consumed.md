@@ -1718,6 +1718,27 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
+### Chapter 29 — §29.1 to §29.2.3 (16)
+
+`tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
+and `induvara` test the house groups both ways round, `ithasala` applies
+footnote 83's order and §28.2's aspects, and `faster_of` ranks any pair the
+footnote can. What follows is prose and findings.
+
+| constant | why it is not consumed |
+|---|---|
+| `INTRODUCTION` · `ISHKAVALA_RULE` · `INDUVARA_RULE` · `ITHASALA_RULE` · `ITHASALA_RESULTS` · `SPEED_ORDER_FOOTNOTE` | The sections and the footnote verbatim |
+| `ITHASALA_REFERENCE_LORDS` · `ITHASALA_MARRIAGE_EXAMPLE` | The Results paragraph's four ways in and its worked case, as data |
+| `PRASNA_IS_NAMED_BUT_NEVER_TAUGHT` | Ours: §29.1 extends the chapter to prasna charts and the book never casts one |
+| `THE_TWO_HALVES_OF_EACH_RULE_ARE_THE_SAME_TEST` | Ours: "occupies only X" and "Y is empty" are one condition, and both are tested so a disagreement would show |
+| `WHICH_BODIES_COUNT_IS_NOT_SAID` | Ours: "planets" is not counted, and including the nodes drops ishkavala from 6.2% of charts to 4.1%. OI-159 |
+| `THE_TWO_YOGAS_ARE_OPPOSITE_ENDS_OF_ONE_TEST` · `ISHKAVALA_IS_ORDERS_OF_MAGNITUDE_COMMONER` | Ours: no chart has both, and the chapter's matched pair is 6.2% against 0.03% |
+| `ADVANCEMENT_IS_WITHIN_THE_RASI` | Ours: the test compares degrees within each sign, not longitudes, and the two differ across a boundary |
+| `THE_ORB_AND_THE_ADVANCEMENT_ARE_ONE_NUMBER` | Ours: whole-sign aspects make the separation from exact the difference of the two advancements |
+| `WHOSE_DEEPTAMSA_GOVERNS_IS_NOT_SAID` · `WHETHER_THE_ASPECT_NEEDS_THE_ORB_IS_NOT_SAID` · `A_NODES_ITHASALA_CANNOT_BE_ORBED` | Ours: three holes in one sentence — whether an orb applies, whose, and what to do when a node has none. OI-161 |
+| `THE_SPEED_ORDER_IS_A_LIST_NOT_A_MEASUREMENT` · `THE_NODES_ARE_THE_ONE_PLACE_THE_ORDER_IS_WRONG` | Ours: 22 of 36 pairs invert against true speed, and the nodes are misplaced outright. OI-160, D-81 |
+| `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
+
 ---
 
 ## How to use this register
