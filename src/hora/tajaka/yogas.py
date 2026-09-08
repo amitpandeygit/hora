@@ -363,6 +363,33 @@ def ithasala(*, faster: int, slower: int, faster_longitude: float,
                   else within["faster"] == within["slower"])
 
     applying = advancement(lon[quick]) < advancement(lon[slow])
+    orb_values = [v for v in orbs.values() if v is not None]
+    binding = min(orb_values) if orb_values else None
+
+    vartamaana: bool | None
+    poorna: bool | None
+    bhavishya: bool | None
+    to_go: float | None
+    if aspect is None or not applying:
+        vartamaana = poorna = bhavishya = False
+        to_go = None
+    elif binding is None:
+        vartamaana = poorna = bhavishya = None
+        to_go = None
+    else:
+        vartamaana = separation <= binding
+        poorna = separation <= POORNA_DEGREES
+        to_go = max(separation - binding, 0.0)
+        bhavishya = (not vartamaana) and to_go <= BHAVISHYA_DEGREES
+
+    kind = None
+    if poorna:
+        kind = "Poorna"
+    elif vartamaana:
+        kind = "Vartamaana"
+    elif bhavishya:
+        kind = "Bhavishya"
+
     return {
         "yoga": "Ithasala",
         "faster": quick, "faster_name": str(GRAHA_NAMES[quick]),
@@ -385,6 +412,17 @@ def ithasala(*, faster: int, slower: int, faster_longitude: float,
         # so rather than handed one of them.
         "present_within_orb": None if within_orb is None
                               else bool(within_orb and applying),
+        "binding_deeptamsa": binding,
+        "vartamaana": vartamaana,
+        "poorna": poorna,
+        "bhavishya": bhavishya,
+        "degrees_to_vartamaana": to_go,
+        "bhavishya_crosses_a_rasi": (
+            None if to_go is None
+            else advancement(lon[quick]) + to_go >= 30.0),
+        # Poorna is a vartamaana, so the most specific name is reported and
+        # the three flags stay beside it.
+        "type": kind,
         # The example settles whose orb governs — both — so a disagreement
         # between the two is an answer, not an undecided. What is still
         # undecided is a node, which section 28.2 gives no orb at all.
@@ -448,6 +486,79 @@ THE_NODES_ARE_THE_ONE_PLACE_THE_ORDER_IS_WRONG = (
 )
 
 
+# --------------------------------------------------------------------------
+# §29.2.3 — the three types of ithasala
+# --------------------------------------------------------------------------
+
+#: The three types, verbatim.
+ITHASALA_TYPES: tuple[dict[str, str], ...] = (
+    {"name": "Vartamaana", "means": "present (current)",
+     "rule": ("Vartamaana ithasala yoga results when the planets aspect each "
+              "other and both are within the deeptaamsa (orb) of the other "
+              "planet."),
+     "gives": ""},
+    {"name": "Poorna", "means": "complete",
+     "rule": ("Poorna ithasala yoga results when the planets aspect each "
+              "other closely and their advancements in respective rasis are "
+              "within 1 degree of each other."),
+     "gives": ("Poorna ithasala is the most powerful ithasala. It shows "
+               "speedy fulfillment of the matter.")},
+    {"name": "Bhavishya", "means": "future",
+     "rule": ("Bhavishya ithasala yoga is formed if vartamaana ithasala yoga "
+              "is about to be formed when the faster moving planet moves by "
+              "1 degree or less."),
+     "gives": ("Bhavishya ithasala shows fulfillment after some obstructions "
+               "or delay.")},
+)
+
+#: Poorna's threshold and bhavishya's are both one degree, and both are stated
+#: as "within 1°" and "by 1° or less" — inclusive on either side.
+POORNA_DEGREES = 1.0
+BHAVISHYA_DEGREES = 1.0
+
+#: **Finding.** The three "types" are not three cases. **Every poorna is a
+#: vartamaana**: poorna needs the two advancements within 1° and the smallest
+#: deeptamsa in §28.2 is 7°, so a poorna pair is always inside both orbs.
+#: Bhavishya is the only one that excludes the others — it is defined by
+#: vartamaana *not* holding yet. So the set is one nested pair and one
+#: disjoint case, and the chapter numbers them (i), (ii), (iii) as if they
+#: were alternatives.
+POORNA_IS_A_KIND_OF_VARTAMAANA = (
+    "Poorna needs the two advancements within one degree and the smallest "
+    "deeptamsa in the book is seven, so every poorna ithasala is also a "
+    "vartamaana ithasala. Bhavishya is the only type that excludes the "
+    "other two."
+)
+
+#: **Finding.** All three types reduce to **one number**: the separation, which
+#: is the difference of the two advancements. Inside the smaller deeptamsa it
+#: is vartamaana; inside one degree it is also poorna; within one degree
+#: *outside* the smaller deeptamsa it is bhavishya. The book works each type
+#: from windows in the aspected rasi — Venus at 19° "extends from 12° to 26°"
+#: — and every one of those windows is the same subtraction.
+ALL_THREE_TYPES_READ_ONE_SEPARATION = (
+    "The separation is the slower planet's degree in its rasi minus the "
+    "faster planet's. Inside the smaller deeptamsa gives vartamaana, inside "
+    "one degree gives poorna as well, and up to one degree outside the "
+    "smaller deeptamsa gives bhavishya."
+)
+
+#: **Finding.** Bhavishya moves the faster planet forward by up to a degree,
+#: which raises the question of what happens when it is near the end of its
+#: rasi and would change sign instead, taking the whole-sign aspect with it.
+#: **It cannot happen.** Bhavishya needs the separation above the binding
+#: deeptamsa, the smallest in §28.2 is 7°, and the separation is the slower
+#: planet's degree minus the faster's — so the faster planet is below 23° of
+#: its rasi in every bhavishya, and a further degree leaves it below 24°. The
+#: book does not raise the case and does not need to. `bhavishya_crosses_a_rasi`
+#: is reported anyway, and is False in every chart.
+BHAVISHYA_CANNOT_REACH_THE_END_OF_A_RASI = (
+    "A bhavishya needs a separation above the smaller deeptamsa, which is at "
+    "least seven degrees, so the faster planet is below 23 degrees of its "
+    "rasi. Moving it forward by a degree cannot take it out of the sign."
+)
+
+
 #: §29.2.3's worked example, as the book states it.
 ITHASALA_EXAMPLE: dict[str, object] = {
     "faster": "Moon", "faster_at": "14 Le", "faster_longitude": 134.0,
@@ -468,6 +579,49 @@ THE_EXAMPLE_CHECKS_OUT_ON_ALL_FOUR_CLAIMS = (
     "Leo to Libra is the 3rd house, which section 28.2 makes a sextile. The "
     "separation is 5 degrees against orbs of 7 and 12. The advancements are "
     "14 and 19. The Moon is the faster. The yoga is present."
+)
+
+
+#: The three worked cases for the types, as the book states them. The Moon
+#: moves and Venus stays; one pair, three separations, three types.
+ITHASALA_TYPE_EXAMPLES: tuple[dict[str, object], ...] = (
+    {"type": "Vartamaana", "moon": "14 Le", "venus": "19 Li",
+     "moon_longitude": 134.0, "venus_longitude": 199.0,
+     "separation": 5.0, "book_says": "So we have vartamaana ithasala."},
+    {"type": "Poorna", "moon": "18 Le 25", "venus": "19 Li",
+     "moon_longitude": 120.0 + 18.0 + 25.0 / 60.0, "venus_longitude": 199.0,
+     "separation": 35.0 / 60.0, "book_says": "So we have a poorna ithasala now."},
+    {"type": "Bhavishya", "moon": "13 Le 35", "venus": "21 Li 20",
+     "moon_longitude": 120.0 + 13.0 + 35.0 / 60.0,
+     "venus_longitude": 180.0 + 21.0 + 20.0 / 60.0,
+     "separation": 7.0 + 45.0 / 60.0,
+     "degrees_to_vartamaana": 45.0 / 60.0,
+     "book_says": "he needs to move by just 0 degrees 45 minutes"},
+)
+
+#: **Book defect, and it is two slips that mirror each other.** The bhavishya
+#: example sets up "Moon is at 13°35' in Le and Venus is at 21°20' in **Le**".
+#: Venus is in **Li**: the paragraph calls the aspect a sextile, which Leo to
+#: Leo is not, it puts the Moon's sextile "on Li", and it computes Venus's
+#: window from 21°20' and compares it against a Leo degree. Then, computing
+#: that window, it writes "extends from 14°20' to 28°20' **in Li**". That one
+#: is in **Le** — it is Venus's aspect *on Leo*, and the next sentence tests
+#: the Moon's Leo degree against it. Le for Li, then Li for Le.
+THE_BHAVISHYA_EXAMPLE_SWAPS_TWO_RASI_NAMES = (
+    "The bhavishya example puts Venus in Le where it means Li, and then puts "
+    "Venus's window in Li where it means Le. Every number in the example is "
+    "right; the two rasi names are exchanged."
+)
+
+#: **Finding.** All three examples reproduce to the arcminute, including the
+#: windows the book prints: Venus at 19° gives 12° to 26°, the Moon at 13°35'
+#: gives 1°35' to 25°35', Venus at 21°20' gives 14°20' to 28°20'. And the
+#: bhavishya distance the book computes by hand, 0°45', is exactly the
+#: separation less the smaller deeptamsa.
+THE_THREE_TYPE_EXAMPLES_REPRODUCE = (
+    "One pair at three separations gives the three types: 5 degrees is "
+    "vartamaana, 35 arcminutes is poorna, and 7 degrees 45 arcminutes is "
+    "bhavishya with 45 arcminutes to go."
 )
 
 

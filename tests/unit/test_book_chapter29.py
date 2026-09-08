@@ -461,3 +461,190 @@ def test_only_the_node_hole_is_left_in_the_orb_rule():
     assert got["present_within_orb"] is None
     assert got["deeptamsa_of_faster"] is None
     assert got["undecided"] == yogas.A_NODES_ITHASALA_CANNOT_BE_ORBED
+
+
+# --------------------------------------------------------------------------
+# §29.2.3 — the three types of ithasala
+# --------------------------------------------------------------------------
+
+
+def test_the_three_types_are_transcribed_with_their_meanings():
+    names = [row["name"] for row in yogas.ITHASALA_TYPES]
+    assert names == ["Vartamaana", "Poorna", "Bhavishya"]
+    means = [row["means"] for row in yogas.ITHASALA_TYPES]
+    assert means == ["present (current)", "complete", "future"]
+    assert "within the deeptaamsa (orb) of the other" in (
+        yogas.ITHASALA_TYPES[0]["rule"])
+    assert "within 1 degree of each other" in yogas.ITHASALA_TYPES[1]["rule"]
+    assert "speedy fulfillment" in yogas.ITHASALA_TYPES[1]["gives"]
+    assert "is about to be formed" in yogas.ITHASALA_TYPES[2]["rule"]
+    assert "obstructions or delay" in yogas.ITHASALA_TYPES[2]["gives"]
+    assert yogas.POORNA_DEGREES == yogas.BHAVISHYA_DEGREES == 1.0
+
+
+def test_the_three_worked_cases_reproduce():
+    """One pair, three separations, three types. Every number the book prints
+    comes back, including the 0°45' it computes by hand for bhavishya.
+    """
+    for want in yogas.ITHASALA_TYPE_EXAMPLES:
+        got = yogas.ithasala(
+            faster=int(Graha.MOON), slower=int(Graha.VENUS),
+            faster_longitude=float(want["moon_longitude"]),
+            slower_longitude=float(want["venus_longitude"]))
+        assert got["type"] == want["type"], want["type"]
+        assert got["separation_from_exact"] == pytest.approx(
+            float(want["separation"]), abs=1e-9), want["type"]
+        if "degrees_to_vartamaana" in want:
+            assert got["degrees_to_vartamaana"] == pytest.approx(
+                float(want["degrees_to_vartamaana"]), abs=1e-9)
+    assert "three types" in yogas.THE_THREE_TYPE_EXAMPLES_REPRODUCE
+
+
+def test_the_deeptamsa_windows_the_book_prints_come_back():
+    """Venus at 19° gives 12° to 26°; the Moon at 13°35' gives 1°35' to
+    25°35'; Venus at 21°20' gives 14°20' to 28°20'.
+    """
+    from hora.tajaka.aspects import aspect_span
+
+    venus_at_19 = aspect_span(int(Graha.VENUS), 180.0 + 19.0, 11)
+    assert venus_at_19["from"] % 30 == pytest.approx(12.0)
+    assert venus_at_19["to"] % 30 == pytest.approx(26.0)
+
+    moon_at_13_35 = aspect_span(int(Graha.MOON), 120.0 + 13.0 + 35 / 60, 3)
+    assert moon_at_13_35["from"] % 30 == pytest.approx(1 + 35 / 60)
+    assert moon_at_13_35["to"] % 30 == pytest.approx(25 + 35 / 60)
+
+    venus_at_21_20 = aspect_span(int(Graha.VENUS), 180.0 + 21.0 + 20 / 60, 11)
+    assert venus_at_21_20["from"] % 30 == pytest.approx(14 + 20 / 60)
+    assert venus_at_21_20["to"] % 30 == pytest.approx(28 + 20 / 60)
+
+
+def test_vartamaana_is_the_orb_test_already_built():
+    """(i) restates §29.2.3's own rule, so the two must agree in every chart.
+    """
+    random.seed(2923)
+    for _ in range(2000):
+        a, b = random.sample(range(7), 2)
+        got = yogas.ithasala(faster=a, slower=b,
+                             faster_longitude=random.uniform(0, 360),
+                             slower_longitude=random.uniform(0, 360))
+        assert got["vartamaana"] == got["present_within_orb"]
+
+
+def test_every_poorna_is_also_a_vartamaana():
+    """1° against a smallest deeptamsa of 7°, so poorna nests inside."""
+    from hora.tajaka.aspects import DEEPTAMSA
+
+    assert min(DEEPTAMSA.values()) > yogas.POORNA_DEGREES
+
+    random.seed(2924)
+    poornas = 0
+    for _ in range(4000):
+        a, b = random.sample(range(7), 2)
+        got = yogas.ithasala(faster=a, slower=b,
+                             faster_longitude=random.uniform(0, 360),
+                             slower_longitude=random.uniform(0, 360))
+        if got["poorna"]:
+            poornas += 1
+            assert got["vartamaana"] is True
+            assert got["type"] == "Poorna"
+    assert poornas > 20
+    assert "every poorna ithasala is also a" in (
+        yogas.POORNA_IS_A_KIND_OF_VARTAMAANA)
+
+
+def test_bhavishya_excludes_the_other_two():
+    random.seed(2925)
+    for _ in range(4000):
+        a, b = random.sample(range(7), 2)
+        got = yogas.ithasala(faster=a, slower=b,
+                             faster_longitude=random.uniform(0, 360),
+                             slower_longitude=random.uniform(0, 360))
+        if got["bhavishya"]:
+            assert got["vartamaana"] is False and got["poorna"] is False
+            assert got["type"] == "Bhavishya"
+            assert 0 < got["degrees_to_vartamaana"] <= 1.0
+
+
+def test_all_three_types_are_one_subtraction():
+    """The separation against the smaller deeptamsa decides everything."""
+    random.seed(2926)
+    for _ in range(3000):
+        a, b = random.sample(range(7), 2)
+        got = yogas.ithasala(faster=a, slower=b,
+                             faster_longitude=random.uniform(0, 360),
+                             slower_longitude=random.uniform(0, 360))
+        if not got["aspects_by_house"] or not got["faster_is_less_advanced"]:
+            assert got["type"] is None
+            continue
+        gap, orb = got["separation_from_exact"], got["binding_deeptamsa"]
+        assert got["vartamaana"] == (gap <= orb)
+        assert got["poorna"] == (gap <= 1.0)
+        assert got["bhavishya"] == (orb < gap <= orb + 1.0)
+    assert "smaller deeptamsa" in yogas.ALL_THREE_TYPES_READ_ONE_SEPARATION
+
+
+def test_the_binding_orb_is_the_smaller_of_the_two():
+    got = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.VENUS),
+                         faster_longitude=134.0, slower_longitude=199.0)
+    assert got["deeptamsa_of_faster"] == 12.0
+    assert got["deeptamsa_of_slower"] == 7.0
+    assert got["binding_deeptamsa"] == 7.0
+
+
+def test_a_separating_pair_has_no_type_at_all():
+    """None of the three survives the faster planet being ahead."""
+    got = yogas.ithasala(faster=int(Graha.MOON), slower=int(Graha.VENUS),
+                         faster_longitude=120.0 + 25.0, slower_longitude=199.0)
+    assert got["faster_is_less_advanced"] is False
+    assert got["type"] is None
+    assert (got["vartamaana"], got["poorna"], got["bhavishya"]) == (
+        False, False, False)
+
+
+def test_a_bhavishya_can_never_reach_the_end_of_a_rasi():
+    """The obvious worry — the faster planet changing sign as it advances,
+    taking the whole-sign aspect with it — cannot arise. A bhavishya needs a
+    separation above the binding orb, so the faster planet is below 23° of
+    its rasi and a further degree leaves it below 24°.
+    """
+    from hora.tajaka.aspects import DEEPTAMSA
+
+    smallest = min(DEEPTAMSA.values())
+    assert smallest == 7.0
+
+    random.seed(2927)
+    seen = 0
+    for _ in range(6000):
+        a, b = random.sample(range(7), 2)
+        got = yogas.ithasala(faster=a, slower=b,
+                             faster_longitude=random.uniform(0, 360),
+                             slower_longitude=random.uniform(0, 360))
+        if got["degrees_to_vartamaana"] is not None:
+            assert got["bhavishya_crosses_a_rasi"] is False
+        if got["bhavishya"]:
+            seen += 1
+            assert got["faster_advancement"] < 30.0 - smallest
+    assert seen > 20
+    assert "cannot take it out of the sign" in (
+        yogas.BHAVISHYA_CANNOT_REACH_THE_END_OF_A_RASI)
+
+
+def test_the_bhavishya_example_swaps_two_rasi_names():
+    """Venus is put in Le where the arithmetic needs Li, and his window in Li
+    where it needs Le. Both are checkable from the numbers.
+    """
+    from hora.tajaka.aspects import aspect_on_house
+
+    # If Venus were in Le with the Moon the aspect would be a conjunction,
+    # not the sextile the paragraph names.
+    assert aspect_on_house(1)["name"] == "Conjunction"
+    assert aspect_on_house(3)["name"] == "Sextile aspect"
+
+    bhavishya = yogas.ITHASALA_TYPE_EXAMPLES[2]
+    assert bhavishya["venus"] == "21 Li 20"
+    assert int(float(bhavishya["venus_longitude"]) // 30) == 6      # Libra
+    assert int(float(bhavishya["moon_longitude"]) // 30) == 4       # Leo
+    assert "Le for Li, then Li for Le" not in yogas.ITHASALA_RULE
+    assert "the two rasi names are exchanged" in (
+        yogas.THE_BHAVISHYA_EXAMPLE_SWAPS_TWO_RASI_NAMES)

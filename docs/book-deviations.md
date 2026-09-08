@@ -2703,3 +2703,32 @@ measurement is held in
 
 **Closes when:** you confirm the reading, or JHora shows which order it uses —
 see OI-160, which is the larger question of the list against true speed.
+
+
+---
+
+## D-82 · §29.2.3's bhavishya example writes Le for Li, then Li for Le
+
+**Status: BOOK DEVIATION — every number in the example is right and both rasi
+names are exchanged. Held as printed; the constants carry the corrected
+placements.**
+
+The example opens: "Suppose Moon is at 13°35' in Le and Venus is at 21°20' in
+**Le**." Venus is in **Li**, and the paragraph itself proves it three ways —
+it calls the aspect a **sextile**, which Leo to Leo is not (that is a
+conjunction); it puts the Moon's sextile "on Li"; and it computes Venus's
+window from 21°20' and then tests a **Leo** degree against it.
+
+Computing that window it writes: "the deeptaamsa of Venus's sextile aspect on
+Le extends from 14°20' to 28°20' **in Li**." That one is **in Le** — it is
+Venus's aspect *on Leo*, and the next sentence reads "Moon is at 13°35' and
+this is outside Venus's deeptaamsa", comparing a Leo degree to it.
+
+So the two slips mirror each other: Le where Li is meant, then Li where Le is.
+
+**What we do.** `ITHASALA_TYPE_EXAMPLES` records Venus at "21 Li 20" with the
+longitude to match, and every figure the example prints reproduces: the Moon's
+window 1°35'–25°35', Venus's 14°20'–28°20', the separation 7°45', and the
+0°45' the book computes by hand for the Moon to reach vartamaana.
+
+**Closes when:** you confirm the reading, or a later printing corrects it.

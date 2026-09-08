@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.3 and its example (19)
+### Chapter 29 — §29.1 to §29.2.3, with the three types (26)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1739,6 +1739,12 @@ footnote can. What follows is prose and findings.
 | `A_NODES_ITHASALA_CANNOT_BE_ORBED` | Ours: the third hole, still open — footnote 83 ranks the nodes and §28.2 gives them no orb. OI-161 |
 | `ITHASALA_EXAMPLE` · `THE_EXAMPLE_CHECKS_OUT_ON_ALL_FOUR_CLAIMS` | The example as data, and its four claims, all reproducing |
 | `THE_SPEED_ORDER_IS_A_LIST_NOT_A_MEASUREMENT` · `THE_NODES_ARE_THE_ONE_PLACE_THE_ORDER_IS_WRONG` | Ours: 22 of 36 pairs invert against true speed, and the nodes are misplaced outright. OI-160, D-81 |
+| `ITHASALA_TYPES` · `ITHASALA_TYPE_EXAMPLES` | The three types and their three worked cases, verbatim and as data |
+| `POORNA_IS_A_KIND_OF_VARTAMAANA` | Ours: poorna needs 1° and the smallest deeptamsa is 7°, so every poorna is a vartamaana; only bhavishya excludes the others |
+| `ALL_THREE_TYPES_READ_ONE_SEPARATION` | Ours: one subtraction decides all three — inside the binding orb, inside a degree, or up to a degree outside |
+| `BHAVISHYA_CANNOT_REACH_THE_END_OF_A_RASI` | Ours: the sign-change worry cannot arise, because a bhavishya puts the faster planet below 23° of its rasi |
+| `THE_BHAVISHYA_EXAMPLE_SWAPS_TWO_RASI_NAMES` | Le written for Li and then Li for Le; every number is right |
+| `THE_THREE_TYPE_EXAMPLES_REPRODUCE` | Ours: all three, and every printed window, to the arcminute |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---
