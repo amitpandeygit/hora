@@ -598,31 +598,6 @@ and misses in the D-10.
 1926 at 78 E 10 / 26 N 13 and 26 N 14, or a later section states the model.
 
 
-### OI-124 — which chart §15.5.2's advancement rule reads, in a varga dasa
-
-**Waiting on the book.** Exercise 29's answer gives its dasa seed as "Le is
-stronger than Aq because Sun is more advanced in his rasi than Saturn" — the
-last rule of §15.5.2. Our cascade never reaches it: rule 2 decides two to one,
-Jupiter aspecting both from Li while Mercury reaches only Le from Cp. Same
-winner, so nothing is wrong today.
-
-But the reason the answer gives only works in the **rasi** chart:
-
-| | Sun | Saturn | stronger |
-|---|---|---|---|
-| rasi chart | 19 Ta 29 | 6 Cn 17 | Le, the book's answer |
-| navamsa | 25.35° | 26.55° | **Aq**, which would reverse the exercise |
-
-Everything else in §18.5 is read in the varga — Example 71 showed even dignity
-is. Either the prose reaches for a reason rather than the first one, which the
-book has done before, or advancement is the one thing counted in the rasi
-chart.
-
-**What we do:** nothing. No chart yet ties past rule 5 in a varga, so the
-question has never been live; `stronger` reads the longitudes it is given.
-
-**Closes when:** a varga example ties past rule 5, or one states which chart.
-
 ### OI-136 — whether Niryaana Shoola has a Ketu exception too
 
 **Waiting on the book.** §18.2.1 and §19.2 give the Saturn exception and a Ketu
@@ -2735,6 +2710,31 @@ containing 7th lord" — is checked and holds; it is the timing that does not.
 
 **Closes when:** a later section states the varsha antardasa rule, or a second
 worked varsha antardasa fixes the seed.
+
+
+### OI-178 — Exercise 49's second-cycle dates are twenty-five days out
+
+**Waiting on the book.** Everything else in the exercise reproduces: the varsha
+pravesh to 6.5 seconds, every longitude and every D-16 box, all four readings
+in the solution, the seed Pisces, the trinal order Pi, Cn, Sc, Sg, Ar, Le, and
+Cancer's second-cycle length of **24 solar days** — which is exactly the width
+of the printed 16 January to 9 February 1996 window.
+
+The **position** does not. Our first cycle totals 252 solar days and the second
+opens with Pisces's 9, so the second-cycle Cancer runs **22 December 1995 to 15
+January 1996**, twenty-five days before the printed window.
+
+Nothing tried closes it: dropping §18.2.2's dignities moves it three days the
+wrong way, reading the days as the solar days §30.4 defines moves it four the
+right way, and taking the dignities from the rasi chart makes it worse. A
+twenty-five day gap is about eight years of dasa, so it is a length somewhere
+in the first cycle rather than a day-counting convention.
+
+Every other Varsha Narayana date in the chapter is out by a day or two and
+Example 125's lands exactly. This one is different in kind.
+
+**Closes when:** a worked first cycle prints its lengths, or a later example
+reaches a second cycle with dates.
 
 
 ---

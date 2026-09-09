@@ -2294,3 +2294,257 @@ def test_the_chapter_works_four_vargas():
     for varga, house in worked.items():
         assert house_for_varga(varga) == house
     assert len(set(worked)) == 4
+
+
+# --------------------------------------------------------------------------
+# Exercise 49 and Chart 71
+# --------------------------------------------------------------------------
+
+from hora.dasha.annual import exercise_49 as ex49
+
+_E49_PRAVESH = from_local(**ex49.VARSHA_PRAVESH)
+
+
+def _e49_annual():
+    return compute_chart(_E49_PRAVESH, _EX48_PLACE, _SETTINGS)
+
+
+def _e49_d16():
+    from hora.charts.vargas import d16_shodasamsa
+
+    chart = _e49_annual()
+    signs = {g: int(d16_shodasamsa(chart.positions[g].longitude).sign)
+             for g in range(9)}
+    full = {g: signs[g] * 30.0 + (chart.positions[g].longitude % 1.875) * 16
+            for g in range(9)}
+    return signs, full, int(d16_shodasamsa(chart.lagna_longitude).sign)
+
+
+def test_exercise_49_is_transcribed():
+    assert "bought a car in 1995-96" in ex49.EXERCISE_49
+    assert "Varsha Narayana dasa of D-16" in ex49.EXERCISE_49
+    assert "3:28:36 am (IST)" in ex49.EXERCISE_49_ANSWER
+    assert "Pi is stronger than Vi" in ex49.THE_SOLUTION
+    assert "Cancer dasa in the second cycle ran during Jan 16-Feb 9, 1996" in (
+        ex49.THE_SOLUTION)
+    assert ex49.VARGA == 16 and ex49.ANNUAL_YEAR == 26
+
+
+def test_chart_71_and_its_d16_reproduce():
+    from hora.charts.book import chart as record
+    from hora.charts.book import longitudes
+    from hora.core.const import RASI_ABBR
+
+    chart = _e49_annual()
+    printed = longitudes(71)
+    ids = {"Sun": 0, "Moon": 1, "Mars": 2, "Merc": 3, "Jup": 4, "Ven": 5,
+           "Sat": 6, "Rahu": 7, "Ketu": 8}
+    for name, index in ids.items():
+        gap = (((chart.positions[index].longitude - printed[name] + 180) % 360)
+               - 180) * 60
+        assert 0.0 < gap < 1.0, (name, gap)
+    assert chart.positions[4].is_retrograde is True          # Jup (R)
+
+    signs, _, lagna = _e49_d16()
+    drawn = record(71)["divisional"]["D16"]
+    for name, index in ids.items():
+        assert RASI_ABBR[signs[index]] == drawn[name], name
+    assert RASI_ABBR[lagna] == drawn["Asc"] == "Li"
+
+
+def test_exercise_49s_varsha_pravesh_reproduces():
+    from hora.core.ephemeris import get_ephemeris
+    from hora.tajaka.annual import varsha_pravesh
+
+    eph = get_ephemeris(_SETTINGS)
+    natal_sun = compute_chart(_EX48_BIRTH, _EX48_PLACE,
+                              _SETTINGS).positions[0].longitude
+    got = varsha_pravesh(lambda jd: eph.positions(jd, [0])[0].longitude,
+                         natal_sun, _EX48_BIRTH.jd_ut, ex49.ANNUAL_YEAR)
+    assert 0.0 < (got["jd"] - _E49_PRAVESH.jd_ut) * 86400.0 < 8.0
+
+
+def test_every_reading_in_the_solution_reproduces():
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD, Graha
+    from hora.core.constants.graha import EXALTATION_RASI
+    from hora.dasha.annual.varsha_narayana import (
+        house_for_varga,
+        progressed_lagna,
+    )
+
+    signs, _, lagna = _e49_d16()
+    assert RASI_ABBR[lagna] == "Li"
+    fourth = (lagna + 3) % 12
+    assert RASI_ABBR[fourth] == "Cp"
+    assert [g for g in range(9) if signs[g] == fourth] == []   # not strong
+
+    venus = signs[int(Graha.VENUS)]
+    assert RASI_ABBR[venus] == "Ar"
+    from_venus = (venus + 3) % 12
+    assert RASI_ABBR[from_venus] == "Cn"
+    assert signs[int(Graha.JUPITER)] == from_venus
+    assert from_venus == int(EXALTATION_RASI[int(Graha.JUPITER)])
+
+    third = (lagna + 2) % 12
+    assert str(GRAHA_NAMES[int(RASI_LORD[third])]) == "Jupiter"
+
+    muntha = progressed_lagna(5, ex49.ANNUAL_YEAR)["rasi"]
+    assert RASI_ABBR[muntha] == "Li"
+    assert house_for_varga(ex49.VARGA) == 4
+    seat = (muntha + 3) % 12
+    assert RASI_ABBR[seat] == "Cp"
+    assert str(GRAHA_NAMES[int(RASI_LORD[seat])]) == "Saturn"
+    assert RASI_ABBR[signs[int(Graha.SATURN)]] == "Vi"
+    assert "whose lord Saturn is in Virgo" in (
+        ex49.EVERY_READING_IN_THE_SOLUTION_REPRODUCES)
+
+
+def test_the_seed_comparison_closes_oi_124():
+    """Rules 1-5 tie in the D-16; only the rasi chart's rule 6 gives Pisces.
+    """
+    from hora.charts.rasi_strength import (
+        ADVANCEMENT_IS_READ_IN_THE_RASI_CHART,
+        stronger,
+    )
+    from hora.core.const import RASI_ABBR
+
+    chart = _e49_annual()
+    rasi = {g: chart.positions[g].longitude for g in range(9)}
+    _, d16, _ = _e49_d16()
+    virgo, pisces = RASI_ABBR.index("Vi"), RASI_ABBR.index("Pi")
+
+    in_varga = stronger(virgo, pisces, d16)
+    assert in_varga.decided_by == "6"
+    assert in_varga.winner == virgo                          # not the book's
+
+    mixed = stronger(virgo, pisces, d16, advancement_longitudes=rasi)
+    assert mixed.decided_by == "6"
+    assert mixed.winner == pisces                            # the book's
+    assert "11" in mixed.reason and "21" in mixed.reason
+    assert "reads the rasi chart" in ADVANCEMENT_IS_READ_IN_THE_RASI_CHART
+
+
+def test_the_other_four_seeds_are_decided_in_the_varga_at_rule_one():
+    """Three of the four come out wrong from the rasi chart, so rules 1 to 5
+    read the varga.
+    """
+    from hora.charts.rasi_strength import stronger
+    from hora.charts.vargas import (
+        d4_chaturthamsa,
+        d7_saptamsa,
+        d9_navamsa,
+        d24_chaturvimsamsa,
+    )
+    from hora.core.const import RASI_ABBR
+
+    cases = (
+        (_PRAVESH, d9_navamsa, 30 / 9, "Sc", "Ta"),
+        (_E123_PRAVESH, d4_chaturthamsa, 7.5, "Ar", "Li"),
+        (_E124_PRAVESH, d24_chaturvimsamsa, 1.25, "Ar", "Li"),
+        (_E125_PRAVESH, d7_saptamsa, 30 / 7, "Cp", "Cn"),
+    )
+    wrong_from_rasi = 0
+    for instant, varga, width, printed, other in cases:
+        chart = compute_chart(instant, _EX48_PLACE, _SETTINGS)
+        rasi = {g: chart.positions[g].longitude for g in range(9)}
+        divided = {g: int(varga(rasi[g]).sign) * 30.0
+                   + (rasi[g] % width) * (30 / width) for g in range(9)}
+        a, b = RASI_ABBR.index(printed), RASI_ABBR.index(other)
+        in_varga = stronger(a, b, divided)
+        assert in_varga.decided_by == "1"
+        assert RASI_ABBR[in_varga.winner] == printed
+        if RASI_ABBR[stronger(a, b, rasi).winner] != printed:
+            wrong_from_rasi += 1
+    assert wrong_from_rasi == 3
+
+
+def test_the_seed_decides_the_movement_too():
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import progression
+
+    signs, _, _ = _e49_d16()
+    pisces = progression(11, occupants={g for g in range(9) if signs[g] == 11})
+    assert pisces.movement == "trinal"
+    assert pisces.exception is None
+    assert list(pisces.sign_names[:6]) == [
+        "Pisces", "Cancer", "Scorpio", "Sagittarius", "Aries", "Leo"]
+
+    virgo = progression(5, occupants={g for g in range(9) if signs[g] == 5})
+    assert int(Graha.SATURN) in {g for g in range(9) if signs[g] == 5}
+    assert virgo.exception == "Saturn"
+    assert list(virgo.sign_names[:3]) != list(pisces.sign_names[:3])
+    assert "would have taken the Saturn exception" in (
+        ex49.THE_SEED_DECIDES_THE_MOVEMENT_TOO)
+
+
+def test_the_second_cycle_length_reproduces_and_its_position_does_not():
+    import swisseph as swe
+
+    from hora.core.const import RASI_ABBR, RASI_LORD
+    from hora.core.constants.graha import DEBILITATION_RASI, EXALTATION_RASI
+    from hora.dasha.annual.varsha_narayana import compressed_days
+    from hora.dasha.rasi.narayana import (
+        dasa_length,
+        progression,
+        second_cycle_length,
+    )
+
+    signs, _, _ = _e49_d16()
+    order = progression(11, occupants={g for g in range(9) if signs[g] == 11})
+
+    def dignity(graha):
+        if graha in (7, 8):
+            return None
+        if signs[graha] == int(EXALTATION_RASI[graha]):
+            return "exalted"
+        if signs[graha] == int(DEBILITATION_RASI[graha]):
+            return "debilitated"
+        return None
+
+    firsts, elapsed = {}, 0
+    for rasi in order.signs:
+        lord = int(RASI_LORD[rasi])
+        firsts[rasi] = dasa_length(rasi=rasi, lord=lord, lord_sign=signs[lord],
+                                   lord_dignity=dignity(lord)).years
+        elapsed += compressed_days(firsts[rasi])
+
+    cancer = RASI_ABBR.index("Cn")
+    assert firsts[cancer] == 4
+    assert second_cycle_length(firsts[cancer]) == 8
+    assert compressed_days(8) == ex49.PRINTED_CANCER["days"] == 24
+
+    # The printed window is 24 days wide.
+    opens = from_local(*ex49.PRINTED_CANCER["from"], 0, 0, 0.0,
+                       utc_offset_hours=5.5).jd_ut
+    closes = from_local(*ex49.PRINTED_CANCER["to"], 0, 0, 0.0,
+                        utc_offset_hours=5.5).jd_ut
+    assert closes - opens == 24.0
+
+    # But ours opens twenty-five days earlier.
+    for rasi in order.signs:
+        if rasi == cancer:
+            break
+        elapsed += compressed_days(second_cycle_length(firsts[rasi]))
+
+    def day(offset):
+        year, month, dom, _ = swe.revjul(
+            _E49_PRAVESH.jd_ut + offset + 5.5 / 24.0)
+        return int(year), int(month), int(dom)
+
+    assert day(elapsed) == (1995, 12, 22)
+    assert day(elapsed + 24) == (1996, 1, 15)
+    gap = opens - (_E49_PRAVESH.jd_ut + elapsed)
+    assert 24 < gap < 26
+    assert "twenty-five days early" in (
+        ex49.THE_SECOND_CYCLE_POSITION_IS_TWENTY_FIVE_DAYS_OUT)
+
+
+def test_the_varga_house_rule_holds_a_fifth_time():
+    from hora.dasha.annual.varsha_narayana import house_for_varga
+
+    worked = {9: 9, 4: 4, 24: 12, 7: 7, 16: 4}
+    for varga, house in worked.items():
+        assert house_for_varga(varga) == house
+    assert len(worked) == 5
+    assert "five vargas and one rule" in (
+        ex49.THE_VARGA_HOUSE_RULE_HOLDS_A_FIFTH_TIME)

@@ -483,6 +483,13 @@
         "number": 70,
         "recomputable": true,
         "title": "Childbirth \u2014 the 1998-99 annual chart of Exercise 48's native, drawn in D-7"
+      },
+      {
+        "birth": "April 5, 1995, 3:28:36 am (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 30, Exercise 49",
+        "number": 71,
+        "recomputable": true,
+        "title": "Bought a car \u2014 the 1995-96 annual chart of Exercise 48's native, drawn in D-16"
       }
     ],
     "not_supplied": [
@@ -550,7 +557,8 @@
       67,
       68,
       69,
-      70
+      70,
+      71
     ]
   },
   "status": 200

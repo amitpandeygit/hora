@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1 to §30.4 and Examples 122 to 125 (99)
+### Chapter 30 — §30.1 to §30.4, complete (109)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1897,6 +1897,19 @@ exist to check the section's own figures, and one of them fails.
 | `THE_VARGA_HOUSE_RULE_HOLDS_A_FOURTH_TIME` | Ours: D-7 takes the 7th, after D-9's 9th, D-4's 4th and D-24's 12th |
 | `THE_PUTRA_SAHAM_REPRODUCES` | Ours: 23 Ar 33 in its night form, ruled by Mars, who is in the 5th of the rasi chart |
 | `THE_PARAGRAPH_MIXES_TWO_KINDS_OF_ASPECT` · `THE_SECTION_SAYS_THREE_OF_THE_SIX_WOULD_HAVE_DONE` | Ours: graha drishti for Jupiter and Mars, rasi drishti for Venus and the putra pada, and the section rests on two reasons of six |
+| `EXERCISE_49` · `EXERCISE_49_ANSWER` · `THE_SOLUTION` · `BIRTH` · `PLACE` · `VARSHA_PRAVESH` · `PRINTED_CANCER` | Exercise 49 verbatim, its worked solution and its data |
+| `THE_SEED_COMPARISON_CLOSES_OI_124` · `THE_SEED_DECIDES_THE_MOVEMENT_TOO` | Ours: the first varga seed to tie past rule 5, and getting it wrong would have changed every dasa in the year. OI-124 closed |
+| `EVERY_READING_IN_THE_SOLUTION_REPRODUCES` · `THE_VARGA_HOUSE_RULE_HOLDS_A_FIFTH_TIME` | Ours: all four readings, and D-16 taking the 4th house |
+| `THE_SECOND_CYCLE_LENGTH_REPRODUCES` · `THE_SECOND_CYCLE_POSITION_IS_TWENTY_FIVE_DAYS_OUT` | Ours: 24 solar days as printed, twenty-five days early. OI-178 |
+
+### Chapter 15 — §15.5.2's advancement, revisited from chapter 30 (1)
+
+`charts/rasi_strength.py`. The rule **is** built and always was; what chapter
+30 added is which chart it reads.
+
+| constant | why it is not consumed |
+|---|---|
+| `ADVANCEMENT_IS_READ_IN_THE_RASI_CHART` | Ours: rules 1 to 5 read the varga and rule 6 reads the rasi chart, settled by Exercise 49. OI-124 closed |
 
 ---
 

@@ -2760,6 +2760,48 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "example says."
         ),
     },
+    71: {
+        "title": "Bought a car — the 1995-96 annual chart of Exercise 48's "
+                 "native, drawn in D-16",
+        "birth": "April 5, 1995, 3:28:36 am (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1995, "month": 4, "day": 5, "hour": 3, "minute": 28,
+            "second": 36.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "3 Aq 59", "Sun": "20 Pi 52", "Moon": "14 Ta 40",
+            "Mars": "20 Cn 06", "Merc": "11 Pi 04", "Jup": "21 Sc 34",
+            "Ven": "15 Aq 26", "Sat": "24 Aq 48", "Rahu": "13 Li 00",
+            "Ketu": "13 Ar 00", "HL": "4 Cp 31", "GL": "11 Vi 19",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Jup": "AmK", "Sun": "BK", "Mars": "MK",
+            "Ven": "PK", "Rahu": "PiK", "Moon": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Jup",),
+        "divisional": {
+            "D16": {
+                "Moon": "Pi", "Ven": "Ar", "Merc": "Ta", "GL": "Ge",
+                "HL": "Ge", "Mars": "Aq", "AL": "Cn", "Jup": "Cn",
+                "Sun": "Sc", "Rahu": "Li", "Asc": "Li", "Ketu": "Li",
+                "Sat": "Vi",
+            },
+        },
+        "events": {"bought a car": "1995-96"},
+        "first_seen": "chapter 30, Exercise 49",
+        "note": (
+            "Not a nativity. The **annual chart** of Exercise 48's native for "
+            "1995-96, cast for the Sun's return to his natal 20 Pi 52 in his "
+            "26th year, and the fourth chart in the register drawn in a varga "
+            "-- a D-16 -- with rasi longitudes beneath. The varsha pravesh "
+            "reproduces to 6.5 seconds, every longitude within an arcminute "
+            "and every D-16 box. Its seed comparison is the case that closed "
+            "OI-124: Virgo and Pisces tie past rule 5 in the D-16, and only "
+            "the **rasi** chart's advancements give the printed Pisces. Its "
+            "second-cycle dates do not reproduce -- see OI-178."
+        ),
+    },
 }
 
 

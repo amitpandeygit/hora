@@ -219,6 +219,30 @@ def rule_2_count(
     return count, why
 
 
+#: **Finding, and Exercise 49 settles it.** When §15.5's comparison is applied
+#: to a **varga** — as chapter 30's Varsha Narayana dasas do to pick a seed —
+#: rules 1 to 5 read the varga chart and rule 6, the lords' **advancement**,
+#: reads the **rasi** chart.
+#:
+#: Four of chapter 30's five varga seeds are decided at rule 1 by the varga's
+#: own occupants, and three of those four would come out wrong from the rasi
+#: chart. Exercise 49 is the first to tie past rule 5: in its D-16 Virgo and
+#: Pisces hold one planet each and nothing separates them until rule 6, where
+#: the D-16 gives Mercury 27°16' against Jupiter's 15°09' and so **Virgo** —
+#: but the book says "Pi is stronger than Vi". In the **rasi** chart Mercury
+#: stands at 11 Pi 04 and Jupiter at 21 Sc 34, so Jupiter is the more advanced
+#: and **Pisces** wins, which is the book's answer.
+#:
+#: `stronger` takes `advancement_longitudes` for this. Passing nothing leaves
+#: every existing caller exactly as it was. OI-124 closed.
+ADVANCEMENT_IS_READ_IN_THE_RASI_CHART = (
+    "Section 15.5.2's advancement rule reads the rasi chart even when the "
+    "rest of the cascade is applied to a varga. Exercise 49's D-16 ties past "
+    "rule 5, the varga's advancements give Virgo and the rasi chart's give "
+    "Pisces, and the book says Pisces."
+)
+
+
 def stronger(
     first: int,
     second: int,
@@ -226,6 +250,7 @@ def stronger(
     purpose: str = "phalita",
     dasa_years: dict[int, float] | None = None,
     atma_karaka_rasi: int | None = None,
+    advancement_longitudes: dict[int, float] | None = None,
 ) -> RasiVerdict:
     """Which of two rasis is stronger, by §15.5.2's cascade.
 
@@ -422,7 +447,13 @@ def stronger(
         detail + " — tie (always so when comparing a rasi and the 7th from it)")
 
     # --- Rule 6 ---
-    advances = {r: advancement(longitudes[lords[r]], lords[r]) for r in (a, b)}
+    # §15.5.2's advancement is read in the **rasi** chart even when the rest
+    # of the cascade is being applied to a varga — see
+    # `ADVANCEMENT_IS_READ_IN_THE_RASI_CHART` and OI-124, closed by
+    # Exercise 49. Callers comparing varga rasis pass the rasi longitudes
+    # here; everyone else passes nothing and the behaviour is unchanged.
+    seats = longitudes if advancement_longitudes is None else advancement_longitudes
+    advances = {r: advancement(seats[lords[r]], lords[r]) for r in (a, b)}
     detail = "; ".join(
         f"{RASI_NAMES[r]}'s lord {GRAHA_NAMES[lords[r]]} advanced "
         f"{int(adv)}°{round((adv - int(adv)) * 60):02d}'"

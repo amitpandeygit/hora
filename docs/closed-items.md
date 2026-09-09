@@ -7,6 +7,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | [OI-116](#oi-116) | Example 54's Rajya saham could not be computed |
 | [OI-157](#oi-157) | Table 74 used a house as a longitude and never defined one |
 | [OI-174](#oi-174) | §30.1 gave Narayana dasa a paramayush of 120 where its cycles run to 144 |
+| [OI-124](#oi-124) | Which chart §15.5.2's advancement rule reads, in a varga dasa |
 | [OI-151](#oi-151) | §27.1's "exact position" is the sidereal longitude |
 | [OI-146](#oi-146) | one square of Figure 3 could not be read |
 | [OI-147](#oi-147) | §26.8's vedha lines were stated but not determined |
@@ -2016,3 +2017,31 @@ The 144 we derived from chapter 18's own rule — a rasi's first cycle runs 1 to
 12 years and its second is 12 minus that, so twelve rasis give 144 in every
 chart — is the book's own figure, printed here for the first time.
 `narayana_full_cycle_years` still derives it rather than asserting it.
+
+
+## OI-124 — which chart §15.5.2's advancement rule reads, in a varga dasa · **CLOSED**
+
+**Closed by Exercise 49.** The entry said it would close when "a varga example
+ties past rule 5, or one states which chart". Exercise 49 is the first in the
+book to do the former, and it answers the question.
+
+Its D-16 seed comparison is Virgo against Pisces. Each holds one planet — Saturn
+and the Moon — so rule 1 ties, and nothing separates them until rule 6:
+
+| rule 6 read in | Virgo's Mercury | Pisces's Jupiter | winner |
+|---|---|---|---|
+| the D-16 | 27°16' | 15°09' | Virgo |
+| the **rasi chart** | 11°05' | 21°34' | **Pisces** |
+
+The solution prints "Pi is stronger than Vi".
+
+The other four varga seeds in chapter 30 are all decided at **rule 1** by the
+**varga's** own occupants, and three of the four come out wrong from the rasi
+chart. So rules 1 to 5 read the varga and rule 6 reads the rasi chart, which is
+the second of the two readings this entry could not choose between — "advancement
+is the one thing counted in the rasi chart".
+
+`stronger` takes an optional `advancement_longitudes` for it. Passing nothing
+leaves every existing caller exactly as it was; a caller comparing varga rasis
+passes the rasi longitudes. The finding is recorded at
+`hora.charts.rasi_strength.ADVANCEMENT_IS_READ_IN_THE_RASI_CHART`.
