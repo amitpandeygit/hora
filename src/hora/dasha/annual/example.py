@@ -140,3 +140,134 @@ THE_SUNRISE_OFFSET_IS_NOT_A_FUNCTION_OF_LATITUDE = (
     "to disc centre at 16 N 15, against 23% at 26 N, so the offset does not "
     "grow with latitude."
 )
+
+
+# --------------------------------------------------------------------------
+# §30.2's "Timing of marriage" — why Mercury
+# --------------------------------------------------------------------------
+
+#: The five reasons §30.2 gives for Mercury's dasa bringing the marriage,
+#: verbatim in substance. Every one is checkable.
+WHY_MERCURY_GAVE_MARRIAGE: tuple[dict[str, object], ...] = (
+    {"number": 1, "reason": "Mercury is lagna lord", "holds": True},
+    {"number": 2, "reason": "he is very strong as per panchavargeeya bala",
+     "holds": True},
+    {"number": 3, "reason": "he is varsheswara (lord of the year)",
+     "holds": None},
+    {"number": 4, "reason": "he aspects vivaha saham within 3 degrees",
+     "holds": True},
+    {"number": 5,
+     "reason": ("in navamsa, which is the right chart for marriage, he is "
+                "the 7th lord, strong in a trine"),
+     "holds": True},
+)
+
+#: **Finding.** Reason (2) reproduces and survives OI-153. Mercury is in his
+#: **own** place in four of the five sources — Gemini for kshetra, his own
+#: hadda, his own drekkana, and 8.87 units of uchcha bala — and only his
+#: navamsa, Scorpio, is a neutral's, which §28.4 does not price. So his bala
+#: is between **15.97 and 17.22** depending on what the unpriced grade is
+#: worth, and §28.4.6 calls both **"very strong"**. The book's phrase is that
+#: band's name exactly. He is also the highest in the chart under either
+#: bound: 15.97 against Saturn's 14.23.
+MERCURY_IS_VERY_STRONG_WHATEVER_OI_153_DECIDES = (
+    "Mercury's pancha vargeeya bala is between 15.97 and 17.22 because his "
+    "navamsa lord is a neutral, which section 28.4 leaves unpriced. Both "
+    "bounds fall in section 28.4.6's very strong band, and both beat every "
+    "other planet in the chart."
+)
+
+#: **Finding.** Reason (4) reproduces and it is close. Mercury at 4 Ge 47 is
+#: the 7th from the vivaha saham's Sagittarius, so §28.2 gives an opposition,
+#: whose exact point is 4°47' of Sagittarius. The saham stands at 2°22', so
+#: Mercury's aspect falls **2°25'** away — inside the three degrees the
+#: section claims and inside his seven-degree deeptamsa.
+MERCURY_ASPECTS_THE_SAHAM_BY_TWO_AND_A_HALF_DEGREES = (
+    "Mercury opposes the vivaha saham's rasi and his exact aspect point is 2 "
+    "degrees 25 minutes from the saham, which is the \"within 3 degrees\" "
+    "the section claims."
+)
+
+#: **The disagreement.** Reason (3) says Mercury is varsheswara. §28.6's
+#: cascade as written does not give him.
+#:
+#: The five candidates are Venus (lord of the Sun's Taurus), Mars (natal
+#: lagna Aries), Saturn (muntha Capricorn), Mercury (annual lagna Virgo) and
+#: the Moon (Virgo's daytime triraasi lord). §28.6's main rule wants a
+#: candidate **strong by pancha vargeeya bala and holding a benefic aspect on
+#: lagna**, and no candidate is both: Mars alone aspects the lagna benefically
+#: — a sextile from the 3rd — and his bala is 6.99, only "ordinary strength",
+#: while Mercury is the only "very strong" one and his aspect is a **square**,
+#: which §28.2 calls malefic.
+#:
+#: None of the three fallbacks fires either, on their literal triggers: a
+#: candidate does have a benefic aspect, candidates do have aspects, and one
+#: candidate is very strong. That is **OI-156**, and Example 122 is the first
+#: worked case to run the cascade past its first step.
+#:
+#: Two readings give the book's Mercury and one gives Mars:
+#:
+#: * shortlist on **any** aspect on lagna, then take the highest bala — Mars,
+#:   Mercury and the Moon aspect, and Mercury's 15.97 is highest. This is the
+#:   first fallback's spirit, "even a malefic aspect may be accepted", applied
+#:   because the main rule found nobody;
+#: * take the one candidate that is **very strong** by bala — Mercury is the
+#:   only one. This is the second fallback's criterion with its trigger
+#:   ignored;
+#: * shortlist on a **benefic** aspect only, as §28.6's procedure literally
+#:   says — Mars, which is not the book's answer.
+#:
+#: `hora.tajaka.varsheswara.varsheswara` still returns Mars: §28.6 is not
+#: changed on the strength of one example without your say-so. See OI-156.
+EXAMPLE_122_RUNS_28_6S_CASCADE_AND_DISAGREES_WITH_US = (
+    "Section 30.2 says Mercury is varsheswara. Section 28.6's procedure "
+    "shortlists candidates with a benefic aspect on lagna and takes the "
+    "highest bala among them, which gives Mars. Widening the shortlist to "
+    "any aspect gives Mercury, and so does taking the only very strong "
+    "candidate."
+)
+
+#: The three readings as data, with what each gives on Chart 67.
+VARSHESWARA_READINGS: tuple[dict[str, object], ...] = (
+    {"reading": "benefic aspect on lagna, then highest bala",
+     "source": "§28.6's selection procedure, literally",
+     "gives": "Mars", "matches_the_book": False},
+    {"reading": "any aspect on lagna, then highest bala",
+     "source": "§28.6's first fallback applied when the main rule finds none",
+     "gives": "Mercury", "matches_the_book": True},
+    {"reading": "the only candidate very strong by pancha vargeeya bala",
+     "source": "§28.6's second fallback, trigger ignored",
+     "gives": "Mercury", "matches_the_book": True},
+)
+
+
+def varsheswara_readings(*, candidates_with: dict[int, dict]) -> dict:
+    """What each of the three readings gives, for one chart.
+
+    `candidates_with` maps a candidate graha to ``{"aspect_nature": str |
+    None, "bala": float | None}``. Nothing here changes §28.6; it shows the
+    three answers side by side so the disagreement is visible. See OI-156.
+    """
+    from hora.core.const import GRAHA_NAMES
+
+    def best(pool: list[int]) -> str | None:
+        scored = [g for g in pool if candidates_with[g].get("bala") is not None]
+        if not scored:
+            return None
+        return str(GRAHA_NAMES[max(scored,
+                                   key=lambda g: candidates_with[g]["bala"])])
+
+    benefic = [g for g, row in candidates_with.items()
+               if row.get("aspect_nature") == "benefic"]
+    any_aspect = [g for g, row in candidates_with.items()
+                  if row.get("aspect_nature") is not None]
+    very_strong = [g for g, row in candidates_with.items()
+                   if (row.get("bala") or 0.0) >= 15.0]
+    return {
+        "by_benefic_aspect": best(benefic),
+        "by_any_aspect": best(any_aspect),
+        "by_very_strong_bala": (str(GRAHA_NAMES[very_strong[0]])
+                                if len(very_strong) == 1 else None),
+        "readings": VARSHESWARA_READINGS,
+        "undecided": EXAMPLE_122_RUNS_28_6S_CASCADE_AND_DISAGREES_WITH_US,
+    }

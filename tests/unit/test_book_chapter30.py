@@ -416,3 +416,397 @@ def test_one_sunrise_explains_both_hl_and_gl_and_it_is_not_ours():
     assert 0.50 < fraction < 0.58              # 54% at 16 N 15
     assert "does not grow with latitude" in (
         example.THE_SUNRISE_OFFSET_IS_NOT_A_FUNCTION_OF_LATITUDE)
+
+
+# --------------------------------------------------------------------------
+# §30.2 Patyayini dasa
+# --------------------------------------------------------------------------
+
+from hora.dasha.annual import patyayini
+
+
+def _patyayini():
+    chart = _annual()
+    return patyayini.patyayini_dasa(
+        lagna=chart.lagna_longitude,
+        longitudes={g: chart.positions[g].longitude for g in range(7)},
+        start_jd=_PRAVESH.jd_ut)
+
+
+def _minutes(text: str) -> float:
+    degrees, arcminutes = text.split()
+    return float(degrees) + float(arcminutes) / 60.0
+
+
+def test_the_procedure_and_footnote_87_are_transcribed():
+    assert "specifically meant for Tajaka charts" in patyayini.PATYAYINI_SCOPE
+    steps = [row["step"] for row in patyayini.PATYAYINI_PROCEDURE]
+    assert steps == [1, 2, 3, 4]
+    assert "Krisamsas" in str(patyayini.PATYAYINI_PROCEDURE[0]["text"])
+    assert "Patyamsas" in str(patyayini.PATYAYINI_PROCEDURE[1]["text"])
+    assert "365.2425" in str(patyayini.PATYAYINI_PROCEDURE[2]["text"])
+    assert "First antardasa is the same as dasa" in str(
+        patyayini.PATYAYINI_PROCEDURE[3]["text"])
+    assert "largest krisamsa" in patyayini.FOOTNOTE_87
+    assert patyayini.PATYAYINI_YEAR_DAYS == 365.2425
+
+
+def test_the_order_matches_table_75():
+    got = _patyayini()
+    assert got["order"] == tuple(str(row["body"]) for row in patyayini.TABLE_75)
+    assert got["order"] == ("Venus", "Mercury", "Moon", "Saturn", "Lagna",
+                            "Jupiter", "Sun", "Mars")
+
+
+def test_footnote_87_is_an_identity_not_an_observation():
+    """The patyamsas telescope, so their sum is the largest krisamsa in every
+    chart — checked here and over random charts.
+    """
+    import random
+
+    got = _patyayini()
+    assert got["footnote_87_holds"] is True
+    assert got["sum_of_patyamsas"] == pytest.approx(got["largest_krisamsa"])
+    assert _minutes(patyayini.TABLE_75_DENOMINATOR) == pytest.approx(
+        _minutes(str(patyayini.TABLE_75[-1]["krisamsa"])))
+
+    random.seed(302)
+    for _ in range(300):
+        rolled = patyayini.patyayini_dasa(
+            lagna=random.uniform(0, 360),
+            longitudes={g: random.uniform(0, 360) for g in range(7)})
+        assert rolled["footnote_87_holds"] is True
+    assert "in every chart" in patyayini.THE_SUM_TELESCOPES_TO_THE_LARGEST_KRISAMSA
+
+
+def test_table_75_reproduces_cell_for_cell_from_its_own_krisamsas():
+    """Separates the arithmetic from the ephemeris: fed the book's own
+    rounded krisamsas, every fraction and every day count comes back.
+    """
+    total = _minutes(patyayini.TABLE_75_DENOMINATOR)
+    previous = 0.0
+    for row in patyayini.TABLE_75:
+        krisamsa = _minutes(str(row["krisamsa"]))
+        patyamsa = krisamsa - previous
+        previous = krisamsa
+        assert patyamsa == pytest.approx(_minutes(str(row["patyamsa"])),
+                                         abs=1e-9), row["body"]
+        fraction = patyamsa / total
+        assert fraction == pytest.approx(float(row["fraction"]), abs=5e-5)
+        days = patyayini.PATYAYINI_YEAR_DAYS * fraction
+        assert days == pytest.approx(float(row["days"]), abs=0.006)
+    assert "confirmed separately from the ephemeris" in (
+        patyayini.TABLE_75_REPRODUCES_FROM_ITS_OWN_KRISAMSAS)
+
+
+def test_the_dasa_lengths_sum_to_the_year_the_section_names():
+    got = _patyayini()
+    assert got["total_days"] == pytest.approx(365.2425)
+    assert sum(float(row["fraction"]) for row in got["rows"]) == pytest.approx(1.0)
+
+
+def test_table_75_rounds_where_chart_67_truncates():
+    """Five of the eight differ by an arcminute, and our value is between
+    every pair. D-80, from inside one example.
+    """
+    from hora.charts.book import longitudes
+
+    chart = _annual()
+    printed = longitudes(67)
+    ids = {"Sun": 0, "Moon": 1, "Mars": 2, "Mercury": 3, "Jupiter": 4,
+           "Venus": 5, "Saturn": 6}
+    disagree = 0
+    for row in patyayini.TABLE_75:
+        body = str(row["body"])
+        ours = (chart.lagna_longitude if body == "Lagna"
+                else chart.positions[ids[body]].longitude) % 30
+        short = {"Mercury": "Merc", "Jupiter": "Jup", "Venus": "Ven",
+                 "Saturn": "Sat", "Lagna": "Asc"}
+        diagram = printed[short.get(body, body)] % 30
+        table = _minutes(str(row["krisamsa"]))
+        assert int(ours * 60) % 60 == round(diagram * 60) % 60, body
+        assert round(ours * 60) % 60 == round(table * 60) % 60, body
+        if abs(table - diagram) > 1e-9:
+            disagree += 1
+            assert diagram < ours < table, body
+    assert disagree == 5
+    assert "truncates to the diagram and" in (
+        patyayini.TABLE_75_ROUNDS_WHERE_CHART_67_TRUNCATES)
+
+
+def test_the_two_dasa_spans_the_section_states():
+    """Venus June 1-26, Mercury June 26 - Aug 13, and the marriage inside
+    Mercury's.
+    """
+    import swisseph as swe
+
+    got = _patyayini()
+    rows = {str(row["body"]): row for row in got["rows"]}
+    assert float(rows["Venus"]["days"]) == pytest.approx(25.0, abs=0.1)
+    assert float(rows["Mercury"]["days"]) == pytest.approx(48.0, abs=0.3)
+
+    def day(jd):
+        year, month, dom, _ = swe.revjul(jd + 5.5 / 24.0)
+        return int(year), int(month), int(dom)
+
+    assert day(float(rows["Venus"]["from_jd"])) == (1993, 6, 1)
+    assert day(float(rows["Venus"]["to_jd"])) == (1993, 6, 26)
+    assert day(float(rows["Mercury"]["to_jd"])) == (1993, 8, 13)
+
+    wedding = from_local(1993, 7, 24, 12, 0, 0.0, utc_offset_hours=5.5).jd_ut
+    assert (float(rows["Mercury"]["from_jd"]) < wedding
+            < float(rows["Mercury"]["to_jd"]))
+
+
+def test_the_four_worked_antardasas_in_venus_dasa_reproduce():
+    got = _patyayini()
+    legs = patyayini.antardasas(got, "Venus")
+    assert [leg["antardasa"] for leg in legs[:4]] == [
+        "Venus", "Mercury", "Moon", "Saturn"]
+    for leg, want in zip(legs[:4], patyayini.VENUS_ANTARDASAS, strict=False):
+        assert leg["antardasa"] == want["antardasa"]
+        assert leg["days"] == pytest.approx(float(want["days"]), abs=0.11)
+    # And the antardasas partition the dasa exactly.
+    rows = {str(row["body"]): row for row in got["rows"]}
+    assert sum(leg["days"] for leg in legs) == pytest.approx(
+        float(rows["Venus"]["days"]))
+    assert "sum to its length" in patyayini.THE_ANTARDASAS_PARTITION_THE_DASA_EXACTLY
+
+
+def test_the_first_antardasa_is_the_dasa_lord_in_every_dasa():
+    got = _patyayini()
+    for body in got["order"]:
+        legs = patyayini.antardasas(got, body)
+        assert legs[0]["antardasa"] == body
+        assert [leg["antardasa"] for leg in legs] == sorted(
+            got["order"], key=lambda n: (list(got["order"]).index(n)
+                                         - list(got["order"]).index(body)) % 8)
+
+
+def test_the_shortest_dasa_is_the_least_robust_to_the_books_rounding():
+    got = _patyayini()
+    rows = {str(row["body"]): row for row in got["rows"]}
+    printed = {str(row["body"]): float(row["days"]) for row in patyayini.TABLE_75}
+    gaps = {name: abs(float(rows[name]["days"]) - printed[name])
+            for name in printed}
+    assert max(gaps, key=lambda n: gaps[n] / printed[n]) == "Moon"
+    assert printed["Moon"] == 0.51
+    assert float(rows["Moon"]["days"]) == pytest.approx(0.40, abs=0.02)
+    for name in printed:
+        if name != "Moon":
+            assert gaps[name] < 0.25, name
+    assert "No other dasa moves by more than" in (
+        patyayini.THE_SHORTEST_DASA_IS_THE_LEAST_ROBUST)
+
+
+def test_the_first_patyamsa_is_the_whole_krisamsa():
+    got = _patyayini()
+    first = got["rows"][0]
+    assert first["patyamsa"] == pytest.approx(first["krisamsa"])
+    assert patyayini.TABLE_75[0]["krisamsa"] == patyayini.TABLE_75[0]["patyamsa"]
+    assert "both columns" in patyayini.THE_FIRST_PATYAMSA_IS_THE_WHOLE_KRISAMSA
+
+
+def test_a_tie_gives_a_dasa_of_zero_days():
+    got = patyayini.patyayini_dasa(
+        lagna=15.0, longitudes={0: 45.0, 1: 75.0, 2: 105.0, 3: 135.0,
+                                4: 165.0, 5: 195.0, 6: 225.0})
+    assert got["ties"]
+    zero = [row for row in got["rows"] if row["days"] == 0.0]
+    assert zero
+    assert "no length" in patyayini.A_TIE_GIVES_A_DASA_OF_ZERO_DAYS
+
+
+def test_the_divisor_is_the_calendar_year_not_the_sidereal_one():
+    """The dasas run 365.2425 days; the year between two varsha praveshes is
+    a sidereal year, about 20 minutes longer.
+    """
+    from hora.core.ephemeris import get_ephemeris
+    from hora.tajaka.annual import varsha_pravesh
+
+    eph = get_ephemeris(_SETTINGS)
+    natal_sun = compute_chart(_BIRTH, _PLACE, _SETTINGS).positions[0].longitude
+
+    def sun(jd):
+        return eph.positions(jd, [0])[0].longitude
+
+    this_year = varsha_pravesh(sun, natal_sun, _BIRTH.jd_ut, 22)["jd"]
+    next_year = varsha_pravesh(sun, natal_sun, _BIRTH.jd_ut, 23)["jd"]
+    real = next_year - this_year
+    assert real == pytest.approx(365.256, abs=0.01)
+    shortfall = (real - patyayini.PATYAYINI_YEAR_DAYS) * 24 * 60
+    assert 15 < shortfall < 30                    # about twenty minutes
+    assert "twenty minutes early" in (
+        patyayini.THE_DIVISOR_IS_THE_CALENDAR_YEAR_NOT_THE_REAL_ONE)
+
+
+def test_patyayini_needs_all_seven_grahas_and_uses_no_node():
+    from hora.core.const import Graha
+
+    assert int(Graha.RAHU) not in patyayini.PATYAYINI_BODIES
+    assert int(Graha.KETU) not in patyayini.PATYAYINI_BODIES
+    assert len(patyayini.PATYAYINI_BODIES) == 7
+    with pytest.raises(patyayini.PatyayiniError, match="missing"):
+        patyayini.patyayini_dasa(lagna=0.0, longitudes={0: 1.0})
+
+
+# --------------------------------------------------------------------------
+# §30.2's "Timing of marriage" — why Mercury
+# --------------------------------------------------------------------------
+
+
+def _pancha_vargeeya_bounds():
+    """Each graha's pancha vargeeya bala as a range, because §28.4 prices no
+    neutral grade. OI-153.
+    """
+    from hora.charts.vargas import d3_drekkana, d9_navamsa
+    from hora.core.const import RASI_LORD
+    from hora.core.constants.graha import NATURAL_RELATION
+    from hora.tajaka.panchavargeeya import (
+        NAVAMSA_BALA_UNITS,
+        drekkana_bala,
+        hadda_bala,
+        hadda_lord,
+        kshetra_bala,
+        navamsa_bala,
+        uchcha_bala,
+    )
+
+    chart = _annual()
+    names = {2: "friend", 1: "neutral", 0: "enemy"}
+
+    def relation(graha, lord):
+        return ("own" if lord == graha
+                else names[int(NATURAL_RELATION[graha][lord])])
+
+    best = max(v for v in NAVAMSA_BALA_UNITS.values() if v is not None)
+    out = {}
+    for graha in range(7):
+        place = chart.positions[graha].longitude
+        parts = {
+            "kshetra": kshetra_bala(
+                relation(graha, int(RASI_LORD[int(place // 30)]))).get("units"),
+            "uchcha": uchcha_bala(graha, place)["units"],
+            "hadda": hadda_bala(
+                relation(graha, int(hadda_lord(place)["lord"]))).get("units"),
+            "drekkana": drekkana_bala(relation(
+                graha, int(RASI_LORD[int(d3_drekkana(place).sign)]))).get("units"),
+            "navamsa": navamsa_bala(relation(
+                graha, int(RASI_LORD[int(d9_navamsa(place).sign)]))).get("units"),
+        }
+        known = sum(v for v in parts.values() if v is not None)
+        unpriced = [k for k, v in parts.items() if v is None]
+        out[graha] = (known / 4.0, (known + best * len(unpriced)) / 4.0,
+                      tuple(unpriced))
+    return out
+
+
+def test_the_five_reasons_are_recorded_and_four_are_checked_here():
+    numbers = [row["number"] for row in example.WHY_MERCURY_GAVE_MARRIAGE]
+    assert numbers == [1, 2, 3, 4, 5]
+    holds = [row["holds"] for row in example.WHY_MERCURY_GAVE_MARRIAGE]
+    assert holds == [True, True, None, True, True]      # (3) is OI-156
+
+
+def test_mercury_is_very_strong_whatever_oi_153_decides():
+    """Own in four of five sources; only his navamsa lord is a neutral."""
+    from hora.core.const import Graha
+    from hora.tajaka.panchavargeeya import pancha_vargeeya_grade
+
+    bounds = _pancha_vargeeya_bounds()
+    low, high, unpriced = bounds[int(Graha.MERCURY)]
+    assert unpriced == ("navamsa",)
+    assert low == pytest.approx(15.97, abs=0.02)
+    assert high == pytest.approx(17.22, abs=0.02)
+    assert pancha_vargeeya_grade(low) == pancha_vargeeya_grade(high) == (
+        "very strong")
+
+    # And highest in the chart under either bound.
+    others = [bounds[g][1] for g in range(7) if g != int(Graha.MERCURY)]
+    assert low > max(others)
+    assert "both beat every other planet" in (
+        example.MERCURY_IS_VERY_STRONG_WHATEVER_OI_153_DECIDES)
+
+
+def test_mercury_aspects_the_vivaha_saham_within_three_degrees():
+    from hora.core.const import Graha
+    from hora.tajaka.aspects import aspect_on_house
+    from hora.tajaka.sahams import sahams
+
+    longitudes, lagna = _annual_longitudes()
+    saham = sahams(longitudes=longitudes, lagna=lagna,
+                   daytime=True)["Vivaha"]["longitude"]
+    mercury = longitudes["Mercury"]
+    house = (int(saham // 30) - int(mercury // 30)) % 12 + 1
+    assert house == 7
+    assert aspect_on_house(house)["name"] == "Opposition"
+    exact = (mercury + 30.0 * (house - 1)) % 360.0
+    gap = abs(((saham - exact + 180) % 360) - 180)
+    assert gap == pytest.approx(2 + 25 / 60, abs=0.02)
+    assert gap < 3.0
+    from hora.tajaka.aspects import deeptamsa
+
+    assert gap < deeptamsa(int(Graha.MERCURY))
+    assert "2 degrees 25 minutes" in (
+        example.MERCURY_ASPECTS_THE_SAHAM_BY_TWO_AND_A_HALF_DEGREES)
+
+
+def test_28_6s_cascade_gives_mars_where_the_section_says_mercury():
+    """OI-156's first worked case, and it disagrees with our reading."""
+    from hora.core.const import Graha
+    from hora.tajaka.varsheswara import varsheswara
+
+    chart = _annual()
+    bounds = _pancha_vargeeya_bounds()
+    got = varsheswara(
+        sun_rasi=int(chart.positions[0].longitude // 30),
+        moon_rasi=int(chart.positions[1].longitude // 30),
+        natal_lagna_rasi=0, muntha_rasi=9,
+        annual_lagna_rasi=chart.lagna_rasi, daytime=True,
+        rasis={g: int(chart.positions[g].longitude // 30) for g in range(7)},
+        pancha_vargeeya={g: bounds[g][0] for g in range(7)})
+    assert got["lord_name"] == "Mars"
+    assert [row["graha"] for row in got["candidates"]] == [
+        int(Graha.VENUS), int(Graha.MARS), int(Graha.SATURN),
+        int(Graha.MERCURY), int(Graha.MOON)]
+    assert "Section 30.2 says Mercury is varsheswara" in (
+        example.EXAMPLE_122_RUNS_28_6S_CASCADE_AND_DISAGREES_WITH_US)
+
+
+def test_two_of_the_three_readings_give_the_books_mercury():
+    from hora.core.const import Graha
+    from hora.tajaka.aspects import aspect_on_house
+
+    chart = _annual()
+    bounds = _pancha_vargeeya_bounds()
+    rasis = {g: int(chart.positions[g].longitude // 30) for g in range(7)}
+    lagna_rasi = chart.lagna_rasi
+    pool = {}
+    for graha in (int(Graha.VENUS), int(Graha.MARS), int(Graha.SATURN),
+                  int(Graha.MERCURY), int(Graha.MOON)):
+        house = (lagna_rasi - rasis[graha]) % 12 + 1
+        aspect = aspect_on_house(house)
+        pool[graha] = {"aspect_nature": None if aspect is None
+                       else aspect["nature"], "bala": bounds[graha][0]}
+
+    got = example.varsheswara_readings(candidates_with=pool)
+    assert got["by_benefic_aspect"] == "Mars"
+    assert got["by_any_aspect"] == "Mercury"
+    assert got["by_very_strong_bala"] == "Mercury"
+
+    matching = [row for row in example.VARSHESWARA_READINGS
+                if row["matches_the_book"]]
+    assert len(matching) == 2
+    assert got["undecided"] is not None
+
+
+def test_28_6_is_not_changed_on_the_strength_of_one_example():
+    """`varsheswara` still returns what §28.6's procedure says. OI-156."""
+    import inspect
+
+    from hora.tajaka import varsheswara as module
+
+    source = inspect.getsource(module)
+    assert "benefic aspect on lagna" in source
+    assert "Example 122" not in source
+    assert "OI-156" in inspect.getsource(example)

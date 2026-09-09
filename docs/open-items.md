@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**7 waiting on Amit · 122 waiting on evidence · 2 parked**
+**8 waiting on Amit · 122 waiting on evidence · 2 parked**
 
 ---
 
@@ -20,6 +20,7 @@ until the book is finished, not only the five below. Record; never re-raise.
 | OI-40 | Pick a default reading for a hora's length | The hora lord, whenever the real day is not 24h00m. Both readings supported today; 24h is the default |
 | OI-158 | Read §28.8.2's "Jupiter aspects natal vivaha saham" as chapter 10's graha drishti | The marriage rule. Graha drishti fires in 1 chart of 3; §28.2's Tajaka aspects fire in 5 of 6, which leaves it almost no content |
 | OI-169 | Read §29.2.12 as its rule states it, faster strong and slower weak, rather than as its example works it | Duhphali-Kutta. The two are exact mirrors and the book's own example contradicts its own rule |
+| OI-156 | Read §28.6's shortlist as any aspect on lagna, not only a benefic one, when no candidate is both strong and benefic | The varsheswara. Example 122's answer is Mercury and §28.6 as written gives Mars |
 | OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Seventeen** charts reproduce with mean and none with true; under `true` Chart 41's Rahu is **98'** out and Chart 39's **96'**, both a whole sign wrong |
 
 Order I would take them: OI-39 is the only unambiguous defect and the only one
@@ -2274,28 +2275,42 @@ leaves `overall` as ``None`` with the reason attached.
 **Closes when:** a later section reads a level count, or you settle it.
 
 
-### OI-156 — §28.6's cascade does not close, in two places
+### OI-156 — §28.6's cascade does not close, and Example 122 shows it
 
-**Waiting on the book.** The lord of the year is picked by a cascade, and two
-steps of it are underdetermined.
+**Waiting on you.** §28.6's main rule wants a candidate **strong by pancha
+vargeeya bala and holding a benefic aspect on lagna**; its procedure shortlists
+the benefic aspects and takes the highest bala among them; three fallbacks
+follow. The cascade has no branch for a chart where the main rule finds nobody
+but a fallback's literal trigger is also unmet.
 
-**1. The opening sentence and the procedure can disagree.** The opening says a
-candidate that is *strong* and has a benefic aspect becomes the lord; the
-operational paragraph shortlists on the aspect alone and ranks by bala. They
-pick differently when an *ordinary* candidate has a benefic aspect and the
-highest bala while a *strong* one has a lower.
+**Example 122 is that chart, and the book answers it.** §30.2 says Mercury is
+varsheswara of Chart 67. Our reading gives Mars:
 
-**2. The last two fallbacks test different things.** The third asks whether
-"none of the planets has **an** aspect on lagna", the fourth whether "none has
-a **strong** aspect". §28.2 grades aspects strong, weak and neutral, so a
-weak aspect answers the third no and the fourth yes, with no order between.
+| candidate | aspect on lagna | pancha vargeeya bala |
+|---|---|---|
+| Venus | none (6th) | 4.87, weak |
+| Mars | **sextile, benefic** (3rd) | 6.99, ordinary |
+| Saturn | none (8th) | 14.23, strong |
+| **Mercury** | square, **malefic** (4th) | **15.97, very strong** |
+| Moon | semi-sextile, neutral (12th) | 0.78, weak |
 
-`varsheswara` follows the operational paragraph, reports which step it stopped
-at, and returns no lord where the section settles none — including when two
-candidates share both the highest bala and the same number of categories,
-which §28.6 also leaves open.
+Nobody is both strong and benefic-aspecting. No fallback trigger is met either:
+a candidate does have a benefic aspect, candidates do have aspects, and one
+candidate is very strong. Three readings are available and two give Mercury:
 
-**Closes when:** a worked example runs the cascade, or you settle both.
+| reading | gives |
+|---|---|
+| shortlist on a **benefic** aspect, then highest bala — §28.6 literally | Mars |
+| shortlist on **any** aspect, then highest bala — the first fallback applied because the main rule found nobody | **Mercury** |
+| take the only candidate **very strong** by bala — the second fallback's criterion without its trigger | **Mercury** |
+
+**Not changed.** `varsheswara` still returns Mars. One worked example is
+evidence and not a licence to rewrite §28.6 without your say-so;
+`dasha.annual.example.varsheswara_readings` shows all three side by side.
+
+**Closes when:** you pick a reading, or a second worked varsheswara separates
+the two that agree here.
+
 
 ### OI-158 — §28.8.2's Jupiter aspect does not say which scheme
 

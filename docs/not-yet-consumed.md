@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1 and Example 122 (20)
+### Chapter 30 — §30.1, Example 122 and §30.2 (36)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1850,6 +1850,15 @@ exist to check the section's own figures, and one of them fails.
 | `THE_MUNTHA_IN_CAPRICORN_IS_28_1S_RULE` | Ours: §28.1's rule checked against a diagram, the chart printing no muntha longitude |
 | `THE_KARAKA_ORDER_TURNS_ON_1_6_ARCMINUTES` | Ours: all eight match and the PK/GK pair is decided by 1.6 arcminutes |
 | `THE_SUNRISE_OFFSET_IS_NOT_A_FUNCTION_OF_LATITUDE` | Ours: one sunrise fits both HL and GL, at 54% between two conventions at 16 N. OI-103 |
+| `PATYAYINI_SCOPE` · `PATYAYINI_PROCEDURE` · `FOOTNOTE_87` · `TABLE_75` · `TABLE_75_TITLE` · `TABLE_75_DENOMINATOR` · `PATYAYINI_SPANS` · `VENUS_ANTARDASAS` | §30.2 and Table 75 verbatim, and the section's worked spans and antardasas as data |
+| `THE_SUM_TELESCOPES_TO_THE_LARGEST_KRISAMSA` | Ours: footnote 87 states an identity — the patyamsas telescope — checked over 300 random charts |
+| `THE_DIVISOR_IS_THE_CALENDAR_YEAR_NOT_THE_REAL_ONE` | Ours: 365.2425 is the Gregorian year and the varsha pravesh interval is sidereal, so the dasas end about twenty minutes early |
+| `A_TIE_GIVES_A_DASA_OF_ZERO_DAYS` · `THE_FIRST_PATYAMSA_IS_THE_WHOLE_KRISAMSA` | Ours: two edges of step (2) the section does not state |
+| `TABLE_75_ROUNDS_WHERE_CHART_67_TRUNCATES` · `TABLE_75_REPRODUCES_FROM_ITS_OWN_KRISAMSAS` | Ours: the same eight bodies printed twice, five differing by an arcminute, and the table's arithmetic confirmed apart from the ephemeris. D-80 |
+| `THE_SHORTEST_DASA_IS_THE_LEAST_ROBUST` · `THE_ANTARDASAS_PARTITION_THE_DASA_EXACTLY` | Ours: the Moon's half-day dasa is a quarter longer for one arcminute of rounding, and antardasas sum to their dasa |
+| `WHY_MERCURY_GAVE_MARRIAGE` · `VARSHESWARA_READINGS` | §30.2's five reasons and the three readings of §28.6 as data |
+| `MERCURY_IS_VERY_STRONG_WHATEVER_OI_153_DECIDES` · `MERCURY_ASPECTS_THE_SAHAM_BY_TWO_AND_A_HALF_DEGREES` | Ours: reasons (2) and (4) reproduce, the first robustly across OI-153's unpriced grade |
+| `EXAMPLE_122_RUNS_28_6S_CASCADE_AND_DISAGREES_WITH_US` | Ours: §28.6 gives Mars where §30.2 says Mercury. OI-156 |
 
 ---
 
