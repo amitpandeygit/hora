@@ -2548,3 +2548,122 @@ def test_the_varga_house_rule_holds_a_fifth_time():
     assert len(worked) == 5
     assert "five vargas and one rule" in (
         ex49.THE_VARGA_HOUSE_RULE_HOLDS_A_FIFTH_TIME)
+
+
+# --------------------------------------------------------------------------
+# Chapter 30's conclusion
+# --------------------------------------------------------------------------
+
+
+def test_the_conclusion_is_transcribed():
+    assert "three dasa systems that are applicable to Tajaka annual charts" in (
+        intro.CHAPTER_CONCLUSION)
+    assert "Patyayini dasa is applicable to Tajaka monthly charts also" in (
+        intro.CHAPTER_CONCLUSION)
+    assert "Varsha Narayana dasa and Patyayini dasa give the best results" in (
+        intro.CHAPTER_CONCLUSION)
+    assert "exact month or week of the event" in intro.CHAPTER_CONCLUSION
+
+
+def test_the_ranking_is_stated_three_times_and_loosens():
+    from hora.dasha.annual import varsha_narayana as vn
+
+    # §30.3's ranking, §30.4's, and the conclusion's.
+    assert "Patyayini dasa shows the event better than Mudda dasa" not in (
+        intro.CHAPTER_CONCLUSION)
+    assert "Varsha Narayana dasa is, however, the best" in (
+        vn.THE_BOOKS_OWN_RANKING)
+    assert "Varsha Narayana dasa and Patyayini dasa give the best" in (
+        intro.CHAPTER_CONCLUSION)
+    # Mudda is last every time and never named at the top.
+    assert "Mudda" not in intro.CHAPTER_CONCLUSION.split("best results")[0]
+    assert "argues for the order" in (
+        intro.THE_RANKING_IS_STATED_THREE_TIMES_AND_LOOSENS)
+
+
+def test_only_patyayini_can_go_monthly():
+    """It reads the chart's own longitudes; the other two need a yearly
+    progression of the natal chart.
+    """
+    from hora.dasha.annual import mudda
+    from hora.dasha.annual import varsha_narayana as vn
+
+    assert "based on the longitudes of lagna and all planets" in (
+        patyayini.PATYAYINI_SCOPE)
+    assert "one constellation per year" in mudda.MUDDA_ORDER_RULE
+    assert "one rasi per year" in vn.ORDER_RULE
+    assert "a month has no such step" in intro.ONLY_PATYAYINI_CAN_GO_MONTHLY
+
+    # And patyayini needs nothing from the natal chart at all.
+    import inspect
+
+    source = inspect.getsource(patyayini.patyayini_dasa)
+    assert "natal" not in source
+
+
+def test_the_monthly_divisor_is_not_given():
+    """§27.3 makes a month 30° of solar motion; §30.2 divides a year by
+    365.2425. The conclusion picks neither figure. OI-179.
+    """
+    from hora.dasha.annual import mudda
+    from hora.tajaka.monthly import YEAR_AND_MONTH_ARE_SOLAR_ARCS
+
+    assert "A month is the period in which Sun moves by 30" in (
+        YEAR_AND_MONTH_ARE_SOLAR_ARCS)
+    assert patyayini.PATYAYINI_YEAR_DAYS == 365.2425
+    assert mudda.MUDDA_YEAR_DAYS == 360
+    assert patyayini.PATYAYINI_YEAR_DAYS / 12 == pytest.approx(30.4369,
+                                                              abs=5e-5)
+    assert mudda.MUDDA_YEAR_DAYS / 12 == 30
+    assert "monthly" not in patyayini.PATYAYINI_SCOPE
+    for row in patyayini.PATYAYINI_PROCEDURE:
+        assert "month" not in str(row["text"]).lower()
+    assert "30.4369 days and 30" in intro.THE_MONTHLY_DIVISOR_IS_NOT_GIVEN
+
+
+def test_the_resolution_claim_is_generous_for_patyayini():
+    """Example 122's dasas ran from 0.4 days to 104."""
+    got = _patyayini()
+    lengths = [float(row["days"]) for row in got["rows"]]
+    assert min(lengths) == pytest.approx(0.40, abs=0.02)
+    assert max(lengths) == pytest.approx(104.2, abs=0.3)
+    assert max(lengths) / min(lengths) > 250
+    assert "a factor of" in intro.THE_RESOLUTION_CLAIM_IS_GENEROUS_FOR_PATYAYINI
+
+
+def test_chapter_30_is_complete():
+    from hora.dasha.annual import (
+        example_123,
+        example_124,
+        example_125,
+        exercise_48,
+        exercise_49,
+        mudda,
+        patyayini,
+        varsha_narayana,
+    )
+
+    marker = intro.CHAPTER_30_IS_COMPLETE
+    assert "30.1 to §30.4" in marker.replace("§30.1", "30.1")
+    assert "Tables 75 and 76" in marker
+    assert "Charts 67 to 71" in marker
+    assert "Examples 122 to 125" in marker
+    assert "Exercises 48 and 49" in marker
+    assert "Footnotes 85 to 88" in marker
+    assert "OI-124 and OI-174" in marker
+
+    # The three dasas, all built.
+    assert callable(patyayini.patyayini_dasa)
+    assert callable(mudda.mudda_dasa)
+    assert callable(varsha_narayana.progressed_lagna)
+    # And the five worked cases, all held as data.
+    for module in (exercise_48, example_123, example_124, example_125,
+                   exercise_49):
+        assert module.PLACE == {"latitude": 16 + 15 / 60,
+                                "longitude": 81 + 12 / 60}
+
+    # All four footnotes.
+    assert "B.V. Raman" in intro.FOOTNOTE_85
+    assert "own researches" in intro.FOOTNOTE_86
+    assert "largest krisamsa" in patyayini.FOOTNOTE_87
+    assert "12 x 12 = 144" in varsha_narayana.FOOTNOTE_88

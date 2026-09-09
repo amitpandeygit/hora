@@ -169,3 +169,78 @@ def narayana_full_cycle_years() -> int:
     from hora.dasha.rasi.narayana import second_cycle_length
 
     return sum(first + second_cycle_length(first) for first in range(1, 13))
+
+
+# --------------------------------------------------------------------------
+# Chapter 30's conclusion
+# --------------------------------------------------------------------------
+
+#: The chapter's closing paragraph, verbatim.
+CHAPTER_CONCLUSION = (
+    "In this chapter, we learnt three dasa systems that are applicable to "
+    "Tajaka annual charts. Patyayini dasa is applicable to Tajaka monthly "
+    "charts also. For annual charts, Varsha Narayana dasa and Patyayini dasa "
+    "give the best results. If a result seems likely in an annual chart, we "
+    "can find the exact month or week of the event using these dasas.")
+
+#: **Finding.** The chapter ranks its three dasas **three times** and not
+#: identically. §30.3 said patyayini showed Example 122's marriage better than
+#: mudda. §30.4 put them in a strict order — "Usually Patyayini dasa gives
+#: better results than Mudda dasa. Varsha Narayana dasa is, however, the
+#: **best**". The conclusion pairs the top two instead: "Varsha Narayana dasa
+#: **and** Patyayini dasa give the best results." Mudda is last in all three
+#: statements and no reason is given anywhere.
+THE_RANKING_IS_STATED_THREE_TIMES_AND_LOOSENS = (
+    "Section 30.4 puts Varsha Narayana above patyayini and the conclusion "
+    "pairs them at the top. Mudda is last in all three statements and none of "
+    "them argues for the order."
+)
+
+#: **Finding, and it is new information in a conclusion.** "Patyayini dasa is
+#: applicable to Tajaka monthly charts **also**." Nothing earlier says so, and
+#: there is a structural reason only patyayini can: §30.2 builds it from the
+#: **chart's own longitudes**, so it works on any Tajaka chart. Mudda and
+#: Varsha Narayana are seeded by progressing the natal chart one constellation
+#: or one rasi **per year**, and there is no per-month progression to use.
+#: The conclusion states the fact and not the reason.
+ONLY_PATYAYINI_CAN_GO_MONTHLY = (
+    "Patyayini reads the chart's own longitudes, so it works on a monthly "
+    "chart as it does on an annual one. Mudda and Varsha Narayana are seeded "
+    "by a progression that advances once a year, and a month has no such "
+    "step."
+)
+
+#: **Gap.** A monthly patyayini needs a divisor and the chapter gives none.
+#: §30.2's formula names **365.2425** days for a year. §27.3 defines a Tajaka
+#: month as the Sun's motion of **30°**, one twelfth of the year's 360°, so
+#: the proportional substitute is 365.2425/12 = **30.4369** days — while the
+#: chapter's other two dasas take the year as 360 days, which would make a
+#: month **30**. The conclusion picks neither and works no monthly example.
+#: See OI-179.
+THE_MONTHLY_DIVISOR_IS_NOT_GIVEN = (
+    "Section 30.2 divides by 365.2425 days for a year and the conclusion "
+    "extends patyayini to monthly charts without giving the month's figure. "
+    "Section 27.3 makes a month 30 degrees of solar motion, so the candidates "
+    "are 30.4369 days and 30."
+)
+
+#: **Finding, measured.** "We can find the exact month or week of the event"
+#: is generous for patyayini, whose dasas are as uneven as the chart makes
+#: them. In Example 122 they ran from the Moon's **0.4 days** to Mars's
+#: **104 days** — a factor of 260 — because the lengths are proportional to
+#: gaps between sorted krisamsas. A patyayini dasa is a week only when the
+#: chart happens to give one.
+THE_RESOLUTION_CLAIM_IS_GENEROUS_FOR_PATYAYINI = (
+    "Example 122's patyayini dasas ran from 0.4 days to 104, a factor of "
+    "260, because their lengths are gaps between sorted krisamsas. Varsha "
+    "Narayana's twelve are far more even."
+)
+
+#: Chapter 30 end to end.
+CHAPTER_30_IS_COMPLETE = (
+    "§30.1 to §30.4 and the conclusion, Tables 75 and 76, Charts 67 to 71, "
+    "Examples 122 to 125, Exercises 48 and 49 and Footnotes 85 to 88, checked "
+    "against the printed pages. All three dasas are built and every worked "
+    "figure the chapter prints reproduces except Exercise 49's second-cycle "
+    "dates. Closed here: OI-124 and OI-174. Opened here: OI-175 to OI-179."
+)

@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1 to §30.4, complete (109)
+### Chapter 30 — §30.1 to the conclusion, complete (115)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1901,6 +1901,11 @@ exist to check the section's own figures, and one of them fails.
 | `THE_SEED_COMPARISON_CLOSES_OI_124` · `THE_SEED_DECIDES_THE_MOVEMENT_TOO` | Ours: the first varga seed to tie past rule 5, and getting it wrong would have changed every dasa in the year. OI-124 closed |
 | `EVERY_READING_IN_THE_SOLUTION_REPRODUCES` · `THE_VARGA_HOUSE_RULE_HOLDS_A_FIFTH_TIME` | Ours: all four readings, and D-16 taking the 4th house |
 | `THE_SECOND_CYCLE_LENGTH_REPRODUCES` · `THE_SECOND_CYCLE_POSITION_IS_TWENTY_FIVE_DAYS_OUT` | Ours: 24 solar days as printed, twenty-five days early. OI-178 |
+| `CHAPTER_CONCLUSION` · `CHAPTER_30_IS_COMPLETE` | The closing paragraph verbatim and the chapter's completion record |
+| `THE_RANKING_IS_STATED_THREE_TIMES_AND_LOOSENS` | Ours: §30.4 ranks Varsha Narayana above patyayini and the conclusion pairs them |
+| `ONLY_PATYAYINI_CAN_GO_MONTHLY` | Ours: it reads the chart's own longitudes; the other two need a yearly progression |
+| `THE_MONTHLY_DIVISOR_IS_NOT_GIVEN` | Ours: 30.4369 days or 30, and the chapter picks neither. OI-179 |
+| `THE_RESOLUTION_CLAIM_IS_GENEROUS_FOR_PATYAYINI` | Ours: Example 122's dasas ran 0.4 to 104 days, a factor of 260 |
 
 ### Chapter 15 — §15.5.2's advancement, revisited from chapter 30 (1)
 

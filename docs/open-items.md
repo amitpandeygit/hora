@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**8 waiting on Amit · 124 waiting on evidence · 2 parked**
+**8 waiting on Amit · 125 waiting on evidence · 2 parked**
 
 ---
 
@@ -2646,17 +2646,11 @@ from 1 June 1993 lands on **14 July** counted as calendar days, which is what
 §30.3 prints, and on **16 July** counted as the solar days it just defined —
 the Sun covers 42.66° in 44.7 calendar days at that time of year.
 
-So the three figures in play are all different:
-
-| | days | against the real year |
-|---|---|---|
-| the varsha pravesh interval | 365.2564 | — |
-| §30.2's patyayini divisor | 365.2425 | 20 minutes short |
-| §30.3's 360, counted as calendar days | 360 | **5.26 days short** |
-| §30.3's 360, counted as defined | 365.2564 | exact |
-
-`mudda_dasa` returns day counts and leaves the conversion to the caller, so
-either reading can be applied to them. Nothing is converted here.
+So three figures are in play: the varsha pravesh interval is 365.2564 days,
+§30.2's patyayini divisor 365.2425 (twenty minutes short), and §30.3's 360 —
+which is exact as the solar days it defines and **5.26 days short** as the
+calendar days it counts. `mudda_dasa` returns day counts and leaves the
+conversion to the caller.
 
 **Closes when:** a worked mudda date needs the solar-day conversion to come
 out, or a later section states which is meant.
@@ -2720,21 +2714,36 @@ in the solution, the seed Pisces, the trinal order Pi, Cn, Sc, Sg, Ar, Le, and
 Cancer's second-cycle length of **24 solar days** — which is exactly the width
 of the printed 16 January to 9 February 1996 window.
 
-The **position** does not. Our first cycle totals 252 solar days and the second
+The **position** does not: our first cycle totals 252 solar days and the second
 opens with Pisces's 9, so the second-cycle Cancer runs **22 December 1995 to 15
-January 1996**, twenty-five days before the printed window.
-
-Nothing tried closes it: dropping §18.2.2's dignities moves it three days the
-wrong way, reading the days as the solar days §30.4 defines moves it four the
-right way, and taking the dignities from the rasi chart makes it worse. A
-twenty-five day gap is about eight years of dasa, so it is a length somewhere
-in the first cycle rather than a day-counting convention.
-
-Every other Varsha Narayana date in the chapter is out by a day or two and
-Example 125's lands exactly. This one is different in kind.
+January 1996**, twenty-five days early. Nothing tried closes it — dropping
+§18.2.2's dignities moves it three days the wrong way, solar days four the right
+way, rasi-chart dignities worse. Twenty-five days is about eight years of dasa,
+so it is a length somewhere in the first cycle and not a day-counting
+convention. Every other Varsha Narayana date in the chapter is out by a day or
+two and Example 125's lands exactly; this one differs in kind.
 
 **Closes when:** a worked first cycle prints its lengths, or a later example
 reaches a second cycle with dates.
+
+
+### OI-179 — the conclusion extends patyayini to monthly charts and gives no divisor
+
+**Waiting on the book.** Chapter 30's conclusion says "Patyayini dasa is
+applicable to Tajaka monthly charts also". Nothing earlier says so, and
+patyayini is the only one of the three that could be: §30.2 builds it from the
+chart's own longitudes, while mudda and Varsha Narayana are seeded by
+progressing the natal chart one step **per year**, and a month has no such step.
+
+What the conclusion does not give is the **divisor**. §30.2 divides by
+365.2425 days, so a month is either **30.4369** (a twelfth of that) or **30** (a
+twelfth of the 360 §30.3 and §30.4 use). §27.3 makes a Tajaka month exactly 30°
+of solar motion, a twelfth of the year's 360°, so both are proportional and
+neither is wrong on its face. The chapter works no monthly example.
+
+`patyayini_dasa` takes no month parameter; a monthly patyayini is not built.
+
+**Closes when:** a worked monthly patyayini fixes the figure.
 
 
 ---
