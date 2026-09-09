@@ -3076,6 +3076,97 @@ def durupha(*, lagna_rasi: int, faster: int, slower: int,
     }
 
 
+# --------------------------------------------------------------------------
+# Chapter 29's conclusion
+# --------------------------------------------------------------------------
+
+#: The chapter's closing paragraph, verbatim.
+CHAPTER_CONCLUSION = (
+    "One should remember the definitions of all the yogas and consider all of "
+    "them. There is some overlap between some yogas here. An ithasala may be "
+    "converted to another yoga if an additional combination is present and it "
+    "may again turn into another yoga under yet another combination. So it is "
+    "possible to overlook one planet and conclude the presence of a wrong "
+    "yoga."
+)
+
+#: **Finding.** The conclusion names three hazards and the chapter realises
+#: every one of them. It is not a general caution: each clause has a section
+#: behind it.
+THE_CONCLUSION_NAMES_THREE_HAZARDS_AND_ALL_THREE_HAPPEN = (
+    "Overlap, chained conversion and the overlooked planet are each realised "
+    "by named sections in the chapter, not warned about in the abstract."
+)
+
+#: Which yogas convert an ithasala into something else, and what it takes.
+#: This is the conclusion's "an additional combination" enumerated.
+ITHASALA_CONVERSIONS: tuple[dict[str, object], ...] = (
+    {"yoga": "Manahoo", "section": "29.2.7", "effect": "cancels",
+     "needs": "Saturn or Mars conjunct the faster planet, inside its orb"},
+    {"yoga": "Kamboola", "section": "29.2.8", "effect": "strengthens",
+     "needs": "the Moon in ithasala with either planet"},
+    {"yoga": "Radda", "section": "29.2.11", "effect": "negates",
+     "needs": "a party debilitated, retrograde, combust or otherwise weak"},
+    {"yoga": "Duhphali-Kutta", "section": "29.2.12", "effect": "renames",
+     "needs": "one party dignified and the other weak"},
+    {"yoga": "Duttota", "section": "29.2.13", "effect": "restores",
+     "needs": "a weak pair reached by a strong third planet"},
+    {"yoga": "Durupha", "section": "29.2.16", "effect": "negates",
+     "needs": "both parties afflicted, in dusthanas as worded"},
+)
+
+#: **Finding.** "It may **again** turn into another yoga" is not hypothetical:
+#: §29.2.13's own example is a three-step chain and the book walks it. Mars
+#: 19° Li and Saturn 20° Ar are a **poorna ithasala**; Saturn's debilitation
+#: makes it a **radda** with bad results; exalted Venus at 18° Pi reaching
+#: Saturn makes it a **duttota** with good ones. Two conversions, opposite
+#: verdicts, one chart.
+THE_CHAIN_IS_WORKED_IN_29_2_13 = (
+    "Section 29.2.13's example runs ithasala to radda to duttota on one "
+    "chart, reversing the verdict twice. That is the conclusion's repeated "
+    "conversion, worked."
+)
+
+#: **Finding.** "Overlook one planet and conclude the presence of a wrong
+#: yoga" — six of the chapter's yogas turn on a planet **outside** the pair,
+#: so missing one changes the answer: manahoo's malefic, kamboola's Moon,
+#: nakta's and yamaya's connectors, khallasara's lagna lord and duttota's
+#: rescuer. Only radda, durupha, duhphali-kutta and the two waiting yogas are
+#: decided inside the pair.
+SIX_YOGAS_TURN_ON_A_PLANET_OUTSIDE_THE_PAIR = (
+    "Manahoo, kamboola, nakta, yamaya, khallasara and duttota are each "
+    "settled by a planet that is not one of the two, so overlooking it gives "
+    "the wrong yoga."
+)
+
+#: **Finding.** The conclusion licenses the overlaps this module records and
+#: settles none of them. It says overlap exists; it does not say which name
+#: wins where two apply, and §29.2.11 had already left one such choice open in
+#: as many words — "whether one calls it Eesarpha or Radda yoga depends on
+#: one's interpretation". So the open items raised against this chapter stay
+#: open: they are about rules disagreeing with their own examples, which is
+#: not what this paragraph is about.
+THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE = (
+    "The conclusion says yogas overlap and convert. It does not say which "
+    "name governs when two apply, and the contradictions recorded against "
+    "this chapter are between rules and their own examples, not overlaps."
+)
+
+#: Chapter 29 end to end.
+CHAPTER_29_IS_COMPLETE = (
+    "§29.1, §29.2.1 to §29.2.16 and the conclusion, with footnotes 83 and 84, "
+    "checked against the printed pages. Every worked example in the chapter "
+    "reproduces. Opened here: OI-159 to OI-173 and D-81 to D-83. The chapter "
+    "names no strength but pancha vargeeya bala, in §29.2.12 alone, and "
+    "nothing in it is scored."
+)
+
+
+def ithasala_conversions() -> tuple[str, ...]:
+    """Every yoga §29.2 turns an ithasala into, in section order."""
+    return tuple(str(row["yoga"]) for row in ITHASALA_CONVERSIONS)
+
+
 def pairs_in_speed_order() -> tuple[tuple[int, int], ...]:
     """Every graha pair footnote 83 can rank, slower first."""
     out = []

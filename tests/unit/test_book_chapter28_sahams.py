@@ -672,3 +672,38 @@ def test_example_121_misnames_vanik_once():
 
     assert "where it means vanik" in EXAMPLE_121_MISNAMES_VANIK_ONCE
     assert "Three sahams, three rules" in EXAMPLE_121_COVERS_THREE_DIFFERENT_RULES
+
+
+def test_chapter_28_is_complete():
+    """§28.1 to §28.8.2, with no conclusion section of its own — §29.1 follows
+    §28.8.2 directly, which is why the marker was written when 29 closed.
+    """
+    from hora.core.const import CHAPTER_28_IS_COMPLETE
+
+    assert "28.1 to §28.8.2" in CHAPTER_28_IS_COMPLETE
+    assert "Tables 72 to 74" in CHAPTER_28_IS_COMPLETE
+    assert "Examples 119 to 121" in CHAPTER_28_IS_COMPLETE
+    assert "thirty-six sahams" in CHAPTER_28_IS_COMPLETE
+    assert "OI-116 and OI-157" in CHAPTER_28_IS_COMPLETE
+    assert "no conclusion section" in CHAPTER_28_IS_COMPLETE
+
+    # The chapter's eight modules, all importable and all built.
+    from hora.tajaka import (
+        aspects,
+        dwadasavargeeya,
+        harsha,
+        muntha,
+        panchavargeeya,
+        saham_use,
+        sahams,
+        varsheswara,
+    )
+
+    for module, name in ((muntha, "muntha_rasi"), (aspects, "aspects_from"),
+                         (harsha, "harsha_bala"),
+                         (panchavargeeya, "pancha_vargeeya_bala"),
+                         (dwadasavargeeya, "strength_in_rasi"),
+                         (varsheswara, "lord_of_the_month"),
+                         (sahams, "sahams"),
+                         (saham_use, "jupiter_on_vivaha")):
+        assert callable(getattr(module, name)), name

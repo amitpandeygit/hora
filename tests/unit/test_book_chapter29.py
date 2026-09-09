@@ -3218,3 +3218,119 @@ def test_combustion_needs_the_sun_here_too():
     assert burnt["slower_side"]["combust"] is True
     assert set(burnt["slower_side"]["afflicted_by"]) == {"combust",
                                                          "debilitated"}
+
+
+# --------------------------------------------------------------------------
+# Chapter 29's conclusion
+# --------------------------------------------------------------------------
+
+
+def test_the_conclusion_is_transcribed():
+    assert "remember the definitions of all the yogas" in (
+        yogas.CHAPTER_CONCLUSION)
+    assert "some overlap between some yogas" in yogas.CHAPTER_CONCLUSION
+    assert "it may again turn into another yoga" in yogas.CHAPTER_CONCLUSION
+    assert "overlook one planet and conclude the presence of a wrong yoga" in (
+        yogas.CHAPTER_CONCLUSION)
+
+
+def test_every_conversion_the_conclusion_implies_is_built():
+    """"An ithasala may be converted to another yoga if an additional
+    combination is present" — six of them, and each has a function.
+    """
+    assert yogas.ithasala_conversions() == (
+        "Manahoo", "Kamboola", "Radda", "Duhphali-Kutta", "Duttota",
+        "Durupha")
+    for row in yogas.ITHASALA_CONVERSIONS:
+        name = str(row["yoga"]).lower().replace("-", "_")
+        assert callable(getattr(yogas, name)), name
+    effects = {str(row["effect"]) for row in yogas.ITHASALA_CONVERSIONS}
+    assert effects == {"cancels", "strengthens", "negates", "renames",
+                       "restores"}
+
+
+def test_the_chain_the_conclusion_describes_is_worked_in_29_2_13():
+    """One chart, two conversions, the verdict reversed twice."""
+    pair = {"faster": int(Graha.MARS), "slower": int(Graha.SATURN),
+            "faster_longitude": 199.0, "slower_longitude": 20.0}
+
+    step_one = yogas.ithasala(**pair)
+    assert step_one["type"] == "Poorna"
+
+    step_two = yogas.radda(**pair, lagna_rasi=0)
+    assert step_two["negates_the_ithasala"] is True
+
+    step_three = yogas.duttota(**pair, rescuer=int(Graha.VENUS),
+                               rescuer_longitude=348.0, lagna_rasi=0)
+    assert step_three["present_as_worked"] is True
+    assert step_three["houses"] == step_two["destroys_houses"] == (10, 11)
+    assert "reversing the verdict twice" in yogas.THE_CHAIN_IS_WORKED_IN_29_2_13
+
+
+def test_six_yogas_turn_on_a_planet_outside_the_pair():
+    """The conclusion's overlooked planet, enumerated."""
+    outside = ("manahoo", "kamboola", "nakta", "yamaya", "khallasara",
+               "duttota")
+    for name in outside:
+        assert callable(getattr(yogas, name))
+    # Each of them changes its answer when the outside planet moves.
+    pair = {"faster": int(Graha.MARS), "slower": int(Graha.SATURN),
+            "faster_longitude": 199.0, "slower_longitude": 20.0}
+    with_rescuer = yogas.duttota(**pair, rescuer=int(Graha.VENUS),
+                                 rescuer_longitude=348.0)
+    without = yogas.duttota(**pair, rescuer=int(Graha.VENUS),
+                            rescuer_longitude=120.0)
+    assert with_rescuer["present_as_worked"] is True
+    assert without["present_as_worked"] is False
+    assert "overlooking it gives" in (
+        yogas.SIX_YOGAS_TURN_ON_A_PLANET_OUTSIDE_THE_PAIR)
+
+
+def test_one_chart_can_carry_more_than_one_yoga_name():
+    """The overlap the conclusion admits, made concrete: §29.2.16's example is
+    a durupha as worked and a radda outright.
+    """
+    pair = {"faster": int(Graha.MARS), "slower": int(Graha.SATURN),
+            "faster_longitude": 105.0, "slower_longitude": 17.0}
+    as_durupha = yogas.durupha(lagna_rasi=0, **pair)
+    as_radda = yogas.radda(**pair, lagna_rasi=0)
+    assert as_durupha["present_as_worked"] is True
+    assert as_radda["negates_the_ithasala"] is True
+    assert "which name governs when two apply" in (
+        yogas.THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE)
+
+
+def test_the_conclusion_does_not_settle_the_eesarpha_radda_choice():
+    """§29.2.11 left it open in as many words and the conclusion generalises
+    the problem without resolving it.
+    """
+    assert "depends on one's interpretation" in yogas.RADDA_OVERLAPS_EESARPHA
+    got = yogas.radda(faster=int(Graha.MERCURY), slower=int(Graha.MARS),
+                      faster_longitude=155.0, slower_longitude=217.0,
+                      faster_retrograde=True)
+    assert got["overlap"] is not None
+    assert "not overlaps" in (
+        yogas.THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE)
+
+
+def test_the_conclusion_names_three_hazards_and_all_three_happen():
+    assert "Overlap, chained conversion and the overlooked planet" in (
+        yogas.THE_CONCLUSION_NAMES_THREE_HAZARDS_AND_ALL_THREE_HAPPEN)
+
+
+def test_chapter_29_is_complete():
+    """Every section, both footnotes, and every worked example reproducing."""
+    assert "29.2.1 to 29.2.16" in yogas.CHAPTER_29_IS_COMPLETE.replace("§", "")
+    assert "footnotes 83 and 84" in yogas.CHAPTER_29_IS_COMPLETE
+    assert "Every worked example in the chapter" in yogas.CHAPTER_29_IS_COMPLETE
+
+    # The sixteen yogas the chapter defines, all callable.
+    for name in ("ishkavala", "induvara", "ithasala", "eesarpha", "nakta",
+                 "yamaya", "manahoo", "kamboola", "gairi_kamboola",
+                 "khallasara", "radda", "duhphali_kutta", "duttota",
+                 "thambira", "kutta", "durupha"):
+        assert callable(getattr(yogas, name)), name
+
+    # And the two footnotes are both held.
+    assert "increasing order of speed" in yogas.SPEED_ORDER_FOOTNOTE
+    assert "interpreted differently by scholars" in yogas.KUTTA_FOOTNOTE

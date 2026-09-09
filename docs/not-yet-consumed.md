@@ -1700,7 +1700,7 @@ elsewhere reproduce. What follows is prose and findings.
 | `CHART_66_TRUNCATES_WHERE_EXAMPLE_121_ROUNDS` | Ours: the diagram truncates arcminutes and the example rounds them, five for five. D-80 |
 | `EXAMPLE_121_MISNAMES_VANIK_ONCE` | A stray "samartha saham" in the vanik paragraph's arithmetic line |
 
-### Chapter 28 — §28.8.2's use of sahams (9)
+### Chapter 28 — §28.8.2's use of sahams, and the chapter's marker (10)
 
 `tajaka/saham_use.py`. What the section makes computable **is** built:
 `saham_dispositor` and `annual_rule_terms` give the annual rule's two lords,
@@ -1717,8 +1717,9 @@ findings.
 | `TWO_SECTIONS_READ_VIVAHA_SAHAM_DIFFERENTLY` | Ours: §25.3 gives the 7th lord or Venus, §28.8.2 gives Jupiter, for one event |
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
+| `CHAPTER_28_IS_COMPLETE` | The chapter's completion record, written when 29 closed because §28.8.2 has no conclusion of its own |
 
-### Chapter 29 — §29.1 to §29.2.16 (132)
+### Chapter 29 — §29.1 to the conclusion, complete (139)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1821,6 +1822,9 @@ footnote can. What follows is prose and findings.
 | `THE_EXAMPLE_IGNORES_ITS_OWN_DUSTHANA_CONDITION` | Ours: Mars is in the 4th and Saturn in the 1st, both kendras, and the rule asks for dusthanas. OI-173 |
 | `DURUPHAS_TRIGGERS_ARE_A_SUBSET_OF_RADDAS` · `THREE_SECTIONS_THREE_LISTS_ONE_COMMON_TERM` | Ours: every durupha is a radda, and the chapter's three weakness lists share only debilitation |
 | `THE_NAMED_HOUSES_BELONG_TO_ONLY_ONE_OF_THE_TWO` | Ours: career and gains are Saturn's 10th and 11th; Mars owns the 1st and 8th and is named anyway |
+| `CHAPTER_CONCLUSION` · `ITHASALA_CONVERSIONS` · `CHAPTER_29_IS_COMPLETE` | The closing paragraph verbatim, the six conversions as data, and the chapter's completion record |
+| `THE_CONCLUSION_NAMES_THREE_HAZARDS_AND_ALL_THREE_HAPPEN` · `THE_CHAIN_IS_WORKED_IN_29_2_13` · `SIX_YOGAS_TURN_ON_A_PLANET_OUTSIDE_THE_PAIR` | Ours: each clause of the conclusion has a named section behind it |
+| `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

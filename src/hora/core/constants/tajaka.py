@@ -261,6 +261,20 @@ THE_THREE_CONCLUSIONS_DO_DIFFERENT_WORK = (
     "and section 27.5 declares a scope boundary. Only 26.9 introduced a rule."
 )
 
+#: Chapter 28 end to end. Written when chapter 29 closed, because §28.8.2 ran
+#: straight into §29.1 with no conclusion of its own — chapter 28 is the only
+#: chapter in Part 4 that does not end with one.
+CHAPTER_28_IS_COMPLETE = (
+    "§28.1 to §28.8.2, Tables 72 to 74, Examples 119 to 121 and Footnotes 79 "
+    "to 82, checked against the printed pages. The muntha, the Tajaka "
+    "aspects, harsha bala, pancha vargeeya bala, dwaadasa vargeeya bala, the "
+    "lord of the year, the lord of the month and all thirty-six sahams are "
+    "built, and every worked figure in the chapter reproduces. Closed here: "
+    "OI-116 and OI-157. Opened here: OI-152 to OI-158 and D-79 and D-80. The "
+    "chapter has no conclusion section; §29.1 follows §28.8.2 directly."
+)
+
+
 #: Chapter 27 end to end.
 CHAPTER_27_IS_COMPLETE = (
     "§27.1 to §27.5, Table 71, Chart 66, Example 118, Exercise 47 and "
