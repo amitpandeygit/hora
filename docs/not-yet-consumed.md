@@ -1972,12 +1972,16 @@ has not been given yet.
 | `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
 
-### Chapter 32 — §32.1 and footnote 89 (14)
+### Chapter 32 — §32.1 and footnote 89 (26)
 
-`rectification/birthtime.py`. The section is an argument, not a technique, and
-the one thing it asks to be computed — which varga signs move when a birthtime
-moves — **is** consumed: `varga_signs_that_change` answers it and the tests run
-it on Chart 1.
+`rectification/birthtime.py`. The section is an argument, not a technique.
+Three things in it **are** computable and all three are consumed:
+`varga_signs_that_change` answers which signs move when a birthtime moves,
+`nearest_quantum` and `acid_test_of_twins` run the quantum family against the
+section's own criterion, and `scan_over_range` produces the 9:02, 9:03, 9:04
+candidates. The two named methods it fails — Pranapada lagna in navamsa and
+Kunda — are not taught anywhere in the book, so the verdict on them cannot be
+reproduced.
 
 | constant | why it is not consumed |
 |---|---|
@@ -1990,6 +1994,15 @@ it on Chart 1.
 | `THE_SAME_OBJECTION_IS_MADE_TO_BOTH_PRACTICES` | Ours: reading only D-1 and the third-house twin lagna are dismissed in the same words |
 | `THE_SECTION_GRANTS_THE_RESULTS_AND_REJECTS_THE_METHOD` | Ours: the section allows the D-1 astrologer's successes and still calls the method unscientific |
 | `ONLY_THE_FOURTH_CAUSE_IS_OURS_TO_ANSWER` | Ours: three causes no calculation can see, and a definition of birth the section names without giving |
+| `RECTIFICATION_DEFINED` · `THE_THREE_REASONABLE_METHODS` · `THE_ONLY_CORRECT_WAY` · `THE_SCAN_OVER_THE_REPORTED_RANGE` | §32.1's rectification paragraphs verbatim |
+| `NAMED_METHODS` · `WHAT_A_RECTIFIED_TIME_MUST_EXPLAIN` | The three named methods and the five things a rectified time must explain, as data |
+| `QUANTUM_CLOSED_MINUTES` · `QUANTUM_OPEN_MINUTES` · `QUANTUM_CYCLE_MINUTES` | The section's own quantum lengths; `nearest_quantum` defaults to them |
+| `THE_ACID_TEST_GIVES_NO_THRESHOLD` | Ours: "too far apart" is never quantified, so `acid_test_of_twins` returns `passes: None` with this as the reason |
+| `THE_QUANTUM_FAMILY_FAILS_THE_ACID_TEST_BY_CONSTRUCTION` | Ours: the section's own example returns twins the same 42.9% of the time and 3.5 minutes apart the rest, never two |
+| `THE_QUANTUM_FAMILY_HAS_NO_STATED_EPOCH` | Ours: the window lengths are given and their position is not, and nothing here depends on it |
+| `THE_ACID_TEST_IS_STATED_ON_METHODS_THE_BOOK_NEVER_TEACHES` | Ours: Pranapada lagna and Kunda are failed and neither is taught, so the verdict cannot be checked |
+| `THE_ONLY_ACCEPTED_METHOD_IS_THE_ONE_THAT_CANNOT_BE_AUTOMATED` | Ours: four of the five demands are judgements about a native and the fifth is the dated past |
+| `THE_SCAN_STEP_IS_COARSER_THAN_THE_ARGUMENT` | Ours: two minutes makes a different native and the section's own grid is one minute |
 
 ---
 

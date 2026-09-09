@@ -260,3 +260,233 @@ def test_an_identical_casting_changes_nothing():
     points = _fast_points(0)
     assert birthtime.varga_signs_that_change(points, dict(points),
                                              _VARGAS) == ()
+
+
+# --------------------------------------------------------------------------
+# §32.1 continued — rectification defined, and the acid test of twins
+# --------------------------------------------------------------------------
+
+
+def test_rectification_and_the_quantum_family_are_transcribed():
+    assert "**Birthtime rectification** is the process of correcting" in (
+        birthtime.RECTIFICATION_DEFINED)
+    assert "human births happen in certain quanta" in (
+        birthtime.RECTIFICATION_DEFINED)
+    assert '"human birth can happen now" quantum' in (
+        birthtime.RECTIFICATION_DEFINED)
+    assert birthtime.QUANTUM_CLOSED_MINUTES == 3.0
+    assert birthtime.QUANTUM_OPEN_MINUTES == 0.5
+    assert birthtime.QUANTUM_CYCLE_MINUTES == 3.5
+    assert "period of 3 minutes" in birthtime.RECTIFICATION_DEFINED
+    assert "period of half a minute" in birthtime.RECTIFICATION_DEFINED
+
+
+def test_the_three_named_methods_and_what_becomes_of_each():
+    assert "(a) Tattva siddhaanta" in birthtime.THE_THREE_REASONABLE_METHODS
+    assert "fail the acid test of twins" in (
+        birthtime.THE_THREE_REASONABLE_METHODS)
+    methods = birthtime.NAMED_METHODS
+    assert [m["label"] for m in methods] == ["a", "b", "c"]
+    assert methods[0]["fails_the_acid_test"] is None      # out of scope
+    assert methods[1]["fails_the_acid_test"] is True
+    assert methods[2]["fails_the_acid_test"] is True
+    # None of the three is taught, so none of the verdicts is reproducible.
+    assert all(m["taught_here"] is False for m in methods)
+    assert "cannot be checked" in (
+        birthtime.THE_ACID_TEST_IS_STATED_ON_METHODS_THE_BOOK_NEVER_TEACHES)
+
+
+def test_the_only_correct_way_is_transcribed_and_its_five_demands_listed():
+    assert "The only correct way to rectify a birthtime" in (
+        birthtime.THE_ONLY_CORRECT_WAY)
+    assert "This is a laborious process, but there is no other way" in (
+        birthtime.THE_ONLY_CORRECT_WAY)
+    demands = birthtime.WHAT_A_RECTIFIED_TIME_MUST_EXPLAIN
+    assert len(demands) == 5
+    for word in ("nature", "credentials", "attitude", "aptitude"):
+        assert any(word in d for d in demands)
+        assert word in birthtime.THE_ONLY_CORRECT_WAY
+    assert demands[-1] == "the known events from the native's past"
+    assert "the dated past" in (
+        birthtime.THE_ONLY_ACCEPTED_METHOD_IS_THE_ONE_THAT_CANNOT_BE_AUTOMATED)
+
+
+def test_the_scan_paragraphs_are_transcribed():
+    text = birthtime.THE_SCAN_OVER_THE_REPORTED_RANGE
+    assert "born between 9:02 and 9:08 am" in text
+    assert "thousands of people born in that range" in text
+    assert "we should look at 9:02, 9:03, 9:04 etc" in text
+    assert "the known life events of the native make sense" in text
+    assert len(text.split("\n\n")) == 3
+
+
+# --------------------------------------------------------------------------
+# The quantum family, run
+# --------------------------------------------------------------------------
+
+
+def test_the_nearest_quantum_snaps_to_a_window_centre():
+    """The book's numbers: three minutes shut, half a minute open."""
+    # Windows [0, 0.5), [3.5, 4.0), [7.0, 7.5) ... so the centres are 0.25,
+    # 3.75, 7.25.
+    assert birthtime.nearest_quantum(0.0) == pytest.approx(0.25)
+    assert birthtime.nearest_quantum(0.4) == pytest.approx(0.25)
+    assert birthtime.nearest_quantum(3.6) == pytest.approx(3.75)
+    assert birthtime.nearest_quantum(7.2) == pytest.approx(7.25)
+    # Every answer is a whole number of cycles from the first centre.
+    for reported in (0.0, 1.9, 2.1, 5.0, 11.3, 100.0):
+        offset = birthtime.nearest_quantum(reported) - 0.25
+        assert offset % birthtime.QUANTUM_CYCLE_MINUTES == pytest.approx(
+            0.0, abs=1e-9)
+
+
+def test_the_quantum_family_needs_an_epoch_the_section_never_gives():
+    """GAP: the windows' position is not stated, so the method is not
+    reproducible from the section alone. It changes nothing here.
+    """
+    assert "period of 3 minutes" in birthtime.RECTIFICATION_DEFINED
+    assert "period of half a minute" in birthtime.RECTIFICATION_DEFINED
+    for word in ("begin", "epoch", "midnight", "sunrise"):
+        assert word not in birthtime.RECTIFICATION_DEFINED
+
+    # A different epoch gives a different answer for the same reported time.
+    assert birthtime.nearest_quantum(2.0, epoch_minutes=0.0) != (
+        birthtime.nearest_quantum(2.0, epoch_minutes=1.0))
+    assert "cannot be run from the section alone" in (
+        birthtime.THE_QUANTUM_FAMILY_HAS_NO_STATED_EPOCH)
+
+
+def test_the_quantum_family_fails_the_acid_test_over_a_whole_cycle():
+    """FINDING: the section's own example fails the section's own test —
+    the same time 42.9% of the time and 3.5 minutes apart the rest.
+    """
+    gaps: dict[float, int] = {}
+    steps = 3500
+    for index in range(steps):
+        got = birthtime.acid_test_of_twins(
+            birthtime.nearest_quantum,
+            index * birthtime.QUANTUM_CYCLE_MINUTES / steps)
+        # Never returns the twins two minutes apart, whatever the instant.
+        assert got["preserves_the_gap"] is False
+        if got["collapsed_to_one_time"]:
+            assert got["passes"] is False
+        else:
+            # "Too far apart" has no threshold in the section, so the verdict
+            # is undecided rather than invented.
+            assert got["passes"] is None
+            assert got["reason"] is birthtime.THE_ACID_TEST_GIVES_NO_THRESHOLD
+        gaps[round(float(got["rectified_gap_minutes"]), 6)] = (
+            gaps.get(round(float(got["rectified_gap_minutes"]), 6), 0) + 1)
+
+    assert set(gaps) == {0.0, 3.5}
+    assert gaps[0.0] / steps == pytest.approx(3.0 / 7.0, abs=1e-3)   # 42.9%
+    assert gaps[3.5] / steps == pytest.approx(4.0 / 7.0, abs=1e-3)   # 57.1%
+    assert "42.9%" in (
+        birthtime.THE_QUANTUM_FAMILY_FAILS_THE_ACID_TEST_BY_CONSTRUCTION)
+
+
+def test_the_failure_is_structural_and_holds_at_every_epoch():
+    """The rectified gap is always a whole number of cycles, so it can equal
+    the true gap only when the true gap is one.
+    """
+    for epoch in (0.0, 0.37, 1.0, 2.9):
+        for start in (0.0, 0.9, 1.7, 2.6, 3.2):
+            def rectify(minutes: float, epoch: float = epoch) -> float:
+                return birthtime.nearest_quantum(minutes, epoch_minutes=epoch)
+
+            got = birthtime.acid_test_of_twins(rectify, start)
+            gap = float(got["rectified_gap_minutes"])
+            assert gap % birthtime.QUANTUM_CYCLE_MINUTES == pytest.approx(
+                0.0, abs=1e-9)
+            assert gap != 2.0
+            assert got["preserves_the_gap"] is False
+
+    # And a method that keeps the twins where they are does pass, on any
+    # tolerance and even on none, because it preserves the gap exactly.
+    passing = birthtime.acid_test_of_twins(lambda m: m + 0.1, 0.0,
+                                           tolerance_minutes=0.5)
+    assert passing["rectified_gap_minutes"] == pytest.approx(2.0)
+    assert passing["collapsed_to_one_time"] is False
+    assert passing["preserves_the_gap"] is True
+    assert passing["passes"] is True
+    assert passing["reason"] is None
+
+
+def test_the_acid_test_rejects_a_gap_that_is_not_positive():
+    with pytest.raises(birthtime.BirthtimeError, match="must be positive"):
+        birthtime.acid_test_of_twins(birthtime.nearest_quantum, 0.0,
+                                     gap_minutes=0.0)
+
+
+def test_nearest_quantum_rejects_windows_that_are_not_positive():
+    with pytest.raises(birthtime.BirthtimeError, match="must both be positive"):
+        birthtime.nearest_quantum(1.0, open_minutes=0.0)
+
+
+# --------------------------------------------------------------------------
+# The scan the section actually prescribes
+# --------------------------------------------------------------------------
+
+
+def test_the_scan_reproduces_the_sections_own_candidates():
+    """9:02 to 9:08, a minute at a time, is seven candidates."""
+    nine_oh_two = 9 * 60 + 2
+    candidates = birthtime.scan_over_range(nine_oh_two, 9 * 60 + 8)
+    assert len(candidates) == 7
+    assert candidates[0] == nine_oh_two
+    assert candidates[-1] == 9 * 60 + 8
+    assert [c - nine_oh_two for c in candidates[:3]] == [0.0, 1.0, 2.0]
+
+
+def test_the_scan_step_is_coarser_than_the_argument():
+    """FINDING: two minutes makes a different native, and the grid is one."""
+    assert "wrong by 2 minutes" in birthtime.TWINS_PROVE_THE_VARGAS_MATTER
+    assert "9:02, 9:03, 9:04" in birthtime.THE_SCAN_OVER_THE_REPORTED_RANGE
+    coarse = birthtime.scan_over_range(9 * 60 + 2, 9 * 60 + 8)
+    assert len(coarse) == 7
+    # At the resolution the argument asks for there is more to try, not less.
+    fine = birthtime.scan_over_range(9 * 60 + 2, 9 * 60 + 8,
+                                     step_minutes=0.25)
+    assert len(fine) == 25
+    assert "half the resolution" not in birthtime.THE_SCAN_OVER_THE_REPORTED_RANGE
+    assert "Seven candidates" in (
+        birthtime.THE_SCAN_STEP_IS_COARSER_THAN_THE_ARGUMENT)
+
+
+def test_scan_over_range_rejects_an_inverted_range_and_a_dead_step():
+    with pytest.raises(birthtime.BirthtimeError, match="must not precede"):
+        birthtime.scan_over_range(10.0, 5.0)
+    with pytest.raises(birthtime.BirthtimeError, match="step_minutes"):
+        birthtime.scan_over_range(5.0, 10.0, step_minutes=0.0)
+
+
+def test_the_acid_test_leaves_too_far_apart_undecided():
+    """GAP: "the same" is exact and "too far apart" has no threshold."""
+    got = birthtime.acid_test_of_twins(birthtime.nearest_quantum, 0.5)
+    assert got["rectified_gap_minutes"] == pytest.approx(3.5)
+    assert got["collapsed_to_one_time"] is False
+    assert got["passes"] is None
+    assert got["reason"] is birthtime.THE_ACID_TEST_GIVES_NO_THRESHOLD
+    assert got["tolerance_minutes"] is None
+
+    # Supplying a tolerance decides it, in either direction.
+    assert birthtime.acid_test_of_twins(
+        birthtime.nearest_quantum, 0.5, tolerance_minutes=0.5)["passes"] is (
+        False)
+    assert birthtime.acid_test_of_twins(
+        birthtime.nearest_quantum, 0.5, tolerance_minutes=2.0)["passes"] is (
+        True)
+
+    # A collapse needs no threshold: it is decided from the section itself.
+    collapsed = birthtime.acid_test_of_twins(lambda m: 0.0, 0.0)
+    assert collapsed["collapsed_to_one_time"] is True
+    assert collapsed["passes"] is False
+    assert "rectify to one time" in str(collapsed["reason"])
+
+    assert "how far is too far" in birthtime.THE_ACID_TEST_GIVES_NO_THRESHOLD
+
+
+def test_the_acid_test_rejects_a_negative_tolerance():
+    with pytest.raises(birthtime.BirthtimeError, match="not be negative"):
+        birthtime.acid_test_of_twins(birthtime.nearest_quantum, 0.0,
+                                     tolerance_minutes=-1.0)
