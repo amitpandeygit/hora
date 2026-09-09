@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1 to §30.3 (46)
+### Chapter 30 — §30.1 to §30.4 (56)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1865,6 +1865,14 @@ exist to check the section's own figures, and one of them fails.
 | `THE_DATES_USE_CALENDAR_DAYS_NOT_THE_SOLAR_DAYS_DEFINED` · `THE_TWO_DASAS_USE_TWO_DIFFERENT_YEARS` | Ours: the section defines a solar day and works its date in calendar days. OI-175 |
 | `THE_ANNUAL_CHART_CONTRIBUTES_ONLY_THE_START_DATE` | Ours: seed and balance both come from the natal Moon, so the annual chart gives only the date |
 | `THE_NATAL_MOON_IS_CITED_AN_ARCMINUTE_HIGH` | Ours: §30.3 says 29 Sg 28 where Chart 18 prints 29 Sg 27, and this one is not D-80's convention |
+| `DURATION_RULE` · `ORDER_RULE` · `FOOTNOTE_88` · `THE_BOOKS_OWN_RANKING` | §30.4 verbatim, footnote 88, and the chapter's closing ranking |
+| `FOOTNOTE_88_ANSWERS_THE_144` | Ours: the footnote states 12 x 12 = 144 and why only 120 is used. OI-174 closed |
+| `THE_PROGRESSED_LAGNA_IS_THE_MUNTHA` | Ours: §28.1's muntha and §30.4's progressed lagna are one rasi, checked over 12 lagnas and 60 years |
+| `THE_TWO_COMPRESSED_DASAS_PROGRESS_THE_SAME_WAY` | Ours: the Moon's constellation and the lagna, both one step a year, neither from the annual chart |
+| `THE_DATE_FITS_NEITHER_READING_OF_A_SOLAR_DAY` | Ours: 48 days end 19 July as calendar days and 21 as solar; the section prints 20. OI-175 |
+| `SCORPIOS_CO_LORD_HAS_TO_BE_KETU_HERE` | Ours: the printed 7 years is Ketu's figure and §15.5.1 picks Ketu independently |
+| `BOTH_ORDERS_REPRODUCE_AND_SATURN_DECIDES` | Ours: Scorpio's sixth movement and §18.2.1's Saturn exception, both reproducing a printed order |
+| `THE_BOOK_RANKS_ITS_THREE_DASAS_AND_GIVES_NO_REASON` | Ours: Varsha Narayana, then patyayini, then mudda, stated twice and argued nowhere |
 
 ---
 

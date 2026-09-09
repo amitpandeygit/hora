@@ -1062,3 +1062,218 @@ def test_the_marriage_reading_repeats_the_setups_own_facts():
     venus = int(d9_navamsa(chart.positions[int(Graha.VENUS)].longitude).sign)
     assert jupiter == venus
     assert (jupiter - nav_lagna) % 12 + 1 == 2
+
+
+# --------------------------------------------------------------------------
+# §30.4 Varsha Narayana dasa
+# --------------------------------------------------------------------------
+
+from hora.dasha.annual import varsha_narayana as vn
+
+
+def _navamsa_longitudes():
+    """Navamsa positions carrying the degree inside the navamsa sign."""
+    from hora.charts.vargas import d9_navamsa
+
+    chart = _annual()
+    out = {}
+    for graha in range(9):
+        place = chart.positions[graha].longitude
+        out[graha] = (int(d9_navamsa(place).sign) * 30.0
+                      + (place % (30 / 9)) * 9)
+    return out
+
+
+def test_the_rules_and_footnote_88_are_transcribed():
+    assert "compressed from 120 years to 360 solar days" in vn.DURATION_RULE
+    assert "Sun moves by (3 x n) degrees" in vn.DURATION_RULE
+    assert "we take muntha as lagna" in vn.ORDER_RULE
+    assert "link between the natal chart and the Tajaka chart" in vn.ORDER_RULE
+    assert "12 x 12 = 144 years" in vn.FOOTNOTE_88
+    assert "paramayush of human beings is 120 years" in vn.FOOTNOTE_88
+    assert vn.VARSHA_NARAYANA_MULTIPLIER == 3
+    assert vn.VARSHA_NARAYANA_YEAR_DAYS == 360
+
+
+def test_footnote_88_answers_oi_174():
+    """§30.1's 120 is deliberate, and the 144 behind it is the book's own."""
+    assert intro.narayana_full_cycle_years() == 144
+    assert "12 x 12 = 144" in vn.FOOTNOTE_88
+    assert "only the first 120" in vn.FOOTNOTE_88
+    assert "deliberate" in vn.FOOTNOTE_88_ANSWERS_THE_144
+    assert 120 * vn.VARSHA_NARAYANA_MULTIPLIER == vn.VARSHA_NARAYANA_YEAR_DAYS
+
+
+def test_the_progressed_lagna_is_the_muntha():
+    """§28.1's rule and §30.4's give the same rasi in every chart and year."""
+    from hora.tajaka.muntha import muntha_rasi
+
+    for natal in range(12):
+        for year in range(1, 61):
+            assert vn.progressed_lagna(natal, year)["rasi"] == int(
+                muntha_rasi(natal, year)["rasi"]), (natal, year)
+    got = vn.progressed_lagna(0, 22)
+    assert got["house_from_natal_lagna"] == 10
+    assert got["rasi_name"] == "Capricorn"
+    assert "the same rasi in every chart" in vn.THE_PROGRESSED_LAGNA_IS_THE_MUNTHA
+
+
+def test_the_ninth_from_the_muntha_is_virgo_owned_by_mercury():
+    from hora.charts.vargas import d9_navamsa
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD, Graha
+
+    muntha = vn.progressed_lagna(0, 22)["rasi"]
+    ninth = (muntha + 8) % 12
+    assert RASI_ABBR[ninth] == "Vi"
+    assert str(GRAHA_NAMES[int(RASI_LORD[ninth])]) == "Mercury"
+
+    chart = _annual()
+    mercury = int(d9_navamsa(chart.positions[int(Graha.MERCURY)].longitude).sign)
+    assert RASI_ABBR[mercury] == "Sc"
+
+
+def test_scorpio_is_stronger_than_taurus():
+    """The seed choice, computed from §15.5 rather than taken on trust."""
+    from hora.charts.rasi_strength import stronger
+
+    verdict = stronger(7, 1, _navamsa_longitudes())
+    assert verdict.winner == 7                          # Scorpio
+
+
+def test_both_dasa_orders_reproduce_and_saturn_decides():
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import progression
+
+    normal = progression(7, occupants=set())
+    assert list(normal.sign_names[:6]) == [
+        "Scorpio", "Gemini", "Capricorn", "Leo", "Pisces", "Libra"]
+    assert normal.movement == "sixth"
+
+    with_saturn = progression(7, occupants={int(Graha.SATURN)})
+    assert list(with_saturn.sign_names[:6]) == [
+        "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Aries"]
+    assert with_saturn.exception == "Saturn"
+    assert "Both come back exactly" in vn.BOTH_ORDERS_REPRODUCE_AND_SATURN_DECIDES
+
+
+def test_saturn_really_is_in_scorpio_in_the_navamsa():
+    from hora.charts.vargas import d9_navamsa
+    from hora.core.const import RASI_ABBR, Graha
+
+    chart = _annual()
+    saturn = int(d9_navamsa(chart.positions[int(Graha.SATURN)].longitude).sign)
+    assert RASI_ABBR[saturn] == "Sc"
+
+
+def test_the_five_dasa_lengths_reproduce_and_scorpio_needs_ketu():
+    """Sc 7, Sg 4, Cp 2, Aq 3, Pi 11 — and Scorpio's 7 is Ketu's figure."""
+    from hora.charts.colord import stronger as co_lord
+    from hora.core.const import RASI_ABBR, RASI_LORD, Graha
+    from hora.dasha.rasi.narayana import dasa_length
+
+    navamsa = {g: int(place // 30) for g, place in _navamsa_longitudes().items()}
+    want = {"Sc": 7, "Sg": 4, "Cp": 2, "Aq": 3, "Pi": 11}
+    for abbr, years in want.items():
+        rasi = RASI_ABBR.index(abbr)
+        lord = (int(Graha.KETU) if abbr == "Sc" else int(RASI_LORD[rasi]))
+        assert dasa_length(rasi=rasi, lord=lord,
+                           lord_sign=navamsa[lord]).years == years, abbr
+
+    # Mars, the other co-lord, would give 3 — so the printed 7 fixes Ketu.
+    assert dasa_length(rasi=7, lord=int(Graha.MARS),
+                       lord_sign=navamsa[int(Graha.MARS)]).years == 3
+    # And §15.5.1's own comparison picks Ketu independently.
+    assert co_lord(7, _navamsa_longitudes()).winner == int(Graha.KETU)
+    assert "makes Ketu the stronger" in vn.SCORPIOS_CO_LORD_HAS_TO_BE_KETU_HERE
+
+
+def test_the_compressed_lengths_are_three_times_the_years():
+    assert [vn.compressed_days(y) for y in (7, 4, 2, 3)] == [21, 12, 6, 9]
+    assert sum(vn.compressed_days(y) for y in (7, 4, 2, 3)) == 48
+    assert vn.compressed_days(11) == 33
+
+
+def test_pisces_dasa_holds_the_marriage_under_every_reading():
+    """19 July as calendar days, 21 July as solar days, 20 July printed — and
+    24 July is inside Pisces dasa on all three.
+    """
+    from hora.core.ephemeris import get_ephemeris
+
+    eph = get_ephemeris(_SETTINGS)
+    start = _PRAVESH.jd_ut
+    at_start = eph.positions(start, [0])[0].longitude
+
+    def after(degrees):
+        low, high = start, start + 200.0
+        for _ in range(70):
+            middle = (low + high) / 2.0
+            moved = (eph.positions(middle, [0])[0].longitude - at_start) % 360.0
+            if moved < degrees:
+                low = middle
+            else:
+                high = middle
+        return (low + high) / 2.0
+
+    wedding = from_local(1993, 7, 24, 12, 0, 0.0, utc_offset_hours=5.5).jd_ut
+    for opens, closes in ((start + 48, start + 81),          # calendar days
+                          (after(48), after(81))):           # solar days
+        assert opens < wedding < closes
+    assert "under every reading" not in vn.DURATION_RULE
+    assert "one day from each" in vn.THE_DATE_FITS_NEITHER_READING_OF_A_SOLAR_DAY
+
+
+def test_the_printed_date_sits_between_the_two_readings():
+    import swisseph as swe
+
+    from hora.core.ephemeris import get_ephemeris
+
+    eph = get_ephemeris(_SETTINGS)
+    start = _PRAVESH.jd_ut
+    at_start = eph.positions(start, [0])[0].longitude
+    low, high = start, start + 120.0
+    for _ in range(70):
+        middle = (low + high) / 2.0
+        moved = (eph.positions(middle, [0])[0].longitude - at_start) % 360.0
+        if moved < 48.0:
+            low = middle
+        else:
+            high = middle
+
+    def day(jd):
+        year, month, dom, _ = swe.revjul(jd + 5.5 / 24.0)
+        return int(year), int(month), int(dom)
+
+    assert day(start + 48.0) == (1993, 7, 19)          # calendar days
+    assert day((low + high) / 2.0) == (1993, 7, 21)    # solar days
+    # The section prints 20 July, between the two.
+
+
+def test_pisces_holds_the_navamsa_lagna_and_takes_argala_from_the_second():
+    from hora.charts.vargas import d9_navamsa
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD, Graha
+
+    chart = _annual()
+    nav_lagna = int(d9_navamsa(chart.lagna_longitude).sign)
+    assert RASI_ABBR[nav_lagna] == "Pi"
+    assert str(GRAHA_NAMES[int(RASI_LORD[nav_lagna])]) == "Jupiter"
+
+    for graha in (Graha.JUPITER, Graha.VENUS):
+        where = int(d9_navamsa(chart.positions[int(graha)].longitude).sign)
+        assert (where - nav_lagna) % 12 + 1 == 2       # the 2nd gives argala
+
+
+def test_the_two_compressed_dasas_progress_the_same_way():
+    assert "one constellation per year" in mudda.MUDDA_ORDER_RULE
+    assert "one rasi per year" in vn.ORDER_RULE
+    assert "Just as we progress Moon by one constellation per year" in (
+        vn.ORDER_RULE)
+    assert "Neither reads the annual chart" in (
+        vn.THE_TWO_COMPRESSED_DASAS_PROGRESS_THE_SAME_WAY)
+
+
+def test_the_book_ranks_its_three_dasas():
+    assert "Varsha Narayana dasa is, however, the best" in vn.THE_BOOKS_OWN_RANKING
+    assert "Patyayini dasa gives better results than Mudda" in (
+        vn.THE_BOOKS_OWN_RANKING)
+    assert "argues for it nowhere" in (
+        vn.THE_BOOK_RANKS_ITS_THREE_DASAS_AND_GIVES_NO_REASON)

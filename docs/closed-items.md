@@ -6,6 +6,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 |---|---|
 | [OI-116](#oi-116) | Example 54's Rajya saham could not be computed |
 | [OI-157](#oi-157) | Table 74 used a house as a longitude and never defined one |
+| [OI-174](#oi-174) | §30.1 gave Narayana dasa a paramayush of 120 where its cycles run to 144 |
 | [OI-151](#oi-151) | §27.1's "exact position" is the sidereal longitude |
 | [OI-146](#oi-146) | one square of Figure 3 could not be read |
 | [OI-147](#oi-147) | §26.8's vedha lines were stated but not determined |
@@ -1996,3 +1997,22 @@ from the **lagna's own longitude**.
 returned those five undecided. An explicit mapping still overrides it, and a
 mapping that omits a house Table 74 needs still returns that saham undecided,
 so nothing silently falls back.
+
+
+## OI-174 — §30.1 gave Narayana dasa a paramayush of 120 where its cycles run to 144 · **CLOSED**
+
+**Closed by footnote 88**, which states the arithmetic and the reason in one
+sentence: "Sum of the 2 cycles of Narayana dasa for natal charts is 12 x 12 =
+144 years. However, only the first 120 years of this is valid, as the
+paramayush of human beings is 120 years."
+
+So §30.1's "paramayush of 120 years is compressed to one year" is deliberate
+for both systems. Vimsottari's paramayush is 120 outright; Narayana dasa's two
+cycles are 144 and the first 120 of them are what a human life can reach, so
+120 is the span being compressed either way — and 120 x 3 = 360, which is
+§30.3's and §30.4's day count.
+
+The 144 we derived from chapter 18's own rule — a rasi's first cycle runs 1 to
+12 years and its second is 12 minus that, so twelve rasis give 144 in every
+chart — is the book's own figure, printed here for the first time.
+`narayana_full_cycle_years` still derives it rather than asserting it.
