@@ -2577,6 +2577,56 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "GL come closest under a disc-centre sunrise, as OI-103 records."
         ),
     },
+    67: {
+        "title": "Annual Dasa Example — the 1993-94 annual chart of Chart 18",
+        "birth": "June 1, 1993, 1:30:04 pm (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1993, "month": 6, "day": 1, "hour": 13, "minute": 30,
+            "second": 4.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "7 Vi 13", "Sun": "17 Ta 04", "Moon": "4 Li 48",
+            "Mars": "23 Cn 53", "Merc": "4 Ge 47", "Jup": "10 Vi 59",
+            "Ven": "1 Ar 37", "Sat": "6 Aq 29", "Rahu": "18 Sc 38",
+            "Ketu": "18 Ta 38", "HL": "15 Cp 32", "GL": "13 Cp 42",
+        },
+        "chara_karakas": {
+            "Mars": "AK", "Sun": "AmK", "Rahu": "BK", "Jup": "MK",
+            "Sat": "PiK", "Moon": "PK", "Merc": "GK", "Ven": "DK",
+        },
+        "drawn": {
+            "Ven": "Ar", "Ketu": "Ta", "Sun": "Ta", "Merc": "Ge",
+            "Sat": "Aq", "Mars": "Cn", "GL": "Cp", "HL": "Cp",
+            "Muntha": "Cp", "AL": "Sg", "Rahu": "Sc", "Moon": "Li",
+            "Jup": "Vi", "Asc": "Vi",
+        },
+        "divisional": {
+            "D9": {
+                "Asc": "Pi", "Ven": "Ar", "Jup": "Ar", "GL": "Ta",
+                "HL": "Ta", "AL": "Ta", "Ketu": "Ge", "Sun": "Ge",
+                "Mars": "Aq", "Rahu": "Sg", "Merc": "Sc", "Moon": "Sc",
+                "Sat": "Sc",
+            },
+        },
+        "sahams": {"vivaha": "2 Sg 22"},
+        "events": {"married": "July 24, 1993"},
+        "first_seen": "chapter 30, Example 122",
+        "note": (
+            "Not a nativity. The **annual chart** of Chart 18 for 1993-94, "
+            "cast for the moment the Sun regained her natal 17 Ta 04 in her "
+            "22nd year. The book does not say the nativity is Chart 18; the "
+            "birth data is identical and the natal Sun matches to the "
+            "arcminute. Every printed longitude reproduces within one "
+            "arcminute and every difference is positive, which is D-80's "
+            "truncation again. The muntha in Cp is section 28.1's rule at "
+            "year 22 from an Aries natal lagna, the vivaha saham at 2 Sg 22 "
+            "is Table 74's with the thirty-degree correction applied, and "
+            "all eight chara karakas match -- the PK/GK pair by 1.6 "
+            "arcminutes. HL and GL miss, as OI-103 records for every chart "
+            "that prints them."
+        ),
+    },
 }
 
 

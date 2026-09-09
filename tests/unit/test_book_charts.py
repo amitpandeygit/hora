@@ -50,7 +50,7 @@ def test_the_register_holds_every_chart_supplied_so_far():
         20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
         35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
         49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65,
-        66)
+        66, 67)
     # 4 alone is uncited. 61 was promised from chapter 1 and arrived with
     # Example 110; 65 was cited by Exercise 39 and arrived a page later.
     assert CHARTS_NOT_SUPPLIED == (4,)
@@ -118,13 +118,15 @@ def test_every_charts_nodes_are_exactly_opposite(number):
 
 @pytest.mark.parametrize("number", sorted(BOOK_CHARTS))
 def test_a_drawn_diagram_agrees_with_the_printed_longitudes(number):
-    """AL is excluded: it is derived, not a body with a longitude."""
+    """AL and Muntha are excluded: both are derived, not bodies with a
+    longitude. Muntha is section 28.1's, drawn only in annual charts.
+    """
     drawn = chart(number).get("drawn")
     if not drawn:
         pytest.skip("no rasi diagram transcribed for this chart")
     found = signs(number)
     for body, rasi in drawn.items():
-        if body == "AL":
+        if body in ("AL", "Muntha"):
             continue
         assert RASI_ABBR[found[body]] == rasi, body
 
@@ -147,7 +149,7 @@ def test_the_recomputable_charts_are_the_ones_with_full_birth_lines():
         3, 6, 7, 8, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
         24, 25, 26, 27, 28, 29, 31, 32, 33, 34, 35, 37, 38, 39,
         40, 41, 42, 43, 44, 46, 47, 48, 49, 50, 51, 53, 54, 55,
-        56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66)
+        56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67)
 
 
 # --------------------------------------------------------------------------
@@ -293,7 +295,7 @@ def test_the_index_endpoint_lists_every_chart(client):
         3, 6, 7, 8, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
         24, 25, 26, 27, 28, 29, 31, 32, 33, 34, 35, 37, 38, 39,
         40, 41, 42, 43, 44, 46, 47, 48, 49, 50, 51, 53, 54, 55,
-        56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66]
+        56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67]
 
 
 def test_the_chart_endpoint_derives_signs_and_lagna(client):

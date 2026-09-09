@@ -579,23 +579,20 @@ reproduces.
 | Chart 58 HL / GL | 13 Li 43 / 21 Cn 18 | 13 Li 56 / 21 Cn 52 | 13' / 34' |
 
 Not the birth time and not the formulae. HL advances 0.5°/minute from sunrise
-and GL 1.25°/minute, so each error implies a sunrise shift, and within each
-chart the two agree to within a second: +18.4s/+19.1s (Chart 3), +49.5s/+49.3s
-(Chart 12), +26.6s/+26.9s (Chart 58). Under `disc_center` they agree too, at
-−62s, −43s and −34s. HL and GL are right and the sunrise is not. Neither §5
-definition is the book's — ours early every time, `disc_center` late, at no
-fixed fraction between (23% at 26 N, 53% at 43 N), so a toggle cannot fix it;
-it looks like refraction or horizon dip diverging with latitude. The reach into
-a **divisional** chart is not monotone: Chart 12's GL is a rasi out yet lands
-in the same D-10 sign, while its HL agrees in the rasi and misses in the D-10.
+and GL 1.25°/minute, so each error implies a sunrise shift, and in every chart
+the two agree to within a second — so **one sunrise explains both lagnas** and
+the sunrise is what is wrong. Chart 67 (Example 122, 16 N 15) shows it cleanly:
+fitting a single sunrise to its printed HL reproduces its printed GL to 0.38'.
 
-**Chart 58 reprints Chart 3** at 26 N **13** rather than 26 N 14, with every
-graha and the ascendant identical and only HL and GL moving, by −3' and −7'.
-So the book's two castings sit **8s apart** in implied sunrise for **1'** of
-latitude while ours moves **2.2s the other way** — faster than our model
-varies, and in the opposite sense.
+Neither §5 definition is the book's: ours is early every time and `disc_center`
+late, at no fixed fraction between — **54% at 16 N, 23% and 44% at 26 N, 53% at
+43 N**. The two 26 N figures are Charts 3 and 58, the same nativity at the same
+latitude, so the offset is not a function of latitude and a toggle cannot fix
+it. The reach into a **divisional** chart is not monotone either: Chart 12's GL
+is a rasi out yet lands in the same D-10 sign, while its HL agrees in the rasi
+and misses in the D-10.
 
-**Not changed** — neither available value is right. Pinned by the
+**Not changed** — no available value is right. Pinned by the
 `..._sunrise_shift` tests. **Closes when:** a JHora run gives sunrise for 24 Dec
 1926 at 78 E 10 / 26 N 13 and 26 N 14, or a later section states the model.
 

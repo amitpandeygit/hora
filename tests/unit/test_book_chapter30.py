@@ -163,3 +163,256 @@ def test_nothing_is_computed_from_the_introduction_yet():
     """§30.1 states the plan; the three dasas arrive in §30.2 onwards."""
     with pytest.raises(KeyError):
         intro.paramayush("patyayini")
+
+
+# --------------------------------------------------------------------------
+# Example 122 and Chart 67
+# --------------------------------------------------------------------------
+
+from hora.charts.chart import Place, compute_chart
+from hora.core.const import RASI_ABBR, Graha
+from hora.core.settings import NodeType, Settings
+from hora.core.timeutil import from_local
+from hora.dasha.annual import example
+
+_PLACE = Place(name="Example 122", latitude=16 + 15 / 60, longitude=81 + 12 / 60)
+_SETTINGS = Settings(node_type=NodeType.MEAN)
+_PRAVESH = from_local(1993, 6, 1, 13, 30, 4.0, utc_offset_hours=5.5)
+_BIRTH = from_local(1972, 6, 1, 4, 16, 0.0, utc_offset_hours=5.5)
+
+
+def _annual():
+    return compute_chart(_PRAVESH, _PLACE, _SETTINGS)
+
+
+def _annual_longitudes():
+    chart = _annual()
+    names = ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn")
+    return ({name: chart.positions[i].longitude
+             for i, name in enumerate(names)}, chart.lagna_longitude)
+
+
+def test_the_example_and_its_varsha_pravesh_line_are_transcribed():
+    assert "born on 1st June 1972 at 4:16 am" in example.EXAMPLE_122
+    assert "married on 24th July 1993" in example.EXAMPLE_122
+    assert "1:30:04 pm (IST)" in example.VARSHA_PRAVESH_DATA
+    assert example.CHART_NUMBER == 67
+
+
+def test_the_nativity_is_chart_18_and_the_example_does_not_say_so():
+    from hora.charts.book import chart
+
+    eighteen = chart(18)
+    assert eighteen["birth"] == "June 1, 1972, 4:16 am (IST), 81 E 12, 16 N 15"
+    assert eighteen["longitudes"]["Sun"] == "17 Ta 04"
+    assert chart(67)["longitudes"]["Sun"] == "17 Ta 04"
+    assert "Chart 18" not in example.EXAMPLE_122
+    assert "does not name the chart" in example.THE_NATIVITY_IS_CHART_18_UNNAMED
+
+
+def test_chart_67_reproduces_within_one_arcminute_and_always_high():
+    """Ten bodies, ten positive residuals under an arcminute. D-80 again."""
+    from hora.charts.book import longitudes
+
+    chart = _annual()
+    ids = {"Sun": 0, "Moon": 1, "Mars": 2, "Merc": 3, "Jup": 4, "Ven": 5,
+           "Sat": 6, "Rahu": 7, "Ketu": 8}
+    printed = longitudes(67)
+    worst = 0.0
+    for name, index in ids.items():
+        got = chart.positions[index].longitude
+        gap = (((got - printed[name] + 180) % 360) - 180) * 60
+        assert 0.0 < gap < 1.0, (name, gap)
+        worst = max(worst, gap)
+    lagna_gap = (((chart.lagna_longitude - printed["Asc"] + 180) % 360)
+                 - 180) * 60
+    assert 0.0 < lagna_gap < 1.0
+    assert worst < 1.0
+    assert "every residual is positive" in example.CHART_67_TRUNCATES_LIKE_CHART_66
+
+
+def test_the_varsha_pravesh_reproduces_to_seven_seconds():
+    """§27.1's solar return on Chart 18, in her 22nd year."""
+    from hora.core.ephemeris import get_ephemeris
+    from hora.tajaka.annual import varsha_pravesh
+
+    eph = get_ephemeris(_SETTINGS)
+    natal_sun = compute_chart(_BIRTH, _PLACE, _SETTINGS).positions[0].longitude
+    got = varsha_pravesh(lambda jd: eph.positions(jd, [0])[0].longitude,
+                         natal_sun, _BIRTH.jd_ut, 22)
+    assert got["found"] is True
+    seconds = (got["jd"] - _PRAVESH.jd_ut) * 86400.0
+    assert 0.0 < seconds < 10.0
+    assert "6.6 seconds" in example.THE_VARSHA_PRAVESH_REPRODUCES_TO_SEVEN_SECONDS
+
+
+def test_the_vivaha_saham_reproduces_and_needs_the_correction():
+    """2 Sg 22, with the thirty degrees added."""
+    from hora.tajaka.sahams import sahams
+
+    longitudes, lagna = _annual_longitudes()
+    got = sahams(longitudes=longitudes, lagna=lagna, daytime=True)["Vivaha"]
+    assert got["correction"] == 30.0
+    assert RASI_ABBR[got["rasi"]] == "Sg"
+    assert got["longitude"] % 30 == pytest.approx(2 + 22 / 60, abs=0.01)
+    # Without the correction it would fall in Scorpio, a whole rasi away.
+    assert RASI_ABBR[int(got["uncorrected"] // 30)] == "Sc"
+    assert "which is what the book prints" in (
+        example.THE_VIVAHA_SAHAM_NEEDS_THE_CORRECTION)
+
+
+def test_the_lagna_holds_the_seventh_lord_and_the_saham_lord():
+    """Both are Jupiter, and Jupiter is in the lagna."""
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    chart = _annual()
+    lagna_rasi = chart.lagna_rasi
+    assert RASI_ABBR[lagna_rasi] == "Vi"
+    seventh = (lagna_rasi + 6) % 12
+    assert str(GRAHA_NAMES[int(RASI_LORD[seventh])]) == "Jupiter"
+    saham_rasi = RASI_ABBR.index("Sg")
+    assert str(GRAHA_NAMES[int(RASI_LORD[saham_rasi])]) == "Jupiter"
+    assert int(chart.positions[int(Graha.JUPITER)].longitude // 30) == lagna_rasi
+
+
+def test_lagna_lord_mercury_is_in_his_own_sign():
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    chart = _annual()
+    assert str(GRAHA_NAMES[int(RASI_LORD[chart.lagna_rasi])]) == "Mercury"
+    mercury_rasi = int(chart.positions[int(Graha.MERCURY)].longitude // 30)
+    assert RASI_ABBR[mercury_rasi] == "Ge"
+    assert int(RASI_LORD[mercury_rasi]) == int(Graha.MERCURY)
+
+
+def test_mercury_has_an_ithasala_with_jupiter():
+    """A square, 6.20° apart against a binding deeptamsa of 7 — the closest
+    call in the paragraph.
+    """
+    from hora.tajaka.yogas import ithasala
+
+    longitudes, _ = _annual_longitudes()
+    got = ithasala(faster=int(Graha.MERCURY), slower=int(Graha.JUPITER),
+                   faster_longitude=longitudes["Mercury"],
+                   slower_longitude=longitudes["Jupiter"])
+    assert got["aspect"] == "Square aspect"
+    assert got["binding_deeptamsa"] == 7.0
+    assert got["separation_from_exact"] == pytest.approx(6.20, abs=0.02)
+    assert got["type"] == "Vartamaana"
+    assert "the closest call" in example.EVERY_REASON_IN_THE_PARAGRAPH_CHECKS_OUT
+
+
+def test_the_navamsa_claims_hold():
+    """Jupiter with Venus in the 2nd from a Pisces lagna, Mercury in the 9th.
+    """
+    from hora.charts.vargas import d9_navamsa
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    chart = _annual()
+    nav_lagna = int(d9_navamsa(chart.lagna_longitude).sign)
+    assert RASI_ABBR[nav_lagna] == "Pi"
+    assert str(GRAHA_NAMES[int(RASI_LORD[nav_lagna])]) == "Jupiter"
+    seventh = (nav_lagna + 6) % 12
+    assert str(GRAHA_NAMES[int(RASI_LORD[seventh])]) == "Mercury"
+
+    where = {name: int(d9_navamsa(chart.positions[g].longitude).sign)
+             for name, g in (("Jupiter", Graha.JUPITER), ("Venus", Graha.VENUS),
+                             ("Mercury", Graha.MERCURY))}
+    assert where["Jupiter"] == where["Venus"]
+    assert RASI_ABBR[where["Jupiter"]] == "Ar"
+    assert (where["Jupiter"] - nav_lagna) % 12 + 1 == 2      # the 2nd
+    assert (where["Mercury"] - nav_lagna) % 12 + 1 == 9      # a trikona
+
+
+def test_the_drawn_navamsa_reproduces_body_for_body():
+    from hora.charts.book import chart as record
+    from hora.charts.vargas import d9_navamsa
+
+    chart = _annual()
+    ids = {"Sun": 0, "Moon": 1, "Mars": 2, "Merc": 3, "Jup": 4, "Ven": 5,
+           "Sat": 6, "Rahu": 7, "Ketu": 8}
+    drawn = record(67)["divisional"]["D9"]
+    for name, index in ids.items():
+        got = int(d9_navamsa(chart.positions[index].longitude).sign)
+        assert RASI_ABBR[got] == drawn[name], name
+    assert RASI_ABBR[int(d9_navamsa(chart.lagna_longitude).sign)] == drawn["Asc"]
+
+
+def test_the_muntha_in_capricorn_is_28_1s_rule():
+    from hora.tajaka.muntha import muntha_rasi
+
+    natal = compute_chart(_BIRTH, _PLACE, _SETTINGS)
+    assert RASI_ABBR[natal.lagna_rasi] == "Ar"
+    got = muntha_rasi(natal.lagna_rasi, 22)
+    assert RASI_ABBR[int(got["rasi"])] == "Cp"
+
+    from hora.charts.book import chart as record
+
+    assert record(67)["drawn"]["Muntha"] == "Cp"
+    assert "The diagram draws it in Capricorn" in (
+        example.THE_MUNTHA_IN_CAPRICORN_IS_28_1S_RULE)
+
+
+def test_all_eight_chara_karakas_match_and_one_pair_by_1_6_arcminutes():
+    from hora.charts.book import chart as record
+    from hora.charts.karaka import chara_karakas
+
+    chart = _annual()
+    got = chara_karakas({g: chart.positions[g].longitude for g in range(8)})
+    printed = record(67)["chara_karakas"]
+    short = {"Sun": "Sun", "Moon": "Moon", "Mars": "Mars", "Mercury": "Merc",
+             "Jupiter": "Jup", "Venus": "Ven", "Saturn": "Sat", "Rahu": "Rahu"}
+    for row in got:
+        assert printed[short[row.graha_name]] == row.symbol, row.graha_name
+
+    by_name = {row.graha_name: row.advancement for row in got}
+    gap = abs(by_name["Moon"] - by_name["Mercury"]) * 60
+    assert gap == pytest.approx(1.6, abs=0.2)
+    assert "1.6 arcminutes apart" in (
+        example.THE_KARAKA_ORDER_TURNS_ON_1_6_ARCMINUTES)
+
+
+def test_one_sunrise_explains_both_hl_and_gl_and_it_is_not_ours():
+    """OI-103's evidence from a fourth chart, and it removes the latitude
+    hypothesis: 54% at 16 N against 23% at 26 N.
+    """
+    from hora.charts.book import longitudes
+    from hora.charts.special_lagna import all_special_lagnas
+    from hora.core.ephemeris import get_ephemeris
+    from hora.core.settings import SunriseMode
+
+    chart = _annual()
+    printed = longitudes(67)
+
+    def lagnas(rise):
+        got = all_special_lagnas(
+            sunrise_jd=rise, jd_ut=_PRAVESH.jd_ut,
+            lagna_longitude=chart.lagna_longitude,
+            moon_longitude=chart.positions[1].longitude, settings=_SETTINGS)
+        return got[1].longitude, got[2].longitude
+
+    low, high = _PRAVESH.jd_ut - 0.6, _PRAVESH.jd_ut - 0.2
+    for _ in range(60):
+        middle = (low + high) / 2
+        if lagnas(middle)[0] < printed["HL"]:
+            high = middle
+        else:
+            low = middle
+    solved = (low + high) / 2
+    hl, gl = lagnas(solved)
+    assert abs(hl - printed["HL"]) * 60 < 0.01
+    # The free check: the same sunrise reproduces the GL as well.
+    assert abs(gl - printed["GL"]) * 60 < 0.5
+
+    times = {}
+    for mode in (SunriseMode.DISC_UPPER_LIMB, SunriseMode.DISC_CENTER):
+        eph = get_ephemeris(Settings(node_type=NodeType.MEAN,
+                                     sunrise_mode=mode))
+        eph.set_observer(_PLACE.latitude, _PLACE.longitude, 0.0)
+        times[mode] = eph.sunrise(_PRAVESH.jd_ut - 0.5, _PLACE.latitude,
+                                  _PLACE.longitude)
+    span = times[SunriseMode.DISC_CENTER] - times[SunriseMode.DISC_UPPER_LIMB]
+    fraction = (solved - times[SunriseMode.DISC_UPPER_LIMB]) / span
+    assert 0.50 < fraction < 0.58              # 54% at 16 N 15
+    assert "does not grow with latitude" in (
+        example.THE_SUNRISE_OFFSET_IS_NOT_A_FUNCTION_OF_LATITUDE)

@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1's introduction (11)
+### Chapter 30 — §30.1 and Example 122 (20)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1842,6 +1842,14 @@ exist to check the section's own figures, and one of them fails.
 | `FOOTNOTE_86_IS_A_PROVENANCE_MARK` · `WHETHER_FOOTNOTE_86_COVERS_BOTH_RULES_IS_NOT_MARKED` | Ours: the second self-labelled technique in the book, and it sits on only one of the paragraph's two sentences |
 | `NARAYANA_DASAS_PARAMAYUSH_IS_144_NOT_120` | Ours: the section's 120 is right for Vimsottari and wrong for Narayana dasa. OI-174 |
 | `THE_ORDER_OF_A_HUNDRED_IS_A_RANGE_NOT_A_FIGURE` | Ours: the nakshatra dasas run 36 to 120 years and seven of ten sit between 84 and 120 |
+| `EXAMPLE_122` · `VARSHA_PRAVESH_DATA` · `MARRIAGE_IN_THIS_YEAR` · `MARRIAGE_REASONS` · `CHART_NUMBER` | Example 122 verbatim and its five reasons as data |
+| `THE_NATIVITY_IS_CHART_18_UNNAMED` | Ours: the birth data is Chart 18's word for word and the example does not say so |
+| `THE_VARSHA_PRAVESH_REPRODUCES_TO_SEVEN_SECONDS` | Ours: 6.6 seconds, which a birth time printed to the minute covers on its own |
+| `CHART_67_TRUNCATES_LIKE_CHART_66` | Ours: ten bodies, ten positive residuals under an arcminute. D-80 |
+| `EVERY_REASON_IN_THE_PARAGRAPH_CHECKS_OUT` · `THE_VIVAHA_SAHAM_NEEDS_THE_CORRECTION` | Ours: all five reasons hold, and the saham is the second in the book to need the thirty degrees |
+| `THE_MUNTHA_IN_CAPRICORN_IS_28_1S_RULE` | Ours: §28.1's rule checked against a diagram, the chart printing no muntha longitude |
+| `THE_KARAKA_ORDER_TURNS_ON_1_6_ARCMINUTES` | Ours: all eight match and the PK/GK pair is decided by 1.6 arcminutes |
+| `THE_SUNRISE_OFFSET_IS_NOT_A_FUNCTION_OF_LATITUDE` | Ours: one sunrise fits both HL and GL, at 54% between two conventions at 16 N. OI-103 |
 
 ---
 
