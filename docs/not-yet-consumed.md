@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.14 (116)
+### Chapter 29 — §29.1 to §29.2.15 (125)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1810,6 +1810,13 @@ footnote can. What follows is prose and findings.
 | `THAMBIRA_IS_GAIRI_KAMBOOLA_WITHOUT_THE_CONDITIONS` · `EVERY_GAIRI_KAMBOOLA_IS_ALSO_A_THAMBIRA` | Ours: the same crossing against different backgrounds, and one contains the other |
 | `THE_SLOWER_CONDITION_IS_FORCED_BY_THE_CROSSING` | Ours: at 0° the mover is behind everything, so the other planet is the slower one by construction |
 | `THE_RESULT_IS_AGAIN_READ_OFF_THE_HOUSES_OWNED` | Ours: Venus's 2nd and 7th from Aries, the fourth section running to do this |
+| `KUTTA_RULE` · `KUTTA_FOOTNOTE` · `KUTTA_RESULTS` · `KUTTA_EXAMPLE` | §29.2.15 verbatim with its slip intact, footnote 84, and its worked case as data |
+| `THE_BOOK_MARKS_THIS_YOGA_CONTESTED_AND_SAYS_NO_MORE` · `A_PLANET_IN_LAGNA_COULD_ASPECT_ITSELF` | Ours: the only yoga the book marks contested, and an edge it does not reach. OI-172 |
+| `KUTTA_IS_THE_FIRST_YOGA_SINCE_29_2_2_WITHOUT_AN_ITHASALA` | Ours: twelve sections in a row turned on an ithasala and this one does not |
+| `THE_SAME_EIGHT_HOUSES_AS_ISHKAVALA` | Ours: kendras and panapharas are ishkavala's own eight, used again thirteen sections later |
+| `MERCURY_IN_VIRGO_IS_BOTH_AND_ONLY_MERCURY_IS` | Ours: the one worked case is the one placement that cannot separate the rule's disjunction |
+| `GRAHA_DRISHTI_WOULD_GIVE_NO_YOGA_HERE` | Ours: the example forms only under §28.2's aspects; chapter 10's would fail |
+| `SIGNIFIED_MATTERS_ARE_THE_HOUSES_OWNED_AGAIN` | Ours: the Sun's 4th from Taurus, the fifth section running to read a result this way |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

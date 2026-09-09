@@ -2739,6 +2739,175 @@ def thambira(*, mover: int, mover_longitude: float, other: int,
     }
 
 
+# --------------------------------------------------------------------------
+# §29.2.15 Kutta yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.15's rule, verbatim, including "in occupying" for "occupying".
+KUTTA_RULE = (
+    "If a planet occupying lagna is aspected by a planet in occupying own or "
+    "exaltation rasi in a kendra or a panaphara, then this yoga is formed. "
+    "The desires related to the matters signified by the planet in lagna are "
+    "fulfilled."
+)
+
+#: Footnote 84, verbatim. The book flags a disagreement and states none of it.
+KUTTA_FOOTNOTE = "This yoga was interpreted differently by scholars."
+
+KUTTA_RESULTS = (
+    "the desires related to the matters signified by the planet in lagna are "
+    "fulfilled")
+
+#: §29.2.15's worked example, as the book states it.
+KUTTA_EXAMPLE: dict[str, object] = {
+    "lagna_rasi": "Ta",
+    "in_lagna": "Sun", "in_lagna_at": "21 Ta", "in_lagna_longitude": 51.0,
+    "aspecting": "Mercury", "aspecting_at": "16 Vi",
+    "aspecting_longitude": 166.0,
+    "aspecting_house": 5, "aspecting_house_class": "panaphara",
+    "aspecting_dignity": ("own rasi", "exaltation"),
+    "aspect": "Trinal aspect",
+    "owns": (4,),
+    "shows": "the 4th house matters receive a boost in the year",
+}
+
+#: **Gap, and the book's own.** Footnote 84 says only "This yoga was
+#: interpreted differently by scholars" and gives none of the other readings,
+#: no source for them and no reason for preferring this one. It is the only
+#: yoga in §29.2 the book marks as contested, and the mark carries no content.
+#: See OI-172.
+THE_BOOK_MARKS_THIS_YOGA_CONTESTED_AND_SAYS_NO_MORE = (
+    "Footnote 84 records that scholars interpreted kutta differently and "
+    "gives neither the other interpretations nor a reason for this one."
+)
+
+#: **Finding.** Kutta is the first yoga since §29.2.2 with **no ithasala in
+#: it**. Everything from §29.2.3 to §29.2.14 was built on one — formed it,
+#: cancelled it, strengthened it, restored it or waited for it. This is a
+#: placement yoga again: a planet in the lagna, an aspect, a dignity and a
+#: house class.
+KUTTA_IS_THE_FIRST_YOGA_SINCE_29_2_2_WITHOUT_AN_ITHASALA = (
+    "Sections 29.2.3 to 29.2.14 all turn on an ithasala. Kutta needs none: a "
+    "planet in lagna, an aspect on it, and the aspecting planet dignified in "
+    "a kendra or a panaphara."
+)
+
+#: **Finding.** "A kendra or a panaphara" is the same eight houses ishkavala
+#: allows and induvara forbids — the twelve less the apoklimas. The chapter
+#: uses the partition twice, thirteen sections apart, and never says so.
+THE_SAME_EIGHT_HOUSES_AS_ISHKAVALA = (
+    "Kendras and panapharas are eight houses, which is exactly the set "
+    "section 29.2.1 requires every planet to occupy and section 29.2.2 "
+    "requires every planet to avoid."
+)
+
+#: **Finding, and the example cannot separate the disjunction.** The rule
+#: allows the aspecting planet to be in its **own** rasi **or** its
+#: **exaltation** rasi. The example uses Mercury in Virgo, which is both — and
+#: Mercury is the **only** graha for which own rasi and exaltation coincide.
+#: So the one worked case is the one placement in the zodiac that cannot tell
+#: the two halves of the condition apart.
+MERCURY_IN_VIRGO_IS_BOTH_AND_ONLY_MERCURY_IS = (
+    "Virgo is Mercury's own rasi and his exaltation rasi, and he is the only "
+    "graha for which the two are the same. The example's aspecting planet "
+    "satisfies both halves of the condition at once."
+)
+
+#: **Finding.** The example only works under §28.2's Tajaka aspects. Mercury
+#: in Virgo aspects Taurus by the **9th**, which §28.2 makes a trinal. Under
+#: chapter 10's graha drishti Mercury reaches only the 7th — Pisces — and does
+#: not aspect the lagna at all, so there would be no yoga. The chapter's
+#: aspect names have been §28.2's throughout; this example makes the choice
+#: load-bearing.
+GRAHA_DRISHTI_WOULD_GIVE_NO_YOGA_HERE = (
+    "Mercury in Virgo aspects Taurus by the 9th house, which section 28.2 "
+    "makes a trinal aspect. Under chapter 10's graha drishti he aspects only "
+    "Pisces and the example would not form."
+)
+
+#: **Finding, for the fifth section running.** "The matters signified by the
+#: planet in lagna" are read as **the houses that planet owns**: the Sun from
+#: a Taurus lagna owns Leo, the 4th, and the book says the 4th house matters
+#: receive a boost. §29.2.10, §29.2.11, §29.2.13 and §29.2.14 all did this and
+#: none of the five states it as a rule.
+SIGNIFIED_MATTERS_ARE_THE_HOUSES_OWNED_AGAIN = (
+    "The Sun owns the 4th from a Taurus lagna and the example boosts the 4th "
+    "house matters. Five sections running have read a planet's significations "
+    "as the houses it owns from the lagna."
+)
+
+#: **Gap.** Nothing stops the aspecting planet being **in the lagna itself**:
+#: the 1st is a kendra, and §28.2 counts the 1st house as a conjunction, which
+#: is one of its aspects. A dignified planet alone in the lagna would then give
+#: itself kutta. The section does not reach the case; `kutta` reports it.
+A_PLANET_IN_LAGNA_COULD_ASPECT_ITSELF = (
+    "The 1st house is a kendra and section 28.2 makes the 1st a conjunction, "
+    "so a dignified planet in the lagna satisfies the rule against itself. "
+    "The section does not say whether that counts."
+)
+
+
+def kutta(*, lagna_rasi: int, in_lagna: int, in_lagna_longitude: float,
+          aspecting: int, aspecting_longitude: float) -> dict:
+    """§29.2.15 — a planet in lagna aspected by a dignified planet.
+
+    The aspect is §28.2's, which is what the example needs: see
+    `GRAHA_DRISHTI_WOULD_GIVE_NO_YOGA_HERE`.
+    """
+    seat = validate.in_range("lagna_rasi", int(lagna_rasi), 0, 11)
+    validate.in_range("in_lagna", int(in_lagna), 0, 8)
+    validate.in_range("aspecting", int(aspecting), 0, 8)
+
+    resident = validate.longitude("in_lagna_longitude",
+                                  float(in_lagna_longitude))
+    source = validate.longitude("aspecting_longitude",
+                                float(aspecting_longitude))
+    resident_rasi = int(resident // 30)
+    source_rasi = int(source // 30)
+
+    in_the_lagna = resident_rasi == seat
+    house = (source_rasi - seat) % 12 + 1
+    group = _house_group(house)
+
+    own = int(RASI_LORD[source_rasi]) == int(aspecting)
+    exalted = source_rasi == int(EXALTATION_RASI[int(aspecting)])
+
+    step = (resident_rasi - source_rasi) % 12 + 1
+    aspect = aspect_on_house(step)
+    same_graha = int(aspecting) == int(in_lagna)
+
+    houses = tuple(h for h in range(1, 13)
+                   if int(RASI_LORD[(seat + h - 1) % 12]) == int(in_lagna))
+    return {
+        "yoga": "Kutta",
+        "lagna_rasi": seat,
+        "in_lagna": int(in_lagna),
+        "in_lagna_name": str(GRAHA_NAMES[int(in_lagna)]),
+        "is_in_lagna": in_the_lagna,
+        "aspecting": int(aspecting),
+        "aspecting_name": str(GRAHA_NAMES[int(aspecting)]),
+        "aspecting_house": house,
+        "aspecting_house_class": group,
+        "in_a_kendra_or_panaphara": group in ("kendra", "panaphara"),
+        "own_rasi": own,
+        "exalted": exalted,
+        "dignified": bool(own or exalted),
+        "aspect": None if aspect is None else aspect["name"],
+        "aspects_the_lagna_planet": aspect is not None,
+        # The 1st house is a kendra and §28.2 calls it a conjunction, so a
+        # dignified planet in lagna satisfies the rule against itself.
+        "aspecting_is_the_lagna_planet": same_graha,
+        "self_aspect_undecided": (A_PLANET_IN_LAGNA_COULD_ASPECT_ITSELF
+                                  if same_graha else None),
+        "present": bool(in_the_lagna and group in ("kendra", "panaphara")
+                        and (own or exalted) and aspect is not None),
+        "houses": houses,
+        "gives": KUTTA_RESULTS,
+        "rule": KUTTA_RULE,
+        "footnote": KUTTA_FOOTNOTE,
+    }
+
+
 def pairs_in_speed_order() -> tuple[tuple[int, int], ...]:
     """Every graha pair footnote 83 can rank, slower first."""
     out = []

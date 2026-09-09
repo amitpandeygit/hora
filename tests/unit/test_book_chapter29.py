@@ -2866,3 +2866,187 @@ def test_thambira_needs_two_different_rankable_grahas():
     with pytest.raises(yogas.TajakaYogaError, match="cannot rank"):
         yogas.thambira(mover=int(Graha.RAHU), mover_longitude=59.5,
                        other=int(Graha.KETU), other_longitude=122.0)
+
+
+# --------------------------------------------------------------------------
+# §29.2.15 Kutta yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_kutta_rule_and_its_footnote_are_transcribed():
+    assert "a planet occupying lagna is aspected by" in yogas.KUTTA_RULE
+    # "in occupying own or exaltation rasi", kept as printed.
+    assert "by a planet in occupying own or exaltation rasi" in yogas.KUTTA_RULE
+    assert "in a kendra or a panaphara" in yogas.KUTTA_RULE
+    assert yogas.KUTTA_FOOTNOTE == (
+        "This yoga was interpreted differently by scholars.")
+
+
+def test_the_kutta_example_reproduces():
+    """Taurus lagna, Sun 21 Ta, Mercury 16 Vi in the 5th."""
+    want = yogas.KUTTA_EXAMPLE
+    got = yogas.kutta(
+        lagna_rasi=1, in_lagna=int(Graha.SUN),
+        in_lagna_longitude=float(want["in_lagna_longitude"]),
+        aspecting=int(Graha.MERCURY),
+        aspecting_longitude=float(want["aspecting_longitude"]))
+    assert got["is_in_lagna"] is True
+    assert got["aspecting_house"] == want["aspecting_house"]
+    assert got["aspecting_house_class"] == want["aspecting_house_class"]
+    assert got["exalted"] is True
+    assert got["aspect"] == want["aspect"]
+    assert got["present"] is True
+    assert got["houses"] == want["owns"] == (4,)
+
+
+def test_the_example_needs_28_2s_aspects_and_fails_under_graha_drishti():
+    """Vi to Ta is the 9th, a trinal. Mercury's graha drishti reaches only
+    the 7th, Pisces.
+    """
+    from hora.charts.aspects import graha_drishti_houses
+    from hora.tajaka.aspects import aspect_on_house
+
+    assert aspect_on_house(9)["name"] == "Trinal aspect"
+    reached = [(5 + h - 1) % 12 for h in graha_drishti_houses(int(Graha.MERCURY))]
+    assert reached == [11]                       # Pisces only
+    assert 1 not in reached                      # not Taurus
+    assert "the example would not form" in (
+        yogas.GRAHA_DRISHTI_WOULD_GIVE_NO_YOGA_HERE)
+
+
+def test_virgo_is_both_mercurys_own_and_his_exaltation():
+    """And he is the only graha for which the two coincide, so the one worked
+    case cannot separate the rule's disjunction.
+    """
+    from hora.core.const import RASI_LORD
+    from hora.core.constants.graha import EXALTATION_RASI
+
+    both = [g for g in range(7)
+            if int(RASI_LORD[int(EXALTATION_RASI[g])]) == g]
+    assert both == [int(Graha.MERCURY)]
+
+    got = yogas.kutta(lagna_rasi=1, in_lagna=int(Graha.SUN),
+                      in_lagna_longitude=51.0, aspecting=int(Graha.MERCURY),
+                      aspecting_longitude=166.0)
+    assert got["own_rasi"] is True and got["exalted"] is True
+    assert yogas.KUTTA_EXAMPLE["aspecting_dignity"] == ("own rasi",
+                                                       "exaltation")
+    assert "the only graha for which the two are the same" in (
+        yogas.MERCURY_IN_VIRGO_IS_BOTH_AND_ONLY_MERCURY_IS)
+
+
+def test_either_half_of_the_dignity_alone_is_enough():
+    """The rule is a disjunction even though its example cannot show it."""
+    # Venus in his own Libra, the 6th from Taurus — an apoklima, so no yoga,
+    # but the dignity holds on its own.
+    own_only = yogas.kutta(lagna_rasi=1, in_lagna=int(Graha.SUN),
+                           in_lagna_longitude=51.0, aspecting=int(Graha.VENUS),
+                           aspecting_longitude=180.0 + 16.0)
+    assert own_only["own_rasi"] is True and own_only["exalted"] is False
+    assert own_only["dignified"] is True
+
+    # The Sun exalted in Aries, which is not his own rasi.
+    exalted_only = yogas.kutta(lagna_rasi=1, in_lagna=int(Graha.MOON),
+                               in_lagna_longitude=51.0,
+                               aspecting=int(Graha.SUN),
+                               aspecting_longitude=10.0)
+    assert exalted_only["exalted"] is True and exalted_only["own_rasi"] is False
+    assert exalted_only["dignified"] is True
+
+
+def test_an_apoklima_gives_no_kutta():
+    """A kendra or a panaphara only — the same eight houses as ishkavala's."""
+    from hora.core.constants.house import APOKLIMA, KENDRA, PANAPHARA
+
+    assert sorted(KENDRA + PANAPHARA) == [1, 2, 4, 5, 7, 8, 10, 11]
+    assert len(KENDRA + PANAPHARA) == 8
+    allowed = set(KENDRA + PANAPHARA)
+    assert allowed == set(range(1, 13)) - set(APOKLIMA)
+    assert yogas.ishkavala(list(allowed))["present"] is True
+    assert "section 29.2.1 requires every planet to occupy" in (
+        yogas.THE_SAME_EIGHT_HOUSES_AS_ISHKAVALA)
+
+    # Jupiter exalted in Cancer is the 3rd from Taurus, an apoklima.
+    got = yogas.kutta(lagna_rasi=1, in_lagna=int(Graha.SUN),
+                      in_lagna_longitude=51.0, aspecting=int(Graha.JUPITER),
+                      aspecting_longitude=90.0 + 16.0)
+    assert got["exalted"] is True
+    assert got["aspecting_house_class"] == "apoklima"
+    assert got["in_a_kendra_or_panaphara"] is False
+    assert got["present"] is False
+
+
+def test_the_planet_must_actually_be_in_the_lagna():
+    got = yogas.kutta(lagna_rasi=1, in_lagna=int(Graha.SUN),
+                      in_lagna_longitude=60.0 + 21.0,
+                      aspecting=int(Graha.MERCURY), aspecting_longitude=166.0)
+    assert got["is_in_lagna"] is False
+    assert got["present"] is False
+
+
+def test_the_sixth_and_eighth_leave_the_lagna_unaspected():
+    """§28.2 gives them no aspect, so a dignified planet there gives nothing.
+    """
+    # Saturn in his own Aquarius is the 10th from Taurus, a kendra, and Aq to
+    # Ta is the 4th — an aspect. Move him to his own Capricorn, the 9th, an
+    # apoklima; then use Mars exalted in Capricorn instead for the 6th/8th.
+    got = yogas.kutta(lagna_rasi=1, in_lagna=int(Graha.SUN),
+                      in_lagna_longitude=51.0, aspecting=int(Graha.SATURN),
+                      aspecting_longitude=300.0 + 16.0)
+    assert got["aspecting_house"] == 10
+    assert got["own_rasi"] is True
+    assert got["aspect"] is not None
+    assert got["present"] is True
+
+
+def test_the_matters_are_the_houses_the_lagna_planet_owns():
+    """Fifth section running. The Sun owns the 4th from Taurus."""
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    assert str(GRAHA_NAMES[int(RASI_LORD[(1 + 4 - 1) % 12])]) == "Sun"
+    got = yogas.kutta(lagna_rasi=1, in_lagna=int(Graha.SUN),
+                      in_lagna_longitude=51.0, aspecting=int(Graha.MERCURY),
+                      aspecting_longitude=166.0)
+    assert got["houses"] == (4,)
+    assert "4th house matters" in str(yogas.KUTTA_EXAMPLE["shows"])
+    assert "Five sections running" in (
+        yogas.SIGNIFIED_MATTERS_ARE_THE_HOUSES_OWNED_AGAIN)
+
+
+def test_kutta_is_the_first_yoga_since_29_2_2_without_an_ithasala():
+    """Its result mentions no ithasala and neither does its rule."""
+    assert "ithasala" not in yogas.KUTTA_RULE
+    for rule in (yogas.EESARPHA_RULE, yogas.NAKTA_RULE, yogas.YAMAYA_RULE,
+                 yogas.MANAHOO_RULE, yogas.KAMBOOLA_RULE,
+                 yogas.GAIRI_KAMBOOLA_RULE, yogas.KHALLASARA_RULE,
+                 yogas.RADDA_RULE, yogas.DUHPHALI_KUTTA_RULE,
+                 yogas.DUTTOTA_RULE, yogas.THAMBIRA_RULE):
+        assert "ithasala" in rule.lower()
+    assert "Kutta needs none" in (
+        yogas.KUTTA_IS_THE_FIRST_YOGA_SINCE_29_2_2_WITHOUT_AN_ITHASALA)
+
+
+def test_a_dignified_planet_in_lagna_satisfies_the_rule_against_itself():
+    """The 1st is a kendra and §28.2 makes the 1st a conjunction. OI-172."""
+    got = yogas.kutta(lagna_rasi=5, in_lagna=int(Graha.MERCURY),
+                      in_lagna_longitude=166.0, aspecting=int(Graha.MERCURY),
+                      aspecting_longitude=166.0)
+    assert got["is_in_lagna"] is True
+    assert got["aspecting_house"] == 1
+    assert got["aspecting_house_class"] == "kendra"
+    assert got["aspect"] == "Conjunction"
+    assert got["aspecting_is_the_lagna_planet"] is True
+    assert got["self_aspect_undecided"] is not None
+    assert "does not say whether that counts" in (
+        yogas.A_PLANET_IN_LAGNA_COULD_ASPECT_ITSELF)
+
+
+def test_the_book_marks_this_yoga_contested_and_says_no_more():
+    """Footnote 84 is the only such mark in §29.2 and carries no content."""
+    assert "interpreted differently by scholars" in yogas.KUTTA_FOOTNOTE
+    assert "gives neither the other interpretations" in (
+        yogas.THE_BOOK_MARKS_THIS_YOGA_CONTESTED_AND_SAYS_NO_MORE)
+    got = yogas.kutta(lagna_rasi=1, in_lagna=int(Graha.SUN),
+                      in_lagna_longitude=51.0, aspecting=int(Graha.MERCURY),
+                      aspecting_longitude=166.0)
+    assert got["footnote"] == yogas.KUTTA_FOOTNOTE

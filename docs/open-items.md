@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**7 waiting on Amit · 119 waiting on evidence · 2 parked**
+**7 waiting on Amit · 120 waiting on evidence · 2 parked**
 
 ---
 
@@ -2595,6 +2595,30 @@ least one weak) separately and sets `readings_agree`. On the book's own example
 they differ.
 
 **Closes when:** a second worked duttota states the second planet's condition.
+
+
+### OI-172 — §29.2.15 is marked contested and two of its edges are open
+
+**Waiting on the book.** Footnote 84 says "This yoga was interpreted
+differently by scholars" and gives none of the other readings, no source for
+them and no reason for preferring the one printed. It is the only yoga in §29.2
+the book marks as contested, and the mark carries no content.
+
+Two edges the section itself does not reach:
+
+* **A dignified planet in the lagna satisfies the rule against itself.** The
+  1st house is a kendra, and §28.2 makes the 1st house a **conjunction**, which
+  is one of its aspects. So a planet alone in the lagna in its own or
+  exaltation rasi is "aspected by a planet occupying own or exaltation rasi in
+  a kendra". `kutta` reports `aspecting_is_the_lagna_planet` and does not
+  decide it.
+* **The example cannot separate "own **or** exaltation rasi".** It uses Mercury
+  in Virgo, which is both — and Mercury is the only graha for which own rasi
+  and exaltation coincide. The one worked case is the one placement in the
+  zodiac that satisfies both halves at once.
+
+**Closes when:** the other interpretations surface, or a second worked case
+uses a planet dignified only one way.
 
 
 ---
