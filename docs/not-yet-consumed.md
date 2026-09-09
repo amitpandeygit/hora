@@ -1916,7 +1916,7 @@ exist to check the section's own figures, and one of them fails.
 |---|---|
 | `ADVANCEMENT_IS_READ_IN_THE_RASI_CHART` | Ours: rules 1 to 5 read the varga and rule 6 reads the rasi chart, settled by Exercise 49. OI-124 closed |
 
-### Chapter 31 — §31.1 and §31.2 (12)
+### Chapter 31 — §31.1 to §31.3 (23)
 
 `dasha/sudarsana.py`. The chakra **is** built: `sudarsana_chakra` returns the
 three bhava chakras with their occupants and `the_same_house_everywhere` reads
@@ -1931,6 +1931,10 @@ has not been given yet.
 | `THE_TENTH_HOUSE_READING_REPRODUCES` · `EMPTY_MEANS_NO_GRAHA_AND_A_NODE_COUNTS` | Ours: all three tenth houses come back, and "empty" excludes GL and HL while a node counts as an occupant |
 | `THE_ASCENDANT_NEEDS_FORTY_EIGHT_SECONDS` | Ours: the only printed ascendant in the book that misses, and it misses because it moves 19.7 arcminutes a clock minute |
 | `THE_SECTION_LEVELS_THE_THREE_REFERENCES` | Ours: the first time the book asks for three references to be weighed together rather than ranked |
+| `THE_CYCLE_OF_TWELVE` · `THE_YEAR_AND_THE_REMAINDER` · `THE_HOUSE_IS_READ_FROM_ALL_THREE` · `ANTARDASA_RULE` · `THE_TAJAKA_CHARTS_ARE_ENTRY_CHARTS` · `SC_DASA_IN_A_VARGA` · `FIGURE_4_TITLE` · `THE_FORTY_FIFTH_YEAR` | §31.3 verbatim, Figure 4's title and the section's worked year |
+| `THE_MUNTHA_IS_THE_SC_DASA_SIGN_FROM_LAGNA` | Ours: §28.1's muntha, §30.4's progressed lagna and §31.3's dasa sign are one rasi under three names |
+| `THE_THREE_CHART_TYPES_MATCH_THE_THREE_DASA_LEVELS` · `CHAPTER_27S_THREE_CHARTS_FIND_THEIR_PURPOSE_HERE` | Ours: twelve at every level, and §27.3's and §27.4's charts get their reading four chapters late |
+| `THE_SIMPLIFICATION_BECOMES_THE_RULE_FOR_VARGAS` · `WHICH_REFERENCE_IS_STRONGEST_IS_NOT_SAID` | Ours: an approximation the section labels and then relies on, with no test for it. OI-180 |
 
 ---
 

@@ -209,3 +209,182 @@ THE_SECTION_LEVELS_THE_THREE_REFERENCES = (
     "31.2 asks for all three to be judged together rather than the lagna "
     "first."
 )
+
+
+# --------------------------------------------------------------------------
+# §31.3 Dasa Computation
+# --------------------------------------------------------------------------
+
+#: §31.3's first paragraph, verbatim.
+THE_CYCLE_OF_TWELVE = (
+    "Dasas of the 12 houses run in cycles throughout a native's life. Each "
+    "dasa is for one year. For example, dasa of the 1st house runs in the 1st "
+    "year of one's life. Dasa of the 2nd house runs in the 2nd year of one's "
+    "life. After 12 years, dasa of the 1st house will return in the 13th "
+    "year. Dasa of the 2nd house will return in the 14th year. After every 12 "
+    "years, the same dasas keep coming.")
+
+#: §31.3's second paragraph, verbatim.
+THE_YEAR_AND_THE_REMAINDER = (
+    "One year stands for a solar year here. A new dasa starts after every one "
+    "year. The exact date and time when a new SC dasa starts can be found by "
+    "casting Tajaka annual chart. Look at the number of years completed. "
+    "Adding one to it, you get the year that starts. Divide it by 12 and find "
+    "the remainder (if the remainder is zero, make it 12). This remainder "
+    "gives the house whose dasa runs in the year.")
+
+#: §31.3's reading of the house, and its simplification, verbatim.
+THE_HOUSE_IS_READ_FROM_ALL_THREE = (
+    "When we say dasa of the 9th house here, we mean the 9th house from "
+    "lagna, Moon and Sun. If lagna is in Pi, Moon is in Aq and Sun is in Cn, "
+    "then the 9th house is in Sc, Li and Pi. However, analyzing with 3 signs "
+    "becomes difficult. So one may conveniently choose the strongest "
+    "reference out of lagna, Moon and Sun and take dasas from it. This is "
+    "only an approximation, but it simplifies analysis.")
+
+#: The Antardasas paragraphs, verbatim.
+ANTARDASA_RULE = (
+    "Each dasa is divided into 12 antardasas. Take the dasa sign as lagna and "
+    "give the 1st, 2nd, 3rd etc houses from it to antardasas. If Pi is natal "
+    "lagna, dasa in the 45th year belongs to the 9th house, i.e. Sc. "
+    "Antardasas in this dasa go as Sc, Sg, Cp, Aq etc. We can use Tajaka "
+    "monthly charts to find the date and time when an antardasa starts. "
+    "Similarly, we can find pratyantardasas from antardasas and use Tajaka "
+    "sixty-hour charts to find the date and time when a pratyantardasa "
+    "starts.")
+
+#: The paragraph that ties chapters 27 to 30 back to this one, verbatim.
+THE_TAJAKA_CHARTS_ARE_ENTRY_CHARTS = (
+    "In short, Tajaka annual, monthly and sixty-hour charts are nothing but "
+    "the entry charts of dasas, antardasas and pratyantardasas as per "
+    "Sudarsana Chakra dasa. Muntha in Tajaka annual charts is nothing but the "
+    "dasa sign as per Sudarsana Chakra dasa, but always reckoned from lagna. "
+    "If we redefine muntha to be the progressed from the strongest of lagna, "
+    "Moon and Sun (instead of always from lagna), it exactly becomes the SC "
+    "dasa sign.")
+
+#: The closing paragraph, verbatim.
+SC_DASA_IN_A_VARGA = (
+    "We can find Sudarsana Chakra dasa for divisional charts also. We take "
+    "the strongest of lagna, Moon and Sun and then start SC dasa from there. "
+    "It moves at the rate of one house per year. Examples will make this "
+    "clear.")
+
+FIGURE_4_TITLE = "Sudarsana Chakra"
+
+
+def dasa_house(year: int) -> int:
+    """§31.3's house for a given year of life: the year modulo twelve.
+
+    "Divide it by 12 and find the remainder (if the remainder is zero, make
+    it 12)." The 45th year gives the 9th house.
+    """
+    index = validate.in_range("year", int(year), 1, 200)
+    return index % 12 or 12
+
+
+def dasa_signs(*, lagna_rasi: int, moon_rasi: int, sun_rasi: int,
+               year: int) -> dict:
+    """The dasa's three rasis — the same house from lagna, Moon and Sun."""
+    house = dasa_house(year)
+    seats = {
+        "lagna": validate.in_range("lagna_rasi", int(lagna_rasi), 0, 11),
+        "Moon": validate.in_range("moon_rasi", int(moon_rasi), 0, 11),
+        "Sun": validate.in_range("sun_rasi", int(sun_rasi), 0, 11),
+    }
+    return {
+        "year": int(year),
+        "house": house,
+        "signs": {name: house_from(seat, house) for name, seat in seats.items()},
+        "sign_names": {name: str(RASI_NAMES[house_from(seat, house)])
+                       for name, seat in seats.items()},
+        "rule": THE_HOUSE_IS_READ_FROM_ALL_THREE,
+    }
+
+
+def antardasa_signs(dasa_sign: int) -> tuple[int, ...]:
+    """§31.3's twelve antardasas: the dasa sign as lagna, then its houses."""
+    seat = validate.in_range("dasa_sign", int(dasa_sign), 0, 11)
+    return tuple((seat + step) % 12 for step in range(12))
+
+
+def pratyantardasa_signs(antardasa_sign: int) -> tuple[int, ...]:
+    """The twelve pratyantardasas of one antardasa, by the same rule."""
+    return antardasa_signs(antardasa_sign)
+
+
+# --------------------------------------------------------------------------
+# What §31.3 settles about chapters 27 to 30
+# --------------------------------------------------------------------------
+
+#: **Finding, and it is a three-way identity the book states only half of.**
+#: §31.3 says "Muntha in Tajaka annual charts is nothing but the dasa sign as
+#: per Sudarsana Chakra dasa, but always reckoned from lagna." That is exact:
+#: §28.1's muntha is the natal lagna advanced one rasi a year, and the SC dasa
+#: sign from lagna is the lagna plus the year modulo twelve, which is the same
+#: rasi in every chart and every year.
+#:
+#: §30.4 had already made the muntha the **progressed lagna** of a Varsha
+#: Narayana dasa. So one quantity carries three names in three chapters —
+#: muntha, progressed lagna, SC dasa sign — and §31.3 names two of the three.
+THE_MUNTHA_IS_THE_SC_DASA_SIGN_FROM_LAGNA = (
+    "Section 28.1's muntha, section 30.4's progressed lagna and section "
+    "31.3's SC dasa sign from lagna are one rasi under three names. Section "
+    "31.3 states the second identity and section 30.4 stated the first."
+)
+
+#: **Finding.** The three Tajaka chart types map onto the three dasa levels
+#: **exactly by count**, and §27.3 and §27.4 had already supplied the numbers:
+#: a year holds twelve Tajaka months and a month twelve shashti-horas, while a
+#: dasa holds twelve antardasas and an antardasa twelve pratyantardasas. So a
+#: year holds 144 shashti-horas and a dasa 144 pratyantardasas. §31.3 says the
+#: charts "are nothing but the entry charts" of the three, and the arithmetic
+#: was in place four chapters earlier.
+THE_THREE_CHART_TYPES_MATCH_THE_THREE_DASA_LEVELS = (
+    "A Tajaka year holds twelve months and a month twelve shashti-horas; a "
+    "dasa holds twelve antardasas and an antardasa twelve pratyantardasas. "
+    "The counts match at every level, so 144 shashti-horas answer 144 "
+    "pratyantardasas."
+)
+
+#: **Finding.** §31.3 retro-explains why chapter 27 built three kinds of chart
+#: and never said what the second and third were for. §27.3's monthly charts
+#: and §27.4's sixty-hour charts were given a casting rule and no reading;
+#: this section supplies it — they mark antardasa and pratyantardasa entries.
+CHAPTER_27S_THREE_CHARTS_FIND_THEIR_PURPOSE_HERE = (
+    "Sections 27.3 and 27.4 cast monthly and sixty-hour charts without saying "
+    "what to read in them. Section 31.3 says: they are the entry charts of "
+    "antardasas and pratyantardasas."
+)
+
+#: **Finding.** The section offers a simplification and marks it as one: "one
+#: may conveniently choose the strongest reference out of lagna, Moon and Sun
+#: and take dasas from it. This is **only an approximation**." It is the only
+#: place in the chapter to label its own method that way, and the varga rule
+#: that follows takes the simplification as its definition — "We take the
+#: strongest of lagna, Moon and Sun and then start SC dasa from there" — with
+#: no three-sign version offered for a divisional chart at all.
+THE_SIMPLIFICATION_BECOMES_THE_RULE_FOR_VARGAS = (
+    "Section 31.3 calls choosing the strongest reference an approximation for "
+    "the rasi chart and then gives it as the rule for divisional charts, "
+    "where no three-sign version is offered."
+)
+
+#: **Gap.** "The strongest reference out of lagna, Moon and Sun" — the section
+#: names no test. §15.5 compares two **rasis** and chapter 15's other rules
+#: compare grahas; neither ranks a lagna against two grahas, which is what
+#: this asks for. `dasa_signs` returns all three references and picks none.
+#: See OI-180.
+WHICH_REFERENCE_IS_STRONGEST_IS_NOT_SAID = (
+    "Section 31.3 asks for the strongest of lagna, Moon and Sun and gives no "
+    "test. Section 15.5 compares rasis and the book's other strength rules "
+    "compare grahas; neither ranks a lagna against two grahas."
+)
+
+#: §31.3's own worked case, as data: a native starting the 45th year.
+THE_FORTY_FIFTH_YEAR: dict[str, object] = {
+    "completed": 44, "year": 45, "house": 9,
+    "lagna": "Pi", "moon": "Aq", "sun": "Cn",
+    "signs": {"lagna": "Sc", "Moon": "Li", "Sun": "Pi"},
+    "antardasas_from_lagna": ("Sc", "Sg", "Cp", "Aq"),
+}

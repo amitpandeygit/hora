@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**8 waiting on Amit · 125 waiting on evidence · 2 parked**
+**8 waiting on Amit · 126 waiting on evidence · 2 parked**
 
 ---
 
@@ -2744,6 +2744,28 @@ neither is wrong on its face. The chapter works no monthly example.
 `patyayini_dasa` takes no month parameter; a monthly patyayini is not built.
 
 **Closes when:** a worked monthly patyayini fixes the figure.
+
+
+### OI-180 — §31.3 asks for the strongest of lagna, Moon and Sun and names no test
+
+**Waiting on the book.** Sudarsana chakra reads every house from three
+references at once, and §31.3 offers a simplification: "one may conveniently
+choose the strongest reference out of lagna, Moon and Sun and take dasas from
+it. This is only an approximation, but it simplifies analysis."
+
+It gives no test. §15.5 compares two **rasis** and the book's other strength
+rules compare **grahas**; neither ranks a lagna against two grahas, which is
+what this asks for. The lagna is a point with no dignity, no aspects of its own
+and no bala in any of the schemes the book taught.
+
+It is not a corner: the closing paragraph makes the simplification the **rule**
+for divisional charts — "We take the strongest of lagna, Moon and Sun and then
+start SC dasa from there" — with no three-sign version offered there at all.
+
+`dasa_signs` returns all three references and picks none.
+
+**Closes when:** a worked SC dasa in a varga names its strongest reference, or
+a later section gives the test.
 
 
 ---

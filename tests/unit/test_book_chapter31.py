@@ -254,3 +254,176 @@ def test_the_section_levels_the_three_references():
     assert "judged together rather than the lagna" in (
         sudarsana.THE_SECTION_LEVELS_THE_THREE_REFERENCES)
     assert int(Graha.SUN) == 0 and int(Graha.MOON) == 1
+
+
+# --------------------------------------------------------------------------
+# §31.3 Dasa Computation
+# --------------------------------------------------------------------------
+
+
+def _chakra():
+    chart = _chart()
+    return sudarsana.sudarsana_chakra(
+        lagna_rasi=chart.lagna_rasi,
+        moon_rasi=int(chart.positions[1].longitude // 30),
+        sun_rasi=int(chart.positions[0].longitude // 30),
+        graha_rasis=_rasis(chart))
+
+
+def test_the_dasa_computation_is_transcribed():
+    assert "Each dasa is for one year" in sudarsana.THE_CYCLE_OF_TWELVE
+    assert "return in the 13th year" in sudarsana.THE_CYCLE_OF_TWELVE
+    assert "One year stands for a solar year here" in (
+        sudarsana.THE_YEAR_AND_THE_REMAINDER)
+    assert "if the remainder is zero, make it 12" in (
+        sudarsana.THE_YEAR_AND_THE_REMAINDER)
+    assert "Sc, Li and Pi" in sudarsana.THE_HOUSE_IS_READ_FROM_ALL_THREE
+    assert "only an approximation" in sudarsana.THE_HOUSE_IS_READ_FROM_ALL_THREE
+    assert "Sc, Sg, Cp, Aq etc" in sudarsana.ANTARDASA_RULE
+    assert sudarsana.FIGURE_4_TITLE == "Sudarsana Chakra"
+
+
+def test_the_house_is_the_year_modulo_twelve():
+    assert sudarsana.dasa_house(1) == 1
+    assert sudarsana.dasa_house(12) == 12
+    assert sudarsana.dasa_house(13) == 1                 # returns in the 13th
+    assert sudarsana.dasa_house(14) == 2
+    assert sudarsana.dasa_house(24) == 12                # remainder zero
+    assert sudarsana.dasa_house(45) == 9                 # the worked case
+    for year in range(1, 121):
+        assert sudarsana.dasa_house(year) == sudarsana.dasa_house(year + 12)
+
+
+def test_the_forty_fifth_year_reproduces():
+    want = sudarsana.THE_FORTY_FIFTH_YEAR
+    assert want["completed"] + 1 == want["year"] == 45
+    got = sudarsana.dasa_signs(lagna_rasi=RASI_ABBR.index("Pi"),
+                               moon_rasi=RASI_ABBR.index("Aq"),
+                               sun_rasi=RASI_ABBR.index("Cn"), year=45)
+    assert got["house"] == want["house"] == 9
+    assert {name: RASI_ABBR[rasi]
+            for name, rasi in got["signs"].items()} == want["signs"]
+
+    antardasas = sudarsana.antardasa_signs(got["signs"]["lagna"])
+    assert tuple(RASI_ABBR[r] for r in antardasas[:4]) == (
+        want["antardasas_from_lagna"])
+    assert len(antardasas) == 12
+    assert len(set(antardasas)) == 12
+
+
+def test_figure_4_reproduces_ring_for_ring():
+    """Chart 72's chakra: the inner ring runs from Pisces, the middle from
+    Aquarius and the outer from Cancer.
+    """
+    got = _chakra()
+    rings = {
+        "lagna": ["Pi", "Ar", "Ta", "Ge", "Cn", "Le", "Vi", "Li", "Sc", "Sg",
+                  "Cp", "Aq"],
+        "Moon": ["Aq", "Pi", "Ar", "Ta", "Ge", "Cn", "Le", "Vi", "Li", "Sc",
+                 "Sg", "Cp"],
+        "Sun": ["Cn", "Le", "Vi", "Li", "Sc", "Sg", "Cp", "Aq", "Pi", "Ar",
+                "Ta", "Ge"],
+    }
+    for name, expected in rings.items():
+        circle = got["circles"][name]
+        assert [RASI_ABBR[h["rasi"]] for h in circle["houses"]] == expected
+
+    # And the figure's own occupants, sector by sector.
+    holders = {
+        "Pi": ("Jupiter",), "Ge": ("Rahu",), "Aq": ("Moon",),
+        "Cn": ("Sun", "Venus"), "Cp": ("Saturn",), "Le": ("Mercury",),
+        "Sg": ("Ketu",), "Vi": ("Mars",),
+    }
+    for name in got["order"]:
+        for house in got["circles"][name]["houses"]:
+            abbr = RASI_ABBR[house["rasi"]]
+            assert set(house["graha_names"]) == set(holders.get(abbr, ())), (
+                name, abbr)
+
+
+def test_the_muntha_is_the_sc_dasa_sign_from_lagna():
+    """§28.1's muntha, §30.4's progressed lagna and §31.3's dasa sign from
+    lagna are one rasi, in every chart and every year.
+    """
+    from hora.dasha.annual.varsha_narayana import progressed_lagna
+    from hora.tajaka.muntha import muntha_rasi
+
+    for lagna in range(12):
+        for year in range(1, 121):
+            house = sudarsana.dasa_house(year)
+            from_lagna = sudarsana.house_from(lagna, house)
+            assert from_lagna == int(muntha_rasi(lagna, year)["rasi"]), (
+                lagna, year)
+            assert from_lagna == progressed_lagna(lagna, year)["rasi"]
+    assert "one rasi under three names" in (
+        sudarsana.THE_MUNTHA_IS_THE_SC_DASA_SIGN_FROM_LAGNA)
+    assert "always reckoned from lagna" in (
+        sudarsana.THE_TAJAKA_CHARTS_ARE_ENTRY_CHARTS)
+
+
+def test_the_three_chart_types_match_the_three_dasa_levels():
+    """A year holds 12 months and a month 12 shashti-horas; a dasa holds 12
+    antardasas and an antardasa 12 pratyantardasas.
+    """
+    from hora.tajaka.monthly import MONTHLY_CHART_RULE
+    from hora.tajaka.shashti_hora import SHASHTI_HORA_RULE
+
+    assert "divided into 12 months" in MONTHLY_CHART_RULE.replace(
+        "A year is divided into 12 months", "divided into 12 months")
+    assert "divided into 12 shashti-horas" in SHASHTI_HORA_RULE
+    assert len(sudarsana.antardasa_signs(0)) == 12
+    assert len(sudarsana.pratyantardasa_signs(0)) == 12
+    assert 12 * 12 == 144
+    assert "144 shashti-horas answer 144" in (
+        sudarsana.THE_THREE_CHART_TYPES_MATCH_THE_THREE_DASA_LEVELS)
+    assert "entry charts" in sudarsana.THE_TAJAKA_CHARTS_ARE_ENTRY_CHARTS
+
+
+def test_antardasas_and_pratyantardasas_walk_the_zodiac():
+    for seat in range(12):
+        antardasas = sudarsana.antardasa_signs(seat)
+        assert antardasas[0] == seat
+        assert set(antardasas) == set(range(12))
+        for leg in antardasas:
+            pratyantardasas = sudarsana.pratyantardasa_signs(leg)
+            assert pratyantardasas[0] == leg
+            assert set(pratyantardasas) == set(range(12))
+
+
+def test_the_simplification_is_labelled_and_then_becomes_the_varga_rule():
+    assert "This is only an approximation" in (
+        sudarsana.THE_HOUSE_IS_READ_FROM_ALL_THREE)
+    assert "We take the strongest of lagna, Moon and Sun" in (
+        sudarsana.SC_DASA_IN_A_VARGA)
+    assert "one house per year" in sudarsana.SC_DASA_IN_A_VARGA
+    assert "no three-sign version is offered" in (
+        sudarsana.THE_SIMPLIFICATION_BECOMES_THE_RULE_FOR_VARGAS)
+
+
+def test_which_reference_is_strongest_is_not_said():
+    """OI-180. `dasa_signs` returns all three and picks none."""
+    got = sudarsana.dasa_signs(lagna_rasi=11, moon_rasi=10, sun_rasi=3,
+                               year=45)
+    assert set(got["signs"]) == {"lagna", "Moon", "Sun"}
+    assert "strongest" not in got
+    assert "gives no test" in sudarsana.WHICH_REFERENCE_IS_STRONGEST_IS_NOT_SAID
+
+
+def test_chapter_27s_three_charts_find_their_purpose_here():
+    from hora.tajaka.monthly import MONTHLY_CHART_RULE
+    from hora.tajaka.shashti_hora import SHASHTI_HORA_RULE
+
+    # Neither section says what to read in the chart it casts.
+    for rule in (MONTHLY_CHART_RULE, SHASHTI_HORA_RULE):
+        assert "antardasa" not in rule.lower()
+        assert "dasa" not in rule.lower()
+    assert "antardasas and pratyantardasas" in (
+        sudarsana.THE_TAJAKA_CHARTS_ARE_ENTRY_CHARTS)
+    assert "Section 31.3 says" in (
+        sudarsana.CHAPTER_27S_THREE_CHARTS_FIND_THEIR_PURPOSE_HERE)
+
+
+def test_the_dasa_house_rejects_a_year_outside_a_lifetime():
+    for bad in (0, -1, 201):
+        with pytest.raises(Exception, match="year"):
+            sudarsana.dasa_house(bad)
