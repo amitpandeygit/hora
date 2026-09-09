@@ -476,6 +476,13 @@
         "number": 69,
         "recomputable": true,
         "title": "Academic success \u2014 the 1987-88 annual chart of Exercise 48's native, drawn in D-24"
+      },
+      {
+        "birth": "April 4, 1998, 9:59:49 pm (IST), 81 E 12, 16 N 15",
+        "first_seen": "chapter 30, Example 125",
+        "number": 70,
+        "recomputable": true,
+        "title": "Childbirth \u2014 the 1998-99 annual chart of Exercise 48's native, drawn in D-7"
       }
     ],
     "not_supplied": [
@@ -542,7 +549,8 @@
       66,
       67,
       68,
-      69
+      69,
+      70
     ]
   },
   "status": 200

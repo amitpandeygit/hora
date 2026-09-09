@@ -2053,3 +2053,244 @@ def test_all_four_reasons_for_cancer_hold():
     assert int(RASI_LORD[fifth]) == int(Graha.MARS)
     assert "Scorpio holds Mars in his own sign" in (
         ex124.ALL_FOUR_REASONS_FOR_CANCER_HOLD)
+
+
+# --------------------------------------------------------------------------
+# Example 125 and Chart 70
+# --------------------------------------------------------------------------
+
+from hora.dasha.annual import example_125 as ex125
+
+_E125_PRAVESH = from_local(**ex125.VARSHA_PRAVESH)
+_E125_SON = from_local(*ex125.BIRTH_OF_SON, 12, 0, 0.0,
+                       utc_offset_hours=5.5).jd_ut
+
+
+def _e125_annual():
+    return compute_chart(_E125_PRAVESH, _EX48_PLACE, _SETTINGS)
+
+
+def _e125_d7():
+    from hora.charts.vargas import d7_saptamsa
+
+    chart = _e125_annual()
+    signs = {g: int(d7_saptamsa(chart.positions[g].longitude).sign)
+             for g in range(9)}
+    full = {g: signs[g] * 30.0 + (chart.positions[g].longitude % (30 / 7)) * 7
+            for g in range(9)}
+    return signs, full, int(d7_saptamsa(chart.lagna_longitude).sign)
+
+
+def test_example_125_is_transcribed():
+    assert "had a son on 21st August 1998" in ex125.EXAMPLE_125
+    assert "Varsha Narayana dasa of D-7" in ex125.EXAMPLE_125
+    assert "9:59:49 pm (IST)" in ex125.VARSHA_PRAVESH_DATA
+    assert "putra saham is in Ar" in ex125.WHY_A_CHILD
+    assert "Ge dasa of 24 solar days" in ex125.THE_DASA_PARAGRAPH
+    assert [row["number"] for row in ex125.WHY_GEMINI] == [1, 2, 3, 4, 5, 6]
+    assert ex125.VARGA == 7 and ex125.ANNUAL_YEAR == 29
+
+
+def test_chart_70_and_its_d7_reproduce():
+    from hora.charts.book import chart as record
+    from hora.charts.book import longitudes
+    from hora.core.const import RASI_ABBR
+
+    chart = _e125_annual()
+    printed = longitudes(70)
+    ids = {"Sun": 0, "Moon": 1, "Mars": 2, "Merc": 3, "Jup": 4, "Ven": 5,
+           "Sat": 6, "Rahu": 7, "Ketu": 8}
+    for name, index in ids.items():
+        gap = (((chart.positions[index].longitude - printed[name] + 180) % 360)
+               - 180) * 60
+        assert 0.0 <= gap < 1.0, (name, gap)
+    assert chart.positions[3].is_retrograde is True         # Merc (R)
+
+    signs, _, lagna = _e125_d7()
+    drawn = record(70)["divisional"]["D7"]
+    for name, index in ids.items():
+        assert RASI_ABBR[signs[index]] == drawn[name], name
+    assert RASI_ABBR[lagna] == drawn["Asc"] == "Le"
+
+
+def test_example_125s_varsha_pravesh_reproduces():
+    from hora.core.ephemeris import get_ephemeris
+    from hora.tajaka.annual import varsha_pravesh
+
+    eph = get_ephemeris(_SETTINGS)
+    natal_sun = compute_chart(_EX48_BIRTH, _EX48_PLACE,
+                              _SETTINGS).positions[0].longitude
+    got = varsha_pravesh(lambda jd: eph.positions(jd, [0])[0].longitude,
+                         natal_sun, _EX48_BIRTH.jd_ut, ex125.ANNUAL_YEAR)
+    assert 0.0 < (got["jd"] - _E125_PRAVESH.jd_ut) * 86400.0 < 12.0
+
+
+def test_the_putra_saham_reproduces():
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD, Graha
+    from hora.tajaka.harsha import year_began_in_daytime
+    from hora.tajaka.sahams import sahams
+
+    night = year_began_in_daytime(_E125_PRAVESH.jd_ut,
+                                  latitude=_EX48_PLACE.latitude,
+                                  longitude=_EX48_PLACE.longitude)
+    assert night["daytime"] is False
+
+    chart = _e125_annual()
+    names = ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn")
+    got = sahams(longitudes={name: chart.positions[i].longitude
+                             for i, name in enumerate(names)},
+                 lagna=chart.lagna_longitude, daytime=False)["Putra"]
+    rasi = int(got["longitude"] // 30)
+    assert RASI_ABBR[rasi] == "Ar"
+    assert got["longitude"] % 30 == pytest.approx(23 + 33 / 60, abs=0.02)
+    assert str(GRAHA_NAMES[int(RASI_LORD[rasi])]) == "Mars"
+
+    assert RASI_ABBR[chart.lagna_rasi] == "Sc"
+    mars = int(chart.positions[int(Graha.MARS)].longitude // 30)
+    assert (mars - chart.lagna_rasi) % 12 + 1 == 5
+    assert "in the 5th from the Scorpio lagna" in ex125.THE_PUTRA_SAHAM_REPRODUCES
+
+
+def test_the_varga_house_rule_holds_a_fourth_time():
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD, Graha
+    from hora.dasha.annual.varsha_narayana import (
+        house_for_varga,
+        progressed_lagna,
+    )
+
+    assert house_for_varga(7) == 7
+    muntha = progressed_lagna(5, ex125.ANNUAL_YEAR)["rasi"]
+    assert RASI_ABBR[muntha] == "Cp"
+    seat = (muntha + house_for_varga(ex125.VARGA) - 1) % 12
+    assert RASI_ABBR[seat] == "Cn"
+    assert str(GRAHA_NAMES[int(RASI_LORD[seat])]) == "Moon"
+
+    signs, _, _ = _e125_d7()
+    assert RASI_ABBR[signs[int(Graha.MOON)]] == "Cp"
+    assert "four vargas and one rule" in (
+        ex125.THE_VARGA_HOUSE_RULE_HOLDS_A_FOURTH_TIME)
+
+
+def test_example_125s_seed_and_dasa_order():
+    from hora.charts.rasi_strength import stronger
+    from hora.core.const import RASI_ABBR, Graha
+    from hora.dasha.rasi.narayana import progression
+
+    signs, full, _ = _e125_d7()
+    moon = signs[int(Graha.MOON)]
+    assert stronger(moon, (moon + 6) % 12, full).winner == moon
+    order = progression(moon, occupants={g for g in range(9)
+                                         if signs[g] == moon})
+    assert list(order.sign_names[:4]) == ["Capricorn", "Sagittarius",
+                                          "Scorpio", "Libra"]
+    assert RASI_ABBR[order.signs[7]] == "Ge"           # the eighth dasa
+
+
+def test_gemini_runs_24_solar_days_and_opens_the_day_before_the_birth():
+    import swisseph as swe
+
+    from hora.core.const import RASI_ABBR, RASI_LORD
+    from hora.core.constants.graha import DEBILITATION_RASI, EXALTATION_RASI
+    from hora.dasha.annual.varsha_narayana import compressed_days
+    from hora.dasha.rasi.narayana import dasa_length, progression
+
+    signs, _full, _ = _e125_d7()
+    from hora.core.const import Graha
+
+    seed = signs[int(Graha.MOON)]
+    order = progression(seed, occupants={g for g in range(9)
+                                         if signs[g] == seed})
+
+    def dignity(graha):
+        if graha in (7, 8):                            # not the nodes
+            return None
+        if signs[graha] == int(EXALTATION_RASI[graha]):
+            return "exalted"
+        if signs[graha] == int(DEBILITATION_RASI[graha]):
+            return "debilitated"
+        return None
+
+    elapsed, gemini = 0, None
+    for rasi in order.signs:
+        lord = int(RASI_LORD[rasi])
+        days = compressed_days(dasa_length(
+            rasi=rasi, lord=lord, lord_sign=signs[lord],
+            lord_dignity=dignity(lord)).years)
+        if RASI_ABBR[rasi] == "Ge":
+            gemini = (elapsed, days)
+            break
+        elapsed += days
+    assert gemini is not None
+    opens, length = gemini
+    assert length == 24                                # the printed figure
+
+    def day(offset):
+        year, month, dom, _ = swe.revjul(
+            _E125_PRAVESH.jd_ut + offset + 5.5 / 24.0)
+        return int(year), int(month), int(dom)
+
+    assert day(opens) == (1998, 8, 20)                 # just before the birth
+    assert (_E125_PRAVESH.jd_ut + opens < _E125_SON
+            < _E125_PRAVESH.jd_ut + opens + length)
+    assert "lands to the day" in (
+        ex125.THE_ONLY_EXAMPLE_WHOSE_LENGTH_AND_OPENING_BOTH_COME_OUT)
+
+
+def test_all_six_reasons_for_gemini_hold():
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.aspects import graha_drishti_houses, rasi_drishti
+    from hora.core.const import RASI_ABBR, RASI_LORD, Graha
+    from hora.core.constants.graha import EXALTATION_RASI
+
+    signs, _, lagna = _e125_d7()
+    gemini = RASI_ABBR.index("Ge")
+    fifth = (lagna + 4) % 12
+
+    # (1) Gemini is the 11th.
+    assert (gemini - lagna) % 12 + 1 == 11
+    # (2)(3) Jupiter is there, owns the 5th and aspects it.
+    assert signs[int(Graha.JUPITER)] == gemini
+    assert int(RASI_LORD[fifth]) == int(Graha.JUPITER)
+    reach = [(gemini + h - 1) % 12
+             for h in graha_drishti_houses(int(Graha.JUPITER))]
+    assert fifth in reach
+    # (4) The 3rd is the 11th from the 5th; its exalted lord Venus aspects Ge.
+    third = (lagna + 2) % 12
+    assert (third - fifth) % 12 + 1 == 11
+    assert int(RASI_LORD[third]) == int(Graha.VENUS)
+    venus = signs[int(Graha.VENUS)]
+    assert venus == int(EXALTATION_RASI[int(Graha.VENUS)])
+    assert gemini in rasi_drishti(venus)
+    # (5) Mars aspects Gemini, by his special 4th.
+    mars = signs[int(Graha.MARS)]
+    assert gemini in [(mars + h - 1) % 12
+                      for h in graha_drishti_houses(int(Graha.MARS))]
+    # (6) The putra pada aspects Gemini from Virgo.
+    pada = arudha_pada(5, lagna, signs).sign
+    assert RASI_ABBR[pada] == "Vi"
+    assert gemini in rasi_drishti(pada)
+
+
+def test_the_paragraph_mixes_two_kinds_of_aspect():
+    kinds = [row["aspect"] for row in ex125.WHY_GEMINI]
+    assert kinds == [None, None, "graha drishti", "rasi drishti",
+                     "graha drishti", "rasi drishti"]
+    assert "An arudha pada has no graha" in (
+        ex125.THE_PARAGRAPH_MIXES_TWO_KINDS_OF_ASPECT)
+
+
+def test_the_section_rests_on_two_of_the_six():
+    assert "simply because it is 11th and 5th lord Jupiter occupies it" in (
+        ex125.THE_CLEAR_CANDIDATE)
+    assert "sets aside" not in ex125.THE_CLEAR_CANDIDATE
+    assert "resting on two of them" in (
+        ex125.THE_SECTION_SAYS_THREE_OF_THE_SIX_WOULD_HAVE_DONE)
+
+
+def test_the_chapter_works_four_vargas():
+    from hora.dasha.annual.varsha_narayana import house_for_varga
+
+    worked = {9: 9, 4: 4, 24: 12, 7: 7}
+    for varga, house in worked.items():
+        assert house_for_varga(varga) == house
+    assert len(set(worked)) == 4

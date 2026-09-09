@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1 to §30.4 and Examples 122 to 124 (89)
+### Chapter 30 — §30.1 to §30.4 and Examples 122 to 125 (99)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1892,6 +1892,11 @@ exist to check the section's own figures, and one of them fails.
 | `THE_DIGNITIES_ARE_WHAT_MAKE_THE_DATE_COME_OUT` · `THE_OPENING_IS_EXACT_AND_THE_CLOSE_IS_A_DAY_SHORT` | Ours: without the debilitations Cancer opens 29 May and the first event falls outside; with them it opens 26 May as printed |
 | `THREE_EXAMPLES_THREE_VARGAS_ONE_RULE` | Ours: D-9, D-4 and D-24 take the 9th, 4th and 12th from the muntha |
 | `DIGNITY_APPLIES_TO_THE_SEVEN_AND_NOT_THE_NODES` · `THE_VARGA_NUMBER_PICKS_THE_HOUSE_MODULO_TWELVE` | Ours: two examples settle §18.2.2's exceptions between them, and three settle the varga house |
+| `EXAMPLE_125` · `VARSHA_PRAVESH_DATA` · `WHY_A_CHILD` · `THE_DASA_PARAGRAPH` · `WHY_GEMINI` · `THE_CLEAR_CANDIDATE` · `BIRTH` · `PLACE` · `VARSHA_PRAVESH` · `BIRTH_OF_SON` | Example 125 verbatim, its six reasons and its data |
+| `THE_ONLY_EXAMPLE_WHOSE_LENGTH_AND_OPENING_BOTH_COME_OUT` | Ours: 24 solar days as printed, opening 20 August against a birth on the 21st |
+| `THE_VARGA_HOUSE_RULE_HOLDS_A_FOURTH_TIME` | Ours: D-7 takes the 7th, after D-9's 9th, D-4's 4th and D-24's 12th |
+| `THE_PUTRA_SAHAM_REPRODUCES` | Ours: 23 Ar 33 in its night form, ruled by Mars, who is in the 5th of the rasi chart |
+| `THE_PARAGRAPH_MIXES_TWO_KINDS_OF_ASPECT` · `THE_SECTION_SAYS_THREE_OF_THE_SIX_WOULD_HAVE_DONE` | Ours: graha drishti for Jupiter and Mars, rasi drishti for Venus and the putra pada, and the section rests on two reasons of six |
 
 ---
 

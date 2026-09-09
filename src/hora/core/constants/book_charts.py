@@ -2716,6 +2716,50 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "grahas; see dasha.annual.varsha_narayana."
         ),
     },
+    70: {
+        "title": "Childbirth — the 1998-99 annual chart of Exercise 48's "
+                 "native, drawn in D-7",
+        "birth": "April 4, 1998, 9:59:49 pm (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1998, "month": 4, "day": 4, "hour": 21, "minute": 59,
+            "second": 49.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "12 Sc 53", "Sun": "20 Pi 52", "Moon": "0 Cn 51",
+            "Mars": "29 Pi 54", "Merc": "24 Pi 22", "Jup": "20 Aq 11",
+            "Ven": "4 Aq 34", "Sat": "28 Pi 24", "Rahu": "14 Le 56",
+            "Ketu": "14 Aq 56", "HL": "20 Cn 30", "GL": "20 Cn 55",
+        },
+        "chara_karakas": {
+            "Mars": "AK", "Sat": "AmK", "Merc": "BK", "Sun": "MK",
+            "Rahu": "PK", "Jup": "PiK", "Ven": "GK", "Moon": "DK",
+        },
+        "retrograde": ("Merc",),
+        "divisional": {
+            "D7": {
+                "Ven": "Pi", "Mars": "Pi", "Sat": "Pi", "HL": "Ta",
+                "Ketu": "Ta", "GL": "Ta", "AL": "Ge", "Jup": "Ge",
+                "Merc": "Aq", "Moon": "Cp", "Sun": "Cp", "Asc": "Le",
+                "Rahu": "Sc",
+            },
+        },
+        "events": {"a son was born": "August 21, 1998"},
+        "sahams": {"putra": "23 Ar 33"},
+        "first_seen": "chapter 30, Example 125",
+        "note": (
+            "Not a nativity. The **annual chart** of Exercise 48's native for "
+            "1998-99, cast for the Sun's return to his natal 20 Pi 52 in his "
+            "29th year, and the third chart in the register drawn in a varga "
+            "-- a D-7 -- with rasi longitudes printed beneath, after Charts "
+            "68 and 69. The cleanest of the chapter's four Varsha Narayana "
+            "cases: the varsha pravesh reproduces to 11 seconds, every "
+            "longitude within an arcminute, every D-7 box, and the Gemini "
+            "dasa comes out at the printed 24 solar days, opening 20 August "
+            "1998 against a birth on the 21st -- 'just before', as the "
+            "example says."
+        ),
+    },
 }
 
 
