@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**8 waiting on Amit · 126 waiting on evidence · 2 parked**
+**9 waiting on Amit · 127 waiting on evidence · 2 parked**
 
 ---
 
@@ -22,6 +22,7 @@ until the book is finished, not only the five below. Record; never re-raise.
 | OI-169 | Read §29.2.12 as its rule states it, faster strong and slower weak, rather than as its example works it | Duhphali-Kutta. The two are exact mirrors and the book's own example contradicts its own rule |
 | OI-156 | Read §28.6's shortlist as any aspect on lagna, not only a benefic one, when no candidate is both strong and benefic | The varsheswara. Example 122's answer is Mercury and §28.6 as written gives Mars |
 | OI-68 | Switch `node_type` to `mean`, or keep `true` | Rahu and Ketu on **every** endpoint. **Seventeen** charts reproduce with mean and none with true; under `true` Chart 41's Rahu is **98'** out and Chart 39's **96'**, both a whole sign wrong |
+| OI-182 | Carry an **ephemeris uncertainty** alongside the birthtime one, so a border check widens for the ayanamsa and the geocentric/topocentric choice | `signs_across_the_uncertainty` and anything built on it. Footnote 90 says the author cannot be confident of a Moon longitude; the two controversies are worth 5.8' to 140' and up to 55' |
 
 Order I would take them: OI-39 is the only unambiguous defect and the only one
 touching `/v1/chart`; OI-37 and OI-40 are preference.
@@ -2773,6 +2774,42 @@ from lagna, Sg from the Moon and Li from the Sun, three different dasa signs.
 
 **Closes when:** a section gives the test, or a worked example shows the
 comparison rather than asserting its result.
+
+
+---
+
+### OI-182 — footnote 90 says the ephemeris itself is uncertain, and we carry no band for it
+
+**NEEDS YOU.** §32.2.1 tells us to consider both rasis when a graha sits at a
+varga border, and footnote 90 gives a second reason to: "We are assuming here
+that our computation of Moon's longitude is very accurate. There are some
+unresolved controversies like (1) ayanamsa and (2) geocentric positions vs
+topocentric positions. Due to these controversies, we cannot be confident of
+our calculations."
+
+Both knobs already exist — `Settings.ayanamsa` offers sixteen and
+`Settings.topocentric` defaults to geocentric — and **nothing here proposes
+changing either**. What is missing is a *band*: the border check takes an
+uncertainty in the birthtime and none in the position.
+
+Measured on Chart 1, in the Moon:
+
+| source | spread | worth, in birthtime |
+|---|---|---|
+| Lahiri, Lahiri ICRC, KP, True Citra | 5.8′ | 11 min |
+| adding Raman, Yukteshwar, Fagan-Bradley | 139.8′ | 254 min |
+| geocentric against topocentric, peak over 30 days | 55′ | 100 min |
+
+The section's own worked border turns on **one arcminute**. D-69 is the case
+already on record: 1.5′ of ayanamsa moved Venus and GL a whole sign in Chart
+49's D-20.
+
+**The decision:** whether the API surfaces an ephemeris uncertainty at all, and
+if so whether it is a caller-supplied figure or one we derive from the settings
+in play. Neither is a calculation change; both change what a border check
+returns.
+
+**Closes when:** you rule on it.
 
 
 ---

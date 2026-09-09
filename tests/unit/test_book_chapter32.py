@@ -507,7 +507,7 @@ def test_section_32_2_is_transcribed_and_labels_itself_approximate():
     assert "60/24=2.5" in birthtime.PLANETS_CHANGE_VERY_SLOWLY
     assert "most important consideration in birthtime rectification" in (
         birthtime.LAGNA_IS_THE_MOST_IMPORTANT_CONSIDERATION)
-    assert "footnote 90" in birthtime.FOOTNOTE_90_NOT_SUPPLIED
+    assert "unresolved controversies" in birthtime.FOOTNOTE_90
 
 
 def test_every_figure_the_section_prints_follows_from_its_own_rule():
@@ -721,3 +721,142 @@ def test_the_lesson_is_one_rate_stated_four_ways():
     assert 30 * 3600 / 15.0 == pytest.approx(120 * 60)
     assert "15 arcseconds of lagna per second of clock" in (
         birthtime.THE_LESSON_IS_ONE_RATE_STATED_FOUR_WAYS)
+
+
+# --------------------------------------------------------------------------
+# Footnote 90 — the ephemeris itself
+# --------------------------------------------------------------------------
+
+
+def test_footnote_90_is_transcribed_and_its_two_knobs_already_exist():
+    from hora.core.settings import Ayanamsa
+
+    assert "computation of Moon's longitude is very accurate" in (
+        birthtime.FOOTNOTE_90)
+    assert "(1) ayanamsa and (2) geocentric positions vs topocentric" in (
+        birthtime.FOOTNOTE_90)
+    assert "consider both the rasis in border-line situations" in (
+        birthtime.FOOTNOTE_90)
+
+    controversies = birthtime.FOOTNOTE_90_CONTROVERSIES
+    assert [c["number"] for c in controversies] == [1, 2]
+    # Both are settings we already carry, and both defaults stand.
+    fresh = Settings()
+    assert fresh.ayanamsa is Ayanamsa.LAHIRI
+    assert fresh.topocentric is False
+    assert controversies[0]["our_default"] == "lahiri"
+    assert controversies[1]["our_default"] == "geocentric"
+    assert "nothing here proposes changing either" in (
+        birthtime.THE_FOOTNOTE_NAMES_NO_WINNER)
+
+
+def test_the_ayanamsa_spread_in_the_moon_is_measured():
+    """FINDING: 5.8 arcminutes inside the Lahiri family, 139.8 across six."""
+    from hora.core.settings import Ayanamsa
+
+    when = from_local(2000, 4, 9, 13, 35, 0.0, utc_offset_hours=-5.0)
+
+    def moon(ayanamsa: Ayanamsa) -> float:
+        return compute_chart(
+            when, _PLACE,
+            Settings(node_type=NodeType.MEAN, ayanamsa=ayanamsa),
+        ).positions[int(Graha.MOON)].longitude
+
+    family = [moon(a) for a in (Ayanamsa.LAHIRI, Ayanamsa.LAHIRI_ICRC,
+                                Ayanamsa.KRISHNAMURTI, Ayanamsa.TRUE_CITRA)]
+    assert (max(family) - min(family)) * 60 == pytest.approx(5.8, abs=0.1)
+
+    wider = family + [moon(a) for a in (Ayanamsa.RAMAN, Ayanamsa.YUKTESHWAR,
+                                        Ayanamsa.FAGAN_BRADLEY)]
+    assert (max(wider) - min(wider)) * 60 == pytest.approx(139.8, abs=0.5)
+
+    # Against the one arcminute the section's own border turns on.
+    assert (max(wider) - min(wider)) * 60 > 100
+    assert "one arcminute" in (
+        birthtime.THE_TWO_CONTROVERSIES_DWARF_THE_BORDER_THEY_ANNOTATE)
+
+
+def test_parallax_is_a_moon_problem_and_reaches_fifty_five_arcminutes():
+    """FINDING: geocentric against topocentric, over thirty days."""
+    from hora.core.timeutil import norm180
+
+    geocentric = Settings(node_type=NodeType.MEAN)
+    topocentric = Settings(node_type=NodeType.MEAN, topocentric=True)
+    when = from_local(2000, 4, 9, 13, 35, 0.0, utc_offset_hours=-5.0)
+
+    # Every other graha is unmoved; the Moon is not.
+    here = compute_chart(when, _PLACE, geocentric)
+    there = compute_chart(when, _PLACE, topocentric)
+    for graha in (Graha.SUN, Graha.MARS, Graha.JUPITER, Graha.SATURN):
+        shift = abs(there.positions[int(graha)].longitude
+                    - here.positions[int(graha)].longitude) * 60
+        assert shift < 0.2, graha
+    moon_shift = abs(there.positions[int(Graha.MOON)].longitude
+                     - here.positions[int(Graha.MOON)].longitude) * 60
+    assert moon_shift > 20
+
+    base = from_local(2000, 4, 9, 0, 0, 0.0, utc_offset_hours=-5.0).jd_ut
+    peak = 0.0
+    for index in range(30 * 24):                   # hourly over thirty days
+        at = from_jd(base + index / 24.0)
+        difference = norm180(
+            compute_chart(at, _PLACE, topocentric).positions[
+                int(Graha.MOON)].longitude
+            - compute_chart(at, _PLACE, geocentric).positions[
+                int(Graha.MOON)].longitude) * 60
+        peak = max(peak, abs(difference))
+    assert peak == pytest.approx(55.0, abs=1.0)
+    assert "reaches 55" in (
+        birthtime.THE_TWO_CONTROVERSIES_DWARF_THE_BORDER_THEY_ANNOTATE)
+
+
+def test_the_footnote_widens_the_rule_from_time_to_position():
+    """FINDING: same instruction, second and larger reason."""
+    assert "if a planet is at a border" in birthtime.THE_MOON_AT_A_DASAMSA_BORDER
+    assert "consider both the positions" in (
+        birthtime.CONSIDER_BOTH_SIDES_OF_A_BORDER)
+    assert "consider both the rasis" in birthtime.FOOTNOTE_90
+    # The helper does not care where the uncertainty came from.
+    scorpio = RASI_ABBR.index("Sc") * 30
+    from_time = birthtime.signs_across_the_uncertainty(
+        scorpio + 23 + 59.5 / 60, vargas.d10_dasamsa, arcminutes=1.0)
+    from_ephemeris = birthtime.signs_across_the_uncertainty(
+        scorpio + 23 + 59.5 / 60, vargas.d10_dasamsa, arcminutes=5.8)
+    assert from_time == from_ephemeris
+    assert "the second reason is the larger one" in (
+        birthtime.THE_FOOTNOTE_WIDENS_THE_RULE_FROM_TIME_TO_POSITION)
+
+
+def test_d69_is_the_footnotes_own_case():
+    """FINDING: 1.5 arcminutes of ayanamsa, a whole sign in D-20."""
+    from pathlib import Path
+
+    text = Path("docs/book-deviations.md").read_text(encoding="utf-8")
+    assert "D-69 · Chart 49 restates Chart 37's nativity" in text
+    assert "Venus in D-20" in text
+
+    from hora.charts.book import longitudes
+
+    thirty_seven, forty_nine = longitudes(37), longitudes(49)
+    for name in ("Sun", "Moon", "Mars"):
+        apart = abs(forty_nine[name] - thirty_seven[name]) * 60
+        assert apart == pytest.approx(1.0, abs=0.2)
+
+    # And an arcminute of it is enough to move a D-20 sign.
+    a = int(vargas.d20_vimsamsa(thirty_seven["Ven"]).sign)
+    b = int(vargas.d20_vimsamsa(forty_nine["Ven"]).sign)
+    assert RASI_ABBR[a] == "Ar"
+    assert RASI_ABBR[b] == "Ta"
+    assert "D-69 is the instance" in birthtime.D69_IS_THE_FOOTNOTES_OWN_CASE
+
+
+def test_oi_182_is_open_and_says_what_it_needs():
+    from pathlib import Path
+
+    text = Path("docs/open-items.md").read_text(encoding="utf-8")
+    assert "### OI-182 — footnote 90 says the ephemeris itself is uncertain" in (
+        text)
+    assert "| OI-182 |" in text
+    entry = text.split("### OI-182")[1].split("### ")[0]
+    assert "**Closes when:**" in entry
+    assert "nothing here proposes\nchanging either" in entry

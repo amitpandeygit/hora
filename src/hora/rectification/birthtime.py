@@ -578,11 +578,23 @@ CONSIDER_BOTH_SIDES_OF_A_BORDER = (
     "divisional chart of interest. If so, we must consider both the positions "
     "and see which one makes better sense based on known past.")
 
-#: Not supplied. Footnote 90 hangs off "it only takes about 2 minutes" and its
-#: text has not been printed here.
-FOOTNOTE_90_NOT_SUPPLIED = (
-    "Section 32.2.1 marks footnote 90 on the words \"it only takes about 2 "
-    "minutes\". The footnote itself is not on the page supplied.")
+#: Footnote 90, verbatim. It hangs off "it only takes about 2 minutes".
+FOOTNOTE_90 = (
+    "We are assuming here that our computation of Moon's longitude is very "
+    "accurate. There are some unresolved controversies like (1) ayanamsa and "
+    "(2) geocentric positions vs topocentric positions. Due to these "
+    "controversies, we cannot be confident of our calculations. It is prudent "
+    "to consider both the rasis in border-line situations.")
+
+#: The two controversies footnote 90 names, and where each already lives in
+#: our settings. **Neither default is proposed for change here.**
+FOOTNOTE_90_CONTROVERSIES: tuple[dict[str, object], ...] = (
+    {"number": 1, "controversy": "ayanamsa",
+     "our_setting": "Settings.ayanamsa", "our_default": "lahiri"},
+    {"number": 2,
+     "controversy": "geocentric positions vs topocentric positions",
+     "our_setting": "Settings.topocentric", "our_default": "geocentric"},
+)
 
 #: §32.2.1's paragraphs on the lagna, verbatim.
 LAGNA_IS_THE_MOST_IMPORTANT_CONSIDERATION = (
@@ -790,5 +802,63 @@ THE_LAGNA_OUTRUNS_THE_FASTEST_GRAHA_THIRTY_TO_ONE = (
 THE_LESSON_IS_ONE_RATE_STATED_FOUR_WAYS = (
     "All four rows of the Lesson are 15 arcseconds of lagna per second of "
     "clock. It is the only boxed lesson in the book that is arithmetic alone."
+)
+
+#: **Finding, measured, and it dwarfs the section it annotates.** Footnote 90
+#: says the two controversies leave us unable to be confident of a Moon
+#: longitude. Measured on Chart 1, in the Moon:
+#:
+#: * **Lahiri, Lahiri ICRC, Krishnamurti and True Citra** — the family our own
+#:   default sits in — span **5.8 arcminutes**.
+#: * Add **Raman, Yukteshwar and Fagan-Bradley** and the span is **139.8
+#:   arcminutes**, two and a third degrees.
+#: * **Geocentric against topocentric** moves the Moon by up to **55
+#:   arcminutes** over thirty days at 42 N 30, and by 0.1 arcminutes or less
+#:   for every other graha — parallax is a Moon problem alone.
+#:
+#: The border §32.2.1 works turns on **one** arcminute. At the section's own
+#: 1.82 minutes per arcminute those spreads are worth 11 minutes, 254 minutes
+#: and 100 minutes of birthtime. The footnote is not a hedge: the ephemeris
+#: question is one to two orders of magnitude larger than the birthtime
+#: question the section is about.
+THE_TWO_CONTROVERSIES_DWARF_THE_BORDER_THEY_ANNOTATE = (
+    "The Lahiri family spans 5.8 arcminutes in the Moon, all six mainstream "
+    "ayanamsas span 139.8, and geocentric against topocentric reaches 55. "
+    "Section 32.2.1's worked border turns on one arcminute."
+)
+
+#: **Finding.** Footnote 90 widens the rule above it. §32.2.1 said to consider
+#: both rasis when a **birthtime** error could carry a graha over a border;
+#: the footnote says to do it when the **ephemeris** could. Same instruction,
+#: a second and much larger reason. `signs_across_the_uncertainty` takes an
+#: uncertainty in arcminutes and does not care where it came from, so it
+#: answers both — but nothing in the API yet supplies the ephemeris figure.
+#: See OI-182.
+THE_FOOTNOTE_WIDENS_THE_RULE_FROM_TIME_TO_POSITION = (
+    "Section 32.2.1 hedges against a birthtime error and footnote 90 hedges "
+    "against the ephemeris. The rule is the same, consider both rasis, and "
+    "the second reason is the larger one."
+)
+
+#: **Finding.** D-69 is footnote 90's own case, recorded eight chapters early
+#: and before there was a rule to hang it on. Charts 37 and 49 are one
+#: nativity printed twice, and the uniform 1.5 arcminutes of ayanamsa between
+#: them moved **Venus and GL a whole sign in D-20**. That is exactly the
+#: footnote's warning happening inside the book's own pages.
+D69_IS_THE_FOOTNOTES_OWN_CASE = (
+    "Charts 37 and 49 differ by about 1.5 arcminutes of ayanamsa and that "
+    "moves Venus and GL a whole sign in D-20. Footnote 90 states the general "
+    "case; D-69 is the instance."
+)
+
+#: **Finding.** Both controversies are already settings and neither default
+#: moves: `Settings.ayanamsa` offers sixteen with **Lahiri** as ours, and
+#: `Settings.topocentric` defaults to **geocentric**. The footnote gives no
+#: preference between the options — it says only that the disagreement exists
+#: and that a border should therefore be read both ways.
+THE_FOOTNOTE_NAMES_NO_WINNER = (
+    "Footnote 90 says the ayanamsa and the geocentric-topocentric questions "
+    "are unresolved and does not choose. Our defaults are Lahiri and "
+    "geocentric and nothing here proposes changing either."
 )
 
