@@ -668,3 +668,195 @@ def test_the_varga_rule_is_qualified_as_soon_as_it_is_used():
         sudarsana.SC_DASA_IN_A_VARGA)
     assert "asks for special attention to the rasi chart" in (
         sudarsana.THE_VARGA_RULE_IS_QUALIFIED_AS_SOON_AS_IT_IS_USED)
+
+
+# --------------------------------------------------------------------------
+# Example 128 and Chart 74
+# --------------------------------------------------------------------------
+
+_E128_PLACE = Place(name="Chart 74", latitude=16 + 13 / 60,
+                    longitude=80 + 28 / 60)
+_E128_NATAL = from_local(1973, 7, 26, 21, 41, 0.0, utc_offset_hours=5.5)
+_E128_ANNUAL_PRINTED = from_local(1998, 7, 27, 7, 15, 0.0, utc_offset_hours=5.5)
+_E128_ANNUAL = from_local(1998, 7, 27, 7, 15, 48.0, utc_offset_hours=5.5)
+
+
+def _d9(instant):
+    from hora.charts.vargas import d9_navamsa
+
+    chart = compute_chart(instant, _E128_PLACE, _SETTINGS)
+    signs = {g: int(d9_navamsa(chart.positions[g].longitude).sign)
+             for g in range(9)}
+    return signs, int(d9_navamsa(chart.lagna_longitude).sign)
+
+
+def test_example_128_is_transcribed():
+    assert "She got married in January 1999" in sudarsana.EXAMPLE_128
+    assert "she started her 26th year in July 1998" in sudarsana.EXAMPLE_128
+    assert "So Le dasa was running in 1998-99" in sudarsana.EXAMPLE_128
+    assert "Three benefics are in quadrants and 3 malefics are in 3rd/11th" in (
+        sudarsana.EXAMPLE_128)
+    assert "he is strong being in own house" in sudarsana.EXAMPLE_128
+
+
+def test_chart_74_is_chart_53_printed_again():
+    """FINDING: the same nativity, and the same marriage as Example 104."""
+    from hora.charts.book import chart
+
+    c53, c74 = chart(53), chart(74)
+    assert c53["birth"] == c74["birth"]
+    assert c53["longitudes"] == c74["longitudes"]
+    assert "divisional" in c74 and "D9" in c74["divisional"]
+    assert "divisional" not in c53
+    assert "Example 104" in sudarsana.CHART_74_IS_CHART_53_AGAIN
+
+
+def test_chart_74s_natal_longitudes_and_navamsa_reproduce():
+    from hora.charts.book import longitudes
+
+    chart = compute_chart(_E128_NATAL, _E128_PLACE, _SETTINGS)
+    printed = longitudes(74)
+    worst = 0.0
+    for g, name in enumerate(("Sun", "Moon", "Mars", "Merc", "Jup", "Ven",
+                              "Sat", "Rahu", "Ketu")):
+        got = chart.positions[g].longitude
+        worst = max(worst, abs((got - printed[name] + 180) % 360 - 180) * 60)
+    assert worst < 1.0
+
+    signs, lagna = _d9(_E128_NATAL)
+    assert RASI_ABBR[lagna] == "Cn"
+    assert RASI_ABBR[signs[int(Graha.MOON)]] == "Le"
+    assert RASI_ABBR[signs[int(Graha.SUN)]] == "Li"
+
+
+def test_the_annual_ascendant_needs_seconds_the_header_does_not_print():
+    """FINDING: 29 Cn 23 arrives at 07:15:48; our return solves 07:16:01."""
+    from hora.tajaka.annual import varsha_pravesh
+
+    printed = compute_chart(_E128_ANNUAL_PRINTED, _E128_PLACE, _SETTINGS)
+    solved = compute_chart(_E128_ANNUAL, _E128_PLACE, _SETTINGS)
+    want = RASI_ABBR.index("Cn") * 30 + 29 + 23 / 60
+    assert abs(printed.lagna_longitude - want) * 60 > 10        # 11.3'
+    assert abs(solved.lagna_longitude - want) * 60 < 0.2        # 0.11'
+
+    from hora.core.timeutil import from_jd
+
+    natal = compute_chart(_E128_NATAL, _E128_PLACE, _SETTINGS)
+
+    def sun_at(jd: float) -> float:
+        return compute_chart(from_jd(jd, utc_offset_hours=5.5), _E128_PLACE,
+                             _SETTINGS).positions[0].longitude
+
+    ours = varsha_pravesh(sun_at, natal.positions[0].longitude,
+                          natal.instant.jd_ut, 26)
+    assert ours["found"]
+    when = from_jd(ours["jd"], utc_offset_hours=5.5).local
+    assert (when.month, when.day, when.hour, when.minute) == (7, 27, 7, 16)
+    assert round(when.second) == 1
+    assert "thirteen seconds apart" in (
+        sudarsana.BOTH_BLOCKS_REPRODUCE_AND_THE_ASCENDANT_NEEDS_SECONDS)
+
+
+def test_the_annual_navamsa_reproduces_every_box():
+    signs, lagna = _d9(_E128_ANNUAL)
+    printed = dict(sudarsana.EXAMPLE_128_ANNUAL["d9"])  # type: ignore[arg-type]
+    assert RASI_ABBR[lagna] == printed.pop("Asc")
+    printed.pop("AL")                     # arudha, not a graha position
+    printed.pop("HL")
+    printed.pop("GL")
+    names = ("Sun", "Moon", "Mars", "Merc", "Jup", "Ven", "Sat", "Rahu",
+             "Ketu")
+    for g, name in enumerate(names):
+        assert RASI_ABBR[signs[g]] == printed[name], name
+
+
+def test_the_twenty_sixth_year_gives_leo_from_the_navamsa_lagna():
+    _, lagna = _d9(_E128_NATAL)
+    assert sudarsana.dasa_house(26) == 2
+    assert RASI_ABBR[sudarsana.house_from(lagna, 2)] == "Le"
+
+
+def test_example_128s_placements_reproduce_and_the_counts_are_exact():
+    signs, _ = _d9(_E128_ANNUAL)
+    leo = RASI_ABBR.index("Le")
+    index = {"Sun": 0, "Moon": 1, "Mars": 2, "Mercury": 3, "Jupiter": 4,
+             "Venus": 5, "Saturn": 6, "Rahu": 7, "Ketu": 8}
+    for row in sudarsana.EXAMPLE_128_PLACEMENTS:
+        graha = index[str(row["graha"])]
+        assert (signs[graha] - leo) % 12 + 1 == row["house"], row["graha"]
+
+    from hora.core.constants.house import KENDRA
+
+    benefics = [r for r in sudarsana.EXAMPLE_128_PLACEMENTS
+                if r["nature"] == "benefic"]
+    assert sum(1 for r in benefics if r["house"] in KENDRA) == 3
+    malefics = [r for r in sudarsana.EXAMPLE_128_PLACEMENTS
+                if r["nature"] == "malefic"]
+    assert sum(1 for r in malefics if r["house"] in (3, 11)) == 3
+    assert "his own Aries" in sudarsana.EXAMPLE_128_COUNTS_ARE_EXACT
+
+
+def test_mars_in_the_ninth_is_excused_by_his_own_house():
+    from hora.core.const import RASI_LORD, Graha
+
+    signs, _ = _d9(_E128_ANNUAL)
+    assert RASI_ABBR[signs[int(Graha.MARS)]] == "Ar"
+    assert int(RASI_LORD[signs[int(Graha.MARS)]]) == int(Graha.MARS)
+    verdict = sudarsana.placement_verdict(house=9, nature="malefic",
+                                          graha=int(Graha.MARS))
+    assert verdict["spoils_the_house"] is True
+    assert "Though Mars is in 9th, he is strong being in own house" in (
+        sudarsana.EXAMPLE_128)
+
+
+def test_the_moon_has_to_be_a_benefic_for_the_count_of_three():
+    """FINDING: evidence on THE_NATURE_IS_NOT_QUALIFIED."""
+    from hora.charts.benefic import moon_nature
+
+    chart = compute_chart(_E128_ANNUAL, _E128_PLACE, _SETTINGS)
+    elongation = (chart.positions[int(Graha.MOON)].longitude
+                  - chart.positions[int(Graha.SUN)].longitude) % 360
+    assert 0 < elongation < 180                       # waxing, 41 degrees
+    assert moon_nature(0) == "benefic"                # 0 is Sukla paksha
+
+    moon = next(r for r in sudarsana.EXAMPLE_128_PLACEMENTS
+                if r["graha"] == "Moon")
+    assert moon["house"] == 3 and moon["nature"] == "benefic"
+    counted_as_malefic = sum(
+        1 for r in sudarsana.EXAMPLE_128_PLACEMENTS
+        if r["house"] in (3, 11) and r["nature"] == "malefic") + 1
+    assert counted_as_malefic == 4                    # what the book avoids
+    assert "she is being taken as a benefic" in (
+        sudarsana.THE_MOON_IS_COUNTED_A_BENEFIC_HERE)
+
+
+def test_ketu_in_the_fifth_is_never_mentioned():
+    """FINDING: a spoiled house the example passes over."""
+    ketu = next(r for r in sudarsana.EXAMPLE_128_PLACEMENTS
+                if r["graha"] == "Ketu")
+    assert ketu["house"] == 5
+    assert 5 not in sudarsana.MALEFIC_GOOD_HOUSES
+    verdict = sudarsana.placement_verdict(house=5, nature="malefic")
+    assert verdict["spoils_the_house"] is True
+    assert "Ketu" not in sudarsana.EXAMPLE_128
+    assert "Most planets are favorably placed" in sudarsana.EXAMPLE_128
+    assert "does not mention him" in sudarsana.KETU_IN_THE_FIFTH_IS_PASSED_OVER
+
+
+def test_the_strength_claim_is_made_and_still_not_shown():
+    """OI-180 stays open: the book asserts a winner and gives no test."""
+    signs, lagna = _d9(_E128_NATAL)
+    three = {RASI_ABBR[lagna], RASI_ABBR[signs[int(Graha.MOON)]],
+             RASI_ABBR[signs[int(Graha.SUN)]]}
+    assert three == {"Cn", "Le", "Li"}                # they differ
+    assert "it is stronger than Moon and Sun" in sudarsana.EXAMPLE_128
+    assert "without saying how" in (
+        sudarsana.THE_STRENGTH_CLAIM_IS_MADE_AND_STILL_NOT_SHOWN)
+
+
+def test_both_worked_examples_are_in_vargas():
+    assert "Let us revisit Example 124" in sudarsana.EXAMPLE_126     # a D-24
+    assert "Sudarsana Chakra dasa of navamsa" in sudarsana.EXAMPLE_128
+    assert "stated once and not exercised" not in sudarsana.EXAMPLE_128
+    assert "a D-24 and a navamsa" in (
+        sudarsana.THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED)

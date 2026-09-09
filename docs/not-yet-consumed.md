@@ -1916,7 +1916,7 @@ exist to check the section's own figures, and one of them fails.
 |---|---|
 | `ADVANCEMENT_IS_READ_IN_THE_RASI_CHART` | Ours: rules 1 to 5 read the varga and rule 6 reads the rasi chart, settled by Exercise 49. OI-124 closed |
 
-### Chapter 31 — §31.1 to §31.4 and Example 126 (39)
+### Chapter 31 — §31.1 to §31.4, Example 126 and Example 128 (47)
 
 `dasha/sudarsana.py`. The chakra **is** built: `sudarsana_chakra` returns the
 three bhava chakras with their occupants and `the_same_house_everywhere` reads
@@ -1947,6 +1947,14 @@ has not been given yet.
 | `THE_EIGHTH_HOUSE_RULE_IS_USED_NOT_JUST_STATED` | Ours: Jupiter in the 8th is called good, so §31.4's dusthana inclusion is load-bearing |
 | `THE_EXAMPLE_USES_THE_TWO_REFERENCES_THAT_AGREE` | Ours: lagna and Moon are both in Ge and the Sun is in Sc, and the example never mentions him. OI-180 |
 | `THE_VARGA_RULE_IS_QUALIFIED_AS_SOON_AS_IT_IS_USED` | Ours: the chapter's first worked SC dasa is in a varga and the next sentence prefers the rasi chart |
+| `EXAMPLE_128` · `EXAMPLE_128_ANNUAL` · `EXAMPLE_128_PLACEMENTS` | Example 128 verbatim, the 1998-99 annual chart it reads and its nine placements as data |
+| `CHART_74_IS_CHART_53_AGAIN` | Ours: Chart 74 reprints Chart 53 with its navamsa, and the marriage is Example 104's |
+| `BOTH_BLOCKS_REPRODUCE_AND_THE_ASCENDANT_NEEDS_SECONDS` | Ours: the annual ascendant reaches its printed value at 07:15:48 against our 07:16:01 return |
+| `THE_STRENGTH_CLAIM_IS_MADE_AND_STILL_NOT_SHOWN` | Ours: the first case where the three references differ and one is chosen, with no test given. OI-180 |
+| `EXAMPLE_128_COUNTS_ARE_EXACT` | Ours: three benefics in quadrants and three malefics in the 3rd and 11th, all nine placements reproduced |
+| `THE_MOON_IS_COUNTED_A_BENEFIC_HERE` | Ours: the Moon is in the 3rd too, so the count of three makes her a benefic. Evidence on `THE_NATURE_IS_NOT_QUALIFIED` |
+| `KETU_IN_THE_FIFTH_IS_PASSED_OVER` | Ours: a malefic outside the 3rd, 6th and 11th that the example never mentions |
+| `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
 ---
 

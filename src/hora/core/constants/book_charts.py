@@ -2840,6 +2840,48 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "dasha.sudarsana.THE_ASCENDANT_NEEDS_FORTY_EIGHT_SECONDS."
         ),
     },
+    74: {
+        "title": "A lady — Chart 53 reprinted with her navamsa",
+        "birth": "July 26, 1973, 9:41 pm (IST), 80 E 28, 16 N 13",
+        "birth_data": {
+            "year": 1973, "month": 7, "day": 26, "hour": 21, "minute": 41,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 13 / 60, "longitude": 80 + 28 / 60},
+        "longitudes": {
+            "Asc": "3 Pi 18", "Sun": "10 Cn 01", "Moon": "26 Ta 39",
+            "Mars": "28 Pi 12", "Merc": "0 Cn 13", "Jup": "14 Cp 12",
+            "Ven": "8 Le 25", "Sat": "5 Ge 48", "Rahu": "12 Sg 48",
+            "Ketu": "12 Ge 48", "HL": "6 Sc 15", "GL": "1 Sc 32",
+        },
+        "chara_karakas": {
+            "Mars": "AK", "Moon": "AmK", "Rahu": "BK", "Jup": "MK",
+            "Ven": "PK", "Sun": "PiK", "Sat": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Merc", "Jup"),
+        "divisional": {
+            "D9": {
+                "Mars": "Pi", "Jup": "Ta", "Ven": "Ge", "Merc": "Cn",
+                "Asc": "Cn", "GL": "Cn", "Rahu": "Cn", "Ketu": "Cp",
+                "HL": "Le", "Moon": "Le", "Sat": "Sc", "Sun": "Li",
+                "AL": "Vi",
+            },
+        },
+        "events": {"the lady married": "January 24, 1999"},
+        "sahams": {"vivaha": "1 Cp"},
+        "first_seen": "chapter 31, Example 128",
+        "note": (
+            "**The same nativity as Chart 53**, reprinted forty-six chapters "
+            "later with her navamsa drawn beside it: every one of the twelve "
+            "printed longitudes is identical, and the marriage Example 104 "
+            "read by transit in chapter 25 is the marriage Example 128 reads "
+            "by Sudarsana Chakra dasa here. The figure also carries her "
+            "**1998-99 annual chart** and its navamsa, which the book gives "
+            "no number of their own; those are held in "
+            "dasha.sudarsana.EXAMPLE_128_ANNUAL. Every printed longitude "
+            "reproduces within an arcminute and every navamsa box."
+        ),
+    },
 }
 
 

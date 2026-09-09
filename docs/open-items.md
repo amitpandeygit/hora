@@ -2764,8 +2764,13 @@ start SC dasa from there" — with no three-sign version offered there at all.
 
 `dasa_signs` returns all three references and picks none.
 
-**Closes when:** a worked SC dasa in a varga names its strongest reference, or
-a later section gives the test.
+Example 128 is the first case where the three differ — natal navamsa lagna Cn,
+Moon Le, Sun Li — and it asserts the answer without working it: "lagna is in Cn
+and it is stronger than Moon and Sun". So the book does name a winner, and
+still gives no test.
+
+**Closes when:** a section gives the test, or a worked example shows the
+comparison rather than asserting its result.
 
 
 ---

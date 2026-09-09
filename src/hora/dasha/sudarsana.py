@@ -635,3 +635,135 @@ THE_VARGA_RULE_IS_QUALIFIED_AS_SOON_AS_IT_IS_USED = (
     "Example 126 is the chapter's first worked SC dasa and it is in a varga. "
     "The next sentence asks for special attention to the rasi chart."
 )
+
+
+# --------------------------------------------------------------------------
+# Example 128 — the rasi-chart preference set aside for a navamsa
+# --------------------------------------------------------------------------
+
+#: Example 128, verbatim.
+EXAMPLE_128 = (
+    "Let us consider the lady of Chart 74. She got married in January 1999. "
+    "Let us analyze her Sudarsana Chakra dasa of navamsa for 1998-99. She was "
+    "born in 1973 and she started her 26th year in July 1998. If we divide 26 "
+    "by 12, we get a remainder of 2. So SC dasa in 1998-99 belongs to the 2nd "
+    "house. In natal navamsa, lagna is in Cn and it is stronger than Moon and "
+    "Sun. The 2nd house from Cn is Le. So Le dasa was running in 1998-99. Is "
+    "it a good dasa? Three benefics are in quadrants and 3 malefics are in "
+    "3rd/11th. Though Mars is in 9th, he is strong being in own house. Most "
+    "planets are favorably placed and, more importantly, lagna and 7th are "
+    "strong with Jupiter and Venus in them (respectively). So this was a "
+    "favorable year for matters shown by D-9. No wonder she got married.")
+
+#: The 1998-99 annual chart printed inside Chart 74, which the book numbers
+#: separately from nothing. Its navamsa is the chart Example 128 reads.
+EXAMPLE_128_ANNUAL: dict[str, object] = {
+    "birth": "July 27, 1998, 7:15 am (IST), 80 E 28, 16 N 13",
+    "birth_data": {"year": 1998, "month": 7, "day": 27, "hour": 7,
+                   "minute": 15, "second": 0.0, "utc_offset_hours": 5.5},
+    "longitudes": {
+        "Asc": "29 Cn 23", "Sun": "10 Cn 01", "Moon": "21 Le 16",
+        "Mars": "20 Ge 01", "Merc": "3 Le 45", "Jup": "4 Pi 05",
+        "Ven": "15 Ge 08", "Sat": "9 Ar 27", "Rahu": "8 Le 55",
+        "Ketu": "8 Aq 55", "HL": "24 Le 04", "GL": "0 Sc 14",
+    },
+    "d9": {"Asc": "Pi", "Mars": "Ar", "Merc": "Ta", "Rahu": "Ge",
+           "Sat": "Ge", "Ven": "Aq", "GL": "Cn", "AL": "Cp", "Jup": "Le",
+           "Ketu": "Sg", "HL": "Sc", "Moon": "Li", "Sun": "Li"},
+    "year": 26,
+}
+
+#: Example 128's placements from the Leo dasa sign, as data.
+EXAMPLE_128_PLACEMENTS: tuple[dict[str, object], ...] = (
+    {"graha": "Jupiter", "nature": "benefic", "house": 1},
+    {"graha": "Venus", "nature": "benefic", "house": 7},
+    {"graha": "Mercury", "nature": "benefic", "house": 10},
+    {"graha": "Sun", "nature": "malefic", "house": 3},
+    {"graha": "Saturn", "nature": "malefic", "house": 11},
+    {"graha": "Rahu", "nature": "malefic", "house": 11},
+    {"graha": "Mars", "nature": "malefic", "house": 9},
+    {"graha": "Moon", "nature": "benefic", "house": 3},
+    {"graha": "Ketu", "nature": "malefic", "house": 5},
+)
+
+#: **Finding.** Chart 74 is **Chart 53** printed again. Every one of the twelve
+#: longitudes matches, and the marriage is the same marriage: Example 104 read
+#: 24 January 1999 by transit against her vivaha saham in chapter 25, and
+#: Example 128 reads it by Sudarsana Chakra dasa here. Forty-six chapters and
+#: two methods on one wedding.
+CHART_74_IS_CHART_53_AGAIN = (
+    "Chart 74 reprints Chart 53's twelve longitudes exactly and adds her "
+    "navamsa. Example 104 timed her January 1999 marriage by transit and "
+    "Example 128 times it by SC dasa."
+)
+
+#: **Finding.** Both blocks of Chart 74 reproduce. The natal longitudes come
+#: back within an arcminute and every navamsa box; the 1998-99 annual chart
+#: does too, except its **ascendant**, which needs seconds the header does not
+#: print. The header says 7:15 am; the printed 29 Cn 23 is reached at
+#: **07:15:48**, and our own solar return for her 26th year lands at
+#: **07:16:01** — thirteen seconds later, which a birth time given to the
+#: minute covers. This is Chart 72's problem again: the ascendant is the only
+#: body fast enough to feel a rounded clock.
+BOTH_BLOCKS_REPRODUCE_AND_THE_ASCENDANT_NEEDS_SECONDS = (
+    "The natal chart and both navamsas come back exactly. The annual "
+    "ascendant reaches its printed 29 Cn 23 at 07:15:48 and our solar return "
+    "is 07:16:01, thirteen seconds apart, with the header printing only 7:15."
+)
+
+#: **Finding, and OI-180 is still open but now has a case.** §31.2 asks for
+#: three references and §31.3 allows the strongest to stand for them. Example
+#: 126 never had to choose — its lagna and Moon shared a rasi. Example 128
+#: does choose, and says so: "In natal navamsa, lagna is in Cn and **it is
+#: stronger than Moon and Sun**." The three are in Cancer, Leo and Libra, so
+#: they differ; the book asserts the lagna is strongest and still gives no
+#: test.
+THE_STRENGTH_CLAIM_IS_MADE_AND_STILL_NOT_SHOWN = (
+    "Example 128's natal navamsa has lagna in Cancer, the Moon in Leo and the "
+    "Sun in Libra, and the example says the lagna is stronger without saying "
+    "how. It is the first case where the three references differ and one is "
+    "chosen."
+)
+
+#: **Finding.** All nine placements reproduce and the example's counts are
+#: exact: **three benefics in quadrants** — Jupiter 1st, Venus 7th, Mercury
+#: 10th — and **three malefics in the 3rd or 11th** — the Sun 3rd, Saturn 11th,
+#: Rahu 11th. Mars is in the 9th in Aries, his own house, which is what
+#: "strong being in own house" means.
+EXAMPLE_128_COUNTS_ARE_EXACT = (
+    "Jupiter, Venus and Mercury take the 1st, 7th and 10th; the Sun, Saturn "
+    "and Rahu take the 3rd, 11th and 11th; Mars is in the 9th in his own "
+    "Aries."
+)
+
+#: **Finding, and it settles the Moon's nature here.** The example counts
+#: **three** malefics in the 3rd and 11th. The Moon is also in the 3rd, so if
+#: she were counted a malefic there would be four. She is waxing — about 41°
+#: ahead of the Sun in the annual chart — so §3's rule makes her a benefic, and
+#: the count only works that way. It is the chapter's only evidence on
+#: `THE_NATURE_IS_NOT_QUALIFIED`.
+THE_MOON_IS_COUNTED_A_BENEFIC_HERE = (
+    "The Moon stands in the 3rd with the Sun and the example still counts "
+    "three malefics there and in the 11th, so she is being taken as a "
+    "benefic. She is waxing in the annual chart."
+)
+
+#: **Finding.** Ketu is in the **5th** from the dasa sign — a malefic outside
+#: the 3rd, 6th and 11th, which §31.4 says spoils the house it occupies. The
+#: example does not mention him. It names eight of the nine grahas and passes
+#: over the one placement that counts against its conclusion, saying only that
+#: "most planets are favorably placed".
+KETU_IN_THE_FIFTH_IS_PASSED_OVER = (
+    "Ketu is in the 5th from the dasa sign, which section 31.4 makes a "
+    "spoiled house, and Example 128 does not mention him. It says most "
+    "planets are favourably placed."
+)
+
+#: **Finding.** §31.4 closed by asking for "special attention to rasi chart",
+#: and the two examples that follow are both in vargas — Example 126 in a D-24
+#: and Example 128 in a navamsa. The preference is stated once and not
+#: exercised.
+THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED = (
+    "Both worked SC dasas after the preference for the rasi chart are in "
+    "divisional charts, a D-24 and a navamsa."
+)
