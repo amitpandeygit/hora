@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**7 waiting on Amit · 120 waiting on evidence · 2 parked**
+**7 waiting on Amit · 121 waiting on evidence · 2 parked**
 
 ---
 
@@ -2619,6 +2619,33 @@ Two edges the section itself does not reach:
 
 **Closes when:** the other interpretations surface, or a second worked case
 uses a planet dignified only one way.
+
+
+### OI-173 — §29.2.16's example does not meet its own dusthana condition
+
+**Waiting on the book.** The rule has two halves: "Ithasala given by two planets
+**in dusthanas (6th, 8th and 12th house)** in combustion or retrogression or
+debilitation turns into Durupha yoga."
+
+The example supplies only the second half. From an Aries lagna, Mars in Cancer
+is in the **4th** and Saturn in Aries is in the **1st** — both kendras, neither
+a dusthana. The book's justification names only the affliction: "Because both
+Mars and Saturn are debilitated, their ithasala turns into Durupha yoga."
+
+Two readings, and the section gives no way to choose:
+
+* **as worded** — both planets in dusthanas **and** both afflicted;
+* **as worked** — both afflicted, wherever they stand.
+
+The second is much wider. It is also indistinguishable from §29.2.11's radda
+with two afflicted planets instead of one, which makes the dusthana condition
+the only thing separating the two yogas.
+
+`durupha` returns `present_as_worded` and `present_as_worked` separately and
+sets `readings_agree`. On the book's own example they differ.
+
+**Closes when:** a second worked durupha places the planets, or a later section
+restates the rule.
 
 
 ---

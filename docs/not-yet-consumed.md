@@ -1718,7 +1718,7 @@ findings.
 | `THE_TAJAKA_READING_WOULD_FIRE_ALMOST_ALWAYS` · `WHICH_ASPECT_SCHEME_IS_NOT_SAID` | Ours: the aspect scheme is unstated, and §28.2's would satisfy the rule in ten charts of twelve. OI-158 |
 | `THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED` | Ours: the closing paragraph is a historical claim with no calculation behind it |
 
-### Chapter 29 — §29.1 to §29.2.15 (125)
+### Chapter 29 — §29.1 to §29.2.16 (132)
 
 `tajaka/yogas.py`. The three yogas defined so far **are** built: `ishkavala`
 and `induvara` test the house groups both ways round, `ithasala` applies
@@ -1817,6 +1817,10 @@ footnote can. What follows is prose and findings.
 | `MERCURY_IN_VIRGO_IS_BOTH_AND_ONLY_MERCURY_IS` | Ours: the one worked case is the one placement that cannot separate the rule's disjunction |
 | `GRAHA_DRISHTI_WOULD_GIVE_NO_YOGA_HERE` | Ours: the example forms only under §28.2's aspects; chapter 10's would fail |
 | `SIGNIFIED_MATTERS_ARE_THE_HOUSES_OWNED_AGAIN` | Ours: the Sun's 4th from Taurus, the fifth section running to read a result this way |
+| `DURUPHA_RULE` · `DURUPHA_RESULTS` · `DURUPHA_AFFLICTIONS` · `DURUPHA_EXAMPLE` | §29.2.16 verbatim, its three afflictions and its worked case as data |
+| `THE_EXAMPLE_IGNORES_ITS_OWN_DUSTHANA_CONDITION` | Ours: Mars is in the 4th and Saturn in the 1st, both kendras, and the rule asks for dusthanas. OI-173 |
+| `DURUPHAS_TRIGGERS_ARE_A_SUBSET_OF_RADDAS` · `THREE_SECTIONS_THREE_LISTS_ONE_COMMON_TERM` | Ours: every durupha is a radda, and the chapter's three weakness lists share only debilitation |
+| `THE_NAMED_HOUSES_BELONG_TO_ONLY_ONE_OF_THE_TWO` | Ours: career and gains are Saturn's 10th and 11th; Mars owns the 1st and 8th and is named anyway |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
 ---

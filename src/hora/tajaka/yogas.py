@@ -19,7 +19,12 @@ from hora.core.constants.graha import (
     NATURAL_RELATION,
     NATURAL_RELATION_NAMES,
 )
-from hora.core.constants.house import APOKLIMA, KENDRA, PANAPHARA
+from hora.core.constants.house import (
+    APOKLIMA,
+    DUSTHANA,
+    KENDRA,
+    PANAPHARA,
+)
 from hora.tajaka.aspects import (
     TajakaAspectError,
     aspect_on_house,
@@ -2905,6 +2910,169 @@ def kutta(*, lagna_rasi: int, in_lagna: int, in_lagna_longitude: float,
         "gives": KUTTA_RESULTS,
         "rule": KUTTA_RULE,
         "footnote": KUTTA_FOOTNOTE,
+    }
+
+
+# --------------------------------------------------------------------------
+# §29.2.16 Durupha yoga
+# --------------------------------------------------------------------------
+
+#: §29.2.16's rule, verbatim.
+DURUPHA_RULE = (
+    "Ithasala given by two planets in dusthanas (6th, 8th and 12th house) in "
+    "combustion or retrogression or debilitation turns into Durupha yoga. The "
+    "planets are powerless to give any good results."
+)
+
+DURUPHA_RESULTS = "the planets are powerless to give any good results"
+
+#: §29.2.16's three afflictions. They are §29.2.11's four less "otherwise
+#: weak" — see `DURUPHAS_TRIGGERS_ARE_A_SUBSET_OF_RADDAS`.
+DURUPHA_AFFLICTIONS: tuple[str, ...] = (
+    "combustion", "retrogression", "debilitation")
+
+#: §29.2.16's worked example, as the book states it.
+DURUPHA_EXAMPLE: dict[str, object] = {
+    "lagna_rasi": "Ar",
+    "faster": "Mars", "faster_at": "15 Cn", "faster_longitude": 105.0,
+    "slower": "Saturn", "slower_at": "17 Ar", "slower_longitude": 17.0,
+    "aspect": "Square aspect", "ithasala": "Vartamaana",
+    "both_debilitated": True,
+    "faster_house": 4, "slower_house": 1,
+    "in_dusthanas": False,
+    "book_says": ("Because both Mars and Saturn are debilitated, their "
+                  "ithasala turns into Durupha yoga."),
+    "shows": "cannot give good results related to career and gains",
+}
+
+#: **Finding, and the example meets half its own rule.** §29.2.16 asks for two
+#: things: the planets **in dusthanas** — the 6th, 8th or 12th — **and** in
+#: combustion, retrogression or debilitation. The example supplies only the
+#: second. From an Aries lagna, Mars in Cancer is in the **4th** and Saturn in
+#: Aries is in the **1st**; both are kendras and neither is a dusthana. The
+#: book's own justification names only the debilitation: "Because both Mars
+#: and Saturn are debilitated, their ithasala turns into Durupha yoga."
+#: `durupha` answers with and without the dusthana condition. See OI-173.
+THE_EXAMPLE_IGNORES_ITS_OWN_DUSTHANA_CONDITION = (
+    "The rule requires both planets in the 6th, 8th or 12th. The example's "
+    "Mars is in the 4th and its Saturn in the 1st, both kendras, and its "
+    "justification mentions only the debilitation."
+)
+
+#: **Finding.** Durupha's three afflictions are §29.2.11's four with
+#: "otherwise weak" removed, and radda needs only **one** afflicted planet
+#: where durupha needs two and adds the dusthanas. So **every durupha is also
+#: a radda** and the reverse fails. The two verdicts differ only in degree —
+#: radda "gives bad results", durupha leaves the planets "powerless to give
+#: any good results" — and the chapter does not say the second is a case of
+#: the first.
+DURUPHAS_TRIGGERS_ARE_A_SUBSET_OF_RADDAS = (
+    "Durupha's afflictions are radda's less \"otherwise weak\", and radda "
+    "needs one afflicted planet where durupha needs two in dusthanas. Every "
+    "durupha is a radda; the chapter does not say so."
+)
+
+#: **Finding.** Three sections define weakness and no two agree. §29.2.11:
+#: debilitation, retrogression, combustion, otherwise weak. §29.2.13:
+#: debilitation, an inimical rasi, a low pancha vargeeya bala. §29.2.16:
+#: combustion, retrogression, debilitation. Only **debilitation** appears in
+#: all three.
+THREE_SECTIONS_THREE_LISTS_ONE_COMMON_TERM = (
+    "Sections 29.2.11, 29.2.13 and 29.2.16 each list what makes a planet "
+    "weak and no two lists agree. Debilitation is the only term on all "
+    "three."
+)
+
+#: **Finding, for the sixth section running — and this time the houses belong
+#: to one planet.** "Mars and Saturn cannot give good results related to career
+#: and gains" names both planets, but career and gains are the **10th** and
+#: **11th**, which are **Saturn's** from an Aries lagna. Mars owns the 1st and
+#: the 8th there, and neither is named. The reading is one planet's ownership
+#: attributed to both.
+THE_NAMED_HOUSES_BELONG_TO_ONLY_ONE_OF_THE_TWO = (
+    "Career and gains are the 10th and 11th, which Saturn owns from an Aries "
+    "lagna. Mars owns the 1st and the 8th there. The example names both "
+    "planets and only Saturn's houses."
+)
+
+
+def _durupha_side(graha: int, longitude: float, lagna_rasi: int,
+                  retrograde: bool, sun_longitude: float | None) -> dict:
+    """One planet under §29.2.16's placement and affliction tests."""
+    place = validate.longitude("longitude", float(longitude))
+    rasi = int(place // 30)
+    house = (rasi - int(lagna_rasi)) % 12 + 1
+    combust = ({"combust": None, "separation": None, "orb": None}
+               if sun_longitude is None
+               else _is_combust(graha, place, float(sun_longitude), retrograde))
+    afflictions = {
+        "combust": combust["combust"],
+        "retrograde": bool(retrograde),
+        "debilitated": rasi == int(DEBILITATION_RASI[int(graha)]),
+    }
+    return {
+        "graha": int(graha), "graha_name": str(GRAHA_NAMES[int(graha)]),
+        "rasi": rasi, "house": house,
+        "house_class": _house_group(house),
+        "in_a_dusthana": house in DUSTHANA,
+        **afflictions,
+        "combustion_separation": combust["separation"],
+        "afflicted_by": tuple(k for k, v in afflictions.items() if v),
+        "afflicted": any(bool(v) for v in afflictions.values()),
+        "owns_houses": tuple(
+            h for h in range(1, 13)
+            if int(RASI_LORD[(int(lagna_rasi) + h - 1) % 12]) == int(graha)),
+    }
+
+
+def durupha(*, lagna_rasi: int, faster: int, slower: int,
+            faster_longitude: float, slower_longitude: float,
+            faster_retrograde: bool = False, slower_retrograde: bool = False,
+            sun_longitude: float | None = None) -> dict:
+    """§29.2.16 — an ithasala between two afflicted planets in dusthanas.
+
+    The dusthana condition is answered separately because the section's own
+    example does not meet it. See
+    `THE_EXAMPLE_IGNORES_ITS_OWN_DUSTHANA_CONDITION` and OI-173.
+    """
+    seat = validate.in_range("lagna_rasi", int(lagna_rasi), 0, 11)
+    base = ithasala(faster=faster, slower=slower,
+                    faster_longitude=faster_longitude,
+                    slower_longitude=slower_longitude,
+                    faster_retrograde=faster_retrograde,
+                    slower_retrograde=slower_retrograde)
+    quick, slow = int(base["faster"]), int(base["slower"])
+    seats = {int(faster): float(faster_longitude),
+             int(slower): float(slower_longitude)}
+    retros = {int(faster): bool(faster_retrograde),
+              int(slower): bool(slower_retrograde)}
+
+    sides = {g: _durupha_side(g, seats[g], seat, retros[g], sun_longitude)
+             for g in (quick, slow)}
+    both_afflicted = all(sides[g]["afflicted"] for g in (quick, slow))
+    both_in_dusthanas = all(sides[g]["in_a_dusthana"] for g in (quick, slow))
+    houses = tuple(sorted({h for g in (quick, slow)
+                           for h in sides[g]["owns_houses"]}))
+    return {
+        "yoga": "Durupha",
+        "lagna_rasi": seat,
+        "ithasala_type": base["type"],
+        "faster_side": sides[quick], "slower_side": sides[slow],
+        "both_afflicted": both_afflicted,
+        "both_in_dusthanas": both_in_dusthanas,
+        "present_as_worded": bool(base["type"] is not None and both_afflicted
+                                  and both_in_dusthanas),
+        "present_as_worked": bool(base["type"] is not None and both_afflicted),
+        "readings_agree": both_in_dusthanas or not both_afflicted
+        or base["type"] is None,
+        "undecided": (None if (both_in_dusthanas or not both_afflicted
+                               or base["type"] is None)
+                      else THE_EXAMPLE_IGNORES_ITS_OWN_DUSTHANA_CONDITION),
+        "houses": houses,
+        "combustion_undecided": (None if sun_longitude is not None else
+                                 "the Sun's longitude was not supplied"),
+        "gives": DURUPHA_RESULTS,
+        "rule": DURUPHA_RULE,
     }
 
 

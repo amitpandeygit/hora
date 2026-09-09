@@ -3050,3 +3050,171 @@ def test_the_book_marks_this_yoga_contested_and_says_no_more():
                       in_lagna_longitude=51.0, aspecting=int(Graha.MERCURY),
                       aspecting_longitude=166.0)
     assert got["footnote"] == yogas.KUTTA_FOOTNOTE
+
+
+# --------------------------------------------------------------------------
+# §29.2.16 Durupha yoga
+# --------------------------------------------------------------------------
+
+
+def test_the_durupha_rule_is_transcribed():
+    assert "two planets in dusthanas (6th, 8th and 12th house)" in (
+        yogas.DURUPHA_RULE)
+    assert "combustion or retrogression or debilitation" in yogas.DURUPHA_RULE
+    assert yogas.DURUPHA_RESULTS in yogas.DURUPHA_RULE.lower()
+    assert yogas.DURUPHA_AFFLICTIONS == ("combustion", "retrogression",
+                                         "debilitation")
+
+
+def test_the_durupha_example_reproduces():
+    """Aries lagna, Mars 15 Cn and Saturn 17 Ar, both debilitated, in a
+    square vartamaana.
+    """
+    want = yogas.DURUPHA_EXAMPLE
+    got = yogas.durupha(
+        lagna_rasi=0, faster=int(Graha.MARS), slower=int(Graha.SATURN),
+        faster_longitude=float(want["faster_longitude"]),
+        slower_longitude=float(want["slower_longitude"]))
+    assert got["ithasala_type"] == want["ithasala"]
+    assert got["faster_side"]["debilitated"] is True
+    assert got["slower_side"]["debilitated"] is True
+    assert got["both_afflicted"] is want["both_debilitated"]
+    assert got["present_as_worked"] is True
+
+
+def test_the_pair_is_a_square_vartamaana():
+    base = yogas.ithasala(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                          faster_longitude=105.0, slower_longitude=17.0)
+    assert base["house_from_faster"] == 10
+    assert base["aspect"] == "Square aspect"
+    assert base["separation_from_exact"] == pytest.approx(2.0)
+    assert base["type"] == "Vartamaana"
+
+
+def test_neither_planet_is_in_a_dusthana():
+    """Mars is in the 4th and Saturn in the 1st — both kendras. OI-173."""
+    from hora.core.constants.house import DUSTHANA, KENDRA
+
+    assert DUSTHANA == (6, 8, 12)
+    want = yogas.DURUPHA_EXAMPLE
+    got = yogas.durupha(lagna_rasi=0, faster=int(Graha.MARS),
+                        slower=int(Graha.SATURN), faster_longitude=105.0,
+                        slower_longitude=17.0)
+    assert got["faster_side"]["house"] == want["faster_house"] == 4
+    assert got["slower_side"]["house"] == want["slower_house"] == 1
+    for side in ("faster_side", "slower_side"):
+        assert got[side]["house"] in KENDRA
+        assert got[side]["in_a_dusthana"] is False
+    assert got["both_in_dusthanas"] is want["in_dusthanas"] is False
+    assert got["present_as_worded"] is False
+    assert got["readings_agree"] is False
+    assert got["undecided"] == (
+        yogas.THE_EXAMPLE_IGNORES_ITS_OWN_DUSTHANA_CONDITION)
+    assert "mentions only the debilitation" in (
+        yogas.THE_EXAMPLE_IGNORES_ITS_OWN_DUSTHANA_CONDITION)
+
+
+def test_the_rule_as_worded_needs_both_planets_in_dusthanas():
+    """Put both in the 6th and 8th and the two readings agree."""
+    # Aries lagna: Pisces is the 12th and Virgo the 6th. Mercury is
+    # debilitated in Pisces; Saturn is retrograde, which §29.2.3 says leaves
+    # the ithasala standing when it is the slower planet.
+    got = yogas.durupha(lagna_rasi=0, faster=int(Graha.MERCURY),
+                        slower=int(Graha.SATURN),
+                        faster_longitude=330.0 + 15.0,
+                        slower_longitude=150.0 + 17.0,
+                        slower_retrograde=True)
+    assert got["ithasala_type"] is not None
+    assert got["faster_side"]["house"] == 12
+    assert got["slower_side"]["house"] == 6
+    assert got["both_in_dusthanas"] is True
+    assert got["both_afflicted"] is True
+    assert got["present_as_worded"] is True
+    assert got["readings_agree"] is True
+
+
+def test_duruphas_afflictions_are_raddas_less_one():
+    """And every durupha is therefore also a radda."""
+    radda_tests = {str(row["trigger"]) for row in yogas.RADDA_TRIGGERS}
+    assert set(yogas.DURUPHA_AFFLICTIONS) < radda_tests
+    assert radda_tests - set(yogas.DURUPHA_AFFLICTIONS) == {"otherwise weak"}
+
+    got = yogas.durupha(lagna_rasi=0, faster=int(Graha.MARS),
+                        slower=int(Graha.SATURN), faster_longitude=105.0,
+                        slower_longitude=17.0)
+    also = yogas.radda(faster=int(Graha.MARS), slower=int(Graha.SATURN),
+                       faster_longitude=105.0, slower_longitude=17.0)
+    assert got["present_as_worked"] is True
+    assert also["negates_the_ithasala"] is True
+    assert "Every durupha is a radda" in (
+        yogas.DURUPHAS_TRIGGERS_ARE_A_SUBSET_OF_RADDAS)
+
+
+def test_three_sections_give_three_lists_and_share_one_term():
+    radda_tests = {str(row["trigger"]) for row in yogas.RADDA_TRIGGERS}
+    duttota_tests = set(yogas.DUTTOTA_WEAK_TESTS)
+    durupha_tests = set(yogas.DURUPHA_AFFLICTIONS)
+    assert radda_tests != duttota_tests != durupha_tests != radda_tests
+    # "debilitation" and "debilitated" are the same term spelt two ways.
+    common = {"debilitation"} & radda_tests & durupha_tests
+    assert common == {"debilitation"}
+    assert "debilitated" in duttota_tests
+    assert "retrogression" not in duttota_tests
+    assert "inimical rasi" not in radda_tests | durupha_tests
+    assert "Debilitation is the only term on all" in (
+        yogas.THREE_SECTIONS_THREE_LISTS_ONE_COMMON_TERM)
+
+
+def test_the_named_houses_belong_to_only_one_of_the_two_planets():
+    """Career and gains are the 10th and 11th, which are Saturn's. Mars owns
+    the 1st and the 8th and neither is named.
+    """
+    got = yogas.durupha(lagna_rasi=0, faster=int(Graha.MARS),
+                        slower=int(Graha.SATURN), faster_longitude=105.0,
+                        slower_longitude=17.0)
+    assert got["slower_side"]["owns_houses"] == (10, 11)
+    assert got["faster_side"]["owns_houses"] == (1, 8)
+    assert got["houses"] == (1, 8, 10, 11)
+    assert "career and gains" in str(yogas.DURUPHA_EXAMPLE["shows"])
+    assert "only Saturn's houses" in (
+        yogas.THE_NAMED_HOUSES_BELONG_TO_ONLY_ONE_OF_THE_TWO)
+
+
+def test_one_afflicted_planet_is_not_enough():
+    """The rule says two planets, and both must be afflicted."""
+    got = yogas.durupha(lagna_rasi=0, faster=int(Graha.MARS),
+                        slower=int(Graha.SATURN),
+                        faster_longitude=210.0 + 15.0,   # Mars in his Scorpio
+                        slower_longitude=17.0)
+    assert got["faster_side"]["afflicted"] is False
+    assert got["slower_side"]["afflicted"] is True
+    assert got["both_afflicted"] is False
+    assert got["present_as_worked"] is False
+    assert got["present_as_worded"] is False
+
+
+def test_no_ithasala_means_no_durupha():
+    got = yogas.durupha(lagna_rasi=0, faster=int(Graha.MARS),
+                        slower=int(Graha.SATURN),
+                        faster_longitude=90.0 + 25.0, slower_longitude=17.0)
+    assert got["ithasala_type"] is None
+    assert got["present_as_worked"] is False
+
+
+def test_combustion_needs_the_sun_here_too():
+    from hora.core.constants.graha import COMBUSTION_ORB
+
+    without = yogas.durupha(lagna_rasi=0, faster=int(Graha.MARS),
+                            slower=int(Graha.SATURN), faster_longitude=105.0,
+                            slower_longitude=17.0)
+    assert without["combustion_undecided"] is not None
+    assert without["faster_side"]["combust"] is None
+
+    orb = COMBUSTION_ORB[int(Graha.SATURN)][0]
+    assert orb > 3.0
+    burnt = yogas.durupha(lagna_rasi=0, faster=int(Graha.MARS),
+                          slower=int(Graha.SATURN), faster_longitude=105.0,
+                          slower_longitude=17.0, sun_longitude=14.0)
+    assert burnt["slower_side"]["combust"] is True
+    assert set(burnt["slower_side"]["afflicted_by"]) == {"combust",
+                                                         "debilitated"}
