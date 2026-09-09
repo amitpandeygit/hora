@@ -2670,6 +2670,52 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "example names and we do not reach."
         ),
     },
+    69: {
+        "title": "Academic success — the 1987-88 annual chart of Exercise "
+                 "48's native, drawn in D-24",
+        "birth": "April 5, 1987, 2:15:41 am (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1987, "month": 4, "day": 5, "hour": 2, "minute": 15,
+            "second": 41.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "13 Cp 35", "Sun": "20 Pi 52", "Moon": "4 Ge 55",
+            "Mars": "5 Ta 46", "Merc": "24 Aq 46", "Jup": "14 Pi 17",
+            "Ven": "14 Aq 55", "Sat": "27 Sc 27", "Rahu": "17 Pi 50",
+            "Ketu": "17 Vi 50", "HL": "28 Sc 06", "GL": "10 Ge 12",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Merc": "AmK", "Sun": "BK", "Ven": "MK",
+            "Rahu": "PK", "Jup": "PiK", "Mars": "GK", "Moon": "DK",
+        },
+        "retrograde": ("Sat",),
+        "divisional": {
+            "D24": {
+                "Merc": "Pi", "GL": "Ar", "Sat": "Ar", "HL": "Ta",
+                "Asc": "Ta", "Jup": "Ge", "Ven": "Cn", "Moon": "Sc",
+                "Sun": "Sc", "Mars": "Sc", "Ketu": "Vi", "Rahu": "Vi",
+                "AL": "Vi",
+            },
+        },
+        "events": {
+            "stood State First in the Intermediate examinations":
+                "May 28, 1987",
+            "selected for the Indian Institute of Technology": "June 1, 1987",
+        },
+        "first_seen": "chapter 30, Example 124",
+        "note": (
+            "Not a nativity. The **annual chart** of Exercise 48's native for "
+            "1987-88, cast for the Sun's return to his natal 20 Pi 52 in his "
+            "18th year, and the second chart in the register whose diagram is "
+            "a varga -- a D-24 -- while its printed longitudes are the rasi "
+            "chart's. Chart 68 is the other. The varsha pravesh reproduces to "
+            "5 seconds, every printed longitude to within an arcminute, and "
+            "every box of the D-24. Its Varsha Narayana dasa is the case that "
+            "settles section 18.2.2's exceptions 2 and 3 for the seven "
+            "grahas; see dasha.annual.varsha_narayana."
+        ),
+    },
 }
 
 

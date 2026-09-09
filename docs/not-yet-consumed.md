@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1 to §30.4, Exercise 48 and Example 123 (76)
+### Chapter 30 — §30.1 to §30.4 and Examples 122 to 124 (89)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1886,6 +1886,12 @@ exist to check the section's own figures, and one of them fails.
 | `TWO_LAGNAS_DO_TWO_DIFFERENT_JOBS` | Ours: the muntha seeds the dasa order and the D-4 lagna is what the houses are counted from |
 | `THE_SATURN_EXCEPTION_FIRES_AND_CHANGES_NOTHING` | Ours: Aries was already regular and forward, unlike Example 122's Scorpio |
 | `THE_ANTARDASA_DOES_NOT_REPRODUCE` · `THE_VIRGO_DASA_DATES_ARE_A_DAY_OR_TWO_OUT` | Ours: the dasa holds under every reading and the named antardasa does not. OI-177, OI-175 |
+| `EXAMPLE_124` · `VARSHA_PRAVESH_DATA` · `WHY_EDUCATION` · `THE_DASA_PARAGRAPH` · `WHY_CANCER` · `BIRTH` · `PLACE` · `VARSHA_PRAVESH` · `EVENTS` | Example 124 verbatim, its four reasons and its data |
+| `THE_VIDYA_SAHAM_REPRODUCES_AND_ITS_LORD_IS_MARS` | Ours: 27 Ar 38 in its night form, and the first use in the book of Table 74's unnumbered row |
+| `EVERY_CLAIM_IN_THE_PARAGRAPHS_REPRODUCES` · `ALL_FOUR_REASONS_FOR_CANCER_HOLD` | Ours: both paragraphs and all four reasons, checked |
+| `THE_DIGNITIES_ARE_WHAT_MAKE_THE_DATE_COME_OUT` · `THE_OPENING_IS_EXACT_AND_THE_CLOSE_IS_A_DAY_SHORT` | Ours: without the debilitations Cancer opens 29 May and the first event falls outside; with them it opens 26 May as printed |
+| `THREE_EXAMPLES_THREE_VARGAS_ONE_RULE` | Ours: D-9, D-4 and D-24 take the 9th, 4th and 12th from the muntha |
+| `DIGNITY_APPLIES_TO_THE_SEVEN_AND_NOT_THE_NODES` · `THE_VARGA_NUMBER_PICKS_THE_HOUSE_MODULO_TWELVE` | Ours: two examples settle §18.2.2's exceptions between them, and three settle the varga house |
 
 ---
 

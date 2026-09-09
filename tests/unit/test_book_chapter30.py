@@ -1787,3 +1787,269 @@ def test_the_rasi_chart_reasons_hold_too():
     jupiter = int(chart.positions[int(Graha.JUPITER)].longitude // 30)
     assert (jupiter - lagna) % 12 + 1 == 7
     assert RASI_ABBR[jupiter] == "Cn"              # Jupiter's exaltation
+
+
+# --------------------------------------------------------------------------
+# Example 124 and Chart 69
+# --------------------------------------------------------------------------
+
+from hora.dasha.annual import example_124 as ex124
+
+_E124_PRAVESH = from_local(**ex124.VARSHA_PRAVESH)
+
+
+def _e124_annual():
+    return compute_chart(_E124_PRAVESH, _EX48_PLACE, _SETTINGS)
+
+
+def _e124_d24():
+    from hora.charts.vargas import d24_chaturvimsamsa
+
+    chart = _e124_annual()
+    signs = {g: int(d24_chaturvimsamsa(chart.positions[g].longitude).sign)
+             for g in range(9)}
+    lagna = int(d24_chaturvimsamsa(chart.lagna_longitude).sign)
+    return signs, lagna
+
+
+def _e124_dignity(graha, signs):
+    from hora.core.constants.graha import DEBILITATION_RASI, EXALTATION_RASI
+
+    if graha in (7, 8):                       # the nodes take none
+        return None
+    if signs[graha] == int(EXALTATION_RASI[graha]):
+        return "exalted"
+    if signs[graha] == int(DEBILITATION_RASI[graha]):
+        return "debilitated"
+    return None
+
+
+def test_example_124_is_transcribed():
+    assert "stood State First in Intermediate" in ex124.EXAMPLE_124
+    assert "Varsha Narayana dasa of D-24" in ex124.EXAMPLE_124
+    assert "2:15:41 am (IST)" in ex124.VARSHA_PRAVESH_DATA
+    assert "Vidya saham lord Mars is in the 5th house" in ex124.WHY_EDUCATION
+    assert "Cn dasa runs during May 26-June 17, 1987" in (
+        ex124.THE_DASA_PARAGRAPH)
+    assert [row["number"] for row in ex124.WHY_CANCER] == [1, 2, 3, 4]
+    assert ex124.VARGA == 24 and ex124.ANNUAL_YEAR == 18
+
+
+def test_chart_69_and_its_d24_reproduce():
+    from hora.charts.book import chart as record
+    from hora.charts.book import longitudes
+    from hora.core.const import RASI_ABBR
+
+    chart = _e124_annual()
+    printed = longitudes(69)
+    ids = {"Sun": 0, "Moon": 1, "Mars": 2, "Merc": 3, "Jup": 4, "Ven": 5,
+           "Sat": 6, "Rahu": 7, "Ketu": 8}
+    for name, index in ids.items():
+        gap = (((chart.positions[index].longitude - printed[name] + 180) % 360)
+               - 180) * 60
+        assert 0.0 < gap <= 1.0, (name, gap)
+    assert chart.positions[6].is_retrograde is True          # Sat (R)
+
+    signs, lagna = _e124_d24()
+    drawn = record(69)["divisional"]["D24"]
+    for name, index in ids.items():
+        assert RASI_ABBR[signs[index]] == drawn[name], name
+    assert RASI_ABBR[lagna] == drawn["Asc"] == "Ta"
+
+
+def test_the_varsha_pravesh_reproduces_to_five_seconds():
+    from hora.core.ephemeris import get_ephemeris
+    from hora.tajaka.annual import varsha_pravesh
+
+    eph = get_ephemeris(_SETTINGS)
+    natal_sun = compute_chart(_EX48_BIRTH, _EX48_PLACE,
+                              _SETTINGS).positions[0].longitude
+    got = varsha_pravesh(lambda jd: eph.positions(jd, [0])[0].longitude,
+                         natal_sun, _EX48_BIRTH.jd_ut, ex124.ANNUAL_YEAR)
+    assert 0.0 < (got["jd"] - _E124_PRAVESH.jd_ut) * 86400.0 < 6.0
+
+
+def test_the_vidya_saham_reproduces_and_its_lord_is_mars():
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD
+    from hora.tajaka.harsha import year_began_in_daytime
+    from hora.tajaka.sahams import TABLE_74_SAHAMS, sahams
+
+    night = year_began_in_daytime(_E124_PRAVESH.jd_ut,
+                                  latitude=_EX48_PLACE.latitude,
+                                  longitude=_EX48_PLACE.longitude)
+    assert night["daytime"] is False
+
+    chart = _e124_annual()
+    names = ("Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn")
+    got = sahams(longitudes={name: chart.positions[i].longitude
+                             for i, name in enumerate(names)},
+                 lagna=chart.lagna_longitude, daytime=False)["Vidya"]
+    rasi = int(got["longitude"] // 30)
+    assert RASI_ABBR[rasi] == "Ar"
+    assert got["longitude"] % 30 == pytest.approx(27 + 38 / 60, abs=0.02)
+    assert str(GRAHA_NAMES[int(RASI_LORD[rasi])]) == "Mars"
+
+    # It is the row Table 74 prints without a number.
+    vidya = next(r for r in TABLE_74_SAHAMS if r["name"] == "Vidya")
+    assert vidya["number"] is None
+    assert "first use in the book" in (
+        ex124.THE_VIDYA_SAHAM_REPRODUCES_AND_ITS_LORD_IS_MARS)
+
+
+def test_marss_two_placements_hold():
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_ABBR, RASI_LORD, Graha
+
+    chart = _e124_annual()
+    mars = int(chart.positions[int(Graha.MARS)].longitude // 30)
+    assert (mars - chart.lagna_rasi) % 12 + 1 == 5          # 5th in rasi
+
+    signs, lagna = _e124_d24()
+    assert int(RASI_LORD[signs[int(Graha.MARS)]]) == int(Graha.MARS)
+    al = arudha_pada(1, lagna, signs).sign
+    assert RASI_ABBR[al] == "Vi"
+    assert (signs[int(Graha.MARS)] - al) % 12 + 1 == 3      # 3rd from AL
+
+
+def test_the_varga_number_picks_the_house_modulo_twelve():
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD, Graha
+    from hora.dasha.annual.varsha_narayana import (
+        house_for_varga,
+        progressed_lagna,
+    )
+
+    assert house_for_varga(9) == 9
+    assert house_for_varga(4) == 4
+    assert house_for_varga(24) == 12
+    assert house_for_varga(12) == 12
+
+    muntha = progressed_lagna(5, ex124.ANNUAL_YEAR)["rasi"]
+    assert RASI_ABBR[muntha] == "Aq"
+    house = house_for_varga(ex124.VARGA)
+    seat = (muntha + house - 1) % 12
+    assert RASI_ABBR[seat] == "Cp"
+    assert str(GRAHA_NAMES[int(RASI_LORD[seat])]) == "Saturn"
+
+    signs, _ = _e124_d24()
+    assert RASI_ABBR[signs[int(Graha.SATURN)]] == "Ar"
+    assert "reduced by twelves" in (
+        ex124.THREE_EXAMPLES_THREE_VARGAS_ONE_RULE)
+
+
+def test_the_seed_and_the_dasa_order():
+    from hora.charts.rasi_strength import stronger
+    from hora.charts.vargas import d24_chaturvimsamsa
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import progression
+
+    chart = _e124_annual()
+    d24 = {g: int(d24_chaturvimsamsa(chart.positions[g].longitude).sign) * 30.0
+           + (chart.positions[g].longitude % 1.25) * 24 for g in range(9)}
+    signs, _ = _e124_d24()
+    assert stronger(signs[int(Graha.SATURN)],
+                    (signs[int(Graha.SATURN)] + 6) % 12, d24).winner == 0
+    order = progression(0, occupants={g for g in range(9) if signs[g] == 0})
+    assert list(order.sign_names[:4]) == ["Aries", "Taurus", "Gemini",
+                                          "Cancer"]
+
+
+def test_the_dignities_are_what_make_the_date_come_out():
+    """Without them Cancer opens 29 May; with them 26 May, as printed."""
+    import swisseph as swe
+
+    from hora.core.const import RASI_ABBR, RASI_LORD
+    from hora.dasha.annual.varsha_narayana import compressed_days
+    from hora.dasha.rasi.narayana import dasa_length, progression
+
+    signs, _ = _e124_d24()
+    order = progression(0, occupants={g for g in range(9) if signs[g] == 0})
+
+    def cancer_opens(use_dignity):
+        elapsed = 0
+        for rasi in order.signs:
+            if RASI_ABBR[rasi] == "Cn":
+                return elapsed
+            lord = int(RASI_LORD[rasi])
+            elapsed += compressed_days(dasa_length(
+                rasi=rasi, lord=lord, lord_sign=signs[lord],
+                lord_dignity=_e124_dignity(lord, signs)
+                if use_dignity else None).years)
+        raise AssertionError("no Cancer dasa")
+
+    def day(offset):
+        year, month, dom, _ = swe.revjul(
+            _E124_PRAVESH.jd_ut + offset + 5.5 / 24.0)
+        return int(year), int(month), int(dom)
+
+    assert day(cancer_opens(False)) == (1987, 5, 29)
+    assert day(cancer_opens(True)) == (1987, 5, 26)          # as printed
+
+    # Both events fall inside only with the dignities applied.
+    opens = cancer_opens(True)
+    lord = int(RASI_LORD[3])                                 # Cancer's Moon
+    length = compressed_days(dasa_length(
+        rasi=3, lord=lord, lord_sign=signs[lord],
+        lord_dignity=_e124_dignity(lord, signs)).years)
+    for event in ex124.EVENTS.values():
+        when = from_local(*event, 12, 0, 0.0, utc_offset_hours=5.5).jd_ut
+        assert (_E124_PRAVESH.jd_ut + opens <= when
+                < _E124_PRAVESH.jd_ut + opens + length), event
+    assert day(opens + length) == (1987, 6, 16)              # printed: 17
+    assert "the only Varsha Narayana date in the chapter whose opening is" in (
+        ex124.THE_OPENING_IS_EXACT_AND_THE_CLOSE_IS_A_DAY_SHORT)
+
+
+def test_example_122_forbids_the_dignity_on_the_nodes():
+    """Its printed Scorpio dasa of 7 years needs Ketu's debilitation ignored.
+    """
+    from hora.charts.vargas import d9_navamsa
+    from hora.core.const import Graha
+    from hora.core.constants.graha import DEBILITATION_RASI
+    from hora.dasha.annual.varsha_narayana import (
+        DIGNITY_APPLIES_TO_THE_SEVEN_AND_NOT_THE_NODES,
+    )
+    from hora.dasha.rasi.narayana import dasa_length
+
+    chart = _annual()                       # Example 122's annual chart
+    navamsa = {g: int(d9_navamsa(chart.positions[g].longitude).sign)
+               for g in range(9)}
+    ketu = int(Graha.KETU)
+    assert navamsa[ketu] == int(DEBILITATION_RASI[ketu])
+    plain = dasa_length(rasi=7, lord=ketu, lord_sign=navamsa[ketu]).years
+    with_it = dasa_length(rasi=7, lord=ketu, lord_sign=navamsa[ketu],
+                          lord_dignity="debilitated").years
+    assert plain == 7                       # what §30.4 prints
+    assert with_it == 6
+    assert _e124_dignity(ketu, navamsa) is None
+    assert "the seven grahas only" in (
+        DIGNITY_APPLIES_TO_THE_SEVEN_AND_NOT_THE_NODES)
+
+
+def test_all_four_reasons_for_cancer_hold():
+    from hora.charts.arudha import arudha_pada
+    from hora.core.const import RASI_ABBR, RASI_LORD, Graha
+
+    signs, lagna = _e124_d24()
+    cancer = RASI_ABBR.index("Cn")
+
+    # (1) Cancer holds the D-24 lagna lord.
+    assert RASI_ABBR[lagna] == "Ta"
+    lagna_lord = int(RASI_LORD[lagna])
+    assert lagna_lord == int(Graha.VENUS)
+    assert signs[lagna_lord] == cancer
+
+    # (2) Cancer is the 11th from the arudha lagna.
+    al = arudha_pada(1, lagna, signs).sign
+    assert (cancer - al) % 12 + 1 == 11
+
+    # (3) Cancer's lord, the Moon, is in the 5th from it.
+    assert int(RASI_LORD[cancer]) == int(Graha.MOON)
+    assert (signs[int(Graha.MOON)] - cancer) % 12 + 1 == 5
+
+    # (4) That 5th holds Mars in his own sign.
+    fifth = (cancer + 4) % 12
+    assert RASI_ABBR[fifth] == "Sc"
+    assert signs[int(Graha.MARS)] == fifth
+    assert int(RASI_LORD[fifth]) == int(Graha.MARS)
+    assert "Scorpio holds Mars in his own sign" in (
+        ex124.ALL_FOUR_REASONS_FOR_CANCER_HOLD)

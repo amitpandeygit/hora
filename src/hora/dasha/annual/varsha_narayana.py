@@ -155,3 +155,56 @@ THE_BOOK_RANKS_ITS_THREE_DASAS_AND_GIVES_NO_REASON = (
     "Varsha Narayana first, patyayini second, mudda third. The chapter states "
     "the order twice and argues for it nowhere."
 )
+
+
+# --------------------------------------------------------------------------
+# What Example 124 settles about the dasa lengths
+# --------------------------------------------------------------------------
+
+#: **Finding, and two examples settle it between them.** §18.2.2's exceptions
+#: 2 and 3 add a year for an exalted lord and take one away for a debilitated
+#: one, and `dasa_length` leaves them to the caller — omitting the dignity
+#: means neither fires. Chapter 30 shows which dignities a Varsha Narayana
+#: caller must pass, and it takes both examples to see it:
+#:
+#: * **Example 124 requires them for the seven grahas.** In its D-24 Mercury
+#:   is debilitated in Pisces and the Moon debilitated in Scorpio, which
+#:   shortens Gemini from 9 years to 8 and Cancer from 8 to 7. Without that,
+#:   Cancer's dasa opens on 29 May 1987; with it, on **26 May**, which is the
+#:   date the example prints. The 28 May result falls inside only with it.
+#: * **Example 122 forbids them for the nodes.** Its Scorpio dasa is printed
+#:   as **7 years**, computed with Ketu as Scorpio's co-lord, and Ketu stands
+#:   in Gemini — a debilitation in our own table. Applying it would make
+#:   Scorpio 6 and contradict the printed figure.
+#:
+#: So the dignity is read for the seven classical grahas and not for Rahu or
+#: Ketu. Nothing in `dasa_length` changes; this is what a caller supplies.
+DIGNITY_APPLIES_TO_THE_SEVEN_AND_NOT_THE_NODES = (
+    "Example 124's Cancer dasa needs Mercury's and the Moon's debilitations "
+    "in the D-24 to open on 26 May as printed, and Example 122's Scorpio "
+    "dasa of 7 years needs Ketu's debilitation in Gemini ignored. Section "
+    "18.2.2's exceptions 2 and 3 are read for the seven grahas only."
+)
+
+#: **Finding.** The varga a Varsha Narayana dasa is cast for decides **which
+#: house from the muntha** supplies the seed lord, and chapter 30 now has
+#: three cases that fix the rule: D-9 takes the **9th**, D-4 the **4th**, and
+#: D-24 the **12th** — twenty-four reduced by twelve, exactly as §30.4 reduced
+#: the muntha's own house count ("the 22nd house, i.e. the 10th house, after
+#: removing 12"). The rule is the varga number modulo twelve, with twelve for
+#: a multiple.
+THE_VARGA_NUMBER_PICKS_THE_HOUSE_MODULO_TWELVE = (
+    "Varsha Narayana dasa of D-9 takes the 9th house from the muntha, D-4 the "
+    "4th and D-24 the 12th. The house is the varga number reduced by twelves, "
+    "which is how section 30.4 reduced the muntha's own count."
+)
+
+
+def house_for_varga(varga: int) -> int:
+    """Which house from the muntha supplies a varga's dasa seed lord.
+
+    D-9 takes the 9th, D-4 the 4th and D-24 the 12th — see
+    `THE_VARGA_NUMBER_PICKS_THE_HOUSE_MODULO_TWELVE`.
+    """
+    number = validate.in_range("varga", int(varga), 1, 300)
+    return ((number - 1) % 12) + 1
