@@ -1971,6 +1971,26 @@ has not been given yet.
 | `KETU_IN_THE_FIFTH_IS_PASSED_OVER` | Ours: a malefic outside the 3rd, 6th and 11th that the example never mentions |
 | `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
+
+### Chapter 32 — §32.1 and footnote 89 (14)
+
+`rectification/birthtime.py`. The section is an argument, not a technique, and
+the one thing it asks to be computed — which varga signs move when a birthtime
+moves — **is** consumed: `varga_signs_that_change` answers it and the tests run
+it on Chart 1.
+
+| constant | why it is not consumed |
+|---|---|
+| `CHAPTER_TITLE` · `TWINS_PROVE_THE_VARGAS_MATTER` · `A_WRONG_BIRTHTIME_IS_A_HYPOTHETICAL_TWIN` · `WE_MUST_FIRST_HAVE_AN_ACCURATE_BIRTHTIME` · `BIRTHTIMES_ARE_SELDOM_ACCURATE` | §32.1 verbatim |
+| `BIRTHTIME_ERROR_CAUSES` | The four causes as data; none of them is a calculation |
+| `FOOTNOTE_89` · `THE_REJECTED_THIRD_HOUSE_TWIN_LAGNA` | Footnote 89 verbatim and the technique it rejects, held on record as not implemented |
+| `THE_TWO_HOURS_IS_A_MEAN_NOT_A_RATE` | Ours: twelve rasis in a sidereal day is 119.7 minutes, and the individual spans run 28 to 195 |
+| `FIFTY_FOUR_OF_A_HUNDRED_AND_FIFTEEN_SIGNS_MOVE` | Ours: two minutes on Chart 1 moves 54 of 115 varga signs and none of the five in D-1 |
+| `THE_CHAPTER_EXPLAINS_THE_ROUNDED_HEADERS` | Ours: Charts 72, 73 and 74 each needed seconds their headers did not print |
+| `THE_SAME_OBJECTION_IS_MADE_TO_BOTH_PRACTICES` | Ours: reading only D-1 and the third-house twin lagna are dismissed in the same words |
+| `THE_SECTION_GRANTS_THE_RESULTS_AND_REJECTS_THE_METHOD` | Ours: the section allows the D-1 astrologer's successes and still calls the method unscientific |
+| `ONLY_THE_FOURTH_CAUSE_IS_OURS_TO_ANSWER` | Ours: three causes no calculation can see, and a definition of birth the section names without giving |
+
 ---
 
 ## How to use this register
