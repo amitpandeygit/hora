@@ -465,14 +465,13 @@ def placement_verdict(*, house: int, nature: str, graha: int | None = None
     return {
         "house": number, "nature": nature,
         "favourable": False,
-        "good_for_the_house": good and not rahu,
-        # "In particular, Rahu destroys the house he occupies." Whether that
-        # overrides the 3rd, 6th and 11th is not stated — see
-        # `WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID`.
-        "spoils_the_house": (not good) or rahu,
-        "rahu_destroys": rahu,
-        "rahu_undecided": (WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID
-                           if rahu and good else None),
+        # "In particular, Rahu destroys the house he occupies" is emphasis
+        # inside the general rule and not a rule above it: Example 126 puts
+        # Rahu in the 11th and calls the placement good. OI-181 closed. See
+        # `RAHU_IN_THE_ELEVENTH_IS_CALLED_GOOD`.
+        "good_for_the_house": good,
+        "spoils_the_house": not good,
+        "rahu_destroys": rahu and not good,
         "rule": PLACEMENT_RULES,
     }
 
@@ -523,16 +522,17 @@ THE_TWO_BENEFIC_RULES_COVER_DIFFERENT_HOUSES = (
     "good for its house without being favourable outright."
 )
 
-#: **Gap.** "In particular, Rahu destroys the house he occupies" follows the
-#: rule exempting malefics in the 3rd, 6th and 11th, and the section does not
-#: say whether it overrides that exemption. Rahu is a malefic, so both
-#: sentences reach him in those three houses and they disagree.
-#: `placement_verdict` reports the collision rather than resolving it. See
-#: OI-181.
+#: **Settled by Example 126.** "In particular, Rahu destroys the house he
+#: occupies" follows the rule exempting malefics in the 3rd, 6th and 11th, and
+#: §31.4 does not say whether it overrides that exemption — Rahu being a
+#: malefic, both sentences reach him in those three houses. Example 126 puts
+#: him in the **11th** and calls the placement **good**, so the exemption
+#: stands and the Rahu sentence is emphasis inside the general rule. OI-181
+#: closed; see `RAHU_IN_THE_ELEVENTH_IS_CALLED_GOOD`.
 WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID = (
     "Malefics in the 3rd, 6th and 11th bring good results and Rahu destroys "
-    "the house he occupies. Rahu is a malefic, so the two sentences collide "
-    "in exactly those three houses."
+    "the house he occupies. Example 126 puts Rahu in the 11th and calls it a "
+    "good placement, so the exemption wins."
 )
 
 #: **Gap.** §31.4 says "benefics" and "malefics" and names no classification.
@@ -543,4 +543,95 @@ THE_NATURE_IS_NOT_QUALIFIED = (
     "Section 31.4 does not say which benefic-and-malefic classification it "
     "means, and chapter 3 makes the Moon's nature depend on her phase and "
     "Mercury's on his company."
+)
+
+
+# --------------------------------------------------------------------------
+# Example 126 — §31.4's rules worked on Chart 69's D-24
+# --------------------------------------------------------------------------
+
+#: Example 126, verbatim.
+EXAMPLE_126 = (
+    "Let us revisit Example 124. In the natal chart, lagna and Moon are in Ge "
+    "in D-24. In 1987-88, the native ran the 18th year of his life. So SC "
+    "dasa of the 6th house was running. The 6th house from Ge is Sc. So "
+    "Scorpio dasa was running as per Sudarsana Chakra dasa of D-24. We should "
+    "look at planetary positions w.r.t. Sc at the time this dasa started, "
+    "i.e. in Tajaka annual chart of the year (see Chart 69). Benefics "
+    "Mercury, Jupiter and Venus are in 5th, 8th and 9th respectively and all "
+    "of them are good placements. Malefics Saturn, Rahu and Ketu are in 6th, "
+    "11th and 11th respectively and all of them are good placements. "
+    "Moreover, dasa sign Sc houses a powerful raja yoga involving the 1st, "
+    "9th and 10th lords from it. For all these reasons, this year was "
+    "excellent for matters shown in D-24.")
+
+#: The closing line, verbatim.
+PAY_SPECIAL_ATTENTION_TO_THE_RASI_CHART = (
+    "Though Sudarsana Chakra dasa can be found for all divisional charts, pay "
+    "special attention to rasi chart.")
+
+#: Example 126's six placements, as data. Every one reproduces.
+EXAMPLE_126_PLACEMENTS: tuple[dict[str, object], ...] = (
+    {"graha": "Mercury", "nature": "benefic", "house": 5, "good": True},
+    {"graha": "Jupiter", "nature": "benefic", "house": 8, "good": True},
+    {"graha": "Venus", "nature": "benefic", "house": 9, "good": True},
+    {"graha": "Saturn", "nature": "malefic", "house": 6, "good": True},
+    {"graha": "Rahu", "nature": "malefic", "house": 11, "good": True},
+    {"graha": "Ketu", "nature": "malefic", "house": 11, "good": True},
+)
+
+#: **Closes OI-181.** "Malefics Saturn, Rahu and Ketu are in 6th, 11th and
+#: 11th respectively and **all of them are good placements**." Rahu stands in
+#: the 11th, one of the three houses §31.4's exemption covers, and the example
+#: calls his placement good. So "in particular, Rahu destroys the house he
+#: occupies" does **not** override the 3rd, 6th and 11th — it is emphasis
+#: inside the general rule, not a rule above it.
+RAHU_IN_THE_ELEVENTH_IS_CALLED_GOOD = (
+    "Example 126 puts Rahu in the 11th from the dasa sign and calls the "
+    "placement good, so section 31.4's Rahu sentence does not override its "
+    "exemption for the 3rd, 6th and 11th."
+)
+
+#: **Finding, and the book uses its own oddity.** §31.4 puts a benefic in the
+#: **8th** among the favourable placements even though the 8th is one of
+#: §7.4's dusthanas, and Example 126 relies on it: "Benefics Mercury, Jupiter
+#: and Venus are in 5th, **8th** and 9th respectively and all of them are good
+#: placements." Jupiter's 8th is the placement that would be bad anywhere else
+#: in the book.
+THE_EIGHTH_HOUSE_RULE_IS_USED_NOT_JUST_STATED = (
+    "Jupiter stands in the 8th from the dasa sign and Example 126 calls it a "
+    "good placement, which is section 31.4's own inclusion of the 8th being "
+    "put to work."
+)
+
+#: **Finding.** All six placements reproduce and so does the raja yoga.
+#: Scorpio holds the **Sun, Moon and Mars** in Chart 69's D-24, which from
+#: Scorpio are the **10th lord, the 9th lord and the 1st lord** — the three
+#: the example names.
+EXAMPLE_126_REPRODUCES_WHOLE = (
+    "Mercury in the 5th, Jupiter the 8th, Venus the 9th, Saturn the 6th and "
+    "both nodes the 11th, and Scorpio holding the Sun, Moon and Mars, who "
+    "are the 10th, 9th and 1st lords from it."
+)
+
+#: **Finding, and it is evidence on OI-180 without settling it.** The example
+#: reads the dasa from **Gemini** because the natal D-24 puts lagna **and**
+#: Moon there. It never mentions the natal Sun, who is in **Scorpio** in that
+#: D-24 — so the three references do not coincide, the full three-sign reading
+#: is not done, and no strength test is applied either. Two of the three
+#: agreeing made the choice without one.
+THE_EXAMPLE_USES_THE_TWO_REFERENCES_THAT_AGREE = (
+    "The natal D-24 has lagna and Moon in Gemini and the Sun in Scorpio. "
+    "Example 126 reads from Gemini and never mentions the Sun, so it takes "
+    "the simplification without needing a strength test."
+)
+
+#: **Finding.** §31.3 gave the varga rule and §31.4's example is the first to
+#: use it, and the section that follows immediately qualifies it: "Though
+#: Sudarsana Chakra dasa can be found for all divisional charts, **pay special
+#: attention to rasi chart**." A preference stated straight after the only
+#: varga worked so far.
+THE_VARGA_RULE_IS_QUALIFIED_AS_SOON_AS_IT_IS_USED = (
+    "Example 126 is the chapter's first worked SC dasa and it is in a varga. "
+    "The next sentence asks for special attention to the rasi chart."
 )

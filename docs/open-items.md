@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**8 waiting on Amit · 127 waiting on evidence · 2 parked**
+**8 waiting on Amit · 126 waiting on evidence · 2 parked**
 
 ---
 
@@ -2766,27 +2766,6 @@ start SC dasa from there" — with no three-sign version offered there at all.
 
 **Closes when:** a worked SC dasa in a varga names its strongest reference, or
 a later section gives the test.
-
-
-### OI-181 — §31.4's Rahu sentence collides with its own malefic exemption
-
-**Waiting on the book.** Two consecutive sentences: "Malefics in the 3rd, 6th
-and 11th houses bring good results. Malefics in other houses spoil the results
-of the houses they occupy. **In particular, Rahu destroys the house he
-occupies.**"
-
-Rahu is a malefic, so the third sentence reaches him in every house — including
-the three the first sentence has just exempted. In the 3rd, 6th and 11th the two
-disagree, and "in particular" reads either as an emphasis inside the general
-rule (so Rahu is still good there) or as an override (so he is not).
-
-`placement_verdict` reports it rather than resolving it: for Rahu in those three
-houses it sets `rahu_destroys`, marks the house spoiled, and returns
-`rahu_undecided` with the reason. Outside them the two sentences agree and
-nothing is flagged.
-
-**Closes when:** a worked SC dasa puts Rahu in the 3rd, 6th or 11th from a dasa
-sign, or a later section restates the rule.
 
 
 ---

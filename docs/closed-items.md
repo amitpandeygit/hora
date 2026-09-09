@@ -8,6 +8,7 @@ Resolved items, with the evidence that closed them. Nothing here needs action. L
 | [OI-157](#oi-157) | Table 74 used a house as a longitude and never defined one |
 | [OI-174](#oi-174) | §30.1 gave Narayana dasa a paramayush of 120 where its cycles run to 144 |
 | [OI-124](#oi-124) | Which chart §15.5.2's advancement rule reads, in a varga dasa |
+| [OI-181](#oi-181) | §31.4's Rahu sentence collided with its own malefic exemption |
 | [OI-151](#oi-151) | §27.1's "exact position" is the sidereal longitude |
 | [OI-146](#oi-146) | one square of Figure 3 could not be read |
 | [OI-147](#oi-147) | §26.8's vedha lines were stated but not determined |
@@ -2045,3 +2046,22 @@ is the one thing counted in the rasi chart".
 leaves every existing caller exactly as it was; a caller comparing varga rasis
 passes the rasi longitudes. The finding is recorded at
 `hora.charts.rasi_strength.ADVANCEMENT_IS_READ_IN_THE_RASI_CHART`.
+
+
+## OI-181 — §31.4's Rahu sentence collided with its own malefic exemption · **CLOSED**
+
+**Closed by Example 126**, one section later. §31.4 says "Malefics in the 3rd,
+6th and 11th houses bring good results" and then "In particular, Rahu destroys
+the house he occupies", and Rahu being a malefic the two reach him in exactly
+those three houses.
+
+Example 126 puts him in one of them: "Malefics Saturn, Rahu and Ketu are in
+6th, 11th and 11th respectively and **all of them are good placements**." Rahu
+in the 11th is called good, so the Rahu sentence is emphasis inside the general
+rule and not a rule above it — the exemption stands.
+
+All six of the example's placements reproduce from Chart 69's D-24 read from
+Scorpio, so the reading it rests on is checked and not taken on trust.
+
+`placement_verdict` keeps `rahu_destroys` as a fact about the sentence and no
+longer treats the three houses as undecided.

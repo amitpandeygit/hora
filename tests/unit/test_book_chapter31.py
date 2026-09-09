@@ -519,9 +519,9 @@ def test_a_malefic_is_good_in_three_houses_and_spoils_the_rest():
         assert got["spoils_the_house"] is not expected
 
 
-def test_whether_rahu_overrides_the_exemption_is_not_said():
-    """He is a malefic, so both sentences reach him in the 3rd, 6th and 11th.
-    OI-181.
+def test_rahu_takes_the_exemption_like_any_other_malefic():
+    """Example 126 settles it: Rahu in the 11th is a good placement, so the
+    exemption survives the Rahu sentence. OI-181 closed.
     """
     from hora.core.const import Graha
 
@@ -530,17 +530,16 @@ def test_whether_rahu_overrides_the_exemption_is_not_said():
         rahu = sudarsana.placement_verdict(house=house, nature="malefic",
                                            graha=int(Graha.RAHU))
         assert plain["good_for_the_house"] is True
-        assert rahu["rahu_destroys"] is True
-        assert rahu["rahu_undecided"] is not None
-        assert rahu["good_for_the_house"] != plain["good_for_the_house"]
+        assert rahu["good_for_the_house"] is True
+        assert rahu["rahu_destroys"] is False
 
-    # Outside those three the two agree and nothing is undecided.
+    # Everywhere else he destroys the house, as the sentence says.
     for house in (1, 5, 12):
         rahu = sudarsana.placement_verdict(house=house, nature="malefic",
                                            graha=int(Graha.RAHU))
         assert rahu["spoils_the_house"] is True
-        assert rahu["rahu_undecided"] is None
-    assert "collide in exactly those three houses" in (
+        assert rahu["rahu_destroys"] is True
+    assert "the exemption wins" in (
         sudarsana.WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID)
 
 
@@ -555,3 +554,117 @@ def test_the_nature_is_not_qualified():
 
     with pytest.raises(sudarsana.SudarsanaError, match="benefic"):
         sudarsana.placement_verdict(house=1, nature="neutral")
+
+
+# --------------------------------------------------------------------------
+# Example 126
+# --------------------------------------------------------------------------
+
+_E126_NATAL = from_local(1970, 4, 4, 17, 50, 0.0, utc_offset_hours=5.5)
+_E126_ANNUAL = from_local(1987, 4, 5, 2, 15, 41.0, utc_offset_hours=5.5)
+_E126_PLACE = Place(name="Exercise 48", latitude=16 + 15 / 60,
+                    longitude=81 + 12 / 60)
+
+
+def _d24(instant):
+    from hora.charts.vargas import d24_chaturvimsamsa
+
+    chart = compute_chart(instant, _E126_PLACE, _SETTINGS)
+    signs = {g: int(d24_chaturvimsamsa(chart.positions[g].longitude).sign)
+             for g in range(9)}
+    return signs, int(d24_chaturvimsamsa(chart.lagna_longitude).sign)
+
+
+def test_example_126_is_transcribed():
+    assert "Let us revisit Example 124" in sudarsana.EXAMPLE_126
+    assert "lagna and Moon are in Ge in D-24" in sudarsana.EXAMPLE_126
+    assert "SC dasa of the 6th house was running" in sudarsana.EXAMPLE_126
+    assert "powerful raja yoga involving the 1st, 9th and 10th lords" in (
+        sudarsana.EXAMPLE_126)
+    assert "pay special attention to rasi chart" in (
+        sudarsana.PAY_SPECIAL_ATTENTION_TO_THE_RASI_CHART)
+
+
+def test_the_natal_d24_puts_lagna_and_moon_in_gemini():
+    signs, lagna = _d24(_E126_NATAL)
+    assert RASI_ABBR[lagna] == "Ge"
+    assert RASI_ABBR[signs[1]] == "Ge"                     # the Moon
+    # And the Sun is not there, so the three references do not coincide.
+    assert RASI_ABBR[signs[0]] == "Sc"
+    assert "never mentions the Sun" in (
+        sudarsana.THE_EXAMPLE_USES_THE_TWO_REFERENCES_THAT_AGREE)
+
+
+def test_the_eighteenth_year_gives_scorpio_from_gemini():
+    _, lagna = _d24(_E126_NATAL)
+    assert sudarsana.dasa_house(18) == 6
+    assert RASI_ABBR[sudarsana.house_from(lagna, 6)] == "Sc"
+
+
+def test_all_six_placements_reproduce():
+    signs, _ = _d24(_E126_ANNUAL)
+    scorpio = RASI_ABBR.index("Sc")
+    ids = {"Mercury": 3, "Jupiter": 4, "Venus": 5, "Saturn": 6, "Rahu": 7,
+           "Ketu": 8}
+    for row in sudarsana.EXAMPLE_126_PLACEMENTS:
+        graha = ids[str(row["graha"])]
+        house = (signs[graha] - scorpio) % 12 + 1
+        assert house == row["house"], row["graha"]
+        got = sudarsana.placement_verdict(house=house,
+                                          nature=str(row["nature"]),
+                                          graha=graha)
+        if row["nature"] == "benefic":
+            assert got["favourable"] is row["good"], row["graha"]
+        else:
+            assert (house in sudarsana.MALEFIC_GOOD_HOUSES) is row["good"]
+    assert "who are the 10th, 9th and 1st lords" in (
+        sudarsana.EXAMPLE_126_REPRODUCES_WHOLE)
+
+
+def test_rahu_in_the_eleventh_is_called_good():
+    """OI-181 closed: the exemption survives the Rahu sentence."""
+    rahu = next(row for row in sudarsana.EXAMPLE_126_PLACEMENTS
+                if row["graha"] == "Rahu")
+    assert rahu["house"] == 11
+    assert rahu["house"] in sudarsana.MALEFIC_GOOD_HOUSES
+    assert rahu["good"] is True
+    assert "all of them are good placements" in sudarsana.EXAMPLE_126
+    assert "does not override" in sudarsana.RAHU_IN_THE_ELEVENTH_IS_CALLED_GOOD
+
+
+def test_the_eighth_house_rule_is_used_not_just_stated():
+    from hora.core.constants.house import DUSTHANA
+
+    jupiter = next(row for row in sudarsana.EXAMPLE_126_PLACEMENTS
+                   if row["graha"] == "Jupiter")
+    assert jupiter["house"] == 8
+    assert 8 in DUSTHANA
+    assert 8 in sudarsana.BENEFIC_FAVOURABLE_HOUSES
+    assert jupiter["good"] is True
+    assert sudarsana.placement_verdict(house=8,
+                                       nature="benefic")["favourable"] is True
+    assert "put to work" in sudarsana.THE_EIGHTH_HOUSE_RULE_IS_USED_NOT_JUST_STATED
+
+
+def test_the_raja_yoga_in_the_dasa_sign_reproduces():
+    from hora.core.const import RASI_LORD, Graha
+
+    signs, _ = _d24(_E126_ANNUAL)
+    scorpio = RASI_ABBR.index("Sc")
+    occupants = {g for g in range(9) if signs[g] == scorpio}
+    assert occupants == {int(Graha.SUN), int(Graha.MOON), int(Graha.MARS)}
+
+    lords = {house: int(RASI_LORD[(scorpio + house - 1) % 12])
+             for house in (1, 9, 10)}
+    assert lords == {1: int(Graha.MARS), 9: int(Graha.MOON),
+                     10: int(Graha.SUN)}
+    assert set(lords.values()) == occupants
+
+
+def test_the_varga_rule_is_qualified_as_soon_as_it_is_used():
+    assert "for all divisional charts" in (
+        sudarsana.PAY_SPECIAL_ATTENTION_TO_THE_RASI_CHART)
+    assert "We can find Sudarsana Chakra dasa for divisional charts also" in (
+        sudarsana.SC_DASA_IN_A_VARGA)
+    assert "asks for special attention to the rasi chart" in (
+        sudarsana.THE_VARGA_RULE_IS_QUALIFIED_AS_SOON_AS_IT_IS_USED)

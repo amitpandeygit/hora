@@ -1916,7 +1916,7 @@ exist to check the section's own figures, and one of them fails.
 |---|---|
 | `ADVANCEMENT_IS_READ_IN_THE_RASI_CHART` | Ours: rules 1 to 5 read the varga and rule 6 reads the rasi chart, settled by Exercise 49. OI-124 closed |
 
-### Chapter 31 — §31.1 to §31.4 (32)
+### Chapter 31 — §31.1 to §31.4 and Example 126 (39)
 
 `dasha/sudarsana.py`. The chakra **is** built: `sudarsana_chakra` returns the
 three bhava chakras with their occupants and `the_same_house_everywhere` reads
@@ -1940,7 +1940,13 @@ has not been given yet.
 | `THE_EIGHTH_IS_GOOD_FOR_A_BENEFIC_HERE` | Ours: the 8th is one of §7.4's dusthanas and §31.4 calls a benefic there favourable |
 | `THE_MALEFIC_HOUSES_ARE_THE_UPACHAYAS_LESS_THE_TENTH` | Ours: the 3rd, 6th and 11th are the upachayas without the 10th, the only quadrant among them |
 | `THE_TWO_BENEFIC_RULES_COVER_DIFFERENT_HOUSES` | Ours: seven houses against ten, the extra three being the 2nd, 3rd and 11th |
-| `WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID` · `THE_NATURE_IS_NOT_QUALIFIED` | Ours: Rahu collides with the exemption in three houses, and no classification is named. OI-181 |
+| `WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID` | Ours: the collision §31.4 left and Example 126 settled. OI-181 closed |
+| `THE_NATURE_IS_NOT_QUALIFIED` | Ours: no benefic-and-malefic classification is named, and two of the nine grahas are conditional |
+| `EXAMPLE_126` · `PAY_SPECIAL_ATTENTION_TO_THE_RASI_CHART` · `EXAMPLE_126_PLACEMENTS` | Example 126 verbatim, its closing preference and its six placements as data |
+| `RAHU_IN_THE_ELEVENTH_IS_CALLED_GOOD` · `EXAMPLE_126_REPRODUCES_WHOLE` | Ours: all six placements and the raja yoga come back, and Rahu in the 11th closes OI-181 |
+| `THE_EIGHTH_HOUSE_RULE_IS_USED_NOT_JUST_STATED` | Ours: Jupiter in the 8th is called good, so §31.4's dusthana inclusion is load-bearing |
+| `THE_EXAMPLE_USES_THE_TWO_REFERENCES_THAT_AGREE` | Ours: lagna and Moon are both in Ge and the Sun is in Sc, and the example never mentions him. OI-180 |
+| `THE_VARGA_RULE_IS_QUALIFIED_AS_SOON_AS_IT_IS_USED` | Ours: the chapter's first worked SC dasa is in a varga and the next sentence prefers the rasi chart |
 
 ---
 
