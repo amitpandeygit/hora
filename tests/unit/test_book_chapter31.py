@@ -427,3 +427,131 @@ def test_the_dasa_house_rejects_a_year_outside_a_lifetime():
     for bad in (0, -1, 201):
         with pytest.raises(Exception, match="year"):
             sudarsana.dasa_house(bad)
+
+
+# --------------------------------------------------------------------------
+# §31.4 Dasa Interpretation
+# --------------------------------------------------------------------------
+
+
+def test_the_interpretation_rule_is_transcribed():
+    assert "take the dasa sign" in sudarsana.INTERPRETATION_RULE
+    assert "natal or transit?" in sudarsana.INTERPRETATION_RULE
+    assert "same results after every 12 years" in sudarsana.INTERPRETATION_RULE
+    assert "at the commencement" in sudarsana.INTERPRETATION_RULE
+    assert "This is where Tajaka charts fit in" in sudarsana.INTERPRETATION_RULE
+    assert "quadrants, trines and 8th from dasa sign" in (
+        sudarsana.PLACEMENT_RULES)
+    assert "Rahu destroys the house he occupies" in sudarsana.PLACEMENT_RULES
+
+
+def test_the_twelve_year_repeat_is_the_argument():
+    """The dasa house repeats every twelve years, so a natal reading from it
+    would repeat too. That is the section's own reason.
+    """
+    for year in range(1, 60):
+        assert sudarsana.dasa_house(year) == sudarsana.dasa_house(year + 12)
+    assert len({sudarsana.dasa_house(y) for y in range(1, 13)}) == 12
+    assert "That is not logical" in sudarsana.INTERPRETATION_RULE
+    assert "identical results in the 1st, 13th, 25th" in (
+        sudarsana.THE_TWELVE_YEAR_REPEAT_IS_THE_ARGUMENT)
+
+
+def test_the_eighth_is_good_for_a_benefic_here():
+    from hora.core.constants.house import DUSTHANA, KENDRA, TRIKONA
+
+    assert DUSTHANA == (6, 8, 12)
+    assert sorted(set(KENDRA) | set(TRIKONA) | {8}) == list(
+        sudarsana.BENEFIC_FAVOURABLE_HOUSES)
+    assert 8 in sudarsana.BENEFIC_FAVOURABLE_HOUSES
+    assert 6 not in sudarsana.BENEFIC_FAVOURABLE_HOUSES
+    assert 12 not in sudarsana.BENEFIC_FAVOURABLE_HOUSES
+
+    eighth = sudarsana.placement_verdict(house=8, nature="benefic")
+    assert eighth["favourable"] is True
+    assert eighth["good_for_the_house"] is True
+    assert "excludes only the" in sudarsana.THE_EIGHTH_IS_GOOD_FOR_A_BENEFIC_HERE
+
+
+def test_the_malefic_houses_are_the_upachayas_less_the_tenth():
+    from hora.core.constants.house import KENDRA, UPACHAYA
+
+    assert UPACHAYA == (3, 6, 10, 11)
+    assert sudarsana.MALEFIC_GOOD_HOUSES == (3, 6, 11)
+    assert set(UPACHAYA) - set(sudarsana.MALEFIC_GOOD_HOUSES) == {10}
+    assert 10 in KENDRA
+    assert not set(sudarsana.MALEFIC_GOOD_HOUSES) & set(KENDRA)
+    assert "the only quadrant among them" in (
+        sudarsana.THE_MALEFIC_HOUSES_ARE_THE_UPACHAYAS_LESS_THE_TENTH)
+
+
+def test_the_two_benefic_rules_cover_different_houses():
+    first, second = (row for row in sudarsana.PLACEMENT_VERDICTS
+                     if row["nature"] == "benefic")
+    assert set(first["houses"]) < set(second["houses"])
+    assert set(second["houses"]) - set(first["houses"]) == {2, 3, 11}
+    assert set(range(1, 13)) - set(second["houses"]) == {6, 12}
+    for house in (2, 3, 11):
+        got = sudarsana.placement_verdict(house=house, nature="benefic")
+        assert got["favourable"] is False
+        assert got["good_for_the_house"] is True
+    assert "the 2nd, the 3rd and the 11th" in (
+        sudarsana.THE_TWO_BENEFIC_RULES_COVER_DIFFERENT_HOUSES)
+
+
+def test_the_four_rules_partition_the_houses_for_each_nature():
+    benefic = [row for row in sudarsana.PLACEMENT_VERDICTS
+               if row["nature"] == "benefic"]
+    malefic = [row for row in sudarsana.PLACEMENT_VERDICTS
+               if row["nature"] == "malefic"]
+    assert len(benefic) == len(malefic) == 2
+    good, spoiled = (set(row["houses"]) for row in malefic)
+    assert good | spoiled == set(range(1, 13))
+    assert not good & spoiled
+
+
+def test_a_malefic_is_good_in_three_houses_and_spoils_the_rest():
+    for house in range(1, 13):
+        got = sudarsana.placement_verdict(house=house, nature="malefic")
+        assert got["favourable"] is False
+        expected = house in sudarsana.MALEFIC_GOOD_HOUSES
+        assert got["good_for_the_house"] is expected
+        assert got["spoils_the_house"] is not expected
+
+
+def test_whether_rahu_overrides_the_exemption_is_not_said():
+    """He is a malefic, so both sentences reach him in the 3rd, 6th and 11th.
+    OI-181.
+    """
+    from hora.core.const import Graha
+
+    for house in sudarsana.MALEFIC_GOOD_HOUSES:
+        plain = sudarsana.placement_verdict(house=house, nature="malefic")
+        rahu = sudarsana.placement_verdict(house=house, nature="malefic",
+                                           graha=int(Graha.RAHU))
+        assert plain["good_for_the_house"] is True
+        assert rahu["rahu_destroys"] is True
+        assert rahu["rahu_undecided"] is not None
+        assert rahu["good_for_the_house"] != plain["good_for_the_house"]
+
+    # Outside those three the two agree and nothing is undecided.
+    for house in (1, 5, 12):
+        rahu = sudarsana.placement_verdict(house=house, nature="malefic",
+                                           graha=int(Graha.RAHU))
+        assert rahu["spoils_the_house"] is True
+        assert rahu["rahu_undecided"] is None
+    assert "collide in exactly those three houses" in (
+        sudarsana.WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID)
+
+
+def test_the_nature_is_not_qualified():
+    """Two of the nine grahas have a conditional nature in chapter 3."""
+    from hora.charts.benefic import mercury_nature, moon_nature
+
+    assert callable(moon_nature) and callable(mercury_nature)
+    assert "benefic" in sudarsana.PLACEMENT_RULES
+    assert "waxing" not in sudarsana.PLACEMENT_RULES
+    assert "her phase" in sudarsana.THE_NATURE_IS_NOT_QUALIFIED
+
+    with pytest.raises(sudarsana.SudarsanaError, match="benefic"):
+        sudarsana.placement_verdict(house=1, nature="neutral")

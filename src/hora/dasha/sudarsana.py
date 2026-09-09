@@ -388,3 +388,159 @@ THE_FORTY_FIFTH_YEAR: dict[str, object] = {
     "signs": {"lagna": "Sc", "Moon": "Li", "Sun": "Pi"},
     "antardasas_from_lagna": ("Sc", "Sg", "Cp", "Aq"),
 }
+
+
+# --------------------------------------------------------------------------
+# §31.4 Dasa Interpretation
+# --------------------------------------------------------------------------
+
+#: §31.4's first three paragraphs, verbatim.
+INTERPRETATION_RULE = (
+    "To interpret a dasa (or antardasa or pratyantardasa), we have to take "
+    "the dasa sign (or antardasa sign or pratyantardasa sign) as lagna and "
+    "analyze the planetary positions with respect to it. What planetary "
+    "positions do we mean - natal or transit? Some people may prefer to "
+    "analyze the natal positions, but that would suggest that one gets the "
+    "same results after every 12 years. That is not logical. Parasara clearly "
+    "advised that we have to analyze the planetary positions at the "
+    "commencement of a dasa (or antardasa or pratyantardasa) with respect to "
+    "the dasa sign (or antardasa sign or pratyantardasa sign). This is where "
+    "Tajaka charts fit in.")
+
+#: §31.4's placement rules, verbatim.
+PLACEMENT_RULES = (
+    "If benefics are in quadrants, trines and 8th from dasa sign, favorable "
+    "results can be expected. Benefics in houses other than the 6th and 12th "
+    "houses produce good results for the houses they occupy. Malefics in the "
+    "3rd, 6th and 11th houses bring good results. Malefics in other houses "
+    "spoil the results of the houses they occupy. In particular, Rahu "
+    "destroys the house he occupies.")
+
+#: The four rules as data, with the houses each names.
+PLACEMENT_VERDICTS: tuple[dict[str, object], ...] = (
+    {"nature": "benefic", "houses": (1, 4, 5, 7, 8, 9, 10),
+     "verdict": "favourable results can be expected",
+     "source": "quadrants, trines and the 8th"},
+    {"nature": "benefic", "houses": (1, 2, 3, 4, 5, 7, 8, 9, 10, 11),
+     "verdict": "good results for the house occupied",
+     "source": "every house but the 6th and the 12th"},
+    {"nature": "malefic", "houses": (3, 6, 11),
+     "verdict": "good results", "source": "the 3rd, 6th and 11th"},
+    {"nature": "malefic",
+     "houses": (1, 2, 4, 5, 7, 8, 9, 10, 12),
+     "verdict": "spoils the results of the house occupied",
+     "source": "every other house"},
+)
+
+#: The houses §31.4's first benefic rule names, as a set.
+BENEFIC_FAVOURABLE_HOUSES: tuple[int, ...] = (1, 4, 5, 7, 8, 9, 10)
+
+#: The houses §31.4 exempts a malefic in.
+MALEFIC_GOOD_HOUSES: tuple[int, ...] = (3, 6, 11)
+
+
+def placement_verdict(*, house: int, nature: str, graha: int | None = None
+                      ) -> dict:
+    """§31.4's verdict on one graha in one house from the dasa sign.
+
+    `nature` is "benefic" or "malefic"; §31.4 does not say which
+    classification it means — see `THE_NATURE_IS_NOT_QUALIFIED`.
+    """
+    number = validate.in_range("house", int(house), 1, 12)
+    if nature not in ("benefic", "malefic"):
+        raise SudarsanaError(
+            f"nature must be 'benefic' or 'malefic'; got {nature!r}")
+    rahu = graha is not None and int(graha) == 7
+
+    if nature == "benefic":
+        return {
+            "house": number, "nature": nature,
+            "favourable": number in BENEFIC_FAVOURABLE_HOUSES,
+            "good_for_the_house": number not in (6, 12),
+            "spoils_the_house": False,
+            "rahu_destroys": False,
+            "rule": PLACEMENT_RULES,
+        }
+    good = number in MALEFIC_GOOD_HOUSES
+    return {
+        "house": number, "nature": nature,
+        "favourable": False,
+        "good_for_the_house": good and not rahu,
+        # "In particular, Rahu destroys the house he occupies." Whether that
+        # overrides the 3rd, 6th and 11th is not stated — see
+        # `WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID`.
+        "spoils_the_house": (not good) or rahu,
+        "rahu_destroys": rahu,
+        "rahu_undecided": (WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID
+                           if rahu and good else None),
+        "rule": PLACEMENT_RULES,
+    }
+
+
+#: **Finding.** §31.4's case against reading natal positions is an argument,
+#: not an assertion, and it is checkable: the SC dasa house is the year modulo
+#: twelve, so it repeats every twelve years, and a natal reading from it would
+#: repeat with it. "That would suggest that one gets the same results after
+#: every 12 years. That is not logical." The Tajaka charts exist because the
+#: **entry** chart differs each cycle while the house does not.
+THE_TWELVE_YEAR_REPEAT_IS_THE_ARGUMENT = (
+    "The dasa house is the year modulo twelve, so a natal reading from it "
+    "would give identical results in the 1st, 13th, 25th year and so on. "
+    "That is the section's reason for reading the entry chart instead."
+)
+
+#: **Finding.** The favourable list is quadrants, trines and the **8th**, and
+#: the 8th is a **dusthana** — §7.4's own "bad/evil houses" are the 6th, 8th
+#: and 12th. So §31.4 puts a benefic in one dusthana among its good placements
+#: and excludes the other two, and the second rule excludes the 6th and 12th
+#: while leaving the 8th in. The 8th is treated as good for a benefic twice
+#: over and the section does not remark on it.
+THE_EIGHTH_IS_GOOD_FOR_A_BENEFIC_HERE = (
+    "Section 7.4's dusthanas are the 6th, 8th and 12th. Section 31.4 puts a "
+    "benefic in the 8th among its favourable placements and excludes only the "
+    "6th and the 12th from its second rule."
+)
+
+#: **Finding.** The malefic exemption is the **upachayas less the 10th**:
+#: §7.4's upachayas are the 3rd, 6th, 10th and 11th, and §31.4 names the 3rd,
+#: 6th and 11th. The 10th is the one it drops, and it is also the one house in
+#: that set that is a quadrant.
+THE_MALEFIC_HOUSES_ARE_THE_UPACHAYAS_LESS_THE_TENTH = (
+    "The upachayas are the 3rd, 6th, 10th and 11th and section 31.4 exempts "
+    "a malefic in the 3rd, 6th and 11th. The 10th is dropped, and it is the "
+    "only quadrant among them."
+)
+
+#: **Finding.** The two benefic rules are not the same rule. The first names
+#: seven houses and gives a general verdict; the second names ten — every
+#: house but the 6th and the 12th — and gives a verdict about the house
+#: occupied. The second is a superset, and the three houses it adds are the
+#: **2nd, 3rd and 11th**. A benefic there is good for that house without being
+#: on the favourable list.
+THE_TWO_BENEFIC_RULES_COVER_DIFFERENT_HOUSES = (
+    "The first benefic rule names seven houses and the second ten. The three "
+    "the second adds are the 2nd, the 3rd and the 11th, where a benefic is "
+    "good for its house without being favourable outright."
+)
+
+#: **Gap.** "In particular, Rahu destroys the house he occupies" follows the
+#: rule exempting malefics in the 3rd, 6th and 11th, and the section does not
+#: say whether it overrides that exemption. Rahu is a malefic, so both
+#: sentences reach him in those three houses and they disagree.
+#: `placement_verdict` reports the collision rather than resolving it. See
+#: OI-181.
+WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID = (
+    "Malefics in the 3rd, 6th and 11th bring good results and Rahu destroys "
+    "the house he occupies. Rahu is a malefic, so the two sentences collide "
+    "in exactly those three houses."
+)
+
+#: **Gap.** §31.4 says "benefics" and "malefics" and names no classification.
+#: Chapter 3 gives Jupiter and Venus as natural benefics outright, the Moon's
+#: nature by her phase and Mercury's by his company, so two of the nine are
+#: conditional. `placement_verdict` takes the nature as an input.
+THE_NATURE_IS_NOT_QUALIFIED = (
+    "Section 31.4 does not say which benefic-and-malefic classification it "
+    "means, and chapter 3 makes the Moon's nature depend on her phase and "
+    "Mercury's on his company."
+)

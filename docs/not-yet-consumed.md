@@ -1916,7 +1916,7 @@ exist to check the section's own figures, and one of them fails.
 |---|---|
 | `ADVANCEMENT_IS_READ_IN_THE_RASI_CHART` | Ours: rules 1 to 5 read the varga and rule 6 reads the rasi chart, settled by Exercise 49. OI-124 closed |
 
-### Chapter 31 — §31.1 to §31.3 (23)
+### Chapter 31 — §31.1 to §31.4 (32)
 
 `dasha/sudarsana.py`. The chakra **is** built: `sudarsana_chakra` returns the
 three bhava chakras with their occupants and `the_same_house_everywhere` reads
@@ -1935,6 +1935,12 @@ has not been given yet.
 | `THE_MUNTHA_IS_THE_SC_DASA_SIGN_FROM_LAGNA` | Ours: §28.1's muntha, §30.4's progressed lagna and §31.3's dasa sign are one rasi under three names |
 | `THE_THREE_CHART_TYPES_MATCH_THE_THREE_DASA_LEVELS` · `CHAPTER_27S_THREE_CHARTS_FIND_THEIR_PURPOSE_HERE` | Ours: twelve at every level, and §27.3's and §27.4's charts get their reading four chapters late |
 | `THE_SIMPLIFICATION_BECOMES_THE_RULE_FOR_VARGAS` · `WHICH_REFERENCE_IS_STRONGEST_IS_NOT_SAID` | Ours: an approximation the section labels and then relies on, with no test for it. OI-180 |
+| `INTERPRETATION_RULE` · `PLACEMENT_RULES` · `PLACEMENT_VERDICTS` · `BENEFIC_FAVOURABLE_HOUSES` · `MALEFIC_GOOD_HOUSES` | §31.4 verbatim and its four placement rules as data |
+| `THE_TWELVE_YEAR_REPEAT_IS_THE_ARGUMENT` | Ours: the section argues rather than asserts, and the argument is checkable |
+| `THE_EIGHTH_IS_GOOD_FOR_A_BENEFIC_HERE` | Ours: the 8th is one of §7.4's dusthanas and §31.4 calls a benefic there favourable |
+| `THE_MALEFIC_HOUSES_ARE_THE_UPACHAYAS_LESS_THE_TENTH` | Ours: the 3rd, 6th and 11th are the upachayas without the 10th, the only quadrant among them |
+| `THE_TWO_BENEFIC_RULES_COVER_DIFFERENT_HOUSES` | Ours: seven houses against ten, the extra three being the 2nd, 3rd and 11th |
+| `WHETHER_RAHU_OVERRIDES_THE_EXEMPTION_IS_NOT_SAID` · `THE_NATURE_IS_NOT_QUALIFIED` | Ours: Rahu collides with the exemption in three houses, and no classification is named. OI-181 |
 
 ---
 
