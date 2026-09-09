@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1 to §30.4 (56)
+### Chapter 30 — §30.1 to §30.4 and Exercise 48 (64)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1873,6 +1873,12 @@ exist to check the section's own figures, and one of them fails.
 | `SCORPIOS_CO_LORD_HAS_TO_BE_KETU_HERE` | Ours: the printed 7 years is Ketu's figure and §15.5.1 picks Ketu independently |
 | `BOTH_ORDERS_REPRODUCE_AND_SATURN_DECIDES` | Ours: Scorpio's sixth movement and §18.2.1's Saturn exception, both reproducing a printed order |
 | `THE_BOOK_RANKS_ITS_THREE_DASAS_AND_GIVES_NO_REASON` | Ours: Varsha Narayana, then patyayini, then mudda, stated twice and argued nowhere |
+| `EXERCISE_48` · `EXERCISE_48_ANSWER` · `BIRTH` · `PLACE` · `VARSHA_PRAVESH` · `MARRIAGE` · `EXERCISE_48_VERDICTS` | Exercise 48 verbatim, its data, and the three verdicts we computed |
+| `THE_VARSHA_PRAVESH_REPRODUCES_TO_ELEVEN_SECONDS` | Ours: 10.6 seconds, the third nativity in a row under eleven |
+| `THE_PHRASE_MEANS_THE_LAGNA_ITSELF` | Ours: patyayini's Lagna dasa settles how "lagna/7th lord" parses |
+| `THE_FOUR_QUALIFYING_LORDS_ARE_FOUR_DIFFERENT_PLANETS` | Ours: Sun, Saturn, Mercury and Jupiter, so nothing is satisfied by accident |
+| `THIS_SEED_TAKES_NO_EXCEPTION_WHERE_EXAMPLE_122S_DID` | Ours: Taurus holds Mars and Jupiter, and §18.2.1's exceptions are Saturn's and Ketu's |
+| `MUDDA_HAS_NO_ANTARDASA_RULE` · `THE_MUDDA_ANTARDASA_NEEDED_A_RULE_THE_SECTION_DOES_NOT_GIVE` | Ours: §30.3 states none and the exercise asks for one. OI-176 |
 
 ---
 

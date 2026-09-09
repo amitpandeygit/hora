@@ -246,3 +246,53 @@ THE_NATAL_MOON_IS_CITED_AN_ARCMINUTE_HIGH = (
     "so this is not the convention D-80 records. The balance is 0.79 either "
     "way."
 )
+
+
+#: **Gap, and Exercise 48 walks into it.** §30.2 gave patyayini an antardasa
+#: rule in its step (4). §30.3 gives mudda none at all — it states the dasa
+#: lengths, the order and the balance and stops. Exercise 48 then asks for
+#: "the running dasa **and antardasa** as per Patyayini dasa and Mudda dasa".
+#:
+#: `mudda_antardasas` applies **Vimsottari's own** antardasa rule — each
+#: antardasa proportional to its lord's period, in the dasa order from the
+#: dasa lord — because §30.3 opens by calling mudda "essentially Vimsottari
+#: dasa", and because that is what §30.2's step (4) did for patyayini ("just
+#: as in Vimsottari dasa"). It is an extension of the section's own words and
+#: not a rule it states. See OI-176.
+MUDDA_HAS_NO_ANTARDASA_RULE = (
+    "Section 30.3 states mudda's lengths, order and balance and no antardasa "
+    "rule, and Exercise 48 asks for a mudda antardasa. Vimsottari's own "
+    "proportional rule is applied, which is what section 30.2 did for "
+    "patyayini and what \"essentially Vimsottari dasa\" implies."
+)
+
+
+def mudda_antardasas(dasa: dict, graha: int) -> tuple[dict, ...]:
+    """The antardasas of one mudda dasa, under Vimsottari's own rule.
+
+    Not stated by §30.3 — see `MUDDA_HAS_NO_ANTARDASA_RULE` and OI-176.
+    """
+    rows = {int(row["graha"]): row for row in dasa["rows"]}
+    if int(graha) not in rows:
+        raise MuddaError(f"{graha!r} has no dasa in this year")
+    parent = rows[int(graha)]
+    order = list(MUDDA_NUMBERS)
+    start = order.index(int(graha))
+    rotated = order[start:] + order[:start]
+
+    out = []
+    running = float(parent["from_day"])
+    for lord in rotated:
+        span = float(parent["days"]) * mudda_days(lord) / MUDDA_YEAR_DAYS
+        row = {
+            "dasa": int(graha), "antardasa": lord, "days": span,
+            "from_day": running, "to_day": running + span,
+            "rule": MUDDA_HAS_NO_ANTARDASA_RULE,
+        }
+        if "from_jd" in parent:
+            offset = float(parent["from_jd"]) - float(parent["from_day"])
+            row["from_jd"] = offset + running
+            row["to_jd"] = offset + running + span
+        out.append(row)
+        running += span
+    return tuple(out)

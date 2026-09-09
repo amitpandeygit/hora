@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**8 waiting on Amit · 122 waiting on evidence · 2 parked**
+**8 waiting on Amit · 123 waiting on evidence · 2 parked**
 
 ---
 
@@ -2685,6 +2685,28 @@ either reading can be applied to them. Nothing is converted here.
 
 **Closes when:** a worked mudda date needs the solar-day conversion to come
 out, or a later section states which is meant.
+
+
+### OI-176 — §30.3 gives mudda no antardasa rule and Exercise 48 asks for one
+
+**Waiting on the book.** §30.2's step (4) gave patyayini an antardasa rule
+outright — "we use the same ratios and order used in dasas, just as in
+Vimsottari dasa. First antardasa is the same as dasa." §30.3 gives mudda dasa
+lengths, an order and a balance, and stops. It states no antardasa rule at all.
+
+Exercise 48 then asks the reader to verify "the running dasa **and antardasa**
+as per Patyayini dasa and **Mudda dasa**".
+
+`mudda_antardasas` applies **Vimsottari's own** rule — each antardasa
+proportional to its lord's period, in the dasa order from the dasa lord — on
+two grounds: §30.3 opens by calling mudda "essentially Vimsottari dasa", and
+§30.2 reached for the same comparison when it defined patyayini's. On Exercise
+48 that gives Jupiter 6.40 days and then Saturn 7.60, and the wedding falls in
+Saturn's antardasa, which satisfies the exercise. That is weak evidence for the
+rule and not a statement of it.
+
+**Closes when:** a later section states mudda's antardasas, or a worked mudda
+antardasa fixes the rule.
 
 
 ---

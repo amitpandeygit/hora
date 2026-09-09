@@ -1277,3 +1277,223 @@ def test_the_book_ranks_its_three_dasas():
         vn.THE_BOOKS_OWN_RANKING)
     assert "argues for it nowhere" in (
         vn.THE_BOOK_RANKS_ITS_THREE_DASAS_AND_GIVES_NO_REASON)
+
+
+# --------------------------------------------------------------------------
+# Exercise 48
+# --------------------------------------------------------------------------
+
+from hora.dasha.annual import exercise_48 as ex48
+
+_EX48_BIRTH = from_local(**ex48.BIRTH)
+_EX48_PRAVESH = from_local(**ex48.VARSHA_PRAVESH)
+_EX48_PLACE = Place(name="Exercise 48", **ex48.PLACE)
+_EX48_WEDDING = from_local(1993, 8, 1, 12, 0, 0.0, utc_offset_hours=5.5).jd_ut
+
+
+def _ex48_annual():
+    return compute_chart(_EX48_PRAVESH, _EX48_PLACE, _SETTINGS)
+
+
+def _ex48_navamsa():
+    """Navamsa positions carrying the degree inside the navamsa sign."""
+    from hora.charts.vargas import d9_navamsa
+
+    chart = _ex48_annual()
+    return {g: int(d9_navamsa(chart.positions[g].longitude).sign) * 30.0
+            + (chart.positions[g].longitude % (30 / 9)) * 9 for g in range(9)}
+
+
+def test_exercise_48_and_its_answer_are_transcribed():
+    assert "born on 4th April 1970 at 5:50 pm" in ex48.EXERCISE_48
+    assert "got married on 1st August 1993" in ex48.EXERCISE_48
+    assert "navamsa lagna's dasa as per varsha Narayana dasa of navamsa" in (
+        ex48.EXERCISE_48)
+    assert "lagna/7th lord in rasi/navamsa" in ex48.EXERCISE_48
+    assert ex48.EXERCISE_48_ANSWER.startswith("Try yourself.")
+    assert "3:19:03 pm (IST)" in ex48.EXERCISE_48_ANSWER
+    assert ex48.ANNUAL_YEAR == ex48.COMPLETED_YEARS + 1
+
+
+def test_the_varsha_pravesh_reproduces_to_eleven_seconds():
+    from hora.core.ephemeris import get_ephemeris
+    from hora.tajaka.annual import varsha_pravesh
+
+    eph = get_ephemeris(_SETTINGS)
+    natal_sun = compute_chart(_EX48_BIRTH, _EX48_PLACE,
+                              _SETTINGS).positions[0].longitude
+    got = varsha_pravesh(lambda jd: eph.positions(jd, [0])[0].longitude,
+                         natal_sun, _EX48_BIRTH.jd_ut, ex48.ANNUAL_YEAR)
+    assert got["found"] is True
+    seconds = (got["jd"] - _EX48_PRAVESH.jd_ut) * 86400.0
+    assert 0.0 < seconds < 12.0
+    assert "10.6 seconds" in (
+        ex48.THE_VARSHA_PRAVESH_REPRODUCES_TO_ELEVEN_SECONDS)
+
+
+def test_the_four_qualifying_lords_are_four_different_planets():
+    from hora.charts.vargas import d9_navamsa
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD
+
+    chart = _ex48_annual()
+    nav_lagna = int(d9_navamsa(chart.lagna_longitude).sign)
+    assert RASI_ABBR[chart.lagna_rasi] == "Le"
+    assert RASI_ABBR[nav_lagna] == "Ge"
+    lords = {}
+    for label, rasi in (("rasi lagna", chart.lagna_rasi),
+                        ("rasi 7th", (chart.lagna_rasi + 6) % 12),
+                        ("navamsa lagna", nav_lagna),
+                        ("navamsa 7th", (nav_lagna + 6) % 12)):
+        lords[label] = str(GRAHA_NAMES[int(RASI_LORD[rasi])])
+    assert lords == {"rasi lagna": "Sun", "rasi 7th": "Saturn",
+                     "navamsa lagna": "Mercury", "navamsa 7th": "Jupiter"}
+    assert len(set(lords.values())) == 4
+    assert "four distinct planets" in (
+        ex48.THE_FOUR_QUALIFYING_LORDS_ARE_FOUR_DIFFERENT_PLANETS)
+
+
+def test_the_navamsa_lagnas_dasa_is_running_at_the_marriage():
+    """The first of the exercise's three verifications."""
+    from hora.charts.colord import stronger as co_lord
+    from hora.charts.rasi_strength import stronger as rasi_stronger
+    from hora.charts.vargas import d9_navamsa
+    from hora.core.const import RASI_ABBR, RASI_LORD, Graha
+    from hora.dasha.annual.varsha_narayana import (
+        compressed_days,
+        progressed_lagna,
+    )
+    from hora.dasha.rasi.narayana import dasa_length, progression
+
+    chart = _ex48_annual()
+    navamsa = _ex48_navamsa()
+    signs = {g: int(place // 30) for g, place in navamsa.items()}
+    nav_lagna = int(d9_navamsa(chart.lagna_longitude).sign)
+
+    muntha = progressed_lagna(5, ex48.ANNUAL_YEAR)["rasi"]   # natal lagna Vi
+    assert RASI_ABBR[muntha] == "Le"
+    ninth_lord = int(RASI_LORD[(muntha + 8) % 12])
+    assert ninth_lord == int(Graha.MARS)
+
+    here = signs[ninth_lord]
+    seed = rasi_stronger(here, (here + 6) % 12, navamsa).winner
+    assert RASI_ABBR[seed] == "Ta"
+
+    occupants = {g for g in range(9) if signs[g] == seed}
+    order = progression(seed, occupants=occupants)
+    assert order.exception is None
+    assert list(order.sign_names[:8]) == [
+        "Taurus", "Sagittarius", "Cancer", "Aquarius", "Virgo", "Aries",
+        "Scorpio", "Gemini"]
+
+    running = _EX48_PRAVESH.jd_ut
+    at_wedding = None
+    for rasi in order.signs:
+        lord = (int(Graha.KETU) if rasi == 7
+                and co_lord(7, navamsa).winner == int(Graha.KETU)
+                else int(RASI_LORD[rasi]))
+        days = compressed_days(
+            dasa_length(rasi=rasi, lord=lord, lord_sign=signs[lord]).years)
+        if running <= _EX48_WEDDING < running + days:
+            at_wedding = rasi
+        running += days
+    assert at_wedding is not None
+    assert at_wedding == nav_lagna
+    assert RASI_ABBR[at_wedding] == "Ge"
+    assert ex48.EXERCISE_48_VERDICTS[0]["running"] == "Gemini"
+    assert ex48.EXERCISE_48_VERDICTS[0]["holds"] is True
+
+
+def test_this_seed_takes_no_exception_where_example_122s_did():
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import progression
+
+    signs = {g: int(place // 30) for g, place in _ex48_navamsa().items()}
+    occupants = {g for g in range(9) if signs[g] == 1}       # Taurus
+    assert occupants == {int(Graha.MARS), int(Graha.JUPITER)}
+    assert progression(1, occupants=occupants).exception is None
+    assert progression(7, occupants={int(Graha.SATURN)}).exception == "Saturn"
+    assert "took the exception" in (
+        ex48.THIS_SEED_TAKES_NO_EXCEPTION_WHERE_EXAMPLE_122S_DID)
+
+
+def test_patyayinis_dasa_and_antardasa_qualify():
+    """The dasa is the Lagna's own and the antardasa is the rasi 7th lord."""
+    from hora.core.const import GRAHA_NAMES, RASI_LORD
+
+    chart = _ex48_annual()
+    got = patyayini.patyayini_dasa(
+        lagna=chart.lagna_longitude,
+        longitudes={g: chart.positions[g].longitude for g in range(7)},
+        start_jd=_EX48_PRAVESH.jd_ut)
+    dasa = next(row for row in got["rows"]
+                if row["from_jd"] <= _EX48_WEDDING < row["to_jd"])
+    assert dasa["body"] == "Lagna"
+
+    leg = next(l for l in patyayini.antardasas(got, "Lagna")
+               if _EX48_PRAVESH.jd_ut + l["from_day"] <= _EX48_WEDDING
+               < _EX48_PRAVESH.jd_ut + l["to_day"])
+    assert leg["antardasa"] == "Saturn"
+    seventh = (chart.lagna_rasi + 6) % 12
+    assert str(GRAHA_NAMES[int(RASI_LORD[seventh])]) == "Saturn"
+
+    verdict = ex48.EXERCISE_48_VERDICTS[1]
+    assert verdict["running"] == "Lagna" and verdict["antardasa"] == "Saturn"
+    assert verdict["holds"] is True
+
+
+def test_the_phrase_means_the_lagna_itself():
+    """Patyayini's answer settles the parse: only patyayini has a Lagna dasa.
+    """
+    assert "Lagna" in patyayini.patyayini_dasa(
+        lagna=10.0,
+        longitudes=dict.fromkeys(range(7), 20.0))["order"]
+    assert "not the lagna lord" in ex48.THE_PHRASE_MEANS_THE_LAGNA_ITSELF
+
+
+def test_muddas_dasa_and_antardasa_qualify():
+    """Jupiter is the navamsa 7th lord and Saturn the rasi 7th lord."""
+    from hora.core.const import GRAHA_NAMES, Graha
+
+    natal_moon = compute_chart(_EX48_BIRTH, _EX48_PLACE,
+                               _SETTINGS).positions[1].longitude
+    got = mudda.mudda_dasa(moon_longitude=natal_moon,
+                           completed_years=ex48.COMPLETED_YEARS,
+                           start_jd=_EX48_PRAVESH.jd_ut)
+    seed = got["seed"]
+    assert seed["natal"]["nakshatra_name"] == "Purva Bhadrapada"
+    assert seed["natal_lord_number"] == 5                    # Jupiter
+    assert seed["sum"] == 28 and seed["remainder"] == 1
+    assert seed["lord"] == int(Graha.SUN)
+    assert seed["agree"] is True
+
+    dasa = next(row for row in got["rows"]
+                if row["from_jd"] <= _EX48_WEDDING < row["to_jd"])
+    assert dasa["graha"] == int(Graha.JUPITER)
+
+    leg = next(l for l in mudda.mudda_antardasas(got, int(Graha.JUPITER))
+               if l["from_jd"] <= _EX48_WEDDING < l["to_jd"])
+    assert leg["antardasa"] == int(Graha.SATURN)
+    assert str(GRAHA_NAMES[leg["antardasa"]]) == "Saturn"
+
+    verdict = ex48.EXERCISE_48_VERDICTS[2]
+    assert verdict["running"] == "Jupiter" and verdict["antardasa"] == "Saturn"
+    assert verdict["holds"] is True
+
+
+def test_the_mudda_antardasa_needed_a_rule_the_section_does_not_give():
+    """§30.2 gave patyayini one; §30.3 gives mudda none. OI-176."""
+    assert "First antardasa is the same as dasa" in str(
+        patyayini.PATYAYINI_PROCEDURE[3]["text"])
+    assert "antardasa" not in mudda.MUDDA_LENGTH_RULE.lower()
+    assert "antardasa" not in mudda.MUDDA_ORDER_RULE.lower()
+    assert "antardasa" not in mudda.MUDDA_BALANCE_RULE.lower()
+    assert "no antardasa rule" in mudda.MUDDA_HAS_NO_ANTARDASA_RULE
+    assert "satisfies the exercise" in (
+        ex48.THE_MUDDA_ANTARDASA_NEEDED_A_RULE_THE_SECTION_DOES_NOT_GIVE)
+
+
+def test_all_three_of_the_exercises_verifications_hold():
+    assert [row["holds"] for row in ex48.EXERCISE_48_VERDICTS] == [
+        True, True, True]
+    assert [row["dasa"] for row in ex48.EXERCISE_48_VERDICTS] == [
+        "Varsha Narayana of navamsa", "Patyayini", "Mudda"]
