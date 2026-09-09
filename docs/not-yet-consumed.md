@@ -1916,7 +1916,7 @@ exist to check the section's own figures, and one of them fails.
 |---|---|
 | `ADVANCEMENT_IS_READ_IN_THE_RASI_CHART` | Ours: rules 1 to 5 read the varga and rule 6 reads the rasi chart, settled by Exercise 49. OI-124 closed |
 
-### Chapter 31 — §31.1 to §31.4, Example 126 and Example 128 (47)
+### Chapter 31 — §31.1 to §31.4 and Examples 126, 127 and 128 (57)
 
 `dasha/sudarsana.py`. The chakra **is** built: `sudarsana_chakra` returns the
 three bhava chakras with their occupants and `the_same_house_everywhere` reads
@@ -1947,6 +1947,15 @@ has not been given yet.
 | `THE_EIGHTH_HOUSE_RULE_IS_USED_NOT_JUST_STATED` | Ours: Jupiter in the 8th is called good, so §31.4's dusthana inclusion is load-bearing |
 | `THE_EXAMPLE_USES_THE_TWO_REFERENCES_THAT_AGREE` | Ours: lagna and Moon are both in Ge and the Sun is in Sc, and the example never mentions him. OI-180 |
 | `THE_VARGA_RULE_IS_QUALIFIED_AS_SOON_AS_IT_IS_USED` | Ours: the chapter's first worked SC dasa is in a varga and the next sentence prefers the rasi chart |
+| `EXAMPLE_127` · `EXAMPLE_127_ANNUAL` · `EXAMPLE_127_PLACEMENTS` | Example 127 verbatim, the 1976-77 annual chart it reads and its nine placements as data |
+| `CHART_73_IS_CHART_61_AGAIN` | Ours: Chart 73 reprints Chart 61 with her 1976-77 annual chart, the second reprint in two examples |
+| `BOTH_BLOCKS_OF_CHART_73_REPRODUCE` | Ours: both blocks come back within 1.01 arcminutes, both arudha lagnas agree, and the annual ascendant needs fifty seconds |
+| `THE_SUN_IS_THE_SAME_IN_BOTH_BLOCKS` | Ours: the Sun is printed 4 Sc 07 in both blocks, so §27.1's solar return is visible on the page |
+| `THE_ZERO_REMAINDER_CLAUSE_IS_USED_HERE` | Ours: her 60th year is the first worked case to reach §31.3's if-the-remainder-is-zero clause |
+| `THE_STRENGTH_CHOICE_IS_GIVEN_A_REASON_BUT_NOT_A_RULE` | Ours: the three references give three different dasa signs and the Sun is picked for a yoga, not a strength test. OI-180 |
+| `THE_THREE_UNNAMED_GRAHAS_ARE_NOT_A_RANDOM_THREE` | Ours: the Moon and Ketu agree with the verdict, Jupiter in the 8th is the one placement §31.4 calls favourable |
+| `KETU_IS_UNNAMED_WHEN_HIS_PLACEMENT_IS_BAD` | Ours: Examples 127 and 128 both omit Ketu in a spoiled house, and Example 126 names him in the 11th |
+| `THE_TWO_BENEFIC_RULES_COLLIDE_AND_THE_EXAMPLE_PICKS_THE_FIRST` | Ours: §31.4's second rule makes Venus in the 3rd good and the example calls it a failure. D-84 |
 | `EXAMPLE_128` · `EXAMPLE_128_ANNUAL` · `EXAMPLE_128_PLACEMENTS` | Example 128 verbatim, the 1998-99 annual chart it reads and its nine placements as data |
 | `CHART_74_IS_CHART_53_AGAIN` | Ours: Chart 74 reprints Chart 53 with its navamsa, and the marriage is Example 104's |
 | `BOTH_BLOCKS_REPRODUCE_AND_THE_ASCENDANT_NEEDS_SECONDS` | Ours: the annual ascendant reaches its printed value at 07:15:48 against our 07:16:01 return |

@@ -2758,3 +2758,39 @@ aspect it actually is, and the test asserts the trinal. Nothing is corrected in
 the transcription.
 
 **Closes when:** you confirm the reading, or a later printing corrects it.
+
+
+---
+
+## D-84 · §31.4's second benefic rule and Example 127 disagree over the 3rd
+
+**Status: BOOK DEVIATION — the section makes a benefic in the 3rd good and the
+example makes it a failure. Both held as printed; we decide neither.**
+
+§31.4 gives two benefic rules, and they cover different houses:
+
+1. "If benefics are in quadrants, trines and 8th from dasa sign, favorable
+   results can be expected." — the 1st, 4th, 5th, 7th, 8th, 9th and 10th.
+2. "Benefics in houses other than the 6th and 12th houses produce good results
+   for the houses they occupy." — every house but the 6th and the 12th, which
+   is those seven **plus the 2nd, 3rd and 11th**.
+
+The 3rd is one of the three houses where they part. Rule 1 is silent on it;
+rule 2 calls it good. Example 127 reads it the third way: "**Benefic Venus is
+in 3rd giving failures**", and counts it among the bad placements that carry
+the year's verdict.
+
+It is the chapter's only benefic outside rule 1's seven houses. Example 126's
+three benefics were in the 5th, 8th and 9th and Example 128's in the 1st, 7th
+and 10th, so both of those fall inside rule 1 and neither tests the collision.
+This one does, and the example decides against the section.
+
+**What we do.** `placement_verdict` already returns `favourable` and
+`good_for_the_house` as **separate fields** — rule 1 and rule 2 answered
+independently — so nothing has to be chosen to record the example. For Venus
+in the 3rd it returns `favourable: False` and `good_for_the_house: True`, and
+`EXAMPLE_127_PLACEMENTS` records the example's own reading beside it.
+
+**Closes when:** you rule on which of the two benefic rules governs the 2nd,
+3rd and 11th, or a later section settles it.
+

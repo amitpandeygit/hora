@@ -638,6 +638,164 @@ THE_VARGA_RULE_IS_QUALIFIED_AS_SOON_AS_IT_IS_USED = (
 
 
 # --------------------------------------------------------------------------
+# Example 127 — the strongest reference chosen, and a reason given for it
+# --------------------------------------------------------------------------
+
+#: Example 127, verbatim.
+EXAMPLE_127 = (
+    "Indira Gandhi's natal rasi chart and Tajaka annual chart of 1976-77 are "
+    "given in Chart 73. During that year, Indira Gandhi's party lost the "
+    "Parliamentary Elections and she was removed from the post of India's "
+    "Prime Minister.\n\n"
+    "Because the finished years are 1976-1917 = 59, we should add 1 and "
+    "divide 60 by 12. Remainder is 12 and Sudarsana Chakra dasa during the "
+    "year belongs to the 12th house. Compared to lagna and Moon, Sun with "
+    "Budha-Aaditya yoga is stronger. Let us take the 12th from Sun. It is "
+    "Libra.\n\n"
+    "Libra's SC dasa runs during the year and we should look at the planetary "
+    "positions from Libra in the Tajaka annual chart (or dasa commencement "
+    "chart). Benefic Venus is in 3rd giving failures. Rahu afflicts the 1st "
+    "house. Mars, Sun and Mercury are not well-placed in the 2nd house. "
+    "Saturn afflicts the 10th house showing troubles in career.\n\n"
+    "Because of bad placement of planets (especially Saturn and Rahu), "
+    "Sudarsana Chakra does not promise a good year. No wonder Mrs. Gandhi "
+    "fell from power.")
+
+#: The 1976-77 annual chart printed inside Chart 73, which carries no number
+#: of its own. It is the chart Example 127 reads the placements from.
+EXAMPLE_127_ANNUAL: dict[str, object] = {
+    "birth": "November 20, 1976, 2:10 am (IST), 81 E 52, 25 N 28",
+    "birth_data": {"year": 1976, "month": 11, "day": 20, "hour": 2,
+                   "minute": 10, "second": 0.0, "utc_offset_hours": 5.5},
+    "longitudes": {
+        "Asc": "7 Vi 26", "Sun": "4 Sc 07", "Moon": "9 Li 03",
+        "Mars": "5 Sc 39", "Merc": "11 Sc 15", "Jup": "2 Ta 22",
+        "Ven": "12 Sg 59", "Sat": "23 Cn 16", "Rahu": "8 Li 34",
+        "Ketu": "8 Ar 34", "HL": "27 Ge 17", "GL": "18 Sg 17",
+    },
+    "drawn": {"AL": "Cp"},
+    "retrograde": ("Jup",),
+    "chara_karakas": {
+        "Sat": "AK", "Rahu": "AmK", "Ven": "BK", "Merc": "MK",
+        "Mars": "PK", "Moon": "PiK", "Sun": "GK", "Jup": "DK",
+    },
+    "year": 60,
+}
+
+#: Example 127's placements from the Libra dasa sign, as data. The three the
+#: example does not name are marked, and each carries the nature §3 gives it
+#: in this chart: the Moon is waning and Mercury sits with two malefics.
+EXAMPLE_127_PLACEMENTS: tuple[dict[str, object], ...] = (
+    {"graha": "Rahu", "nature": "malefic", "house": 1, "named": True},
+    {"graha": "Sun", "nature": "malefic", "house": 2, "named": True},
+    {"graha": "Mars", "nature": "malefic", "house": 2, "named": True},
+    {"graha": "Mercury", "nature": "malefic", "house": 2, "named": True},
+    {"graha": "Venus", "nature": "benefic", "house": 3, "named": True},
+    {"graha": "Saturn", "nature": "malefic", "house": 10, "named": True},
+    {"graha": "Moon", "nature": "malefic", "house": 1, "named": False},
+    {"graha": "Ketu", "nature": "malefic", "house": 7, "named": False},
+    {"graha": "Jupiter", "nature": "benefic", "house": 8, "named": False},
+)
+
+#: **Finding.** Chart 73 is **Chart 61** printed again — the second reprint in
+#: two examples, after Chart 74 reprinted Chart 53. All twelve longitudes are
+#: identical. Chapter 25 read the transit at her assassination from this
+#: nativity; chapter 31 reads her fall from power in 1977 from it.
+CHART_73_IS_CHART_61_AGAIN = (
+    "Chart 73 reprints Chart 61's twelve longitudes exactly and adds her "
+    "1976-77 annual chart. Example 110 read her assassination from the same "
+    "nativity."
+)
+
+#: **Finding.** Both blocks reproduce within **1.01 arcminutes**, and both
+#: arudha lagnas come back — Aries natally and Capricorn in the annual chart,
+#: neither of which is printed as a longitude. The annual ascendant is the one
+#: body that needs seconds: the printed 7 Vi 26 arrives at **02:10:50** and
+#: our own solar return for her 60th year solves to **02:11:02**, twelve
+#: seconds later, under a header that prints only "2:10 am".
+BOTH_BLOCKS_OF_CHART_73_REPRODUCE = (
+    "Every printed longitude in both blocks comes back within 1.01 "
+    "arcminutes and both arudha lagnas agree. The annual ascendant reaches "
+    "its printed 7 Vi 26 at 02:10:50 against our 02:11:02 return."
+)
+
+#: **Finding.** The Sun is printed as **4 Sc 07 in both blocks** — the natal
+#: chart and the annual chart give the same degree, minute and rasi. That is
+#: §27.1's definition of the varsha pravesh made visible in the figure itself,
+#: and it is the only place in the book where the two charts of one native are
+#: printed side by side with the Sun repeated to the arcminute.
+THE_SUN_IS_THE_SAME_IN_BOTH_BLOCKS = (
+    "Chart 73 prints the Sun at 4 Sc 07 natally and 4 Sc 07 in the 1976-77 "
+    "annual chart. The solar return is visible on the page."
+)
+
+#: **Finding, and §31.3's zero clause is exercised at last.** §31.3 said
+#: "divide it by 12 and find the remainder (if the remainder is zero, make it
+#: 12)". Her 60th year is the first worked case where the remainder actually
+#: is zero, and the book carries the clause through: "we should add 1 and
+#: divide 60 by 12. Remainder is 12". `dasa_house` returns the same.
+THE_ZERO_REMAINDER_CLAUSE_IS_USED_HERE = (
+    "60 divided by 12 leaves nothing, and the example calls the remainder 12 "
+    "rather than 0. It is the first worked case that reaches section 31.3's "
+    "zero clause."
+)
+
+#: **Finding, and the strongest OI-180 case so far.** Here the three
+#: references sit in three rasis — lagna Cn, Moon Cp, Sun Sc — so the 12th
+#: house is **Ge from lagna, Sg from the Moon and Li from the Sun**: three
+#: different dasa signs, and the reading depends entirely on the choice. The
+#: example chooses the Sun and, for the first time in the book, **gives a
+#: reason**: "Sun with Budha-Aaditya yoga is stronger". A yoga is not any of
+#: the strength schemes the book taught — not §15.5's rasi comparison, not
+#: shad bala, not the Tajaka balas of chapter 28 — so the test is still not
+#: one we can run. It is a reason, not a rule.
+THE_STRENGTH_CHOICE_IS_GIVEN_A_REASON_BUT_NOT_A_RULE = (
+    "The 12th house is Gemini from lagna, Sagittarius from the Moon and "
+    "Libra from the Sun, so the choice decides the whole reading. The "
+    "example picks the Sun for his Budha-Aditya yoga, which is a reason and "
+    "not one of the book's strength tests."
+)
+
+#: **Finding.** The example names six grahas and passes over three. The three
+#: it skips are the Moon in the 1st, Ketu in the 7th and **Jupiter in the
+#: 8th** — and Jupiter in the 8th is the chart's only favourable placement
+#: under §31.4, the very rule Example 126 used and named. Both unnamed
+#: malefics support the verdict; the one unnamed benefic contradicts it.
+THE_THREE_UNNAMED_GRAHAS_ARE_NOT_A_RANDOM_THREE = (
+    "Of the three placements Example 127 does not mention, the Moon in the "
+    "1st and Ketu in the 7th agree with its verdict and Jupiter in the 8th "
+    "is the only placement section 31.4 would call favourable."
+)
+
+#: **Finding.** Ketu is the graha both of these examples leave out: the 7th
+#: here and the 5th in Example 128, each of them a house §31.4 makes a spoiled
+#: house for a malefic. Example 126 did name him — in the 11th, where the
+#: exemption made his placement good — so what goes unmentioned in both is a
+#: Ketu the rule counts **against** the reading.
+KETU_IS_UNNAMED_WHEN_HIS_PLACEMENT_IS_BAD = (
+    "Example 127 leaves Ketu in the 7th unmentioned and Example 128 leaves "
+    "Ketu in the 5th unmentioned; both are spoiled houses. Example 126 named "
+    "him in the 11th, which the exemption makes good."
+)
+
+#: **Book deviation, D-84.** "Benefic Venus is in 3rd giving failures" is the
+#: first benefic in the chapter placed outside §31.4's first rule, and it
+#: lands in one of the exactly three houses where the section's two benefic
+#: rules disagree. Rule 1 names the quadrants, trines and 8th and is silent on
+#: the 3rd; rule 2 calls every house but the 6th and 12th good for the house
+#: it occupies, so rule 2 makes Venus good here. The example calls it a
+#: failure and counts it among the placements that condemn the year.
+#:
+#: `placement_verdict` answers the two rules separately and picks neither: for
+#: a benefic in the 3rd it returns ``favourable: False`` and
+#: ``good_for_the_house: True``.
+THE_TWO_BENEFIC_RULES_COLLIDE_AND_THE_EXAMPLE_PICKS_THE_FIRST = (
+    "Venus is a benefic in the 3rd. Section 31.4's second rule makes that "
+    "good for the house and Example 127 calls it a failure. The 3rd is one "
+    "of the three houses the two rules cover differently. See D-84."
+)
+
+# --------------------------------------------------------------------------
 # Example 128 — the rasi-chart preference set aside for a navamsa
 # --------------------------------------------------------------------------
 

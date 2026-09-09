@@ -671,6 +671,278 @@ def test_the_varga_rule_is_qualified_as_soon_as_it_is_used():
 
 
 # --------------------------------------------------------------------------
+# Example 127 and Chart 73
+# --------------------------------------------------------------------------
+
+_E127_PLACE = Place(name="Chart 73", latitude=25 + 28 / 60,
+                    longitude=81 + 52 / 60)
+_E127_NATAL = from_local(1917, 11, 19, 23, 3, 0.0, utc_offset_hours=5.5)
+_E127_ANNUAL_PRINTED = from_local(1976, 11, 20, 2, 10, 0.0,
+                                  utc_offset_hours=5.5)
+_E127_ANNUAL = from_local(1976, 11, 20, 2, 10, 50.0, utc_offset_hours=5.5)
+
+_NAMES = ("Sun", "Moon", "Mars", "Merc", "Jup", "Ven", "Sat", "Rahu", "Ketu")
+
+
+def _rasis_and_lagna(instant):
+    chart = compute_chart(instant, _E127_PLACE, _SETTINGS)
+    return _rasis(chart), int(chart.lagna_longitude // 30)
+
+
+def _worst_arcminutes(chart, printed):
+    from hora.core.timeutil import norm180
+
+    worst = 0.0
+    for g, name in enumerate(_NAMES):
+        want = printed[name]
+        got = chart.positions[g].longitude
+        worst = max(worst, abs(norm180(got - want)) * 60)
+    return worst
+
+
+def test_example_127_is_transcribed():
+    assert "Indira Gandhi's party lost the Parliamentary Elections" in (
+        sudarsana.EXAMPLE_127)
+    assert "we should add 1 and divide 60 by 12" in sudarsana.EXAMPLE_127
+    assert "Sun with Budha-Aaditya yoga is stronger" in sudarsana.EXAMPLE_127
+    assert "Let us take the 12th from Sun. It is Libra" in sudarsana.EXAMPLE_127
+    assert "No wonder Mrs. Gandhi fell from power" in sudarsana.EXAMPLE_127
+
+
+def test_chart_73_is_chart_61_printed_again():
+    """FINDING: the second reprint in two examples."""
+    from hora.charts.book import chart
+
+    c61, c73 = chart(61), chart(73)
+    assert c61["longitudes"] == c73["longitudes"]
+    assert c61["birth"] == c73["birth"]
+    assert "Example 110 read her assassination" in (
+        sudarsana.CHART_73_IS_CHART_61_AGAIN)
+
+
+def test_both_blocks_of_chart_73_reproduce():
+    from hora.charts.book import longitudes
+
+    natal = compute_chart(_E127_NATAL, _E127_PLACE, _SETTINGS)
+    assert _worst_arcminutes(natal, longitudes(73)) < 1.02
+
+    annual = compute_chart(_E127_ANNUAL, _E127_PLACE, _SETTINGS)
+    from hora.charts.book import longitude
+
+    printed = {name: longitude(text) for name, text
+               in dict(sudarsana.EXAMPLE_127_ANNUAL["longitudes"]).items()}
+    assert _worst_arcminutes(annual, printed) < 1.02
+    assert "1.01" in sudarsana.BOTH_BLOCKS_OF_CHART_73_REPRODUCE
+
+
+def test_both_arudha_lagnas_come_back():
+    """Neither AL is printed as a longitude; both are drawn in a box."""
+    from hora.charts.arudha import arudha_pada
+    from hora.charts.book import chart
+
+    for instant, want in ((_E127_NATAL, chart(73)["drawn"]["AL"]),
+                          (_E127_ANNUAL,
+                           dict(sudarsana.EXAMPLE_127_ANNUAL["drawn"])["AL"])):
+        got = compute_chart(instant, _E127_PLACE, _SETTINGS)
+        signs = {g: int(got.positions[g].longitude // 30) for g in range(9)}
+        al = arudha_pada(1, int(got.lagna_longitude // 30), signs).sign
+        assert RASI_ABBR[al] == want
+
+
+def test_the_sun_is_printed_at_the_same_degree_in_both_blocks():
+    """FINDING: section 27.1's solar return, visible on the page."""
+    from hora.charts.book import chart
+
+    natal = chart(73)["longitudes"]["Sun"]
+    annual = dict(sudarsana.EXAMPLE_127_ANNUAL["longitudes"])["Sun"]
+    assert natal == annual == "4 Sc 07"
+
+    ours_natal = compute_chart(_E127_NATAL, _E127_PLACE, _SETTINGS)
+    ours_annual = compute_chart(_E127_ANNUAL, _E127_PLACE, _SETTINGS)
+    apart = abs(ours_annual.positions[0].longitude
+                - ours_natal.positions[0].longitude) * 3600
+    assert apart < 5.0                                 # arcseconds
+    assert "visible on the page" in (
+        sudarsana.THE_SUN_IS_THE_SAME_IN_BOTH_BLOCKS)
+
+
+def test_the_annual_ascendant_of_chart_73_needs_fifty_seconds():
+    from hora.core.timeutil import from_jd
+    from hora.tajaka.annual import varsha_pravesh
+
+    want = RASI_ABBR.index("Vi") * 30 + 7 + 26 / 60
+    printed = compute_chart(_E127_ANNUAL_PRINTED, _E127_PLACE, _SETTINGS)
+    solved = compute_chart(_E127_ANNUAL, _E127_PLACE, _SETTINGS)
+    assert abs(printed.lagna_longitude - want) * 60 > 10        # 11.3'
+    assert abs(solved.lagna_longitude - want) * 60 < 0.05
+
+    natal = compute_chart(_E127_NATAL, _E127_PLACE, _SETTINGS)
+
+    def sun_at(jd: float) -> float:
+        return compute_chart(from_jd(jd, utc_offset_hours=5.5), _E127_PLACE,
+                             _SETTINGS).positions[0].longitude
+
+    ours = varsha_pravesh(sun_at, natal.positions[0].longitude,
+                          natal.instant.jd_ut, 60)
+    assert ours["found"]
+    when = from_jd(ours["jd"], utc_offset_hours=5.5).local
+    assert (when.month, when.day, when.hour, when.minute) == (11, 20, 2, 11)
+    assert round(when.second) == 2                     # twelve seconds later
+
+
+def test_the_sixtieth_year_reaches_the_zero_remainder_clause():
+    """FINDING: section 31.3's zero clause, worked for the first time."""
+    assert 1976 - 1917 == 59
+    assert 60 % 12 == 0
+    assert sudarsana.dasa_house(60) == 12
+    assert "if the remainder is zero, make it 12" in (
+        sudarsana.THE_YEAR_AND_THE_REMAINDER)
+    assert "Remainder is 12" in sudarsana.EXAMPLE_127
+    assert "first worked case" in (
+        sudarsana.THE_ZERO_REMAINDER_CLAUSE_IS_USED_HERE)
+
+
+def test_the_three_references_give_three_different_dasa_signs():
+    """OI-180: here the choice decides the whole reading."""
+    natal = compute_chart(_E127_NATAL, _E127_PLACE, _SETTINGS)
+    signs = sudarsana.dasa_signs(
+        lagna_rasi=int(natal.lagna_longitude // 30),
+        moon_rasi=int(natal.positions[int(Graha.MOON)].longitude // 30),
+        sun_rasi=int(natal.positions[int(Graha.SUN)].longitude // 30),
+        year=60)
+    got = {name: RASI_ABBR[rasi] for name, rasi in signs["signs"].items()}
+    assert got == {"lagna": "Ge", "Moon": "Sg", "Sun": "Li"}
+    assert len(set(got.values())) == 3
+    assert "Budha-Aaditya" in sudarsana.EXAMPLE_127
+    assert "not one of the book's strength tests" in (
+        sudarsana.THE_STRENGTH_CHOICE_IS_GIVEN_A_REASON_BUT_NOT_A_RULE)
+
+
+def test_the_budha_aditya_the_example_names_is_there():
+    natal = compute_chart(_E127_NATAL, _E127_PLACE, _SETTINGS)
+    sun = int(natal.positions[int(Graha.SUN)].longitude // 30)
+    merc = int(natal.positions[int(Graha.MERCURY)].longitude // 30)
+    assert sun == merc == RASI_ABBR.index("Sc")
+
+
+def test_example_127s_placements_reproduce():
+    signs, _ = _rasis_and_lagna(_E127_ANNUAL)
+    libra = RASI_ABBR.index("Li")
+    index = {"Sun": 0, "Moon": 1, "Mars": 2, "Mercury": 3, "Jupiter": 4,
+             "Venus": 5, "Saturn": 6, "Rahu": 7, "Ketu": 8}
+    for row in sudarsana.EXAMPLE_127_PLACEMENTS:
+        graha = index[str(row["graha"])]
+        assert (signs[graha] - libra) % 12 + 1 == row["house"], row["graha"]
+    assert len(sudarsana.EXAMPLE_127_PLACEMENTS) == 9
+
+
+def test_the_two_natures_the_chart_makes_conditional():
+    """The Moon is waning and Mercury keeps malefic company, so both of
+    chapter 3's conditional grahas are malefics here.
+    """
+    from hora.charts.benefic import mercury_nature, moon_nature
+    from hora.core.const import NATURAL_MALEFIC
+
+    chart = compute_chart(_E127_ANNUAL, _E127_PLACE, _SETTINGS)
+    elongation = (chart.positions[int(Graha.MOON)].longitude
+                  - chart.positions[int(Graha.SUN)].longitude) % 360
+    assert elongation > 180                            # waning
+    assert moon_nature(1) == "malefic"
+
+    merc = int(chart.positions[int(Graha.MERCURY)].longitude // 30)
+    with_merc = {g for g in range(9)
+                 if g != int(Graha.MERCURY)
+                 and int(chart.positions[g].longitude // 30) == merc}
+    assert with_merc == {int(Graha.SUN), int(Graha.MARS)}
+    assert all(g in NATURAL_MALEFIC for g in with_merc)
+    assert mercury_nature(with_merc) == "malefic"
+
+    for name in ("Moon", "Mercury"):
+        row = next(r for r in sudarsana.EXAMPLE_127_PLACEMENTS
+                   if r["graha"] == name)
+        assert row["nature"] == "malefic"
+
+
+def test_the_three_unnamed_grahas_are_the_moon_ketu_and_jupiter():
+    """FINDING: two agree with the verdict and one contradicts it."""
+    unnamed = {str(r["graha"]): r for r in sudarsana.EXAMPLE_127_PLACEMENTS
+               if r["named"] is False}
+    assert set(unnamed) == {"Moon", "Ketu", "Jupiter"}
+    # The placement paragraph is the third. The Moon appears in the second,
+    # but only as one of the three references being weighed.
+    placements = sudarsana.EXAMPLE_127.split("\n\n")[2]
+    assert placements.startswith("Libra's SC dasa runs")
+    for name in ("Moon", "Ketu", "Jupiter"):
+        assert name not in placements
+
+    assert unnamed["Moon"]["house"] == 1
+    assert unnamed["Ketu"]["house"] == 7
+    assert unnamed["Jupiter"]["house"] == 8
+
+    # The two malefics spoil their houses; the benefic in the 8th is the one
+    # placement section 31.4 calls favourable.
+    for name in ("Moon", "Ketu"):
+        verdict = sudarsana.placement_verdict(
+            house=int(unnamed[name]["house"]), nature="malefic")
+        assert verdict["spoils_the_house"] is True
+    jup = sudarsana.placement_verdict(house=8, nature="benefic")
+    assert jup["favourable"] is True
+    assert "only placement section 31.4 would call favourable" in (
+        sudarsana.THE_THREE_UNNAMED_GRAHAS_ARE_NOT_A_RANDOM_THREE)
+
+
+def test_ketu_goes_unnamed_in_both_examples_and_named_when_he_is_good():
+    ketu_127 = next(r for r in sudarsana.EXAMPLE_127_PLACEMENTS
+                    if r["graha"] == "Ketu")
+    ketu_128 = next(r for r in sudarsana.EXAMPLE_128_PLACEMENTS
+                    if r["graha"] == "Ketu")
+    ketu_126 = next(r for r in sudarsana.EXAMPLE_126_PLACEMENTS
+                    if r["graha"] == "Ketu")
+    assert ketu_127["house"] == 7 and ketu_128["house"] == 5
+    assert ketu_127["house"] not in sudarsana.MALEFIC_GOOD_HOUSES
+    assert ketu_128["house"] not in sudarsana.MALEFIC_GOOD_HOUSES
+    # Example 126 does name him, and there his placement is a good one.
+    assert ketu_126["house"] == 11
+    assert ketu_126["house"] in sudarsana.MALEFIC_GOOD_HOUSES
+    assert "Ketu" in sudarsana.EXAMPLE_126
+    assert "Example 126 named" in (
+        sudarsana.KETU_IS_UNNAMED_WHEN_HIS_PLACEMENT_IS_BAD)
+
+
+def test_d84_the_two_benefic_rules_collide_over_venus_in_the_third():
+    """BOOK DEVIATION D-84. Rule 2 makes it good; the example calls it a
+    failure. `placement_verdict` answers both rules and picks neither.
+    """
+    venus = next(r for r in sudarsana.EXAMPLE_127_PLACEMENTS
+                 if r["graha"] == "Venus")
+    assert venus["house"] == 3 and venus["nature"] == "benefic"
+
+    first, second = sudarsana.PLACEMENT_VERDICTS[0], (
+        sudarsana.PLACEMENT_VERDICTS[1])
+    assert 3 not in first["houses"]
+    assert 3 in second["houses"]
+    assert set(second["houses"]) - set(first["houses"]) == {2, 3, 11}
+
+    got = sudarsana.placement_verdict(house=3, nature="benefic")
+    assert got["favourable"] is False
+    assert got["good_for_the_house"] is True
+
+    assert "Benefic Venus is in 3rd giving failures" in sudarsana.EXAMPLE_127
+    assert "See D-84" in (
+        sudarsana.THE_TWO_BENEFIC_RULES_COLLIDE_AND_THE_EXAMPLE_PICKS_THE_FIRST)
+
+
+def test_d84_is_in_the_deviations_register():
+    from pathlib import Path
+
+    text = Path("docs/book-deviations.md").read_text(encoding="utf-8")
+    assert "## D-84 · §31.4's second benefic rule and Example 127 disagree" in (
+        text)
+    assert "Benefic Venus is" in text and "giving failures" in text
+    assert "placement_verdict` already returns" in text
+
+
+# --------------------------------------------------------------------------
 # Example 128 and Chart 74
 # --------------------------------------------------------------------------
 

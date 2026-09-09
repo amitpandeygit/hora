@@ -499,6 +499,13 @@
         "title": "SC Example"
       },
       {
+        "birth": "November 19, 1917, 11:03 pm (IST), 81 E 52, 25 N 28",
+        "first_seen": "chapter 31, Example 127",
+        "number": 73,
+        "recomputable": true,
+        "title": "Indira Gandhi \u2014 Chart 61 reprinted with her 1976-77 annual chart"
+      },
+      {
         "birth": "July 26, 1973, 9:41 pm (IST), 80 E 28, 16 N 13",
         "first_seen": "chapter 31, Example 128",
         "number": 74,
@@ -574,6 +581,7 @@
       70,
       71,
       72,
+      73,
       74
     ]
   },

@@ -2840,6 +2840,40 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "dasha.sudarsana.THE_ASCENDANT_NEEDS_FORTY_EIGHT_SECONDS."
         ),
     },
+    73: {
+        "title": "Indira Gandhi — Chart 61 reprinted with her 1976-77 annual chart",
+        "birth": "November 19, 1917, 11:03 pm (IST), 81 E 52, 25 N 28",
+        "birth_data": {
+            "year": 1917, "month": 11, "day": 19, "hour": 23, "minute": 3,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 25 + 28 / 60, "longitude": 81 + 52 / 60},
+        "longitudes": {
+            "Asc": "25 Cn 38", "Sun": "4 Sc 07", "Moon": "5 Cp 30",
+            "Mars": "16 Le 22", "Merc": "13 Sc 13", "Jup": "14 Ta 59",
+            "Ven": "21 Sg 00", "Sat": "21 Cn 47", "Rahu": "10 Sg 33",
+            "Ketu": "10 Ge 33", "HL": "23 Pi 43", "GL": "24 Ar 09",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Ven": "AmK", "Rahu": "BK", "Mars": "MK",
+            "Merc": "PK", "Jup": "PiK", "Moon": "GK", "Sun": "DK",
+        },
+        "retrograde": ("Jup",),
+        "drawn": {"AL": "Ar"},
+        "events": {
+            "her party lost the Parliamentary Elections and she was removed "
+            "from the post of India's Prime Minister": "1976-77",
+        },
+        "first_seen": "chapter 31, Example 127",
+        "note": (
+            "**The same nativity as Chart 61**, reprinted with her **1976-77 "
+            "Tajaka annual chart** beside it: every one of the twelve printed "
+            "longitudes is identical to Chart 61's. The annual block carries "
+            "no number of its own and is held in "
+            "dasha.sudarsana.EXAMPLE_127_ANNUAL. Both blocks reproduce "
+            "within 1.01 arcminutes, and both arudha lagnas come back."
+        ),
+    },
     74: {
         "title": "A lady — Chart 53 reprinted with her navamsa",
         "birth": "July 26, 1973, 9:41 pm (IST), 80 E 28, 16 N 13",

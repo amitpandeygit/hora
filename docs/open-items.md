@@ -2764,10 +2764,12 @@ start SC dasa from there" — with no three-sign version offered there at all.
 
 `dasa_signs` returns all three references and picks none.
 
-Example 128 is the first case where the three differ — natal navamsa lagna Cn,
-Moon Le, Sun Li — and it asserts the answer without working it: "lagna is in Cn
-and it is stronger than Moon and Sun". So the book does name a winner, and
-still gives no test.
+Two examples now choose. Example 128 asserts a winner with no reason at all —
+"lagna is in Cn and it is stronger than Moon and Sun". Example 127 gives one:
+"Sun with Budha-Aaditya yoga is stronger". A yoga is not a strength scheme —
+not §15.5, not shad bala, not chapter 28's Tajaka balas — so it is a reason and
+not a test we can run. Example 127 also shows the stakes: its 12th house is Ge
+from lagna, Sg from the Moon and Li from the Sun, three different dasa signs.
 
 **Closes when:** a section gives the test, or a worked example shows the
 comparison rather than asserting its result.
