@@ -810,3 +810,255 @@ def test_28_6_is_not_changed_on_the_strength_of_one_example():
     assert "benefic aspect on lagna" in source
     assert "Example 122" not in source
     assert "OI-156" in inspect.getsource(example)
+
+
+# --------------------------------------------------------------------------
+# §30.3 Mudda dasa (Varsha Vimsottari dasa)
+# --------------------------------------------------------------------------
+
+from hora.dasha.annual import mudda
+
+
+def _natal_moon():
+    return compute_chart(_BIRTH, _PLACE, _SETTINGS).positions[1].longitude
+
+
+def _mudda():
+    return mudda.mudda_dasa(moon_longitude=_natal_moon(), completed_years=21,
+                            start_jd=_PRAVESH.jd_ut)
+
+
+def test_the_mudda_rules_are_transcribed():
+    assert "120 years compressed to a solar year" in mudda.MUDDA_LENGTH_RULE
+    assert "Sun moves by exactly 1 degree" in mudda.MUDDA_LENGTH_RULE
+    assert "6 x 3 = 18 days" in mudda.MUDDA_LENGTH_RULE
+    assert "one constellation per year" in mudda.MUDDA_ORDER_RULE
+    assert "Remainder of 0 is equivalent to 9" in mudda.MUDDA_ORDER_RULE
+    assert "yet to be traversed" in mudda.MUDDA_BALANCE_RULE
+    assert mudda.MUDDA_YEAR_DAYS == 360
+    assert mudda.MUDDA_MULTIPLIER == 3
+
+
+def test_table_76_is_three_times_vimsottari_and_sums_to_360():
+    from hora.core.const import GRAHA_NAMES
+    from hora.dasha.nakshatra.systems import NAKSHATRA_DASHA_SYSTEMS
+
+    spec = NAKSHATRA_DASHA_SYSTEMS["vimshottari"]
+    years = {str(GRAHA_NAMES[int(lord)]): y
+             for lord, y in zip(spec.order, spec.years, strict=True)}
+    for name, days in mudda.TABLE_76:
+        assert days == years[name] * 3, name
+        assert mudda.mudda_days(
+            next(g for g in range(9) if str(GRAHA_NAMES[g]) == name)) == days
+    assert sum(days for _, days in mudda.TABLE_76) == 360
+    assert spec.total_years * 3 == 360
+    assert "sum to 360" in mudda.TABLE_76_IS_THREE_TIMES_VIMSOTTARI
+
+
+def test_the_numbering_is_the_vimsottari_cycle_started_from_the_sun():
+    from hora.core.const import GRAHA_NAMES, Graha
+    from hora.dasha.nakshatra.systems import NAKSHATRA_DASHA_SYSTEMS
+
+    spec = NAKSHATRA_DASHA_SYSTEMS["vimshottari"]
+    cycle = [int(lord) for lord in spec.order]
+    start = cycle.index(int(Graha.SUN))
+    assert list(mudda.MUDDA_NUMBERS) == cycle[start:] + cycle[:start]
+    assert [str(GRAHA_NAMES[g]) for g in mudda.MUDDA_NUMBERS] == [
+        name for name, _ in mudda.TABLE_76]
+    assert mudda.mudda_number(int(Graha.SUN)) == 1
+    assert mudda.mudda_number(int(Graha.VENUS)) == 9
+    assert mudda.mudda_number(int(Graha.KETU)) == 8
+
+
+def test_the_natal_moon_is_in_uttarashadha_with_the_sun_as_lord():
+    from hora.core.const import GRAHA_NAMES, Graha
+
+    got = mudda.natal_nakshatra_lord(_natal_moon())
+    assert got["nakshatra_name"] == "Uttara Ashadha"
+    assert got["lord"] == int(Graha.SUN)
+    assert str(GRAHA_NAMES[got["lord"]]) == "Sun"
+    assert got["yet_to_traverse"] == pytest.approx(0.79, abs=0.005)
+
+
+def test_the_first_dasa_lord_is_rahu_by_both_methods():
+    """1 + 21 = 22, 22 mod 9 = 4, which is Rahu; and Uttarashadha progressed
+    21 constellations is Swati, which is Rahu's.
+    """
+    from hora.core.const import Graha
+
+    got = mudda.first_dasa_lord(moon_longitude=_natal_moon(),
+                                completed_years=21)
+    assert got["natal_lord_number"] == 1
+    assert got["sum"] == 22
+    assert got["remainder"] == 4
+    assert got["by_arithmetic"] == int(Graha.RAHU)
+    assert got["progressed_nakshatra_name"] == "Swati"
+    assert got["by_progression"] == int(Graha.RAHU)
+    assert got["agree"] is True
+
+
+def test_the_shortcut_is_exact_not_approximate():
+    """27 is a multiple of 9, so progressing and the arithmetic are the same
+    operation. Checked over every constellation and forty years.
+    """
+    for index in range(27):
+        longitude = index * mudda.NAKSHATRA_SPAN + 5.0
+        for years in range(40):
+            got = mudda.first_dasa_lord(moon_longitude=longitude,
+                                        completed_years=years)
+            assert got["agree"] is True, (index, years)
+    assert "not an approximation" in mudda.THE_SHORTCUT_IS_EXACT_NOT_APPROXIMATE
+
+
+def test_a_remainder_of_zero_shows_venus():
+    from hora.core.const import Graha
+
+    # Venus is number 9, so nine completed years from a Venus-lorded
+    # constellation gives 9 + 9 = 18, a remainder of 0.
+    venus_star = 1 * mudda.NAKSHATRA_SPAN + 5.0          # Bharani, Venus's
+    got = mudda.first_dasa_lord(moon_longitude=venus_star, completed_years=9)
+    assert got["natal_lord_number"] == 9
+    assert got["remainder"] == 0
+    assert got["by_arithmetic"] == int(Graha.VENUS)
+    assert got["agree"] is True
+    assert "Remainder of 0 is equivalent to 9" in mudda.MUDDA_ORDER_RULE
+
+
+def test_rahus_balance_and_the_july_14_date():
+    """0.79 x 54 = 42.66 solar days, and the section's own date counts them as
+    calendar days.
+    """
+    import swisseph as swe
+
+    from hora.core.const import Graha
+
+    got = _mudda()
+    first = got["rows"][0]
+    assert first["graha"] == int(Graha.RAHU)
+    assert first["full_days"] == 54
+    assert first["is_balance"] is True
+    assert first["days"] == pytest.approx(42.66, abs=0.05)
+
+    year, month, day, _ = swe.revjul(float(first["to_jd"]) + 5.5 / 24.0)
+    assert (int(year), int(month), int(day)) == (1993, 7, 14)
+
+
+def test_jupiter_dasa_holds_the_marriage():
+    import swisseph as swe
+
+    from hora.core.const import Graha
+
+    got = _mudda()
+    jupiter = got["rows"][1]
+    assert jupiter["graha"] == int(Graha.JUPITER)
+    assert jupiter["days"] == 48.0
+    wedding = from_local(1993, 7, 24, 12, 0, 0.0, utc_offset_hours=5.5).jd_ut
+    assert float(jupiter["from_jd"]) < wedding < float(jupiter["to_jd"])
+    year, month, day, _ = swe.revjul(float(jupiter["to_jd"]) + 5.5 / 24.0)
+    assert (int(year), int(month), int(day)) == (1993, 8, 31)
+
+
+def test_the_dates_use_calendar_days_not_the_solar_days_defined():
+    """In true solar days Rahu's balance would end on 16 July. OI-175."""
+    from hora.core.ephemeris import get_ephemeris
+
+    eph = get_ephemeris(_SETTINGS)
+    start = _PRAVESH.jd_ut
+    balance = float(_mudda()["rows"][0]["days"])
+    at_start = eph.positions(start, [0])[0].longitude
+
+    low, high = start, start + 60.0
+    for _ in range(60):
+        middle = (low + high) / 2.0
+        moved = (eph.positions(middle, [0])[0].longitude - at_start) % 360.0
+        if moved < balance:
+            low = middle
+        else:
+            high = middle
+    in_solar_days = (low + high) / 2.0 - start
+    assert in_solar_days == pytest.approx(44.7, abs=0.2)
+    assert in_solar_days - balance > 1.9              # two days later
+    assert "In solar days it would be 16 July" in (
+        mudda.THE_DATES_USE_CALENDAR_DAYS_NOT_THE_SOLAR_DAYS_DEFINED)
+
+
+def test_the_two_dasas_use_two_different_years():
+    from hora.dasha.annual import patyayini
+
+    assert patyayini.PATYAYINI_YEAR_DAYS == 365.2425
+    assert mudda.MUDDA_YEAR_DAYS == 360
+    assert patyayini.PATYAYINI_YEAR_DAYS - mudda.MUDDA_YEAR_DAYS == (
+        pytest.approx(5.2425))
+    assert "all different" in mudda.THE_TWO_DASAS_USE_TWO_DIFFERENT_YEARS
+
+
+def test_the_nine_dasas_from_a_balance_do_not_fill_the_cycle():
+    """The opening dasa is only its balance, so the nine total 360 less the
+    part already spent, and the sequence has to wrap.
+    """
+    got = _mudda()
+    spent = 54 * (1.0 - got["balance_fraction"])
+    assert got["total_days"] == pytest.approx(360.0 - spent, abs=1e-9)
+    assert got["total_days"] == pytest.approx(348.69, abs=0.05)
+    assert len(got["rows"]) == 9
+    assert sum(row["full_days"] for row in got["rows"]) == 360
+
+
+def test_the_annual_chart_contributes_only_the_start_date():
+    """Seed and balance both come from the natal Moon, so a different annual
+    chart for the same nativity and year changes nothing but the start.
+    """
+    here = mudda.mudda_dasa(moon_longitude=_natal_moon(), completed_years=21,
+                            start_jd=_PRAVESH.jd_ut)
+    elsewhere = mudda.mudda_dasa(moon_longitude=_natal_moon(),
+                                 completed_years=21,
+                                 start_jd=_PRAVESH.jd_ut + 3.0)
+    assert here["order"] == elsewhere["order"]
+    assert here["balance_fraction"] == elsewhere["balance_fraction"]
+    assert [row["days"] for row in here["rows"]] == [
+        row["days"] for row in elsewhere["rows"]]
+    assert "supplies the start date alone" in (
+        mudda.THE_ANNUAL_CHART_CONTRIBUTES_ONLY_THE_START_DATE)
+
+
+def test_30_3s_natal_moon_is_cited_an_arcminute_high():
+    """29 Sg 27 in Chart 18, 29 Sg 28 in §30.3's text, 29 Sg 27.49 in ours —
+    which truncates and rounds to 27 alike, so this is not D-80's convention.
+    """
+    from hora.charts.book import chart, longitudes
+
+    ours = _natal_moon() % 30
+    diagram = longitudes(18)["Moon"] % 30
+    assert chart(18)["longitudes"]["Moon"] == "29 Sg 27"
+    arcminutes = (ours % 1) * 60
+    assert int(ours) == int(diagram) == 29
+    assert int(arcminutes) == round(arcminutes) == 27
+    assert "not the convention D-80 records" in (
+        mudda.THE_NATAL_MOON_IS_CITED_AN_ARCMINUTE_HIGH)
+
+    # And nothing turns on it: the balance is 0.79 under either figure.
+    ours_left = mudda.natal_nakshatra_lord(_natal_moon())["yet_to_traverse"]
+    theirs = 240.0 + 29.0 + 28.0 / 60.0
+    theirs_left = mudda.natal_nakshatra_lord(theirs)["yet_to_traverse"]
+    assert round(ours_left, 2) == round(theirs_left, 2) == 0.79
+
+
+def test_the_marriage_reading_repeats_the_setups_own_facts():
+    """"Jupiter is 7th lord and vivaha saham lord in rasi chart. He is in
+    lagna. In navamsa, he is lagna lord and occupies the 2nd with Venus."
+    """
+    from hora.charts.vargas import d9_navamsa
+    from hora.core.const import GRAHA_NAMES, RASI_LORD, Graha
+
+    chart = _annual()
+    assert int(chart.positions[int(Graha.JUPITER)].longitude // 30) == (
+        chart.lagna_rasi)
+    seventh = (chart.lagna_rasi + 6) % 12
+    assert str(GRAHA_NAMES[int(RASI_LORD[seventh])]) == "Jupiter"
+
+    nav_lagna = int(d9_navamsa(chart.lagna_longitude).sign)
+    assert str(GRAHA_NAMES[int(RASI_LORD[nav_lagna])]) == "Jupiter"
+    jupiter = int(d9_navamsa(chart.positions[int(Graha.JUPITER)].longitude).sign)
+    venus = int(d9_navamsa(chart.positions[int(Graha.VENUS)].longitude).sign)
+    assert jupiter == venus
+    assert (jupiter - nav_lagna) % 12 + 1 == 2

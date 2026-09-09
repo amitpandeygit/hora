@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1, Example 122 and §30.2 (36)
+### Chapter 30 — §30.1 to §30.3 (46)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1859,6 +1859,12 @@ exist to check the section's own figures, and one of them fails.
 | `WHY_MERCURY_GAVE_MARRIAGE` · `VARSHESWARA_READINGS` | §30.2's five reasons and the three readings of §28.6 as data |
 | `MERCURY_IS_VERY_STRONG_WHATEVER_OI_153_DECIDES` · `MERCURY_ASPECTS_THE_SAHAM_BY_TWO_AND_A_HALF_DEGREES` | Ours: reasons (2) and (4) reproduce, the first robustly across OI-153's unpriced grade |
 | `EXAMPLE_122_RUNS_28_6S_CASCADE_AND_DISAGREES_WITH_US` | Ours: §28.6 gives Mars where §30.2 says Mercury. OI-156 |
+| `MUDDA_LENGTH_RULE` · `MUDDA_ORDER_RULE` · `MUDDA_BALANCE_RULE` · `TABLE_76` · `TABLE_76_TITLE` | §30.3 and Table 76 verbatim |
+| `TABLE_76_IS_THREE_TIMES_VIMSOTTARI` | Ours: every entry is three times the Vimsottari years and the nine sum to 360 |
+| `THE_SHORTCUT_IS_EXACT_NOT_APPROXIMATE` | Ours: 27 is a multiple of 9, so the arithmetic and the progression are one operation — checked over 27 constellations and 40 years |
+| `THE_DATES_USE_CALENDAR_DAYS_NOT_THE_SOLAR_DAYS_DEFINED` · `THE_TWO_DASAS_USE_TWO_DIFFERENT_YEARS` | Ours: the section defines a solar day and works its date in calendar days. OI-175 |
+| `THE_ANNUAL_CHART_CONTRIBUTES_ONLY_THE_START_DATE` | Ours: seed and balance both come from the natal Moon, so the annual chart gives only the date |
+| `THE_NATAL_MOON_IS_CITED_AN_ARCMINUTE_HIGH` | Ours: §30.3 says 29 Sg 28 where Chart 18 prints 29 Sg 27, and this one is not D-80's convention |
 
 ---
 

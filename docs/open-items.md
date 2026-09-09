@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**8 waiting on Amit · 122 waiting on evidence · 2 parked**
+**8 waiting on Amit · 123 waiting on evidence · 2 parked**
 
 ---
 
@@ -2681,6 +2681,33 @@ revised the figure moves with it.
 
 **Closes when:** §30.4 works a Varsha Narayana dasa and its arithmetic shows
 which divisor it used.
+
+
+### OI-175 — §30.3 defines a solar day and then counts calendar days
+
+**Waiting on the book.** "If we take a solar year to be of 360 days, with each
+day corresponding to the time period in which Sun moves by **exactly 1°**..."
+That is a precise definition, and 360 such days are exactly one sidereal year.
+
+The section's own worked date does not use it. Rahu's balance of 42.66 days
+from 1 June 1993 lands on **14 July** counted as calendar days, which is what
+§30.3 prints, and on **16 July** counted as the solar days it just defined —
+the Sun covers 42.66° in 44.7 calendar days at that time of year.
+
+So the three figures in play are all different:
+
+| | days | against the real year |
+|---|---|---|
+| the varsha pravesh interval | 365.2564 | — |
+| §30.2's patyayini divisor | 365.2425 | 20 minutes short |
+| §30.3's 360, counted as calendar days | 360 | **5.26 days short** |
+| §30.3's 360, counted as defined | 365.2564 | exact |
+
+`mudda_dasa` returns day counts and leaves the conversion to the caller, so
+either reading can be applied to them. Nothing is converted here.
+
+**Closes when:** a worked mudda date needs the solar-day conversion to come
+out, or a later section states which is meant.
 
 
 ---
