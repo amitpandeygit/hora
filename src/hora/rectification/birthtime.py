@@ -525,3 +525,270 @@ THE_SCAN_STEP_IS_COARSER_THAN_THE_ARGUMENT = (
     "the same section says holds thousands of different people."
 )
 
+
+# --------------------------------------------------------------------------
+# §32.2 Robustness of Computations — §32.2.1 Divisional Charts
+# --------------------------------------------------------------------------
+
+SECTION_32_2_TITLE = "Robustness of Computations"
+SECTION_32_2_1_TITLE = "Divisional Charts"
+
+#: §32.2's opening, verbatim. The emphasis on "approximate" is the book's, and
+#: it governs every figure in the section.
+ROBUSTNESS_IS_APPROXIMATE = (
+    "When we try different birthtimes, all the computations change. If we "
+    "know how various computations are altered based on small changes in the "
+    "birthtime, we can approach the problem of birthtime rectification "
+    "intelligently. We will discuss the **approximate** impact of birthtime "
+    "change on various computations.")
+
+#: §32.2.1's paragraph on the grahas, verbatim.
+PLANETS_CHANGE_VERY_SLOWLY = (
+    "Positions of planets in rasi chart and divisional charts change very "
+    "slowly. For example, Sun stays in one rasi for 30 days. He changes rasi "
+    "in D-10 once in 30/10=3 days. He changes rasi in D-24 once in every "
+    "30/24=1.25 days. The speed of Mercury, Venus and Mars is comparable to "
+    "Sun's. Jupiter and Saturn are even slower. Moon is faster than all these "
+    "planets. He stays in one rasi for 2.5 days or 60 hours. He changes rasi "
+    "in D-10 once in 60/10=6 hours. He changes rasi in D-24 once in every "
+    "60/24=2.5 hours.")
+
+#: §32.2.1's worked border case, verbatim.
+THE_MOON_AT_A_DASAMSA_BORDER = (
+    "If the uncertainty in birthtime is of the order of 5 minutes or 10 "
+    "minutes, one may think that there is no problem with these planets as "
+    "they stay in the same rasi in all divisional charts for a lot longer "
+    "time than 5-10 minutes. However, if a planet is at a border and changes "
+    "rasi in a divisional chart during those 5 minutes, we have to take that "
+    "into consideration. Suppose Moon is is at 23Sc59. Suppose That places "
+    "him in the 8th dasamsa of Sc, i.e. Aq. Suppose lagna in D-10 is Cn. So "
+    "D-10 has lagna lord in 8th. This makes the D-10 chart weak. On the other "
+    "hand, it Moon is at 24Sc00 or above, he will be in the 9th dasamsa of "
+    "Sc, i.e. Pi. This puts lagna lord in 9th in D-10 and the chart is "
+    "strengthened. Because Moon moves by one quarter of a nakshatra (or 200 "
+    "arc-min) in 6 hours (or 360 min), he takes 360/200=1.8 min to move by 1 "
+    "arc-min. For Moon to go from 23Sc59 to 24Sc00, it only takes about 2 "
+    "minutes. If we cannot rule out an error of 2 minutes, we should consider "
+    "Moon in both Aq and Pi and see which one explains the native's career "
+    "better.")
+
+#: §32.2.1's rule for the grahas, verbatim.
+CONSIDER_BOTH_SIDES_OF_A_BORDER = (
+    "Thus, we should pay attention if any planet is at a rasi border in the "
+    "divisional chart of interest. If so, we must consider both the positions "
+    "and see which one makes better sense based on known past.")
+
+#: Not supplied. Footnote 90 hangs off "it only takes about 2 minutes" and its
+#: text has not been printed here.
+FOOTNOTE_90_NOT_SUPPLIED = (
+    "Section 32.2.1 marks footnote 90 on the words \"it only takes about 2 "
+    "minutes\". The footnote itself is not on the page supplied.")
+
+#: §32.2.1's paragraphs on the lagna, verbatim.
+LAGNA_IS_THE_MOST_IMPORTANT_CONSIDERATION = (
+    "Lagna changes rasi in divisional charts much faster than planets. So it "
+    "is the most important consideration in birthtime rectification.")
+
+LAGNA_MOVES_ONE_DEGREE_IN_FOUR_MINUTES = (
+    "Lagna moves by one rasi (30 degrees) in 2 hours or 120 min. To move by "
+    "1 degree, lagna takes about 4 min.")
+
+#: The boxed Lesson, verbatim.
+LESSON = (
+    "Lagna moves by 1 degree in 4 min. Lagna moves by 10' in 2/3 min (or 40 "
+    "seconds). Lagna moves by 1' in 4 sec. Lagna moves by 10\" in 2/3 sec.")
+
+#: The Lesson as data: how much lagna moves, and how long it takes.
+LESSON_ROWS: tuple[dict[str, object], ...] = (
+    {"arc_arcseconds": 3600.0, "seconds": 240.0, "as_printed": "1 degree in 4 min"},
+    {"arc_arcseconds": 600.0, "seconds": 40.0, "as_printed": "10' in 2/3 min"},
+    {"arc_arcseconds": 60.0, "seconds": 4.0, "as_printed": "1' in 4 sec"},
+    {"arc_arcseconds": 10.0, "seconds": 2.0 / 3.0, "as_printed": "10\" in 2/3 sec"},
+)
+
+#: §32.2.1's closing line on the lagna, verbatim.
+LAGNA_CHANGES_RASI_IN_D10_IN_TWELVE_MINUTES = (
+    "We can see that lagna changes rasi in D-10 in 12 min. It changes rasi in "
+    "D-24 in 5 min.")
+
+#: The section's own figures, as data, so each can be checked on its own.
+ROBUSTNESS_FIGURES: tuple[dict[str, object], ...] = (
+    {"body": "Sun", "rasi_interval_minutes": 30 * 24 * 60.0, "varga": 1},
+    {"body": "Sun", "rasi_interval_minutes": 3 * 24 * 60.0, "varga": 10},
+    {"body": "Sun", "rasi_interval_minutes": 1.25 * 24 * 60.0, "varga": 24},
+    {"body": "Moon", "rasi_interval_minutes": 60 * 60.0, "varga": 1},
+    {"body": "Moon", "rasi_interval_minutes": 6 * 60.0, "varga": 10},
+    {"body": "Moon", "rasi_interval_minutes": 2.5 * 60.0, "varga": 24},
+    {"body": "lagna", "rasi_interval_minutes": 120.0, "varga": 1},
+    {"body": "lagna", "rasi_interval_minutes": 12.0, "varga": 10},
+    {"body": "lagna", "rasi_interval_minutes": 5.0, "varga": 24},
+)
+
+#: The one varga whose amsas are not equal, and so the one the section's
+#: divide-by-N rule does not describe. §9's trimsamsa runs 5, 5, 8, 7, 5
+#: degrees in an odd rasi and 5, 7, 8, 5, 5 in an even one.
+UNEQUAL_VARGAS: tuple[int, ...] = (30,)
+
+
+def varga_rasi_change_interval(rasi_interval: float, varga: int) -> dict:
+    """§32.2.1's rule: a body changes rasi in D-N once in (its rasi time)/N.
+
+    "Sun stays in one rasi for 30 days. He changes rasi in D-10 once in
+    30/10=3 days."
+
+    The rule holds because a varga cuts the 30-degree rasi into N equal parts
+    — for every varga the book teaches **except D-30**, whose five parts are
+    unequal. For D-30 the interval is returned as a **range**, and
+    `equal_parts` says which case you are in.
+
+    :param rasi_interval: how long the body takes to cross one whole rasi, in
+        any unit; the answer comes back in the same unit.
+    :param varga: the divisional chart's number.
+    :raises BirthtimeError: on a non-positive interval or varga.
+    """
+    span = validate.finite("rasi_interval", float(rasi_interval))
+    if span <= 0:
+        raise BirthtimeError(
+            f"rasi_interval must be positive; got {rasi_interval}")
+    number = validate.in_range("varga", int(varga), 1, 300)
+
+    equal = number not in UNEQUAL_VARGAS
+    if equal:
+        interval = span / number
+        return {"varga": number, "equal_parts": True,
+                "interval": interval, "shortest": interval,
+                "longest": interval, "rule": PLANETS_CHANGE_VERY_SLOWLY}
+    # D-30: 5, 5, 8, 7, 5 degrees out of 30.
+    parts = (5.0, 5.0, 8.0, 7.0, 5.0)
+    return {"varga": number, "equal_parts": False, "interval": None,
+            "shortest": span * min(parts) / 30.0,
+            "longest": span * max(parts) / 30.0,
+            "rule": PLANETS_CHANGE_VERY_SLOWLY}
+
+
+def signs_across_the_uncertainty(longitude: float,
+                                 varga: Callable[[float], object], *,
+                                 arcminutes: float,
+                                 samples: int = 2001) -> tuple[int, ...]:
+    """Every varga sign a body could be in, given an uncertainty either side.
+
+    §32.2.1: "we should pay attention if any planet is at a rasi border in the
+    divisional chart of interest. If so, we must consider both the positions."
+    This answers *which* positions. One sign back means the body is not at a
+    border; two or more mean it is.
+
+    The window is sampled rather than solved, at `samples` points, so a window
+    far wider than the varga's own amsa needs more samples than the default.
+
+    :param longitude: the body's computed longitude.
+    :param varga: a varga function returning an object with a ``sign``.
+    :param arcminutes: the uncertainty either side of that longitude.
+    :raises BirthtimeError: if the uncertainty is negative or samples < 2.
+    """
+    centre = validate.longitude("longitude", float(longitude))
+    slack = validate.finite("arcminutes", float(arcminutes))
+    if slack < 0:
+        raise BirthtimeError(f"arcminutes must not be negative; got {slack}")
+    if int(samples) < 2:
+        raise BirthtimeError(f"samples must be at least 2; got {samples}")
+
+    width = slack / 60.0
+    low = centre - width
+    step = (2 * width) / (int(samples) - 1) if width else 0.0
+    seen: list[int] = []
+    for index in range(int(samples) if width else 1):
+        point = (low + index * step) % 360.0
+        sign = int(varga(point).sign)  # type: ignore[attr-defined]
+        if sign not in seen:
+            seen.append(sign)
+    return tuple(seen)
+
+#: **Finding.** The section's rule — a body changes rasi in D-N once in its
+#: rasi time divided by N — is exact for **twenty-two of the twenty-three**
+#: vargas the book teaches, because every one of them cuts the rasi into N
+#: equal parts. **D-30 is the exception.** §9's trimsamsa runs 5, 5, 8, 7, 5
+#: degrees in an odd rasi and 5, 7, 8, 5, 5 in an even one, so the lagna's
+#: D-30 sign holds for **20 to 32 minutes**, not the 4 the rule gives — five
+#: to eight times longer. The error is in the safe direction: D-30 is steadier
+#: under a birthtime error than the rule claims, not shakier.
+#:
+#: `varga_rasi_change_interval` returns a range and `equal_parts: False` for
+#: D-30 rather than a figure the rule cannot support.
+THE_DIVIDE_BY_N_RULE_HAS_ONE_EXCEPTION = (
+    "The rule is exact for every varga that cuts the rasi into equal parts, "
+    "which is all of them but D-30. Trimsamsa's parts are 5, 5, 8, 7 and 5 "
+    "degrees, so the lagna's D-30 sign lasts 20 to 32 minutes and not 4."
+)
+
+#: **Finding, measured.** Every figure the section prints is a **mean**, and
+#: the section says so in its own first paragraph by bolding "approximate".
+#: Measured against the ephemeris over one year from 2000:
+#:
+#: * The **Sun**'s rasi takes 29.4 to 31.4 days, mean **30.4**. The section's
+#:   30 days is good to two per cent.
+#: * The **Moon**'s rasi takes 47.5 to 61.2 hours, mean **54.7**. The
+#:   section's "2.5 days or 60 hours" is not the mean but close to the
+#:   **maximum**, and it is about ten per cent high.
+#: * The **lagna**'s rasi is the two hours of §32.1, whose mean is 119.7
+#:   minutes and whose spread runs 67 to 155 minutes at 42 N 30.
+THE_SECTIONS_FIGURES_ARE_MEANS_AND_IT_SAYS_SO = (
+    "The Sun's rasi runs 29.4 to 31.4 days against the section's 30, the "
+    "Moon's runs 47.5 to 61.2 hours against its 60, and the lagna's is "
+    "section 32.1's two hours. The section bolds \"approximate\" in its own "
+    "first sentence."
+)
+
+#: **Finding, and the two numbers disagree by ten per cent.** The Moon
+#: paragraph carries **two** speeds and derives its answer from the better
+#: one. "He stays in one rasi for 2.5 days or 60 hours" makes the Moon cover
+#: 1800 arcminutes in 3600 minutes — **2.0 minutes per arcminute**, and 200
+#: arcminutes in 6 hours 40. Two sentences later: "Moon moves by one quarter
+#: of a nakshatra (or 200 arc-min) in 6 hours (or 360 min), he takes
+#: 360/200=1.8 min to move by 1 arc-min" — **1.8 minutes per arcminute**, and
+#: 200 arcminutes in 6 hours flat.
+#:
+#: The measured mean is **1.82 minutes per arcminute**. So the figure the
+#: section actually computes with is right to one per cent and the 60-hour
+#: rasi it stated first is the loose one. Nothing downstream moves: the
+#: conclusion is "about 2 minutes" and the truth is 1.82.
+THE_MOON_PARAGRAPH_CARRIES_TWO_SPEEDS = (
+    "Sixty hours a rasi gives 2.0 minutes per arcminute; the quarter-"
+    "nakshatra sentence gives 1.8; the measured mean is 1.82. The section "
+    "derives its answer from the accurate one."
+)
+
+#: **Finding.** The worked border reproduces exactly. 23 Sc 59 falls in the
+#: **8th** dasamsa of Scorpio, which is Aquarius, and 24 Sc 00 falls in the
+#: **9th**, which is Pisces — both as printed. Scorpio's dasamsas are three
+#: degrees each and, Scorpio being an even rasi, they are counted from the 9th
+#: from it; the 8th and 9th land on Aq and Pi. The lagna-lord argument follows:
+#: with D-10 lagna in Cancer the lord is the Moon, so one arcminute of the
+#: Moon moves the lagna lord from the 8th house to the 9th.
+THE_DASAMSA_BORDER_REPRODUCES = (
+    "23 Sc 59 gives the 8th dasamsa, Aquarius, and 24 Sc 00 gives the 9th, "
+    "Pisces. With D-10 lagna in Cancer the lord is the Moon himself, so one "
+    "arcminute moves him from the 8th house to the 9th."
+)
+
+#: **Finding, and it is the chapter's own thesis restated as a number.** The
+#: section says the lagna is "the most important consideration in birthtime
+#: rectification", and its own figures say why: in the two minutes §32.1 calls
+#: a different native, the **lagna moves 30 arcminutes and the Moon moves
+#: one**. Thirty to one is the whole reason a rectification watches the lagna
+#: and not the grahas — and the Moon is the fastest graha there is.
+THE_LAGNA_OUTRUNS_THE_FASTEST_GRAHA_THIRTY_TO_ONE = (
+    "In two minutes the lagna moves 30 arcminutes and the Moon moves 1.1. "
+    "The section calls the lagna the most important consideration and its own "
+    "figures give the ratio."
+)
+
+#: **Finding.** The boxed Lesson is four statements of one rate and they agree
+#: to the last digit: 3600 arcseconds in 240 seconds, 600 in 40, 60 in 4, 10
+#: in 2/3 — **fifteen arcseconds of lagna per second of clock** every time. It
+#: is the only boxed lesson in the book that is pure arithmetic, and the only
+#: place the book gives a rate to the arcsecond.
+THE_LESSON_IS_ONE_RATE_STATED_FOUR_WAYS = (
+    "All four rows of the Lesson are 15 arcseconds of lagna per second of "
+    "clock. It is the only boxed lesson in the book that is arithmetic alone."
+)
+

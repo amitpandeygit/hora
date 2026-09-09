@@ -1972,7 +1972,7 @@ has not been given yet.
 | `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
 
-### Chapter 32 — §32.1 and footnote 89 (26)
+### Chapter 32 — §32.1, §32.2.1 and footnotes 89 and 90 (44)
 
 `rectification/birthtime.py`. The section is an argument, not a technique.
 Three things in it **are** computable and all three are consumed:
@@ -2003,6 +2003,15 @@ reproduced.
 | `THE_ACID_TEST_IS_STATED_ON_METHODS_THE_BOOK_NEVER_TEACHES` | Ours: Pranapada lagna and Kunda are failed and neither is taught, so the verdict cannot be checked |
 | `THE_ONLY_ACCEPTED_METHOD_IS_THE_ONE_THAT_CANNOT_BE_AUTOMATED` | Ours: four of the five demands are judgements about a native and the fifth is the dated past |
 | `THE_SCAN_STEP_IS_COARSER_THAN_THE_ARGUMENT` | Ours: two minutes makes a different native and the section's own grid is one minute |
+| `SECTION_32_2_TITLE` · `SECTION_32_2_1_TITLE` · `ROBUSTNESS_IS_APPROXIMATE` · `PLANETS_CHANGE_VERY_SLOWLY` · `THE_MOON_AT_A_DASAMSA_BORDER` · `CONSIDER_BOTH_SIDES_OF_A_BORDER` · `LAGNA_IS_THE_MOST_IMPORTANT_CONSIDERATION` · `LAGNA_MOVES_ONE_DEGREE_IN_FOUR_MINUTES` · `LESSON` · `LAGNA_CHANGES_RASI_IN_D10_IN_TWELVE_MINUTES` | §32.2 and §32.2.1 verbatim, including the boxed Lesson |
+| `ROBUSTNESS_FIGURES` · `LESSON_ROWS` · `UNEQUAL_VARGAS` | The section's nine printed figures, the Lesson's four rows and the one varga its rule does not describe |
+| `FOOTNOTE_90_NOT_SUPPLIED` | Footnote 90 is marked on "it only takes about 2 minutes" and its text has not come through |
+| `THE_DIVIDE_BY_N_RULE_HAS_ONE_EXCEPTION` | Ours: the rule is exact for 22 of 23 vargas and D-30's parts are 5, 5, 8, 7, 5 |
+| `THE_SECTIONS_FIGURES_ARE_MEANS_AND_IT_SAYS_SO` | Ours: the Sun's 30 days is good to 2%, the Moon's 60 hours is 10% high, and the section bolds "approximate" |
+| `THE_MOON_PARAGRAPH_CARRIES_TWO_SPEEDS` | Ours: 2.0 minutes per arcminute from one sentence, 1.8 from the next, 1.82 measured |
+| `THE_DASAMSA_BORDER_REPRODUCES` | Ours: 23 Sc 59 gives Aquarius and 24 Sc 00 gives Pisces, and the D-10 lagna lord is the Moon himself |
+| `THE_LAGNA_OUTRUNS_THE_FASTEST_GRAHA_THIRTY_TO_ONE` | Ours: two minutes moves the lagna 30 arcminutes and the Moon 1.1 |
+| `THE_LESSON_IS_ONE_RATE_STATED_FOUR_WAYS` | Ours: all four rows are 15 arcseconds of lagna per second of clock |
 
 ---
 
