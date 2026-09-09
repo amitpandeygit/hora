@@ -1916,6 +1916,22 @@ exist to check the section's own figures, and one of them fails.
 |---|---|
 | `ADVANCEMENT_IS_READ_IN_THE_RASI_CHART` | Ours: rules 1 to 5 read the varga and rule 6 reads the rasi chart, settled by Exercise 49. OI-124 closed |
 
+### Chapter 31 — §31.1 and §31.2 (12)
+
+`dasha/sudarsana.py`. The chakra **is** built: `sudarsana_chakra` returns the
+three bhava chakras with their occupants and `the_same_house_everywhere` reads
+one house from all three at once, which is §31.2's own method. The dasa itself
+has not been given yet.
+
+| constant | why it is not consumed |
+|---|---|
+| `INTRODUCTION` · `THE_THREE_REFERENCES` · `THE_THREE_CIRCLES` · `THE_TENTH_FROM_ALL_THREE` · `NAMED_ALONGSIDE` · `SUDARSANA_REFERENCES` | §31.1 and §31.2 verbatim, and the three references as data |
+| `THE_CHAPTER_EXPLAINS_ITS_OWN_PLACEMENT` | Ours: the second place in the book to say where it put something, and it says "natal" twice |
+| `THE_THREE_PEERS_ARE_ONE_FROM_EACH_FAMILY` | Ours: Vimsottari, Narayana and Kalachakra are a nakshatra dasa, a rasi dasa and neither |
+| `THE_TENTH_HOUSE_READING_REPRODUCES` · `EMPTY_MEANS_NO_GRAHA_AND_A_NODE_COUNTS` | Ours: all three tenth houses come back, and "empty" excludes GL and HL while a node counts as an occupant |
+| `THE_ASCENDANT_NEEDS_FORTY_EIGHT_SECONDS` | Ours: the only printed ascendant in the book that misses, and it misses because it moves 19.7 arcminutes a clock minute |
+| `THE_SECTION_LEVELS_THE_THREE_REFERENCES` | Ours: the first time the book asks for three references to be weighed together rather than ranked |
+
 ---
 
 ## How to use this register

@@ -2802,6 +2802,44 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "second-cycle dates do not reproduce -- see OI-178."
         ),
     },
+    72: {
+        "title": "SC Example",
+        "birth": "August 7, 1963, 9:14 pm (IST), 83 E 58, 21 N 27",
+        "birth_data": {
+            "year": 1963, "month": 8, "day": 7, "hour": 21, "minute": 14,
+            "second": 0.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 21 + 27 / 60, "longitude": 83 + 58 / 60},
+        "longitudes": {
+            "Asc": "14 Pi 01", "Sun": "21 Cn 04", "Moon": "19 Aq 58",
+            "Mars": "13 Vi 40", "Merc": "13 Le 23", "Jup": "26 Pi 07",
+            "Ven": "14 Cn 56", "Sat": "26 Cp 49", "Rahu": "25 Ge 45",
+            "Ketu": "25 Sg 45", "HL": "13 Sc 16", "GL": "2 Sc 31",
+        },
+        "chara_karakas": {
+            "Sat": "AK", "Jup": "AmK", "Sun": "BK", "Moon": "MK",
+            "Mars": "PK", "Ven": "PiK", "Merc": "GK", "Rahu": "DK",
+        },
+        "retrograde": ("Sat",),
+        "drawn": {
+            "Jup": "Pi", "Asc": "Pi", "Rahu": "Ge", "Moon": "Aq",
+            "Ven": "Cn", "Sun": "Cn", "Sat": "Cp", "Merc": "Le",
+            "AL": "Sg", "Ketu": "Sg", "GL": "Sc", "HL": "Sc", "Mars": "Vi",
+        },
+        "first_seen": "chapter 31, section 31.1",
+        "note": (
+            "The chapter's own worked nativity, the only chart in Part 4 that "
+            "is a nativity rather than an annual chart. Nine of the ten "
+            "printed longitudes reproduce within an arcminute from the "
+            "printed 9:14 pm, and the **ascendant** does not: it comes out 14 "
+            "Pi 00.98 at 9:14:**48**, and 15.8 arcminutes low at 9:14:00. The "
+            "ascendant moves 19.7 arcminutes a clock minute at this latitude "
+            "in Pisces, so a birth time printed to the minute leaves the "
+            "ascendant that far out while every graha stays inside an "
+            "arcminute. Held at the printed minute; see "
+            "dasha.sudarsana.THE_ASCENDANT_NEEDS_FORTY_EIGHT_SECONDS."
+        ),
+    },
 }
 
 

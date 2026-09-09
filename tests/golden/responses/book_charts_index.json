@@ -490,6 +490,13 @@
         "number": 71,
         "recomputable": true,
         "title": "Bought a car \u2014 the 1995-96 annual chart of Exercise 48's native, drawn in D-16"
+      },
+      {
+        "birth": "August 7, 1963, 9:14 pm (IST), 83 E 58, 21 N 27",
+        "first_seen": "chapter 31, section 31.1",
+        "number": 72,
+        "recomputable": true,
+        "title": "SC Example"
       }
     ],
     "not_supplied": [
@@ -558,7 +565,8 @@
       68,
       69,
       70,
-      71
+      71,
+      72
     ]
   },
   "status": 200
