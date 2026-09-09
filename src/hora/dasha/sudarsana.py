@@ -925,3 +925,82 @@ THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED = (
     "Both worked SC dasas after the preference for the rasi chart are in "
     "divisional charts, a D-24 and a navamsa."
 )
+
+
+# --------------------------------------------------------------------------
+# Chapter 31's conclusion
+# --------------------------------------------------------------------------
+
+#: The chapter's conclusion, verbatim.
+CONCLUSION = (
+    "Parasara called Sudarsana Chakra dasa a very important dasa. It, "
+    "however, needs to be understood better.\n\n"
+    "Sudarsana Chakra dasa is interpreted based on the planetary positions at "
+    "the commencement of a dasa or an antardasa or a pratyantardasa. Those "
+    "planetary positions can be found from Tajaka annual or monthly or "
+    "sixty-hour charts. In addition, muntha defined in Tajaka texts is nothing "
+    "but Sudarsana Chakra dasa rasi reckoned from lagna. So there may be some "
+    "missing links between Sudarsana Chakra dasa and Tajaka analysis.\n\n"
+    "Sudarsana chakra dasa is good at showing favorable and unfavorable "
+    "periods in a general sense.")
+
+#: **Finding, and it is rare.** The conclusion says the dasa "needs to be
+#: understood better" and that "there **may be** some missing links between
+#: Sudarsana Chakra dasa and Tajaka analysis". The book is stating that its own
+#: material here is incomplete, about a dasa it has just attributed to
+#: Parasara and called very important. Nowhere else does a chapter close by
+#: saying the subject is not yet understood.
+THE_CHAPTER_CLOSES_BY_CALLING_ITSELF_INCOMPLETE = (
+    "The conclusion says the dasa needs to be understood better and that "
+    "there may be missing links to Tajaka analysis. It is the only chapter "
+    "that ends by saying its own subject is unfinished."
+)
+
+#: **Finding.** The chapter states each of its two structural claims **twice**,
+#: and turns both of them round the second time. §31.3 said the Tajaka charts
+#: "are nothing but the entry charts of dasas, antardasas and
+#: pratyantardasas" — the chart types explained by the dasa. The conclusion
+#: runs the other way: the dasa is interpreted from positions at each
+#: commencement, and "those planetary positions can be found from Tajaka
+#: annual or monthly or sixty-hour charts" — the dasa served by the chart
+#: types. Same mapping, opposite direction of dependence.
+THE_MAPPING_IS_STATED_TWICE_AND_REVERSED = (
+    "Section 31.3 explains the Tajaka charts as entry charts of this dasa; "
+    "the conclusion explains this dasa as read from those charts. The "
+    "mapping is the same and the dependence is stated both ways round."
+)
+
+#: **Finding.** The muntha identity is stated **twice** in one chapter — §31.3
+#: sourced it to the book's own §28.1, and the conclusion sources it to
+#: "**Tajaka texts**". It is the same equation both times, and the second
+#: statement makes it a claim about the classical literature and not just
+#: about this book's definitions. See `THE_MUNTHA_IS_THE_SC_DASA_SIGN_FROM_LAGNA`.
+THE_MUNTHA_IDENTITY_IS_STATED_TWICE = (
+    "Section 31.3 and the conclusion both say muntha is the SC dasa rasi from "
+    "lagna. The conclusion attributes the muntha to Tajaka texts rather than "
+    "to the book's own section 28.1."
+)
+
+#: **Finding, and the two conclusions face opposite ways.** Chapter 30 closed
+#: by claiming precision — "we can find the **exact month or week** of the
+#: event using these dasas". Chapter 31 closes by disclaiming it — good at
+#: showing favourable and unfavourable periods "**in a general sense**". Two
+#: consecutive chapters, both on periods within a Tajaka year, making opposite
+#: claims about how finely they resolve. Both worked examples here bear the
+#: weaker claim out: Example 127 reads a year's tenor and Example 128 reads a
+#: year's tenor, and neither dates its event.
+THE_TWO_CONCLUSIONS_CLAIM_OPPOSITE_PRECISION = (
+    "Chapter 30's conclusion offers the exact month or week and chapter 31's "
+    "offers a general sense of favourable and unfavourable periods. Neither "
+    "of chapter 31's examples dates an event."
+)
+
+#: What has been read, and what it left behind.
+CHAPTER_31_IS_COMPLETE = (
+    "§31.1 to §31.4 and the conclusion, Charts 72 to 74, Figure 4 and "
+    "Examples 126 to 128, checked against the printed pages. The chakra and "
+    "all three dasa levels are built and every worked figure reproduces, the "
+    "printed ascendants of Charts 72 and 73 needing seconds their headers do "
+    "not print. Closed here: OI-181. Opened here: OI-180 and D-84."
+)
+

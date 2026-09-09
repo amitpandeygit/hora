@@ -1916,7 +1916,7 @@ exist to check the section's own figures, and one of them fails.
 |---|---|
 | `ADVANCEMENT_IS_READ_IN_THE_RASI_CHART` | Ours: rules 1 to 5 read the varga and rule 6 reads the rasi chart, settled by Exercise 49. OI-124 closed |
 
-### Chapter 31 — §31.1 to §31.4 and Examples 126, 127 and 128 (57)
+### Chapter 31 — §31.1 to §31.4, Examples 126 to 128 and the conclusion (63)
 
 `dasha/sudarsana.py`. The chakra **is** built: `sudarsana_chakra` returns the
 three bhava chakras with their occupants and `the_same_house_everywhere` reads
@@ -1956,6 +1956,12 @@ has not been given yet.
 | `THE_THREE_UNNAMED_GRAHAS_ARE_NOT_A_RANDOM_THREE` | Ours: the Moon and Ketu agree with the verdict, Jupiter in the 8th is the one placement §31.4 calls favourable |
 | `KETU_IS_UNNAMED_WHEN_HIS_PLACEMENT_IS_BAD` | Ours: Examples 127 and 128 both omit Ketu in a spoiled house, and Example 126 names him in the 11th |
 | `THE_TWO_BENEFIC_RULES_COLLIDE_AND_THE_EXAMPLE_PICKS_THE_FIRST` | Ours: §31.4's second rule makes Venus in the 3rd good and the example calls it a failure. D-84 |
+| `CONCLUSION` | The chapter's conclusion verbatim |
+| `THE_CHAPTER_CLOSES_BY_CALLING_ITSELF_INCOMPLETE` | Ours: the only chapter that ends by saying its own subject needs to be understood better |
+| `THE_MAPPING_IS_STATED_TWICE_AND_REVERSED` | Ours: §31.3 makes the Tajaka charts entry charts of the dasa and the conclusion makes the dasa a reading of those charts |
+| `THE_MUNTHA_IDENTITY_IS_STATED_TWICE` | Ours: §31.3 sources the muntha to §28.1 and the conclusion sources it to Tajaka texts |
+| `THE_TWO_CONCLUSIONS_CLAIM_OPPOSITE_PRECISION` | Ours: chapter 30 offers the exact month or week and chapter 31 offers a general sense |
+| `CHAPTER_31_IS_COMPLETE` | Ours: what the chapter supplied, what reproduced, and what it opened and closed |
 | `EXAMPLE_128` · `EXAMPLE_128_ANNUAL` · `EXAMPLE_128_PLACEMENTS` | Example 128 verbatim, the 1998-99 annual chart it reads and its nine placements as data |
 | `CHART_74_IS_CHART_53_AGAIN` | Ours: Chart 74 reprints Chart 53 with its navamsa, and the marriage is Example 104's |
 | `BOTH_BLOCKS_REPRODUCE_AND_THE_ASCENDANT_NEEDS_SECONDS` | Ours: the annual ascendant reaches its printed value at 07:15:48 against our 07:16:01 return |

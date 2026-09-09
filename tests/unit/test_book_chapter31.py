@@ -1132,3 +1132,97 @@ def test_both_worked_examples_are_in_vargas():
     assert "stated once and not exercised" not in sudarsana.EXAMPLE_128
     assert "a D-24 and a navamsa" in (
         sudarsana.THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED)
+
+
+# --------------------------------------------------------------------------
+# The conclusion
+# --------------------------------------------------------------------------
+
+
+def test_the_conclusion_is_transcribed():
+    assert "Parasara called Sudarsana Chakra dasa a very important dasa" in (
+        sudarsana.CONCLUSION)
+    assert "It, however, needs to be understood better" in sudarsana.CONCLUSION
+    assert "there may be some missing links" in sudarsana.CONCLUSION
+    assert "in a general sense" in sudarsana.CONCLUSION
+    assert len(sudarsana.CONCLUSION.split("\n\n")) == 3
+
+
+def test_the_chapter_closes_by_calling_itself_incomplete():
+    """FINDING: a chapter that ends by saying its subject is unfinished."""
+    assert "needs to be understood better" in sudarsana.CONCLUSION
+    assert "may be some missing links" in sudarsana.CONCLUSION
+    # And it is Parasara's own dasa, named as such in the same sentence.
+    assert "Parasara" in sudarsana.CONCLUSION
+    assert "Parasara" in sudarsana.INTRODUCTION
+    assert "its own subject is unfinished" in (
+        sudarsana.THE_CHAPTER_CLOSES_BY_CALLING_ITSELF_INCOMPLETE)
+
+
+def test_the_mapping_is_stated_twice_and_reversed():
+    """FINDING: same identity, opposite direction of dependence."""
+    assert "are nothing but the entry charts of dasas, antardasas and" in (
+        sudarsana.THE_TAJAKA_CHARTS_ARE_ENTRY_CHARTS)
+    assert ("Those planetary positions can be found from Tajaka annual or "
+            "monthly or sixty-hour charts") in sudarsana.CONCLUSION
+    for level in ("dasa", "antardasa", "pratyantardasa"):
+        assert level in sudarsana.CONCLUSION
+    for kind in ("annual", "monthly", "sixty-hour"):
+        assert kind in sudarsana.CONCLUSION
+        assert kind in sudarsana.THE_TAJAKA_CHARTS_ARE_ENTRY_CHARTS
+    assert "stated both ways round" in (
+        sudarsana.THE_MAPPING_IS_STATED_TWICE_AND_REVERSED)
+
+
+def test_the_muntha_identity_is_stated_twice():
+    assert ("Muntha in Tajaka annual charts is nothing but the dasa sign as "
+            "per Sudarsana Chakra dasa, but always reckoned from lagna") in (
+        sudarsana.THE_TAJAKA_CHARTS_ARE_ENTRY_CHARTS)
+    assert ("muntha defined in Tajaka texts is nothing but Sudarsana Chakra "
+            "dasa rasi reckoned from lagna") in sudarsana.CONCLUSION
+    # Section 31.3 sources the muntha to this book; the conclusion sources it
+    # to the classical Tajaka literature.
+    assert "Tajaka texts" in sudarsana.CONCLUSION
+    assert "Tajaka texts" not in sudarsana.THE_TAJAKA_CHARTS_ARE_ENTRY_CHARTS
+    assert "Tajaka texts rather than" in (
+        sudarsana.THE_MUNTHA_IDENTITY_IS_STATED_TWICE)
+
+
+def test_the_identity_holds_for_every_lagna_and_every_year():
+    """The equation both statements make, run out in full."""
+    from hora.tajaka.muntha import muntha_rasi
+
+    for lagna in range(12):
+        for year in range(1, 121):
+            signs = sudarsana.dasa_signs(lagna_rasi=lagna, moon_rasi=lagna,
+                                         sun_rasi=lagna, year=year)
+            assert signs["signs"]["lagna"] == muntha_rasi(lagna, year)["rasi"]
+
+
+def test_the_two_conclusions_claim_opposite_precision():
+    """FINDING: chapter 30 offers the week; chapter 31 offers the tenor."""
+    from hora.dasha.annual.intro import CHAPTER_CONCLUSION
+
+    assert "exact month or week of the event" in CHAPTER_CONCLUSION
+    assert "in a general sense" in sudarsana.CONCLUSION
+    assert "exact" not in sudarsana.CONCLUSION
+
+    # Neither of chapter 31's examples dates its event to finer than a year.
+    assert "in January 1999" in sudarsana.EXAMPLE_128
+    assert "During that year" in sudarsana.EXAMPLE_127
+    for text in (sudarsana.EXAMPLE_126, sudarsana.EXAMPLE_127,
+                 sudarsana.EXAMPLE_128):
+        assert "antardasa" not in text.lower()
+    assert "Neither of chapter 31's examples dates an event" in (
+        sudarsana.THE_TWO_CONCLUSIONS_CLAIM_OPPOSITE_PRECISION)
+
+
+def test_chapter_31_is_complete():
+    assert "§31.1 to §31.4 and the conclusion" in (
+        sudarsana.CHAPTER_31_IS_COMPLETE)
+    assert "Closed here: OI-181" in sudarsana.CHAPTER_31_IS_COMPLETE
+    assert "Opened here: OI-180 and D-84" in sudarsana.CHAPTER_31_IS_COMPLETE
+    for number in (72, 73, 74):
+        from hora.charts.book import chart
+
+        assert chart(number)["first_seen"].startswith("chapter 31")
