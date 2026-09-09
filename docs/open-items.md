@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**7 waiting on Amit · 121 waiting on evidence · 2 parked**
+**7 waiting on Amit · 122 waiting on evidence · 2 parked**
 
 ---
 
@@ -2646,6 +2646,29 @@ sets `readings_agree`. On the book's own example they differ.
 
 **Closes when:** a second worked durupha places the planets, or a later section
 restates the rule.
+
+
+### OI-174 — §30.1 gives Narayana dasa a paramayush of 120; it is 144
+
+**Waiting on the book.** "In Vimsottari dasa and Narayana dasa, paramayush of
+120 years is compressed to one year."
+
+Vimsottari's paramayush **is** 120 years exactly. Narayana dasa's is **144**,
+and it follows from chapter 18's own rule: a rasi's first-cycle length runs 1
+to 12 years and its second cycle is 12 minus that, so first and second together
+are always 12, and twelve rasis give 144 in every chart. Nor is the first cycle
+alone 120 — that sum varies with the chart, anywhere from 12 to 144.
+
+The figure is not decorative. It is the divisor a compressed Narayana dasa is
+built on, and 120 against 144 moves every sub-period by a fifth of its length.
+§30.4 has not been read yet and may work the compression explicitly.
+
+Nothing is compressed here. `narayana_full_cycle_years` derives 144 from
+`second_cycle_length` rather than asserting it, so if chapter 18's rule is ever
+revised the figure moves with it.
+
+**Closes when:** §30.4 works a Varsha Narayana dasa and its arithmetic shows
+which divisor it used.
 
 
 ---

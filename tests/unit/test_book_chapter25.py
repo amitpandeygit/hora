@@ -1871,10 +1871,13 @@ def test_precedence_records_25_4s_standing():
     import pathlib
 
     text = pathlib.Path("docs/precedence.md").read_text()
-    assert "When PVR marks a section as his own research" in text
+    assert "When PVR marks his own research" in text
     assert "own researches" in text
     assert "prone to errors" in text
     assert "never overrides PVR silently" in text
+    # §30.1's footnote 86 carries the same mark, so the entry covers both.
+    assert "footnote 86" in text
+    assert "§25.4 and §30.1's footnote 86" in text
 
 
 # ---------------------------------------------------------------------------

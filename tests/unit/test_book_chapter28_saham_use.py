@@ -218,13 +218,16 @@ def test_the_origin_note_drives_no_calculation():
 
 
 def test_25_4s_provenance_note_no_longer_claims_to_be_the_only_one():
-    """§28.8.2 carries a provenance too, of a different kind. The earlier
-    note said "the only section in the book to carry one".
+    """§28.8.2 carries a provenance too, of a different kind — and §30.1's
+    footnote 86 carries the same kind, so the note now names both and claims
+    uniqueness for neither.
     """
     import inspect
 
     from hora.transits import gochara
 
     source = inspect.getsource(gochara)
-    assert "the only section in the book to label its own" in source
     assert "the only section in the book to carry one" not in source
+    assert "the only section in the book to label its own" not in source
+    assert "THE_ORIGIN_NOTE_CHANGES_NOTHING_COMPUTED" in source
+    assert "footnote 86 of §30.1" in source

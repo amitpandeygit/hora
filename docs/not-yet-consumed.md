@@ -1827,6 +1827,22 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
+### Chapter 30 — §30.1's introduction (11)
+
+`dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
+three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
+exist to check the section's own figures, and one of them fails.
+
+| constant | why it is not consumed |
+|---|---|
+| `WHY_ANNUAL_DASAS` · `WHY_THEY_MUST_BE_COMPRESSED` · `HOW_THE_TWO_COMPRESSED_DASAS_ARE_SEEDED` · `FOOTNOTE_85` · `FOOTNOTE_86` | §30.1 and both footnotes verbatim |
+| `ANNUAL_DASAS` · `SEEDING_CHOICES` | The three dasas and the two progression rules as data |
+| `THE_ANNUAL_CHART_IS_NOT_THE_SEED` | Ours: chapters 27 to 29 read the annual chart alone and two of these three dasas do not |
+| `THE_TWO_PROGRESSIONS_HAVE_DIFFERENT_PERIODS` | Ours: 27 constellations a year against 12 signs a year, so the seeds return on different schedules |
+| `FOOTNOTE_86_IS_A_PROVENANCE_MARK` · `WHETHER_FOOTNOTE_86_COVERS_BOTH_RULES_IS_NOT_MARKED` | Ours: the second self-labelled technique in the book, and it sits on only one of the paragraph's two sentences |
+| `NARAYANA_DASAS_PARAMAYUSH_IS_144_NOT_120` | Ours: the section's 120 is right for Vimsottari and wrong for Narayana dasa. OI-174 |
+| `THE_ORDER_OF_A_HUNDRED_IS_A_RANGE_NOT_A_FIGURE` | Ours: the nakshatra dasas run 36 to 120 years and seven of ten sit between 84 and 120 |
+
 ---
 
 ## How to use this register
