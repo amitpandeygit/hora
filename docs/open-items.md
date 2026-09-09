@@ -3,7 +3,7 @@
 Unresolved only. Closed items and the evidence that closed them live in
 [closed-items.md](closed-items.md) and are not repeated here.
 
-**8 waiting on Amit · 123 waiting on evidence · 2 parked**
+**8 waiting on Amit · 124 waiting on evidence · 2 parked**
 
 ---
 
@@ -2707,6 +2707,34 @@ rule and not a statement of it.
 
 **Closes when:** a later section states mudda's antardasas, or a worked mudda
 antardasa fixes the rule.
+
+
+### OI-177 — Example 123's antardasa does not come out of §18.3
+
+**Waiting on the book.** §30.4 states no antardasa rule for Varsha Narayana
+dasa, exactly as §30.3 stated none for mudda (OI-176). Example 123 then names
+one: the native "went abroad on 15th/16th August 1991, during Virgo dasa,
+**Gemini antardasa**".
+
+The **dasa** reproduces. Virgo runs from 126 to 141 days into the year, which
+is 9-24 August as calendar days and 14-29 August as solar days against the
+printed 10-26, and the departure is inside it under every reading.
+
+The **antardasa** does not. Under §18.3 the antardasas of this Virgo dasa are
+seeded from Aries — the stronger of Virgo and Pisces is Virgo, whose lord
+Mercury is in Aries, an odd sign, so forward — and run Ar, Ta, Ge, Cn, ... So
+Gemini is the **third** of twelve and falls on 11-12 August. The departure
+lands in **Virgo's** own antardasa from our dates, and in **Leo's** from the
+book's printed ones. Neither is Gemini.
+
+For Gemini to hold 15/16 August it would have to be the **fifth or sixth** of
+the twelve, which no seed §18.3 can produce here reaches.
+
+`antardasas` is unchanged. The example's reasoning for Gemini — "the 9th house
+containing 7th lord" — is checked and holds; it is the timing that does not.
+
+**Closes when:** a later section states the varsha antardasa rule, or a second
+worked varsha antardasa fixes the seed.
 
 
 ---

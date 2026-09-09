@@ -1497,3 +1497,293 @@ def test_all_three_of_the_exercises_verifications_hold():
         True, True, True]
     assert [row["dasa"] for row in ex48.EXERCISE_48_VERDICTS] == [
         "Varsha Narayana of navamsa", "Patyayini", "Mudda"]
+
+
+# --------------------------------------------------------------------------
+# Example 123 and Chart 68
+# --------------------------------------------------------------------------
+
+from hora.dasha.annual import example_123 as ex123
+
+_E123_PRAVESH = from_local(**ex123.VARSHA_PRAVESH)
+_E123_TRIP = from_local(1991, 8, 15, 12, 0, 0.0, utc_offset_hours=5.5).jd_ut
+
+
+def _e123_annual():
+    return compute_chart(_E123_PRAVESH, _EX48_PLACE, _SETTINGS)
+
+
+def _e123_d4():
+    """D-4 positions carrying the degree inside the chaturthamsa sign."""
+    from hora.charts.vargas import d4_chaturthamsa
+
+    chart = _e123_annual()
+    out = {g: int(d4_chaturthamsa(chart.positions[g].longitude).sign) * 30.0
+           + (chart.positions[g].longitude % 7.5) * 4 for g in range(9)}
+    return out, int(d4_chaturthamsa(chart.lagna_longitude).sign)
+
+
+def test_example_123_is_transcribed():
+    assert "went from India to US for his masters degree" in ex123.EXAMPLE_123
+    assert "Varsha Narayana dasa of D-4" in ex123.EXAMPLE_123
+    assert "3:05:33 am (IST)" in ex123.VARSHA_PRAVESH_DATA
+    assert "Ar with two planets is stronger than Li" in ex123.THE_DASA_PARAGRAPH
+    assert "Virgo dasa, Gemini antardasa" in ex123.THE_TIMING_PARAGRAPH
+    assert ex123.CHART_NUMBER == 68
+    assert ex123.ANNUAL_YEAR == 22
+
+
+def test_chart_68_draws_a_varga_and_prints_the_rasi():
+    from hora.charts.book import chart
+
+    record = chart(68)
+    assert "D4" in record["divisional"]
+    assert record["longitudes"]["Asc"] == "27 Cp 20"        # the rasi lagna
+    assert record["divisional"]["D4"]["Asc"] == "Li"        # the drawn lagna
+    assert "Though rasi chart has lagna in Cp" in ex123.THE_DASA_PARAGRAPH
+    assert "No other chart in the register" in (
+        ex123.CHART_68_DRAWS_A_VARGA_AND_PRINTS_THE_RASI)
+
+
+def test_the_closest_varsha_pravesh_in_the_book():
+    from hora.core.ephemeris import get_ephemeris
+    from hora.tajaka.annual import varsha_pravesh
+
+    eph = get_ephemeris(_SETTINGS)
+    natal_sun = compute_chart(_EX48_BIRTH, _EX48_PLACE,
+                              _SETTINGS).positions[0].longitude
+    got = varsha_pravesh(lambda jd: eph.positions(jd, [0])[0].longitude,
+                         natal_sun, _EX48_BIRTH.jd_ut, ex123.ANNUAL_YEAR)
+    seconds = (got["jd"] - _E123_PRAVESH.jd_ut) * 86400.0
+    assert -3.0 < seconds < 0.0
+    assert abs(seconds) < 3.0
+    assert "2.3 seconds" in ex123.THE_CLOSEST_VARSHA_PRAVESH_IN_THE_BOOK
+
+
+def test_chart_68s_longitudes_reproduce_within_an_arcminute():
+    from hora.charts.book import longitudes
+
+    chart = _e123_annual()
+    printed = longitudes(68)
+    ids = {"Sun": 0, "Moon": 1, "Mars": 2, "Merc": 3, "Jup": 4, "Ven": 5,
+           "Sat": 6, "Rahu": 7, "Ketu": 8}
+    for name, index in ids.items():
+        gap = (((chart.positions[index].longitude - printed[name] + 180) % 360)
+               - 180) * 60
+        assert 0.0 < gap < 1.1, (name, gap)
+    lagna_gap = (((chart.lagna_longitude - printed["Asc"] + 180) % 360)
+                 - 180) * 60
+    assert 0.0 < lagna_gap < 1.0
+    assert chart.positions[3].is_retrograde is True          # Merc (R)
+
+
+def test_the_printed_moon_fits_our_instant_not_the_printed_one():
+    """25 Sc 03.01 at the book's instant and 25 Sc 02.99 at ours."""
+    from hora.core.ephemeris import get_ephemeris
+    from hora.tajaka.annual import varsha_pravesh
+
+    eph = get_ephemeris(_SETTINGS)
+    natal_sun = compute_chart(_EX48_BIRTH, _EX48_PLACE,
+                              _SETTINGS).positions[0].longitude
+    solved = varsha_pravesh(lambda jd: eph.positions(jd, [0])[0].longitude,
+                            natal_sun, _EX48_BIRTH.jd_ut, ex123.ANNUAL_YEAR)
+
+    at_printed = eph.positions(_E123_PRAVESH.jd_ut, [1])[1].longitude
+    at_solved = eph.positions(solved["jd"], [1])[1].longitude
+    assert int((at_printed % 1) * 60) == 3
+    assert int((at_solved % 1) * 60) == 2                    # what is printed
+    assert abs(at_printed - at_solved) * 60 < 0.05
+    assert "two hundredths of an arcminute" in (
+        ex123.THE_PRINTED_MOON_FITS_OUR_INSTANT_NOT_THE_PRINTED_ONE)
+
+
+def test_the_d4_reproduces_box_for_box():
+    from hora.charts.book import chart as record
+    from hora.core.const import RASI_ABBR
+
+    d4, lagna = _e123_d4()
+    drawn = record(68)["divisional"]["D4"]
+    names = {"Sun": 0, "Moon": 1, "Mars": 2, "Merc": 3, "Jup": 4, "Ven": 5,
+             "Sat": 6, "Rahu": 7, "Ketu": 8}
+    for name, index in names.items():
+        assert RASI_ABBR[int(d4[index] // 30)] == drawn[name], name
+    assert RASI_ABBR[lagna] == drawn["Asc"] == "Li"
+
+
+def test_the_three_house_claims_from_the_d4_lagna_hold():
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD, Graha
+
+    d4, lagna = _e123_d4()
+    house = {g: (int(d4[g] // 30) - lagna) % 12 + 1 for g in d4}
+    assert house[int(Graha.MERCURY)] == 7
+    assert house[int(Graha.MARS)] == 9
+    assert house[int(Graha.SUN)] == 12
+    # Mercury owns the 9th and the 12th from Libra.
+    for offset in (8, 11):
+        assert str(GRAHA_NAMES[int(RASI_LORD[(lagna + offset) % 12])]) == (
+            "Mercury")
+    # Mars owns the 7th.
+    assert str(GRAHA_NAMES[int(RASI_LORD[(lagna + 6) % 12])]) == "Mars"
+    assert RASI_ABBR[(lagna + 11) % 12] == "Vi"
+    assert RASI_ABBR[(lagna + 8) % 12] == "Ge"
+
+
+def test_the_muntha_is_gemini_and_the_fourth_lord_is_mercury():
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD, Graha
+    from hora.dasha.annual.varsha_narayana import progressed_lagna
+
+    muntha = progressed_lagna(5, ex123.ANNUAL_YEAR)["rasi"]  # natal lagna Vi
+    assert RASI_ABBR[muntha] == "Ge"
+    fourth = (muntha + 3) % 12
+    assert RASI_ABBR[fourth] == "Vi"
+    assert str(GRAHA_NAMES[int(RASI_LORD[fourth])]) == "Mercury"
+
+    d4, _ = _e123_d4()
+    assert RASI_ABBR[int(d4[int(Graha.MERCURY)] // 30)] == "Ar"
+
+
+def test_the_seed_is_decided_by_counting_planets():
+    from hora.charts.rasi_strength import stronger
+    from hora.core.const import Graha
+
+    d4, _ = _e123_d4()
+    signs = {g: int(place // 30) for g, place in d4.items()}
+    aries = {g for g in range(9) if signs[g] == 0}
+    libra = {g for g in range(9) if signs[g] == 6}
+    assert aries == {int(Graha.MERCURY), int(Graha.SATURN)}
+    assert libra == {int(Graha.JUPITER)}
+    assert len(aries) == 2 and len(libra) == 1
+    assert stronger(0, 6, d4).winner == 0
+    assert "the ascendant not counting" in (
+        ex123.THE_SEED_IS_DECIDED_BY_COUNTING_PLANETS)
+
+
+def test_the_dasa_order_and_the_saturn_exception():
+    from hora.core.const import Graha
+    from hora.dasha.rasi.narayana import progression
+
+    d4, _ = _e123_d4()
+    signs = {g: int(place // 30) for g, place in d4.items()}
+    occupants = {g for g in range(9) if signs[g] == 0}
+    order = progression(0, occupants=occupants)
+    assert list(order.sign_names[:4]) == ["Aries", "Taurus", "Gemini",
+                                          "Cancer"]
+    assert order.exception == "Saturn"
+    assert int(Graha.SATURN) in occupants
+    # And Aries alone would have run the same way.
+    assert progression(0, occupants=set()).sign_names[:4] == (
+        order.sign_names[:4])
+    assert "The order is unchanged" in (
+        ex123.THE_SATURN_EXCEPTION_FIRES_AND_CHANGES_NOTHING)
+
+
+def test_virgo_dasa_holds_the_departure_under_every_reading():
+    import swisseph as swe
+
+    from hora.core.const import RASI_ABBR, RASI_LORD
+    from hora.core.ephemeris import get_ephemeris
+    from hora.dasha.annual.varsha_narayana import compressed_days
+    from hora.dasha.rasi.narayana import dasa_length, progression
+
+    d4, _ = _e123_d4()
+    signs = {g: int(place // 30) for g, place in d4.items()}
+    order = progression(0, occupants={g for g in range(9) if signs[g] == 0})
+
+    elapsed, virgo = 0, None
+    for rasi in order.signs:
+        days = compressed_days(dasa_length(
+            rasi=rasi, lord=int(RASI_LORD[rasi]),
+            lord_sign=signs[int(RASI_LORD[rasi])]).years)
+        if RASI_ABBR[rasi] == "Vi":
+            virgo = (elapsed, elapsed + days)
+            break
+        elapsed += days
+    assert virgo == (126, 141)
+
+    eph = get_ephemeris(_SETTINGS)
+    at_start = eph.positions(_E123_PRAVESH.jd_ut, [0])[0].longitude
+
+    def after(degrees):
+        low, high = _E123_PRAVESH.jd_ut, _E123_PRAVESH.jd_ut + 400.0
+        for _ in range(70):
+            middle = (low + high) / 2.0
+            moved = (eph.positions(middle, [0])[0].longitude - at_start) % 360.0
+            if moved < degrees:
+                low = middle
+            else:
+                high = middle
+        return (low + high) / 2.0
+
+    printed = (from_local(1991, 8, 10, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut,
+               from_local(1991, 8, 26, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut)
+    calendar = (_E123_PRAVESH.jd_ut + 126, _E123_PRAVESH.jd_ut + 141)
+    solar = (after(126), after(141))
+    for opens, closes in (printed, calendar, solar):
+        assert opens < _E123_TRIP < closes
+
+    def day(jd):
+        year, month, dom, _ = swe.revjul(jd + 5.5 / 24.0)
+        return int(year), int(month), int(dom)
+
+    assert day(calendar[0]) == (1991, 8, 9)
+    assert day(calendar[1]) == (1991, 8, 24)
+    assert day(solar[0]) == (1991, 8, 14)
+    assert "inside it under every reading" in (
+        ex123.THE_VIRGO_DASA_DATES_ARE_A_DAY_OR_TWO_OUT)
+
+
+def test_the_antardasa_does_not_reproduce():
+    """§18.3 puts Gemini third, on 11-12 August. OI-177."""
+    from hora.core.const import RASI_ABBR
+    from hora.dasha.rasi.narayana import antardasas
+
+    d4, _ = _e123_d4()
+    legs = antardasas(5, 5, d4)                    # Virgo dasa, 5 years
+    assert legs.start_name == "Aries"
+    assert list(legs.sign_names[:3]) == ["Aries", "Taurus", "Gemini"]
+    assert legs.sign_names.index("Gemini") == 2
+
+    for opens, closes, expected in (
+            (_E123_PRAVESH.jd_ut + 126, _E123_PRAVESH.jd_ut + 141, "Vi"),
+            (from_local(1991, 8, 10, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut,
+             from_local(1991, 8, 26, 0, 0, 0.0, utc_offset_hours=5.5).jd_ut,
+             "Le")):
+        span = (closes - opens) / 12.0
+        index = int((_E123_TRIP - opens) / span)
+        assert RASI_ABBR[legs.signs[index]] == expected
+        assert RASI_ABBR[legs.signs[index]] != "Ge"
+
+    assert "The example says Gemini" in ex123.THE_ANTARDASA_DOES_NOT_REPRODUCE
+
+
+def test_two_lagnas_do_two_different_jobs():
+    from hora.core.const import RASI_ABBR
+    from hora.dasha.annual.varsha_narayana import progressed_lagna
+
+    muntha = progressed_lagna(5, ex123.ANNUAL_YEAR)["rasi"]
+    _, d4_lagna = _e123_d4()
+    assert RASI_ABBR[muntha] == "Ge"
+    assert RASI_ABBR[d4_lagna] == "Li"
+    assert muntha != d4_lagna
+    # The paragraph counts Virgo as the 12th and Gemini as the 9th, both
+    # from Libra and neither from Gemini.
+    assert (RASI_ABBR.index("Vi") - d4_lagna) % 12 + 1 == 12
+    assert (RASI_ABBR.index("Ge") - d4_lagna) % 12 + 1 == 9
+    assert (RASI_ABBR.index("Vi") - muntha) % 12 + 1 == 4
+    assert "without naming the difference" in (
+        ex123.TWO_LAGNAS_DO_TWO_DIFFERENT_JOBS)
+
+
+def test_the_rasi_chart_reasons_hold_too():
+    from hora.core.const import GRAHA_NAMES, RASI_ABBR, RASI_LORD, Graha
+
+    chart = _e123_annual()
+    lagna = chart.lagna_rasi
+    assert RASI_ABBR[lagna] == "Cp"
+    for graha in (Graha.SATURN, Graha.RAHU):
+        assert int(chart.positions[int(graha)].longitude // 30) == lagna
+    twelfth = (lagna + 11) % 12
+    assert str(GRAHA_NAMES[int(RASI_LORD[twelfth])]) == "Jupiter"
+    jupiter = int(chart.positions[int(Graha.JUPITER)].longitude // 30)
+    assert (jupiter - lagna) % 12 + 1 == 7
+    assert RASI_ABBR[jupiter] == "Cn"              # Jupiter's exaltation

@@ -1827,7 +1827,7 @@ footnote can. What follows is prose and findings.
 | `THE_CONCLUSION_CONFIRMS_THE_OVERLAPS_AND_SETTLES_NONE` | Ours: it licenses the overlaps and settles none, and the chapter's open items are rule-against-example, not overlap |
 | `A_THIRD_RULE_FOR_THE_SAME_MARRIAGE` | Ours: §25.3, §28.8.2 and §29.2.3 give three different tests for marriage against vivaha saham |
 
-### Chapter 30 — §30.1 to §30.4 and Exercise 48 (64)
+### Chapter 30 — §30.1 to §30.4, Exercise 48 and Example 123 (76)
 
 `dasha/annual/intro.py`. Nothing is computed yet: §30.1 states the plan and the
 three dasas arrive from §30.2 on. `paramayush` and `narayana_full_cycle_years`
@@ -1879,6 +1879,13 @@ exist to check the section's own figures, and one of them fails.
 | `THE_FOUR_QUALIFYING_LORDS_ARE_FOUR_DIFFERENT_PLANETS` | Ours: Sun, Saturn, Mercury and Jupiter, so nothing is satisfied by accident |
 | `THIS_SEED_TAKES_NO_EXCEPTION_WHERE_EXAMPLE_122S_DID` | Ours: Taurus holds Mars and Jupiter, and §18.2.1's exceptions are Saturn's and Ketu's |
 | `MUDDA_HAS_NO_ANTARDASA_RULE` · `THE_MUDDA_ANTARDASA_NEEDED_A_RULE_THE_SECTION_DOES_NOT_GIVE` | Ours: §30.3 states none and the exercise asks for one. OI-176 |
+| `EXAMPLE_123` · `VARSHA_PRAVESH_DATA` · `WHY_HE_WENT_ABROAD` · `THE_DASA_PARAGRAPH` · `THE_TIMING_PARAGRAPH` · `REASONS_FOR_THE_TRIP` · `BIRTH` · `PLACE` · `VARSHA_PRAVESH` · `DEPARTURE` | Example 123 verbatim and its data |
+| `CHART_68_DRAWS_A_VARGA_AND_PRINTS_THE_RASI` | Ours: the only chart in the register whose diagram is a divisional chart |
+| `THE_CLOSEST_VARSHA_PRAVESH_IN_THE_BOOK` · `THE_PRINTED_MOON_FITS_OUR_INSTANT_NOT_THE_PRINTED_ONE` | Ours: 2.3 seconds, and the Moon's printed arcminute agrees with our instant by 0.02' |
+| `THE_D4_REPRODUCES_BOX_FOR_BOX` · `THE_SEED_IS_DECIDED_BY_COUNTING_PLANETS` | Ours: every D-4 box and the seed comparison, both reproducing |
+| `TWO_LAGNAS_DO_TWO_DIFFERENT_JOBS` | Ours: the muntha seeds the dasa order and the D-4 lagna is what the houses are counted from |
+| `THE_SATURN_EXCEPTION_FIRES_AND_CHANGES_NOTHING` | Ours: Aries was already regular and forward, unlike Example 122's Scorpio |
+| `THE_ANTARDASA_DOES_NOT_REPRODUCE` · `THE_VIRGO_DASA_DATES_ARE_A_DAY_OR_TWO_OUT` | Ours: the dasa holds under every reading and the named antardasa does not. OI-177, OI-175 |
 
 ---
 

@@ -2627,6 +2627,49 @@ BOOK_CHARTS: dict[int, dict[str, Any]] = {
             "that prints them."
         ),
     },
+    68: {
+        "title": "Going abroad (Tajaka) — the 1991-92 annual chart of "
+                 "Exercise 48's native, drawn in D-4",
+        "birth": "April 5, 1991, 3:05:33 am (IST), 81 E 12, 16 N 15",
+        "birth_data": {
+            "year": 1991, "month": 4, "day": 5, "hour": 3, "minute": 5,
+            "second": 33.0, "utc_offset_hours": 5.5,
+        },
+        "place": {"latitude": 16 + 15 / 60, "longitude": 81 + 12 / 60},
+        "longitudes": {
+            "Asc": "27 Cp 20", "Sun": "20 Pi 52", "Moon": "25 Sc 02",
+            "Mars": "7 Ge 15", "Merc": "5 Ar 16", "Jup": "9 Cn 51",
+            "Ven": "26 Ar 40", "Sat": "11 Cp 41", "Rahu": "0 Cp 25",
+            "Ketu": "0 Cn 25", "HL": "23 Sg 03", "GL": "12 Le 37",
+        },
+        "chara_karakas": {
+            "Rahu": "AK", "Ven": "AmK", "Moon": "BK", "Sun": "MK",
+            "Jup": "PK", "Sat": "PiK", "Mars": "GK", "Merc": "DK",
+        },
+        "retrograde": ("Merc",),
+        "divisional": {
+            "D4": {
+                "Sat": "Ar", "Merc": "Ar", "Mars": "Ge", "Ketu": "Cn",
+                "Moon": "Le", "Rahu": "Cp", "Ven": "Cp", "AL": "Cp",
+                "Jup": "Li", "Asc": "Li", "Sun": "Vi", "HL": "Vi",
+                "GL": "Sc",
+            },
+        },
+        "events": {"left India for the US": "August 15, 1991"},
+        "first_seen": "chapter 30, Example 123",
+        "note": (
+            "Not a nativity. The **annual chart** of Exercise 48's native for "
+            "1991-92, cast for the Sun's return to his natal 20 Pi 52 in his "
+            "22nd year, and the only chart in the register whose **diagram is "
+            "a D-4** while its printed longitudes are the rasi chart's. The "
+            "varsha pravesh reproduces to 2.3 seconds and every printed "
+            "longitude to within an arcminute; the Moon's 25 Sc 02 needs our "
+            "own solved instant rather than the printed one, the two "
+            "straddling the arcminute by 0.02'. Every box of the D-4 "
+            "reproduces. See docs/open-items.md OI-177 for the antardasa the "
+            "example names and we do not reach."
+        ),
+    },
 }
 
 
