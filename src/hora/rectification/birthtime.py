@@ -865,6 +865,88 @@ THE_FOOTNOTE_NAMES_NO_WINNER = (
 
 
 # --------------------------------------------------------------------------
+# §32.2.1 continued — Special Lagnas, and the second boxed Lesson
+# --------------------------------------------------------------------------
+
+#: §32.2.1's paragraph on the special lagnas, verbatim.
+SPECIAL_LAGNAS_ARE_FASTER_STILL = (
+    "Hora lagna moves twice as fast as lagna. Ghati lagna moves 5 times as "
+    "fast as lagna.")
+
+#: The second boxed Lesson, verbatim. It runs across a page break.
+LESSON_SPECIAL_LAGNAS = (
+    "HL moves by 1 degree in 2 min. HL moves by 10' in 1/3 min (or 20 "
+    "seconds). HL moves by 1' in 2 sec. HL moves by 10\" in 1/3 sec.\n\n"
+    "GL moves by 1 degree in 4/5 min (or 48 seconds). GL moves by 10' in 4.8 "
+    "seconds. GL moves by 1' in 0.48 sec (less than half a second).")
+
+#: The second Lesson as data, each row as printed against what the row's own
+#: opening line implies. See D-85 for the two GL rows that disagree.
+LESSON_SPECIAL_LAGNA_ROWS: tuple[dict[str, object], ...] = (
+    {"lagna": "HL", "arc_arcseconds": 3600.0, "printed_seconds": 120.0,
+     "as_printed": "1 degree in 2 min"},
+    {"lagna": "HL", "arc_arcseconds": 600.0, "printed_seconds": 20.0,
+     "as_printed": "10' in 1/3 min"},
+    {"lagna": "HL", "arc_arcseconds": 60.0, "printed_seconds": 2.0,
+     "as_printed": "1' in 2 sec"},
+    {"lagna": "HL", "arc_arcseconds": 10.0, "printed_seconds": 1.0 / 3.0,
+     "as_printed": "10\" in 1/3 sec"},
+    {"lagna": "GL", "arc_arcseconds": 3600.0, "printed_seconds": 48.0,
+     "as_printed": "1 degree in 4/5 min"},
+    {"lagna": "GL", "arc_arcseconds": 600.0, "printed_seconds": 4.8,
+     "as_printed": "10' in 4.8 seconds"},
+    {"lagna": "GL", "arc_arcseconds": 60.0, "printed_seconds": 0.48,
+     "as_printed": "1' in 0.48 sec"},
+)
+
+#: **Finding, and it inverts Example 129's caveat.** The lagna's four minutes
+#: a degree is a mean, and Example 129 withdrew it. HL's two minutes and GL's
+#: forty-eight seconds are **not means**: §5.5 defines both as a uniform
+#: advance from the Sun's position at sunrise — 0.5 and 1.25 degrees a minute —
+#: so `ADVANCE_PER_MINUTE` carries those exact figures and the Lesson's HL
+#: rows are true to the arcsecond at every latitude and every hour. Where the
+#: rectifier can least trust the ascendant, it can most trust these two.
+THE_SPECIAL_LAGNA_RATES_ARE_EXACT_AND_THE_LAGNAS_IS_NOT = (
+    "Hora lagna and Ghati lagna advance 0.5 and 1.25 degrees a minute by "
+    "definition, so their rates are exact where the ascendant's four minutes "
+    "a degree is only a mean."
+)
+
+#: **Finding, measured.** "Twice as fast" and "5 times as fast" are ratios to
+#: the **nominal** lagna, and they are exact there — 0.5 and 1.25 against
+#: 0.25 degrees a minute. Against the real ascendant they drift with latitude:
+#:
+#: | place | ascendant | HL / lagna | GL / lagna |
+#: |---|---|---|---|
+#: | the equator | 13.8'-16.4'/min | 1.83-2.17 | 4.57-5.43 |
+#: | 16 N 15 | 13.5'-18.8' | 1.60-2.23 | 4.00-5.57 |
+#: | 42 N 30 | 11.6'-27.2' | 1.10-2.59 | 2.76-6.48 |
+#: | 60 N | 9.2'-65.7' | 0.46-3.27 | 1.14-8.17 |
+#:
+#: At 60 N there are hours when the ascendant outruns Hora Lagna outright, and
+#: hours when it nearly matches Ghati Lagna. The ordering the sentence asserts
+#: is a property of the mean, not of the sky.
+THE_TWO_RATIOS_HOLD_ONLY_AGAINST_THE_MEAN_LAGNA = (
+    "Twice and five times are exact against the nominal quarter-degree a "
+    "minute. Against the real ascendant they run 1.10 to 2.59 and 2.76 to "
+    "6.48 at 42 N 30, and at 60 N the ascendant sometimes outruns Hora Lagna."
+)
+
+#: **Finding, and it explains an omission.** The section gives rates for HL
+#: and GL and none for **Bhava Lagna**, which §5.5 taught alongside them. The
+#: reason is arithmetic: BL advances **0.25 degrees a minute**, which is the
+#: ascendant's own nominal rate exactly, so a BL row would repeat §32.2.1's
+#: first Lesson word for word. **Sree Lagna** is left out for the opposite
+#: reason — it moves with the Moon as well as the clock and so has no fixed
+#: rate to print.
+BHAVA_LAGNA_IS_OMITTED_BECAUSE_ITS_ROW_WOULD_REPEAT_THE_LAGNAS = (
+    "Bhava Lagna advances a quarter degree a minute, which is the nominal "
+    "ascendant rate, so its Lesson row would be the first Lesson again. Sree "
+    "Lagna has no fixed rate at all."
+)
+
+
+# --------------------------------------------------------------------------
 # Example 129 — a rectification worked from the varga borders alone
 # --------------------------------------------------------------------------
 

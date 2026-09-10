@@ -1040,3 +1040,122 @@ def test_lagna_windows_rejects_a_bad_range():
         birthtime.lagna_windows(20.0, 10.0, _VARGAS[9])
     with pytest.raises(birthtime.BirthtimeError, match="one rasi"):
         birthtime.lagna_windows(0.0, 40.0, _VARGAS[9])
+
+
+# --------------------------------------------------------------------------
+# §32.2.1 continued — Special Lagnas and the second Lesson
+# --------------------------------------------------------------------------
+
+
+def test_the_special_lagna_paragraph_and_lesson_are_transcribed():
+    assert "Hora lagna moves twice as fast as lagna" in (
+        birthtime.SPECIAL_LAGNAS_ARE_FASTER_STILL)
+    assert "Ghati lagna moves 5 times as fast as lagna" in (
+        birthtime.SPECIAL_LAGNAS_ARE_FASTER_STILL)
+    assert "HL moves by 1 degree in 2 min" in birthtime.LESSON_SPECIAL_LAGNAS
+    assert "GL moves by 10' in 4.8 seconds" in birthtime.LESSON_SPECIAL_LAGNAS
+    assert "less than half a second" in birthtime.LESSON_SPECIAL_LAGNAS
+    assert len(birthtime.LESSON_SPECIAL_LAGNA_ROWS) == 7
+
+
+def test_the_special_lagna_rates_are_exact_where_the_lagnas_is_a_mean():
+    """FINDING: HL and GL advance by definition; the ascendant does not."""
+    from hora.charts.special_lagna import ADVANCE_PER_MINUTE, SpecialLagna
+
+    assert ADVANCE_PER_MINUTE[SpecialLagna.HORA] == 0.5
+    assert ADVANCE_PER_MINUTE[SpecialLagna.GHATI] == 1.25
+    # The section's two claims, against the nominal quarter-degree a minute.
+    nominal = 30.0 / 120.0
+    assert ADVANCE_PER_MINUTE[SpecialLagna.HORA] / nominal == 2.0
+    assert ADVANCE_PER_MINUTE[SpecialLagna.GHATI] / nominal == 5.0
+    # And the rates are exact, so the caveat Example 129 raises does not apply.
+    assert "not the case in reality" in birthtime.EXAMPLE_129
+    assert "only a mean" in (
+        birthtime.THE_SPECIAL_LAGNA_RATES_ARE_EXACT_AND_THE_LAGNAS_IS_NOT)
+
+
+def test_the_two_ratios_hold_only_against_the_mean_lagna():
+    """FINDING: at 60 N the ascendant sometimes outruns Hora Lagna."""
+    base = from_local(2000, 3, 20, 0, 0, 0.0, utc_offset_hours=0.0).jd_ut
+    measured = {}
+    for latitude in (42.5, 60.0):
+        place = Place(name="ratio", latitude=latitude, longitude=0.0)
+        rates = []
+        for minute in range(0, 1440, 5):
+            here = compute_chart(from_jd(base + minute / 1440.0), place,
+                                 _SETTINGS).lagna_longitude
+            later = compute_chart(from_jd(base + (minute + 1) / 1440.0), place,
+                                  _SETTINGS).lagna_longitude
+            rates.append((later - here) % 360)
+        measured[latitude] = (min(rates), max(rates))
+
+    slow, fast = measured[42.5]
+    assert 0.5 / fast == pytest.approx(1.10, abs=0.05)
+    assert 0.5 / slow == pytest.approx(2.59, abs=0.05)
+    assert 1.25 / fast == pytest.approx(2.76, abs=0.05)
+
+    slow, fast = measured[60.0]
+    assert 0.5 / fast < 1.0                # the ascendant outruns Hora Lagna
+    assert 1.25 / fast < 1.5               # and nearly matches Ghati Lagna
+    assert "sometimes outruns Hora Lagna" in (
+        birthtime.THE_TWO_RATIOS_HOLD_ONLY_AGAINST_THE_MEAN_LAGNA)
+
+
+def test_bhava_lagna_is_omitted_because_its_row_would_repeat_the_lagnas():
+    """FINDING: BL's rate is the ascendant's nominal rate exactly."""
+    from hora.charts.special_lagna import ADVANCE_PER_MINUTE, SpecialLagna
+
+    assert ADVANCE_PER_MINUTE[SpecialLagna.BHAAVA] == 30.0 / 120.0
+    for name in ("BL", "Bhava", "SL", "Sree"):
+        assert name not in birthtime.LESSON_SPECIAL_LAGNAS
+        assert name not in birthtime.SPECIAL_LAGNAS_ARE_FASTER_STILL
+    # BL's row would be the first Lesson's rows, second for second.
+    for row in birthtime.LESSON_ROWS:
+        arc, seconds = float(row["arc_arcseconds"]), float(row["seconds"])
+        assert arc / seconds == pytest.approx(15.0)
+        assert arc / (ADVANCE_PER_MINUTE[SpecialLagna.BHAAVA] * 3600 / 60) == (
+            pytest.approx(seconds))
+    assert "no fixed rate at all" in (
+        birthtime.BHAVA_LAGNA_IS_OMITTED_BECAUSE_ITS_ROW_WOULD_REPEAT_THE_LAGNAS)
+
+
+def test_d85_the_two_gl_rows_divide_a_degree_into_ten_arcminutes():
+    """BOOK DEFECT D-85. The first GL row is right; the next two are it
+    divided by ten and then ten again, and are the truth times 3/5.
+    """
+    from hora.charts.special_lagna import ADVANCE_PER_MINUTE, SpecialLagna
+
+    rows = birthtime.LESSON_SPECIAL_LAGNA_ROWS
+    hl = [r for r in rows if r["lagna"] == "HL"]
+    gl = [r for r in rows if r["lagna"] == "GL"]
+
+    # Every HL row is the same rate, and it is the one ADVANCE_PER_MINUTE has.
+    hl_rate = ADVANCE_PER_MINUTE[SpecialLagna.HORA] * 3600 / 60   # "/sec
+    assert hl_rate == pytest.approx(30.0)
+    for row in hl:
+        assert float(row["arc_arcseconds"]) / float(
+            row["printed_seconds"]) == pytest.approx(hl_rate), row["as_printed"]
+
+    gl_rate = ADVANCE_PER_MINUTE[SpecialLagna.GHATI] * 3600 / 60
+    assert gl_rate == pytest.approx(75.0)
+    # The first GL row agrees; the other two do not, and both by 5/3.
+    assert float(gl[0]["arc_arcseconds"]) / float(
+        gl[0]["printed_seconds"]) == pytest.approx(gl_rate)
+    for row in gl[1:]:
+        printed = float(row["printed_seconds"])
+        correct = float(row["arc_arcseconds"]) / gl_rate
+        assert printed != pytest.approx(correct)
+        assert correct / printed == pytest.approx(5.0 / 3.0)
+    assert [float(r["printed_seconds"]) for r in gl] == [48.0, 4.8, 0.48]
+    assert [float(r["arc_arcseconds"]) / gl_rate for r in gl] == [
+        pytest.approx(48.0), pytest.approx(8.0), pytest.approx(0.8)]
+
+    # And the parenthesis goes with them.
+    assert "less than half a second" in birthtime.LESSON_SPECIAL_LAGNAS
+    assert 60.0 / gl_rate > 0.5
+
+    from pathlib import Path
+
+    text = Path("docs/book-deviations.md").read_text(encoding="utf-8")
+    assert "## D-85 · §32.2.1's Lesson divides a degree into ten arcminutes" in (
+        text)

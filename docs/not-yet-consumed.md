@@ -1972,7 +1972,7 @@ has not been given yet.
 | `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
 
-### Chapter 32 — §32.1, §32.2.1, Example 129 and footnotes 89 and 90 (56)
+### Chapter 32 — §32.1, §32.2.1, Example 129 and footnotes 89 and 90 (62)
 
 `rectification/birthtime.py`. The section is an argument, not a technique.
 Three things in it **are** computable and all three are consumed:
@@ -2016,6 +2016,10 @@ reproduced.
 | `THE_UNIFORM_LAGNA_IS_THE_SECTIONS_OWN_CAVEAT` | Ours: measured at four latitudes, 5 min 24 sec lands 5 to 10 arcminutes short and needs 21 to 42 seconds more |
 | `THE_BOOK_STATES_THE_MEAN_IS_NOT_A_RATE` | Ours: §32.1 gave the two hours flatly and Example 129 withdraws the uniform lagna outright |
 | `THE_CLOSING_SENTENCE_IS_A_REQUIREMENT_NOT_ADVICE` | Ours: what the astrologer is asked to memorise, `lagna_windows` returns, D-30 included |
+| `SPECIAL_LAGNAS_ARE_FASTER_STILL` · `LESSON_SPECIAL_LAGNAS` · `LESSON_SPECIAL_LAGNA_ROWS` | §32.2.1's special-lagna paragraph and its second boxed Lesson verbatim, every row as printed. D-85 |
+| `THE_SPECIAL_LAGNA_RATES_ARE_EXACT_AND_THE_LAGNAS_IS_NOT` | Ours: HL and GL advance 0.5 and 1.25 degrees a minute by definition, so Example 129's caveat does not reach them |
+| `THE_TWO_RATIOS_HOLD_ONLY_AGAINST_THE_MEAN_LAGNA` | Ours: twice and five times are exact against the nominal rate and run 1.10-2.59 and 2.76-6.48 at 42 N 30 |
+| `BHAVA_LAGNA_IS_OMITTED_BECAUSE_ITS_ROW_WOULD_REPEAT_THE_LAGNAS` | Ours: BL advances a quarter degree a minute, the ascendant's own nominal rate, and Sree Lagna has no fixed rate |
 | `THE_DIVIDE_BY_N_RULE_HAS_ONE_EXCEPTION` | Ours: the rule is exact for 22 of 23 vargas and D-30's parts are 5, 5, 8, 7, 5 |
 | `THE_SECTIONS_FIGURES_ARE_MEANS_AND_IT_SAYS_SO` | Ours: the Sun's 30 days is good to 2%, the Moon's 60 hours is 10% high, and the section bolds "approximate" |
 | `THE_MOON_PARAGRAPH_CARRIES_TWO_SPEEDS` | Ours: 2.0 minutes per arcminute from one sentence, 1.8 from the next, 1.82 measured |

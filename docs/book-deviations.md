@@ -2794,3 +2794,52 @@ in the 3rd it returns `favourable: False` and `good_for_the_house: True`, and
 **Closes when:** you rule on which of the two benefic rules governs the 2nd,
 3rd and 11th, or a later section settles it.
 
+
+---
+
+## D-85 · §32.2.1's Lesson divides a degree into ten arcminutes for GL
+
+**Status: BOOK DEFECT — two rows of the second Lesson are wrong by a factor of
+5/3. Held as printed, with the correct figures recorded beside them.**
+
+The Lesson box gives Hora Lagna and Ghati Lagna. The HL half is exact:
+
+| as printed | arcseconds | seconds | rate |
+|---|---|---|---|
+| 1° in 2 min | 3600 | 120 | 30″/sec |
+| 10′ in 1/3 min | 600 | 20 | 30″/sec |
+| 1′ in 2 sec | 60 | 2 | 30″/sec |
+| 10″ in 1/3 sec | 10 | 1/3 | 30″/sec |
+
+The GL half is not:
+
+| as printed | arcseconds | seconds | rate | should be |
+|---|---|---|---|---|
+| 1° in 4/5 min (48 sec) | 3600 | 48 | 75″/sec | **correct** |
+| 10′ in 4.8 seconds | 600 | 4.8 | 125″/sec | **8 sec** |
+| 1′ in 0.48 sec | 60 | 0.48 | 125″/sec | **0.8 sec** |
+
+The first row is right. The next two are the first divided by ten and then by
+ten again — as if a degree held ten arcminutes. A degree holds sixty, so 10′ is
+a sixth of a degree and takes 48/6 = 8 seconds, and 1′ takes 48/60 = 0.8. Both
+printed figures are the true ones times 3/5.
+
+The parenthesis goes with them: 0.8 seconds is **not** "less than half a
+second".
+
+It is a slip and not a convention. The same box divides HL's 120 seconds by 6
+and then by 10 and gets 20 and 2, both right; §32.2.1's first Lesson does the
+same with the ascendant's 240 seconds and gets 40 and 4, both right. Only the
+GL rows step by tens.
+
+Nothing in the book depends on them — no example uses a GL rate — and the
+opening sentence GL's own first row comes from, "Ghati lagna moves 5 times as
+fast as lagna", is correct.
+
+**What we do.** `LESSON_SPECIAL_LAGNA_ROWS` carries every row as printed,
+including the two wrong ones, and the test asserts that the first GL row agrees
+with `ADVANCE_PER_MINUTE` while the other two do not, at exactly 5/3. Nothing
+is corrected in the transcription.
+
+**Closes when:** you confirm the reading, or a later printing corrects it.
+
