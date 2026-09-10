@@ -1894,3 +1894,150 @@ def test_d88_the_middle_of_the_eighth_dasamsa_is_22_sc_30():
 def test_solar_return_amplification_rejects_a_dead_rate():
     with pytest.raises(birthtime.BirthtimeError, match="must both be positive"):
         birthtime.solar_return_amplification(1.0, sun_degrees_per_day=0.0)
+
+
+# --------------------------------------------------------------------------
+# §32.3 A Practical Approach
+# --------------------------------------------------------------------------
+
+
+def test_section_32_3_is_transcribed():
+    assert birthtime.SECTION_32_3_TITLE == "A Practical Approach"
+    assert "first determine the correct D-9 lagna or D-10 lagna" in (
+        birthtime.NARROW_DOWN_WITH_EACH_CRITERION)
+    assert "narrow down further and further with each criterion" in (
+        birthtime.NARROW_DOWN_WITH_EACH_CRITERION)
+    assert "we can revisit D-9 and change the lagna" in (
+        birthtime.SOMETIMES_WE_MUST_COME_BACK_TO_D9)
+    assert "willing to come back to the first step" in birthtime.BROAD_THEN_FINE
+
+
+def test_the_two_steps_are_the_two_stages_in_minutes():
+    """FINDING: 10 minutes is a D-10 window and 4 is a D-20 or D-24 one."""
+    first, second = birthtime.NARROWING_STEPS
+    assert float(first["width_minutes"]) == 10.0
+    assert float(second["width_minutes"]) == 4.0
+    # The second window sits inside the first.
+    assert first["from"] == "9:05" and first["to"] == "9:15"
+    assert second["from"] == "9:07" and second["to"] == "9:11"
+
+    def window(varga: int) -> float:
+        return float(birthtime.varga_rasi_change_interval(120.0,
+                                                          varga)["interval"])
+
+    assert window(10) == 12.0
+    assert window(20) == 6.0
+    assert window(24) == 5.0
+    assert abs(float(first["width_minutes"]) - window(10)) <= 2.0
+    assert abs(float(second["width_minutes"]) - window(24)) <= 2.0
+    assert "its own broad and fine stages" in (
+        birthtime.THE_TWO_STEPS_ARE_THE_TWO_STAGES_IN_MINUTES)
+
+
+def test_the_named_order_is_strictly_coarse_to_fine():
+    """FINDING: D-9 13.3 min, D-10 12, D-20 6, then Kalachakra."""
+    intervals = []
+    for row in birthtime.THE_NAMED_INSTRUMENTS:
+        if row["varga"] is None:
+            continue
+        intervals.append(float(birthtime.varga_rasi_change_interval(
+            120.0, int(row["varga"]))["interval"]))
+    assert intervals == [pytest.approx(13.333, abs=0.01), 12.0, 6.0]
+    assert intervals == sorted(intervals, reverse=True)
+
+    # Kalachakra is finer than any of them: a whole day of dasa date costs
+    # 0.6 seconds of birthtime at paramayush 100.
+    assert float(birthtime.kalachakra_date_error(100.0, 0.01)["days"]) == (
+        pytest.approx(1.0))
+    assert 0.01 * 60 == pytest.approx(0.6)
+
+    stages = [row["stage"] for row in birthtime.THE_NAMED_INSTRUMENTS]
+    assert stages == ["broad", "broad", "fine", "fine"]
+    assert "in the order the section names them" in (
+        birthtime.THE_NAMED_ORDER_IS_STRICTLY_COARSE_TO_FINE)
+
+
+def test_the_backtracking_is_computable():
+    """FINDING: D-9 in Li allows one D-24 lagna, D-9 in Sc allows two."""
+    aries = RASI_ABBR.index("Ar") * 30
+    centre = 23 + 20 / 60                       # the Li/Sc navamsa border
+    got = birthtime.refine_windows(aries + centre - 0.75,
+                                   aries + centre + 0.75,
+                                   vargas.d9_navamsa,
+                                   vargas.d24_chaturvimsamsa)
+    assert [RASI_ABBR[int(row["sign"])] for row in got] == ["Li", "Sc"]
+
+    libra, scorpio = got
+    assert [RASI_ABBR[s] for s in libra["fine_signs"]] == ["Aq"]
+    assert [RASI_ABBR[s] for s in scorpio["fine_signs"]] == ["Aq", "Pi"]
+
+    # The example's own shape: one choice is "better" and the other is what
+    # a D-24 answer of Pisces would force.
+    assert "lagna in D-9 in Li or Sc" in birthtime.SOMETIMES_WE_MUST_COME_BACK_TO_D9
+    assert "one D-24 candidate, Aquarius" in birthtime.THE_BACKTRACKING_IS_COMPUTABLE
+
+
+def test_d9_and_d24_borders_coincide_only_at_ten_degree_marks():
+    """FINDING: which is what decides whether backtracking is forced."""
+    from fractions import Fraction
+
+    nine = {Fraction(k * 10, 3) for k in range(10)}
+    twentyfour = {Fraction(j * 5, 4) for j in range(25)}
+    assert sorted(float(x) for x in nine & twentyfour) == [0.0, 10.0, 20.0,
+                                                           30.0]
+
+    aries = RASI_ABBR.index("Ar") * 30
+    # At a coincident mark the two D-9 choices share nothing.
+    at_twenty = birthtime.refine_windows(aries + 20.0 - 0.75,
+                                         aries + 20.0 + 0.75,
+                                         vargas.d9_navamsa,
+                                         vargas.d24_chaturvimsamsa)
+    first, second = (set(row["fine_signs"]) for row in at_twenty)
+    assert not (first & second)
+
+    # Away from one they share exactly one.
+    off_mark = birthtime.refine_windows(aries + 23 + 20 / 60 - 0.75,
+                                        aries + 23 + 20 / 60 + 0.75,
+                                        vargas.d9_navamsa,
+                                        vargas.d24_chaturvimsamsa)
+    first, second = (set(row["fine_signs"]) for row in off_mark)
+    assert len(first & second) == 1
+    assert "only at 0, 10, 20 and 30 degrees" in (
+        birthtime.D9_AND_D24_BORDERS_COINCIDE_ONLY_AT_TEN_DEGREE_MARKS)
+
+
+def test_the_d9_criteria_are_section_18_5s_own_significations():
+    """FINDING: the rectification criterion is the varga's signification."""
+    from hora.dasha.rasi.narayana import VARGA_SEED_RATIONALE
+
+    navamsa = next(row for row in VARGA_SEED_RATIONALE
+                   if "D9" in row["vargas"])
+    assert navamsa["shows"] == "dharma (duty)"
+    assert "To get married" in str(navamsa["text"])
+    assert "duty" in str(navamsa["text"])
+
+    assert "If one's marriage has already taken place" in (
+        birthtime.SOMETIMES_WE_MUST_COME_BACK_TO_D9)
+    assert "one's general sense of duty" in (
+        birthtime.SOMETIMES_WE_MUST_COME_BACK_TO_D9)
+    assert "The criterion is the signification" in (
+        birthtime.THE_D9_CRITERIA_ARE_SECTION_18_5S_OWN_SIGNIFICATIONS)
+
+
+def test_refine_windows_carries_the_whole_range_through():
+    aries = RASI_ABBR.index("Ar") * 30
+    low, high = aries + 10.0, aries + 14.0
+    got = birthtime.refine_windows(low, high, vargas.d9_navamsa,
+                                   vargas.d24_chaturvimsamsa)
+    # The coarse windows tile the range without gaps.
+    assert float(got[0]["from"]) == pytest.approx(low)
+    assert float(got[-1]["to"]) == pytest.approx(high)
+    from itertools import pairwise
+
+    for before, after in pairwise(got):
+        assert float(before["to"]) == pytest.approx(float(after["from"]))
+    # And each coarse window's fine windows tile it in turn.
+    for row in got:
+        inner = row["fine"]
+        assert float(inner[0]["from"]) == pytest.approx(float(row["from"]))
+        assert float(inner[-1]["to"]) == pytest.approx(float(row["to"]))

@@ -1972,7 +1972,7 @@ has not been given yet.
 | `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
 
-### Chapter 32 — §32.1 to §32.2.3, Example 129, Exercise 50 and footnotes 89 and 90 (95)
+### Chapter 32 — §32.1 to §32.3, Example 129, Exercise 50 and footnotes 89 and 90 (106)
 
 `rectification/birthtime.py`. The section is an argument, not a technique.
 Three things in it **are** computable and all three are consumed:
@@ -2041,6 +2041,13 @@ reproduced.
 | `THE_BOOKS_OWN_APPROXIMATE_METHOD_MISSES_BY_A_THIRD_OF_A_DEGREE` | Ours: §27.2's method was 72 and 118 seconds out, which is 18 to 30 arcminutes of annual lagna |
 | `THE_ANNUAL_MARGIN_IS_TWENTY_SECONDS_NOT_THIRTY` | Ours: 15 Cn 05 is 5 arcminutes above the border, so 20 seconds suffices and half a minute is loose |
 | `THE_MIDDLE_OF_THE_EIGHTH_DASAMSA_IS_22_SC_30` | Ours: the 8th dasamsa runs 21 to 24, and from the printed 23 Sc 30 the upward margin is 2 minutes. D-88 |
+| `SECTION_32_3_TITLE` · `NARROW_DOWN_WITH_EACH_CRITERION` · `SOMETIMES_WE_MUST_COME_BACK_TO_D9` · `BROAD_THEN_FINE` | §32.3 verbatim |
+| `NARROWING_STEPS` · `THE_NAMED_INSTRUMENTS` | The section's two illustrative windows and the four instruments it names, as data |
+| `THE_NAMED_ORDER_IS_STRICTLY_COARSE_TO_FINE` | Ours: D-9 13.3 minutes, D-10 12, D-20 6, Kalachakra 0.6 seconds a day of dasa date |
+| `THE_TWO_STEPS_ARE_THE_TWO_STAGES_IN_MINUTES` | Ours: 10 minutes is about a D-10 lagna's window and 4 about a D-20's or D-24's |
+| `THE_BACKTRACKING_IS_COMPUTABLE` | Ours: at Aries 23°20' a D-9 of Li allows one D-24 lagna and a D-9 of Sc allows two |
+| `D9_AND_D24_BORDERS_COINCIDE_ONLY_AT_TEN_DEGREE_MARKS` | Ours: 0, 10, 20 and 30 only, which is why neighbouring D-9 windows usually share a D-24 candidate |
+| `THE_D9_CRITERIA_ARE_SECTION_18_5S_OWN_SIGNIFICATIONS` | Ours: §18.5 justifies D-9 by dharma and marriage, and §32.3 fixes its lagna by marriage and duty |
 | `THE_DIVIDE_BY_N_RULE_HAS_ONE_EXCEPTION` | Ours: the rule is exact for 22 of 23 vargas and D-30's parts are 5, 5, 8, 7, 5 |
 | `THE_SECTIONS_FIGURES_ARE_MEANS_AND_IT_SAYS_SO` | Ours: the Sun's 30 days is good to 2%, the Moon's 60 hours is 10% high, and the section bolds "approximate" |
 | `THE_MOON_PARAGRAPH_CARRIES_TWO_SPEEDS` | Ours: 2.0 minutes per arcminute from one sentence, 1.8 from the next, 1.82 measured |

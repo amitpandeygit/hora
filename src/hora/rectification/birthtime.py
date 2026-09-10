@@ -1759,3 +1759,153 @@ THE_MIDDLE_OF_THE_EIGHTH_DASAMSA_IS_22_SC_30 = (
     "the 2 is inside the example's own 3-minute bound. See D-88."
 )
 
+
+# --------------------------------------------------------------------------
+# §32.3 A Practical Approach
+# --------------------------------------------------------------------------
+
+SECTION_32_3_TITLE = "A Practical Approach"
+
+#: §32.3's first paragraph, verbatim.
+NARROW_DOWN_WITH_EACH_CRITERION = (
+    "It is a good idea to first determine the correct D-9 lagna or D-10 lagna "
+    "and then go to the other divisional charts. We should first determine "
+    "that the birthtime is between 9:05 and 9:15. Then we can determine that "
+    "it is between 9:07 and 9:11. Then we can use a more precise criterion "
+    "and narrow down further. Thus we narrow down further and further with "
+    "each criterion.")
+
+#: §32.3's second paragraph, verbatim.
+SOMETIMES_WE_MUST_COME_BACK_TO_D9 = (
+    "If one's marriage has already taken place, we can use D-9 to see it and "
+    "fix D-9 lagna. If not, we can see one's general sense of duty, one's "
+    "basic skills and one's interaction with others and fix D-9 lagna based "
+    "on them. Then we can go to a higher divisional chart. However, in "
+    "reality, sometimes it may become necessary to come back to D-9. For "
+    "example, suppose someone can have lagna in D-9 in Li or Sc. Suppose we "
+    "think that Li is also a good candidate but Sc is better. Then the "
+    "candidates for D-24 lagna that we get with this choice may not make "
+    "sense. It may make sense to place lagna in D-24 in another rasi and that "
+    "may require lagna in D-9 to be in Li. In that case, we can revisit D-9 "
+    "and change the lagna.")
+
+#: §32.3's closing paragraph, verbatim.
+BROAD_THEN_FINE = (
+    "Trying to first do a broad rectification with D-9 and D-10 and then "
+    "doing a fine rectification with high divisional charts like D-20 and "
+    "Kalachakra dasa will provide a systematic approach to the problem, but "
+    "we should be willing to come back to the first step if we are stuck in "
+    "the second step.")
+
+#: §32.3's two narrowing steps, as data.
+NARROWING_STEPS: tuple[dict[str, object], ...] = (
+    {"step": 1, "from": "9:05", "to": "9:15", "width_minutes": 10.0},
+    {"step": 2, "from": "9:07", "to": "9:11", "width_minutes": 4.0},
+)
+
+#: The instruments §32.3 names, in the order it names them, broad first.
+THE_NAMED_INSTRUMENTS: tuple[dict[str, object], ...] = (
+    {"stage": "broad", "instrument": "D-9", "varga": 9},
+    {"stage": "broad", "instrument": "D-10", "varga": 10},
+    {"stage": "fine", "instrument": "D-20", "varga": 20},
+    {"stage": "fine", "instrument": "Kalachakra dasa", "varga": None},
+)
+
+
+def refine_windows(low: float, high: float,
+                   coarse: Callable[[float], object],
+                   fine: Callable[[float], object]) -> tuple[dict, ...]:
+    """§32.3's move: which fine-varga lagnas each coarse-varga choice allows.
+
+    "Suppose someone can have lagna in D-9 in Li or Sc... Then the candidates
+    for D-24 lagna that we get with this choice may not make sense."
+
+    :param low: the low end of the lagna range the birthtime allows.
+    :param high: the high end.
+    :param coarse: the varga whose lagna is being fixed first.
+    :param fine: the varga whose candidates that choice constrains.
+    :returns: one entry per coarse window, each carrying its own ``from``,
+        ``to`` and ``sign`` and the ``fine`` windows inside it.
+    """
+    out: list[dict[str, object]] = []
+    for window in lagna_windows(low, high, coarse):
+        inner = lagna_windows(cast(float, window["from"]),
+                              cast(float, window["to"]), fine)
+        out.append({
+            "from": window["from"], "to": window["to"],
+            "sign": window["sign"],
+            "fine": inner,
+            "fine_signs": tuple(dict.fromkeys(
+                int(cast(int, row["sign"])) for row in inner)),
+        })
+    return tuple(out)
+
+
+#: **Finding, measured.** The order §32.3 names is strictly coarse to fine,
+#: and by its own §32.2.1 rule the intervals fall monotonically: a **D-9**
+#: lagna holds for **13.3 minutes**, a **D-10** lagna for **12**, a **D-20**
+#: lagna for **6**, and **Kalachakra** resolves finer than any of them — at
+#: paramayush 100 a whole day of dasa date costs only **0.6 seconds** of
+#: birthtime. Four named instruments, four decreasing resolutions, in the
+#: order printed.
+THE_NAMED_ORDER_IS_STRICTLY_COARSE_TO_FINE = (
+    "D-9's lagna holds 13.3 minutes, D-10's 12, D-20's 6, and Kalachakra "
+    "moves a dasa date a whole day for 0.6 seconds of birthtime. The four "
+    "instruments fall in resolution in the order the section names them."
+)
+
+#: **Finding.** The section's own two steps match the instruments it ends
+#: with. The first window, 9:05 to 9:15, is **10 minutes** — about what fixing
+#: a **D-10** lagna gives you, whose window is 12. The second, 9:07 to 9:11,
+#: is **4 minutes** — about what a **D-20** or **D-24** lagna gives, whose
+#: windows are 6 and 5. The illustration is not arbitrary; it is the broad
+#: step and the fine step in minutes.
+THE_TWO_STEPS_ARE_THE_TWO_STAGES_IN_MINUTES = (
+    "Ten minutes is about a D-10 lagna's twelve and four is about a D-20's "
+    "six or a D-24's five. The section's illustrative narrowing is its own "
+    "broad and fine stages."
+)
+
+#: **Finding, demonstrated.** The backtracking §32.3 describes is real and
+#: computable. Take a lagna near Aries 23°20', where the navamsa turns from
+#: **Li** to **Sc**, with the three minutes either side §32.2.3 used:
+#:
+#: * D-9 in **Li** leaves exactly **one** D-24 candidate, Aquarius.
+#: * D-9 in **Sc** leaves **two**, Aquarius or Pisces.
+#:
+#: So the D-9 choice really does decide what D-24 can be, and a D-24 answer of
+#: Pisces forces D-9 to Sc while an answer outside those two forces the window
+#: itself to widen. `refine_windows` returns exactly this.
+THE_BACKTRACKING_IS_COMPUTABLE = (
+    "Three minutes either side of Aries 23 degrees 20 gives D-9 in Li with "
+    "one D-24 candidate, Aquarius, and D-9 in Sc with two, Aquarius or "
+    "Pisces. The first choice constrains the second."
+)
+
+#: **Finding, and it says when backtracking is forced.** D-9's boundaries fall
+#: at multiples of 3°20' and D-24's at multiples of 1°15', and inside one rasi
+#: those coincide **only at 0°, 10°, 20° and 30°**. Everywhere else a D-24
+#: amsa straddles a D-9 boundary, so two neighbouring D-9 choices **share** a
+#: D-24 candidate — which is why the Aries case above overlaps in Aquarius.
+#: Backtracking is forced only when the D-24 answer lies outside that shared
+#: amsa; at the three coincident degrees the candidate sets are disjoint and
+#: the D-9 choice decides D-24 outright.
+D9_AND_D24_BORDERS_COINCIDE_ONLY_AT_TEN_DEGREE_MARKS = (
+    "Inside a rasi the D-9 and D-24 boundaries coincide only at 0, 10, 20 and "
+    "30 degrees, so neighbouring D-9 windows usually share one D-24 "
+    "candidate. That shared amsa is what decides whether backtracking is "
+    "forced."
+)
+
+#: **Finding.** The criteria §32.3 offers for fixing a D-9 lagna are §18.5's
+#: own reasons for the varga. §18.5 explains D-9's seed as the 9th house
+#: because "D-9 shows dharma (**duty**). To get married, to live with one's
+#: spouse... are one's duties"; §32.3 says to use "one's marriage" or, failing
+#: that, "one's general sense of **duty**". The rectification criterion is the
+#: signification, taken straight across.
+THE_D9_CRITERIA_ARE_SECTION_18_5S_OWN_SIGNIFICATIONS = (
+    "Section 18.5 justifies D-9's seed by dharma and marriage, and section "
+    "32.3 offers marriage and a general sense of duty as the things to fix a "
+    "D-9 lagna by. The criterion is the signification."
+)
+
