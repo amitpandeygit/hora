@@ -2936,3 +2936,48 @@ argument. The test runs the table above.
 
 **Closes when:** you confirm the reading, or a later printing corrects it.
 
+
+---
+
+## D-88 · §32.2.3's "middle of the 8th dasamsa" is 22 Sc 30, not 23 Sc 30
+
+**Status: BOOK DEFECT — a one-degree slip that breaks the example's own
+contrast. Held as printed, with the correct margins recorded.**
+
+§32.2.3's example:
+
+> In natal D-10, lagna (23Sc30) is in the *middle* of the 8th dasamsa in Sc.
+> Unless the birthtime changes by more than 6 minutes in either direction,
+> lagna in D-10 will not change.
+
+Scorpio's dasamsas are three degrees each, so the 8th spans **21° to 24°** and
+its middle is **22 Sc 30**. The printed 23 Sc 30 sits half a degree below the
+*top* of that dasamsa, not at its centre.
+
+The consequence follows the middle, not the printed value. At four minutes a
+degree:
+
+| lagna | margin down | margin up |
+|---|---|---|
+| 22 Sc 30, the true middle | 1°30′ = **6 min** | 1°30′ = **6 min** |
+| 23 Sc 30, as printed | 2°30′ = 10 min | 0°30′ = **2 min** |
+
+So "6 minutes in either direction" is exactly right for 22 Sc 30 and wrong for
+23 Sc 30 in both directions.
+
+**It breaks the example.** The example posits a birthtime error of "upto 3
+minutes (either way)" and its whole point is that the natal D-10 lagna survives
+that while the annual one does not. From 23 Sc 30 the natal D-10 lagna flips
+after **2 minutes**, which is inside the stated bound — so as printed there is
+no contrast to draw. Reading 22 for 23 restores it exactly.
+
+Nothing else in the example depends on the natal figure. The annual half —
+15 Cn 05, Cancer just below 15° and Leo just above, counted the 5th and 6th
+from Pisces — reproduces exactly as printed.
+
+**What we do.** `THE_TAJAKA_BORDER_EXAMPLE` is transcribed as printed and
+`TAJAKA_BORDER_EXAMPLE_STATED` carries the printed margin, the correct margins
+and the true middle side by side. The test asserts all three.
+
+**Closes when:** you confirm the reading, or a later printing corrects it.
+

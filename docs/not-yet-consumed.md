@@ -1972,7 +1972,7 @@ has not been given yet.
 | `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
 
-### Chapter 32 — §32.1, §32.2.1, §32.2.2, Example 129, Exercise 50 and footnotes 89 and 90 (81)
+### Chapter 32 — §32.1 to §32.2.3, Example 129, Exercise 50 and footnotes 89 and 90 (95)
 
 `rectification/birthtime.py`. The section is an argument, not a technique.
 Three things in it **are** computable and all three are consumed:
@@ -2033,6 +2033,14 @@ reproduced.
 | `EVEN_ANTARDASAS_ARE_SWAMPED_AT_TWO_MINUTES` | Ours: 200 days exceeds 715 of 729 pratyantardasas and 17 of 81 antardasas, the shortest being 100 days |
 | `THE_VARGA_ASCENDANT_PLAYS_NO_PART_IN_A_VARGA_NARAYANA_DASA` | Ours: §18.5 reads the seed house in the rasi chart, so the fastest quantity in the chart is never an input |
 | `THE_RASI_LAGNA_IS_LEFT_OUT_OF_THE_NARAYANA_CLAIM` | Ours: a varga Narayana dasa also changes when the rasi lagna crosses a boundary. D-87 |
+| `SECTION_32_2_3_TITLE` · `THE_TAJAKA_LAGNA_MOVES_WITH_THE_NATAL_ONE` · `THE_TAJAKA_BORDER_EXAMPLE` · `THE_TAJAKA_CHART_CAN_SHOW_WHAT_THE_NATAL_ONE_HIDES` · `THE_ACCURACY_ASSUMPTION` · `AYANAMSA_MUST_BE_NONLINEAR` | §32.2.3 verbatim, including the book's truncated "this boo" |
+| `TAJAKA_BORDER_EXAMPLE_STATED` · `SUN_DEGREES_PER_DAY` | The example's figures printed and corrected side by side, and the amplification's denominator. D-88 |
+| `THE_ANNUAL_INSTANT_TRACKS_THE_BIRTHTIME_ALMOST_EXACTLY` | Ours: 1, 3 and 5 minutes of birthtime moved a real return by 1.006, 3.007 and 5.003 |
+| `CHANGING_THE_AYANAMSA_DOES_NOT_MOVE_THE_RETURN_INSTANT` | Ours: Lahiri and Raman agree on the instant to 0.002 seconds and shift both lagnas by the same 1.4463 degrees |
+| `THE_TIMES_360_IS_EXACT_AND_THE_BASELINE_DECIDES_THE_DAMAGE` | Ours: one arcminute of Sun costs 24.38 minutes and 6.88 degrees; Lahiri's own nonlinearity is 0.014′ over 1900-2100 and 0.371′ over 1000-2100 |
+| `THE_BOOKS_OWN_APPROXIMATE_METHOD_MISSES_BY_A_THIRD_OF_A_DEGREE` | Ours: §27.2's method was 72 and 118 seconds out, which is 18 to 30 arcminutes of annual lagna |
+| `THE_ANNUAL_MARGIN_IS_TWENTY_SECONDS_NOT_THIRTY` | Ours: 15 Cn 05 is 5 arcminutes above the border, so 20 seconds suffices and half a minute is loose |
+| `THE_MIDDLE_OF_THE_EIGHTH_DASAMSA_IS_22_SC_30` | Ours: the 8th dasamsa runs 21 to 24, and from the printed 23 Sc 30 the upward margin is 2 minutes. D-88 |
 | `THE_DIVIDE_BY_N_RULE_HAS_ONE_EXCEPTION` | Ours: the rule is exact for 22 of 23 vargas and D-30's parts are 5, 5, 8, 7, 5 |
 | `THE_SECTIONS_FIGURES_ARE_MEANS_AND_IT_SAYS_SO` | Ours: the Sun's 30 days is good to 2%, the Moon's 60 hours is 10% high, and the section bolds "approximate" |
 | `THE_MOON_PARAGRAPH_CARRIES_TWO_SPEEDS` | Ours: 2.0 minutes per arcminute from one sentence, 1.8 from the next, 1.82 measured |

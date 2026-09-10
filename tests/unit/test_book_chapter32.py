@@ -1631,3 +1631,266 @@ def test_the_dasa_error_helpers_reject_bad_inputs():
     assert float(earlier["days"]) == pytest.approx(-10.0)
     assert earlier["subtract_from_dasa_dates"] is False
     assert "and vice versa" in birthtime.NAKSHATRA_DASA_DATE_ERROR
+
+
+# --------------------------------------------------------------------------
+# §32.2.3 Tajaka Charts
+# --------------------------------------------------------------------------
+
+_TAJAKA_PLACE = Place(name="Tajaka", latitude=16 + 15 / 60,
+                      longitude=81 + 12 / 60)
+_TAJAKA_SETTINGS = Settings(node_type=NodeType.MEAN)
+
+
+def _annual(minute_offset: int, settings: Settings = _TAJAKA_SETTINGS):
+    """A real nativity's eleventh annual chart, cast from a shifted birth."""
+    from hora.tajaka.annual import varsha_pravesh
+
+    natal = compute_chart(
+        from_local(1970, 4, 4, 17, 50 + minute_offset, 0.0,
+                   utc_offset_hours=5.5), _TAJAKA_PLACE, settings)
+
+    def sun_at(jd: float) -> float:
+        return compute_chart(from_jd(jd, utc_offset_hours=5.5), _TAJAKA_PLACE,
+                             settings).positions[int(Graha.SUN)].longitude
+
+    got = varsha_pravesh(sun_at, natal.positions[int(Graha.SUN)].longitude,
+                         natal.instant.jd_ut, 11)
+    annual = compute_chart(from_jd(got["jd"], utc_offset_hours=5.5),
+                           _TAJAKA_PLACE, settings)
+    return natal.lagna_longitude, float(got["jd"]), annual.lagna_longitude
+
+
+def test_section_32_2_3_is_transcribed():
+    assert birthtime.SECTION_32_2_3_TITLE == "Tajaka Charts"
+    assert "will also change by approximately x" in (
+        birthtime.THE_TAJAKA_LAGNA_MOVES_WITH_THE_NATAL_ONE)
+    assert "is in the *middle* of the 8th dasamsa in Sc" in (
+        birthtime.THE_TAJAKA_BORDER_EXAMPLE)
+    assert "half a minute before the reported birthtime" in (
+        birthtime.THE_TAJAKA_BORDER_EXAMPLE)
+    assert "can help in some cases" in (
+        birthtime.THE_TAJAKA_CHART_CAN_SHOW_WHAT_THE_NATAL_ONE_HIDES)
+    # The book's own truncation, kept.
+    assert "taught in this boo or" in birthtime.THE_ACCURACY_ASSUMPTION
+    assert "multiplied by 360 in the longitude of lagna" in (
+        birthtime.AYANAMSA_MUST_BE_NONLINEAR)
+    assert "**nonlinear**" in birthtime.AYANAMSA_MUST_BE_NONLINEAR
+
+
+def test_the_annual_instant_tracks_the_birthtime_almost_exactly():
+    """FINDING, measured: a birthtime shift of m moves the return by m."""
+    from hora.core.timeutil import norm180
+
+    base_natal, base_jd, base_annual = _annual(0)
+    moved = {}
+    for minutes in (1, 3, 5):
+        natal, jd, annual = _annual(minutes)
+        moved[minutes] = ((jd - base_jd) * 1440.0,
+                          norm180(natal - base_natal) * 60,
+                          norm180(annual - base_annual) * 60)
+
+    for minutes, (instant, _, _) in moved.items():
+        assert instant == pytest.approx(minutes, abs=0.02), minutes
+
+    # And the annual lagna moves by about what the natal one does.
+    _, natal_arc, annual_arc = moved[1]
+    assert natal_arc == pytest.approx(14.5, abs=0.2)
+    assert annual_arc == pytest.approx(17.3, abs=0.2)
+    assert 0.5 < annual_arc / natal_arc < 2.0
+    assert "1.006, 3.007 and 5.003 minutes" in (
+        birthtime.THE_ANNUAL_INSTANT_TRACKS_THE_BIRTHTIME_ALMOST_EXACTLY)
+
+
+def test_changing_the_ayanamsa_does_not_move_the_return_instant():
+    """FINDING, measured: the ayanamsa cancels out of the solar return."""
+    from hora.core.settings import Ayanamsa
+
+    lahiri_natal, lahiri_jd, lahiri_annual = _annual(0)
+    raman = Settings(node_type=NodeType.MEAN, ayanamsa=Ayanamsa.RAMAN)
+    raman_natal, raman_jd, raman_annual = _annual(0, raman)
+
+    # The instant does not move at all, to a couple of thousandths of a second.
+    assert abs(raman_jd - lahiri_jd) * 86400 < 0.01
+
+    # And both lagnas shift by the same amount, which is the ayanamsa change.
+    natal_shift = raman_natal - lahiri_natal
+    annual_shift = raman_annual - lahiri_annual
+    assert natal_shift == pytest.approx(1.4463, abs=1e-3)
+    assert annual_shift == pytest.approx(natal_shift, abs=1e-4)
+    assert "matters only to a small extent" in (
+        birthtime.AYANAMSA_MUST_BE_NONLINEAR)
+    assert "cancels out of the return" in (
+        birthtime.CHANGING_THE_AYANAMSA_DOES_NOT_MOVE_THE_RETURN_INSTANT)
+
+
+def test_the_times_360_is_exact_against_the_engine():
+    """FINDING: one arcminute of Sun costs 24 minutes and nearly 7 degrees."""
+    from hora.core.timeutil import norm180
+    from hora.tajaka.annual import varsha_pravesh
+
+    natal = compute_chart(
+        from_local(1970, 4, 4, 17, 50, 0.0, utc_offset_hours=5.5),
+        _TAJAKA_PLACE, _TAJAKA_SETTINGS)
+
+    def sun_at(jd: float) -> float:
+        return compute_chart(from_jd(jd, utc_offset_hours=5.5), _TAJAKA_PLACE,
+                             _TAJAKA_SETTINGS).positions[
+                                 int(Graha.SUN)].longitude
+
+    def annual_for(offset_arcminutes: float) -> tuple[float, float]:
+        got = varsha_pravesh(
+            sun_at,
+            natal.positions[int(Graha.SUN)].longitude + offset_arcminutes / 60,
+            natal.instant.jd_ut, 11)
+        chart = compute_chart(from_jd(float(got["jd"]), utc_offset_hours=5.5),
+                              _TAJAKA_PLACE, _TAJAKA_SETTINGS)
+        return float(got["jd"]), chart.lagna_longitude
+
+    base_jd, base_lagna = annual_for(0.0)
+    for arcminutes, minutes, degrees in ((0.1, 2.44, 0.70), (1.0, 24.38, 6.88)):
+        jd, lagna = annual_for(arcminutes)
+        assert (jd - base_jd) * 1440 == pytest.approx(minutes, abs=0.05)
+        assert norm180(lagna - base_lagna) == pytest.approx(degrees, abs=0.05)
+
+    # The helper says the same thing without an ephemeris.
+    got = birthtime.solar_return_amplification(1.0)
+    assert float(got["instant_error_minutes"]) == pytest.approx(24.4, abs=0.1)
+    assert float(got["amplification"]) == pytest.approx(365.2564, abs=0.01)
+    assert "6.88 degrees" in (
+        birthtime.THE_TIMES_360_IS_EXACT_AND_THE_BASELINE_DECIDES_THE_DAMAGE)
+
+
+def test_lahiri_is_nearly_linear_over_the_modern_era_and_less_so_before():
+    """FINDING: the baseline decides how much a linear formula costs."""
+    import swisseph as swe
+
+    swe.set_sid_mode(swe.SIDM_LAHIRI)
+
+    def worst_residual(low: int, high: int) -> float:
+        years = list(range(low, high + 1))
+        values = [swe.get_ayanamsa_ut(swe.julday(y, 1, 1, 0.0)) for y in years]
+        count = len(years)
+        sum_x, sum_y = sum(years), sum(values)
+        sum_xx = sum(y * y for y in years)
+        sum_xy = sum(y * v for y, v in zip(years, values, strict=True))
+        slope = ((count * sum_xy - sum_x * sum_y)
+                 / (count * sum_xx - sum_x * sum_x))
+        intercept = (sum_y - slope * sum_x) / count
+        return max(abs(v - (intercept + slope * y)) * 60
+                   for y, v in zip(years, values, strict=True))
+
+    modern = worst_residual(1900, 2100)
+    ancient = worst_residual(1000, 2100)
+    assert modern == pytest.approx(0.014, abs=0.003)
+    assert ancient == pytest.approx(0.371, abs=0.02)
+    assert ancient > 20 * modern
+
+    # What each is worth in annual lagna.
+    assert float(birthtime.solar_return_amplification(modern)[
+        "lagna_error_degrees"]) == pytest.approx(0.085, abs=0.02)
+    assert float(birthtime.solar_return_amplification(ancient)[
+        "lagna_error_degrees"]) == pytest.approx(2.26, abs=0.1)
+    assert "0.014 arcminutes over 1900-2100" in (
+        birthtime.THE_TIMES_360_IS_EXACT_AND_THE_BASELINE_DECIDES_THE_DAMAGE)
+
+
+def test_the_books_own_approximate_method_misses_by_a_third_of_a_degree():
+    """FINDING: section 27.2's method, measured in chapter 27, in annual
+    lagna.
+    """
+    from hora.tajaka.approximate import THE_APPROXIMATION_ERROR_IS_NOT_CONSTANT
+
+    assert "72 seconds" in THE_APPROXIMATION_ERROR_IS_NOT_CONSTANT
+    assert "118 seconds" in THE_APPROXIMATION_ERROR_IS_NOT_CONSTANT
+    assert "approximate method taught in this boo" in (
+        birthtime.THE_ACCURACY_ASSUMPTION)
+
+    for seconds, arcminutes in ((72, 18.0), (118, 29.5)):
+        assert seconds / 60 * 15 == pytest.approx(arcminutes, abs=0.1)
+    # Against the 5 arcminutes this section's own example turns on.
+    assert 18.0 / 5 >= 3
+    assert "several times" in (
+        birthtime.THE_BOOKS_OWN_APPROXIMATE_METHOD_MISSES_BY_A_THIRD_OF_A_DEGREE)
+
+
+def test_the_annual_half_of_the_example_reproduces_exactly():
+    """Cancer just below 15 degrees and Leo just above, the 5th and 6th
+    from Pisces as printed.
+    """
+    stated = birthtime.TAJAKA_BORDER_EXAMPLE_STATED
+    cancer = RASI_ABBR.index("Cn") * 30
+    border = float(stated["annual_border"])
+    below = vargas.d10_dasamsa(cancer + border - 0.001)
+    above = vargas.d10_dasamsa(cancer + float(
+        stated["annual_lagna_degree_in_rasi"]))
+    assert RASI_ABBR[int(below.sign)] == stated["below_the_border"] == "Cn"
+    assert RASI_ABBR[int(above.sign)] == stated["above_the_border"] == "Le"
+
+    # Counted from Pisces, Cancer is the 5th and Leo the 6th.
+    pisces = RASI_ABBR.index("Pi")
+    assert (int(below.sign) - pisces) % 12 + 1 == 5
+    assert (int(above.sign) - pisces) % 12 + 1 == 6
+    assert "the 5th from Pi" in birthtime.THE_TAJAKA_BORDER_EXAMPLE
+    assert "the 6th from Pi" in birthtime.THE_TAJAKA_BORDER_EXAMPLE
+
+
+def test_the_annual_margin_is_twenty_seconds_not_thirty():
+    """FINDING: half a minute is a true sufficient condition, not the margin."""
+    stated = birthtime.TAJAKA_BORDER_EXAMPLE_STATED
+    above_border = (float(stated["annual_lagna_degree_in_rasi"])
+                    - float(stated["annual_border"])) * 60
+    assert above_border == pytest.approx(5.0)
+    assert birthtime.seconds_to_move(above_border) == pytest.approx(20.0)
+    assert float(stated["correct_margin_seconds"]) == 20.0
+    assert float(stated["printed_margin_seconds"]) == 30.0
+    # Half a minute is more than enough, so the sentence is true as printed.
+    assert float(stated["printed_margin_seconds"]) > float(
+        stated["correct_margin_seconds"])
+    assert "sufficient" in birthtime.THE_ANNUAL_MARGIN_IS_TWENTY_SECONDS_NOT_THIRTY
+
+
+def test_d88_the_middle_of_the_eighth_dasamsa_is_22_sc_30():
+    """BOOK DEFECT D-88. Six minutes either way is right for 22 Sc 30; from
+    the printed 23 Sc 30 it is ten minutes down and two up, and the two is
+    inside the example's own bound.
+    """
+    stated = birthtime.TAJAKA_BORDER_EXAMPLE_STATED
+    scorpio = RASI_ABBR.index("Sc") * 30
+    low, high = (float(x) for x in stated["natal_dasamsa_span"])
+    assert (low, high) == (21.0, 24.0)
+    assert (low + high) / 2 == float(stated["the_middle_of_the_eighth"]) == 22.5
+
+    # The 8th dasamsa really is 21 to 24, and the printed lagna is inside it.
+    printed = float(stated["natal_lagna_degree_in_rasi"])
+    assert printed == 23.5
+    windows = birthtime.lagna_windows(scorpio + low, scorpio + high,
+                                      vargas.d10_dasamsa)
+    assert len(windows) == 1
+    assert int(printed // 3) + 1 == int(stated["natal_dasamsa"]) == 8
+
+    # Margins from the true middle, and from the printed value.
+    assert birthtime.seconds_to_move((22.5 - low) * 60) / 60 == pytest.approx(
+        float(stated["printed_margin_minutes"]))
+    assert birthtime.seconds_to_move((high - 22.5) * 60) / 60 == pytest.approx(
+        float(stated["printed_margin_minutes"]))
+    down, up = (float(x) for x in stated["correct_margin_minutes"])
+    assert birthtime.seconds_to_move((printed - low) * 60) / 60 == (
+        pytest.approx(down))
+    assert birthtime.seconds_to_move((high - printed) * 60) / 60 == (
+        pytest.approx(up))
+    assert (down, up) == (10.0, 2.0)
+
+    # And two minutes is inside the error the example itself allows.
+    assert up < float(stated["error_bound_minutes"])
+    assert "error of upto 3 minutes" in birthtime.THE_TAJAKA_BORDER_EXAMPLE
+
+    from pathlib import Path
+
+    text = Path("docs/book-deviations.md").read_text(encoding="utf-8")
+    assert '## D-88 · §32.2.3\'s "middle of the 8th dasamsa" is 22 Sc 30' in text
+
+
+def test_solar_return_amplification_rejects_a_dead_rate():
+    with pytest.raises(birthtime.BirthtimeError, match="must both be positive"):
+        birthtime.solar_return_amplification(1.0, sun_degrees_per_day=0.0)

@@ -1540,3 +1540,222 @@ THE_RASI_LAGNA_IS_LEFT_OUT_OF_THE_NARAYANA_CLAIM = (
     "missing. See D-87."
 )
 
+
+# --------------------------------------------------------------------------
+# §32.2.3 Tajaka Charts
+# --------------------------------------------------------------------------
+
+SECTION_32_2_3_TITLE = "Tajaka Charts"
+
+#: §32.2.3's first paragraph, verbatim.
+THE_TAJAKA_LAGNA_MOVES_WITH_THE_NATAL_ONE = (
+    "If the change in lagna in the natal chart due to a birthtime change is "
+    "x, then the lagna in the Tajaka annual and monthly charts will also "
+    "change by approximately x. However, we have to keep in mind that the "
+    "list of divisional charts in which lagna is near rasi borders may "
+    "change.")
+
+#: §32.2.3's worked example, verbatim. See D-88 on "the middle".
+THE_TAJAKA_BORDER_EXAMPLE = (
+    "For example, let us say that natal lagna is at 23Sc30 and lagna in a "
+    "Tajaka annual chart for 1980-81 is at 15Cn05. Let us say that the "
+    "birthtime can have an error of upto 3 minutes (either way - plus or "
+    "minus). Let us say that we are interested in the career of the native "
+    "and especially in an event in career that took place in 1980-81. In "
+    "natal D-10, lagna (23Sc30) is in the *middle* of the 8th dasamsa in Sc. "
+    "Unless the birthtime changes by more than 6 minutes in either direction, "
+    "lagna in D-10 will not change. However, lagna in 1980-81 Tajaka annual "
+    "chart is close to a dasamsa border. If lagna is just below 15 degrees in "
+    "Cn, lagna in D-10 will be in the 5th from Pi, i.e. Cn itself. If lagna "
+    "is just above 15 degrees in Cn, lagna in D-10 will be in the 6th from "
+    "Pi, i.e. Le. With the given birthtime, we get 15Cn05 and so lagna in "
+    "D-10 in the Tajaka chart is in Le. But it could be Cn if the native's "
+    "birth took place half a minute before the reported birthtime.")
+
+#: §32.2.3's conclusion from the example, verbatim.
+THE_TAJAKA_CHART_CAN_SHOW_WHAT_THE_NATAL_ONE_HIDES = (
+    "Thus, sometimes we cannot detect a birthtime error just by looking at "
+    "the natal chart and dasas. Looking at the divisional charts of Tajaka "
+    "annual charts can help in some cases.")
+
+#: §32.2.3's caveat on how the Tajaka chart itself is cast, verbatim. "boo"
+#: is the book's; the word is not completed on the page.
+THE_ACCURACY_ASSUMPTION = (
+    "The assumption here is that one casts Tajaka charts very accurately. "
+    "This is not true with those who use the approximate method taught in "
+    "this boo or those who find the exact solar return but use an approximate "
+    "formula for Sun's motion or use a linear formula for ayanamsa.")
+
+#: §32.2.3's closing paragraph on the ayanamsa, verbatim.
+AYANAMSA_MUST_BE_NONLINEAR = (
+    "The actual ayanamsa used matters only to a small extent, in the sense "
+    "that it has the same impact on the longitude of lagna and the rasis "
+    "occupied by lagna in various divisional charts, as it has in the natal "
+    "chart. On the other hand, using an approximate linear formula for "
+    "ayanamsa brings minor discrepancy in Sun's longitude which is multiplied "
+    "by 360 in the longitude of lagna. This results in a serious error. "
+    "Though we do not know exactly when Nirayana zodiac coincided with the "
+    "Sayana zodiac, we do know the exact nonlinear formula of the precession. "
+    "So one hoping to use Tajaka charts in birthtime rectification **must** "
+    "use the correct **nonlinear** formula of the ayanamsa of one's choice. "
+    "Unfortunately, many people use linear approximations. They are not good "
+    "enough for Tajaka charts.")
+
+#: The example's figures, as printed against what they should be. See D-88.
+TAJAKA_BORDER_EXAMPLE_STATED: dict[str, object] = {
+    "natal_lagna": "23 Sc 30",
+    "natal_lagna_degree_in_rasi": 23.5,
+    "natal_dasamsa": 8,
+    "natal_dasamsa_span": (21.0, 24.0),
+    "printed_margin_minutes": 6.0,
+    "correct_margin_minutes": (10.0, 2.0),      # down, up
+    "the_middle_of_the_eighth": 22.5,
+    "annual_lagna": "15 Cn 05",
+    "annual_lagna_degree_in_rasi": 15 + 5 / 60,
+    "annual_border": 15.0,
+    "below_the_border": "Cn",
+    "above_the_border": "Le",
+    "printed_margin_seconds": 30.0,
+    "correct_margin_seconds": 20.0,
+    "error_bound_minutes": 3.0,
+}
+
+#: The Sun's mean daily motion in degrees — 360 over a sidereal year. The
+#: denominator of §32.2.3's amplification.
+SUN_DEGREES_PER_DAY = 360.0 / 365.2564
+
+
+def solar_return_amplification(sun_error_arcminutes: float, *,
+                               sun_degrees_per_day: float = SUN_DEGREES_PER_DAY,
+                               lagna_degrees_per_day: float = 360.0) -> dict:
+    """§32.2.3's x360: what an error in the Sun costs the annual lagna.
+
+    "Using an approximate linear formula for ayanamsa brings minor
+    discrepancy in Sun's longitude which is multiplied by 360 in the longitude
+    of lagna."
+
+    The mechanism is the solar return itself. An error of d degrees in the
+    Sun's longitude moves the instant the Sun is judged to have returned by
+    d / (the Sun's daily motion) **days**, and the ascendant covers 360
+    degrees in a day — so the annual chart's lagna is out by 360 d / (daily
+    motion), which is about 360 times d.
+
+    :param sun_error_arcminutes: the error in the Sun's longitude.
+    :raises BirthtimeError: on a non-positive daily motion.
+    """
+    error = validate.finite("sun_error_arcminutes",
+                            float(sun_error_arcminutes))
+    per_day = validate.finite("sun_degrees_per_day",
+                              float(sun_degrees_per_day))
+    lagna_per_day = validate.finite("lagna_degrees_per_day",
+                                    float(lagna_degrees_per_day))
+    if per_day <= 0 or lagna_per_day <= 0:
+        raise BirthtimeError(
+            "sun_degrees_per_day and lagna_degrees_per_day must both be "
+            f"positive; got {sun_degrees_per_day} and {lagna_degrees_per_day}")
+
+    days = (error / 60.0) / per_day
+    return {
+        "sun_error_arcminutes": error,
+        "instant_error_minutes": days * 1440.0,
+        "lagna_error_degrees": days * lagna_per_day,
+        "amplification": lagna_per_day / per_day,
+        "rule": AYANAMSA_MUST_BE_NONLINEAR,
+    }
+
+
+#: **Finding, measured, and the first claim is stronger than "approximately".**
+#: A birthtime shifted by m minutes moves the natal Sun by m minutes' worth of
+#: motion, so the solar return moves by **m minutes too** — measured on a real
+#: nativity, +1, +3 and +5 minutes of birthtime moved the eleventh annual
+#: chart's instant by 1.006, 3.007 and 5.003 minutes. The annual lagna then
+#: moves by whatever its own ascendant does in that time: 17.3' against the
+#: natal chart's 14.5' for one minute, the two differing only because the two
+#: charts' ascendants rise at different rates. "Approximately x" is right, and
+#: the *instant* tracks to better than a per cent.
+THE_ANNUAL_INSTANT_TRACKS_THE_BIRTHTIME_ALMOST_EXACTLY = (
+    "One, three and five minutes of birthtime moved a real annual chart's "
+    "instant by 1.006, 3.007 and 5.003 minutes. The annual lagna moved 17.3' "
+    "against the natal chart's 14.5', the difference being the two "
+    "ascendants' own rates."
+)
+
+#: **Finding, measured.** "The actual ayanamsa used matters only to a small
+#: extent... it has the same impact on the longitude of lagna... as it has in
+#: the natal chart" is exactly right, and the reason is that the solar return
+#: is defined against the **same** sidereal zodiac it is measured in: change
+#: the ayanamsa and both the target and the Sun shift together, so the
+#: **instant does not move**. Measured on one nativity, Lahiri and Raman give
+#: the same return instant to **0.002 seconds**, and the annual lagna shifts
+#: by 1.44631 degrees against the natal lagna's 1.44630 — the same shift to
+#: five decimal places.
+CHANGING_THE_AYANAMSA_DOES_NOT_MOVE_THE_RETURN_INSTANT = (
+    "Lahiri and Raman put one nativity's solar return at the same instant to "
+    "two thousandths of a second, and shift the annual and natal lagnas by "
+    "the same 1.4463 degrees. The ayanamsa cancels out of the return."
+)
+
+#: **Finding, measured against the engine, and the x360 is exact.** Perturbing
+#: the natal Sun by **one arcminute** and re-solving the return moved the
+#: instant by **24.38 minutes** and the annual lagna by **6.88 degrees** —
+#: more than two whole dasamsas. A tenth of an arcminute still costs 2.44
+#: minutes and 0.70 degrees. The book's ×360 is not rhetoric: it is
+#: 360 divided by the Sun's degree a day.
+#:
+#: How much that bites depends on the baseline. **Lahiri itself is very nearly
+#: linear over the modern era**: against a least-squares line it departs by at
+#: most **0.014 arcminutes** over 1900-2100, worth 0.08 degrees of annual
+#: lagna. Over 1500-2100 it is 0.111 arcminutes and 0.67 degrees, and over
+#: 1000-2100 0.371 arcminutes and 2.26 degrees. So the warning is right, and
+#: it is a warning about crude linearisations and long baselines rather than
+#: about a century-scale best fit.
+THE_TIMES_360_IS_EXACT_AND_THE_BASELINE_DECIDES_THE_DAMAGE = (
+    "One arcminute of Sun error moved a real annual chart's instant by 24.38 "
+    "minutes and its lagna by 6.88 degrees. Lahiri departs from a best-fit "
+    "line by 0.014 arcminutes over 1900-2100 and 0.371 over 1000-2100, worth "
+    "0.08 and 2.26 degrees of annual lagna."
+)
+
+#: **Finding, and the book's warning about its own method is quantified by its
+#: own exercise.** §32.2.3 says the accuracy assumption "is not true with
+#: those who use the approximate method taught in this boo". §27.2's method
+#: was measured against Exercise 47 at **72 seconds** out in one year and
+#: **118 seconds** in another. At the ascendant's nominal quarter-degree a
+#: minute that is **18 to 30 arcminutes** of annual lagna — three to six times
+#: the 5 arcminutes this section's own example turns on.
+THE_BOOKS_OWN_APPROXIMATE_METHOD_MISSES_BY_A_THIRD_OF_A_DEGREE = (
+    "Section 27.2's approximate method was 72 and 118 seconds out on one "
+    "nativity, which is 18 to 30 arcminutes of annual lagna — several times "
+    "the 5 arcminutes section 32.2.3's own example hangs on."
+)
+
+#: **Finding.** The annual lagna's margin is **20 seconds**, not the half
+#: minute printed: 15 Cn 05 stands 5 arcminutes above the 15-degree border and
+#: the ascendant covers 15 arcminutes a minute. Half a minute earlier would
+#: certainly put it below, so the sentence is true as a **sufficient**
+#: condition and loose as an exact one, which is what §32.2's bolded
+#: "approximate" licenses. Both figures reproduce: just below 15 gives Cancer
+#: and 15 Cn 05 gives Leo, counted the 5th and 6th from Pisces as printed.
+THE_ANNUAL_MARGIN_IS_TWENTY_SECONDS_NOT_THIRTY = (
+    "15 Cn 05 is 5 arcminutes above the border and the ascendant does 15 a "
+    "minute, so 20 seconds suffices. Half a minute is a true sufficient "
+    "condition, not the exact margin."
+)
+
+#: **Book defect, D-88.** "In natal D-10, lagna (23Sc30) is in the *middle* of
+#: the 8th dasamsa in Sc." The 8th dasamsa of Scorpio spans 21 to 24 degrees
+#: and its middle is **22 Sc 30**, not 23 Sc 30. The consequence the section
+#: draws — "unless the birthtime changes by more than 6 minutes in either
+#: direction, lagna in D-10 will not change" — is right for 22 Sc 30, whose
+#: margins are 1°30' each way at four minutes a degree. From 23 Sc 30 the
+#: margins are **10 minutes down and 2 minutes up**.
+#:
+#: Two arcminutes up is **inside the example's own ±3 minute error bound**, so
+#: as printed the natal D-10 lagna is not safe either — and the contrast the
+#: whole example is built on collapses. Reading 22 for 23 restores it.
+THE_MIDDLE_OF_THE_EIGHTH_DASAMSA_IS_22_SC_30 = (
+    "The 8th dasamsa of Scorpio runs 21 to 24, so its middle is 22 Sc 30. "
+    "From the printed 23 Sc 30 the margins are 10 minutes down and 2 up, and "
+    "the 2 is inside the example's own 3-minute bound. See D-88."
+)
+
