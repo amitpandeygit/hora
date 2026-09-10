@@ -1361,3 +1361,273 @@ def test_narrow_down_rejects_nothing_and_unfound_windows():
         birthtime.narrow_down([])
     with pytest.raises(birthtime.BirthtimeError, match="was not found"):
         birthtime.narrow_down([{"found": False}])
+
+
+# --------------------------------------------------------------------------
+# §32.2.2 Dasas
+# --------------------------------------------------------------------------
+
+
+def test_section_32_2_2_is_transcribed():
+    assert birthtime.SECTION_32_2_2_TITLE == "Dasas"
+    assert "Because lagna changes rasi once in 2 hours" in (
+        birthtime.RASI_DASAS_ARE_ROBUST)
+    assert "unless a planet changes rasi in the divisional chart" in (
+        birthtime.NARAYANA_DASA_OF_VARGAS_IS_ROBUST)
+    assert "nx360xm/(24x60) = (n x m)/4" in birthtime.NAKSHATRA_DASA_DATE_ERROR
+    assert "the complete duration (and not just the remainder at birth)" in (
+        birthtime.NAKSHATRA_DASA_DATE_ERROR)
+    assert "It is almost 7 months!" in birthtime.KALACHAKRA_DATE_ERROR
+    assert "futile to use pratyantardasas" in birthtime.KALACHAKRA_DATE_ERROR
+    assert len(birthtime.KALACHAKRA_DATE_ERROR.split("\n\n")) == 3
+
+
+def test_the_three_worked_error_figures_reproduce():
+    for row in birthtime.DASA_ERROR_CASES:
+        years, minutes = float(row["full_years"]), float(row["minutes"])
+        got = (birthtime.nakshatra_dasa_date_error(years, minutes)
+               if row["system"] == "nakshatra"
+               else birthtime.kalachakra_date_error(years, minutes))
+        assert float(got["days"]) == pytest.approx(float(row["days"]))
+        assert got["subtract_from_dasa_dates"] is True
+
+    # The printed arithmetic itself.
+    assert 20 * 2 / 4 == 10
+    assert 10 * 2 / 4 == 5
+    assert 100 * 2 == 200
+    assert 200 / 30.44 == pytest.approx(6.57, abs=0.01)     # "almost 7 months"
+
+
+def test_the_two_dasa_lengths_are_the_whole_vimsottari_periods():
+    from hora.dasha.nakshatra.systems import VIMSHOTTARI
+
+    periods = dict(zip(VIMSHOTTARI.order, VIMSHOTTARI.years, strict=True))
+    assert periods[Graha.VENUS] == 20
+    assert periods[Graha.MOON] == 10
+    assert sum(VIMSHOTTARI.years) == 120
+    for row in birthtime.DASA_ERROR_CASES:
+        if row["system"] != "nakshatra":
+            continue
+        lord = Graha.VENUS if row["lord"] == "Venus" else Graha.MOON
+        assert periods[lord] == int(row["full_years"])
+
+
+def test_the_printed_balances_play_no_part():
+    """FINDING: seven years of Venus and three of the Moon are decoys."""
+    for row in birthtime.DASA_ERROR_CASES:
+        if row["remaining_years"] is None:
+            continue
+        assert int(row["remaining_years"]) != int(row["full_years"])
+        by_full = birthtime.nakshatra_dasa_date_error(
+            float(row["full_years"]), float(row["minutes"]))["days"]
+        assert float(by_full) == pytest.approx(float(row["days"]))
+        # The balance, used instead, would give a different answer.
+        by_balance = birthtime.nakshatra_dasa_date_error(
+            float(row["remaining_years"]), float(row["minutes"]))["days"]
+        assert float(by_balance) != pytest.approx(float(row["days"]))
+    assert "7 years of Venus dasa remains" in (
+        birthtime.NAKSHATRA_DASA_WORKED_CASES)
+    assert "3 years of Moon dasa were remaining" in (
+        birthtime.NAKSHATRA_DASA_WORKED_CASES)
+    assert "printed and unused" in birthtime.THE_PRINTED_BALANCES_PLAY_NO_PART
+
+
+def test_the_twenty_four_hour_nakshatra_is_the_accurate_figure():
+    """FINDING, measured: mean 24.34 hours, implying 54.76 hours a rasi."""
+    place = Place(name="nakshatra", latitude=0.0, longitude=0.0)
+    base = from_local(2000, 1, 1, 0, 0, 0.0, utc_offset_hours=0.0).jd_ut
+    span = 360.0 / 27.0
+    previous, started, spans = None, 0, []
+    for index in range(366 * 24 * 4):
+        which = int(compute_chart(
+            from_jd(base + index / 96.0), place,
+            _SETTINGS).positions[int(Graha.MOON)].longitude // span)
+        if which != previous:
+            if previous is not None:
+                spans.append((index - started) / 96.0 * 24)
+            previous, started = which, index
+    spans = spans[1:]                       # the first one starts mid-nakshatra
+    assert 20.9 < min(spans) < 21.1
+    assert 27.2 < max(spans) < 27.4
+    mean = sum(spans) / len(spans)
+    assert mean == pytest.approx(24.34, abs=0.05)
+
+    # Which implies a rasi of 54.8 hours, not section 32.2.1's 60.
+    assert mean * 27 / 12 == pytest.approx(54.76, abs=0.1)
+    assert "60/10=6 hours" in birthtime.PLANETS_CHANGE_VERY_SLOWLY
+    assert "only the 60 is loose" in (
+        birthtime.THE_TWENTY_FOUR_HOUR_NAKSHATRA_IS_THE_ACCURATE_FIGURE)
+
+
+def test_the_derivation_uses_savana_years():
+    """FINDING: 360 days to the year, which is OI-115's savana."""
+    assert "nx360xm" in birthtime.NAKSHATRA_DASA_DATE_ERROR
+    # The clean quarter only appears with 360 days to a year.
+    assert 360 / (24 * 60) == pytest.approx(0.25)
+    assert 365.2564 / (24 * 60) != pytest.approx(0.25, abs=1e-3)
+
+    from pathlib import Path
+
+    text = Path("docs/open-items.md").read_text(encoding="utf-8")
+    assert "OI-115 — §16.2 uses savana years" in text
+    assert "Evidence on OI-115, no change" in (
+        birthtime.THE_DERIVATION_USES_SAVANA_YEARS)
+
+
+def test_the_kalachakra_factor_is_four_because_a_pada_is_a_quarter():
+    """FINDING: a navamsa is a quarter of a nakshatra, and the 360s cancel."""
+    nakshatra = birthtime.nakshatra_dasa_date_error(100.0, 2.0)["days"]
+    kalachakra = birthtime.kalachakra_date_error(100.0, 2.0)["days"]
+    assert float(kalachakra) / float(nakshatra) == pytest.approx(4.0)
+
+    # A pada takes a quarter of 24x60 minutes, and 360 cancels 360.
+    assert 24 * 60 / 4 == 360
+    assert 100 * 360 * 2 / 360 == pytest.approx(200.0)
+
+    # The same quantity per arcminute is already in the Kalachakra module:
+    # a pada is 200 arcminutes, so paramayush / 200 years each.
+    from hora.dasha.nakshatra.kalachakra import (
+        balance_per_arcminute,
+        group_of,
+        pada_sequence,
+        paramayush,
+        sub_group_of,
+    )
+
+    sequence = pada_sequence(group_of(1), sub_group_of(1), 1)
+    assert paramayush(sequence) == 100
+    assert balance_per_arcminute(sequence) == pytest.approx(100 / 200)
+    assert "no divisor" in (
+        birthtime.THE_KALACHAKRA_FACTOR_IS_FOUR_BECAUSE_A_PADA_IS_A_QUARTER)
+
+
+def test_even_antardasas_are_swamped_at_two_minutes():
+    """FINDING: 715 of 729 pratyantardasas and 17 of 81 antardasas are
+    shorter than the 200-day error the section itself computes. Built from
+    section 24.2's own wheel, not from a proportional model.
+    """
+    from hora.dasha.nakshatra.kalachakra import (
+        antardasas,
+        dasa_years,
+        group_of,
+        pada_sequence,
+        paramayush,
+        sub_group_of,
+        wheel,
+        wheel_position,
+    )
+
+    nakshatra = 1                                   # Aswini, savya, pada 1
+    sequence = pada_sequence(group_of(nakshatra), sub_group_of(nakshatra), 1)
+    total = paramayush(sequence)
+    assert total == 100
+
+    error = float(birthtime.kalachakra_date_error(total, 2.0)["days"])
+    assert error == 200.0
+
+    ring = wheel(group_of(nakshatra))
+    start = wheel_position(nakshatra, 1)
+    dasas, antas, pratyantas = [], [], []
+    for step in range(9):
+        index = (start + step) % 24
+        years = dasa_years(ring[index])
+        dasas.append(years * 360)
+        for anta in antardasas(nakshatra, index, years):
+            antas.append(float(anta["years"]) * 360)
+            for pratya in antardasas(nakshatra, int(anta["position"]),
+                                     float(anta["years"])):
+                pratyantas.append(float(pratya["years"]) * 360)
+
+    assert (len(dasas), len(antas), len(pratyantas)) == (9, 81, 729)
+    assert sum(1 for d in dasas if d < error) == 0
+    assert sum(1 for a in antas if a < error) == 17
+    assert sum(1 for p in pratyantas if p < error) == 715
+    assert min(antas) == pytest.approx(100.0)
+    assert min(dasas) == pytest.approx(1800.0)
+
+    finding = birthtime.EVEN_ANTARDASAS_ARE_SWAMPED_AT_TWO_MINUTES
+    assert "715 of the 729" in finding
+    assert "17 of the 81" in finding
+    assert "the shortest of which is 100 days" in finding
+
+
+def test_the_varga_ascendant_plays_no_part_in_a_varga_narayana_dasa():
+    """FINDING: section 18.5 never asks for it, which is why the claim is as
+    safe as it is.
+    """
+    import inspect
+
+    from hora.dasha.rasi.narayana import varga_lagna
+
+    parameters = inspect.signature(varga_lagna).parameters
+    assert list(parameters) == ["divisions", "natal_lagna", "varga_signs",
+                                "lord", "seed_house_number"]
+    assert "varga_lagna" not in parameters
+    # The D-24 ascendant is the fastest thing in the chart and is not an input.
+    assert birthtime.varga_rasi_change_interval(120.0, 24)["interval"] == 5.0
+    assert "never uses the varga ascendant" in (
+        birthtime.THE_VARGA_ASCENDANT_PLAYS_NO_PART_IN_A_VARGA_NARAYANA_DASA)
+
+
+def test_d87_the_rasi_lagna_is_left_out_of_the_narayana_claim():
+    """BOOK DEFECT D-87. Four minutes across a rasi-lagna boundary moves the
+    D-24 varga lagna with no graha changing rasi in D-24.
+    """
+    from hora.core.timeutil import from_jd
+    from hora.dasha.rasi.narayana import varga_lagna
+
+    base = from_local(2000, 4, 9, 13, 35, 0.0, utc_offset_hours=-5.0).jd_ut
+    leo = RASI_ABBR.index("Le")
+    low, high = base - 3 / 24, base
+    for _ in range(60):
+        middle = (low + high) / 2
+        if int(compute_chart(from_jd(middle), _PLACE,
+                             _SETTINGS).lagna_longitude // 30) < leo:
+            low = middle
+        else:
+            high = middle
+
+    rows, graha_rasis = [], []
+    for offset in (-2, +2):
+        chart = compute_chart(from_jd(high + offset / 1440.0), _PLACE,
+                              _SETTINGS)
+        signs = {g: int(vargas.d24_chaturvimsamsa(
+            chart.positions[g].longitude).sign) for g in range(9)}
+        graha_rasis.append(tuple(signs[g] for g in range(9)))
+        rows.append((RASI_ABBR[int(chart.lagna_longitude // 30)],
+                     varga_lagna(24, int(chart.lagna_longitude // 30), signs)))
+
+    # Not one graha changes D-24 rasi across the four minutes.
+    assert len(set(graha_rasis)) == 1
+
+    (before_lagna, before), (after_lagna, after) = rows
+    assert (before_lagna, after_lagna) == ("Cn", "Le")
+    assert before["seed_house"] == after["seed_house"] == 12
+    assert (before["seed_rasi_name"], after["seed_rasi_name"]) == (
+        "Gemini", "Cancer")
+    assert (before["lord_name"], after["lord_name"]) == ("Mercury", "Moon")
+    assert (before["lagna_name"], after["lagna_name"]) == ("Leo", "Libra")
+
+    # The first paragraph names the lagna; the second does not.
+    assert "lagna changes rasi" in birthtime.RASI_DASAS_ARE_ROBUST
+    assert "lagna" not in birthtime.NARAYANA_DASA_OF_VARGAS_IS_ROBUST
+
+    from pathlib import Path
+
+    text = Path("docs/book-deviations.md").read_text(encoding="utf-8")
+    assert "## D-87 · §32.2.2's varga Narayana claim leaves out the rasi lagna" in (
+        text)
+    assert "The conclusion survives" in (
+        birthtime.THE_RASI_LAGNA_IS_LEFT_OUT_OF_THE_NARAYANA_CLAIM)
+
+
+def test_the_dasa_error_helpers_reject_bad_inputs():
+    with pytest.raises(birthtime.BirthtimeError, match="full_dasa_years"):
+        birthtime.nakshatra_dasa_date_error(0.0, 2.0)
+    with pytest.raises(birthtime.BirthtimeError, match="paramayush_years"):
+        birthtime.kalachakra_date_error(-1.0, 2.0)
+    # A negative error moves the dates the other way, as the section says.
+    earlier = birthtime.nakshatra_dasa_date_error(20.0, -2.0)
+    assert float(earlier["days"]) == pytest.approx(-10.0)
+    assert earlier["subtract_from_dasa_dates"] is False
+    assert "and vice versa" in birthtime.NAKSHATRA_DASA_DATE_ERROR

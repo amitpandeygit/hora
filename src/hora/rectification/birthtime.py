@@ -1329,3 +1329,214 @@ THE_LAST_LINE_IS_THE_ALGORITHM = (
     "intersection."
 )
 
+
+# --------------------------------------------------------------------------
+# §32.2.2 Dasas
+# --------------------------------------------------------------------------
+
+SECTION_32_2_2_TITLE = "Dasas"
+
+#: §32.2.2's first paragraph, verbatim.
+RASI_DASAS_ARE_ROBUST = (
+    "Rasi dasas based on rasi chart change only if lagna changes rasi or a "
+    "planet changes rasi. Because lagna changes rasi once in 2 hours, we do "
+    "not have to deal with inaccuracies in rasi dasas in most cases.")
+
+#: §32.2.2's second paragraph, verbatim. See D-87.
+NARAYANA_DASA_OF_VARGAS_IS_ROBUST = (
+    "Narayana dasa of divisional charts does not change in a small period of "
+    "time, unless a planet changes rasi in the divisional chart of interest.")
+
+#: §32.2.2's derivation for the nakshatra dasas, verbatim.
+NAKSHATRA_DASA_DATE_ERROR = (
+    "However, the dasa start dates in nakshatra dasas change with small "
+    "changes in birthtime. Let us say the complete duration (and not just the "
+    "remainder at birth) of the dasa running at birth is n years. Let us say "
+    "the birthtime is wrong by m minutes. Moon stays in the nakshatra for "
+    "about 24x60 minutes (24 hours) and the error in the fraction of Moon's "
+    "constellation that is yet to be traversed is m/(24x60). The error in the "
+    "number of days of dasa left is nx360xm/(24x60) = (n x m)/4. If we add m "
+    "minutes to the birthtime, we should subtract (n x m)/4 days from dasa "
+    "dates and vice versa.")
+
+#: §32.2.2's two worked nakshatra cases, verbatim.
+NAKSHATRA_DASA_WORKED_CASES = (
+    "If 7 years of Venus dasa remains at birth, then n = 20 and the "
+    "approximate error in dasa dates is 20m/4 = 5m days, where m is the "
+    "birthtime error in minutes. If the birthtime is wrong by 2 minutes, dasa "
+    "dates are wrong by 10 days.\n\n"
+    "If the birthtime is wrong by 2 minutes and 3 years of Moon dasa were "
+    "remaining at birth, then n = 10 and m = 2 and the error in dasa dates is "
+    "10x2/4 = 5 days.")
+
+#: §32.2.2's Kalachakra paragraphs, verbatim.
+KALACHAKRA_DATE_ERROR = (
+    "In Kalachakra dasa, the error is more. If n years is the paramayush of "
+    "the sequence corresponding to the navamsa of natal Moon and m minutes is "
+    "the error in birthtime, the error in the dates of dasa is (n x m) days. "
+    "If we add m minutes to the birthtime, we should subtract (n x m) days "
+    "from dasa dates and vice versa.\n\n"
+    "For example, if the paramayush is 100 years and the birthtime error is 2 "
+    "minutes, then the error in dates is 200 days. It is almost 7 months!\n\n"
+    "For this reason, it is futile to use pratyantardasas in Kalachakra dasa "
+    "unless one is absolutely confident of the birthtime.")
+
+#: The section's three worked figures, as data.
+DASA_ERROR_CASES: tuple[dict[str, object], ...] = (
+    {"system": "nakshatra", "lord": "Venus", "full_years": 20,
+     "remaining_years": 7, "minutes": 2, "days": 10.0},
+    {"system": "nakshatra", "lord": "Moon", "full_years": 10,
+     "remaining_years": 3, "minutes": 2, "days": 5.0},
+    {"system": "kalachakra", "lord": None, "full_years": 100,
+     "remaining_years": None, "minutes": 2, "days": 200.0},
+)
+
+
+def nakshatra_dasa_date_error(full_dasa_years: float, minutes: float) -> dict:
+    """§32.2.2's nakshatra formula: (n x m)/4 days.
+
+    `full_dasa_years` is the **complete** length of the dasa running at birth
+    and not the balance — the section says so where it defines n, and both of
+    its worked cases print a balance that plays no part in the answer.
+
+    The sign is the section's: "if we add m minutes to the birthtime, we
+    should subtract (n x m)/4 days from dasa dates and vice versa", so a
+    positive `minutes` returns days to be **subtracted**.
+
+    :raises BirthtimeError: on a non-positive dasa length.
+    """
+    years = validate.finite("full_dasa_years", float(full_dasa_years))
+    if years <= 0:
+        raise BirthtimeError(
+            f"full_dasa_years must be positive; got {full_dasa_years}")
+    error = validate.finite("minutes", float(minutes))
+    return {
+        "days": years * error / 4.0,
+        "subtract_from_dasa_dates": error > 0,
+        "full_dasa_years": years, "minutes": error,
+        "rule": NAKSHATRA_DASA_DATE_ERROR,
+    }
+
+
+def kalachakra_date_error(paramayush_years: float, minutes: float) -> dict:
+    """§32.2.2's Kalachakra formula: (n x m) days.
+
+    `paramayush_years` is the paramayush of the sequence for the natal Moon's
+    navamsa — one of the four values §24.2's Table 48 gives.
+
+    :raises BirthtimeError: on a non-positive paramayush.
+    """
+    years = validate.finite("paramayush_years", float(paramayush_years))
+    if years <= 0:
+        raise BirthtimeError(
+            f"paramayush_years must be positive; got {paramayush_years}")
+    error = validate.finite("minutes", float(minutes))
+    return {
+        "days": years * error,
+        "subtract_from_dasa_dates": error > 0,
+        "paramayush_years": years, "minutes": error,
+        "rule": KALACHAKRA_DATE_ERROR,
+    }
+
+
+#: **Finding, measured, and it settles §32.2.1's loose Moon.** "Moon stays in
+#: the nakshatra for about 24x60 minutes" is a good figure: measured over a
+#: year, the Moon's nakshatra takes **21.00 to 27.25 hours, mean 24.34**. And
+#: 24.34 hours a nakshatra implies **54.76 hours a rasi**, which is the
+#: measured rasi mean to a rounding. So the chapter states the Moon's speed
+#: three times — 60 hours a rasi in §32.2.1, 200 arcminutes in 6 hours two
+#: sentences later, and 24 hours a nakshatra here — and the last two agree
+#: with the sky and with each other. Only the 60 is loose.
+THE_TWENTY_FOUR_HOUR_NAKSHATRA_IS_THE_ACCURATE_FIGURE = (
+    "The Moon's nakshatra runs 21.00 to 27.25 hours with a mean of 24.34, "
+    "which implies 54.76 hours a rasi and not section 32.2.1's 60. Of the "
+    "chapter's three statements of the Moon's speed, only the 60 is loose."
+)
+
+#: **Finding, and it is OI-115's year.** The derivation turns years into days
+#: by multiplying by **360** — "nx360xm/(24x60)" — so §32.2.2 computes in
+#: **savana** years, the 360-day year §16.2's controversy box chose for every
+#: nakshatra dasa in the book. It is used here without comment, and it is what
+#: makes the quotient come out as a clean quarter. Evidence on OI-115;
+#: **nothing changes** — precedence keeps JHora's sidereal default until you
+#: rule.
+THE_DERIVATION_USES_SAVANA_YEARS = (
+    "The formula turns years into days by multiplying by 360, so section "
+    "32.2.2 is working in savana years. It is stated nowhere here and it is "
+    "what makes n x m / 4 come out whole. Evidence on OI-115, no change."
+)
+
+#: **Finding, and it is why the two formulas differ by exactly four.** The
+#: nakshatra dasas divide by four and Kalachakra does not, and the reason is
+#: geometry: Kalachakra is seeded from the Moon's **navamsa**, a quarter of a
+#: nakshatra. A nakshatra takes 24x60 minutes and a pada 360, so the
+#: Kalachakra error is n x 360 x m / 360 = n x m — the 360 days of a savana
+#: year cancelling the 360 minutes of a pada, which is why that formula has no
+#: divisor at all.
+THE_KALACHAKRA_FACTOR_IS_FOUR_BECAUSE_A_PADA_IS_A_QUARTER = (
+    "Kalachakra reads the Moon's navamsa, a quarter of a nakshatra, so its "
+    "error is four times the nakshatra dasas'. A savana year's 360 days "
+    "cancel a pada's 360 minutes, which is why the formula has no divisor."
+)
+
+#: **Finding.** Both worked nakshatra cases print a **balance** that plays no
+#: part in the answer — "7 years of Venus dasa remains", "3 years of Moon dasa
+#: were remaining". The formula takes the complete duration, and the section
+#: warns of exactly this in the same breath it introduces n: "the complete
+#: duration (and not just the remainder at birth)". The 20 and the 10 are
+#: Venus's and the Moon's whole Vimsottari periods; the 7 and the 3 are
+#: decoys the section plants and defuses in advance.
+THE_PRINTED_BALANCES_PLAY_NO_PART = (
+    "Seven years of Venus and three of the Moon are printed and unused. The "
+    "formula takes 20 and 10, the complete Vimsottari periods, and the "
+    "section warns of exactly this where it defines n."
+)
+
+#: **Finding, measured, and "futile" understates it.** At the section's own
+#: m = 2 and paramayush 100 the error is 200 days. Run against a real savya
+#: pada-1 sequence, using §24.2's own wheel rather than a proportional model:
+#: **715 of the 729 pratyantardasas** are shorter than 200 days, so the
+#: warning about pratyantardasas is right. But **17 of the 81 antardasas** are
+#: shorter than 200 days too — the shortest is exactly **100 days** — and the
+#: section says nothing about antardasas. Only the nine dasas survive, the
+#: shortest being 1800 days.
+EVEN_ANTARDASAS_ARE_SWAMPED_AT_TWO_MINUTES = (
+    "Two minutes of error is 200 days at paramayush 100. In a savya pada-1 "
+    "sequence that exceeds 715 of the 729 pratyantardasas and 17 of the 81 "
+    "antardasas, the shortest of which is 100 days. All nine dasas survive it."
+)
+
+#: **Finding, and it is the reason the varga claim is as safe as it is.**
+#: §32.2.1 spent its length establishing that the **varga lagna** is the
+#: fastest thing in a chart — a D-24 lagna changes rasi every five minutes.
+#: A varga Narayana dasa never touches it. §18.5 counts the seed house in the
+#: **rasi** chart, takes that house's lord, and asks where **that graha** sits
+#: in the varga; `varga_lagna` takes a rasi lagna and a table of graha varga
+#: rasis, and no varga ascendant at all. So the volatile quantity plays no
+#: part, which is why §32.2.2 can say what it says.
+THE_VARGA_ASCENDANT_PLAYS_NO_PART_IN_A_VARGA_NARAYANA_DASA = (
+    "Section 18.5 reads the seed house in the rasi chart and finds its lord "
+    "in the varga, so a varga Narayana dasa never uses the varga ascendant — "
+    "the one quantity section 32.2.1 showed to be volatile."
+)
+
+#: **Book defect, D-87.** §32.2.2's second paragraph gives a varga Narayana
+#: dasa one trigger: "unless a planet changes rasi in the divisional chart of
+#: interest". There is a second. §18.5 counts the seed house from the **rasi**
+#: lagna, so when that lagna crosses a rasi boundary the seed rasi changes,
+#: its **lord** changes, and the varga lagna jumps to wherever the new lord
+#: stands — with no graha having moved anywhere.
+#:
+#: The first paragraph names it for rasi-chart dasas — "only if **lagna
+#: changes rasi** or a planet changes rasi" — and the second drops the term
+#: for varga charts, where §18.5 makes it just as load-bearing. The
+#: conclusion survives: a rasi lagna crosses a boundary once in about two
+#: hours, so a varga Narayana dasa still does not change in a small period of
+#: time. It is a missing term, not a wrong conclusion.
+THE_RASI_LAGNA_IS_LEFT_OUT_OF_THE_NARAYANA_CLAIM = (
+    "A varga Narayana dasa also changes when the rasi lagna crosses a rasi "
+    "boundary, because section 18.5 counts the seed house from it. Section "
+    "32.2.2 names only the grahas. The conclusion survives; the term is "
+    "missing. See D-87."
+)
+

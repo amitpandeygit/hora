@@ -1972,7 +1972,7 @@ has not been given yet.
 | `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
 
-### Chapter 32 — §32.1, §32.2.1, Example 129, Exercise 50 and footnotes 89 and 90 (68)
+### Chapter 32 — §32.1, §32.2.1, §32.2.2, Example 129, Exercise 50 and footnotes 89 and 90 (81)
 
 `rectification/birthtime.py`. The section is an argument, not a technique.
 Three things in it **are** computable and all three are consumed:
@@ -2024,6 +2024,15 @@ reproduced.
 | `EXERCISE_50S_RASIS_ARE_ALL_CORRECT` | Ours: Leo's 7th to 10th dasamsas are Aq, Pi, Ar, Ta, so the wanted window is 24 Le 00 to 27 Le 00 |
 | `THE_GHATI_LAGNA_METHOD_NEEDS_NO_SECOND_PASS` | Ours: Example 129 must iterate and Exercise 50 need not, because GL advances uniformly and the ascendant does not |
 | `THE_LAST_LINE_IS_THE_ALGORITHM` | Ours: several inequations intersected is the whole method, stated once, in an exercise answer's last line |
+| `SECTION_32_2_2_TITLE` · `RASI_DASAS_ARE_ROBUST` · `NARAYANA_DASA_OF_VARGAS_IS_ROBUST` · `NAKSHATRA_DASA_DATE_ERROR` · `NAKSHATRA_DASA_WORKED_CASES` · `KALACHAKRA_DATE_ERROR` | §32.2.2 verbatim |
+| `DASA_ERROR_CASES` | The section's three worked error figures as data |
+| `THE_TWENTY_FOUR_HOUR_NAKSHATRA_IS_THE_ACCURATE_FIGURE` | Ours: the Moon's nakshatra measures 21.00 to 27.25 hours, mean 24.34, implying 54.76 a rasi and not §32.2.1's 60 |
+| `THE_DERIVATION_USES_SAVANA_YEARS` | Ours: the formula multiplies by 360, so §32.2.2 computes in savana years without saying so. OI-115 |
+| `THE_KALACHAKRA_FACTOR_IS_FOUR_BECAUSE_A_PADA_IS_A_QUARTER` | Ours: a navamsa is a quarter of a nakshatra, and a savana year's 360 days cancel a pada's 360 minutes |
+| `THE_PRINTED_BALANCES_PLAY_NO_PART` | Ours: the 7 and 3 years remaining are decoys; the formula takes Venus's 20 and the Moon's 10 |
+| `EVEN_ANTARDASAS_ARE_SWAMPED_AT_TWO_MINUTES` | Ours: 200 days exceeds 715 of 729 pratyantardasas and 17 of 81 antardasas, the shortest being 100 days |
+| `THE_VARGA_ASCENDANT_PLAYS_NO_PART_IN_A_VARGA_NARAYANA_DASA` | Ours: §18.5 reads the seed house in the rasi chart, so the fastest quantity in the chart is never an input |
+| `THE_RASI_LAGNA_IS_LEFT_OUT_OF_THE_NARAYANA_CLAIM` | Ours: a varga Narayana dasa also changes when the rasi lagna crosses a boundary. D-87 |
 | `THE_DIVIDE_BY_N_RULE_HAS_ONE_EXCEPTION` | Ours: the rule is exact for 22 of 23 vargas and D-30's parts are 5, 5, 8, 7, 5 |
 | `THE_SECTIONS_FIGURES_ARE_MEANS_AND_IT_SAYS_SO` | Ours: the Sun's 30 days is good to 2%, the Moon's 60 hours is 10% high, and the section bolds "approximate" |
 | `THE_MOON_PARAGRAPH_CARRIES_TWO_SPEEDS` | Ours: 2.0 minutes per arcminute from one sentence, 1.8 from the next, 1.82 measured |

@@ -2890,3 +2890,49 @@ corrected in the transcription.
 
 **Closes when:** you confirm the reading, or a later printing corrects it.
 
+
+---
+
+## D-87 · §32.2.2's varga Narayana claim leaves out the rasi lagna
+
+**Status: BOOK DEFECT — a missing term, not a wrong conclusion. Held as
+printed, with the second trigger recorded.**
+
+§32.2.2's second paragraph:
+
+> Narayana dasa of divisional charts does not change in a small period of
+> time, unless a planet changes rasi in the divisional chart of interest.
+
+Only the grahas are named. §18.5 gives a varga Narayana dasa **two** inputs,
+not one: the seed house is counted in the **rasi** chart from the **rasi
+lagna**, and that house's lord is then located in the varga. So the dasa also
+changes when the rasi lagna crosses a rasi boundary — the seed rasi changes,
+its lord changes, and the varga lagna jumps to wherever the new lord stands,
+with no graha having moved at all.
+
+The first paragraph carries the term for rasi-chart dasas — "rasi dasas based
+on rasi chart change only if **lagna changes rasi** or a planet changes rasi" —
+and the second drops it for vargas, where §18.5 makes it just as load-bearing.
+
+**Demonstrated.** Chart 1's rasi lagna crosses Cn into Le at 13:25:11. Two
+minutes either side, in D-24:
+
+| | rasi lagna | 12th house | its lord | that lord in D-24 | D-24 varga lagna |
+|---|---|---|---|---|---|
+| −2 min | Cn | Gemini | Mercury | Leo | **Leo** |
+| +2 min | Le | Cancer | Moon | Libra | **Libra** |
+
+Not one graha changes D-24 rasi across the four minutes: both castings give
+Ar, Li, Sc, Le, Vi, Aq, Aq, Sc, Sc.
+
+**The conclusion still holds.** A rasi lagna crosses a boundary once in about
+two hours, so a varga Narayana dasa does indeed "not change in a small period
+of time". The paragraph is short a term, not wrong about the outcome.
+
+**What we do.** `NARAYANA_DASA_OF_VARGAS_IS_ROBUST` is transcribed as printed
+and `THE_RASI_LAGNA_IS_LEFT_OUT_OF_THE_NARAYANA_CLAIM` records the omission.
+`varga_lagna` is unchanged — it already takes the rasi lagna as its second
+argument. The test runs the table above.
+
+**Closes when:** you confirm the reading, or a later printing corrects it.
+
