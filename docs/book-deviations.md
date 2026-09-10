@@ -2843,3 +2843,50 @@ is corrected in the transcription.
 
 **Closes when:** you confirm the reading, or a later printing corrects it.
 
+
+---
+
+## D-86 · Exercise 50's answer puts GL in Pisces, not the Aries it asks for
+
+**Status: BOOK DEFECT — three arithmetic slips in one paragraph, and the
+printed birthtime does not satisfy the exercise's own requirement. Held as
+printed, with the corrected window recorded beside it.**
+
+The reasoning is right throughout. Leo is odd, so its dasamsas run from Leo:
+18°–21° is the 7th and gives Aq, 21°–24° the 8th and gives Pi, 24°–27° the 9th
+and gives Ar, 27°–30° the 10th and gives Ta. GL at 20 Le 37 is in Aq in D-10,
+and for Ar it must reach 24 Le 00 and stay under 27 Le 00. Every rasi and every
+border the exercise names is correct.
+
+The arithmetic that follows is not:
+
+| step | printed | correct |
+|---|---|---|
+| 24°00′ − 20°37′ | 3°21′ = 201′ | **3°23′ = 203′** |
+| GL's rate | 0.48 sec per arcminute | **0.8 sec** (see [D-85](#d-85--3221s-lesson-divides-a-degree-into-ten-arcminutes-for-gl)) |
+| 96.48 sec, in minutes | 1 min 6.48 sec | **1 min 36.48 sec** |
+
+Each is independent of the others. The subtraction drops two arcminutes; the
+rate is the one D-85 records; and 96.48 less sixty is 36.48, not 6.48.
+
+The exercise then uses the **correct** rate for its upper bound in the very
+next paragraph — "GL moves by 3° in 3 × 4/5 = 12/5 min = 2 min 24 sec" — which
+is 1.25° a minute exactly. So both rates appear in one answer.
+
+**What the printed answer does.** GL must move 203′, which at 0.8 sec takes
+**162.4 seconds**. The window is 9:07:42.4 to 9:10:06.4. The printed 9:06:07
+adds 67 seconds, which moves GL to about **22 Le 01** — still the 8th dasamsa,
+so **D-10 GL is in Pisces**, the sign the exercise was trying to leave. Checked
+on a real chart whose GL is 20 Le 37: at +67 seconds the D-10 sign is Pi; at
++162.4 seconds GL is 24 Le 00 to within the residual of the starting point.
+
+The window's **width** is right — 144 seconds, from the correctly computed 3°
+step — so only its position moves, by 1 minute 35 seconds.
+
+**What we do.** `EXERCISE_50_ANSWER` is transcribed as printed and
+`EXERCISE_50_STATED` carries `printed` and `correct` side by side. The test
+asserts all three slips and that +67 seconds lands in Pisces. Nothing is
+corrected in the transcription.
+
+**Closes when:** you confirm the reading, or a later printing corrects it.
+

@@ -1039,7 +1039,8 @@ def lagna_windows(low: float, high: float, varga: Callable[[float], object],
     :raises BirthtimeError: if the range is inverted or wider than a rasi.
     """
     start = validate.longitude("low", float(low))
-    stop = validate.longitude("high", float(high))
+    # `high` may run past 360 so a window can straddle the zodiac's start.
+    stop = validate.finite("high", float(high))
     if stop < start:
         raise BirthtimeError(f"high must not precede low; got {low} and {high}")
     if stop - start > 30.0:
@@ -1048,7 +1049,7 @@ def lagna_windows(low: float, high: float, varga: Callable[[float], object],
             f"{stop - start} degrees")
 
     def sign_at(point: float) -> int:
-        return int(varga(point).sign)  # type: ignore[attr-defined]
+        return int(varga(point % 360.0).sign)  # type: ignore[attr-defined]
 
     steps = max(int(coarse_steps), 2)
     step = (stop - start) / steps if stop > start else 0.0
@@ -1159,5 +1160,172 @@ THE_CLOSING_SENTENCE_IS_A_REQUIREMENT_NOT_ADVICE = (
     "The example closes by asking the astrologer to know where lagna changes "
     "rasi in every varga. That is a table, and lagna_windows computes it, "
     "D-30's unequal borders included."
+)
+
+
+def window_for_varga_sign(current: float, wanted_sign: int,
+                          varga: Callable[[float], object], *,
+                          degrees_per_minute: float) -> dict:
+    """Exercise 50's inequation: when is this point in that varga sign?
+
+    "So the birthtime should be between 9:06:07 am and 9:08:31 am for GL in
+    D-10 to be in Ar." Given where a point stands now and how fast it moves,
+    this returns the seconds after the reported birthtime during which its
+    varga sign is `wanted_sign` — the first such stretch at or after now.
+
+    :param current: the point's longitude in the chart as reported.
+    :param wanted_sign: the varga sign the known past calls for, 0 = Aries.
+    :param varga: a varga function returning an object with a ``sign``.
+    :param degrees_per_minute: the point's speed. Exact for HL and GL;
+        a mean for the ascendant — see
+        `THE_SPECIAL_LAGNA_RATES_ARE_EXACT_AND_THE_LAGNAS_IS_NOT`.
+    :returns: ``from_seconds`` and ``to_seconds``, the arc each end needs, and
+        ``found``. ``found`` is False when the sign is not reached within one
+        rasi of travel.
+    :raises BirthtimeError: on a non-positive speed.
+    """
+    here = validate.longitude("current", float(current))
+    sign = validate.in_range("wanted_sign", int(wanted_sign), 0, 11)
+    rate = validate.finite("degrees_per_minute", float(degrees_per_minute))
+    if rate <= 0:
+        raise BirthtimeError(
+            f"degrees_per_minute must be positive; got {degrees_per_minute}")
+
+    windows = lagna_windows(here, here + 30.0, varga)
+    for window in windows:
+        if int(cast(int, window["sign"])) != sign:
+            continue
+        low_arc = cast(float, window["from"]) - here
+        high_arc = cast(float, window["to"]) - here
+        return {
+            "found": True, "wanted_sign": sign,
+            "from_degrees": low_arc, "to_degrees": high_arc,
+            "from_seconds": low_arc / rate * 60.0,
+            "to_seconds": high_arc / rate * 60.0,
+            "degrees_per_minute": rate,
+        }
+    return {"found": False, "wanted_sign": sign,
+            "from_degrees": None, "to_degrees": None,
+            "from_seconds": None, "to_seconds": None,
+            "degrees_per_minute": rate,
+            "reason": "the wanted sign is not reached within one rasi of "
+                      "travel from the reported position"}
+
+
+def narrow_down(windows: tuple[dict, ...] | list[dict]) -> dict:
+    """The exercise's closing sentence: intersect several inequations.
+
+    "If we create several inequations like the above using lagna and special
+    lagnas in various divisional charts, we can narrow down to the correct
+    birthtime."
+
+    :param windows: results from `window_for_varga_sign`.
+    :returns: the overlap in seconds after the reported birthtime, with
+        ``possible`` False and a reason when the constraints cannot all hold.
+    :raises BirthtimeError: if no windows are given, or one was not found.
+    """
+    rows = list(windows)
+    if not rows:
+        raise BirthtimeError("at least one window is needed")
+    for index, row in enumerate(rows):
+        if not row.get("found"):
+            raise BirthtimeError(
+                f"window {index} was not found and cannot be intersected")
+
+    low = max(float(cast(float, row["from_seconds"])) for row in rows)
+    high = min(float(cast(float, row["to_seconds"])) for row in rows)
+    if high <= low:
+        return {"possible": False, "from_seconds": None, "to_seconds": None,
+                "windows": len(rows),
+                "reason": "the windows do not overlap, so no single birthtime "
+                          "satisfies every constraint"}
+    return {"possible": True, "from_seconds": low, "to_seconds": high,
+            "windows": len(rows), "reason": None}
+
+
+# --------------------------------------------------------------------------
+# Exercise 50 — the same move, on Ghati Lagna
+# --------------------------------------------------------------------------
+
+#: Exercise 50, verbatim.
+EXERCISE_50 = (
+    "Suppose someone is born at 9:05 am and has GL at 20Le37. This puts GL in "
+    "D-10 in Aq. Suppose we expect the D-10 GL in Ar to explain the native's "
+    "periods of power and authority. What should the correct birthtime be?")
+
+#: Exercise 50's printed answer, verbatim.
+EXERCISE_50_ANSWER = (
+    "GL in D-10 goes to the next rasi at multiples of 3 degrees. Here it goes "
+    "from Aq to Pi when GL crosses 21 degrees. It goes from Pi to Ar when GL "
+    "crosses 24 degrees. So GL has to be at or above 24Le00. So the amount we "
+    "have to add is 24 deg 0' - 20 deg 37' = 3 deg 21' = 201'.\n\n"
+    "GL moves by 201' in 201 x 0.48 sec = 96.48 sec = 1 min 6.48 sec. So we "
+    "should roughly add 1 min 7 sec and the birthtime should be 9:06:07 am or "
+    "above.\n\n"
+    "There is an upper limit also. If it becomes too high, GL in D-10 will "
+    "move from Ar to Ta. But we decided that GL in D-10 in Ar makes the best "
+    "sense. So we cannot add another 3 degrees to GL. GL moves by 3 degrees "
+    "in 3 x 4/5 = 12/5 min = 2 min 24 sec. Adding this to 9:06:07, we get "
+    "9:08:31. So the birthtime should be between 9:06:07 am and 9:08:31 am "
+    "for GL in D-10 to be in Ar.\n\n"
+    "If we create several inequations like the above using lagna and special "
+    "lagnas in various divisional charts, we can narrow down to the correct "
+    "birthtime.")
+
+#: Exercise 50's figures, as printed against what they should be. See D-86.
+EXERCISE_50_STATED: dict[str, object] = {
+    "reported_birthtime": "9:05 am",
+    "gl": "20 Le 37",
+    "gl_degree_in_rasi": 20 + 37 / 60,
+    "gl_in_d10_as_reported": "Aq",
+    "wanted_d10_sign": "Ar",
+    "borders": {"Aq_to_Pi": 21.0, "Pi_to_Ar": 24.0, "Ar_to_Ta": 27.0},
+    "printed": {
+        "arc_arcminutes": 201.0, "lower_seconds": 96.48,
+        "lower_bound": "9:06:07", "upper_bound": "9:08:31",
+        "width_seconds": 144.0,
+    },
+    "correct": {
+        "arc_arcminutes": 203.0, "lower_seconds": 162.4,
+        "lower_bound": "9:07:42.4", "upper_bound": "9:10:06.4",
+        "width_seconds": 144.0,
+    },
+}
+
+#: **Finding.** Every rasi the exercise names is right. Leo being odd, its
+#: dasamsas run from Leo itself: 18°-21° is the 7th and gives **Aq**, 21°-24°
+#: the 8th and gives **Pi**, 24°-27° the 9th and gives **Ar**, 27°-30° the
+#: 10th and gives **Ta**. So GL must sit in **24 Le 00 to 27 Le 00**, exactly
+#: the bracket the exercise reasons its way to.
+EXERCISE_50S_RASIS_ARE_ALL_CORRECT = (
+    "Leo's 7th, 8th, 9th and 10th dasamsas are Aq, Pi, Ar and Ta, so the "
+    "wanted window is 24 Le 00 to 27 Le 00. The exercise's reasoning is "
+    "right throughout."
+)
+
+#: **Finding, and it is the sharpest contrast in the chapter.** Example 129
+#: had to end with a caveat — the ascendant does not move uniformly, so the
+#: answer "may be a little off" and needs iterating. Exercise 50 needs no
+#: caveat and does not give one, because **Ghati Lagna does move uniformly**.
+#: Taking a real chart whose GL is 20 Le 37, the corrected 162.4 seconds lands
+#: GL on 24 Le 00 to within the residual of the starting point. The arithmetic
+#: is the answer, with no chart and no second pass.
+THE_GHATI_LAGNA_METHOD_NEEDS_NO_SECOND_PASS = (
+    "Example 129's ascendant answer needs iterating and Exercise 50's does "
+    "not. Ghati Lagna advances 1.25 degrees a minute exactly, so the "
+    "corrected 162.4 seconds lands on 24 Le 00 on a real chart."
+)
+
+#: **Finding, and it is the chapter's actual algorithm.** The last line —
+#: "if we create several inequations like the above using lagna and special
+#: lagnas in various divisional charts, we can narrow down to the correct
+#: birthtime" — is the only place the book says how the pieces combine, and it
+#: is a set intersection. `window_for_varga_sign` produces one inequation and
+#: `narrow_down` intersects them, reporting `possible: False` with a reason
+#: when the known past asks for something no single birthtime can give.
+THE_LAST_LINE_IS_THE_ALGORITHM = (
+    "Several inequations intersected is the whole method, and it is stated "
+    "once, in the last line of an exercise answer. narrow_down is that "
+    "intersection."
 )
 

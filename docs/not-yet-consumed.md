@@ -1972,7 +1972,7 @@ has not been given yet.
 | `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
 
-### Chapter 32 — §32.1, §32.2.1, Example 129 and footnotes 89 and 90 (62)
+### Chapter 32 — §32.1, §32.2.1, Example 129, Exercise 50 and footnotes 89 and 90 (68)
 
 `rectification/birthtime.py`. The section is an argument, not a technique.
 Three things in it **are** computable and all three are consumed:
@@ -2020,6 +2020,10 @@ reproduced.
 | `THE_SPECIAL_LAGNA_RATES_ARE_EXACT_AND_THE_LAGNAS_IS_NOT` | Ours: HL and GL advance 0.5 and 1.25 degrees a minute by definition, so Example 129's caveat does not reach them |
 | `THE_TWO_RATIOS_HOLD_ONLY_AGAINST_THE_MEAN_LAGNA` | Ours: twice and five times are exact against the nominal rate and run 1.10-2.59 and 2.76-6.48 at 42 N 30 |
 | `BHAVA_LAGNA_IS_OMITTED_BECAUSE_ITS_ROW_WOULD_REPEAT_THE_LAGNAS` | Ours: BL advances a quarter degree a minute, the ascendant's own nominal rate, and Sree Lagna has no fixed rate |
+| `EXERCISE_50` · `EXERCISE_50_ANSWER` · `EXERCISE_50_STATED` | Exercise 50 and its answer verbatim, with every figure printed and corrected side by side. D-86 |
+| `EXERCISE_50S_RASIS_ARE_ALL_CORRECT` | Ours: Leo's 7th to 10th dasamsas are Aq, Pi, Ar, Ta, so the wanted window is 24 Le 00 to 27 Le 00 |
+| `THE_GHATI_LAGNA_METHOD_NEEDS_NO_SECOND_PASS` | Ours: Example 129 must iterate and Exercise 50 need not, because GL advances uniformly and the ascendant does not |
+| `THE_LAST_LINE_IS_THE_ALGORITHM` | Ours: several inequations intersected is the whole method, stated once, in an exercise answer's last line |
 | `THE_DIVIDE_BY_N_RULE_HAS_ONE_EXCEPTION` | Ours: the rule is exact for 22 of 23 vargas and D-30's parts are 5, 5, 8, 7, 5 |
 | `THE_SECTIONS_FIGURES_ARE_MEANS_AND_IT_SAYS_SO` | Ours: the Sun's 30 days is good to 2%, the Moon's 60 hours is 10% high, and the section bolds "approximate" |
 | `THE_MOON_PARAGRAPH_CARRIES_TWO_SPEEDS` | Ours: 2.0 minutes per arcminute from one sentence, 1.8 from the next, 1.82 measured |

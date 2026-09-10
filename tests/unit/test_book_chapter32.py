@@ -1159,3 +1159,205 @@ def test_d85_the_two_gl_rows_divide_a_degree_into_ten_arcminutes():
     text = Path("docs/book-deviations.md").read_text(encoding="utf-8")
     assert "## D-85 · §32.2.1's Lesson divides a degree into ten arcminutes" in (
         text)
+
+
+# --------------------------------------------------------------------------
+# Exercise 50
+# --------------------------------------------------------------------------
+
+_LE = RASI_ABBR.index("Le") * 30
+_GL_DEGREES_PER_MINUTE = 1.25
+
+
+def test_exercise_50_and_its_answer_are_transcribed():
+    assert "has GL at 20Le37" in birthtime.EXERCISE_50
+    assert "periods of power and authority" in birthtime.EXERCISE_50
+    assert "3 deg 21' = 201'" in birthtime.EXERCISE_50_ANSWER
+    assert "201 x 0.48 sec = 96.48 sec = 1 min 6.48 sec" in (
+        birthtime.EXERCISE_50_ANSWER)
+    assert "between 9:06:07 am and 9:08:31 am" in birthtime.EXERCISE_50_ANSWER
+    assert "several inequations like the above" in birthtime.EXERCISE_50_ANSWER
+    assert len(birthtime.EXERCISE_50_ANSWER.split("\n\n")) == 4
+
+
+def test_every_rasi_and_border_the_exercise_names_is_right():
+    """FINDING: Leo's 7th to 10th dasamsas are Aq, Pi, Ar, Ta."""
+    stated = birthtime.EXERCISE_50_STATED
+    here = float(stated["gl_degree_in_rasi"])
+    assert RASI_ABBR[int(vargas.d10_dasamsa(_LE + here).sign)] == "Aq"
+    borders = dict(stated["borders"])
+    for degree, sign in ((float(borders["Aq_to_Pi"]), "Pi"),
+                         (float(borders["Pi_to_Ar"]), "Ar"),
+                         (float(borders["Ar_to_Ta"]), "Ta")):
+        assert RASI_ABBR[int(vargas.d10_dasamsa(_LE + degree).sign)] == sign
+        assert RASI_ABBR[int(
+            vargas.d10_dasamsa(_LE + degree - 1e-9).sign)] != sign
+
+    windows = birthtime.lagna_windows(_LE + here, _LE + here + 30.0,
+                                      vargas.d10_dasamsa)
+    aries = next(w for w in windows if RASI_ABBR[int(w["sign"])] == "Ar")
+    assert float(aries["from"]) - _LE == pytest.approx(24.0, abs=1e-6)
+    assert float(aries["to"]) - _LE == pytest.approx(27.0, abs=1e-6)
+    assert "right throughout" in birthtime.EXERCISE_50S_RASIS_ARE_ALL_CORRECT
+
+
+def test_d86_the_three_slips_in_exercise_50s_answer():
+    """BOOK DEFECT D-86. The subtraction, the rate and the minute
+    conversion are each wrong, and independently.
+    """
+    from hora.charts.special_lagna import ADVANCE_PER_MINUTE, SpecialLagna
+
+    stated = birthtime.EXERCISE_50_STATED
+    printed, correct = dict(stated["printed"]), dict(stated["correct"])
+
+    # 1. the subtraction
+    arc = (24.0 - float(stated["gl_degree_in_rasi"])) * 60
+    assert arc == pytest.approx(203.0)
+    assert float(printed["arc_arcminutes"]) == 201.0
+    assert float(correct["arc_arcminutes"]) == pytest.approx(arc)
+
+    # 2. the rate, which is D-85's
+    assert ADVANCE_PER_MINUTE[SpecialLagna.GHATI] == _GL_DEGREES_PER_MINUTE
+    seconds_per_arcminute = 60.0 / (_GL_DEGREES_PER_MINUTE * 60)
+    assert seconds_per_arcminute == pytest.approx(0.8)
+    assert 201 * 0.48 == pytest.approx(96.48)
+
+    # 3. the minute conversion, in the book's own figures
+    assert 96.48 - 60 == pytest.approx(36.48)
+    assert "1 min 6.48 sec" in birthtime.EXERCISE_50_ANSWER
+
+    assert float(correct["lower_seconds"]) == pytest.approx(
+        arc * seconds_per_arcminute)
+    assert float(correct["lower_seconds"]) == pytest.approx(162.4)
+
+    # The upper bound uses the correct rate, so the width survives.
+    assert 3 * 4 / 5 * 60 == pytest.approx(144.0)
+    assert float(printed["width_seconds"]) == float(correct["width_seconds"])
+
+    from pathlib import Path
+
+    text = Path("docs/book-deviations.md").read_text(encoding="utf-8")
+    assert "## D-86 · Exercise 50's answer puts GL in Pisces" in text
+
+
+def test_d86_the_printed_birthtime_lands_in_pisces_on_a_real_chart():
+    """BOOK DEFECT D-86, checked against the ephemeris. At +67 seconds the
+    D-10 GL is still Pisces; at +162.4 it is 24 Le 00.
+    """
+    from hora.charts.special_lagna import SpecialLagna
+    from hora.core.timeutil import norm180
+
+    target = _LE + 20 + 37 / 60
+    place = Place(name="E50", latitude=16 + 15 / 60, longitude=81 + 12 / 60)
+    ephemeris = SwissEphemeris(_SETTINGS)
+
+    def ghati(jd: float) -> float:
+        chart = compute_chart(from_jd(jd), place, _SETTINGS)
+        sunrise = ephemeris.sunrise(chart.instant.jd_ut - 1.5, place.latitude,
+                                    place.longitude)
+        while True:
+            nxt = ephemeris.sunrise(sunrise + 0.5, place.latitude,
+                                    place.longitude)
+            if nxt is None or nxt > chart.instant.jd_ut:
+                break
+            sunrise = nxt
+        return all_special_lagnas(
+            sunrise_jd=sunrise, jd_ut=chart.instant.jd_ut,
+            lagna_longitude=chart.lagna_longitude,
+            moon_longitude=chart.positions[int(Graha.MOON)].longitude,
+            settings=_SETTINGS)[int(SpecialLagna.GHATI)].longitude
+
+    start = from_local(2000, 1, 1, 9, 5, 0.0, utc_offset_hours=5.5).jd_ut
+    best = min(((start + day, abs(norm180(ghati(start + day) - target)))
+                for day in range(400)), key=lambda pair: pair[1])
+    jd = best[0]
+    for second in range(-3000, 3000, 5):
+        here = jd + second / 86400.0
+        if abs(norm180(ghati(here) - target)) < best[1]:
+            jd, best = here, (here, abs(norm180(ghati(here) - target)))
+    assert best[1] * 60 < 0.1                       # within a tenth of a minute
+
+    # The book's answer: +67 seconds.
+    printed = ghati(jd + 67.0 / 86400.0)
+    assert RASI_ABBR[int(vargas.d10_dasamsa(printed).sign)] == "Pi"
+
+    # The corrected one lands on the border, and just past it gives Aries.
+    corrected = ghati(jd + 162.4 / 86400.0)
+    assert (corrected % 30) == pytest.approx(24.0, abs=0.01)
+    assert RASI_ABBR[int(
+        vargas.d10_dasamsa(ghati(jd + 170.0 / 86400.0)).sign)] == "Ar"
+
+
+def test_the_ghati_lagna_method_needs_no_second_pass():
+    """FINDING: Example 129 iterates because the ascendant is not uniform;
+    Exercise 50 does not, because Ghati Lagna is.
+    """
+    from hora.charts.special_lagna import ADVANCE_PER_MINUTE, SpecialLagna
+
+    assert "may be a little off" in birthtime.EXAMPLE_129
+    assert "a little off" not in birthtime.EXERCISE_50_ANSWER
+    assert "uniformly" not in birthtime.EXERCISE_50_ANSWER
+    assert ADVANCE_PER_MINUTE[SpecialLagna.GHATI] == _GL_DEGREES_PER_MINUTE
+    assert "needs iterating and Exercise 50's does not" in (
+        birthtime.THE_GHATI_LAGNA_METHOD_NEEDS_NO_SECOND_PASS)
+
+
+def test_window_for_varga_sign_reproduces_the_corrected_exercise():
+    got = birthtime.window_for_varga_sign(
+        _LE + 20 + 37 / 60, RASI_ABBR.index("Ar"), vargas.d10_dasamsa,
+        degrees_per_minute=_GL_DEGREES_PER_MINUTE)
+    assert got["found"] is True
+    assert float(got["from_degrees"]) * 60 == pytest.approx(203.0, abs=1e-4)
+    assert float(got["from_seconds"]) == pytest.approx(162.4, abs=1e-3)
+    assert float(got["to_seconds"]) == pytest.approx(162.4 + 144.0, abs=1e-3)
+    # 9:05 plus those is 9:07:42.4 to 9:10:06.4.
+    assert 9 * 3600 + 5 * 60 + float(got["from_seconds"]) == pytest.approx(
+        9 * 3600 + 7 * 60 + 42.4)
+
+
+def test_window_for_varga_sign_reports_a_sign_it_cannot_reach():
+    # A D-2 hora chart only ever holds Cancer and Leo.
+    got = birthtime.window_for_varga_sign(
+        0.0, RASI_ABBR.index("Sg"), vargas.d2_hora, degrees_per_minute=1.0)
+    assert got["found"] is False
+    assert got["from_seconds"] is None
+    assert "not reached within one rasi" in str(got["reason"])
+
+    with pytest.raises(birthtime.BirthtimeError, match="must be positive"):
+        birthtime.window_for_varga_sign(0.0, 0, vargas.d9_navamsa,
+                                        degrees_per_minute=0.0)
+
+
+def test_narrow_down_is_the_last_lines_algorithm():
+    """FINDING: several inequations intersected is the whole method."""
+    assert "several inequations" in birthtime.EXERCISE_50_ANSWER
+
+    gl = birthtime.window_for_varga_sign(
+        _LE + 20 + 37 / 60, RASI_ABBR.index("Ar"), vargas.d10_dasamsa,
+        degrees_per_minute=_GL_DEGREES_PER_MINUTE)
+    # A second constraint on the same GL, in D-24, that overlaps it.
+    d24 = birthtime.window_for_varga_sign(
+        _LE + 20 + 37 / 60,
+        int(vargas.d24_chaturvimsamsa(_LE + 24.5).sign),
+        vargas.d24_chaturvimsamsa,
+        degrees_per_minute=_GL_DEGREES_PER_MINUTE)
+    both = birthtime.narrow_down([gl, d24])
+    assert both["possible"] is True
+    assert float(both["from_seconds"]) >= float(gl["from_seconds"])
+    assert float(both["to_seconds"]) <= float(gl["to_seconds"])
+    assert both["windows"] == 2
+
+    # Constraints that cannot both hold say so rather than inventing a time.
+    impossible = birthtime.narrow_down([
+        {"found": True, "from_seconds": 0.0, "to_seconds": 10.0},
+        {"found": True, "from_seconds": 20.0, "to_seconds": 30.0}])
+    assert impossible["possible"] is False
+    assert "do not overlap" in str(impossible["reason"])
+    assert "narrow_down is that" in birthtime.THE_LAST_LINE_IS_THE_ALGORITHM
+
+
+def test_narrow_down_rejects_nothing_and_unfound_windows():
+    with pytest.raises(birthtime.BirthtimeError, match="at least one window"):
+        birthtime.narrow_down([])
+    with pytest.raises(birthtime.BirthtimeError, match="was not found"):
+        birthtime.narrow_down([{"found": False}])
