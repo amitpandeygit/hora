@@ -1972,7 +1972,7 @@ has not been given yet.
 | `THE_RASI_PREFERENCE_IS_STATED_AND_NOT_EXERCISED` | Ours: both worked SC dasas after the preference are in vargas, a D-24 and a navamsa |
 
 
-### Chapter 32 — §32.1, §32.2.1 and footnotes 89 and 90 (49)
+### Chapter 32 — §32.1, §32.2.1, Example 129 and footnotes 89 and 90 (56)
 
 `rectification/birthtime.py`. The section is an argument, not a technique.
 Three things in it **are** computable and all three are consumed:
@@ -2010,6 +2010,12 @@ reproduced.
 | `THE_FOOTNOTE_WIDENS_THE_RULE_FROM_TIME_TO_POSITION` | Ours: §32.2.1 hedges against the clock and footnote 90 against the ephemeris, with the same instruction |
 | `D69_IS_THE_FOOTNOTES_OWN_CASE` | Ours: Charts 37 and 49 differ by 1.5′ of ayanamsa and Venus moves a whole sign in D-20 |
 | `THE_FOOTNOTE_NAMES_NO_WINNER` | Ours: the footnote chooses neither ayanamsa nor observer, and our Lahiri and geocentric defaults stand |
+| `EXAMPLE_129` · `EXAMPLE_129_STATED` | Example 129 verbatim and every figure it prints, as data |
+| `EXAMPLE_129_REPRODUCES_FROM_BORDERS_ALONE` | Ours: one D-10 sign, two D-12, three D-24, split where the example says, with no ephemeris |
+| `THE_ANSWER_LEAVES_THE_REPORTED_WINDOW_AND_THE_EXAMPLE_SAYS_SO` | Ours: 9:10:24 falls outside the native's own 9:00-9:10 and the example keeps it |
+| `THE_UNIFORM_LAGNA_IS_THE_SECTIONS_OWN_CAVEAT` | Ours: measured at four latitudes, 5 min 24 sec lands 5 to 10 arcminutes short and needs 21 to 42 seconds more |
+| `THE_BOOK_STATES_THE_MEAN_IS_NOT_A_RATE` | Ours: §32.1 gave the two hours flatly and Example 129 withdraws the uniform lagna outright |
+| `THE_CLOSING_SENTENCE_IS_A_REQUIREMENT_NOT_ADVICE` | Ours: what the astrologer is asked to memorise, `lagna_windows` returns, D-30 included |
 | `THE_DIVIDE_BY_N_RULE_HAS_ONE_EXCEPTION` | Ours: the rule is exact for 22 of 23 vargas and D-30's parts are 5, 5, 8, 7, 5 |
 | `THE_SECTIONS_FIGURES_ARE_MEANS_AND_IT_SAYS_SO` | Ours: the Sun's 30 days is good to 2%, the Moon's 60 hours is 10% high, and the section bolds "approximate" |
 | `THE_MOON_PARAGRAPH_CARRIES_TWO_SPEEDS` | Ours: 2.0 minutes per arcminute from one sentence, 1.8 from the next, 1.82 measured |

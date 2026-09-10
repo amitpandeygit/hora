@@ -860,3 +860,183 @@ def test_oi_182_is_open_and_says_what_it_needs():
     entry = text.split("### OI-182")[1].split("### ")[0]
     assert "**Closes when:**" in entry
     assert "nothing here proposes\nchanging either" in entry
+
+
+# --------------------------------------------------------------------------
+# Example 129
+# --------------------------------------------------------------------------
+
+_SG = RASI_ABBR.index("Sg") * 30
+
+
+def test_example_129_is_transcribed():
+    text = birthtime.EXAMPLE_129
+    assert "Suppose lagna is at 4Sg39" in text
+    assert "3Sg24-3Sg45: Li" in text
+    assert "81x4 sec = 324 sec = 5 min 24 sec" in text
+    assert "it has to be more than 5 minutes in this case" in text
+    assert "That is not the case in reality" in text
+    assert "That familiarity is a necessity for quick birthtime rectification" in (
+        text)
+    assert len(text.split("\n\n")) == 7
+
+
+def test_the_three_lagnas_as_reported_reproduce():
+    stated = birthtime.EXAMPLE_129_STATED
+    degree = float(stated["lagna_degree_in_rasi"])
+    assert degree == pytest.approx(4 + 39 / 60)
+    for number, expected in dict(stated["lagnas_as_reported"]).items():
+        got = _VARGAS[int(number)](_SG + degree)
+        assert RASI_ABBR[int(got.sign)] == expected, number
+
+
+def test_the_five_minute_window_is_one_and_a_quarter_degrees():
+    stated = birthtime.EXAMPLE_129_STATED
+    assert float(stated["maximum_error_minutes"]) == 5.0
+    # The Lesson's rate, inverted: 4 minutes a degree.
+    assert 5 / 4 == 1.25
+    low, high = (float(x) for x in stated["range_degrees_in_rasi"])
+    assert low == pytest.approx(4 + 39 / 60 - 1.25)
+    assert high == pytest.approx(4 + 39 / 60 + 1.25)
+    assert stated["range"] == ("3 Sg 24", "5 Sg 54")
+
+
+def test_the_windows_in_all_three_vargas_reproduce():
+    """FINDING: one D-10 sign, two D-12 signs, three D-24 signs."""
+    stated = birthtime.EXAMPLE_129_STATED
+    low, high = (float(x) for x in stated["range_degrees_in_rasi"])
+    for number, printed in dict(stated["windows"]).items():
+        got = birthtime.lagna_windows(_SG + low, _SG + high,
+                                      _VARGAS[int(number)])
+        assert len(got) == len(printed), number
+        for ours, (bounds, sign) in zip(got, printed, strict=True):
+            assert RASI_ABBR[int(ours["sign"])] == sign, (number, sign)
+            assert float(ours["from"]) - _SG == pytest.approx(
+                bounds[0], abs=1e-6)
+            assert float(ours["to"]) - _SG == pytest.approx(
+                bounds[1], abs=1e-6)
+
+    # The borders themselves are where the example says they are.
+    d12 = birthtime.lagna_windows(_SG + low, _SG + high, _VARGAS[12])
+    assert float(d12[0]["to"]) - _SG == pytest.approx(5.0, abs=1e-6)
+    d24 = birthtime.lagna_windows(_SG + low, _SG + high, _VARGAS[24])
+    assert [round(float(w["to"]) - _SG, 4) for w in d24[:2]] == [3.75, 5.0]
+    assert "No ephemeris is needed" in (
+        birthtime.EXAMPLE_129_REPRODUCES_FROM_BORDERS_ALONE)
+
+
+def test_the_shift_to_the_next_d10_border_reproduces():
+    stated = birthtime.EXAMPLE_129_STATED
+    # 6 Sg 00 is the next D-10 border above 4 Sg 39, and it gives Aquarius.
+    assert float(stated["next_d10_border"]) == 6.0
+    assert RASI_ABBR[int(_VARGAS[10](_SG + 6.0).sign)] == "Aq"
+    assert RASI_ABBR[int(_VARGAS[10](_SG + 6.0 - 1e-9).sign)] == "Cp"
+
+    shortfall = (6.0 - float(stated["lagna_degree_in_rasi"])) * 60
+    assert shortfall == pytest.approx(81.0)
+    assert birthtime.seconds_to_move(shortfall) == pytest.approx(324.0)
+    assert 324 == 5 * 60 + 24
+    assert stated["rectified_birthtime"] == "9:10:24"
+
+
+def test_the_answer_leaves_the_reported_window_and_the_example_says_so():
+    """FINDING: the known past outranks the reported bound."""
+    # 9:05 plus 5 min 24 sec is 9:10:24; the native's window ended at 9:10.
+    assert 9 * 3600 + 5 * 60 + 324 == 9 * 3600 + 10 * 60 + 24
+    assert "birthtime can be 9:00-9:10" in birthtime.EXAMPLE_129
+    assert "it has to be more than 5 minutes" in birthtime.EXAMPLE_129
+    # It is the four causes of section 32.1 that make a reported bound soft.
+    assert len(birthtime.BIRTHTIME_ERROR_CAUSES) == 4
+    assert "outranks the reported bound" in (
+        birthtime.THE_ANSWER_LEAVES_THE_REPORTED_WINDOW_AND_THE_EXAMPLE_SAYS_SO)
+
+
+def test_the_uniform_lagna_caveat_measured_at_four_latitudes():
+    """FINDING: 5 min 24 sec always lands short of 6 Sg 00, by 5 to 10
+    arcminutes, and always needs another 21 to 42 seconds.
+    """
+    from hora.core.timeutil import norm180
+
+    target = _SG + 4 + 39 / 60
+    six = _SG + 6.0
+    shortfalls, extras = [], []
+    for latitude, longitude in ((16 + 15 / 60, 81 + 12 / 60),
+                                (42.5, -(71 + 12 / 60)),
+                                (0.0, 0.0),
+                                (60.0, 0.0)):
+        place = Place(name="E129", latitude=latitude, longitude=longitude)
+        offset = round(longitude / 15 * 2) / 2
+
+        def at(jd: float, place: Place = place) -> float:
+            return compute_chart(from_jd(jd), place, _SETTINGS).lagna_longitude
+
+        # An instant where the lagna really is 4 Sg 39 at 9:05 local.
+        start = from_local(2000, 1, 1, 9, 5, 0.0,
+                           utc_offset_hours=offset).jd_ut
+        best = min(((start + day, abs(norm180(at(start + day) - target)))
+                    for day in range(366)), key=lambda pair: pair[1])
+        jd = best[0]
+        for second in range(-1800, 1800, 5):
+            here = jd + second / 86400.0
+            if abs(norm180(at(here) - target)) < best[1]:
+                jd, best = here, (here, abs(norm180(at(here) - target)))
+        assert best[1] * 60 < 3.0                     # within 3 arcminutes
+
+        after = at(jd + 324 / 86400.0)
+        assert after < six                            # always short
+        shortfalls.append((six - after) * 60)
+
+        low, high = 0.0, 900.0
+        for _ in range(50):
+            middle = (low + high) / 2
+            if at(jd + middle / 86400.0) < six:
+                low = middle
+            else:
+                high = middle
+        extras.append(high - 324.0)
+
+    assert 5.0 < min(shortfalls) and max(shortfalls) < 10.0
+    assert 20.0 < min(extras) and max(extras) < 45.0
+    assert "5 to 10 arcminutes short" in (
+        birthtime.THE_UNIFORM_LAGNA_IS_THE_SECTIONS_OWN_CAVEAT)
+
+
+def test_the_book_states_the_mean_is_not_a_rate():
+    """FINDING: what 32.1 stated flatly, Example 129 withdraws."""
+    assert "Lagna in D-1 changes rasi once in 2 hours" in (
+        birthtime.WE_MUST_FIRST_HAVE_AN_ACCURATE_BIRTHTIME)
+    assert "**approximate**" in birthtime.ROBUSTNESS_IS_APPROXIMATE
+    assert ("lagna moves uniformly. That is not the case in reality" in
+            birthtime.EXAMPLE_129)
+    assert "119.7 minutes" in birthtime.THE_TWO_HOURS_IS_A_MEAN_NOT_A_RATE
+    assert "The remedy offered is to iterate" in (
+        birthtime.THE_BOOK_STATES_THE_MEAN_IS_NOT_A_RATE)
+
+
+def test_the_closing_sentence_is_a_requirement_and_we_answer_it():
+    """FINDING: what the astrologer is asked to memorise, we compute —
+    including D-30, whose borders are not multiples of anything.
+    """
+    assert "familiar with the longitudes at which lagna changes rasi" in (
+        birthtime.EXAMPLE_129)
+    # An equal varga: the borders are multiples, as the example expects.
+    equal = birthtime.lagna_windows(_SG, _SG + 30.0, _VARGAS[24])
+    assert len(equal) == 24
+    for index, window in enumerate(equal):
+        assert float(window["from"]) - _SG == pytest.approx(index * 1.25,
+                                                            abs=1e-6)
+    # D-30's are not.
+    unequal = birthtime.lagna_windows(_SG, _SG + 30.0, _VARGAS[30])
+    edges = [round(float(w["to"]) - _SG, 4) for w in unequal]
+    assert edges == [5.0, 10.0, 18.0, 25.0, 30.0]
+    assert len(unequal) == 5
+    assert 30 in birthtime.UNEQUAL_VARGAS
+    assert "D-30's unequal borders included" in (
+        birthtime.THE_CLOSING_SENTENCE_IS_A_REQUIREMENT_NOT_ADVICE)
+
+
+def test_lagna_windows_rejects_a_bad_range():
+    with pytest.raises(birthtime.BirthtimeError, match="must not precede"):
+        birthtime.lagna_windows(20.0, 10.0, _VARGAS[9])
+    with pytest.raises(birthtime.BirthtimeError, match="one rasi"):
+        birthtime.lagna_windows(0.0, 40.0, _VARGAS[9])

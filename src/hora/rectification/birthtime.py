@@ -9,6 +9,7 @@ approximation of the right one.
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import cast
 
 from hora.core import validate
 
@@ -860,5 +861,221 @@ THE_FOOTNOTE_NAMES_NO_WINNER = (
     "Footnote 90 says the ayanamsa and the geocentric-topocentric questions "
     "are unresolved and does not choose. Our defaults are Lahiri and "
     "geocentric and nothing here proposes changing either."
+)
+
+
+# --------------------------------------------------------------------------
+# Example 129 — a rectification worked from the varga borders alone
+# --------------------------------------------------------------------------
+
+#: Example 129, verbatim.
+EXAMPLE_129 = (
+    "Suppose we are told that someone was born at 9:05 am. Suppose lagna is "
+    "at 4Sg39. Suppose we have events related to D-10 (career), D-12 "
+    "(parents) and D-24 (education). Lagna at 4Sg39 puts lagna in these 3 "
+    "charts in Cp, Cp and Sc (respectively). Suppose the birthtime is "
+    "reasonably accurate and the maximum error is 5 minutes (i.e. birthtime "
+    "can be 9:00-9:10). Let us find the possible lagnas in the 3 charts.\n\n"
+    "An error of 5 min changes lagna by about 5/4=1.25 degrees or 1 deg 15'. "
+    "So, instead of being 4Sg39, it can be as low as 3Sg24 or as high as "
+    "5Sg54. So we should consider all lagnas between 3Sg24 and 5Sg54. In "
+    "D-10, lagna changes rasi at multiples of 3 degrees. So the whole range "
+    "we have for lagna results in the same D-10 lagna (Cp). In D-12, lagna "
+    "changes rasi at multiples of 2 deg 30'. So we have a transition at 5 "
+    "degrees. So there are two possibilities for lagna - one in 3Sg24-5Sg00 "
+    "and the other in 5Sg00-5Sg54. So lagna in D-12 can be Cp or Aq. Lagna "
+    "in D-24 changes rasi at multiples of 1 deg 15'. It changes rasi at 3 "
+    "deg 45' and 5 deg 00'. So we have 3 possibilities for lagna - (1) "
+    "3Sg24-3Sg45: Li, (2) 3Sg45-5Sg00: Sc, (3) 5Sg00-5Sg54: Sg.\n\n"
+    "Using these sets of lagnas, we should analyze the charts and see which "
+    "one makes sense. Suppose Sg lagna in D-24 and Aq lagna in D-12 explain "
+    "known events. But suppose we cannot explain his career. Suppose Aq "
+    "lagna instead of Cp lagna explains his career well. Then what do we "
+    "do?\n\n"
+    "To get the next rasi as D-10 lagna (Aq instead of Cp), we should cross "
+    "the next D-10 border, which is 6Sg00. So the lagna should become 6Sg00 "
+    "(or higher) instead of 4Sg39. So we have to add 1 deg 21' or higher to "
+    "lagna. Lagna moves by 1 deg 21' or 81' in 81x4 sec = 324 sec = 5 min 24 "
+    "sec.\n\n"
+    "This means that the birthtime should be 9:10:24 instead of 9:05. Though "
+    "we are told that the error in birthtime cannot be more than 5 minutes, "
+    "it has to be more than 5 minutes in this case to explain known "
+    "facts.\n\n"
+    "Please note that these calculations are made on the assumption that "
+    "lagna moves uniformly. That is not the case in reality. So the actual "
+    "rectified birthtime may be a little off. We can do approximate "
+    "calculations first and then see if it has to be corrected further. For "
+    "example, we may get lagna at 9:10:24 to be 5Sg59 instead of the "
+    "expected value of 6Sg00. Then we have to add a few more seconds and see "
+    "if we cross 6Sg00.\n\n"
+    "One may see from this example that an astrologer should know the "
+    "details of the computation of divisional charts and be familiar with "
+    "the longitudes at which lagna changes rasi in various divisional "
+    "charts. That familiarity is a necessity for quick birthtime "
+    "rectification.")
+
+#: Everything Example 129 states, as data. Degrees are within Sagittarius.
+EXAMPLE_129_STATED: dict[str, object] = {
+    "reported_birthtime": "9:05 am",
+    "lagna": "4 Sg 39",
+    "lagna_degree_in_rasi": 4 + 39 / 60,
+    "maximum_error_minutes": 5.0,
+    "range": ("3 Sg 24", "5 Sg 54"),
+    "range_degrees_in_rasi": (3 + 24 / 60, 5 + 54 / 60),
+    "vargas": {10: "career", 12: "parents", 24: "education"},
+    "lagnas_as_reported": {10: "Cp", 12: "Cp", 24: "Sc"},
+    "windows": {
+        10: (((3 + 24 / 60, 5 + 54 / 60), "Cp"),),
+        12: (((3 + 24 / 60, 5.0), "Cp"), ((5.0, 5 + 54 / 60), "Aq")),
+        24: (((3 + 24 / 60, 3 + 45 / 60), "Li"),
+             ((3 + 45 / 60, 5.0), "Sc"),
+             ((5.0, 5 + 54 / 60), "Sg")),
+    },
+    "wanted_d10_lagna": "Aq",
+    "next_d10_border": 6.0,
+    "shortfall_arcminutes": 81.0,
+    "shift_seconds": 324.0,
+    "rectified_birthtime": "9:10:24",
+}
+
+
+def lagna_windows(low: float, high: float, varga: Callable[[float], object],
+                  *, coarse_steps: int = 4000) -> tuple[dict[str, object], ...]:
+    """Example 129's own move: split a lagna range into its varga signs.
+
+    "So we have 3 possibilities for lagna - (1) 3Sg24-3Sg45: Li, (2)
+    3Sg45-5Sg00: Sc, (3) 5Sg00-5Sg54: Sg."
+
+    Borders are found by bisection, so the ends of each window come back
+    exact rather than to the scan's resolution.
+
+    :param low: the low end of the lagna range, an absolute longitude.
+    :param high: the high end.
+    :param varga: a varga function returning an object with a ``sign``.
+    :returns: one entry per window, in order, with its ``from``, ``to`` and
+        ``sign``.
+    :raises BirthtimeError: if the range is inverted or wider than a rasi.
+    """
+    start = validate.longitude("low", float(low))
+    stop = validate.longitude("high", float(high))
+    if stop < start:
+        raise BirthtimeError(f"high must not precede low; got {low} and {high}")
+    if stop - start > 30.0:
+        raise BirthtimeError(
+            "the range must not exceed one rasi; got "
+            f"{stop - start} degrees")
+
+    def sign_at(point: float) -> int:
+        return int(varga(point).sign)  # type: ignore[attr-defined]
+
+    steps = max(int(coarse_steps), 2)
+    step = (stop - start) / steps if stop > start else 0.0
+    windows: list[dict[str, object]] = []
+    window_from, current = start, sign_at(start)
+    previous_point = start
+    for index in range(1, steps + 1):
+        point = start + index * step
+        here = sign_at(point)
+        if here != current:
+            low_edge, high_edge = previous_point, point
+            for _ in range(60):
+                middle = (low_edge + high_edge) / 2.0
+                if sign_at(middle) == current:
+                    low_edge = middle
+                else:
+                    high_edge = middle
+            windows.append({"from": window_from, "to": high_edge,
+                            "sign": current})
+            window_from, current = high_edge, here
+        previous_point = point
+    windows.append({"from": window_from, "to": stop, "sign": current})
+    # A border landing exactly on `stop` leaves an empty last window.
+    return tuple(w for w in windows
+                 if cast(float, w["to"]) - cast(float, w["from"]) > 1e-9)
+
+
+def seconds_to_move(arcminutes: float) -> float:
+    """The Lesson's rate applied: lagna moves one arcminute in four seconds.
+
+    Example 129: "Lagna moves by 1 deg 21' or 81' in 81x4 sec = 324 sec = 5
+    min 24 sec." It is the two-hour rasi of §32.1 and so a **mean**; see
+    `THE_UNIFORM_LAGNA_IS_THE_SECTIONS_OWN_CAVEAT`.
+    """
+    arc = validate.finite("arcminutes", float(arcminutes))
+    return arc * 4.0
+
+#: **Finding.** Every figure Example 129 prints reproduces, and none of it
+#: needs a chart. 4 Sg 39 gives Cp, Cp and Sc in D-10, D-12 and D-24; five
+#: minutes of error is 1°15' either side, so 3 Sg 24 to 5 Sg 54; that range
+#: holds **one** D-10 sign, **two** D-12 signs split at 5°00', and **three**
+#: D-24 signs split at 3°45' and 5°00' — Li, Sc and Sg. The whole example is
+#: worked from the varga borders and a rate, which is what its closing
+#: sentence says an astrologer should be able to do.
+EXAMPLE_129_REPRODUCES_FROM_BORDERS_ALONE = (
+    "One D-10 sign, two D-12 signs and three D-24 signs across the range, "
+    "split exactly where the example says. No ephemeris is needed for any of "
+    "it."
+)
+
+#: **Finding.** The example's rectified time **breaks its own constraint and
+#: says so**: "though we are told that the error in birthtime cannot be more
+#: than 5 minutes, it has to be more than 5 minutes in this case to explain
+#: known facts." 9:05 plus 5 min 24 sec is 9:10:24, which is outside the
+#: 9:00-9:10 the native reported. The known past outranks the reported bound —
+#: §32.1's four causes of birthtime error are the reason it can.
+THE_ANSWER_LEAVES_THE_REPORTED_WINDOW_AND_THE_EXAMPLE_SAYS_SO = (
+    "The rectified 9:10:24 falls outside the 9:00-9:10 the native gave, and "
+    "the example keeps it. The known past outranks the reported bound."
+)
+
+#: **Finding, measured, and the caveat is right in the direction it warns of.**
+#: The example ends by saying its arithmetic assumes the lagna moves uniformly,
+#: "that is not the case in reality", and that the rectified time "may be a
+#: little off" — it guesses 5 Sg 59 where 6 Sg 00 was wanted. Put a real chart
+#: under it. Taking instants where the lagna truly is 4 Sg 39 at 9:05:
+#:
+#: | place | lagna after 5m24s | short of 6 Sg 00 by | extra time needed |
+#: |---|---|---|---|
+#: | 16 N 15 | 5 Sg 55 | 5.1' | 22 sec |
+#: | 42 N 30 | 5 Sg 50 | 9.7' | 42 sec |
+#: | the equator | 5 Sg 55 | 5.2' | 21 sec |
+#: | 60 N | 5 Sg 52 | 8.3' | 35 sec |
+#:
+#: Early Sagittarius rises at about **13.7 arcminutes a minute** at these
+#: latitudes against the nominal 15, so the uniform figure always overshoots
+#: and the true time is always **later**. The book's illustrative 5 Sg 59 is
+#: optimistic — the real shortfall is five to ten arcminutes, not one — but
+#: its instruction, add a few more seconds and check, is exactly right.
+THE_UNIFORM_LAGNA_IS_THE_SECTIONS_OWN_CAVEAT = (
+    "Measured at four latitudes, the lagna after the example's 5 min 24 sec "
+    "lands 5 to 10 arcminutes short of 6 Sg 00 and needs another 21 to 42 "
+    "seconds. Early Sagittarius rises at about 13.7 arcminutes a minute "
+    "against the nominal 15."
+)
+
+#: **Finding, and it settles a question §32.1 left hanging.** §32.1 said the
+#: lagna "changes rasi once in 2 hours" flatly; §32.2 bolded "approximate";
+#: Example 129 finally says outright that "these calculations are made on the
+#: assumption that lagna moves uniformly. **That is not the case in
+#: reality.**" So the mean-not-a-rate finding recorded against §32.1 is the
+#: book's own position, stated two sections later, and the book's remedy is to
+#: iterate rather than to compute the rate properly.
+THE_BOOK_STATES_THE_MEAN_IS_NOT_A_RATE = (
+    "Section 32.1 gave the two hours flatly, section 32.2 called its figures "
+    "approximate, and Example 129 says the uniform lagna is not the case in "
+    "reality. The remedy offered is to iterate."
+)
+
+#: **Finding.** Example 129's closing sentence is a **product requirement**
+#: dressed as advice: "an astrologer should know the details of the
+#: computation of divisional charts and be familiar with the longitudes at
+#: which lagna changes rasi in various divisional charts. That familiarity is
+#: a necessity for quick birthtime rectification." What a human is asked to
+#: memorise, `lagna_windows` returns — including for D-30, whose borders are
+#: not multiples of anything.
+THE_CLOSING_SENTENCE_IS_A_REQUIREMENT_NOT_ADVICE = (
+    "The example closes by asking the astrologer to know where lagna changes "
+    "rasi in every varga. That is a table, and lagna_windows computes it, "
+    "D-30's unequal borders included."
 )
 
